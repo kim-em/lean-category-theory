@@ -134,14 +134,8 @@ definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := 
                           end,
   braiding             := {
     morphism  := {
-      components := begin
-                      intros,
-                      exact {
-                        map := λ p, (p.2, p.1),
-                        multiplicative := ♮
-                      }
-                    end,
-      naturality := ♮
+      components := sorry,
+      naturality := sorry
     },
     inverse   := sorry,
     witness_1 := sorry,
