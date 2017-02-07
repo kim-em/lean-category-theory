@@ -134,10 +134,23 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
                               apply semigroup_morphism_pointwise_equality, 
                               intros, 
                               blast,
-                              -- but now how do I do anything with those abstracted definitions?
-                              exact sorry
+                              delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
+                              delta MonoidalCategoryOfSemigroups.associator, dsimp, 
+                              induction x with a b,
+                              induction a,
+                              blast
                             end,
-  associators_inverses_2 := sorry,
+  associators_inverses_2 := begin
+                              intros, 
+                              apply semigroup_morphism_pointwise_equality, 
+                              intros, 
+                              blast,
+                              delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
+                              delta MonoidalCategoryOfSemigroups.associator, dsimp, 
+                              induction x with a b,
+                              induction b,
+                              blast
+                            end,
   interchange          := begin
                             intros, blast
                           end
