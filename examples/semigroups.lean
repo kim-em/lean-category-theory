@@ -162,45 +162,45 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
 
 open tqft.categories.natural_transformation
 
-definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
-  MonoidalCategoryOfSemigroups.{u} with
-  braiding             := {
-    morphism  := {
-      components := begin
-                      abstract braiding {
-                        intros,
-                        exact {
-                          map := λ p, (p.2, p.1),
-                          multiplicative := ♮
-                        }
-                      }
-                    end,
-      naturality := ♮
-    },
-    inverse   := {
-      components := begin
-                      abstract inverse_braiding {
-                        intros,
-                        exact {
-                          map := λ p, (p.2, p.1),
-                          multiplicative := ♮
-                        }
-                      }
-                    end,
-      naturality := ♮
-    },
-    witness_1 := begin
-                   apply NaturalTransformations_componentwise_equal,
-                   blast,
-                                                   delta MonoidalCategoryOfSemigroups.associator, dsimp, 
-
-                   delta SymmetricMonoidalCategoryOfSemigroups.braiding, dsimp,
-                   delta SymmetricMonoidalCategoryOfSemigroups.inverse_braiding, dsimp,
-                   blast
-                 end,
-    witness_2 := sorry
-  },
-  symmetry := sorry
-}
+-- definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
+--   MonoidalCategoryOfSemigroups.{u} with
+--   braiding             := {
+--     morphism  := {
+--       components := begin
+--                       abstract braiding {
+--                         intros,
+--                         exact {
+--                           map := λ p, (p.2, p.1),
+--                           multiplicative := ♮
+--                         }
+--                       }
+--                     end,
+--       naturality := ♮
+--     },
+--     inverse   := {
+--       components := begin
+--                       abstract inverse_braiding {
+--                         intros,
+--                         exact {
+--                           map := λ p, (p.2, p.1),
+--                           multiplicative := ♮
+--                         }
+--                       }
+--                     end,
+--       naturality := ♮
+--     },
+--     witness_1 := begin
+--                    apply NaturalTransformations_componentwise_equal,
+--                    blast,
+--                    -- now what? something like?
+--                   --  delta SymmetricMonoidalCategoryOfSemigroups.braiding, dsimp,
+--                   --  delta SymmetricMonoidalCategoryOfSemigroups.inverse_braiding, dsimp,
+--                   --  blast
+--                   exact sorry
+--                  end,
+--     witness_2 := sorry
+--   },
+--   symmetry := sorry
+-- }
 
 end tqft.categories.examples.semigroups
