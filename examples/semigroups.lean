@@ -130,52 +130,77 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
                             }
                           end,
   associators_inverses_1 := begin
-                              intros, 
-                              apply semigroup_morphism_pointwise_equality, 
-                              intros, 
-                              blast,
-                              delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
-                              delta MonoidalCategoryOfSemigroups.associator, dsimp, 
-                              induction x with a b,
-                              induction a,
-                              blast
+                              abstract {
+                                intros, 
+                                apply semigroup_morphism_pointwise_equality, 
+                                intros, 
+                                blast,
+                                delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
+                                delta MonoidalCategoryOfSemigroups.associator, dsimp, 
+                                induction x with a b,
+                                induction a,
+                                blast
+                              }
                             end,
   associators_inverses_2 := begin
-                              intros, 
-                              apply semigroup_morphism_pointwise_equality, 
-                              intros, 
-                              blast,
-                              delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
-                              delta MonoidalCategoryOfSemigroups.associator, dsimp, 
-                              induction x with a b,
-                              induction b,
-                              blast
+                              abstract {
+                                intros, 
+                                apply semigroup_morphism_pointwise_equality, 
+                                intros, 
+                                blast,
+                                delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
+                                delta MonoidalCategoryOfSemigroups.associator, dsimp, 
+                                induction x with a b,
+                                induction b,
+                                blast
+                              }
                             end,
   interchange          := begin
                             intros, blast
                           end
 }
 
--- definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
---   MonoidalCategoryOfSemigroups.{u} with
---   braiding             := {
---     morphism  := {
---       components := begin
---                       abstract {
---                         intros,
---                         exact {
---                           map := λ p, (p.2, p.1),
---                           multiplicative := ♮
---                         }
---                       }
---                     end,
---       naturality := ♮
---     },
---     inverse   := sorry,
---     witness_1 := sorry,
---     witness_2 := sorry
---   },
---   symmetry := sorry
--- }
+open tqft.categories.natural_transformation
+
+definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
+  MonoidalCategoryOfSemigroups.{u} with
+  braiding             := {
+    morphism  := {
+      components := begin
+                      abstract braiding {
+                        intros,
+                        exact {
+                          map := λ p, (p.2, p.1),
+                          multiplicative := ♮
+                        }
+                      }
+                    end,
+      naturality := ♮
+    },
+    inverse   := {
+      components := begin
+                      abstract inverse_braiding {
+                        intros,
+                        exact {
+                          map := λ p, (p.2, p.1),
+                          multiplicative := ♮
+                        }
+                      }
+                    end,
+      naturality := ♮
+    },
+    witness_1 := begin
+                   apply NaturalTransformations_componentwise_equal,
+                   blast,
+                                                   delta MonoidalCategoryOfSemigroups.associator, dsimp, 
+
+                   delta SymmetricMonoidalCategoryOfSemigroups.braiding, dsimp,
+                   delta SymmetricMonoidalCategoryOfSemigroups.inverse_braiding, dsimp,
+                   blast
+                 end,
+    witness_2 := sorry
+  },
+  symmetry := sorry
+}
 
 end tqft.categories.examples.semigroups
