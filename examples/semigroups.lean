@@ -93,61 +93,76 @@ definition semigroup_morphism_product
     end
 }
 
-definition trivial_semigroup: semigroup unit := {
-  mul := λ _ _, unit.star,
+definition trivial_semigroup: semigroup punit := {
+  mul := λ _ _, punit.star,
   mul_assoc := ♮
 }
 
 open tqft.categories.products
 
-definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
+definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
   CategoryOfSemigroups.{u} with
   tensor               := {
-    onObjects   := λ p, sigma.mk (p.1.1 × p.2.1) (semigroup_product p.1.2 p.2.2),
-    onMorphisms := λ s t f, semigroup_morphism_product f.1 f.2,
-    identities   := begin
-                      intros, apply semigroup_morphism_pointwise_equality, intros, induction x, blast
-                    end,
+    onObjects     := λ p, sigma.mk (p.1.1 × p.2.1) (semigroup_product p.1.2 p.2.2),
+    onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
+    identities    := begin
+                      abstract tensor_identities { intros, apply semigroup_morphism_pointwise_equality, intros, induction x, blast }
+                     end,
     functoriality := ♮
   },
-  tensor_unit          := sorry, -- sigma.mk unit trivial_semigroup,
+  tensor_unit          := sigma.mk punit trivial_semigroup, -- punit is just a universe-parameterized version of unit
   associator           := begin
-                            intros,
-                            exact {
-                              map := λ t, (t.1.1, (t.1.2, t.2)),
-                              multiplicative := ♮
+                            abstract associator {
+                              intros,
+                              exact {
+                                map := λ t, (t.1.1, (t.1.2, t.2)),
+                                multiplicative := ♮
+                              }
                             }
                           end,
   backwards_associator := begin
-                            intros,
-                            exact {
-                              map := λ t, ((t.1, t.2.1), t.2.2),
-                              multiplicative := ♮
+                            abstract backwards_associator {
+                              intros,
+                              exact {
+                                map := λ t, ((t.1, t.2.1), t.2.2),
+                                multiplicative := ♮
+                              }
                             }
                           end,
   associators_inverses_1 := begin
-                              intros, apply semigroup_morphism_pointwise_equality, intros, exact sorry
+                              intros, 
+                              apply semigroup_morphism_pointwise_equality, 
+                              intros, 
+                              blast,
+                              -- but now how do I do anything with those abstracted definitions?
+                              exact sorry
                             end,
   associators_inverses_2 := sorry,
   interchange          := begin
                             intros, blast
-                          end,
-  braiding             := {
-    morphism  := {
-      components := begin
-                      intros,
-                      exact {
-                        map := λ p, (p.2, p.1),
-                        multiplicative := ♮
-                      }
-                    end,
-      naturality := ♮
-    },
-    inverse   := sorry,
-    witness_1 := sorry,
-    witness_2 := sorry
-  },
-  symmetry             := sorry
+                          end
 }
+
+-- definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
+--   MonoidalCategoryOfSemigroups.{u} with
+--   braiding             := {
+--     morphism  := {
+--       components := begin
+--                       abstract {
+--                         intros,
+--                         exact {
+--                           map := λ p, (p.2, p.1),
+--                           multiplicative := ♮
+--                         }
+--                       }
+--                     end,
+--       naturality := ♮
+--     },
+--     inverse   := sorry,
+--     witness_1 := sorry,
+--     witness_2 := sorry
+--   },
+--   symmetry := sorry
+-- }
 
 end tqft.categories.examples.semigroups
