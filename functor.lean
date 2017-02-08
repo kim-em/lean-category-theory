@@ -53,8 +53,8 @@ open notations
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f,
-  identities    := λ _, rfl,
-  functoriality := λ _ _ _ _ _, rfl
+  identities    := ♮,
+  functoriality := ♮
 }
 
 @[reducible] definition FunctorComposition { C D E : Category } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=

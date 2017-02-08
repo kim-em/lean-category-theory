@@ -89,12 +89,8 @@ definition ProductCategoryAssociator ( C D E : Category.{ u v } ) : Functor ((C 
 {
   onObjects     := λ X, (X^.fst^.fst, (X^.fst^.snd, X^.snd)),
   onMorphisms   := λ _ _ f, (f^.fst^.fst, (f^.fst^.snd, f^.snd)),
-  identities    := begin
-                     blast 
-                   end,
-  functoriality := begin
-                     blast
-                   end
+  identities    := ♮,
+  functoriality := ♮
 }
 
 end tqft.categories.products

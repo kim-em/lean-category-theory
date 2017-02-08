@@ -71,7 +71,6 @@ open tqft.categories.functor
   {
     components := λ X : C^.Obj, E^.compose (β (F X)) (I^.onMorphisms (α X)),
     naturality := begin
-                    intros,
                     blast,
                     -- This is obscene! What is the state of automation?
                     -- Ideally we could just say:
@@ -125,7 +124,6 @@ definition whisker_on_right
   left_identity  := begin
                      intros F G f,
                      apply NaturalTransformations_componentwise_equal,
-                     intros,
                      blast, 
                      simp
                     end, 
@@ -137,14 +135,12 @@ definition whisker_on_right
                    begin 
                      intros,
                      apply NaturalTransformations_componentwise_equal,
-                     intros, 
                      blast,
                      simp
                     end, 
   associativity  := begin
                       intros,
                       apply NaturalTransformations_componentwise_equal,
-                      intros,
                       blast,
                       rewrite [ D^.associativity ]
                     end
