@@ -149,13 +149,13 @@ open NaturalTransformation
 --     α^.components X
 
 
-lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C^.Obj } :
- Inverse (@components C D F G α X) := 
-  {
-    inverse := α^.inverse^.components X,
-    witness_1 := α^.witness_1, -- TODO we need to evaluate both sides of this equation at X.
-    witness_2 := sorry
-  }
+-- lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C^.Obj } :
+--  Inverse (@components C D F G α X) := 
+--   {
+--     inverse := α^.inverse^.components X,
+--     witness_1 := α^.witness_1, -- TODO we need to evaluate both sides of this equation at X.
+--     witness_2 := sorry
+  -- }
 
 
 end tqft.categories.natural_transformation
