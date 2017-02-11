@@ -20,6 +20,10 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 { F   := λ f, Π X : C^.Obj, D^.Hom (F X) (G X),
   coe := NaturalTransformation.components }
 
+-- TODO can we simplify the next proof, by first using:
+--     attribute [applicandum] funext
+-- and then a bit of automation?
+
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
 @[applicandum] lemma NaturalTransformations_componentwise_equal
   { C D : Category } 
@@ -144,7 +148,7 @@ open NaturalTransformation
 -- or at least
 --     α^.components X
 
-/-
+
 lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C^.Obj } :
  Inverse (@components C D F G α X) := 
   {
@@ -152,6 +156,6 @@ lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G
     witness_1 := α^.witness_1, -- TODO we need to evaluate both sides of this equation at X.
     witness_2 := sorry
   }
--/
+
 
 end tqft.categories.natural_transformation

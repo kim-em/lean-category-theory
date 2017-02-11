@@ -8,7 +8,7 @@ open smt_tactic
 
 def applicandum_attribute : user_attribute := {
   name := `applicandum,
-  descr := "Lemma that should be automatically applied to goals by the 'applico' tactic."
+  descr := "Lemma that should be automatically applied to goals by the 'applica' tactic."
 }
 
 run_command attribute.register `applicandum_attribute
