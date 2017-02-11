@@ -21,7 +21,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   coe := NaturalTransformation.components }
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
-lemma NaturalTransformations_componentwise_equal
+@[applicandum] lemma NaturalTransformations_componentwise_equal
   { C D : Category } 
   { F G : Functor C D } 
   ( α β : NaturalTransformation F G )
@@ -36,9 +36,7 @@ lemma NaturalTransformations_componentwise_equal
 @[reducible] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D^.identity (F X),
-    naturality := begin
-                    intros, simp
-                  end
+    naturality := ♮
   }
 
 @[reducible] definition vertical_composition_of_NaturalTransformations
@@ -49,7 +47,7 @@ lemma NaturalTransformations_componentwise_equal
   {
     components := λ X, D^.compose (α X) (β X),
     naturality := begin
-                    intros,
+                    blast,
                     /- this proof was written by a sufficient stupid process that I am confident a computer
                     -- could have done it! -/
                     rewrite D^.associativity,
@@ -121,26 +119,9 @@ definition whisker_on_right
   identity := λ F, IdentityNaturalTransformation F,
   compose  := @vertical_composition_of_NaturalTransformations C D,
 
-  left_identity  := begin
-                     intros F G f,
-                     apply NaturalTransformations_componentwise_equal,
-                     blast, 
-                     simp
-                    end, 
-  right_identity := 
-                   /- 
-                   -- This is just a copy and paste of the proof for left_identity.
-                   -- Eventually of course this is unacceptable, and demands appropriate tactics.
-                   -/
-                   begin 
-                     intros,
-                     apply NaturalTransformations_componentwise_equal,
-                     blast,
-                     simp
-                    end, 
-  associativity  := begin
-                      intros,
-                      apply NaturalTransformations_componentwise_equal,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := begin                      
                       blast,
                       rewrite [ D^.associativity ]
                     end

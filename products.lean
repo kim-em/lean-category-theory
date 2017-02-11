@@ -46,14 +46,8 @@ definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Funct
 {
   onObjects := λ X, (F X^.fst, G X^.snd),
   onMorphisms := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
-  identities := begin
-                  intros,
-                  simp
-                end,
-  functoriality := begin
-                     intros,
-                     simp
-                   end
+  identities := ♮,
+  functoriality := ♮
 }
 
 namespace ProductFunctor

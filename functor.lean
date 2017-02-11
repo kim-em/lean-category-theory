@@ -61,12 +61,8 @@ open notations
 {
   onObjects     := λ X, G (F X),
   onMorphisms   := λ _ _ f, G^.onMorphisms (F^.onMorphisms f),
-  identities    := begin
-                     intros, simp
-                   end,
-  functoriality := begin
-                     intros, simp
-                   end
+  identities    := ♮,
+  functoriality := ♮
 }
 
 -- We'll want to be able to prove that two functors are equal if they are equal on objects and on morphisms.
@@ -77,7 +73,7 @@ open notations
 --   for `morphismWitness`, leaving the `objectWitness` goal somehow "implicit" and likely unprovable.
 --   See https://groups.google.com/d/msg/lean-user/bhStu87PjiI/vqsyr9ZABAAJ for details.
 -- If you run into this problem, use `fapply Functors_pointwise_equal` instead.
-lemma Functors_pointwise_equal
+@[applicandum] lemma Functors_pointwise_equal
   { C D : Category } 
   { F G : Functor C D } 
   ( objectWitness : ∀ X : C^.Obj, F^.onObjects X = G^.onObjects X ) 
@@ -94,24 +90,12 @@ begin
 end
 
 lemma FunctorComposition_left_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition (IdentityFunctor C) F = F :=
-  begin
-    fapply Functors_pointwise_equal,
-    blast, blast
-  end
+  FunctorComposition (IdentityFunctor C) F = F := ♮
 
 lemma FunctorComposition_right_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition F (IdentityFunctor D) = F :=
-  begin
-    fapply Functors_pointwise_equal,
-    blast, blast
-  end
+  FunctorComposition F (IdentityFunctor D) = F := ♮
 
 lemma FunctorComposition_associative { B C D E : Category } ( F : Functor B C ) ( G : Functor C D ) ( H : Functor D E ) :
-  FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) :=
-  begin
-    fapply Functors_pointwise_equal,
-    blast, blast
-  end
+  FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
 
 end tqft.categories.functor

@@ -32,11 +32,11 @@ definition monoid_morphism_composition
   ( f: monoid_morphism s t ) ( g: monoid_morphism t u ) : monoid_morphism s u :=
 {
   map := λ x, g (f x),
-  multiplicative := begin blast, simp end,
-  unital := begin blast, simp end
+  multiplicative := ♮,
+  unital := ♮
 }
 
-lemma monoid_morphism_pointwise_equality
+@[applicandum] lemma monoid_morphism_pointwise_equality
   { α β : Type } { s : monoid α } { t: monoid β }
   ( f g : monoid_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=
@@ -59,11 +59,8 @@ definition CategoryOfMonoids : Category :=
     identity := λ s, monoid_identity s.2,
     compose  := λ _ _ _ f g, monoid_morphism_composition f g,
 
-    /-
-    -- These proofs are a bit tedious, how do we automate?
-    -/
-    left_identity  := begin intros, apply monoid_morphism_pointwise_equality, blast end,
-    right_identity := begin intros, apply monoid_morphism_pointwise_equality, blast end,
+    left_identity  := ♮,
+    right_identity := ♮,
     associativity  := ♮
 }
 

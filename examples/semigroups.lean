@@ -30,10 +30,10 @@ instance monoid_semigroup_to_map { α β : Type u } { s : semigroup α } { t: se
   ( f: semigroup_morphism s t ) ( g: semigroup_morphism t u ) : semigroup_morphism s u :=
 {
   map := λ x, g (f x),
-  multiplicative := begin blast, simp end
+  multiplicative := ♮
 }
 
-lemma semigroup_morphism_pointwise_equality
+@[applicandum] lemma semigroup_morphism_pointwise_equality
   { α β : Type u } { s : semigroup α } { t: semigroup β }
   ( f g : semigroup_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=
@@ -59,8 +59,8 @@ end
     /-
     -- These proofs are a bit tedious, how do we automate?
     -/
-    left_identity  := begin intros, apply semigroup_morphism_pointwise_equality, blast end,
-    right_identity := begin intros, apply semigroup_morphism_pointwise_equality, blast end,
+    left_identity  := ♮,
+    right_identity := ♮,
     associativity  := ♮
 }
 
@@ -155,9 +155,7 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
                                 blast
                               }
                             end,
-  interchange          := begin
-                            intros, blast
-                          end
+  interchange          := ♮
 }
 
 open tqft.categories.natural_transformation
