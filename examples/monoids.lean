@@ -36,7 +36,7 @@ definition monoid_morphism_composition
   unital := ♮
 }
 
-@[applicandum] lemma monoid_morphism_pointwise_equality
+@[pointwise] lemma monoid_morphism_pointwise_equality
   { α β : Type } { s : monoid α } { t: monoid β }
   ( f g : monoid_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=

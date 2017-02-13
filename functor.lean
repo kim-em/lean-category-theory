@@ -73,7 +73,7 @@ open notations
 --   for `morphismWitness`, leaving the `objectWitness` goal somehow "implicit" and likely unprovable.
 --   See https://groups.google.com/d/msg/lean-user/bhStu87PjiI/vqsyr9ZABAAJ for details.
 -- If you run into this problem, use `fapply Functors_pointwise_equal` instead.
-@[applicandum] lemma Functors_pointwise_equal
+@[pointwise] lemma Functors_pointwise_equal
   { C D : Category } 
   { F G : Functor C D } 
   ( objectWitness : ∀ X : C^.Obj, F^.onObjects X = G^.onObjects X ) 

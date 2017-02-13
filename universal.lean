@@ -51,16 +51,30 @@ definition DiagonalFunctor ( C J : Category ) : Functor C (FunctorCategory J C) 
   functoriality := ♮  
 }
 
+-- The elaborator has some trouble understanding what p.2.2 and q.2.2 mean below.
+-- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
+local attribute [elab_simple]  sigma.snd
+
+open subtype
+
+-- universe variable u
+
+-- instance elt_of_coercion {α : Type u} {p : α → Prop} : has_coe { x // p x } α :=
+--   { coe := elt_of }
+
 definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B C ) : Category :=
 {
   Obj      := Σ a : A^.Obj, Σ b : B^.Obj, C^.Hom (S a) (T b),
-  Hom      := λ p q, Σ g : A^.Hom p.1 q.1, psigma h : B^.Hom p.2.1 q.2.1, C^.compose p.2.2 (T^.onMorphisms h) = C^.compose (S^.onMorphisms g) q.2.2,
-  identity := sorry,
-  compose  := sorry,
-
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
+  Hom      := λ p q, { gh : (A^.Hom p.1 q.1) × (B^.Hom p.2.1 q.2.1) // C^.compose (S^.onMorphisms gh.1) q.2.2 = C^.compose p.2.2 (T^.onMorphisms gh.2) },
+  identity := λ p, tag (A^.identity p.1, B^.identity p.2.1) ♮,
+  compose  := λ p q r f g, tag (A^.compose (elt_of f).1 (elt_of g).1, B^.compose (elt_of f).2 (elt_of g).2)
+                 begin
+                   blast,
+                   rewrite S^.functoriality
+                 end,
+  left_identity  := sorry,
+  right_identity := sorry,
+  associativity  := sorry
 }
 
 -- TODO then equalizers, etc.

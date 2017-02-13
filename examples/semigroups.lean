@@ -33,7 +33,7 @@ instance monoid_semigroup_to_map { α β : Type u } { s : semigroup α } { t: se
   multiplicative := ♮
 }
 
-@[applicandum] lemma semigroup_morphism_pointwise_equality
+@[pointwise] lemma semigroup_morphism_pointwise_equality
   { α β : Type u } { s : semigroup α } { t: semigroup β }
   ( f g : semigroup_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=

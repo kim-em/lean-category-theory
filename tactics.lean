@@ -6,12 +6,12 @@ set_option pp.universes true
 
 open smt_tactic
 
-def applicandum_attribute : user_attribute := {
-  name := `applicandum,
-  descr := "Lemma that should be automatically applied to goals by the 'applica' tactic."
+def pointwise_attribute : user_attribute := {
+  name := `pointwise,
+  descr := "A lemma that proves things are equal using the fact they are pointwise equal."
 }
 
-run_command attribute.register `applicandum_attribute
+run_command attribute.register `pointwise_attribute
 
 open tactic
 
@@ -20,11 +20,11 @@ meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply) <|> any_apply cs
 
-meta def applica : tactic unit :=
-do cs ← attribute.get_instances `applicandum,
+meta def pointwise : tactic unit :=
+do cs ← attribute.get_instances `pointwise,
    repeat_at_most 3 (any_apply cs >> try intros)
 
-meta def blast : tactic unit := repeat_at_most 3 ( (using_smt $ intros >> add_lemmas_from_facts >> repeat_at_most 3 ematch) >> applica >> try simp )
+meta def blast : tactic unit := repeat_at_most 3 ( (using_smt $ intros >> add_lemmas_from_facts >> repeat_at_most 3 ematch) >> pointwise >> try simp )
 
 notation `♮` := by blast
 
