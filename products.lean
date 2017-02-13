@@ -22,16 +22,8 @@ universe variables u v
     identity := λ X, (C^.identity (X^.fst), D^.identity (X^.snd)),
     compose  := λ _ _ _ f g, (C^.compose (f^.fst) (g^.fst), D^.compose (f^.snd) (g^.snd)),
 
-    left_identity  := begin
-                        intros, simp,
-                        induction f,
-                        simp
-                      end,
-    right_identity := begin
-                        intros, simp,
-                        induction f,
-                        simp
-                      end,
+    left_identity  := ♮,
+    right_identity := ♮,
     associativity  := begin
                         intros, 
                         rewrite [ C^.associativity, D^.associativity ]
@@ -44,9 +36,9 @@ end ProductCategory
 
 definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
-  onObjects := λ X, (F X^.fst, G X^.snd),
-  onMorphisms := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
-  identities := ♮,
+  onObjects     := λ X, (F X^.fst, G X^.snd),
+  onMorphisms   := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
+  identities    := ♮,
   functoriality := ♮
 }
 
@@ -62,22 +54,7 @@ end ProductFunctor
   functoriality := ♮
 }
 
-lemma switch_twice_is_the_identity ( C D : Category ) : FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (C × D) :=
-begin
-  fapply Functors_pointwise_equal,
-  begin
-    intros X,
-    blast,
-    induction X,
-    blast
-  end,
-  begin
-    intros X Y f,
-    blast,
-    induction f,
-    blast
-  end
-end
+lemma switch_twice_is_the_identity ( C D : Category ) : FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (C × D) := ♮
 
 definition ProductCategoryAssociator ( C D E : Category.{ u v } ) : Functor ((C × D) × E) (C × (D × E)) :=
 {

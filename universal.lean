@@ -69,11 +69,17 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
   identity := λ p, tag (A^.identity p.1, B^.identity p.2.1) ♮,
   compose  := λ p q r f g, tag (A^.compose (elt_of f).1 (elt_of g).1, B^.compose (elt_of f).2 (elt_of g).2)
                  begin
-                   blast,
-                   rewrite S^.functoriality
+                   abstract compose_tag {
+                     blast,
+                     rewrite C^.associativity,
+                     rewrite g^.has_property,
+                     rewrite - C^.associativity,
+                     rewrite - C^.associativity,
+                     rewrite - f^.has_property
+                   }
                  end,
-  left_identity  := sorry,
-  right_identity := sorry,
+  left_identity  := ♮,
+  right_identity := ♮,
   associativity  := sorry
 }
 

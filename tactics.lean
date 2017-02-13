@@ -20,15 +20,18 @@ meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply) <|> any_apply cs
 
-meta def smt   : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch
+meta def smt   : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch >> try simp
 
-meta def pointwise : tactic unit :=
+meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
-   try (any_apply cs >> repeat_at_most 2 smt)
+   try (any_apply cs >> and_then)
 
-meta def blast : tactic unit := smt >> pointwise >> try simp
+meta def blast : tactic unit := smt >> pointwise (repeat_at_most 2 blast)
 
-notation `♮` := by blast
+notation `♮` := by abstract { blast }
+
+@[pointwise] lemma {u v} pair_equality {α : Type u } {β : Type v} { X: α × β }: (X^.fst, X^.snd) = X := begin induction X, blast end
+attribute [pointwise] subtype.eq
 
 def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a
 @[simp] lemma {u} auto_cast_identity {α : Type u} (a : α) : @auto_cast α α ♮ a = a := ♮
