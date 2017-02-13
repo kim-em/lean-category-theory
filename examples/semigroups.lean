@@ -103,14 +103,14 @@ open tqft.categories.products
 definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
   CategoryOfSemigroups.{u} with
   tensor               := {
-    onObjects     := λ p, sigma.mk (p.1.1 × p.2.1) (semigroup_product p.1.2 p.2.2),
+    onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
     onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
     identities    := begin
                       abstract tensor_identities { intros, apply semigroup_morphism_pointwise_equality, intros, induction x, blast }
                      end,
     functoriality := ♮
   },
-  tensor_unit          := sigma.mk punit trivial_semigroup, -- punit is just a universe-parameterized version of unit
+  tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
   associator           := begin
                             abstract associator {
                               intros,
