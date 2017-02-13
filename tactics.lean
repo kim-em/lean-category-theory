@@ -20,11 +20,13 @@ meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply) <|> any_apply cs
 
+meta def smt   : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch
+
 meta def pointwise : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
-   repeat_at_most 3 (any_apply cs >> try intros)
+   try (any_apply cs >> repeat_at_most 2 smt)
 
-meta def blast : tactic unit := repeat_at_most 3 ( (using_smt $ intros >> add_lemmas_from_facts >> repeat_at_most 3 ematch) >> pointwise >> try simp )
+meta def blast : tactic unit := smt >> pointwise >> try simp
 
 notation `♮` := by blast
 

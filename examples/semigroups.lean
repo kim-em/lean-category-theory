@@ -100,63 +100,63 @@ definition trivial_semigroup: semigroup punit := {
 
 open tqft.categories.products
 
-definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
-  CategoryOfSemigroups.{u} with
-  tensor               := {
-    onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
-    onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
-    identities    := begin
-                      abstract tensor_identities { intros, apply semigroup_morphism_pointwise_equality, intros, induction x, blast }
-                     end,
-    functoriality := ♮
-  },
-  tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
-  associator           := begin
-                            abstract associator {
-                              intros,
-                              exact {
-                                map := λ t, (t.1.1, (t.1.2, t.2)),
-                                multiplicative := ♮
-                              }
-                            }
-                          end,
-  backwards_associator := begin
-                            abstract backwards_associator {
-                              intros,
-                              exact {
-                                map := λ t, ((t.1, t.2.1), t.2.2),
-                                multiplicative := ♮
-                              }
-                            }
-                          end,
-  associators_inverses_1 := begin
-                              abstract {
-                                intros, 
-                                apply semigroup_morphism_pointwise_equality, 
-                                intros, 
-                                blast,
-                                delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
-                                delta MonoidalCategoryOfSemigroups.associator, dsimp, 
-                                induction x with a b,
-                                induction a,
-                                blast
-                              }
-                            end,
-  associators_inverses_2 := begin
-                              abstract {
-                                intros, 
-                                apply semigroup_morphism_pointwise_equality, 
-                                intros, 
-                                blast,
-                                delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
-                                delta MonoidalCategoryOfSemigroups.associator, dsimp, 
-                                induction x with a b,
-                                induction b,
-                                blast
-                              }
-                            end,
-  interchange          := ♮
-}
+-- definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
+--   CategoryOfSemigroups.{u} with
+--   tensor               := {
+--     onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
+--     onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
+--     identities    := begin
+--                       abstract tensor_identities { intros, apply semigroup_morphism_pointwise_equality, intros, induction x, blast }
+--                      end,
+--     functoriality := ♮
+--   },
+--   tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
+--   associator           := begin
+--                             abstract associator {
+--                               intros,
+--                               exact {
+--                                 map := λ t, (t.1.1, (t.1.2, t.2)),
+--                                 multiplicative := ♮
+--                               }
+--                             }
+--                           end,
+--   backwards_associator := begin
+--                             abstract backwards_associator {
+--                               intros,
+--                               exact {
+--                                 map := λ t, ((t.1, t.2.1), t.2.2),
+--                                 multiplicative := ♮
+--                               }
+--                             }
+--                           end,
+--   associators_inverses_1 := begin
+--                               abstract {
+--                                 intros, 
+--                                 apply semigroup_morphism_pointwise_equality, 
+--                                 intros, 
+--                                 blast,
+--                                 delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
+--                                 delta MonoidalCategoryOfSemigroups.associator, dsimp, 
+--                                 induction x with a b,
+--                                 induction a,
+--                                 blast
+--                               }
+--                             end,
+--   associators_inverses_2 := begin
+--                               abstract {
+--                                 intros, 
+--                                 apply semigroup_morphism_pointwise_equality, 
+--                                 intros, 
+--                                 blast,
+--                                 delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
+--                                 delta MonoidalCategoryOfSemigroups.associator, dsimp, 
+--                                 induction x with a b,
+--                                 induction b,
+--                                 blast
+--                               }
+--                             end,
+--   interchange          := ♮
+-- }
 
 open tqft.categories.natural_transformation
 
