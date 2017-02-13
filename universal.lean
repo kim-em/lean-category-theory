@@ -80,7 +80,7 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
                  end,
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := sorry
+  associativity  := begin blast, rewrite [ A^.associativity, B^.associativity ] end
 }
 
 -- TODO then equalizers, etc.
