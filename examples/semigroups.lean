@@ -56,9 +56,6 @@ end
     identity := λ s, semigroup_identity s.2,
     compose  := λ _ _ _ f g, semigroup_morphism_composition f g,
 
-    /-
-    -- These proofs are a bit tedious, how do we automate?
-    -/
     left_identity  := ♮,
     right_identity := ♮,
     associativity  := ♮
@@ -100,105 +97,51 @@ definition trivial_semigroup: semigroup punit := {
 
 open tqft.categories.products
 
--- definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
---   CategoryOfSemigroups.{u} with
---   tensor               := {
---     onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
---     onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
---     identities    := begin
---                       abstract tensor_identities { intros, apply semigroup_morphism_pointwise_equality, intros, induction x, blast }
---                      end,
---     functoriality := ♮
---   },
---   tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
---   associator           := begin
---                             abstract associator {
---                               intros,
---                               exact {
---                                 map := λ t, (t.1.1, (t.1.2, t.2)),
---                                 multiplicative := ♮
---                               }
---                             }
---                           end,
---   backwards_associator := begin
---                             abstract backwards_associator {
---                               intros,
---                               exact {
---                                 map := λ t, ((t.1, t.2.1), t.2.2),
---                                 multiplicative := ♮
---                               }
---                             }
---                           end,
---   associators_inverses_1 := begin
---                               abstract {
---                                 intros, 
---                                 apply semigroup_morphism_pointwise_equality, 
---                                 intros, 
---                                 blast,
---                                 delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
---                                 delta MonoidalCategoryOfSemigroups.associator, dsimp, 
---                                 induction x with a b,
---                                 induction a,
---                                 blast
---                               }
---                             end,
---   associators_inverses_2 := begin
---                               abstract {
---                                 intros, 
---                                 apply semigroup_morphism_pointwise_equality, 
---                                 intros, 
---                                 blast,
---                                 delta MonoidalCategoryOfSemigroups.backwards_associator, dsimp,
---                                 delta MonoidalCategoryOfSemigroups.associator, dsimp, 
---                                 induction x with a b,
---                                 induction b,
---                                 blast
---                               }
---                             end,
---   interchange          := ♮
--- }
+definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
+  CategoryOfSemigroups.{u} with
+  tensor               := {
+    onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
+    onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
+    identities    := ♮,
+    functoriality := ♮
+  },
+  tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
+  associator           := λ _ _ _, {
+                                map := λ t, (t.1.1, (t.1.2, t.2)),
+                                multiplicative := ♮
+                              },
+  backwards_associator := λ _ _ _, {
+                                map := λ t, ((t.1, t.2.1), t.2.2),
+                                multiplicative := ♮
+                              },
+  associators_inverses_1 := ♮,
+  associators_inverses_2 := ♮,
+  interchange            := ♮
+}
 
 open tqft.categories.natural_transformation
 
--- definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
---   MonoidalCategoryOfSemigroups.{u} with
---   braiding             := {
---     morphism  := {
---       components := begin
---                       abstract braiding {
---                         intros,
---                         exact {
---                           map := λ p, (p.2, p.1),
---                           multiplicative := ♮
---                         }
---                       }
---                     end,
---       naturality := ♮
---     },
---     inverse   := {
---       components := begin
---                       abstract inverse_braiding {
---                         intros,
---                         exact {
---                           map := λ p, (p.2, p.1),
---                           multiplicative := ♮
---                         }
---                       }
---                     end,
---       naturality := ♮
---     },
---     witness_1 := begin
---                    apply NaturalTransformations_componentwise_equal,
---                    blast,
---                    -- now what? something like?
---                   --  delta SymmetricMonoidalCategoryOfSemigroups.braiding, dsimp,
---                   --  delta SymmetricMonoidalCategoryOfSemigroups.inverse_braiding, dsimp,
---                   --  blast
---                   exact sorry
---                  end,
---     witness_2 := sorry
---   },
---   symmetry := sorry
--- }
+definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
+  MonoidalCategoryOfSemigroups.{u} with
+  braiding             := {
+    morphism  := {
+      components := λ _, {
+                           map := λ p, (p.2, p.1),
+                           multiplicative := ♮
+                         },
+      naturality := ♮
+    },
+    inverse   := {
+      components := λ _, {
+                           map := λ p, (p.2, p.1),
+                           multiplicative := ♮
+                         },
+      naturality := ♮
+    },
+    witness_1 := ♮,
+    witness_2 := ♮
+  },
+  symmetry := begin blast, exact sorry end
+}
 
 end tqft.categories.examples.semigroups

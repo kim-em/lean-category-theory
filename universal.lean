@@ -30,37 +30,32 @@ lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Iso
       witness_2 := sorry
   }
 
--- TODO cones, limits
-
 open tqft.categories.functor
 open tqft.categories.natural_transformation
 
-definition DiagonalFunctor ( C J : Category ) : Functor C (FunctorCategory J C) :=
-{
-  onObjects     := λ X: C^.Obj, {
-    onObjects     := λ _, X,
-    onMorphisms   := λ _ _ _, C^.identity X,
-    identities    := ♮,
-    functoriality := ♮
-  },
-  onMorphisms   := λ X Y f, {
-    components := λ _, f,
-    naturality := ♮
-  },
-  identities    := ♮,
-  functoriality := ♮  
-}
+-- -- The diagonal functor sends X to the constant functor that sends everything to X.
+-- definition DiagonalFunctor ( C J : Category ) : Functor C (FunctorCategory J C) :=
+-- {
+--   onObjects     := λ X: C^.Obj, {
+--     onObjects     := λ _, X,
+--     onMorphisms   := λ _ _ _, C^.identity X,
+--     identities    := ♮,
+--     functoriality := ♮
+--   },
+--   onMorphisms   := λ X Y f, {
+--     components := λ _, f,
+--     naturality := ♮
+--   },
+--   identities    := ♮,
+--   functoriality := ♮  
+-- }
 
 -- The elaborator has some trouble understanding what p.2.2 and q.2.2 mean below.
 -- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
 local attribute [elab_simple]  sigma.snd
 
+-- TODO can one automatically coerce along subtype.elt_of?
 open subtype
-
--- universe variable u
-
--- instance elt_of_coercion {α : Type u} {p : α → Prop} : has_coe { x // p x } α :=
---   { coe := elt_of }
 
 definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B C ) : Category :=
 {
@@ -82,6 +77,32 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
   right_identity := ♮,
   associativity  := begin blast, rewrite [ A^.associativity, B^.associativity ] end
 }
+
+def One: Category :=
+{
+  Obj      := unit,
+  Hom      := λ _ _, unit,
+  identity := λ _, unit.star,
+  compose  := λ _ _ _ _ _, unit.star,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
+}
+
+definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor One C :=
+{
+  onObjects     := λ _, X,
+  onMorphisms   := λ _ _ _, C^.identity X,
+  identities    := ♮,
+  functoriality := ♮
+}
+
+-- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
+
+definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
+definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
+
+-- TODO cones, limits
 
 -- TODO then equalizers, etc.
 

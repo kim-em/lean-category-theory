@@ -24,13 +24,17 @@ meta def smt   : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> t
 
 meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
-   try (any_apply cs >> and_then)
+   try (do any_apply cs, and_then)
 
 meta def blast : tactic unit := smt >> pointwise (repeat_at_most 2 blast) -- pointwise equality of functors creates two goals
 
 notation `♮` := by abstract { blast }
 
-@[pointwise] lemma {u v} pair_equality {α : Type u } {β : Type v} { X: α × β }: (X^.fst, X^.snd) = X := begin induction X, blast end
+@[pointwise] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X^.fst, X^.snd) = X := begin induction X, blast end
+@[pointwise] lemma {u v} pair_equality_1 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X^.fst ) : (A, X^.snd) = X := begin induction X, blast end
+@[pointwise] lemma {u v} pair_equality_2 {α : Type u} {β : Type v} { X: α × β } { B : β } ( p : B = X^.snd ) : (X^.fst, B) = X := begin induction X, blast end
+-- But let's not use this last one, as it introduces two goals.
+-- @[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X^.fst ) { B : β } ( p : B = X^.snd ) : (A, B) = X := begin induction X, blast end
 attribute [pointwise] subtype.eq
 
 def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a
