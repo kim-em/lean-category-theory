@@ -15,6 +15,11 @@ structure InitialObject ( C : Category ) :=
   (morphism : ∀ Y : C^.Obj, C^.Hom object Y)
   (uniqueness :  ∀ Y : C^.Obj, ∀ f : C^.Hom object Y, f = morphism Y)
 
+structure TerminalObject ( C : Category ) :=
+  (object : C^.Obj)
+  (morphism : ∀ Y : C^.Obj, C^.Hom Y object)
+  (uniqueness :  ∀ Y : C^.Obj, ∀ f : C^.Hom Y object, f = morphism Y)
+
 -- TODO define a coercion along `object`
 
 structure is_initial { C : Category } ( X : C^.Obj ) :=
@@ -33,22 +38,22 @@ lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Iso
 open tqft.categories.functor
 open tqft.categories.natural_transformation
 
--- -- The diagonal functor sends X to the constant functor that sends everything to X.
--- definition DiagonalFunctor ( C J : Category ) : Functor C (FunctorCategory J C) :=
--- {
---   onObjects     := λ X: C^.Obj, {
---     onObjects     := λ _, X,
---     onMorphisms   := λ _ _ _, C^.identity X,
---     identities    := ♮,
---     functoriality := ♮
---   },
---   onMorphisms   := λ X Y f, {
---     components := λ _, f,
---     naturality := ♮
---   },
---   identities    := ♮,
---   functoriality := ♮  
--- }
+-- The diagonal functor sends X to the constant functor that sends everything to X.
+definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) :=
+{
+  onObjects     := λ X: C^.Obj, {
+    onObjects     := λ _, X,
+    onMorphisms   := λ _ _ _, C^.identity X,
+    identities    := ♮,
+    functoriality := ♮
+  },
+  onMorphisms   := λ X Y f, {
+    components := λ _, f,
+    naturality := ♮
+  },
+  identities    := ♮,
+  functoriality := ♮  
+}
 
 -- The elaborator has some trouble understanding what p.2.2 and q.2.2 mean below.
 -- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
@@ -98,11 +103,15 @@ definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor One C :=
 }
 
 -- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
-
 definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
 definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
--- TODO cones, limits
+definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C) (ObjectAsFunctor F)
+definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
+
+-- TODO is this definition actually usable??
+definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones F)
+definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject (Cocones F)
 
 -- TODO then equalizers, etc.
 
