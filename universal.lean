@@ -106,12 +106,12 @@ definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor One C :=
 definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
 definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
-definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C) (ObjectAsFunctor F)
+definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
 definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
 
 -- TODO is this definition actually usable??
-definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones F)
-definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject (Cocones F)
+definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
+definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
 
 -- TODO then equalizers, etc.
 
