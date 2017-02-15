@@ -17,14 +17,18 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
+@[reducible] definition TensorProduct ( C: Category ) := Functor ( C × C ) C
+
 structure PreMonoidalCategory
   -- this is only for internal use: it has a tensor product, but no associator at all
   -- it's not interesting mathematically, but may allow us to introduce usable notation for the tensor product
   extends carrier : Category :=
-  (tensor : Functor (carrier × carrier) carrier)
+  (tensor : TensorProduct carrier)
   (tensor_unit : Obj)
-  (interchange: Π { A B C D E F: Obj }, Π f : Hom A B, Π g : Hom B C, Π h : Hom D E, Π k : Hom E F, 
-    @Functor.onMorphisms _ _ tensor (A, D) (C, F) ((compose f g), (compose h k)) = compose (@Functor.onMorphisms _ _ tensor (A, D) (B, E) (f, h)) (@Functor.onMorphisms _ _ tensor (B, E) (C, F) (g, k)))
+  -- TODO this used to be a field, but it's just expressing tensor^.functoriality
+  -- make it a definition? or just leave it out?
+  -- (interchange: Π { A B C D E F: Obj }, Π f : Hom A B, Π g : Hom B C, Π h : Hom D E, Π k : Hom E F, 
+  --   @Functor.onMorphisms _ _ tensor (A, D) (C, F) ((compose f g), (compose h k)) = compose (@Functor.onMorphisms _ _ tensor (A, D) (B, E) (f, h)) (@Functor.onMorphisms _ _ tensor (B, E) (C, F) (g, k)))
 
 instance PreMonoidalCategory_coercion : has_coe PreMonoidalCategory Category := 
   ⟨PreMonoidalCategory.to_Category⟩
