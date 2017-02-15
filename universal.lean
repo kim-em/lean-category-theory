@@ -13,27 +13,48 @@ namespace tqft.categories.universal
 structure InitialObject ( C : Category ) :=
   (object : C^.Obj)
   (morphism : ∀ Y : C^.Obj, C^.Hom object Y)
-  (uniqueness :  ∀ Y : C^.Obj, ∀ f : C^.Hom object Y, f = morphism Y)
+  (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom object Y, f = morphism Y)
 
-structure TerminalObject ( C : Category ) :=
-  (object : C^.Obj)
-  (morphism : ∀ Y : C^.Obj, C^.Hom Y object)
-  (uniqueness :  ∀ Y : C^.Obj, ∀ f : C^.Hom Y object, f = morphism Y)
-
--- TODO define a coercion along `object`
+instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObject C) (C^.Obj) :=
+  { coe := InitialObject.object }
 
 structure is_initial { C : Category } ( X : C^.Obj ) :=
   (morphism : ∀ Y : C^.Obj, C^.Hom X Y)
   (uniqueness :  ∀ Y : C^.Obj, ∀ f : C^.Hom X Y, f = morphism Y)
-  
 
-lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Isomorphism C X^.object Y^.object :=
+lemma InitialObjects_have_only_the_identity_endomorphism { C : Category } ( X: InitialObject C ) ( f : C^.Hom X X ) : f = C^.identity X :=
+  begin
+   blast, -- blast is not actually doing anything here; but perhaps later it will.
+   rewrite X^.uniqueness X f,
+   rewrite X^.uniqueness X (C^.identity X)
+  end
+
+lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Isomorphism C X Y :=
   {
-      morphism := X^.morphism Y^.object,
-      inverse := Y^.morphism X^.object,
-      witness_1 := begin exact sorry end,
-      witness_2 := sorry
+      morphism  := X^.morphism Y,
+      inverse   := Y^.morphism X,
+      witness_1 := begin apply InitialObjects_have_only_the_identity_endomorphism end,
+      witness_2 := begin apply InitialObjects_have_only_the_identity_endomorphism end
   }
+
+definition Opposite ( C : Category ) : Category :=
+{
+  Obj      := C^.Obj,
+  Hom      := λ X Y, C^.Hom Y X,
+  identity := C^.identity,
+  compose  := λ X Y Z f g, C^.compose g f,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := begin
+    blast,
+    rewrite C^.associativity
+  end
+}
+
+structure TerminalObject ( C : Category ) :=
+  (object : C^.Obj)
+  (morphism : ∀ Y : C^.Obj, C^.Hom Y object)
+  (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom Y object, f = morphism Y)
 
 open tqft.categories.functor
 open tqft.categories.natural_transformation
@@ -83,9 +104,9 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
   associativity  := begin blast, rewrite [ A^.associativity, B^.associativity ] end
 }
 
-def One: Category :=
+definition DiscreteCategory ( n : ℕ ) : Category :=
 {
-  Obj      := unit,
+  Obj      := { k : ℕ // k < n },
   Hom      := λ _ _, unit,
   identity := λ _, unit.star,
   compose  := λ _ _ _ _ _, unit.star,
@@ -94,7 +115,7 @@ def One: Category :=
   associativity  := ♮
 }
 
-definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor One C :=
+definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory 1) C :=
 {
   onObjects     := λ _, X,
   onMorphisms   := λ _ _ _, C^.identity X,
@@ -113,7 +134,8 @@ definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@Obj
 definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
 definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
 
--- TODO then equalizers, etc.
+-- TODO then products, equalizers, etc.
+-- perhaps a good way to find out if these definitions are usable is to verify that products are products.
 
 -- TODO ... how to handle dual notions without too much duplication?
 
