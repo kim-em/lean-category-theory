@@ -51,10 +51,13 @@ definition Opposite ( C : Category ) : Category :=
   end
 }
 
-structure TerminalObject ( C : Category ) :=
-  (object : C^.Obj)
-  (morphism : ∀ Y : C^.Obj, C^.Hom Y object)
-  (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom Y object, f = morphism Y)
+-- Do we dare:
+definition TerminalObject ( C : Category ) := InitialObject (Opposite C)
+
+-- structure TerminalObject ( C : Category ) :=
+--   (object : C^.Obj)
+--   (morphism : ∀ Y : C^.Obj, C^.Hom Y object)
+--   (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom Y object, f = morphism Y)
 
 open tqft.categories.functor
 open tqft.categories.natural_transformation
@@ -80,7 +83,7 @@ definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) 
 -- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
 local attribute [elab_simple]  sigma.snd
 
--- TODO can one automatically coerce along subtype.elt_of?
+-- unfortunately one can't coerce along subtype.elt_of
 open subtype
 
 definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B C ) : Category :=

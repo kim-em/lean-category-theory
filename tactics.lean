@@ -24,7 +24,7 @@ meta def smt   : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> t
 
 meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
-   try (do any_apply cs, and_then)
+   try (any_apply cs >> and_then)
 
 meta def blast : tactic unit := smt >> pointwise (repeat_at_most 2 blast) -- pointwise equality of functors creates two goals
 

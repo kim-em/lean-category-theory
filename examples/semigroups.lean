@@ -121,27 +121,31 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
 
 open tqft.categories.natural_transformation
 
--- definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
---   MonoidalCategoryOfSemigroups.{u} with
---   braiding             := {
---     morphism  := {
---       components := λ _, {
---                            map := λ p, (p.2, p.1),
---                            multiplicative := ♮
---                          },
---       naturality := ♮
---     },
---     inverse   := {
---       components := λ _, {
---                            map := λ p, (p.2, p.1),
---                            multiplicative := ♮
---                          },
---       naturality := ♮
---     },
---     witness_1 := ♮,
---     witness_2 := ♮
---   },
---   symmetry := begin blast, exact sorry end
--- }
+definition BraidedMonoidalCategoryOfSemigroups : BraidedMonoidalCategory := {
+  MonoidalCategoryOfSemigroups.{u} with
+  braiding             := {
+    morphism  := {
+      components := λ _, {
+                           map := λ p, (p.2, p.1),
+                           multiplicative := ♮
+                         },
+      naturality := ♮
+    },
+    inverse   := {
+      components := λ _, {
+                           map := λ p, (p.2, p.1),
+                           multiplicative := ♮
+                         },
+      naturality := ♮
+    },
+    witness_1 := ♮,
+    witness_2 := ♮
+  }
+}
+
+definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
+  BraidedMonoidalCategoryOfSemigroups.{u} with
+  symmetry := sorry
+}
 
 end tqft.categories.examples.semigroups

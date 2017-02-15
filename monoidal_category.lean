@@ -120,32 +120,21 @@ namespace notations
                      C^.tensor^.onMorphisms (f, g)
 end notations
 
-/- TODO make this work again
-definition { u v } tensor_on_left (C: MonoidalCategory.{u v}) (Z: C^.Obj) : Functor.{u v u v} C C :=
-  {
-    onObjects := λ X, C^.tensor (Z, X),
-    onMorphisms := --λ _ _ f, (C^.identity Z) ⊗ f,
-                   --λ _ _ f, C^.tensor <$> (C^.identity Z, f),
-                   --λ _ _ f, onMorphisms (C^.tensor) (C^.identity Z f),
-                   λ X Y f, @Functor.onMorphisms _ _ (C^.tensor) (Z, X) (Z, Y) (C^.identity Z, f),
-    identities := begin
-                    intros, 
-                    pose H := Functor.identities (C^.tensor) (Z, X),
-                    -- TODO these next two steps are ridiculous... surely we shouldn't have to do this.
-                    assert ids : Category.identity.{u v} C = MonoidalCategory.identity C, blast,
-                    rewrite ids,
-                    exact H -- blast doesn't work here?!                    
-                  end,
-    functoriality := begin
-                       intros,
-                       -- TODO similarly here
-                       assert composes : Category.compose.{u v} C = MonoidalCategory.compose C, blast, 
-                       rewrite composes,
-                       rewrite - C^.interchange,
-                       rewrite C^.left_identity
-                     end
-  }
-  -/
+-- TODO make this work again
+-- definition tensor_on_left (C: MonoidalCategory.{u v}) (Z: C^.Obj) : Functor.{u v u v} C C :=
+--   {
+--     onObjects := λ X, C^.tensor (Z, X),
+--     onMorphisms := λ X Y f, @Functor.onMorphisms _ _ (C^.tensor) (Z, X) (Z, Y) (C^.identity Z, f),
+--     identities := begin
+--                     intros, 
+--                     -- TODO these next two steps are ridiculous... surely we shouldn't have to do this.
+--                     assert ids : Category.identity.{u v} C = MonoidalCategory.identity C, blast,
+--                     rewrite ids,
+--                     rewrite Functor.identities (C^.tensor),                
+--                   end,
+--     functoriality := sorry
+--   }
+  --
 
 /-
 -- I don't really understand why the universe annotations are needed in Braiding and in squaredBraiding.
