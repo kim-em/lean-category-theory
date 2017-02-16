@@ -46,7 +46,7 @@ structure Isomorphism ( C: Category ) ( X Y : C^.Obj ) :=
 instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } : has_coe (Isomorphism C X Y) (C^.Hom X Y) :=
   { coe := Isomorphism.morphism }
 
-structure Inverse { C : Category } { X Y : C^.Obj } ( morphism : C^.Hom X Y ) :=
+structure is_isomorphism { C : Category } { X Y : C^.Obj } ( morphism : C^.Hom X Y ) :=
   (inverse : C^.Hom Y X)
   (witness_1 : C^.compose morphism inverse = C^.identity X)
   (witness_2 : C^.compose inverse morphism = C^.identity Y)

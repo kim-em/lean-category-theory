@@ -25,10 +25,6 @@ structure PreMonoidalCategory
   extends carrier : Category :=
   (tensor : TensorProduct carrier)
   (tensor_unit : Obj)
-  -- TODO this used to be a field, but it's just expressing tensor^.functoriality
-  -- make it a definition? or just leave it out?
-  -- (interchange: Π { A B C D E F: Obj }, Π f : Hom A B, Π g : Hom B C, Π h : Hom D E, Π k : Hom E F, 
-  --   @Functor.onMorphisms _ _ tensor (A, D) (C, F) ((compose f g), (compose h k)) = compose (@Functor.onMorphisms _ _ tensor (A, D) (B, E) (f, h)) (@Functor.onMorphisms _ _ tensor (B, E) (C, F) (g, k)))
 
 instance PreMonoidalCategory_coercion : has_coe PreMonoidalCategory Category := 
   ⟨PreMonoidalCategory.to_Category⟩
@@ -113,31 +109,51 @@ structure MonoidalCategory
   (associators_inverses_1: Π (X Y Z : Obj), compose (associator X Y Z) (backwards_associator X Y Z) = identity (tensor (tensor (X, Y), Z)))
   (associators_inverses_2: Π (X Y Z : Obj), compose (backwards_associator X Y Z) (associator X Y Z) = identity (tensor (X, tensor (Y, Z))))
 
+-- Convenience methods which take two arguments, rather than a pair. (This seems to often help the elaborator avoid getting stuck on `prod.mk`.)
+@[reducible] definition MonoidalCategory.tensorObjects ( C : MonoidalCategory ) ( X Y : C^.Obj ) : C^.Obj := C^.tensor (X, Y)
+@[reducible] definition MonoidalCategory.tensorMorphisms ( C : MonoidalCategory ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (C^.tensor (W, Y)) (C^.tensor (X, Z)) := C^.tensor^.onMorphisms (f, g)
+
 instance MonoidalCategory_coercion_to_LaxMonoidalCategory : has_coe MonoidalCategory LaxMonoidalCategory := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
 -- instance MonoidalCategory_coercion_to_OplaxMonoidalCategory : has_coe MonoidalCategory OplaxMonoidalCategory := ⟨MonoidalCategory.to_OplaxMonoidalCategory⟩
 
+-- TODO This works, but do we really need to be so explicit??
+@[reducible] definition MonoidalCategory.interchange
+  ( C : MonoidalCategory )
+  { U V W X Y Z: C^.Obj }
+  ( f : C^.Hom U V )( g : C^.Hom V W )( h : C^.Hom X Y )( k : C^.Hom Y Z ) : 
+  @Functor.onMorphisms _ _ C^.tensor (U, X) (W, Z) ((C^.compose f g), (C^.compose h k)) = C^.compose (@Functor.onMorphisms _ _ C^.tensor (U, X) (V, Y) (f, h)) (@Functor.onMorphisms _ _ C^.tensor (V, Y) (W, Z) (g, k)) :=
+  @Functor.functoriality (C × C) C C^.tensor (U, X) (V, Y) (W, Z) (f, h) (g, k)
+
 namespace notations
   infix `⊗`:70 := λ {C : MonoidalCategory} (X Y : C^.Obj),
-                    C^.tensor^.onObjects (X, Y)
+                    C^.tensorObjects X Y
   infix `⊗`:70 := λ {C : MonoidalCategory} {W X Y Z : C^.Obj}
                      (f : C^.Hom W X) (g : C^.Hom Y Z),
-                     C^.tensor^.onMorphisms (f, g)
+                     C^.tensorMorphisms f g
 end notations
 
 -- TODO make this work again
--- definition tensor_on_left (C: MonoidalCategory.{u v}) (Z: C^.Obj) : Functor.{u v u v} C C :=
---   {
---     onObjects := λ X, C^.tensor (Z, X),
---     onMorphisms := λ X Y f, @Functor.onMorphisms _ _ (C^.tensor) (Z, X) (Z, Y) (C^.identity Z, f),
---     identities := begin
---                     intros, 
---                     -- TODO these next two steps are ridiculous... surely we shouldn't have to do this.
---                     assert ids : Category.identity.{u v} C = MonoidalCategory.identity C, blast,
---                     rewrite ids,
---                     rewrite Functor.identities (C^.tensor),                
---                   end,
---     functoriality := sorry
---   }
+definition tensor_on_left (C: MonoidalCategory.{u v}) (Z: C^.Obj) : Functor.{u v u v} C C :=
+  {
+    onObjects := λ X, C^.tensorObjects Z X,
+    onMorphisms := λ X Y f, C^.tensorMorphisms (C^.identity Z) f,
+    identities := begin
+                    intros, 
+                    -- TODO these next two steps are ridiculous... surely we shouldn't have to do this.
+                    assert identities_same : Category.identity.{u v} C = MonoidalCategory.identity C, blast,
+                    rewrite identities_same,
+                    blast,
+                    rewrite Functor.identities (C^.tensor),                
+                  end,
+    functoriality := sorry
+                    --  begin
+                    --    blast,
+                    --    assert compositions_same : Category.compose C = MonoidalCategory.compose C, blast,
+                    --    rewrite compositions_same,
+                    --    rewrite C^.interchange,
+                    --    exact sorry
+                    --  end
+  }
   --
 
 /-
@@ -145,31 +161,5 @@ end notations
 -- My guess is that it is related to
 -- https://groups.google.com/d/msg/lean-user/3qzchWkut0g/0QR6_cS8AgAJ
 -/
-
-definition Braiding(C : MonoidalCategory.{u v}) := 
-  NaturalIsomorphism (C^.tensor) (FunctorComposition (SwitchProductCategory C^.to_LaxMonoidalCategory^.to_PreMonoidalCategory^.to_Category C) C^.tensor)
-
-structure BraidedMonoidalCategory
-  extends parent: MonoidalCategory :=
-  (braiding: Braiding parent)
-
-instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
-
-definition squared_Braiding { C : MonoidalCategory.{u v} } ( braiding : Braiding C )
-  : NaturalTransformation C^.tensor C^.tensor :=
-  begin
-    pose square := vertical_composition_of_NaturalTransformations braiding^.morphism (whisker_on_left (SwitchProductCategory C C) braiding^.morphism),
-    rewrite - FunctorComposition_associative at square,
-    erewrite switch_twice_is_the_identity at square,
-    rewrite FunctorComposition_left_identity at square,
-    exact square
-  end 
-
-definition Symmetry(C : BraidedMonoidalCategory) : Prop :=
-  squared_Braiding (C^.braiding) = IdentityNaturalTransformation C^.tensor
-
-structure SymmetricMonoidalCategory
-  extends parent: BraidedMonoidalCategory :=
-  (symmetry: Symmetry parent)
 
 end tqft.categories.monoidal_category

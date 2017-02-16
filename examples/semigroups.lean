@@ -3,7 +3,7 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import ..category
-import ..monoidal_category
+import ..braided_monoidal_category
 
 namespace tqft.categories.examples.semigroups
 
@@ -115,11 +115,11 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
                                 multiplicative := ♮
                               },
   associators_inverses_1 := ♮,
-  associators_inverses_2 := ♮,
-  interchange            := ♮
+  associators_inverses_2 := ♮
 }
 
 open tqft.categories.natural_transformation
+open tqft.categories.braided_monoidal_category
 
 definition BraidedMonoidalCategoryOfSemigroups : BraidedMonoidalCategory := {
   MonoidalCategoryOfSemigroups.{u} with
@@ -141,11 +141,6 @@ definition BraidedMonoidalCategoryOfSemigroups : BraidedMonoidalCategory := {
     witness_1 := ♮,
     witness_2 := ♮
   }
-}
-
-definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
-  BraidedMonoidalCategoryOfSemigroups.{u} with
-  symmetry := sorry
 }
 
 end tqft.categories.examples.semigroups
