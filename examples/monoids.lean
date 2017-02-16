@@ -4,7 +4,7 @@
 
 import ..category
 import ..functor
-import .semigroups
+import .semigroups.semigroups
 
 namespace tqft.categories.examples.monoids
 

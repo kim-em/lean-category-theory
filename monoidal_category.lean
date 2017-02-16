@@ -114,7 +114,7 @@ structure MonoidalCategory
 @[reducible] definition MonoidalCategory.tensorMorphisms ( C : MonoidalCategory ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (C^.tensor (W, Y)) (C^.tensor (X, Z)) := C^.tensor^.onMorphisms (f, g)
 
 instance MonoidalCategory_coercion_to_LaxMonoidalCategory : has_coe MonoidalCategory LaxMonoidalCategory := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
--- instance MonoidalCategory_coercion_to_OplaxMonoidalCategory : has_coe MonoidalCategory OplaxMonoidalCategory := ⟨MonoidalCategory.to_OplaxMonoidalCategory⟩
+instance MonoidalCategory_coercion_to_OplaxMonoidalCategory : has_coe MonoidalCategory OplaxMonoidalCategory := ⟨MonoidalCategory.to_OplaxMonoidalCategory⟩
 
 -- TODO This works, but do we really need to be so explicit??
 @[reducible] definition MonoidalCategory.interchange
@@ -132,34 +132,37 @@ namespace notations
                      C^.tensorMorphisms f g
 end notations
 
--- TODO make this work again
-definition tensor_on_left (C: MonoidalCategory.{u v}) (Z: C^.Obj) : Functor.{u v u v} C C :=
-  {
-    onObjects := λ X, C^.tensorObjects Z X,
-    onMorphisms := λ X Y f, C^.tensorMorphisms (C^.identity Z) f,
-    identities := begin
-                    intros, 
-                    -- TODO these next two steps are ridiculous... surely we shouldn't have to do this.
-                    assert identities_same : Category.identity.{u v} C = MonoidalCategory.identity C, blast,
-                    rewrite identities_same,
-                    blast,
-                    rewrite Functor.identities (C^.tensor),                
-                  end,
-    functoriality := sorry
-                    --  begin
-                    --    blast,
-                    --    assert compositions_same : Category.compose C = MonoidalCategory.compose C, blast,
-                    --    rewrite compositions_same,
-                    --    rewrite C^.interchange,
-                    --    exact sorry
-                    --  end
-  }
-  --
+-- per https://groups.google.com/d/msg/lean-user/kkIFgWRJTLo/tr2VyJGmCQAJ
+local attribute [reducible] lift_t coe_t coe_b
 
-/-
--- I don't really understand why the universe annotations are needed in Braiding and in squaredBraiding.
--- My guess is that it is related to
--- https://groups.google.com/d/msg/lean-user/3qzchWkut0g/0QR6_cS8AgAJ
--/
+definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
+{
+  onObjects := λ X, C^.tensorObjects Z X,
+  onMorphisms := λ X Y f, C^.tensorMorphisms (C^.identity Z) f,
+  identities := begin
+                  blast,
+                  rewrite Functor.identities (C^.tensor),                
+                end,
+  functoriality := begin
+                      blast,
+                      rewrite - C^.interchange,
+                      rewrite C^.left_identity
+                    end
+}
 
+definition tensor_on_right { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
+{
+  onObjects := λ X, C^.tensorObjects X Z,
+  onMorphisms := λ X Y f, C^.tensorMorphisms f (C^.identity Z),
+  identities := begin
+                  blast,
+                  rewrite Functor.identities (C^.tensor),                
+                end,
+  functoriality := begin
+                      blast,
+                      rewrite - C^.interchange,
+                      rewrite C^.left_identity
+                    end
+}
+  
 end tqft.categories.monoidal_category

@@ -26,26 +26,26 @@ open tqft.categories.monoidal_category
     associativity  := begin blast, apply nat.add_assoc end
   }    
 
-definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
-  { onObjects   := id,
-    onMorphisms := (λ _ _ n, nat.add n n),
-    identities    := ♮,
-    functoriality := begin blast, exact sorry end
-  }
+-- TODO finish these only natural arithmetic is automated
+-- definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
+--   { onObjects   := id,
+--     onMorphisms := (λ _ _ n, nat.add n n),
+--     identities    := ♮,
+--     functoriality := begin blast, exact sorry end
+--   }
 
-definition ℕTensorProduct : Functor (ℕCategory × ℕCategory) ℕCategory :=
-  { onObjects     := prod.fst,
-    onMorphisms   := λ _ _ n, n^.fst + n^.snd,
-    identities    := ♮,
-    functoriality := sorry
-  }
+-- definition ℕTensorProduct : Functor (ℕCategory × ℕCategory) ℕCategory :=
+--   { onObjects     := prod.fst,
+--     onMorphisms   := λ _ _ n, n^.fst + n^.snd,
+--     identities    := ♮,
+--     functoriality := sorry
+--   }
 
-def ℕLaxMonoidalCategory : LaxMonoidalCategory :=
-  { ℕCategory with
-    tensor       := ℕTensorProduct,
-    tensor_unit  := (),
-    associator   := λ _ _ _, Category.identity ℕCategory (),
-    interchange  := sorry -- should be trivial, but how?
-  }
+-- def ℕLaxMonoidalCategory : LaxMonoidalCategory :=
+--   { ℕCategory with
+--     tensor       := ℕTensorProduct,
+--     tensor_unit  := (),
+--     associator   := λ _ _ _, Category.identity ℕCategory ()
+--   }
 
 end tqft.categories.examples.naturals

@@ -17,6 +17,12 @@ open tqft.categories.monoidal_category
 
 universe variables u v
 
+/-
+-- I don't really understand why the universe annotations are needed in Braiding and in squaredBraiding.
+-- My guess is that it is related to
+-- https://groups.google.com/d/msg/lean-user/3qzchWkut0g/0QR6_cS8AgAJ
+-/
+
 definition Braiding(C : MonoidalCategory.{u v}) := 
   NaturalIsomorphism (C^.tensor) (FunctorComposition (SwitchProductCategory C^.to_LaxMonoidalCategory^.to_PreMonoidalCategory^.to_Category C) C^.tensor)
 
@@ -26,7 +32,7 @@ structure BraidedMonoidalCategory
 
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
 
-definition squared_Braiding { C : MonoidalCategory.{u v} } ( braiding : Braiding C )
+@[reducible] definition squared_Braiding { C : MonoidalCategory.{u v} } ( braiding : Braiding C )
   : NaturalTransformation C^.tensor C^.tensor :=
   begin
     pose square := vertical_composition_of_NaturalTransformations braiding^.morphism (whisker_on_left (SwitchProductCategory C C) braiding^.morphism),
@@ -36,7 +42,7 @@ definition squared_Braiding { C : MonoidalCategory.{u v} } ( braiding : Braiding
     exact square
   end 
 
-definition Symmetry(C : BraidedMonoidalCategory) : Prop :=
+@[reducible] definition Symmetry(C : BraidedMonoidalCategory) : Prop :=
   squared_Braiding (C^.braiding) = IdentityNaturalTransformation C^.tensor
 
 structure SymmetricMonoidalCategory
