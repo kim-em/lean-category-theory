@@ -4,6 +4,8 @@
 
 set_option pp.universes true
 
+
+open tactic
 open smt_tactic
 
 def pointwise_attribute : user_attribute := {
@@ -12,8 +14,6 @@ def pointwise_attribute : user_attribute := {
 }
 
 run_command attribute.register `pointwise_attribute
-
-open tactic
 
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
