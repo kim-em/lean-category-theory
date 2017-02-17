@@ -24,8 +24,10 @@ universe variables u v
     left_identity  := ♮,
     right_identity := ♮,
     associativity  := begin
-                        intros, 
-                        rewrite [ C^.associativity, D^.associativity ]
+                        blast,
+                        begin[smt]
+                          eblast_using [ Category.associativity ]
+                        end
                       end
   }
 
@@ -51,7 +53,9 @@ definition ProductNaturalTransformation { A B C D : Category } { F G : Functor A
   naturality :=
   begin
     blast,
-    rewrite [α^.naturality, β^.naturality],
+    begin[smt]
+      eblast_using [ NaturalTransformation.naturality ]
+    end
   end
 }
 

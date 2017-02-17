@@ -47,7 +47,9 @@ definition Opposite ( C : Category ) : Category :=
   right_identity := ♮,
   associativity  := begin
     blast,
-    rewrite C^.associativity
+    begin[smt]
+      eblast_using [ Category.associativity ]
+    end
   end
 }
 
@@ -95,16 +97,19 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
                  begin
                    abstract compose_tag {
                      blast,
-                     rewrite C^.associativity,
-                     rewrite g^.has_property,
-                     rewrite - C^.associativity,
-                     rewrite - C^.associativity,
-                     rewrite - f^.has_property
+                     begin[smt]
+                        eblast_using [ Category.associativity, subtype.has_property ]
+                     end
                    }
                  end,
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin blast, rewrite [ A^.associativity, B^.associativity ] end
+  associativity  := begin 
+                      blast, 
+                      begin[smt]
+                        eblast_using [ Category.associativity ]
+                      end 
+                     end
 }
 
 definition DiscreteCategory ( n : ℕ ) : Category :=

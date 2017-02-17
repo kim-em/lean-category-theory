@@ -142,6 +142,10 @@ definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.
                 end,
   functoriality := begin
                       blast,
+                      -- TODO, why doesn't this work?
+                      -- begin[smt]
+                      --   eblast_using [ Category.left_identity, MonoidalCategory.interchange ]
+                      -- end,
                       rewrite - C^.interchange,
                       rewrite C^.left_identity
                     end
