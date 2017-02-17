@@ -29,6 +29,7 @@ definition Braiding(C : MonoidalCategory.{u v}) :=
 structure BraidedMonoidalCategory
   extends parent: MonoidalCategory :=
   (braiding: Braiding parent)
+-- TODO hexagon!
 
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
 
