@@ -36,9 +36,6 @@ definition Associator ( C : PreMonoidalCategory ) :=
     (left_associated_triple_tensor C) 
     (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor C))
 
-definition associator_components ( C : PreMonoidalCategory ) :=
-  Π X Y Z : C^.Obj, C^.Hom (C^.tensor (C^.tensor (X, Y), Z)) (C^.tensor (X, C^.tensor (Y, Z)))
-
 /-
 definition associator_to_components { C : PreMonoidalCategory } ( α : Associator C ) : associator_components C := 
 begin
@@ -55,29 +52,72 @@ end
 -- which look at the components and then attempts to use automation to construct the proof of naturality. 
 -/
 
+definition left_associated_quadruple_tensor ( C : PreMonoidalCategory ) :
+  Functor (((C × C) × C) × C) C :=
+  FunctorComposition
+    (FunctorComposition
+      ((C^.tensor × IdentityFunctor C) × IdentityFunctor C)
+      (C^.tensor × IdentityFunctor C))
+    C^.tensor
+
+definition right_associated_quadruple_tensor ( C : PreMonoidalCategory ) :
+  Functor (C × (C × (C × C))) C :=
+  FunctorComposition
+    (FunctorComposition
+      (IdentityFunctor C × (IdentityFunctor C  × C^.tensor))
+      (IdentityFunctor C × C^.tensor))
+    C^.tensor
+
+definition pentagon_3step_1 { C : PreMonoidalCategory } ( α : Associator C ) :=
+  whisker_on_right
+    (ProductNaturalTransformation α (IdentityNaturalTransformation (IdentityFunctor C)))
+    C^.tensor
+
+definition pentagon_3step_2 { C : PreMonoidalCategory } ( α : Associator C ) :=
+  whisker_on_left
+    (FunctorComposition
+      (ProductCategoryAssociator C C C × IdentityFunctor C)
+      ((IdentityFunctor C × C^.tensor) × IdentityFunctor C))
+    α
+
+definition pentagon_3step_3 { C : PreMonoidalCategory } ( α : Associator C ) :=
+  whisker_on_left
+    (FunctorComposition
+      (ProductCategoryAssociator C C C × IdentityFunctor C)
+      (ProductCategoryAssociator C (↑C × ↑C) C))
+    (whisker_on_right
+      (IdentityNaturalTransformation (IdentityFunctor C) × α)
+      C^.tensor)
+
+definition pentagon_3step { C : PreMonoidalCategory } ( α : Associator C ) :=
+  vertical_composition_of_NaturalTransformations
+    (vertical_composition_of_NaturalTransformations
+      (pentagon_3step_1 α)
+      (pentagon_3step_2 α))
+    (pentagon_3step_3 α)
+
+definition pentagon_2step_1 { C : PreMonoidalCategory } ( α : Associator C ) :=
+  whisker_on_left
+    ((C^.tensor × IdentityFunctor C) × IdentityFunctor C)
+    α
+
+definition pentagon_2step_2 { C : PreMonoidalCategory } ( α : Associator C ) :=
+  whisker_on_left
+    (FunctorComposition
+      (ProductCategoryAssociator (↑C × ↑C) C C)
+      (IdentityFunctor (↑C × ↑C) × C^.tensor))
+    α
+
+definition pentagon_2step { C : PreMonoidalCategory } ( α : Associator C ) :=
+  vertical_composition_of_NaturalTransformations
+    (pentagon_2step_1 α)
+    (pentagon_2step_2 α)
+
 structure LaxMonoidalCategory
   extends carrier : PreMonoidalCategory :=
-  -- (associator : Associator carrier)
-  (associator : Π (X Y Z : Obj),
-     Hom (tensor (tensor (X, Y), Z)) (tensor (X, tensor (Y, Z)))) 
+  (associator : Associator carrier)
+  (pentagon   : pentagon_3step associator = pentagon_2step associator)
 
--- TODO actually, express the associator as a natural transformation!
-/- I tried writing the pentagon, but it doesn't type check. :-(
-  (pentagon : Π (A B C D : Obj),
-     -- we need to compare:
-     -- ((AB)C)D ---> (A(BC))D ---> A((BC)D) ---> A(B(CD))
-     -- ((AB)C)D ---> (AB)(CD) ---> A(B(CD))
-     compose
-       (compose
-         (tensor <$> (associator A B C, identity D))
-         (associator A (tensor (B, C)) D)
-       ) (tensor <$> (identity A, associator B C D)) =
-     compose
-       (associator (tensor (A, B)) C D)
-       (associator A B (tensor (C, D)))
-
-  )
--/
 /-
 -- TODO (far future)
 -- One should prove the first substantial result of this theory: that any two ways to reparenthesize are equal.
