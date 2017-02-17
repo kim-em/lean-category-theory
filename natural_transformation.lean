@@ -51,13 +51,9 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     components := λ X, D^.compose (α X) (β X),
     naturality := begin
                     blast,
-                    /- this proof was written by a sufficient stupid process that I am confident a computer
-                    -- could have done it! -/
-                    rewrite D^.associativity,
-                    rewrite - β^.naturality,
-                    rewrite - D^.associativity,
-                    rewrite α^.naturality,
-                    rewrite D^.associativity
+                    begin[smt]
+                      eblast_using [ Category.associativity, NaturalTransformation.naturality ]
+                    end,
                   end
   }
 
@@ -73,25 +69,9 @@ open tqft.categories.functor
     components := λ X : C^.Obj, E^.compose (β (F X)) (I^.onMorphisms (α X)),
     naturality := begin
                     blast,
-                    -- This is obscene! What is the state of automation?
-                    -- Ideally we could just say:
-                    --     some_tactic [ α^.naturality, β^.naturality, E^.associativity, H^.functoriality ]
-                    -- which would search for sequences of rewrites along these equations (and their reverses)
-                    -- or even just
-                    --     some_other_tactic [ α, β, E, H ]
-                    -- which would apply some_tactic using all the equations available as fields on these hypotheses,
-                    -- or even just
-                    --     some_other_tactic
-                    -- which would consider all the available hypotheses.
-                    rewrite - β^.naturality,
-                    rewrite - β^.naturality,
-                    rewrite - E^.associativity,
-                    rewrite - H^.functoriality,
-                    rewrite α^.naturality,
-                    rewrite H^.functoriality,
-                    rewrite E^.associativity,
-                    rewrite E^.associativity,
-                    rewrite β^.naturality
+                    begin[smt]
+                      eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
+                    end,
                   end
   }
 
@@ -114,6 +94,8 @@ definition whisker_on_right
 -- To define a natural isomorphism, we'll define the functor category, and ask for an isomorphism there.
 -- It's then a lemma that each component is an isomorphism, and vice versa.
 
+open smt_tactic.interactive
+
 @[reducible] definition FunctorCategory ( C D : Category ) : Category :=
 {
   Obj := Functor C D,
@@ -124,9 +106,11 @@ definition whisker_on_right
 
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin                      
+  associativity  := begin                     
                       blast,
-                      rewrite [ D^.associativity ]
+                      begin[smt]
+                        eblast_using [ Category.associativity ]
+                      end
                     end
 }
 

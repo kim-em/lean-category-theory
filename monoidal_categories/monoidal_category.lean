@@ -70,7 +70,7 @@ definition right_associated_quadruple_tensor ( C : PreMonoidalCategory ) :
 
 definition pentagon_3step_1 { C : PreMonoidalCategory } ( α : Associator C ) :=
   whisker_on_right
-    (ProductNaturalTransformation α (IdentityNaturalTransformation (IdentityFunctor C)))
+    (α × IdentityNaturalTransformation (IdentityFunctor C))
     C^.tensor
 
 definition pentagon_3step_2 { C : PreMonoidalCategory } ( α : Associator C ) :=
@@ -182,6 +182,10 @@ definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.
                 end,
   functoriality := begin
                       blast,
+                      -- TODO, why doesn't this work?
+                      -- begin[smt]
+                      --   eblast_using [ Category.left_identity, MonoidalCategory.interchange ]
+                      -- end,
                       rewrite - C^.interchange,
                       rewrite C^.left_identity
                     end
