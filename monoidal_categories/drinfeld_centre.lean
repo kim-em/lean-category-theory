@@ -25,25 +25,25 @@ structure HalfBraidingMorphism { C : MonoidalCategory } ( X Y : HalfBraiding C )
   -- Probably there is a better way to express this condition!
   (witness : ∀ Z : C^.Obj, C^.compose (X^.commutor Z) (C^.tensorMorphisms (C^.identity Z) morphism) = C^.compose (C^.tensorMorphisms morphism (C^.identity Z)) (Y^.commutor Z))
 
--- --TODO: remove, not actually used
+-- --TODO: remove?, not actually used
 -- instance HalfBraidingMorphism_coercion_to_morphism { C : MonoidalCategory } ( X Y : HalfBraiding C ): has_coe (HalfBraidingMorphism  X Y) (C^.Hom X Y) :=
 --   { coe := HalfBraidingMorphism.morphism }
 
 -- TODO: most of the proofs don't work here. Hopefully after I learn to rewrite automatically this will work better.
--- definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
---   Obj := HalfBraiding C,
---   Hom := λ X Y, HalfBraidingMorphism X Y,
---   identity := λ X, {
---     morphism := C^.identity X,
---     witness  := ♮
---   },
---   compose := λ _ _ _ f g, {
---     morphism := C^.compose f^.morphism g^.morphism,
---     witness  := ♮
---   },
---   left_identity  := ♮,
---   right_identity := ♮,
---   associativity  := ♮
--- }
+definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
+  Obj := HalfBraiding C,
+  Hom := λ X Y, HalfBraidingMorphism X Y,
+  identity := λ X, {
+    morphism := C^.identity X,
+    witness  := ♮
+  },
+  compose := λ _ _ _ f g, {
+    morphism := C^.compose f^.morphism g^.morphism,
+    witness  := ♮
+  },
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
+}
 
 end tqft.categories.drinfeld_centre

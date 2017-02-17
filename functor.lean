@@ -45,8 +45,8 @@ open notations
 
 -- This defines a coercion allowing us to write `F f` for `onMorphisms F f`
 -- but sadly it doesn't work if to_onObjects is already in scope.
---instance Functor_to_onMorphisms { C D : Category } : has_coe_to_fun (Functor C D) :=
---{ F   := λ f, Π ⦃X Y : C^.Obj⦄, C^.Hom X Y → D^.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
+-- instance Functor_to_onMorphisms { C D : Category } : has_coe_to_fun (Functor C D) :=
+-- { F   := λ f, Π ⦃X Y : C^.Obj⦄, C^.Hom X Y → D^.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
 --  coe := Functor.onMorphisms }
 
 @[reducible] definition IdentityFunctor ( C: Category ) : Functor C C :=
