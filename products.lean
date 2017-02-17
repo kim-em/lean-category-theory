@@ -9,6 +9,7 @@ import .natural_transformation
 
 open tqft.categories
 open tqft.categories.functor
+open tqft.categories.natural_transformation
 
 namespace tqft.categories.products
 
@@ -46,6 +47,22 @@ namespace ProductFunctor
   notation F `×` G := ProductFunctor F G
 end ProductFunctor
 
+definition ProductNaturalTransformation { A B C D : Category } { F G : Functor A B } { H I : Functor C D } (α : NaturalTransformation F G) (β : NaturalTransformation H I) : NaturalTransformation (F × H) (G × I) :=
+{
+  components := λ X, (α X^.fst, β X^.snd),
+  naturality :=
+  begin
+    unfold ProductFunctor,
+    unfold ProductCategory,
+    blast,
+    rewrite [α^.naturality, β^.naturality],
+  end
+}
+
+namespace ProductNaturalTransformation
+  notation α `×` β := ProductNaturalTransformation α β
+end ProductNaturalTransformation
+
 @[reducible] definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
   onObjects     := λ X, (X^.snd, X^.fst),
@@ -64,5 +81,5 @@ definition ProductCategoryAssociator ( C D E : Category.{ u v } ) : Functor ((C 
   functoriality := ♮
 }
 
-end tqft.categories.products
 
+end tqft.categories.products
