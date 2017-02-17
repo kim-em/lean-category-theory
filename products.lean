@@ -33,7 +33,7 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
-definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
+@[reducible] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
   onObjects     := λ X, (F X^.fst, G X^.snd),
   onMorphisms   := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
@@ -50,8 +50,6 @@ definition ProductNaturalTransformation { A B C D : Category } { F G : Functor A
   components := λ X, (α X^.fst, β X^.snd),
   naturality :=
   begin
-    unfold ProductFunctor,
-    unfold ProductCategory,
     blast,
     rewrite [α^.naturality, β^.naturality],
   end
