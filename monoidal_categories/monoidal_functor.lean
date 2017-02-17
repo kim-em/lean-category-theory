@@ -31,26 +31,27 @@ structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : Monoi
 --   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
 --   { coe := MonoidalNaturalTransformation.natural_transformation }
 
-definition vertical_composition_of_MonoidalNaturalTransformations
-  { C D : MonoidalCategory } 
-  { F G H : MonoidalFunctor C D } 
-  ( α : MonoidalNaturalTransformation F G ) 
-  ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
-{
-  natural_transformation    := vertical_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
-  compatibility_with_tensor := sorry
-}
+-- TODO waiting for better tactics
+-- definition vertical_composition_of_MonoidalNaturalTransformations
+--   { C D : MonoidalCategory } 
+--   { F G H : MonoidalFunctor C D } 
+--   ( α : MonoidalNaturalTransformation F G ) 
+--   ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
+-- {
+--   natural_transformation    := vertical_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
+--   compatibility_with_tensor := sorry
+-- }
 
-definition CategoryOfMonoidalFunctors ( C D : MonoidalCategory ) : Category :=
-{
-  Obj := MonoidalFunctor C D,
-  Hom := λ F G, MonoidalNaturalTransformation F G,
-  identity := λ F, ⟨ IdentityNaturalTransformation F, sorry ⟩,
-  compose  := λ _ _ _ α β, vertical_composition_of_MonoidalNaturalTransformations α β,
+-- definition CategoryOfMonoidalFunctors ( C D : MonoidalCategory ) : Category :=
+-- {
+--   Obj := MonoidalFunctor C D,
+--   Hom := λ F G, MonoidalNaturalTransformation F G,
+--   identity := λ F, ⟨ IdentityNaturalTransformation F, sorry ⟩,
+--   compose  := λ _ _ _ α β, vertical_composition_of_MonoidalNaturalTransformations α β,
 
-  left_identity  := sorry,
-  right_identity := sorry,
-  associativity  := sorry
-}
+--   left_identity  := sorry,
+--   right_identity := sorry,
+--   associativity  := sorry
+-- }
 
 end tqft.categories.monoidal_functor
