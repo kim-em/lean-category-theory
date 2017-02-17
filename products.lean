@@ -11,9 +11,9 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.products
 
-universe variables u v
+universe variables u1 v1 u2 v2 u3 v3
 
-@[reducible] definition ProductCategory (C : Category) (D : Category) :
+@[reducible] definition ProductCategory (C : Category.{u1 v1}) (D : Category.{u2 v2}) :
   Category :=
   {
     Obj      := C^.Obj × D^.Obj,
@@ -73,7 +73,11 @@ end ProductNaturalTransformation
 
 lemma switch_twice_is_the_identity ( C D : Category ) : FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (C × D) := ♮
 
-definition ProductCategoryAssociator ( C D E : Category.{ u v } ) : Functor ((C × D) × E) (C × (D × E)) :=
+definition ProductCategoryAssociator
+  ( C : Category.{ u1 v1 } )
+  ( D : Category.{ u2 v2 } )
+  ( E : Category.{ u3 v3 } )
+  : Functor ((C × D) × E) (C × (D × E)) :=
 {
   onObjects     := λ X, (X^.fst^.fst, (X^.fst^.snd, X^.snd)),
   onMorphisms   := λ _ _ f, (f^.fst^.fst, (f^.fst^.snd, f^.snd)),
