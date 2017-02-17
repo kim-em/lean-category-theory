@@ -2,8 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ...category
-import ...braided_monoidal_category
+import ...monoidal_categories.braided_monoidal_category
 import .semigroups
 
 namespace tqft.categories.examples.semigroups

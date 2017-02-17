@@ -1,10 +1,6 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
-import .category
-import .functor
-import .natural_transformation
-import .products
 import .monoidal_category
 
 namespace tqft.categories.braided_monoidal_category
@@ -29,6 +25,7 @@ definition Braiding(C : MonoidalCategory.{u v}) :=
 structure BraidedMonoidalCategory
   extends parent: MonoidalCategory :=
   (braiding: Braiding parent)
+-- TODO hexagon!
 
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
 
