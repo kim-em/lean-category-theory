@@ -55,13 +55,13 @@ instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCa
   @Functor.onMorphisms _ _ C^.tensor (U, X) (W, Z) ((C^.compose f g), (C^.compose h k)) = C^.compose (@Functor.onMorphisms _ _ C^.tensor (U, X) (V, Y) (f, h)) (@Functor.onMorphisms _ _ C^.tensor (V, Y) (W, Z) (g, k)) :=
   @Functor.functoriality (C × C) C C^.tensor (U, X) (V, Y) (W, Z) (f, h) (g, k)
 
-namespace notations
-  infix `⊗`:70 := λ {C : MonoidalCategory} (X Y : C^.Obj),
-                    C^.tensorObjects X Y
-  infix `⊗`:70 := λ {C : MonoidalCategory} {W X Y Z : C^.Obj}
-                     (f : C^.Hom W X) (g : C^.Hom Y Z),
-                     C^.tensorMorphisms f g
-end notations
+--namespace notations
+--  infix `⊗`:70 := λ {C : MonoidalCategory} (X Y : C^.Obj),
+--                    C^.tensorObjects X Y
+--  infix `⊗`:70 := λ {C : MonoidalCategory} {W X Y Z : C^.Obj}
+--                     (f : C^.Hom W X) (g : C^.Hom Y Z),
+--                     C^.tensorMorphisms f g
+--end notations
 
 -- per https://groups.google.com/d/msg/lean-user/kkIFgWRJTLo/tr2VyJGmCQAJ
 local attribute [reducible] lift_t coe_t coe_b
