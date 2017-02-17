@@ -23,7 +23,7 @@ structure PreMonoidalCategory
   (tensor : TensorProduct carrier)
   (tensor_unit : Obj)
 
-instance PreMonoidalCategory_coercion : has_coe PreMonoidalCategory Category := 
+instance PreMonoidalCategory_coercion : has_coe PreMonoidalCategory.{u v} Category.{u v} := 
   ⟨PreMonoidalCategory.to_Category⟩
 
 definition left_associated_triple_tensor ( C : PreMonoidalCategory ) : Functor ((C × C) × C) C :=

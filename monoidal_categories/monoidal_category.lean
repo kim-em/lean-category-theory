@@ -19,7 +19,7 @@ structure LaxMonoidalCategory
   (associator_transformation : Associator carrier)
   (pentagon   : pentagon_3step associator_transformation = pentagon_2step associator_transformation)
 
-instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory PreMonoidalCategory :=
+instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} PreMonoidalCategory.{u v} :=
   ⟨LaxMonoidalCategory.to_PreMonoidalCategory⟩
 
 -- structure OplaxMonoidalCategory
@@ -44,7 +44,7 @@ definition MonoidalCategory.associator
   { X Y Z : C^.Obj } : C^.Hom (C^.tensorObjects (C^.tensorObjects X Y) Z) (C^.tensorObjects X (C^.tensorObjects Y Z)) :=
   C^.associator_transformation ((X, Y), Z)
 
-instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCategory LaxMonoidalCategory   := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
+instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCategory.{u v} LaxMonoidalCategory.{u v}   := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
 -- instance MonoidalCategory_coercion_to_OplaxMonoidalCategory : has_coe MonoidalCategory OplaxMonoidalCategory := ⟨MonoidalCategory.to_OplaxMonoidalCategory⟩
 
 -- TODO This works, but do we really need to be so explicit??
