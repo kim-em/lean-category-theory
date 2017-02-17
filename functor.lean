@@ -65,6 +65,10 @@ open notations
   functoriality := ♮
 }
 
+namespace Functor
+  notation F `∘` G := FunctorComposition F G
+end Functor
+
 -- We'll want to be able to prove that two functors are equal if they are equal on objects and on morphisms.
 -- Implementation warning:
 -- When using `apply Functors_pointwise_equal`, you might expect that Lean will create two goals,

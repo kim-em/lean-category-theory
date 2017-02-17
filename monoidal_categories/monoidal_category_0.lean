@@ -21,6 +21,11 @@ structure PreMonoidalCategory
   (tensor : TensorProduct carrier)
   (tensor_unit : Obj)
 
+namespace PreMonoidalCategory
+  notation X `⊗` Y := (PreMonoidalCategory.tensor _)^.onObjects (X, Y)
+  notation f `⊗` g := (PreMonoidalCategory.tensor _)^.onMorphisms (f, g)
+end PreMonoidalCategory
+
 instance PreMonoidalCategory_coercion : has_coe PreMonoidalCategory Category := 
   ⟨PreMonoidalCategory.to_Category⟩
 
@@ -95,4 +100,4 @@ definition { u v } pentagon_2step { C : PreMonoidalCategory.{ u v } } ( α : Ass
     (pentagon_2step_1 α)
     (pentagon_2step_2 α)
 
-end tqft.categories.monoidal_category    
+end tqft.categories.monoidal_category
