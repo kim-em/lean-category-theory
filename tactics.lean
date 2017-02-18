@@ -33,6 +33,8 @@ meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
    try (any_apply cs >> and_then)
 
+attribute [pointwise] funext
+
 meta def blast : tactic unit := smt >> pointwise (repeat_at_most 2 blast) -- pointwise equality of functors creates two goals
 
 notation `♮` := by abstract { blast }

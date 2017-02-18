@@ -11,7 +11,7 @@ structure EnrichedCategory :=
   (V: MonoidalCategory)
   (Obj : Type )
   (Hom : Obj -> Obj -> V^.Obj)
-  (compose :  Π ⦃X Y Z : Obj⦄, V^.Hom ((Hom X Y) ⊗ (Hom Y Z)) (Hom X Z))
+  (compose :  Π ⦃X Y Z : Obj⦄, V^.Hom (V^.tensorObjects (Hom X Y) (Hom Y Z)) (Hom X Z))
   -- TODO and so on
 
 -- TODO How would we define an additive category, now? We don't want to say:
