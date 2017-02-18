@@ -37,6 +37,7 @@ attribute [pointwise] funext
 
 meta def blast : tactic unit := smt >> pointwise (repeat_at_most 2 blast) -- pointwise equality of functors creates two goals
 
+-- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }
 
 @[pointwise] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X^.fst, X^.snd) = X := begin induction X, blast end

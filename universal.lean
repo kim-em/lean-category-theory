@@ -95,12 +95,10 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
   identity := λ p, tag (A^.identity p.1, B^.identity p.2.1) ♮,
   compose  := λ p q r f g, tag (A^.compose (elt_of f).1 (elt_of g).1, B^.compose (elt_of f).2 (elt_of g).2)
                  begin
-                   abstract compose_tag {
-                     blast,
-                     begin[smt]
-                        eblast_using [ Category.associativity, subtype.has_property ]
-                     end
-                   }
+                  blast,
+                  begin[smt]
+                    eblast_using [ Category.associativity, subtype.has_property ]
+                  end
                  end,
   left_identity  := ♮,
   right_identity := ♮,
@@ -112,9 +110,9 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
                      end
 }
 
-definition DiscreteCategory ( n : ℕ ) : Category :=
+definition DiscreteCategory ( α : Type ) : Category :=
 {
-  Obj      := { k : ℕ // k < n },
+  Obj      := α,
   Hom      := λ _ _, unit,
   identity := λ _, unit.star,
   compose  := λ _ _ _ _ _, unit.star,
@@ -123,7 +121,7 @@ definition DiscreteCategory ( n : ℕ ) : Category :=
   associativity  := ♮
 }
 
-definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory 1) C :=
+definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
 {
   onObjects     := λ _, X,
   onMorphisms   := λ _ _ _, C^.identity X,
