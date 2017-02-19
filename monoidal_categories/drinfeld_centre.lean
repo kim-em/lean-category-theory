@@ -2,6 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 import .braided_monoidal_category
+import .tensor_with_object
 
 --set_option pp.universes true
 
@@ -30,20 +31,23 @@ structure HalfBraidingMorphism { C : MonoidalCategory } ( X Y : HalfBraiding C )
 --   { coe := HalfBraidingMorphism.morphism }
 
 -- TODO: most of the proofs don't work here. Hopefully after I learn to rewrite automatically this will work better.
--- definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
---   Obj := HalfBraiding C,
---   Hom := λ X Y, HalfBraidingMorphism X Y,
---   identity := λ X, {
---     morphism := C^.identity X,
---     witness  := ♮
---   },
---   compose := λ _ _ _ f g, {
---     morphism := C^.compose f^.morphism g^.morphism,
---     witness  := ♮
---   },
---   left_identity  := ♮,
---   right_identity := ♮,
---   associativity  := ♮
--- }
+definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
+  Obj := HalfBraiding C,
+  Hom := λ X Y, HalfBraidingMorphism X Y,
+  identity := λ X, {
+    morphism := C^.identity X,
+    witness  := begin
+                  blast,
+                  exact sorry
+                end
+  },
+  compose := λ _ _ _ f g, {
+    morphism := C^.compose f^.morphism g^.morphism,
+    witness  := sorry
+  },
+  left_identity  := sorry,
+  right_identity := sorry,
+  associativity  := sorry
+}
 
 end tqft.categories.drinfeld_centre
