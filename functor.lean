@@ -25,7 +25,7 @@ attribute [simp] Functor.functoriality
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.
 instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :=
-{ F   := λ f, C^.Obj -> D^.Obj,
+{ F   := λ f, C^.Obj → D^.Obj,
   coe := Functor.onObjects }
 
 /-

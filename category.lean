@@ -32,6 +32,10 @@ namespace Category
   notation f `∘` g := Category.compose f g
 end Category
 
+instance Category_to_Hom : has_coe_to_fun Category :=
+{ F   := λ C, C^.Obj → C^.Obj → Type v,
+  coe := Category.Hom }
+
 -- attribute [class] Category
 /-
 -- Unfortunately declaring Category as a class when it is first declared results
@@ -42,16 +46,16 @@ end Category
 -/
 
 structure Isomorphism ( C: Category ) ( X Y : C^.Obj ) :=
-  (morphism : C^.Hom X Y)
-  (inverse : C^.Hom Y X)
+  (morphism : C X Y)
+  (inverse : C Y X)
   (witness_1 : C^.compose morphism inverse = C^.identity X)
   (witness_2 : C^.compose inverse morphism = C^.identity Y)
 
-instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } : has_coe (Isomorphism C X Y) (C^.Hom X Y) :=
+instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } : has_coe (Isomorphism C X Y) (C X Y) :=
   { coe := Isomorphism.morphism }
 
-structure is_isomorphism { C : Category } { X Y : C^.Obj } ( morphism : C^.Hom X Y ) :=
-  (inverse : C^.Hom Y X)
+structure is_isomorphism { C : Category } { X Y : C^.Obj } ( morphism : C X Y ) :=
+  (inverse : C Y X)
   (witness_1 : C^.compose morphism inverse = C^.identity X)
   (witness_2 : C^.compose inverse morphism = C^.identity Y)
   
