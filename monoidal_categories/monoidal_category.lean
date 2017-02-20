@@ -17,7 +17,7 @@ universe variables u v
 structure LaxMonoidalCategory
   extends carrier : PreMonoidalCategory :=
   (associator_transformation : Associator carrier)
-  (pentagon   : pentagon_3step associator_transformation = pentagon_2step associator_transformation)
+  (pentagon   : Pentagon associator_transformation)
 
 instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} PreMonoidalCategory.{u v} :=
   ⟨LaxMonoidalCategory.to_PreMonoidalCategory⟩

@@ -24,29 +24,29 @@ open tqft.categories
 
 open tqft.categories.monoidal_category
 
--- definition MonoidalCategoryOfTypes : MonoidalCategory :=
--- {
---   CategoryOfTypes with
---   tensor := {
---     onObjects     := λ p, prod p.1 p.2,
---     onMorphisms   := λ _ _ p, λ q, (p.1 q.1, p.2 q.2),
---     identities    := ♮,
---     functoriality := ♮
---   },
---   tensor_unit := punit,
---   associator_transformation := {
---     components := λ p, λ t, (t.1.1,(t.1.2, t.2)),
---     naturality := ♮
---   },
---   associator_is_isomorphism := {
---     inverse := {
---       components := λ p, λ t, ((t.1,t.2.1), t.2.2),
---       naturality := ♮
---     },
---     witness_1 := ♮,
---     witness_2 := ♮
---   },
---   pentagon := ♮
--- }
+definition MonoidalCategoryOfTypes : MonoidalCategory :=
+{
+  CategoryOfTypes with
+  tensor := {
+    onObjects     := λ p, prod p.1 p.2,
+    onMorphisms   := λ _ _ p, λ q, (p.1 q.1, p.2 q.2),
+    identities    := ♮,
+    functoriality := ♮
+  },
+  tensor_unit := punit,
+  associator_transformation := {
+    components := λ p, λ t, (t.1.1,(t.1.2, t.2)),
+    naturality := ♮
+  },
+  associator_is_isomorphism := {
+    inverse := {
+      components := λ p, λ t, ((t.1,t.2.1), t.2.2),
+      naturality := ♮
+    },
+    witness_1 := ♮,
+    witness_2 := ♮
+  },
+  pentagon := ♮
+}
 
 end tqft.categories.examples.types
