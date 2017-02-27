@@ -31,7 +31,7 @@ meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply) <|> any_apply cs
 
-meta def smt_simp        : tactic unit := using_smt $ intros >> try simp
+meta def smt_simp   : tactic unit := using_smt $ intros >> try simp
 meta def smt_ematch : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch
 
 meta def pointwise (and_then : tactic unit) : tactic unit :=
