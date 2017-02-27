@@ -114,8 +114,8 @@ definition DiscreteCategory ( α : Type ) : Category :=
 {
   Obj      := α,
   Hom      := λ _ _, unit,
-  identity := λ _, unit.star,
-  compose  := λ _ _ _ _ _, unit.star,
+  identity := λ _, (),
+  compose  := λ _ _ _ _ _, (),
   left_identity  := ♮,
   right_identity := ♮,
   associativity  := ♮
