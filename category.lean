@@ -28,9 +28,22 @@ structure Category :=
 attribute [simp] Category.left_identity
 attribute [simp] Category.right_identity
 
-namespace Category
-  notation f `∘` g := Category.compose f g
-end Category
+/- I've had to disable this notation, as it is breaking output:
+
+abstract tactic failed, there are unsolved goals
+state:
+C : Category,
+W X Y Z : C^.Obj,
+f : C^.Hom X W,
+g : C^.Hom Y X,
+h : C^.Hom Z Y
+⊢ (C ∘ h) ((C ∘ g) f) = (C ∘ (C ∘ h) g) f
+
+-/
+
+-- namespace Category
+--   notation f `∘` g := Category.compose f g
+-- end Category
 
 instance Category_to_Hom : has_coe_to_fun Category :=
 { F   := λ C, C^.Obj → C^.Obj → Type v,
