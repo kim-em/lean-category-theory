@@ -23,10 +23,10 @@ structure PreMonoidalCategory
   (tensor : TensorProduct carrier)
   (tensor_unit : Obj)
 
-namespace PreMonoidalCategory
-  notation X `⊗` Y := (PreMonoidalCategory.tensor _)^.onObjects (X, Y)
-  notation f `⊗` g := (PreMonoidalCategory.tensor _)^.onMorphisms (f, g)
-end PreMonoidalCategory
+-- namespace PreMonoidalCategory
+--   notation X `⊗` Y := (PreMonoidalCategory.tensor _)^.onObjects (X, Y)
+--   notation f `⊗` g := (PreMonoidalCategory.tensor _)^.onMorphisms (f, g)
+-- end PreMonoidalCategory
 
 instance PreMonoidalCategory_coercion : has_coe PreMonoidalCategory Category := 
   ⟨PreMonoidalCategory.to_Category⟩
@@ -47,7 +47,7 @@ instance PreMonoidalCategory_coercion : has_coe PreMonoidalCategory Category :=
 definition Pentagon { C: PreMonoidalCategory } ( associator : Associator C ) :=
   let α ( X Y Z : C^.Obj ) := associator ((X, Y), Z) in
   ∀ W X Y Z : C^.Obj, 
-    C^.compose (α (W ⊗ X) Y Z) (α W X (Y ⊗ Z))
-  = C^.compose (C^.compose (C^.tensorMorphisms (α W X Y) (C^.identity Z)) (α W (X ⊗ Y) Z)) (C^.tensorMorphisms (C^.identity W) (α X Y Z)) 
+    C^.compose (α (C^.tensorObjects W X) Y Z) (α W X (C^.tensorObjects Y Z))
+  = C^.compose (C^.compose (C^.tensorMorphisms (α W X Y) (C^.identity Z)) (α W (C^.tensorObjects X Y) Z)) (C^.tensorMorphisms (C^.identity W) (α X Y Z)) 
 
 end tqft.categories.monoidal_category

@@ -49,7 +49,7 @@ open notations
 -- { F   := λ f, Π ⦃X Y : C^.Obj⦄, C^.Hom X Y → D^.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
 --  coe := Functor.onMorphisms }
 
-definition IdentityFunctor ( C: Category ) : Functor C C :=
+@[reducible] definition IdentityFunctor ( C: Category ) : Functor C C :=
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f,
@@ -92,14 +92,5 @@ begin
   exact morphismWitness X Y f,
   subst h_morphisms
 end
-
-lemma FunctorComposition_left_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition (IdentityFunctor C) F = F := ♮
-
-lemma FunctorComposition_right_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition F (IdentityFunctor D) = F := ♮
-
-lemma FunctorComposition_associative { B C D E : Category } ( F : Functor B C ) ( G : Functor C D ) ( H : Functor D E ) :
-  FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
 
 end tqft.categories.functor

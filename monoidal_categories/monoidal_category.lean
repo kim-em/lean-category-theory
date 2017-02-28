@@ -22,17 +22,8 @@ structure LaxMonoidalCategory
 instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} PreMonoidalCategory.{u v} :=
   ⟨LaxMonoidalCategory.to_PreMonoidalCategory⟩
 
--- structure OplaxMonoidalCategory
---   extends carrier : PreMonoidalCategory :=
---   -- TODO better name? unfortunately it doesn't yet make sense to say 'inverse_associator'.
---   (backwards_associator : Π (X Y Z : Obj),
---      Hom (tensor (X, tensor (Y, Z)))  (tensor (tensor (X, Y), Z)))
-
--- instance OplaxMonoidalCategory_coercion : has_coe OplaxMonoidalCategory PreMonoidalCategory :=
---   ⟨OplaxMonoidalCategory.to_PreMonoidalCategory⟩
-
 structure MonoidalCategory
-  extends LaxMonoidalCategory/-, OplaxMonoidalCategory-/ :=
+  extends LaxMonoidalCategory :=
   (associator_is_isomorphism : is_NaturalIsomorphism associator_transformation)
 
 -- Convenience methods which take two arguments, rather than a pair. (This seems to often help the elaborator avoid getting stuck on `prod.mk`.)
@@ -45,7 +36,6 @@ definition MonoidalCategory.associator
   C^.associator_transformation ((X, Y), Z)
 
 instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCategory.{u v} LaxMonoidalCategory.{u v}   := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
--- instance MonoidalCategory_coercion_to_OplaxMonoidalCategory : has_coe MonoidalCategory OplaxMonoidalCategory := ⟨MonoidalCategory.to_OplaxMonoidalCategory⟩
 
 -- TODO This works, but do we really need to be so explicit??
 @[reducible] definition MonoidalCategory.interchange
