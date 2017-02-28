@@ -75,7 +75,7 @@ open tqft.categories.functor
                   end
   }
 
-definition whisker_on_left
+@[reducible] definition whisker_on_left
   { C D E : Category }
   ( F : Functor C D )
   { G H : Functor D E }
@@ -83,7 +83,7 @@ definition whisker_on_left
   NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
   horizontal_composition_of_NaturalTransformations (IdentityNaturalTransformation F) α
 
-definition whisker_on_right
+@[reducible] definition whisker_on_right
   { C D E : Category }
   { F G : Functor C D }
   ( α : NaturalTransformation F G )

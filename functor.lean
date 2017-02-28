@@ -49,7 +49,7 @@ open notations
 -- { F   := λ f, Π ⦃X Y : C^.Obj⦄, C^.Hom X Y → D^.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
 --  coe := Functor.onMorphisms }
 
-@[reducible] definition IdentityFunctor ( C: Category ) : Functor C C :=
+definition IdentityFunctor ( C: Category ) : Functor C C :=
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f,
@@ -65,9 +65,9 @@ open notations
   functoriality := ♮
 }
 
-namespace Functor
-  notation F `∘` G := FunctorComposition F G
-end Functor
+-- namespace Functor
+--   notation F `∘` G := FunctorComposition F G
+-- end Functor
 
 -- We'll want to be able to prove that two functors are equal if they are equal on objects and on morphisms.
 -- Implementation warning:
