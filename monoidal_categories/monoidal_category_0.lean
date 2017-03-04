@@ -16,38 +16,22 @@ universe variables u v
 
 @[reducible] definition TensorProduct ( C: Category ) := Functor ( C × C ) C
 
-structure PreMonoidalCategory
-  -- this is only for internal use: it has a tensor product, but no associator at all
-  -- it's not interesting mathematically, but may allow us to introduce usable notation for the tensor product
-  extends carrier : Category :=
-  (tensor : TensorProduct carrier)
-  (tensor_unit : Obj)
+@[reducible] definition left_associated_triple_tensor ( C : Category.{ u v } ) ( tensor : TensorProduct C ) : Functor ((C × C) × C) C :=
+  FunctorComposition (tensor × IdentityFunctor C) tensor
+@[reducible] definition right_associated_triple_tensor ( C : Category.{ u v } ) ( tensor : TensorProduct C ) : Functor (C × (C × C)) C :=
+  FunctorComposition (IdentityFunctor C × tensor) tensor
 
--- namespace PreMonoidalCategory
---   notation X `⊗` Y := (PreMonoidalCategory.tensor _)^.onObjects (X, Y)
---   notation f `⊗` g := (PreMonoidalCategory.tensor _)^.onMorphisms (f, g)
--- end PreMonoidalCategory
-
-instance PreMonoidalCategory_coercion : has_coe PreMonoidalCategory Category := 
-  ⟨PreMonoidalCategory.to_Category⟩
-
-@[reducible] definition PreMonoidalCategory.tensorObjects   ( C : PreMonoidalCategory ) ( X Y : C^.Obj ) : C^.Obj := C^.tensor (X, Y)
-@[reducible] definition PreMonoidalCategory.tensorMorphisms ( C : PreMonoidalCategory ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (C^.tensor (W, Y)) (C^.tensor (X, Z)) := C^.tensor^.onMorphisms (f, g)
-
-@[reducible] definition left_associated_triple_tensor ( C : PreMonoidalCategory.{ u v } ) : Functor ((C × C) × C) C :=
-  FunctorComposition (C^.tensor × IdentityFunctor C) C^.tensor
-@[reducible] definition right_associated_triple_tensor ( C : PreMonoidalCategory.{ u v } ) : Functor (C × (C × C)) C :=
-  FunctorComposition (IdentityFunctor C × C^.tensor) C^.tensor
-
-@[reducible] definition Associator ( C : PreMonoidalCategory.{ u v } ) := 
+@[reducible] definition Associator { C : Category.{ u v } } ( tensor : TensorProduct C ) := 
   NaturalTransformation 
-    (left_associated_triple_tensor C) 
-    (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor C))
+    (left_associated_triple_tensor C tensor) 
+    (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor C tensor))
 
-definition Pentagon { C: PreMonoidalCategory } ( associator : Associator C ) :=
+definition Pentagon { C : Category } { tensor : TensorProduct C } ( associator : Associator tensor ) :=
   let α ( X Y Z : C^.Obj ) := associator ((X, Y), Z) in
+  let tensorObjects ( X Y : C^.Obj ) := tensor^.onObjects (X, Y) in
+  let tensorMorphisms { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor^.onMorphisms (f, g) in
   ∀ W X Y Z : C^.Obj, 
-    C^.compose (α (C^.tensorObjects W X) Y Z) (α W X (C^.tensorObjects Y Z))
-  = C^.compose (C^.compose (C^.tensorMorphisms (α W X Y) (C^.identity Z)) (α W (C^.tensorObjects X Y) Z)) (C^.tensorMorphisms (C^.identity W) (α X Y Z)) 
+    C^.compose (α (tensorObjects W X) Y Z) (α W X (tensorObjects Y Z))
+  = C^.compose (C^.compose (tensorMorphisms (α W X Y) (C^.identity Z)) (α W (tensorObjects X Y) Z)) (tensorMorphisms (C^.identity W) (α X Y Z)) 
 
 end tqft.categories.monoidal_category

@@ -15,12 +15,13 @@ namespace tqft.categories.monoidal_category
 universe variables u v
 
 structure LaxMonoidalCategory
-  extends carrier : PreMonoidalCategory :=
-  (associator_transformation : Associator carrier)
-  (pentagon   : Pentagon associator_transformation)
+  extends carrier : Category :=
+  (tensor                    : TensorProduct carrier)
+  (associator_transformation : Associator tensor)
+  (pentagon                  : Pentagon associator_transformation)
 
-instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} PreMonoidalCategory.{u v} :=
-  ⟨LaxMonoidalCategory.to_PreMonoidalCategory⟩
+instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} Category.{u v} :=
+  ⟨LaxMonoidalCategory.to_Category⟩
 
 structure MonoidalCategory
   extends LaxMonoidalCategory :=
