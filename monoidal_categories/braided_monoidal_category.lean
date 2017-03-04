@@ -20,7 +20,7 @@ universe variables u v
 -/
 
 definition Braiding(C : MonoidalCategory.{u v}) := 
-  NaturalIsomorphism (C^.tensor) (FunctorComposition (SwitchProductCategory C^.to_LaxMonoidalCategory^.to_PreMonoidalCategory^.to_Category C) C^.tensor)
+  NaturalIsomorphism (C^.tensor) (FunctorComposition (SwitchProductCategory C C) C^.tensor)
 
 structure BraidedMonoidalCategory
   extends parent: MonoidalCategory :=

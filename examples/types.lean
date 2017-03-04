@@ -33,7 +33,7 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
     identities    := ♮,
     functoriality := ♮
   },
-  tensor_unit := punit,
+  -- tensor_unit := punit,
   associator_transformation := {
     components := λ p, λ t, (t.1.1,(t.1.2, t.2)),
     naturality := ♮
