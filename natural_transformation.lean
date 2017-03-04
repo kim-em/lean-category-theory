@@ -50,10 +50,12 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   {
     components := λ X, D^.compose (α X) (β X),
     naturality := begin
-                    blast,
-                    begin[smt]
-                      eblast_using [ Category.associativity, NaturalTransformation.naturality ]
-                    end,
+                    abstract {
+                      blast,
+                      begin[smt]
+                        eblast_using [ Category.associativity, NaturalTransformation.naturality ]
+                      end,
+                    }
                   end
   }
 
@@ -68,10 +70,12 @@ open tqft.categories.functor
   {
     components := λ X : C^.Obj, E^.compose (β (F X)) (I^.onMorphisms (α X)),
     naturality := begin
-                    blast,
-                    begin[smt]
-                      eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
-                    end,
+                    abstract {
+                      blast,
+                      begin[smt]
+                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
+                      end,
+                    }
                   end
   }
 
@@ -106,11 +110,13 @@ open smt_tactic.interactive
 
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin                     
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity ]
-                      end
+  associativity  := begin  
+                      abstract {                   
+                        blast,
+                        begin[smt]
+                          eblast_using [ Category.associativity ]
+                        end
+                      }
                     end
 }
 
