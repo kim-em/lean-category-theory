@@ -44,11 +44,11 @@ definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
     tensor_unit := ()
   }
 
--- Why can't it figure out there's a zero here?
-definition ℕAssociator : Associator ℕPreMonoidalCategory :=
-  { components := λ _, 0,
-    naturality := sorry
-  }
+-- TODO Why can't it figure out there's a zero here?
+-- definition ℕAssociator : Associator ℕPreMonoidalCategory :=
+--   { components := λ _, 0,
+--     naturality := sorry
+--   }
 
 --definition ℕLaxMonoidalCategory : LaxMonoidalCategory :=
 --  { ℕPreMonoidalCategory with

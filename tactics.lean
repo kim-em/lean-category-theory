@@ -12,20 +12,6 @@ def pointwise_attribute : user_attribute := {
 
 run_command attribute.register `pointwise_attribute
 
---def pointwise_2_attribute : user_attribute := {
---  name := `pointwise_2,
---  descr := "A lemma that proves things are equal using the fact they are pointwise equal, generating two subgoals."
---}
---
---run_command attribute.register `pointwise_2_attribute
-
--- def searchable_attribute : user_attribute := {
---   name := `searchable,
---   descr := "An identifier that the SMT solver should have access to."
--- }
-
--- run_command attribute.register `searchable_attribute
-
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
 | []      := failed

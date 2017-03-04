@@ -47,7 +47,7 @@ namespace ProductFunctor
   notation F `×` G := ProductFunctor F G
 end ProductFunctor
 
-definition ProductNaturalTransformation { A B C D : Category } { F G : Functor A B } { H I : Functor C D } (α : NaturalTransformation F G) (β : NaturalTransformation H I) : NaturalTransformation (F × H) (G × I) :=
+@[reducible] definition ProductNaturalTransformation { A B C D : Category } { F G : Functor A B } { H I : Functor C D } (α : NaturalTransformation F G) (β : NaturalTransformation H I) : NaturalTransformation (F × H) (G × I) :=
 {
   components := λ X, (α X^.fst, β X^.snd),
   naturality :=
@@ -73,7 +73,7 @@ end ProductNaturalTransformation
 
 lemma switch_twice_is_the_identity ( C D : Category ) : FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (C × D) := ♮
 
-definition ProductCategoryAssociator
+@[reducible] definition ProductCategoryAssociator
   ( C : Category.{ u1 v1 } )
   ( D : Category.{ u2 v2 } )
   ( E : Category.{ u3 v3 } )

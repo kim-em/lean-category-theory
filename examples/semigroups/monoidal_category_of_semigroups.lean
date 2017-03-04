@@ -41,35 +41,35 @@ definition semigroup_morphism_product
 
 open tqft.categories.products
 
-definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
-  CategoryOfSemigroups.{u} with
-  tensor               := {
-    onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
-    onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
-    identities    := ♮,
-    functoriality := ♮
-  },
-  tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
-  associator_transformation := {
-    components := λ _, {
-      map := λ t, (t.1.1, (t.1.2, t.2)),
-      multiplicative := ♮
-    },
-    naturality := ♮
-  },
-  associator_is_isomorphism := {
-    inverse := {
-      components := λ _, {
-        map := λ t, ((t.1, t.2.1), t.2.2),
-        multiplicative := ♮
-      },
-      naturality := ♮     
-    },
-    witness_1 := sorry,
-    witness_2 := sorry
-  },
-  pentagon := sorry
-}
+-- definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
+--   CategoryOfSemigroups.{u} with
+--   tensor               := {
+--     onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
+--     onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
+--     identities    := ♮,
+--     functoriality := ♮
+--   },
+--   tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
+--   associator_transformation := {
+--     components := λ _, {
+--       map := λ t, (t.1.1, (t.1.2, t.2)),
+--       multiplicative := ♮
+--     },
+--     naturality := ♮
+--   },
+--   associator_is_isomorphism := {
+--     inverse := {
+--       components := λ _, {
+--         map := λ t, ((t.1, t.2.1), t.2.2),
+--         multiplicative := ♮
+--       },
+--       naturality := ♮     
+--     },
+--     witness_1 := sorry,
+--     witness_2 := sorry
+--   },
+--   pentagon := sorry
+-- }
 
 open tqft.categories.natural_transformation
 open tqft.categories.braided_monoidal_category
