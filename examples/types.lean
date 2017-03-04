@@ -9,6 +9,8 @@ namespace tqft.categories.examples.types
 
 open tqft.categories
 
+
+
 @[reducible] definition { u } CategoryOfTypes : Category := 
 {
     Obj := Type u,
@@ -24,16 +26,19 @@ open tqft.categories
 
 open tqft.categories.monoidal_category
 
+definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
+{
+  onObjects     := λ p, prod p.1 p.2,
+  onMorphisms   := λ _ _ p, λ q, (p.1 q.1, p.2 q.2),
+  identities    := ♮,
+  functoriality := ♮
+}
+
 definition MonoidalCategoryOfTypes : MonoidalCategory :=
 {
   CategoryOfTypes with
-  tensor := {
-    onObjects     := λ p, prod p.1 p.2,
-    onMorphisms   := λ _ _ p, λ q, (p.1 q.1, p.2 q.2),
-    identities    := ♮,
-    functoriality := ♮
-  },
-  -- tensor_unit := punit,
+  tensor := TensorProductOfTypes,
+  tensor_unit := sorry,
   associator_transformation := {
     components := λ p, λ t, (t.1.1,(t.1.2, t.2)),
     naturality := ♮
@@ -46,7 +51,7 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
     witness_1 := sorry, -- ♮ causes a timeout here
     witness_2 := sorry  -- ♮ causes a timeout here
   },
-  pentagon := sorry     -- ♮ causes a timeout here
+  pentagon := ♮
 }
 
 end tqft.categories.examples.types

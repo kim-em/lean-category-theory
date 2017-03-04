@@ -47,6 +47,7 @@ definition ℕAssociator : Associator ℕTensorProduct :=
 definition ℕLaxMonoidalCategory : LaxMonoidalCategory :=
  { ℕCategory with
    tensor := ℕTensorProduct,
+   tensor_unit := unit.star,
    associator_transformation := ℕAssociator,
    pentagon := sorry
  }

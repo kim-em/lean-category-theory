@@ -17,8 +17,11 @@ universe variables u v
 structure LaxMonoidalCategory
   extends carrier : Category :=
   (tensor                    : TensorProduct carrier)
+  (tensor_unit               : Obj)
   (associator_transformation : Associator tensor)
+  -- TODO left and right identitors
   (pentagon                  : Pentagon associator_transformation)
+  -- TODO triangles for the identitors
 
 instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} Category.{u v} :=
   ⟨LaxMonoidalCategory.to_Category⟩

@@ -26,7 +26,7 @@ universe variables u v
     (left_associated_triple_tensor tensor) 
     (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor tensor))
 
-definition Pentagon { C : Category } { tensor : TensorProduct C } ( associator : Associator tensor ) :=
+@[reducible] definition Pentagon { C : Category } { tensor : TensorProduct C } ( associator : Associator tensor ) :=
   let α ( X Y Z : C^.Obj ) := associator ((X, Y), Z) in
   let tensorObjects ( X Y : C^.Obj ) := tensor^.onObjects (X, Y) in
   let tensorMorphisms { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor^.onMorphisms (f, g) in

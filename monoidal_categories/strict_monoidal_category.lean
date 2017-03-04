@@ -10,10 +10,11 @@ open tqft.categories.monoidal_category
 
 namespace tqft.categories.strict_monoidal_category
 
-structure TensorProduct_is_strict { C : Category } ( tensor : TensorProduct C ) :=
+structure TensorProduct_is_strict { C : Category } ( tensor : TensorProduct C ) ( tensor_unit : C^.Obj ) :=
   ( associativeOnObjects : ∀ X Y Z : C^.Obj, tensor^.onObjects (tensor^.onObjects (X, Y), Z) = tensor^.onObjects (X, tensor^.onObjects (Y, Z)) )
+  -- TODO strict identities
 
-definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } ( is_strict : TensorProduct_is_strict tensor ) : MonoidalCategory :=
+definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalCategory :=
 {
   Obj := C^.Obj,
   Hom := λ X Y : C^.Obj, C^.Hom X Y,
@@ -28,6 +29,7 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
     identities    := ♮,
     functoriality := ♮
   },
+  tensor_unit := tensor_unit,
   associator_transformation := {
     components := λ t, begin
                          abstract {
@@ -38,10 +40,10 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
                            exact C^.identity (tensor^.onObjects (tensor^.onObjects (t^.fst), t^.snd))
                          }
                        end,
-    naturality := ♮
+    naturality := sorry
   },
-  associator_is_isomorphism := ♮,
-  pentagon := ♮
+  associator_is_isomorphism := sorry,
+  pentagon := sorry
 }  
 
 @[reducible] definition ListObjectsCategory ( C : MonoidalCategory ) : Category := {
