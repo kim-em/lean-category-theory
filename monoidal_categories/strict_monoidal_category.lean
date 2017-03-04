@@ -10,34 +10,57 @@ open tqft.categories.monoidal_category
 
 namespace tqft.categories.strict_monoidal_category
 
-structure StrictMonoidalCategory extends parent: MonoidalCategory :=
-  ( tensorAssociativeOnObjects : forall X Y Z : Obj, tensorObjects (tensorObjects X Y) Z = tensorObjects X (tensorObjects Y Z) )
-  ( associatorTrivial : forall X Y Z : Obj, associator X Y Z = identity (tensorObject (tensorObjects X Y) Z) )
+structure TensorProduct_is_strict { C : Category } ( tensor : TensorProduct C ) :=
+  ( associativeOnObjects : ∀ X Y Z : C^.Obj, tensor^.onObjects (tensor^.onObjects (X, Y), Z) = tensor^.onObjects (X, tensor^.onObjects (Y, Z)) )
 
-definition StrictTensorProduct
+definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } ( is_strict : TensorProduct_is_strict tensor ) : MonoidalCategory :=
+{
+  Obj := C^.Obj,
+  Hom := λ X Y : C^.Obj, C^.Hom X Y,
+  compose := λ _ _ _ f g, C^.compose f g,
+  identity := λ X, C^.identity X,
+  left_identity := λ _ _ f, C^.left_identity f,
+  right_identity := λ _ _ f, C^.right_identity f,
+  associativity := λ _ _ _ _ f g h, C^.associativity f g h,
+  tensor := {
+    onObjects     := λ p, tensor^.onObjects p,
+    onMorphisms   := λ _ _ f, tensor^.onMorphisms f,
+    identities    := ♮,
+    functoriality := ♮
+  },
+  associator_transformation := {
+    components := λ t, begin
+                         blast,
+                         rewrite - is_strict^.associativeOnObjects,
+                         assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
+                         rewrite p,
+                         exact C^.identity (tensor^.onObjects (tensor^.onObjects (t^.fst), t^.snd))
+                       end,
+    naturality := ♮
+  },
+  associator_is_isomorphism := ♮,
+  pentagon := ♮
+}  
 
--- this ought to also return the equivalence
-definition ListObjectsMonoidalCategory ( C : MonoidalCategory ) : MonoidalCategory := {
+@[reducible] definition ListObjectsCategory ( C : MonoidalCategory ) : Category := {
   Obj := list C^.Obj,
-  Hom := \lambda X Y, C^.Hom sorry sorry,
-  identity := \lambda X, sorry,
-  compose := sorry,
-  left_identity := sorry,
+  Hom := λ X Y, C^.Hom sorry sorry,
+  identity       := λ X, sorry,
+  compose        := sorry,
+  left_identity  := sorry,
   right_identity := sorry,
-  associativity := sorry
+  associativity  := sorry
 }
 
-definition StrictTensorProduct ( C : MonoidalCategory ) : TensorProduct (ListObjectsMonoidalCategory C) := {
-  onObjects := \lambda p, p._1 ++ p._2,
-  onMorphisms := sorry,
-  identities := sorry,
+definition StrictTensorProduct ( C : MonoidalCategory ) : TensorProduct (ListObjectsCategory C) := {
+  onObjects     := λ p, append p.1 p.2,
+  onMorphisms   := sorry,
+  identities    := sorry,
   functoriality := sorry
 }
 
-definition StrictifyMonoidalCategory ( C: MonoidalCategory ) : StrictMonoidalCategory := {
-  ListObjectsMonoidalCategory C with
-  tensor := StrictTensorProduct C,
-  associator_transformation := sorry
-}
+-- show that StrictTensorProduct is strict
+-- construct a functor from C
+-- show that it is part of an equivalence
 
 end tqft.categories.strict_monoidal_category
