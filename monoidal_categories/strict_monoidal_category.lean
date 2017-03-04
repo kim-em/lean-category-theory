@@ -30,11 +30,13 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
   },
   associator_transformation := {
     components := λ t, begin
-                         blast,
-                         rewrite - is_strict^.associativeOnObjects,
-                         assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
-                         rewrite p,
-                         exact C^.identity (tensor^.onObjects (tensor^.onObjects (t^.fst), t^.snd))
+                         abstract {
+                           blast,
+                           rewrite - is_strict^.associativeOnObjects,
+                           assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
+                           rewrite p,
+                           exact C^.identity (tensor^.onObjects (tensor^.onObjects (t^.fst), t^.snd))
+                         }
                        end,
     naturality := ♮
   },
@@ -59,6 +61,7 @@ definition StrictTensorProduct ( C : MonoidalCategory ) : TensorProduct (ListObj
   functoriality := sorry
 }
 
+-- TODO
 -- show that StrictTensorProduct is strict
 -- construct a functor from C
 -- show that it is part of an equivalence
