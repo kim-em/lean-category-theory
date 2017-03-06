@@ -12,15 +12,23 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
+local attribute [reducible] lift_t coe_t coe_b
+
+attribute [simp] MonoidalCategory.left_identity
+attribute [simp] MonoidalCategory.right_identity
+
 lemma pentagon_in_terms_of_natural_transformations
   ( C : MonoidalCategory ) :
   pentagon_2step C = pentagon_3step C :=
   begin
-    blast,
-    exact sorry
-    -- begin[smt]
-    --   eblast_using [ C^.pentagon ]
-    -- end
+    blast, -- This just unfolds definitions and introduces variables
+    induction X with PQR S,
+    induction PQR with PQ R,
+    induction PQ with P Q,
+    pose p := C^.pentagon P Q R S,
+    blast, -- this simplifies the hypothesis p back to something reasonable
+    repeat { rewrite C^.tensor^.identities }, -- we shouldn't have to do this, as Functor.identities has [simp]
+    blast
   end
 
 end tqft.categories.monoidal_category

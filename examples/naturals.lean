@@ -38,22 +38,18 @@ definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
     functoriality := ♮
   }
 
-@[reducible] definition ℕPreMonoidalCategory : PreMonoidalCategory :=
-  { ℕCategory with
-    tensor      := ℕTensorProduct,
-    tensor_unit := ()
+definition ℕAssociator : Associator ℕTensorProduct :=
+  {
+    components := λ _, 0,
+    naturality := ♮
   }
 
--- Why can't it figure out there's a zero here?
-definition ℕAssociator : Associator ℕPreMonoidalCategory :=
-  { components := λ _, 0,
-    naturality := sorry
-  }
-
---definition ℕLaxMonoidalCategory : LaxMonoidalCategory :=
---  { ℕPreMonoidalCategory with
---    associator_transformation := ℕAssociator,
---    pentagon := sorry
---  }
+definition ℕLaxMonoidalCategory : LaxMonoidalCategory :=
+ { ℕCategory with
+   tensor := ℕTensorProduct,
+   tensor_unit := unit.star,
+   associator_transformation := ℕAssociator,
+   pentagon := sorry
+ }
 
 end tqft.categories.examples.naturals

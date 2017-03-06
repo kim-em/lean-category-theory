@@ -10,7 +10,6 @@ open tqft.categories.examples.semigroups
 
 universe variables u
 
--- Can't make progress here, waiting on https://groups.google.com/d/msg/lean-user/1AAIgqIaCwA/m8NMlnNmCgAJ
 -- definition SymmetricMonoidalCategoryOfSemigroups : SymmetricMonoidalCategory := {
 --   BraidedMonoidalCategoryOfSemigroups.{u} with
 --   symmetry := begin

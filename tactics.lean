@@ -12,20 +12,6 @@ def pointwise_attribute : user_attribute := {
 
 run_command attribute.register `pointwise_attribute
 
---def pointwise_2_attribute : user_attribute := {
---  name := `pointwise_2,
---  descr := "A lemma that proves things are equal using the fact they are pointwise equal, generating two subgoals."
---}
---
---run_command attribute.register `pointwise_2_attribute
-
--- def searchable_attribute : user_attribute := {
---   name := `searchable,
---   descr := "An identifier that the SMT solver should have access to."
--- }
-
--- run_command attribute.register `searchable_attribute
-
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
 | []      := failed
@@ -38,13 +24,9 @@ meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
    try (seq (any_apply cs) and_then)
 
---meta def pointwise_2 (and_then : tactic unit) : tactic unit :=
---do cs ← attribute.get_instances `pointwise_2,
---   try (any_apply cs >> repeat_at_most 2 and_then)
-
 attribute [pointwise] funext
 
-meta def blast        : tactic unit := smt_simp >> pointwise blast -- pointwise equality of functors creates two goals
+meta def blast        : tactic unit := smt_simp >> pointwise blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }

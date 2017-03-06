@@ -50,10 +50,12 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   {
     components := λ X, D^.compose (α X) (β X),
     naturality := begin
-                    blast,
-                    begin[smt]
-                      eblast_using [ Category.associativity, NaturalTransformation.naturality ]
-                    end,
+                    abstract {
+                      blast,
+                      begin[smt]
+                        eblast_using [ Category.associativity, NaturalTransformation.naturality ]
+                      end,
+                    }
                   end
   }
 
@@ -68,14 +70,16 @@ open tqft.categories.functor
   {
     components := λ X : C^.Obj, E^.compose (β (F X)) (I^.onMorphisms (α X)),
     naturality := begin
-                    blast,
-                    begin[smt]
-                      eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
-                    end,
+                    abstract {
+                      blast,
+                      begin[smt]
+                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
+                      end,
+                    }
                   end
   }
 
-definition whisker_on_left
+@[reducible] definition whisker_on_left
   { C D E : Category }
   ( F : Functor C D )
   { G H : Functor D E }
@@ -83,7 +87,7 @@ definition whisker_on_left
   NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
   horizontal_composition_of_NaturalTransformations (IdentityNaturalTransformation F) α
 
-definition whisker_on_right
+@[reducible] definition whisker_on_right
   { C D E : Category }
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
@@ -106,11 +110,13 @@ open smt_tactic.interactive
 
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin                     
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity ]
-                      end
+  associativity  := begin  
+                      abstract {                   
+                        blast,
+                        begin[smt]
+                          eblast_using [ Category.associativity ]
+                        end
+                      }
                     end
 }
 

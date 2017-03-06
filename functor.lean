@@ -65,9 +65,9 @@ open notations
   functoriality := ♮
 }
 
-namespace Functor
-  notation F `∘` G := FunctorComposition F G
-end Functor
+-- namespace Functor
+--   notation F `∘` G := FunctorComposition F G
+-- end Functor
 
 -- We'll want to be able to prove that two functors are equal if they are equal on objects and on morphisms.
 -- Implementation warning:
@@ -92,14 +92,5 @@ begin
   exact morphismWitness X Y f,
   subst h_morphisms
 end
-
-lemma FunctorComposition_left_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition (IdentityFunctor C) F = F := ♮
-
-lemma FunctorComposition_right_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition F (IdentityFunctor D) = F := ♮
-
-lemma FunctorComposition_associative { B C D E : Category } ( F : Functor B C ) ( G : Functor C D ) ( H : Functor D E ) :
-  FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
 
 end tqft.categories.functor
