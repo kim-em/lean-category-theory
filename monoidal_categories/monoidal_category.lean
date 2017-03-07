@@ -19,16 +19,20 @@ structure LaxMonoidalCategory
   (tensor                    : TensorProduct carrier)
   (tensor_unit               : Obj)
   (associator_transformation : Associator tensor)
-  -- TODO left and right identitors
+  (left_unitor               : LeftUnitor ⟦tensor_unit⟧ tensor)
+  (right_unitor              : RightUnitor ⟦tensor_unit⟧ tensor)
+
   (pentagon                  : Pentagon associator_transformation)
-  -- TODO triangles for the identitors
+  (triangle                  : Triangle ⟦tensor_unit⟧ left_unitor right_unitor associator_transformation)
 
 instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} Category.{u v} :=
   ⟨LaxMonoidalCategory.to_Category⟩
 
 structure MonoidalCategory
   extends LaxMonoidalCategory :=
-  (associator_is_isomorphism : is_NaturalIsomorphism associator_transformation)
+  (associator_is_isomorphism   : is_NaturalIsomorphism associator_transformation)
+  (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
+  (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
 
 -- Convenience methods which take two arguments, rather than a pair. (This seems to often help the elaborator avoid getting stuck on `prod.mk`.)
 @[reducible] definition MonoidalCategory.tensorObjects   ( C : MonoidalCategory ) ( X Y : C^.Obj ) : C^.Obj := C^.tensor (X, Y)
@@ -45,8 +49,11 @@ instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCa
 @[reducible] definition MonoidalCategory.interchange
   ( C : MonoidalCategory )
   { U V W X Y Z: C^.Obj }
-  ( f : C^.Hom U V )( g : C^.Hom V W )( h : C^.Hom X Y )( k : C^.Hom Y Z ) : 
-  @Functor.onMorphisms _ _ C^.tensor (U, X) (W, Z) ((C^.compose f g), (C^.compose h k)) = C^.compose (@Functor.onMorphisms _ _ C^.tensor (U, X) (V, Y) (f, h)) (@Functor.onMorphisms _ _ C^.tensor (V, Y) (W, Z) (g, k)) :=
+  ( f : C^.Hom U V )( g : C^.Hom V W )( h : C^.Hom X Y )( k : C^.Hom Y Z ) :
+  @Functor.onMorphisms _ _ C^.tensor (U, X) (W, Z) ((C^.compose f g), (C^.compose h k))
+  = C^.compose
+      (@Functor.onMorphisms _ _ C^.tensor (U, X) (V, Y) (f, h))
+      (@Functor.onMorphisms _ _ C^.tensor (V, Y) (W, Z) (g, k)) :=
   @Functor.functoriality (C × C) C C^.tensor (U, X) (V, Y) (W, Z) (f, h) (g, k)
 
 --namespace notations
@@ -58,5 +65,5 @@ instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCa
 --end notations
 
 -- per https://groups.google.com/d/msg/lean-user/kkIFgWRJTLo/tr2VyJGmCQAJ
-  
+
 end tqft.categories.monoidal_category

@@ -37,6 +37,20 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
+@[reducible] definition LeftInjectionAt { D : Category.{u2 v2} } ( Z : D^.Obj ) ( C : Category.{u1 v1} ) : Functor C (C × D) :=
+{ onObjects   := λ X, (X, Z),
+  onMorphisms := λ X Y f, (f, D^.identity Z),
+  identities  := ♮,
+  functoriality := ♮
+}
+
+@[reducible] definition RightInjectionAt { C : Category.{u1 v1} } ( Z : C^.Obj) ( D : Category.{u2 v2} ) : Functor D (C × D) :=
+{ onObjects   := λ X, (Z, X),
+  onMorphisms := λ X Y f, (C^.identity Z, f),
+  identities  := ♮,
+  functoriality := ♮
+}
+
 @[reducible] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
   onObjects     := λ X, (F X^.fst, G X^.snd),
