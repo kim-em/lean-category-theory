@@ -25,8 +25,8 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
 @[pointwise] lemma NaturalTransformations_componentwise_equal
-  { C D : Category } 
-  { F G : Functor C D } 
+  { C D : Category }
+  { F G : Functor C D }
   ( α β : NaturalTransformation F G )
   ( w : ∀ X : C^.Obj, α X = β X ) : α = β :=
   begin
@@ -36,7 +36,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
-@[reducible] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
+@[reducible] definition IdentityNaturalTransformation { C D : Category } ( F : Functor C D ) : NaturalTransformation F F :=
   {
     components := λ X, D^.identity (F X),
     naturality := ♮
@@ -61,10 +61,10 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 
 open tqft.categories.functor
 
-@[reducible] definition horizontal_composition_of_NaturalTransformations 
+@[reducible] definition horizontal_composition_of_NaturalTransformations
   { C D E : Category }
   { F G : Functor C D }
-  { H I : Functor D E } 
+  { H I : Functor D E }
   ( α : NaturalTransformation F G )
   ( β : NaturalTransformation H I ) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
   {
@@ -110,8 +110,8 @@ open smt_tactic.interactive
 
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin  
-                      abstract {                   
+  associativity  := begin
+                      abstract {
                         blast,
                         begin[smt]
                           eblast_using [ Category.associativity ]
@@ -132,6 +132,13 @@ open NaturalTransformation
 
 definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α : NaturalTransformation F G ) := @is_isomorphism (FunctorCategory C D) F G α
 
+lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F : Functor C D ) : is_NaturalIsomorphism (IdentityNaturalTransformation F) :=
+  { inverse := IdentityNaturalTransformation F,
+    witness_1 := ♮,
+    witness_2 := ♮
+  }
+
+
 -- Getting this coercion to work is really painful. We shouldn't have to write
 --     @components C D F G α X
 -- below, but rather just:
@@ -141,7 +148,7 @@ definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α :
 
 
 -- lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C^.Obj } :
---  Inverse (@components C D F G α X) := 
+--  Inverse (@components C D F G α X) :=
 --   {
 --     inverse := α^.inverse^.components X,
 --     witness_1 := α^.witness_1, -- TODO we need to evaluate both sides of this equation at X.
