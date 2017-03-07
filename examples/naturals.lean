@@ -22,7 +22,7 @@ open tqft.categories.monoidal_category
     left_identity  := ♮,
     right_identity := ♮,
     associativity  := ♮
-  }    
+  }
 
 definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
   { onObjects   := id,
@@ -38,18 +38,35 @@ definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
     functoriality := ♮
   }
 
-definition ℕAssociator : Associator ℕTensorProduct :=
-  {
-    components := λ _, 0,
-    naturality := ♮
-  }
-
-definition ℕLaxMonoidalCategory : LaxMonoidalCategory :=
+-- What follows involves a lot of natural transformations than are
+-- really the same thing (at least for the unitors). Can we get lean
+-- to recognise this?
+definition ℕMonoidalCategory : MonoidalCategory :=
  { ℕCategory with
-   tensor := ℕTensorProduct,
-   tensor_unit := unit.star,
-   associator_transformation := ℕAssociator,
-   pentagon := sorry
+   tensor                    := ℕTensorProduct,
+   tensor_unit               := (),
+   associator_transformation := { components := λ _, 0, naturality := ♮ },
+   left_unitor               := { components := λ _, 0, naturality := ♮ },
+   right_unitor              := { components := λ _, 0, naturality := ♮ },
+
+   associator_is_isomorphism := {
+     inverse := { components := λ _, 0, naturality := ♮ },
+     witness_1 := ♮,
+     witness_2 := ♮
+   },
+   left_unitor_is_isomorphism := {
+     inverse := { components := λ _, 0, naturality := ♮ },
+     witness_1 := ♮,
+     witness_2 := ♮
+   },
+   right_unitor_is_isomorphism := {
+     inverse := { components := λ _, 0, naturality := ♮ },
+     witness_1 := ♮,
+     witness_2 := ♮
+   },
+
+   pentagon := ♮,
+   triangle := ♮
  }
 
 end tqft.categories.examples.naturals

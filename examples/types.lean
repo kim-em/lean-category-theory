@@ -10,8 +10,7 @@ namespace tqft.categories.examples.types
 open tqft.categories
 
 
-
-@[reducible] definition { u } CategoryOfTypes : Category := 
+@[reducible] definition { u } CategoryOfTypes : Category :=
 {
     Obj := Type u,
     Hom := λ a b, a → b,
@@ -28,30 +27,60 @@ open tqft.categories.monoidal_category
 
 definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 {
-  onObjects     := λ p, prod p.1 p.2,
-  onMorphisms   := λ _ _ p, λ q, (p.1 q.1, p.2 q.2),
+  onObjects     := λ p, p.1 × p.2,
+  onMorphisms   := λ _ _ p q, (p.1 q.1, p.2 q.2),
   identities    := ♮,
   functoriality := ♮
 }
 
+-- I don't think this is a monoidal category if we don't assume
+-- functional extensionality, though it is a lax monoidal
+-- category. Otherwise there are too many endomorphisms of punit.
 definition MonoidalCategoryOfTypes : MonoidalCategory :=
 {
   CategoryOfTypes with
-  tensor := TensorProductOfTypes,
-  tensor_unit := sorry,
+  tensor      := TensorProductOfTypes,
+  tensor_unit := punit,
   associator_transformation := {
-    components := λ p, λ t, (t.1.1,(t.1.2, t.2)),
+    components := λ p t, (t.1.1,(t.1.2, t.2)),
     naturality := ♮
   },
+  left_unitor := {
+    components := λ p t, t.2,
+    naturality := ♮
+  },
+  right_unitor := {
+    components := λ p t, t.1,
+    naturality := ♮
+  },
+
   associator_is_isomorphism := {
     inverse := {
-      components := λ p, λ t, ((t.1,t.2.1), t.2.2),
+      components := λ p t, ((t.1,t.2.1), t.2.2),
       naturality := ♮
     },
     witness_1 := sorry, -- ♮ causes a timeout here
     witness_2 := sorry  -- ♮ causes a timeout here
   },
-  pentagon := ♮
+  left_unitor_is_isomorphism := {
+    inverse := {
+      components := λ p t, (id, t),
+      naturality := ♮
+    },
+    witness_1 := sorry,
+    witness_2 := sorry
+  },
+  right_unitor_is_isomorphism := {
+    inverse := {
+      components := λ p t, (t, id),
+      naturality := ♮
+    },
+    witness_1 := sorry,
+    witness_2 := sorry
+  },
+
+  pentagon := ♮,
+  triangle := ♮
 }
 
 end tqft.categories.examples.types
