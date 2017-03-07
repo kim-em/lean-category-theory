@@ -3,8 +3,10 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .category
+import .discrete_category
 import .functor
 import .natural_transformation
+import .examples.types
 
 open tqft.categories
 
@@ -56,6 +58,7 @@ definition Opposite ( C : Category ) : Category :=
 -- Do we dare:
 definition TerminalObject ( C : Category ) := InitialObject (Opposite C)
 
+-- If not:
 -- structure TerminalObject ( C : Category ) :=
 --   (object : C^.Obj)
 --   (morphism : ∀ Y : C^.Obj, C^.Hom Y object)
@@ -67,7 +70,7 @@ open tqft.categories.natural_transformation
 -- The diagonal functor sends X to the constant functor that sends everything to X.
 definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) :=
 {
-  onObjects     := λ X: C^.Obj, {
+  onObjects     := λ X : C^.Obj, {
     onObjects     := λ _, X,
     onMorphisms   := λ _ _ _, C^.identity X,
     identities    := ♮,
@@ -110,17 +113,6 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
                      end
 }
 
-definition DiscreteCategory ( α : Type ) : Category :=
-{
-  Obj      := α,
-  Hom      := λ _ _, unit,
-  identity := λ _, (),
-  compose  := λ _ _ _ _ _, (),
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
-}
-
 definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
 {
   onObjects     := λ _, X,
@@ -136,9 +128,44 @@ definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (Obj
 definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
 definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
 
--- TODO is this definition actually usable??
 definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
 definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
+
+structure ExplicitLimit { J C : Category } ( F: Functor J C ) :=
+  ( limit : C^.Obj )
+  ( maps  : Π X : J^.Obj, C^.Hom limit (F X) )
+  ( commutativity : Π X Y : J^.Obj, Π f : J^.Hom X Y, C^.compose (maps X) (F^.onMorphisms f) = maps Y )
+
+open tqft.categories.examples.types
+
+definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Limit F) (ExplicitLimit F) := {
+  morphism  := λ L, { 
+    limit := begin
+               unfold Limit at F, -- TODO why doesn't this do anything?
+               -- The idea here is that the underlying object of L is an object in the 
+               -- comma category. Taking its left projection is an object in C, which is the one we want!
+               exact sorry
+             end,
+    maps  := sorry,
+    commutativity := sorry
+  },
+  inverse   := sorry,
+  witness_1 := sorry,
+  witness_2 := sorry
+}
+
+def zero : fin 2 := ⟨ 0, sorry ⟩
+def one  : fin 2 := ⟨ 1, sorry ⟩
+
+definition Product { C : Category } ( A B : C^.Obj ) := @Limit (DiscreteCategory (fin 2)) C {
+  onObjects     := λ X, match X with
+                          | zero := A
+                          | one  := B
+                        end, 
+  onMorphisms   := sorry,
+  identities    := sorry,
+  functoriality := sorry
+}
 
 -- TODO then products, equalizers, etc.
 -- perhaps a good way to find out if these definitions are usable is to verify that products are products.

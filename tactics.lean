@@ -28,6 +28,15 @@ attribute [pointwise] funext
 
 meta def blast        : tactic unit := smt_simp >> pointwise blast
 
+-- open smt_tactic.interactive
+-- def search_attribute : user_attribute := {
+--   name := `search,
+--   descr := "An equation that the eblast tactic may use."
+-- }
+-- run_command attribute.register `search_attribute
+-- meta def eblast : tactic unit := using_smt $ (attribute.get_instances `search) >>= eblast_using
+
+
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }
 
@@ -38,6 +47,6 @@ notation `♮` := by abstract { blast }
 -- @[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X^.fst ) { B : β } ( p : B = X^.snd ) : (A, B) = X := begin induction X, blast end
 attribute [pointwise] subtype.eq
 
-def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a
+@[reducible] def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a
 @[simp] lemma {u} auto_cast_identity {α : Type u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮
 notation `⟦` p `⟧` := @auto_cast _ _ (by smt_ematch) p
