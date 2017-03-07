@@ -20,16 +20,23 @@ structure StrictTwoCategory :=
   (identity_1 : Π { X Y : _0 }, Π f : _1 X Y, _2 f f)
   (compose_1  : Π { X Y Z : _0 }, _1 X Y → _1 Y Z → _1 X Z)
   (compose_2_vertically   : Π { X Y : _0 }, Π { f g h : _1 X Y }, _2 f g → _2 g h → _2 f h)
-  (compose_2_horizontally : Π { X Y Z : _0 }, Π { f g : _1 X Y }, Π { h k : _1 Y Z }, _2 f g → _2 h k → _2 (compose_1 f h) (compose_1 g k) )
+  (compose_2_horizontally : Π { X Y Z : _0 }, Π { f g : _1 X Y }, Π { h k : _1 Y Z },
+     _2 f g → _2 h k → _2 (compose_1 f h) (compose_1 g k) )
 
   (left_identity  : ∀ { X Y : _0 } (f : _1 X Y), compose_1 (identity_0 X) f = f)
   (right_identity : ∀ { X Y : _0 } (f : _1 X Y), compose_1 f (identity_0 Y) = f)
   (associativity_1  : ∀ { W X Y Z : _0 } (f : _1 W X) (g : _1 X Y) (h : _1 Y Z),
     compose_1 (compose_1 f g) h = compose_1 f (compose_1 g h))
   
-  -- TODO up_identity, down_identity
-  -- TODO associativity_2_vertical, associativity_2_horizontal
-  -- TODO interchange
+  (up_identity : ∀ { X Y : _0 } { f g : _1 X Y } ( α : _2 f g ), compose_2_vertically α (identity_1 g) = α)
+  (down_identity : ∀ { X Y : _0 } { f g : _1 X Y } ( α : _2 f g ), compose_2_vertically (identity_1 f) α = α)
+  (associativity_2_vertical : ∀ { X Y : _0 } { f g h k : _1 X Y } ( α : _2 f g ) ( β : _2 g h ) ( γ : _2 h k ), 
+    compose_2_vertically (compose_2_vertically α β) γ = compose_2_vertically α (compose_2_vertically β γ))
+  (associativity_2_horizontal : ∀ { W X Y Z : _0 } { f g : _1 W X } { h k : _1 X Y } { i j : _1 Y Z } ( α: _2 f g ) ( β : _2 h k ) ( γ : _2 i j ), 
+    compose_2_horizontally (compose_2_horizontally α β) γ = ⟦ compose_2_horizontally α (compose_2_horizontally β γ) ⟧)
+  (interchange : ∀ { X Y Z : _0 } { f g h : _1 X Y } { i j k : _1 Y Z } ( α : _2 f g ) ( β : _2 i j ) ( γ : _2 g h ) ( δ : _2 j k ), 
+    compose_2_vertically (compose_2_horizontally α β) (compose_2_horizontally γ δ) =
+    compose_2_horizontally (compose_2_vertically α γ) (compose_2_vertically β δ))
 
 definition CAT : StrictTwoCategory :=
 {
@@ -42,9 +49,37 @@ definition CAT : StrictTwoCategory :=
     compose_2_vertically := λ _ _ _ _ _ α β, vertical_composition_of_NaturalTransformations α β,
     compose_2_horizontally := λ _ _ _ _ _ _ _ α β, horizontal_composition_of_NaturalTransformations α β,
 
-    left_identity := λ _ _ F, FunctorComposition_left_identity F,
-    right_identity := λ _ _ F, FunctorComposition_right_identity F,
-    associativity_1 := λ _ _ _ _ F G H, FunctorComposition_associative F G H
+    left_identity := ♮,
+    right_identity := ♮,
+    associativity_1 := ♮,
+
+    up_identity := ♮,
+    down_identity := ♮,
+    associativity_2_vertical := 
+                   begin
+                    abstract {
+                      blast,
+                      begin[smt]
+                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
+                      end
+                    }
+                   end,
+    associativity_2_horizontal := begin
+                    abstract {
+                      blast,
+                      begin[smt]
+                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
+                      end
+                    }
+                   end,
+    interchange := begin
+                    abstract {
+                      blast,
+                      begin[smt]
+                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
+                      end
+                    }
+                   end
 }  
 
 end tqft.categories.two_category
