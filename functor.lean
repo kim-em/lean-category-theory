@@ -21,6 +21,7 @@ structure Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }) :=
 
 attribute [simp] Functor.identities
 attribute [simp] Functor.functoriality
+attribute [ematch] Functor.functoriality
 
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.

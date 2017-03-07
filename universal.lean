@@ -47,12 +47,7 @@ definition Opposite ( C : Category ) : Category :=
   compose  := λ X Y Z f g, C^.compose g f,
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin
-    blast,
-    begin[smt]
-      eblast_using [ Category.associativity ]
-    end
-  end
+  associativity  := ♮
 }
 
 -- Do we dare:
@@ -91,26 +86,17 @@ local attribute [elab_simple]  sigma.snd
 -- unfortunately one can't coerce along subtype.elt_of
 open subtype
 
+local attribute [ematch] subtype.has_property
+
 definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B C ) : Category :=
 {
   Obj      := Σ a : A^.Obj, Σ b : B^.Obj, C^.Hom (S a) (T b),
   Hom      := λ p q, { gh : (A^.Hom p.1 q.1) × (B^.Hom p.2.1 q.2.1) // C^.compose (S^.onMorphisms gh.1) q.2.2 = C^.compose p.2.2 (T^.onMorphisms gh.2) },
   identity := λ p, tag (A^.identity p.1, B^.identity p.2.1) ♮,
-  compose  := λ p q r f g, tag (A^.compose (elt_of f).1 (elt_of g).1, B^.compose (elt_of f).2 (elt_of g).2)
-                 begin
-                  blast,
-                  begin[smt]
-                    eblast_using [ Category.associativity, subtype.has_property ]
-                  end
-                 end,
+  compose  := λ p q r f g, tag (A^.compose (elt_of f).1 (elt_of g).1, B^.compose (elt_of f).2 (elt_of g).2) ♮,
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin 
-                      blast, 
-                      begin[smt]
-                        eblast_using [ Category.associativity ]
-                      end 
-                     end
+  associativity  := ♮
 }
 
 definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
@@ -154,18 +140,20 @@ definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C )
   witness_2 := sorry
 }
 
+-- TODO How do we even prove 0 < 2 ??! :-)
 def zero : fin 2 := ⟨ 0, sorry ⟩
 def one  : fin 2 := ⟨ 1, sorry ⟩
 
-definition Product { C : Category } ( A B : C^.Obj ) := @Limit (DiscreteCategory (fin 2)) C {
-  onObjects     := λ X, match X with
-                          | zero := A
-                          | one  := B
-                        end, 
-  onMorphisms   := sorry,
-  identities    := sorry,
-  functoriality := sorry
-}
+-- TODO This breaks, with a mysterious error. Any ideas?
+-- definition Product { C : Category } ( A B : C^.Obj ) := @Limit (DiscreteCategory (fin 2)) C {
+--   onObjects     := λ X, match X with
+--                           | zero := A
+--                           | one  := B
+--                         end, 
+--   onMorphisms   := sorry,
+--   identities    := sorry,
+--   functoriality := sorry
+-- }
 
 -- TODO then products, equalizers, etc.
 -- perhaps a good way to find out if these definitions are usable is to verify that products are products.

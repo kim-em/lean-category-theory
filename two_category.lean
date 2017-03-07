@@ -55,31 +55,9 @@ definition CAT : StrictTwoCategory :=
 
     up_identity := ♮,
     down_identity := ♮,
-    associativity_2_vertical := 
-                   begin
-                    abstract {
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
-                      end
-                    }
-                   end,
-    associativity_2_horizontal := begin
-                    abstract {
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
-                      end
-                    }
-                   end,
-    interchange := begin
-                    abstract {
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
-                      end
-                    }
-                   end
+    associativity_2_vertical := ♮,
+    associativity_2_horizontal := ♮,
+    interchange := ♮
 }  
 
 end tqft.categories.two_category

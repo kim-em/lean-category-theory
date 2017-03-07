@@ -18,6 +18,7 @@ meta def any_apply : list name → tactic unit
 | (c::cs) := (mk_const c >>= fapply) <|> any_apply cs
 
 meta def smt_simp   : tactic unit := using_smt $ intros >> try simp
+meta def smt_eblast : tactic unit := using_smt $ intros >> try simp >> try eblast
 meta def smt_ematch : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch
 
 meta def pointwise (and_then : tactic unit) : tactic unit :=
@@ -26,7 +27,7 @@ do cs ← attribute.get_instances `pointwise,
 
 attribute [pointwise] funext
 
-meta def blast        : tactic unit := smt_simp >> pointwise blast
+meta def blast        : tactic unit := smt_eblast >> pointwise blast
 
 -- open smt_tactic.interactive
 -- def search_attribute : user_attribute := {

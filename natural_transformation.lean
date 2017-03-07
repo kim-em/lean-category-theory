@@ -14,6 +14,8 @@ structure NaturalTransformation { C D : Category } ( F G : Functor C D ) :=
   (naturality: ∀ { X Y : C^.Obj } (f : C^.Hom X Y),
      D^.compose (F^.onMorphisms f) (components Y) = D^.compose (components X) (G^.onMorphisms f))
 
+attribute [ematch] NaturalTransformation.naturality
+
 -- This defines a coercion so we can write `α X` for `components α X`.
 instance NaturalTransformation_to_components { C D : Category } { F G : Functor C D } : has_coe_to_fun (NaturalTransformation F G) :=
 { F   := λ f, Π X : C^.Obj, D^.Hom (F X) (G X),
@@ -42,6 +44,8 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     naturality := ♮
   }
 
+
+
 @[reducible] definition vertical_composition_of_NaturalTransformations
   { C D : Category }
   { F G H : Functor C D }
@@ -49,14 +53,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   ( β : NaturalTransformation G H ) : NaturalTransformation F H :=
   {
     components := λ X, D^.compose (α X) (β X),
-    naturality := begin
-                    abstract {
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity, NaturalTransformation.naturality ]
-                      end,
-                    }
-                  end
+    naturality := ♮
   }
 
 open tqft.categories.functor
@@ -69,14 +66,7 @@ open tqft.categories.functor
   ( β : NaturalTransformation H I ) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
   {
     components := λ X : C^.Obj, E^.compose (β (F X)) (I^.onMorphisms (α X)),
-    naturality := begin
-                    abstract {
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
-                      end,
-                    }
-                  end
+    naturality := ♮
   }
 
 @[reducible] definition whisker_on_left
@@ -110,14 +100,7 @@ open smt_tactic.interactive
 
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin  
-                      abstract {                   
-                        blast,
-                        begin[smt]
-                          eblast_using [ Category.associativity ]
-                        end
-                      }
-                    end
+  associativity  := ♮
 }
 
 @[reducible] definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G

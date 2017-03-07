@@ -27,6 +27,7 @@ structure Category :=
 
 attribute [simp] Category.left_identity
 attribute [simp] Category.right_identity
+attribute [ematch] Category.associativity
 
 /- I've had to disable this notation, as it is breaking output:
 
