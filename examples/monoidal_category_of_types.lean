@@ -30,14 +30,14 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
     components := λ p t, (t.1.1,(t.1.2, t.2)),
     naturality := ♮
   },
-  left_unitor := {
-    components := λ p t, t.2,
-    naturality := ♮
-  },
-  right_unitor := {
-    components := λ p t, t.1,
-    naturality := ♮
-  },
+  -- left_unitor := {
+  --   components := λ p t, t.2,
+  --   naturality := ♮
+  -- },
+  -- right_unitor := {
+  --   components := λ p t, t.1,
+  --   naturality := ♮
+  -- },
 
   associator_is_isomorphism := {
     inverse := {
@@ -47,25 +47,25 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
     witness_1 := sorry, -- ♮ causes a timeout here
     witness_2 := sorry  -- ♮ causes a timeout here
   },
-  left_unitor_is_isomorphism := {
-    inverse := {
-      components := λ p t, (id, t),
-      naturality := ♮
-    },
-    witness_1 := sorry,
-    witness_2 := sorry
-  },
-  right_unitor_is_isomorphism := {
-    inverse := {
-      components := λ p t, (t, id),
-      naturality := ♮
-    },
-    witness_1 := sorry,
-    witness_2 := sorry
-  },
+  -- left_unitor_is_isomorphism := {
+  --   inverse := {
+  --     components := λ p t, (id, t),
+  --     naturality := ♮
+  --   },
+  --   witness_1 := sorry,
+  --   witness_2 := sorry
+  -- },
+  -- right_unitor_is_isomorphism := {
+  --   inverse := {
+  --     components := λ p t, (t, id),
+  --     naturality := ♮
+  --   },
+  --   witness_1 := sorry,
+  --   witness_2 := sorry
+  -- },
 
-  pentagon := ♮,
-  triangle := ♮
+  pentagon := ♮
+  -- triangle := ♮
 }
 
 end tqft.categories.examples.types

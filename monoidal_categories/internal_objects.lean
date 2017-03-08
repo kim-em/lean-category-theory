@@ -40,15 +40,15 @@ instance ModuleMorphism_coercion_to_map { C : MonoidalCategory } { A : Semigroup
 -- local attribute [reducible] lift_t coe_t coe_b
 
 -- TODO wait for better tactics
-definition CategoryOfModules { C: MonoidalCategory } ( A : SemigroupObject C ) : Category :=
-{
-  Obj := ModuleObject A,
-  Hom := λ X Y, ModuleMorphism X Y,
-  identity := λ X, ⟨ C^.identity X, ♮ ⟩,
-  compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, ♮ ⟩,
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
-}
+-- definition CategoryOfModules { C: MonoidalCategory } ( A : SemigroupObject C ) : Category :=
+-- {
+--   Obj := ModuleObject A,
+--   Hom := λ X Y, ModuleMorphism X Y,
+--   identity := λ X, ⟨ C^.identity X, ♮ ⟩,
+--   compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, ♮ ⟩,
+--   left_identity  := ♮,
+--   right_identity := ♮,
+--   associativity  := ♮
+-- }
 
 end tqft.categories.internal_objects

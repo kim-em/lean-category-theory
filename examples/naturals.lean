@@ -46,27 +46,27 @@ definition ℕMonoidalCategory : MonoidalCategory :=
    tensor                    := ℕTensorProduct,
    tensor_unit               := (),
    associator_transformation := { components := λ _, 0, naturality := ♮ },
-   left_unitor               := { components := λ _, 0, naturality := ♮ },
-   right_unitor              := { components := λ _, 0, naturality := ♮ },
+  --  left_unitor               := { components := λ _, 0, naturality := ♮ },
+  --  right_unitor              := { components := λ _, 0, naturality := ♮ },
 
    associator_is_isomorphism := {
      inverse := { components := λ _, 0, naturality := ♮ },
      witness_1 := ♮,
      witness_2 := ♮
    },
-   left_unitor_is_isomorphism := {
-     inverse := { components := λ _, 0, naturality := ♮ },
-     witness_1 := ♮,
-     witness_2 := ♮
-   },
-   right_unitor_is_isomorphism := {
-     inverse := { components := λ _, 0, naturality := ♮ },
-     witness_1 := ♮,
-     witness_2 := ♮
-   },
+  --  left_unitor_is_isomorphism := {
+  --    inverse := { components := λ _, 0, naturality := ♮ },
+  --    witness_1 := ♮,
+  --    witness_2 := ♮
+  --  },
+  --  right_unitor_is_isomorphism := {
+  --    inverse := { components := λ _, 0, naturality := ♮ },
+  --    witness_1 := ♮,
+  --    witness_2 := ♮
+  --  },
 
-   pentagon := ♮,
-   triangle := ♮
+   pentagon := ♮
+  --  triangle := ♮
  }
 
 end tqft.categories.examples.naturals
