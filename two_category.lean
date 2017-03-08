@@ -38,6 +38,9 @@ structure StrictTwoCategory :=
     compose_2_vertically (compose_2_horizontally α β) (compose_2_horizontally γ δ) =
     compose_2_horizontally (compose_2_vertically α γ) (compose_2_vertically β δ))
 
+attribute [simp] StrictTwoCategory.left_identity StrictTwoCategory.right_identity StrictTwoCategory.up_identity StrictTwoCategory.down_identity
+attribute [ematch] StrictTwoCategory.associativity_1 StrictTwoCategory.associativity_2_vertical StrictTwoCategory.associativity_2_horizontal StrictTwoCategory.interchange
+
 definition CAT : StrictTwoCategory :=
 {
     _0 := Category,
@@ -49,15 +52,27 @@ definition CAT : StrictTwoCategory :=
     compose_2_vertically := λ _ _ _ _ _ α β, vertical_composition_of_NaturalTransformations α β,
     compose_2_horizontally := λ _ _ _ _ _ _ _ α β, horizontal_composition_of_NaturalTransformations α β,
 
-    left_identity := ♮,
-    right_identity := ♮,
+    left_identity   := ♮,
+    right_identity  := ♮,
     associativity_1 := ♮,
 
-    up_identity := ♮,
-    down_identity := ♮,
-    associativity_2_vertical := ♮,
+    up_identity                := ♮,
+    down_identity              := ♮,
+    associativity_2_vertical   := ♮,
     associativity_2_horizontal := ♮,
-    interchange := ♮
+    interchange                := ♮
 }  
+
+definition HomCategory ( C : StrictTwoCategory ) ( X Y : C^._0 ) : Category := {
+  Obj            := C^._1 X Y,
+  Hom            := λ f g, C^._2 f g,
+  identity       := λ f, C^.identity_1 f,
+  compose        := λ _ _ _ α β, C^.compose_2_vertically α β,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
+}
+
+-- TODO show that HomCategory C X X is monoidal?
 
 end tqft.categories.two_category

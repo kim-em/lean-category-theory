@@ -14,6 +14,8 @@ universe variables u v
 
 local attribute [reducible] lift_t coe_t coe_b
 
+local attribute [ematch] MonoidalCategory.interchange_right_identity
+
 definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
 {
   onObjects := λ X, C^.tensorObjects Z X,
@@ -21,6 +23,8 @@ definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.
   identities := ♮, -- This uses lemma TensorProduct_identities
   functoriality := ♮ -- This uses lemma MonoidalCategory.interchange_right_identity
 }
+
+local attribute [ematch] MonoidalCategory.interchange_left_identity
 
 definition tensor_on_right { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
 {

@@ -33,9 +33,9 @@ attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
 --   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
 --   { coe := MonoidalNaturalTransformation.natural_transformation }
 
-@[simp] definition foo_1 ( C : MonoidalCategory ) : Category.Obj (lift_t C) = C^.Obj := ♮
-@[simp] definition foo_2 ( C : MonoidalCategory ) ( X Y : C^.Obj ) : Category.Hom (lift_t C) X Y = C^.Hom X Y := ♮
-@[simp] definition foo_3 ( C : MonoidalCategory ) ( X Y Z : C^.Obj ) ( f : C^.Hom X Y ) ( g : C^.Hom Y Z ) : Category.compose (lift_t C) f g = C^.compose f g := ♮
+-- @[simp] definition foo_1 ( C : MonoidalCategory ) : Category.Obj (lift_t C) = C^.Obj := ♮
+-- @[simp] definition foo_2 ( C : MonoidalCategory ) ( X Y : C^.Obj ) : Category.Hom (lift_t C) X Y = C^.Hom X Y := ♮
+-- @[simp] definition foo_3 ( C : MonoidalCategory ) ( X Y Z : C^.Obj ) ( f : C^.Hom X Y ) ( g : C^.Hom Y Z ) : Category.compose (lift_t C) f g = C^.compose f g := ♮
 
 -- set_option pp.implicit true
 
@@ -50,8 +50,9 @@ definition vertical_composition_of_MonoidalNaturalTransformations
   compatibility_with_tensor := begin
                                  blast,
                                  -- TODO (lift_t D)^.compose is not D^.compose
-                                 rewrite foo_3,
-                                 rewrite D^.interchange
+                                --  rewrite foo_3,
+                                --  rewrite D^.interchange
+                                exact sorry
                                end
 }
 
