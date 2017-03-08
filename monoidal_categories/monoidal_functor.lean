@@ -26,21 +26,34 @@ structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : Monoi
   ( compatibility_with_tensor : ∀ X Y : C^.Obj, D^.compose (F^.tensorator (X, Y)) (D^.tensorMorphisms (natural_transformation X) (natural_transformation Y)) = D^.compose (natural_transformation (C^.tensorObjects X Y)) (G^.tensorator (X, Y)))
 -- TODO compatibility with unit
 
+attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
+
 -- instance MonoidalNaturalTransformation_coercion_to_natural_transformation
 --   { C D : MonoidalCategory }
 --   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
 --   { coe := MonoidalNaturalTransformation.natural_transformation }
 
--- TODO waiting for better tactics
--- definition vertical_composition_of_MonoidalNaturalTransformations
---   { C D : MonoidalCategory } 
---   { F G H : MonoidalFunctor C D } 
---   ( α : MonoidalNaturalTransformation F G ) 
---   ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
--- {
---   natural_transformation    := vertical_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
---   compatibility_with_tensor := sorry
--- }
+@[simp] definition foo_1 ( C : MonoidalCategory ) : Category.Obj (lift_t C) = C^.Obj := ♮
+@[simp] definition foo_2 ( C : MonoidalCategory ) ( X Y : C^.Obj ) : Category.Hom (lift_t C) X Y = C^.Hom X Y := ♮
+@[simp] definition foo_3 ( C : MonoidalCategory ) ( X Y Z : C^.Obj ) ( f : C^.Hom X Y ) ( g : C^.Hom Y Z ) : Category.compose (lift_t C) f g = C^.compose f g := ♮
+
+-- set_option pp.implicit true
+
+-- TODO strange inheritance issues here too!
+definition vertical_composition_of_MonoidalNaturalTransformations
+  { C D : MonoidalCategory } 
+  { F G H : MonoidalFunctor C D } 
+  ( α : MonoidalNaturalTransformation F G ) 
+  ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
+{
+  natural_transformation    := vertical_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
+  compatibility_with_tensor := begin
+                                 blast,
+                                 -- TODO (lift_t D)^.compose is not D^.compose
+                                 rewrite foo_3,
+                                 rewrite D^.interchange
+                               end
+}
 
 -- definition CategoryOfMonoidalFunctors ( C D : MonoidalCategory ) : Category :=
 -- {

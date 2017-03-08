@@ -25,6 +25,11 @@ structure LaxMonoidalCategory
   (pentagon                  : Pentagon associator_transformation)
   -- (triangle                  : Triangle ⟦tensor_unit⟧ left_unitor right_unitor associator_transformation)
 
+-- TODO Unfortunately we need to copy these attributes; this isn't handled by inheritance.
+attribute [ematch,simp] LaxMonoidalCategory.left_identity
+attribute [ematch,simp] LaxMonoidalCategory.right_identity
+attribute [ematch] LaxMonoidalCategory.associativity
+
 instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} Category.{u v} :=
   ⟨LaxMonoidalCategory.to_Category⟩
 
@@ -33,6 +38,11 @@ structure MonoidalCategory
   (associator_is_isomorphism   : is_NaturalIsomorphism associator_transformation)
   -- (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
   -- (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
+
+-- TODO Unfortunately we need to copy these attributes; this isn't handled by inheritance.
+attribute [ematch,simp] MonoidalCategory.left_identity
+attribute [ematch,simp] MonoidalCategory.right_identity
+attribute [ematch] MonoidalCategory.associativity
 
 -- Convenience methods which take two arguments, rather than a pair. (This seems to often help the elaborator avoid getting stuck on `prod.mk`.)
 @[reducible] definition MonoidalCategory.tensorObjects   ( C : MonoidalCategory ) ( X Y : C^.Obj ) : C^.Obj := C^.tensor (X, Y)
@@ -45,7 +55,7 @@ definition MonoidalCategory.associator
 
 instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCategory.{u v} LaxMonoidalCategory.{u v}   := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
 
--- TODO This works, but do we really need to be so explicit??
+-- TODO This works, but why do we need to be so explicit??
 @[reducible,ematch] definition MonoidalCategory.interchange
   ( C : MonoidalCategory )
   { U V W X Y Z: C^.Obj }
@@ -56,14 +66,10 @@ instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCa
       (@Functor.onMorphisms _ _ C^.tensor (V, Y) (W, Z) (g, k)) :=
   @Functor.functoriality (C × C) C C^.tensor (U, X) (V, Y) (W, Z) (f, h) (g, k)
 
--- TOODO it seems a shame we need to redine this for MonoidalCategory; it's already there on Category.
+-- TODO it seems a shame we need to redine this for MonoidalCategory; it's already there on Category.
 @[ematch] definition MonoidalCategory.identity_idempotent
   ( C : MonoidalCategory )
-  ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := 
-  begin
-    -- TODO why doesn't this work by blast?! left_identity is marked as simp.
-    rewrite C^.left_identity
-  end
+  ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := ♮
 
 @[ematch] definition MonoidalCategory.interchange_left_identity
   ( C : MonoidalCategory )
