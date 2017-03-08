@@ -88,8 +88,6 @@ open tqft.categories.functor
 -- To define a natural isomorphism, we'll define the functor category, and ask for an isomorphism there.
 -- It's then a lemma that each component is an isomorphism, and vice versa.
 
-open smt_tactic.interactive
-
 @[reducible] definition FunctorCategory ( C D : Category ) : Category :=
 {
   Obj := Functor C D,
@@ -130,6 +128,5 @@ definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α :
 --     witness_1 := α^.witness_1, -- TODO we need to evaluate both sides of this equation at X.
 --     witness_2 := sorry
   -- }
-
 
 end tqft.categories.natural_transformation

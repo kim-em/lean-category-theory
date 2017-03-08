@@ -129,7 +129,7 @@ definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C )
     limit := begin
                unfold Limit at F, -- TODO why doesn't this do anything?
                -- The idea here is that the underlying object of L is an object in the 
-               -- comma category. Taking its left projection is an object in C, which is the one we want!
+               -- comma category. Taking its left projection (i.e. the first piece of the dependent pair) is an object in C, which is the one we want!
                exact sorry
              end,
     maps  := sorry,

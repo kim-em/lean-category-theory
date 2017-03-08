@@ -29,15 +29,6 @@ attribute [pointwise] funext
 
 meta def blast        : tactic unit := smt_eblast >> pointwise blast
 
--- open smt_tactic.interactive
--- def search_attribute : user_attribute := {
---   name := `search,
---   descr := "An equation that the eblast tactic may use."
--- }
--- run_command attribute.register `search_attribute
--- meta def eblast : tactic unit := using_smt $ (attribute.get_instances `search) >>= eblast_using
-
-
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }
 
