@@ -15,8 +15,8 @@ open tqft.categories.monoidal_category
 namespace tqft.categories.drinfeld_centre
 
 structure HalfBraiding ( C : MonoidalCategory ) :=
-    (object        : C^.Obj)
-    (commutor: NaturalIsomorphism (tensor_on_left object) (tensor_on_right object))
+    (object   : C^.Obj)
+    (commutor : NaturalIsomorphism (tensor_on_left object) (tensor_on_right object))
 
 instance HalfBraiding_coercion_to_object { C : MonoidalCategory } : has_coe (HalfBraiding C) (C^.Obj) :=
   { coe := HalfBraiding.object }
@@ -38,12 +38,19 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
     morphism := C^.identity X,
     witness  := begin
                   blast,
+                  -- TODO this really should work. It's hard to see why it doesn't apply; removing some [reducible] attributes may help.
+                  -- rewrite TensorProduct_identities,
                   exact sorry
                 end
   },
-  compose := λ _ _ _ f g, {
+  compose := λ P Q R f g, {
     morphism := C^.compose f^.morphism g^.morphism,
-    witness  := sorry
+    witness  := begin
+                  blast,
+                  -- TODO similarly, I don't understand why this doesn't work
+                  -- rewrite MonoidalCategory.interchange_left_identity,
+                  exact sorry
+                end
   },
   left_identity  := sorry,
   right_identity := sorry,

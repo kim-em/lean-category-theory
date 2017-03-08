@@ -88,5 +88,14 @@ lemma switch_twice_is_the_identity ( C D : Category ) : FunctorComposition ( Swi
   functoriality := ♮
 }
 
+-- @[simp] lemma bifunctor_identities
+--   { C D E : Category }
+--   ( X : C^.Obj ) ( Y : D^.Obj )
+--   ( F : Functor (C × D) E ) : @Functor.onMorphisms _ _ F (X, Y) (X, Y) (C^.identity X, D^.identity Y) = E^.identity (F^.onObjects (X, Y)) :=
+--   begin
+--     assert p : (C^.identity X, D^.identity Y) = (C × D)^.identity (X, Y), blast,
+--     rewrite p,
+--     rewrite F^.identities
+--   end 
 
 end tqft.categories.products

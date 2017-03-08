@@ -46,7 +46,7 @@ definition MonoidalCategory.associator
 instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCategory.{u v} LaxMonoidalCategory.{u v}   := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
 
 -- TODO This works, but do we really need to be so explicit??
-@[reducible] definition MonoidalCategory.interchange
+@[reducible,ematch] definition MonoidalCategory.interchange
   ( C : MonoidalCategory )
   { U V W X Y Z: C^.Obj }
   ( f : C^.Hom U V )( g : C^.Hom V W )( h : C^.Hom X Y )( k : C^.Hom Y Z ) :
@@ -56,14 +56,25 @@ instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCa
       (@Functor.onMorphisms _ _ C^.tensor (V, Y) (W, Z) (g, k)) :=
   @Functor.functoriality (C × C) C C^.tensor (U, X) (V, Y) (W, Z) (f, h) (g, k)
 
---namespace notations
---  infix `⊗`:70 := λ {C : MonoidalCategory} (X Y : C^.Obj),
---                    C^.tensorObjects X Y
---  infix `⊗`:70 := λ {C : MonoidalCategory} {W X Y Z : C^.Obj}
---                     (f : C^.Hom W X) (g : C^.Hom Y Z),
---                     C^.tensorMorphisms f g
---end notations
+@[ematch] definition MonoidalCategory.interchange_left_identity
+  ( C : MonoidalCategory )
+  { W X Y Z : C^.Obj }
+  ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :
+  @Functor.onMorphisms _ _ C^.tensor (W, Z) (Y, Z) ((C^.compose f g), (C^.identity Z)) = C^.compose (C^.tensorMorphisms f (C^.identity Z)) (C^.tensorMorphisms g (C^.identity Z)) :=
+  begin
+    blast,
+    -- TODO this doesn't work, because inheritance is broken
+    -- rewrite (Category.identity_idempotent C Z),
+    exact sorry
+  end
 
--- per https://groups.google.com/d/msg/lean-user/kkIFgWRJTLo/tr2VyJGmCQAJ
+@[simp] lemma TensorProduct_identities
+  { C : MonoidalCategory }
+  ( X Y : C^.Obj ) : @Functor.onMorphisms _ _ C^.tensor (X, Y) (X, Y) (C^.identity X, C^.identity Y) = C^.identity (C^.tensor^.onObjects (X, Y)) :=
+  begin
+    assert p : (C^.identity X, C^.identity Y) = (C × C)^.identity (X, Y), blast,
+    rewrite p,
+    blast
+  end 
 
 end tqft.categories.monoidal_category
