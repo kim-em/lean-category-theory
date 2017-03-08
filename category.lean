@@ -35,7 +35,7 @@ instance Category_to_Hom : has_coe_to_fun Category :=
 
 @[ematch] definition Category.identity_idempotent
   ( C : Category )
-  ( X : C^.Obj ) : C^.identity X  = C^.compose (C^.identity X) (C^.identity X) := ♮
+  ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := ♮
 
 structure Isomorphism ( C: Category ) ( X Y : C^.Obj ) :=
   (morphism : C X Y)

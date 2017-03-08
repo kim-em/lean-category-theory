@@ -56,19 +56,30 @@ instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCa
       (@Functor.onMorphisms _ _ C^.tensor (V, Y) (W, Z) (g, k)) :=
   @Functor.functoriality (C × C) C C^.tensor (U, X) (V, Y) (W, Z) (f, h) (g, k)
 
+-- TOODO it seems a shame we need to redine this for MonoidalCategory; it's already there on Category.
+@[ematch] definition MonoidalCategory.identity_idempotent
+  ( C : MonoidalCategory )
+  ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := 
+  begin
+    -- TODO why doesn't this work by blast?! left_identity is marked as simp.
+    rewrite C^.left_identity
+  end
+
 @[ematch] definition MonoidalCategory.interchange_left_identity
   ( C : MonoidalCategory )
   { W X Y Z : C^.Obj }
   ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :
-  @Functor.onMorphisms _ _ C^.tensor (W, Z) (Y, Z) ((C^.compose f g), (C^.identity Z)) = C^.compose (C^.tensorMorphisms f (C^.identity Z)) (C^.tensorMorphisms g (C^.identity Z)) :=
-  begin
-    blast,
-    -- TODO this doesn't work, because inheritance is broken
-    -- rewrite (Category.identity_idempotent C Z),
-    exact sorry
-  end
+  @Functor.onMorphisms _ _ C^.tensor (W, Z) (Y, Z) ((C^.compose f g), (C^.identity Z))
+    = C^.compose (C^.tensorMorphisms f (C^.identity Z)) (C^.tensorMorphisms g (C^.identity Z)) := ♮
 
-@[simp] lemma TensorProduct_identities
+@[ematch] definition MonoidalCategory.interchange_right_identity
+  ( C : MonoidalCategory )
+  { W X Y Z : C^.Obj }
+  ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :
+  @Functor.onMorphisms _ _ C^.tensor (Z, W) (Z, Y) ((C^.identity Z), (C^.compose f g))
+    = C^.compose (C^.tensorMorphisms (C^.identity Z) f) (C^.tensorMorphisms (C^.identity Z) g) := ♮
+
+@[ematch,simp] lemma TensorProduct_identities
   { C : MonoidalCategory }
   ( X Y : C^.Obj ) : @Functor.onMorphisms _ _ C^.tensor (X, Y) (X, Y) (C^.identity X, C^.identity Y) = C^.identity (C^.tensor^.onObjects (X, Y)) :=
   begin
