@@ -32,23 +32,23 @@ structure ModuleMorphism { C : MonoidalCategory } { A : SemigroupObject C } ( X 
   ( map : C^.Hom X Y )
   ( compatibility : C^.compose (C^.tensorMorphisms (C^.identity A) map) Y^.action = C^.compose X^.action map )
 
-attribute [simp] ModuleMorphism.compatibility
+attribute [ematch,simp] ModuleMorphism.compatibility
 
 instance ModuleMorphism_coercion_to_map { C : MonoidalCategory } { A : SemigroupObject C } ( X Y : ModuleObject A ) : has_coe (ModuleMorphism X Y) (C^.Hom X Y) :=
   { coe := ModuleMorphism.map }
 
--- local attribute [reducible] lift_t coe_t coe_b
+local attribute [reducible] lift_t coe_t coe_b
 
 -- TODO wait for better tactics
--- definition CategoryOfModules { C: MonoidalCategory } ( A : SemigroupObject C ) : Category :=
--- {
---   Obj := ModuleObject A,
---   Hom := λ X Y, ModuleMorphism X Y,
---   identity := λ X, ⟨ C^.identity X, ♮ ⟩,
---   compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, ♮ ⟩,
---   left_identity  := ♮,
---   right_identity := ♮,
---   associativity  := ♮
--- }
+definition CategoryOfModules { C: MonoidalCategory } ( A : SemigroupObject C ) : Category :=
+{
+  Obj := ModuleObject A,
+  Hom := λ X Y, ModuleMorphism X Y,
+  identity := λ X, ⟨ C^.identity X, begin blast, rewrite C^.right_identity end ⟩,
+  compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, sorry ⟩,
+  left_identity  := sorry,
+  right_identity := sorry,
+  associativity  := sorry
+}
 
 end tqft.categories.internal_objects
