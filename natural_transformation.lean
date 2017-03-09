@@ -22,7 +22,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   coe := NaturalTransformation.components }
 
 -- TODO can we simplify the next proof, by first using:
---     attribute [pointwise] funext
+-- attribute [pointwise] funext
 -- and then a bit of automation?
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
@@ -32,9 +32,9 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   ( α β : NaturalTransformation F G )
   ( w : ∀ X : C^.Obj, α X = β X ) : α = β :=
   begin
-    induction α with αc,
-    induction β with βc,
-    have hc : αc = βc, from funext w,
+    induction α with α_components α_naturality,
+    induction β with β_components β_naturality,
+    have hc : α_components = β_components, from funext w,
     by subst hc
   end
 
