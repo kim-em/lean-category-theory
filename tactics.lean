@@ -12,6 +12,14 @@ def pointwise_attribute : user_attribute := {
 
 run_command attribute.register `pointwise_attribute
 
+def unfoldable_attribute : user_attribute := {
+  name := `unfoldable,
+  descr := "A definition that may be unfoldable, but hesitantly."
+}
+
+run_command attribute.register `unfoldable_attribute
+
+
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
 | []      := failed
@@ -25,9 +33,28 @@ meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
    try (seq (any_apply cs) and_then)
 
+-- TODO does this have any effect?
 attribute [pointwise] funext
 
-meta def blast        : tactic unit := smt_eblast >> pointwise blast
+open tactic
+open lean.parser
+open interactive
+
+namespace tactic.interactive
+  meta def force (t : itactic) : tactic unit :=
+  do gs ← get_goals,
+     t,
+     gs' ← get_goals,
+     guard (gs ≠ gs') <|> tactic.fail "force tactic failed"
+
+  meta def unfold_at_least_one_with_attribute (attr : parse ident) : tactic unit :=
+  do defs ← attribute.get_instances attr,
+     force (dunfold defs [])
+end tactic.interactive
+
+meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute `unfoldable) and_then )
+
+meta def blast  : tactic unit := smt_eblast >> pointwise blast >> unfold_something blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }
