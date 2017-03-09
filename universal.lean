@@ -3,8 +3,10 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .category
+import .discrete_category
 import .functor
 import .natural_transformation
+import .examples.types
 
 open tqft.categories
 
@@ -45,17 +47,13 @@ definition Opposite ( C : Category ) : Category :=
   compose  := λ X Y Z f g, C^.compose g f,
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin
-    blast,
-    begin[smt]
-      eblast_using [ Category.associativity ]
-    end
-  end
+  associativity  := ♮
 }
 
 -- Do we dare:
 definition TerminalObject ( C : Category ) := InitialObject (Opposite C)
 
+-- If not:
 -- structure TerminalObject ( C : Category ) :=
 --   (object : C^.Obj)
 --   (morphism : ∀ Y : C^.Obj, C^.Hom Y object)
@@ -67,7 +65,7 @@ open tqft.categories.natural_transformation
 -- The diagonal functor sends X to the constant functor that sends everything to X.
 definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) :=
 {
-  onObjects     := λ X: C^.Obj, {
+  onObjects     := λ X : C^.Obj, {
     onObjects     := λ _, X,
     onMorphisms   := λ _ _ _, C^.identity X,
     identities    := ♮,
@@ -88,34 +86,14 @@ local attribute [elab_simple]  sigma.snd
 -- unfortunately one can't coerce along subtype.elt_of
 open subtype
 
+local attribute [ematch] subtype.has_property
+
 definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B C ) : Category :=
 {
   Obj      := Σ a : A^.Obj, Σ b : B^.Obj, C^.Hom (S a) (T b),
   Hom      := λ p q, { gh : (A^.Hom p.1 q.1) × (B^.Hom p.2.1 q.2.1) // C^.compose (S^.onMorphisms gh.1) q.2.2 = C^.compose p.2.2 (T^.onMorphisms gh.2) },
   identity := λ p, tag (A^.identity p.1, B^.identity p.2.1) ♮,
-  compose  := λ p q r f g, tag (A^.compose (elt_of f).1 (elt_of g).1, B^.compose (elt_of f).2 (elt_of g).2)
-                 begin
-                  blast,
-                  begin[smt]
-                    eblast_using [ Category.associativity, subtype.has_property ]
-                  end
-                 end,
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := begin 
-                      blast, 
-                      begin[smt]
-                        eblast_using [ Category.associativity ]
-                      end 
-                     end
-}
-
-definition DiscreteCategory ( α : Type ) : Category :=
-{
-  Obj      := α,
-  Hom      := λ _ _, unit,
-  identity := λ _, (),
-  compose  := λ _ _ _ _ _, (),
+  compose  := λ p q r f g, tag (A^.compose (elt_of f).1 (elt_of g).1, B^.compose (elt_of f).2 (elt_of g).2) ♮,
   left_identity  := ♮,
   right_identity := ♮,
   associativity  := ♮
@@ -136,9 +114,46 @@ definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (Obj
 definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
 definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
 
--- TODO is this definition actually usable??
 definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
 definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
+
+structure ExplicitLimit { J C : Category } ( F: Functor J C ) :=
+  ( limit : C^.Obj )
+  ( maps  : Π X : J^.Obj, C^.Hom limit (F X) )
+  ( commutativity : Π X Y : J^.Obj, Π f : J^.Hom X Y, C^.compose (maps X) (F^.onMorphisms f) = maps Y )
+
+open tqft.categories.examples.types
+
+definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Limit F) (ExplicitLimit F) := {
+  morphism  := λ L, { 
+    limit := begin
+               unfold Limit at F, -- TODO why doesn't this do anything?
+               -- The idea here is that the underlying object of L is an object in the 
+               -- comma category. Taking its left projection (i.e. the first piece of the dependent pair) is an object in C, which is the one we want!
+               exact sorry
+             end,
+    maps  := sorry,
+    commutativity := sorry
+  },
+  inverse   := sorry,
+  witness_1 := sorry,
+  witness_2 := sorry
+}
+
+-- TODO How do we even prove 0 < 2 ??! :-)
+def zero : fin 2 := ⟨ 0, sorry ⟩
+def one  : fin 2 := ⟨ 1, sorry ⟩
+
+-- TODO This breaks, with a mysterious error. Any ideas?
+-- definition Product { C : Category } ( A B : C^.Obj ) := @Limit (DiscreteCategory (fin 2)) C {
+--   onObjects     := λ X, match X with
+--                           | zero := A
+--                           | one  := B
+--                         end, 
+--   onMorphisms   := sorry,
+--   identities    := sorry,
+--   functoriality := sorry
+-- }
 
 -- TODO then products, equalizers, etc.
 -- perhaps a good way to find out if these definitions are usable is to verify that products are products.

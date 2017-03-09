@@ -18,6 +18,7 @@ meta def any_apply : list name → tactic unit
 | (c::cs) := (mk_const c >>= fapply) <|> any_apply cs
 
 meta def smt_simp   : tactic unit := using_smt $ intros >> try simp
+meta def smt_eblast : tactic unit := using_smt $ intros >> try simp >> try eblast
 meta def smt_ematch : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch
 
 meta def pointwise (and_then : tactic unit) : tactic unit :=
@@ -26,7 +27,7 @@ do cs ← attribute.get_instances `pointwise,
 
 attribute [pointwise] funext
 
-meta def blast        : tactic unit := smt_simp >> pointwise blast
+meta def blast        : tactic unit := smt_eblast >> pointwise blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }
@@ -38,6 +39,6 @@ notation `♮` := by abstract { blast }
 -- @[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X^.fst ) { B : β } ( p : B = X^.snd ) : (A, B) = X := begin induction X, blast end
 attribute [pointwise] subtype.eq
 
-def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a
+@[reducible] def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a
 @[simp] lemma {u} auto_cast_identity {α : Type u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮
 notation `⟦` p `⟧` := @auto_cast _ _ (by smt_ematch) p

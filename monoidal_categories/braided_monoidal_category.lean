@@ -30,16 +30,6 @@ structure BraidedMonoidalCategory
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
 
 
--- TODO think about where these should properly live.
-lemma FunctorComposition_left_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition (IdentityFunctor C) F = F := ♮
-
-lemma FunctorComposition_right_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition F (IdentityFunctor D) = F := ♮
-
-lemma FunctorComposition_associative { B C D E : Category } ( F : Functor B C ) ( G : Functor C D ) ( H : Functor D E ) :
-  FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
-
 @[reducible] definition squared_Braiding { C : MonoidalCategory.{u v} } ( braiding : Braiding C )
   : NaturalTransformation C^.tensor C^.tensor :=
   begin

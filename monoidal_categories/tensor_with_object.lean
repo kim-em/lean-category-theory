@@ -14,38 +14,24 @@ universe variables u v
 
 local attribute [reducible] lift_t coe_t coe_b
 
+local attribute [ematch] MonoidalCategory.interchange_right_identity
+
 definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
 {
   onObjects := λ X, C^.tensorObjects Z X,
   onMorphisms := λ X Y f, C^.tensorMorphisms (C^.identity Z) f,
-  identities := begin
-                  blast,
-                  rewrite Functor.identities (C^.tensor),                
-                end,
-  functoriality := begin
-                      blast,
-                      -- TODO, why doesn't this work?
-                      -- begin[smt]
-                      --   eblast_using [ Category.left_identity, MonoidalCategory.interchange ]
-                      -- end,
-                      rewrite - C^.interchange,
-                      rewrite C^.left_identity
-                    end
+  identities := ♮, -- This uses lemma TensorProduct_identities
+  functoriality := ♮ -- This uses lemma MonoidalCategory.interchange_right_identity
 }
+
+local attribute [ematch] MonoidalCategory.interchange_left_identity
 
 definition tensor_on_right { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
 {
   onObjects := λ X, C^.tensorObjects X Z,
   onMorphisms := λ X Y f, C^.tensorMorphisms f (C^.identity Z),
-  identities := begin
-                  blast,
-                  rewrite Functor.identities (C^.tensor),                
-                end,
-  functoriality := begin
-                      blast,
-                      rewrite - C^.interchange,
-                      rewrite C^.left_identity
-                    end
+  identities := ♮, -- This uses lemma TensorProduct_identities
+  functoriality := ♮ -- This uses lemma MonoidalCategory.interchange_left_identity
 }
 
 end tqft.categories.monoidal_category

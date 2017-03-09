@@ -23,14 +23,7 @@ universe variables u1 v1 u2 v2 u3 v3
 
     left_identity  := ♮,
     right_identity := ♮,
-    associativity  := begin
-                        abstract {
-                          blast,
-                          begin[smt]
-                            eblast_using [ Category.associativity ]
-                          end
-                        }
-                      end
+    associativity  := ♮
   }
 
 namespace ProductCategory
@@ -66,15 +59,7 @@ end ProductFunctor
 @[reducible] definition ProductNaturalTransformation { A B C D : Category } { F G : Functor A B } { H I : Functor C D } (α : NaturalTransformation F G) (β : NaturalTransformation H I) : NaturalTransformation (F × H) (G × I) :=
 {
   components := λ X, (α X^.fst, β X^.snd),
-  naturality :=
-  begin
-    abstract {
-      blast,
-      begin[smt]
-        eblast_using [ NaturalTransformation.naturality ]
-      end
-    }
-  end
+  naturality := ♮
 }
 
 namespace ProductNaturalTransformation
@@ -103,5 +88,14 @@ lemma switch_twice_is_the_identity ( C D : Category ) : FunctorComposition ( Swi
   functoriality := ♮
 }
 
+-- @[simp] lemma bifunctor_identities
+--   { C D E : Category }
+--   ( X : C^.Obj ) ( Y : D^.Obj )
+--   ( F : Functor (C × D) E ) : @Functor.onMorphisms _ _ F (X, Y) (X, Y) (C^.identity X, D^.identity Y) = E^.identity (F^.onObjects (X, Y)) :=
+--   begin
+--     assert p : (C^.identity X, D^.identity Y) = (C × D)^.identity (X, Y), blast,
+--     rewrite p,
+--     rewrite F^.identities
+--   end 
 
 end tqft.categories.products

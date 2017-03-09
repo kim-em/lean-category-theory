@@ -14,13 +14,15 @@ structure NaturalTransformation { C D : Category } ( F G : Functor C D ) :=
   (naturality: ∀ { X Y : C^.Obj } (f : C^.Hom X Y),
      D^.compose (F^.onMorphisms f) (components Y) = D^.compose (components X) (G^.onMorphisms f))
 
+attribute [ematch] NaturalTransformation.naturality
+
 -- This defines a coercion so we can write `α X` for `components α X`.
 instance NaturalTransformation_to_components { C D : Category } { F G : Functor C D } : has_coe_to_fun (NaturalTransformation F G) :=
 { F   := λ f, Π X : C^.Obj, D^.Hom (F X) (G X),
   coe := NaturalTransformation.components }
 
 -- TODO can we simplify the next proof, by first using:
---     attribute [pointwise] funext
+-- attribute [pointwise] funext
 -- and then a bit of automation?
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
@@ -30,9 +32,9 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   ( α β : NaturalTransformation F G )
   ( w : ∀ X : C^.Obj, α X = β X ) : α = β :=
   begin
-    induction α with αc,
-    induction β with βc,
-    have hc : αc = βc, from funext w,
+    induction α with α_components α_naturality,
+    induction β with β_components β_naturality,
+    have hc : α_components = β_components, from funext w,
     by subst hc
   end
 
@@ -42,6 +44,8 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     naturality := ♮
   }
 
+
+
 @[reducible] definition vertical_composition_of_NaturalTransformations
   { C D : Category }
   { F G H : Functor C D }
@@ -49,14 +53,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   ( β : NaturalTransformation G H ) : NaturalTransformation F H :=
   {
     components := λ X, D^.compose (α X) (β X),
-    naturality := begin
-                    abstract {
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity, NaturalTransformation.naturality ]
-                      end,
-                    }
-                  end
+    naturality := ♮
   }
 
 open tqft.categories.functor
@@ -69,14 +66,7 @@ open tqft.categories.functor
   ( β : NaturalTransformation H I ) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
   {
     components := λ X : C^.Obj, E^.compose (β (F X)) (I^.onMorphisms (α X)),
-    naturality := begin
-                    abstract {
-                      blast,
-                      begin[smt]
-                        eblast_using [ Category.associativity, Functor.functoriality, NaturalTransformation.naturality ]
-                      end,
-                    }
-                  end
+    naturality := ♮
   }
 
 @[reducible] definition whisker_on_left
@@ -98,8 +88,6 @@ open tqft.categories.functor
 -- To define a natural isomorphism, we'll define the functor category, and ask for an isomorphism there.
 -- It's then a lemma that each component is an isomorphism, and vice versa.
 
-open smt_tactic.interactive
-
 @[reducible] definition FunctorCategory ( C D : Category ) : Category :=
 {
   Obj := Functor C D,
@@ -110,14 +98,7 @@ open smt_tactic.interactive
 
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := begin
-                      abstract {
-                        blast,
-                        begin[smt]
-                          eblast_using [ Category.associativity ]
-                        end
-                      }
-                    end
+  associativity  := ♮
 }
 
 @[reducible] definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
@@ -154,6 +135,5 @@ lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F
 --     witness_1 := α^.witness_1, -- TODO we need to evaluate both sides of this equation at X.
 --     witness_2 := sorry
   -- }
-
 
 end tqft.categories.natural_transformation

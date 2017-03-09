@@ -19,29 +19,14 @@ structure Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }) :=
   (functoriality : ∀ { X Y Z : C^.Obj } (f : C^.Hom X Y) (g : C^.Hom Y Z),
     onMorphisms (C^.compose f g) = D^.compose (onMorphisms f) (onMorphisms g))
 
-attribute [simp] Functor.identities
-attribute [simp] Functor.functoriality
+attribute [simp,ematch] Functor.identities
+attribute [simp,ematch] Functor.functoriality
 
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.
 instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :=
 { F   := λ f, C^.Obj → D^.Obj,
   coe := Functor.onObjects }
-
-/-
--- Unfortunately we haven't been able to set up similar notation for morphisms.
--- Instead we define notation so that `F <$> f` denotes the functor `F` applied to the morphism `f`.
--- One can still write out `onMorphisms F f` when needed, or even the very verbose `@Functor.onMorphisms C D F X Y f`.
---namespace notations
-  -- Lean complains about the use of local variables in
-  -- notation. There must be a way around that.
-  infix `<$>` :50 := λ {C : Category} {D : Category}
-                       (F : Functor C D) {X Y : C^.Obj} (f : C^.Hom X Y),
-                       Functor.onMorphisms F f
-end notations
-
-open notations
--/
 
 -- This defines a coercion allowing us to write `F f` for `onMorphisms F f`
 -- but sadly it doesn't work if to_onObjects is already in scope.
@@ -64,10 +49,6 @@ open notations
   identities    := ♮,
   functoriality := ♮
 }
-
--- namespace Functor
---   notation F `∘` G := FunctorComposition F G
--- end Functor
 
 -- We'll want to be able to prove that two functors are equal if they are equal on objects and on morphisms.
 -- Implementation warning:
@@ -92,5 +73,15 @@ begin
   exact morphismWitness X Y f,
   subst h_morphisms
 end
+
+-- TODO think about where these should properly live.
+lemma FunctorComposition_left_identity { C D : Category } ( F : Functor C D ) :
+  FunctorComposition (IdentityFunctor C) F = F := ♮
+
+lemma FunctorComposition_right_identity { C D : Category } ( F : Functor C D ) :
+  FunctorComposition F (IdentityFunctor D) = F := ♮
+
+lemma FunctorComposition_associative { B C D E : Category } ( F : Functor B C ) ( G : Functor C D ) ( H : Functor D E ) :
+  FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
 
 end tqft.categories.functor

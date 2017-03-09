@@ -42,8 +42,13 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
                        end,
     naturality := sorry
   },
+  -- left_unitor := sorry,
+  -- right_unitor := sorry,
   associator_is_isomorphism := sorry,
+  -- left_unitor_is_isomorphism := sorry,
+  -- right_unitor_is_isomorphism := sorry,
   pentagon := sorry
+  -- triangle := sorry
 }  
 
 @[reducible] definition ListObjectsCategory ( C : MonoidalCategory ) : Category := {

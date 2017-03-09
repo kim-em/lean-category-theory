@@ -16,7 +16,7 @@ definition Opposite ( C : Category ) : Category :=
     identity := λ X, C^.identity X,
     left_identity  := ♮,
     right_identity := ♮,
-    associativity  := begin blast, begin[smt] eblast_using [ Category.associativity ] end end
+    associativity  := ♮
 }
 
 end tqft.categories

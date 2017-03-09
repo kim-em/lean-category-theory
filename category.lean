@@ -20,43 +20,22 @@ structure Category :=
   (identity : Π X : Obj, Hom X X)
   (compose  : Π { X Y Z : Obj }, Hom X Y → Hom Y Z → Hom X Z)
 
-  (left_identity  : ∀ { X Y : Obj } (f : Hom X Y), compose (identity _) f = f)
-  (right_identity : ∀ { X Y : Obj } (f : Hom X Y), compose f (identity _) = f)
+  (left_identity  : ∀ { X Y : Obj } (f : Hom X Y), compose (identity X) f = f)
+  (right_identity : ∀ { X Y : Obj } (f : Hom X Y), compose f (identity Y) = f)
   (associativity  : ∀ { W X Y Z : Obj } (f : Hom W X) (g : Hom X Y) (h : Hom Y Z),
     compose (compose f g) h = compose f (compose g h))
 
-attribute [simp] Category.left_identity
-attribute [simp] Category.right_identity
-
-/- I've had to disable this notation, as it is breaking output:
-
-abstract tactic failed, there are unsolved goals
-state:
-C : Category,
-W X Y Z : C^.Obj,
-f : C^.Hom X W,
-g : C^.Hom Y X,
-h : C^.Hom Z Y
-⊢ (C ∘ h) ((C ∘ g) f) = (C ∘ (C ∘ h) g) f
-
--/
-
--- namespace Category
---   notation f `∘` g := Category.compose f g
--- end Category
+attribute [ematch,simp] Category.left_identity
+attribute [ematch,simp] Category.right_identity
+attribute [ematch] Category.associativity
 
 instance Category_to_Hom : has_coe_to_fun Category :=
 { F   := λ C, C^.Obj → C^.Obj → Type v,
   coe := Category.Hom }
 
--- attribute [class] Category
-/-
--- Unfortunately declaring Category as a class when it is first declared results
--- in an unexpected type signature; this is a feature, not a bug, as Stephen discovered
--- and explained at https://github.com/semorrison/proof/commit/e727197e794647d1148a1b8b920e7e567fb9079f
---
--- We just declare things as structures, and then add the class attribute afterwards.
--/
+@[ematch] definition Category.identity_idempotent
+  ( C : Category )
+  ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := ♮
 
 structure Isomorphism ( C: Category ) ( X Y : C^.Obj ) :=
   (morphism : C X Y)
