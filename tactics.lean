@@ -47,10 +47,14 @@ namespace tactic.interactive
      gs' ← get_goals,
      guard (gs ≠ gs') <|> tactic.fail "force tactic failed"
 
+  meta def trace_dunfold ( n : name ) : tactic unit := seq (force (dunfold (n :: list.nil) [])) (trace ("unfolding " ++ to_string n)) 
+
   meta def unfold_at_least_one_with_attribute (attr : parse ident) : tactic unit :=
   do defs ← attribute.get_instances attr,
      force (dunfold defs [])
 end tactic.interactive
+
+attribute [unfoldable] cast
 
 meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute `unfoldable) and_then )
 

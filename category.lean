@@ -36,19 +36,5 @@ instance Category_to_Hom : has_coe_to_fun Category :=
 @[ematch] definition Category.identity_idempotent
   ( C : Category )
   ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := ♮
-
-structure Isomorphism ( C: Category ) ( X Y : C^.Obj ) :=
-  (morphism : C X Y)
-  (inverse : C Y X)
-  (witness_1 : C^.compose morphism inverse = C^.identity X)
-  (witness_2 : C^.compose inverse morphism = C^.identity Y)
-
-instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } : has_coe (Isomorphism C X Y) (C X Y) :=
-  { coe := Isomorphism.morphism }
-
-structure is_isomorphism { C : Category } { X Y : C^.Obj } ( morphism : C X Y ) :=
-  (inverse : C Y X)
-  (witness_1 : C^.compose morphism inverse = C^.identity X)
-  (witness_2 : C^.compose inverse morphism = C^.identity Y)
   
 end tqft.categories
