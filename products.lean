@@ -13,7 +13,7 @@ namespace tqft.categories.products
 
 universe variables u1 v1 u2 v2 u3 v3
 
-@[reducible] definition ProductCategory (C : Category.{u1 v1}) (D : Category.{u2 v2}) :
+@[unfoldable] definition ProductCategory (C : Category.{u1 v1}) (D : Category.{u2 v2}) :
   Category :=
   {
     Obj      := C^.Obj × D^.Obj,

@@ -59,8 +59,12 @@ definition CAT : StrictTwoCategory :=
     up_identity                := ♮,
     down_identity              := ♮,
     associativity_2_vertical   := ♮,
-    associativity_2_horizontal := ♮,
-    interchange                := ♮
+    associativity_2_horizontal := begin
+                                    blast,
+                                    -- unfold cast,
+                                    blast
+                                  end,
+    interchange                := sorry
 }  
 
 definition HomCategory ( C : StrictTwoCategory ) ( X Y : C^._0 ) : Category := {

@@ -3,12 +3,14 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .category
+import .isomorphism
 import .discrete_category
 import .functor
 import .natural_transformation
 import .examples.types
 
 open tqft.categories
+open tqft.categories.isomorphism
 
 namespace tqft.categories.universal
 
