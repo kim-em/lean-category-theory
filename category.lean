@@ -15,8 +15,8 @@ namespace tqft.categories
 universe variables u v
 
 structure Category :=
-  (Obj : Type u)
-  (Hom : Obj → Obj → Type v) 
+  (Obj : Sort u)
+  (Hom : Obj → Obj → Sort v)
   (identity : Π X : Obj, Hom X X)
   (compose  : Π { X Y Z : Obj }, Hom X Y → Hom Y Z → Hom X Z)
 
@@ -36,5 +36,5 @@ instance Category_to_Hom : has_coe_to_fun Category :=
 @[ematch] definition Category.identity_idempotent
   ( C : Category )
   ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := ♮
-  
+
 end tqft.categories
