@@ -10,20 +10,19 @@ def pointwise_attribute : user_attribute := {
   descr := "A lemma that proves things are equal using the fact they are pointwise equal."
 }
 
-run_command attribute.register `pointwise_attribute
+run_cmd attribute.register `pointwise_attribute
 
 def unfoldable_attribute : user_attribute := {
   name := `unfoldable,
   descr := "A definition that may be unfoldable, but hesitantly."
 }
 
-run_command attribute.register `unfoldable_attribute
-
+run_cmd attribute.register `unfoldable_attribute
 
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
 | []      := failed
-| (c::cs) := (mk_const c >>= fapply) <|> any_apply cs
+| (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
 
 meta def smt_simp   : tactic unit := using_smt $ intros >> try simp
 meta def smt_eblast : tactic unit := using_smt $ intros >> try simp >> try eblast
@@ -47,20 +46,16 @@ namespace tactic.interactive
      gs' ← get_goals,
      guard (gs ≠ gs') <|> tactic.fail "force tactic failed"
 
-  meta def trace_dunfold ( n : name ) : tactic unit := seq (force (dunfold [n] [])) (trace ("unfolding " ++ to_string n)) 
-
-  meta def unfold_at_least_one_with_attribute' (attr : parse ident) : tactic unit :=
-  do defs ← attribute.get_instances attr,
-     list.foldl orelse (tactic.fail "") (list.map trace_dunfold defs)
+  meta def trace_dunfold ( n : name ) : tactic unit := (force (dunfold [n] [])) -- >> (trace ("unfolding " ++ to_string n)) 
 
   meta def unfold_at_least_one_with_attribute (attr : parse ident) : tactic unit :=
   do defs ← attribute.get_instances attr,
-     force (dunfold defs [])
+     list.foldl orelse (tactic.fail "") (list.map trace_dunfold defs)
 end tactic.interactive
 
 attribute [unfoldable] cast
 
-meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute' `unfoldable) and_then )
+meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute `unfoldable) and_then )
 
 meta def blast  : tactic unit := smt_eblast >> pointwise blast >> unfold_something blast
 

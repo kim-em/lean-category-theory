@@ -6,6 +6,7 @@ import .monoidal_category
 open tqft.categories
 open tqft.categories.functor
 open tqft.categories.natural_transformation
+open tqft.categories.products
 open tqft.categories.monoidal_category
 
 namespace tqft.categories.strict_monoidal_category
@@ -32,13 +33,16 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
   tensor_unit := tensor_unit,
   associator_transformation := {
     components := λ t, begin
-                         abstract {
-                           blast,
-                           rewrite - is_strict^.associativeOnObjects,
-                           assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
-                           rewrite p,
-                           exact C^.identity (tensor^.onObjects (tensor^.onObjects (t^.fst), t^.snd))
-                         }
+                        exact sorry
+                        -- -- TODO not sure why the rewrite below is failing?
+                        --  abstract {
+                        --    blast,
+                        --    dsimp [ProductCategory] at t,
+                        --    rewrite - is_strict^.associativeOnObjects,
+                        --    assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
+                        --    rewrite p,
+                        --    exact C^.identity (tensor^.onObjects (tensor^.onObjects (t^.fst), t^.snd))
+                        --  }
                        end,
     naturality := sorry
   },
@@ -53,12 +57,12 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
 
 @[reducible] definition ListObjectsCategory ( C : MonoidalCategory ) : Category := {
   Obj := list C^.Obj,
-  Hom := λ X Y, C^.Hom sorry sorry,
-  identity       := λ X, sorry,
-  compose        := sorry,
-  left_identity  := sorry,
-  right_identity := sorry,
-  associativity  := sorry
+  Hom := λ X Y, C^.Hom (list.foldl C^.tensorObjects C^.tensor_unit X) (list.foldl C^.tensorObjects C^.tensor_unit Y),
+  identity       := λ X, C^.identity (list.foldl C^.tensorObjects C^.tensor_unit X),
+  compose        := λ _ _ _ f g, C^.compose f g,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
 }
 
 definition StrictTensorProduct ( C : MonoidalCategory ) : TensorProduct (ListObjectsCategory C) := {

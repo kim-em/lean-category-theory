@@ -74,9 +74,19 @@ begin
   subst h_morphisms
 end
 
+definition CategoryOfCategoriesAndFunctors : Category := {
+  Obj := Category,
+  Hom := λ C D, Functor C D,
+  identity := λ C, IdentityFunctor C,
+  compose  := λ _ _ _ F G, FunctorComposition F G,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
+}
+
 -- TODO think about where these should properly live.
 lemma FunctorComposition_left_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition (IdentityFunctor C) F = F := ♮
+  FunctorComposition (IdentityFunctor C) F = F := ♮                    
 
 lemma FunctorComposition_right_identity { C D : Category } ( F : Functor C D ) :
   FunctorComposition F (IdentityFunctor D) = F := ♮

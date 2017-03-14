@@ -15,8 +15,8 @@ namespace tqft.categories
 universe variables u v
 
 structure Category :=
-  (Obj : Sort u)
-  (Hom : Obj → Obj → Sort v)
+  (Obj : Type u)
+  (Hom : Obj → Obj → Type v)
   (identity : Π X : Obj, Hom X X)
   (compose  : Π { X Y Z : Obj }, Hom X Y → Hom Y Z → Hom X Z)
 

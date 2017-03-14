@@ -58,7 +58,7 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
       map := λ t, (t.1.1, (t.1.2, t.2)),
       multiplicative := ♮
     },
-    naturality := sorry --- dsimplify gets into trouble     
+    naturality := ♮ 
   },
   -- left_unitor := sorry,
   -- right_unitor := sorry,
@@ -68,40 +68,40 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
         map := λ t, ((t.1, t.2.1), t.2.2),
         multiplicative := ♮
       },
-      naturality := sorry --- dsimplify gets into trouble     
+      naturality := ♮   
     },
-    witness_1 := sorry,
-    witness_2 := sorry
+    witness_1 := ♮,
+    witness_2 := ♮
   },
   -- left_unitor_is_isomorphism := sorry,
   -- right_unitor_is_isomorphism := sorry,
-  pentagon := sorry
+  pentagon := ♮
   -- triangle := sorry
 }
 
 open tqft.categories.natural_transformation
 open tqft.categories.braided_monoidal_category
 
--- definition BraidedMonoidalCategoryOfSemigroups : BraidedMonoidalCategory := {
---   MonoidalCategoryOfSemigroups.{u} with
---   braiding             := {
---     morphism  := {
---       components := λ _, {
---                            map := λ p, (p.2, p.1),
---                            multiplicative := ♮
---                          },
---       naturality := ♮
---     },
---     inverse   := {
---       components := λ _, {
---                            map := λ p, (p.2, p.1),
---                            multiplicative := ♮
---                          },
---       naturality := ♮
---     },
---     witness_1 := ♮,
---     witness_2 := ♮
---   }
--- }
+definition BraidedMonoidalCategoryOfSemigroups : BraidedMonoidalCategory := {
+  MonoidalCategoryOfSemigroups.{u} with
+  braiding             := {
+    morphism  := {
+      components := λ _, {
+                           map := λ p, (p.2, p.1),
+                           multiplicative := ♮
+                         },
+      naturality := ♮
+    },
+    inverse   := {
+      components := λ _, {
+                           map := λ p, (p.2, p.1), -- this is sufficiently obvious that automation should be doing it for us!
+                           multiplicative := ♮
+                         },
+      naturality := ♮
+    },
+    witness_1 := ♮,
+    witness_2 := ♮
+  }
+}
 
 end tqft.categories.examples.semigroups

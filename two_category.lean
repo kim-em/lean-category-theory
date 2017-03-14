@@ -59,12 +59,8 @@ definition CAT : StrictTwoCategory :=
     up_identity                := ♮,
     down_identity              := ♮,
     associativity_2_vertical   := ♮,
-    associativity_2_horizontal := begin
-                                    blast,
-                                    -- unfold cast,
-                                    blast
-                                  end,
-    interchange                := sorry
+    associativity_2_horizontal := ♮,
+    interchange                := ♮
 }  
 
 definition HomCategory ( C : StrictTwoCategory ) ( X Y : C^._0 ) : Category := {
@@ -77,6 +73,6 @@ definition HomCategory ( C : StrictTwoCategory ) ( X Y : C^._0 ) : Category := {
   associativity  := ♮
 }
 
--- TODO show that HomCategory C X X is monoidal?
+-- TODO show that HomCategory C X X is (strict) monoidal?
 
 end tqft.categories.two_category

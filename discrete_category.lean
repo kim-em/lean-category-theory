@@ -6,15 +6,17 @@ import .category
 
 namespace tqft.categories
 
-definition DiscreteCategory ( α : Type ) : Category :=
-{
-  Obj      := α,
-  Hom      := λ X Y, X = Y,
-  identity := λ X, rfl,
-  compose  := λ X Y Z f g, eq.trans f g,
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
-}
+-- TODO extending Category to work with Sort breaks other things.
+
+-- definition DiscreteCategory ( α : Type ) : Category :=
+-- {
+--   Obj      := α,
+--   Hom      := λ X Y, X = Y,
+--   identity := λ X, rfl,
+--   compose  := λ X Y Z f g, eq.trans f g,
+--   left_identity  := ♮,
+--   right_identity := ♮,
+--   associativity  := ♮
+-- }
 
 end tqft.categories

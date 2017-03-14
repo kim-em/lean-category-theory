@@ -92,11 +92,6 @@ definition MonoidalCategory.interchange_right_identity
 
 @[simp] lemma TensorProduct_identities
   { C : MonoidalCategory }
-  ( X Y : C^.Obj ) : @Functor.onMorphisms _ _ C^.tensor (X, Y) (X, Y) (C^.identity X, C^.identity Y) = C^.identity (C^.tensor^.onObjects (X, Y)) :=
-  begin
-    assert p : (C^.identity X, C^.identity Y) = (C × C)^.identity (X, Y), blast,
-    rewrite p,
-    blast
-  end 
+  ( X Y : C^.Obj ) : @Functor.onMorphisms _ _ C^.tensor (X, Y) (X, Y) (C^.identity X, C^.identity Y) = C^.identity (C^.tensor^.onObjects (X, Y)) := ♮
 
 end tqft.categories.monoidal_category

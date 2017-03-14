@@ -18,19 +18,13 @@ definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
   functoriality := ♮
 }
 
--- Stephen: I don't think this is a monoidal category if we don't assume
--- functional extensionality, though it is a lax monoidal
--- category. Otherwise there are too many endomorphisms of punit.
-
--- Scott: I don't mind assuming functional extensionality!
-
 definition MonoidalCategoryOfTypes : MonoidalCategory :=
 {
   CategoryOfTypes with
   tensor      := TensorProductOfTypes,
   tensor_unit := punit,
   associator_transformation := {
-    components := λ p t, (t.1.1,(t.1.2, t.2)),
+    components := λ p t, (t.1.1, (t.1.2, t.2)),
     naturality := ♮
   },
   -- left_unitor := {
@@ -44,11 +38,11 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
 
   associator_is_isomorphism := {
     inverse := {
-      components := λ p t, ((t.1,t.2.1), t.2.2),
+      components := λ p t, ((t.1, t.2.1), t.2.2),
       naturality := ♮
     },
-    witness_1 := ♮, -- ♮ causes a timeout here
-    witness_2 := sorry  -- ♮ causes a timeout here
+    witness_1 := ♮,
+    witness_2 := ♮
   },
   -- left_unitor_is_isomorphism := {
   --   inverse := {

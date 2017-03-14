@@ -88,63 +88,65 @@ local attribute [elab_simple]  sigma.snd
 -- unfortunately one can't coerce along subtype.elt_of
 open subtype
 
-local attribute [ematch] subtype.has_property
+local attribute [ematch] subtype.property
 
 definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B C ) : Category :=
 {
   Obj      := Σ a : A^.Obj, Σ b : B^.Obj, C^.Hom (S a) (T b),
   Hom      := λ p q, { gh : (A^.Hom p.1 q.1) × (B^.Hom p.2.1 q.2.1) // C^.compose (S^.onMorphisms gh.1) q.2.2 = C^.compose p.2.2 (T^.onMorphisms gh.2) },
-  identity := λ p, tag (A^.identity p.1, B^.identity p.2.1) ♮,
-  compose  := λ p q r f g, tag (A^.compose (elt_of f).1 (elt_of g).1, B^.compose (elt_of f).2 (elt_of g).2) ♮,
+  identity := λ p, ⟨ (A^.identity p.1, B^.identity p.2.1), ♮ ⟩,
+  compose  := λ p q r f g, ⟨ (A^.compose (val f).1 (val g).1, B^.compose (val f).2 (val g).2), ♮ ⟩,
   left_identity  := ♮,
   right_identity := ♮,
   associativity  := ♮
 }
 
-definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
-{
-  onObjects     := λ _, X,
-  onMorphisms   := λ _ _ _, C^.identity X,
-  identities    := ♮,
-  functoriality := ♮
-}
+-- TODO broken, waiting on DiscreteCategory
 
--- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
-definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
-definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
+-- definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
+-- {
+--   onObjects     := λ _, X,
+--   onMorphisms   := λ _ _ _, C^.identity X,
+--   identities    := ♮,
+--   functoriality := ♮
+-- }
 
-definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
-definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
+-- -- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
+-- definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
+-- definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
-definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
-definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
+-- definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
+-- definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
 
-structure ExplicitLimit { J C : Category } ( F: Functor J C ) :=
-  ( limit : C^.Obj )
-  ( maps  : Π X : J^.Obj, C^.Hom limit (F X) )
-  ( commutativity : Π X Y : J^.Obj, Π f : J^.Hom X Y, C^.compose (maps X) (F^.onMorphisms f) = maps Y )
+-- definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
+-- definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
 
-open tqft.categories.examples.types
+-- structure ExplicitLimit { J C : Category } ( F: Functor J C ) :=
+--   ( limit : C^.Obj )
+--   ( maps  : Π X : J^.Obj, C^.Hom limit (F X) )
+--   ( commutativity : Π X Y : J^.Obj, Π f : J^.Hom X Y, C^.compose (maps X) (F^.onMorphisms f) = maps Y )
 
-definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Limit F) (ExplicitLimit F) := {
-  morphism  := λ L, { 
-    limit := begin
-               unfold Limit at F, -- TODO why doesn't this do anything?
-               -- The idea here is that the underlying object of L is an object in the 
-               -- comma category. Taking its left projection (i.e. the first piece of the dependent pair) is an object in C, which is the one we want!
-               exact sorry
-             end,
-    maps  := sorry,
-    commutativity := sorry
-  },
-  inverse   := sorry,
-  witness_1 := sorry,
-  witness_2 := sorry
-}
+-- open tqft.categories.examples.types
 
--- TODO How do we even prove 0 < 2 ??! :-)
-def zero : fin 2 := ⟨ 0, sorry ⟩
-def one  : fin 2 := ⟨ 1, sorry ⟩
+-- definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Limit F) (ExplicitLimit F) := {
+--   morphism  := λ L, { 
+--     limit := begin
+--                unfold Limit at F, -- TODO why doesn't this do anything?
+--                -- The idea here is that the underlying object of L is an object in the 
+--                -- comma category. Taking its left projection (i.e. the first piece of the dependent pair) is an object in C, which is the one we want!
+--                exact sorry
+--              end,
+--     maps  := sorry,
+--     commutativity := sorry
+--   },
+--   inverse   := sorry,
+--   witness_1 := sorry,
+--   witness_2 := sorry
+-- }
+
+-- -- TODO How do we even prove 0 < 2 ??! :-)
+-- def zero : fin 2 := ⟨ 0, sorry ⟩
+-- def one  : fin 2 := ⟨ 1, sorry ⟩
 
 -- TODO This breaks, with a mysterious error. Any ideas?
 -- definition Product { C : Category } ( A B : C^.Obj ) := @Limit (DiscreteCategory (fin 2)) C {

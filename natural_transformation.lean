@@ -88,7 +88,7 @@ definition whisker_on_right
 -- To define a natural isomorphism, we'll define the functor category, and ask for an isomorphism there.
 -- It's then a lemma that each component is an isomorphism, and vice versa.
 
-definition FunctorCategory ( C D : Category ) : Category :=
+@[unfoldable] definition FunctorCategory ( C D : Category ) : Category :=
 {
   Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,

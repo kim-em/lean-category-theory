@@ -67,8 +67,6 @@ definition CategoryOfMonoids : Category :=
 open tqft.categories.functor
 open tqft.categories.examples.semigroups
 
--- Sadly doesn't work:
--- definition cast_monoid_to_semigroup' {α: Type} (s: monoid α) : semigroup α := s
 definition cast_monoid_to_semigroup {α: Type} (s: monoid α) : semigroup α := @monoid.to_semigroup α s
 
 definition ForgetfulFunctor_Monoids_to_Semigroups : Functor CategoryOfMonoids CategoryOfSemigroups :=
