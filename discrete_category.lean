@@ -6,7 +6,7 @@ import .category
 
 namespace tqft.categories
 
-definition DiscreteCategory ( α : Type ) [ d : decidable_eq α ] : Category :=
+definition DiscreteCategory ( α : Type ) : Category :=
 {
   Obj      := α,
   Hom      := λ X Y, X = Y,
