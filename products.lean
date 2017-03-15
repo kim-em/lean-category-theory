@@ -30,21 +30,21 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
-@[reducible] definition LeftInjectionAt { D : Category.{u2 v2} } ( Z : D^.Obj ) ( C : Category.{u1 v1} ) : Functor C (C × D) :=
-{ onObjects   := λ X, (X, Z),
-  onMorphisms := λ X Y f, (f, D^.identity Z),
-  identities  := ♮,
+definition LeftInjectionAt { D : Category.{u2 v2} } ( Z : D^.Obj ) ( C : Category.{u1 v1} ) : Functor C (C × D) :=
+{ onObjects     := λ X, (X, Z),
+  onMorphisms   := λ X Y f, (f, D^.identity Z),
+  identities    := ♮,
   functoriality := ♮
 }
 
-@[reducible] definition RightInjectionAt { C : Category.{u1 v1} } ( Z : C^.Obj) ( D : Category.{u2 v2} ) : Functor D (C × D) :=
-{ onObjects   := λ X, (Z, X),
-  onMorphisms := λ X Y f, (C^.identity Z, f),
-  identities  := ♮,
+definition RightInjectionAt { C : Category.{u1 v1} } ( Z : C^.Obj) ( D : Category.{u2 v2} ) : Functor D (C × D) :=
+{ onObjects     := λ X, (Z, X),
+  onMorphisms   := λ X Y f, (C^.identity Z, f),
+  identities    := ♮,
   functoriality := ♮
 }
 
-@[reducible] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
+@[unfoldable] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
   onObjects     := λ X, (F X^.fst, G X^.snd),
   onMorphisms   := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
@@ -56,7 +56,11 @@ namespace ProductFunctor
   notation F `×` G := ProductFunctor F G
 end ProductFunctor
 
-@[reducible] definition ProductNaturalTransformation { A B C D : Category } { F G : Functor A B } { H I : Functor C D } (α : NaturalTransformation F G) (β : NaturalTransformation H I) : NaturalTransformation (F × H) (G × I) :=
+definition ProductNaturalTransformation
+  { A B C D : Category } 
+  { F G : Functor A B } { H I : Functor C D } 
+  (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
+    NaturalTransformation (F × H) (G × I) :=
 {
   components := λ X, (α X^.fst, β X^.snd),
   naturality := ♮
@@ -66,7 +70,7 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-@[reducible] definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
+definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
   onObjects     := λ X, (X^.snd, X^.fst),
   onMorphisms   := λ _ _ f, (f^.snd, f^.fst),
@@ -74,9 +78,11 @@ end ProductNaturalTransformation
   functoriality := ♮
 }
 
-lemma switch_twice_is_the_identity ( C D : Category ) : FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (C × D) := ♮
+lemma switch_twice_is_the_identity
+  ( C D : Category ) :
+  FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (C × D) := ♮
 
-@[reducible] definition ProductCategoryAssociator
+@[unfoldable] definition ProductCategoryAssociator
   ( C : Category.{ u1 v1 } )
   ( D : Category.{ u2 v2 } )
   ( E : Category.{ u3 v3 } )

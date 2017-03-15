@@ -33,7 +33,7 @@ instance Category_to_Hom : has_coe_to_fun Category :=
 { F   := λ C, C^.Obj → C^.Obj → Type v,
   coe := Category.Hom }
 
-@[ematch] definition Category.identity_idempotent
+@[ematch] lemma Category.identity_idempotent
   ( C : Category )
   ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := ♮
 

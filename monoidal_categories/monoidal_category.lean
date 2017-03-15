@@ -70,20 +70,20 @@ definition MonoidalCategory.interchange
 local attribute [ematch] MonoidalCategory.interchange
 
 -- TODO it seems a shame we need to redine this for MonoidalCategory; it's already there on Category.
-definition MonoidalCategory.identity_idempotent
+lemma MonoidalCategory.identity_idempotent
   ( C : MonoidalCategory )
   ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := ♮
 
 local attribute [ematch] MonoidalCategory.identity_idempotent
 
-definition MonoidalCategory.interchange_left_identity
+lemma MonoidalCategory.interchange_left_identity
   ( C : MonoidalCategory )
   { W X Y Z : C^.Obj }
   ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :
   @Functor.onMorphisms _ _ C^.tensor (W, Z) (Y, Z) ((C^.compose f g), (C^.identity Z))
     = C^.compose (C^.tensorMorphisms f (C^.identity Z)) (C^.tensorMorphisms g (C^.identity Z)) := ♮
 
-definition MonoidalCategory.interchange_right_identity
+lemma MonoidalCategory.interchange_right_identity
   ( C : MonoidalCategory )
   { W X Y Z : C^.Obj }
   ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :

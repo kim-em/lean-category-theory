@@ -14,13 +14,13 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
-@[reducible] definition pentagon_3step_1 ( C : MonoidalCategory.{ u v } ) :=
+@[unfoldable] definition pentagon_3step_1 ( C : MonoidalCategory.{ u v } ) :=
   let α := C^.associator_transformation in
   whisker_on_right
     (α × IdentityNaturalTransformation (IdentityFunctor C))
     C^.tensor
 
-@[reducible] definition pentagon_3step_2 ( C : MonoidalCategory.{ u v } ) :=
+@[unfoldable] definition pentagon_3step_2 ( C : MonoidalCategory.{ u v } ) :=
   let α := C^.associator_transformation in
   whisker_on_left
     (FunctorComposition
@@ -28,7 +28,7 @@ universe variables u v
       ((IdentityFunctor C × C^.tensor) × IdentityFunctor C))
     α
 
-@[reducible] definition pentagon_3step_3 ( C : MonoidalCategory.{ u v } ) :=
+@[unfoldable] definition pentagon_3step_3 ( C : MonoidalCategory.{ u v } ) :=
   let α := C^.associator_transformation in
   whisker_on_left
     (FunctorComposition
@@ -38,20 +38,20 @@ universe variables u v
       (IdentityNaturalTransformation (IdentityFunctor C) × α)
       C^.tensor)
 
-@[reducible] definition pentagon_3step ( C : MonoidalCategory.{ u v } ) :=
+@[unfoldable] definition pentagon_3step ( C : MonoidalCategory.{ u v } ) :=
   vertical_composition_of_NaturalTransformations
     (vertical_composition_of_NaturalTransformations
       (pentagon_3step_1 C)
       (pentagon_3step_2 C))
     (pentagon_3step_3 C)
 
-@[reducible] definition pentagon_2step_1 ( C : MonoidalCategory.{ u v } ) :=
+@[unfoldable] definition pentagon_2step_1 ( C : MonoidalCategory.{ u v } ) :=
   let α := C^.associator_transformation in
   whisker_on_left
     ((C^.tensor × IdentityFunctor C) × IdentityFunctor C)
     α
 
-@[reducible] definition pentagon_2step_2 ( C : MonoidalCategory.{ u v } ) :=
+@[unfoldable] definition pentagon_2step_2 ( C : MonoidalCategory.{ u v } ) :=
   let α := C^.associator_transformation in
   whisker_on_left
     (FunctorComposition
@@ -59,7 +59,7 @@ universe variables u v
       (IdentityFunctor (C × C) × C^.tensor))
     α
 
-@[reducible] definition pentagon_2step ( C : MonoidalCategory.{ u v } ) :=
+@[unfoldable] definition pentagon_2step ( C : MonoidalCategory.{ u v } ) :=
   vertical_composition_of_NaturalTransformations
     (pentagon_2step_1 C)
     (pentagon_2step_2 C)
