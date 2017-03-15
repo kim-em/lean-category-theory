@@ -40,13 +40,13 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
-@[unfoldable] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
+@[reducible] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D^.identity (F X),
     naturality := ♮
   }
 
-@[unfoldable] definition vertical_composition_of_NaturalTransformations
+@[reducible] definition vertical_composition_of_NaturalTransformations
   { C D : Category }
   { F G H : Functor C D }
   ( α : NaturalTransformation F G )
@@ -58,7 +58,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 
 open tqft.categories.functor
 
-@[unfoldable] definition horizontal_composition_of_NaturalTransformations
+@[reducible] definition horizontal_composition_of_NaturalTransformations
   { C D E : Category }
   { F G : Functor C D }
   { H I : Functor D E }
@@ -69,7 +69,7 @@ open tqft.categories.functor
     naturality := ♮
   }
 
-definition whisker_on_left
+@[reducible] definition whisker_on_left
   { C D E : Category }
   ( F : Functor C D )
   { G H : Functor D E }
@@ -77,7 +77,7 @@ definition whisker_on_left
   NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
   horizontal_composition_of_NaturalTransformations (IdentityNaturalTransformation F) α
 
-definition whisker_on_right
+@[reducible] definition whisker_on_right
   { C D E : Category }
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
@@ -88,7 +88,7 @@ definition whisker_on_right
 -- To define a natural isomorphism, we'll define the functor category, and ask for an isomorphism there.
 -- It's then a lemma that each component is an isomorphism, and vice versa.
 
-@[unfoldable] definition FunctorCategory ( C D : Category ) : Category :=
+@[reducible] definition FunctorCategory ( C D : Category ) : Category :=
 {
   Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,

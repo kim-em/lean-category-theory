@@ -13,7 +13,7 @@ namespace tqft.categories.products
 
 universe variables u1 v1 u2 v2 u3 v3
 
-@[unfoldable] definition ProductCategory (C : Category.{u1 v1}) (D : Category.{u2 v2}) :
+@[reducible] definition ProductCategory (C : Category.{u1 v1}) (D : Category.{u2 v2}) :
   Category :=
   {
     Obj      := C^.Obj × D^.Obj,
@@ -44,7 +44,7 @@ definition RightInjectionAt { C : Category.{u1 v1} } ( Z : C^.Obj) ( D : Categor
   functoriality := ♮
 }
 
-@[unfoldable] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
+@[reducible] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
   onObjects     := λ X, (F X^.fst, G X^.snd),
   onMorphisms   := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
@@ -56,7 +56,7 @@ namespace ProductFunctor
   notation F `×` G := ProductFunctor F G
 end ProductFunctor
 
-definition ProductNaturalTransformation
+@[reducible] definition ProductNaturalTransformation
   { A B C D : Category } 
   { F G : Functor A B } { H I : Functor C D } 
   (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
@@ -70,7 +70,7 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
+@[reducible] definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
   onObjects     := λ X, (X^.snd, X^.fst),
   onMorphisms   := λ _ _ f, (f^.snd, f^.fst),
@@ -82,7 +82,7 @@ lemma switch_twice_is_the_identity
   ( C D : Category ) :
   FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (C × D) := ♮
 
-@[unfoldable] definition ProductCategoryAssociator
+@[reducible] definition ProductCategoryAssociator
   ( C : Category.{ u1 v1 } )
   ( D : Category.{ u2 v2 } )
   ( E : Category.{ u3 v3 } )

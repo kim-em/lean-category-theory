@@ -14,9 +14,9 @@ universe variables u v
 
 @[reducible] definition TensorProduct ( C: Category ) := Functor ( C × C ) C
 
-@[unfoldable] definition left_associated_triple_tensor { C : Category.{ u v } } ( tensor : TensorProduct C ) : Functor ((C × C) × C) C :=
+@[reducible] definition left_associated_triple_tensor { C : Category.{ u v } } ( tensor : TensorProduct C ) : Functor ((C × C) × C) C :=
   FunctorComposition (tensor × IdentityFunctor C) tensor
-@[unfoldable] definition right_associated_triple_tensor { C : Category.{ u v } } ( tensor : TensorProduct C ) : Functor (C × (C × C)) C :=
+@[reducible] definition right_associated_triple_tensor { C : Category.{ u v } } ( tensor : TensorProduct C ) : Functor (C × (C × C)) C :=
   FunctorComposition (IdentityFunctor C × tensor) tensor
 
 @[reducible] definition Associator { C : Category.{ u v } } ( tensor : TensorProduct C ) :=
@@ -24,17 +24,17 @@ universe variables u v
     (left_associated_triple_tensor tensor)
     (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor tensor))
 
--- @[unfoldable] definition LeftUnitor { C : Category.{ u v } } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
+-- @[reducible] definition LeftUnitor { C : Category.{ u v } } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
 --   NaturalTransformation
 --     (FunctorComposition (RightInjectionAt I C) tensor)
 --     (IdentityFunctor C)
 
--- @[unfoldable] definition RightUnitor { C : Category.{ u v } } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
+-- @[reducible] definition RightUnitor { C : Category.{ u v } } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
 --   NaturalTransformation
 --     (FunctorComposition (LeftInjectionAt I C) tensor)
 --     (IdentityFunctor C)
 
-@[unfoldable] definition Pentagon { C : Category } { tensor : TensorProduct C } ( associator : Associator tensor ) :=
+@[reducible] definition Pentagon { C : Category } { tensor : TensorProduct C } ( associator : Associator tensor ) :=
   let α ( X Y Z : C^.Obj ) := associator ((X, Y), Z),
       tensorObjects ( X Y : C^.Obj ) := tensor^.onObjects (X, Y),
       tensorMorphisms { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor^.onMorphisms (f, g) in

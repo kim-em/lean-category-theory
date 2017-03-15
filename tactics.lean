@@ -12,12 +12,12 @@ def pointwise_attribute : user_attribute := {
 
 run_cmd attribute.register `pointwise_attribute
 
-def unfoldable_attribute : user_attribute := {
-  name := `unfoldable,
-  descr := "A definition that may be unfoldable, but hesitantly."
-}
+-- def unfoldable_attribute : user_attribute := {
+--   name := `unfoldable,
+--   descr := "A definition that may be unfoldable, but hesitantly."
+-- }
 
-run_cmd attribute.register `unfoldable_attribute
+-- run_cmd attribute.register `unfoldable_attribute
 
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
@@ -25,7 +25,7 @@ meta def any_apply : list name → tactic unit
 | (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
 
 meta def smt_simp   : tactic unit := using_smt $ intros >> try simp
-meta def smt_eblast : tactic unit := using_smt $ intros >> try simp >> try eblast
+meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> try simp >> try eblast
 meta def smt_ematch : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch
 
 meta def pointwise (and_then : tactic unit) : tactic unit :=
@@ -53,11 +53,11 @@ namespace tactic.interactive
      list.foldl orelse (tactic.fail "") (list.map trace_dunfold defs)
 end tactic.interactive
 
-attribute [unfoldable] cast
+attribute [reducible] cast
 
 meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute `unfoldable) and_then )
 
-meta def blast  : tactic unit := smt_eblast >> pointwise blast >> unfold_something blast
+meta def blast  : tactic unit := smt_eblast >> pointwise blast -- >> unfold_something blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }
