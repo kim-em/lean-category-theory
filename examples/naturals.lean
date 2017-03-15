@@ -10,19 +10,32 @@ open tqft.categories
 open tqft.categories.functor
 open tqft.categories.monoidal_category
 
--- Huh. Using nat.add rather than the notation makes life much more
--- difficult.
-@[reducible] definition ℕCategory : Category :=
-  {
-    Obj := unit,
-    Hom := λ _ _, ℕ,
-    identity := λ _, 0,
-    compose  := λ _ _ _ n m, n + m,
+@[simp]
+lemma add_left_cancel_iff' (a b : ℕ) : a + b = a ↔ b = 0 :=
+@add_left_cancel_iff _ _ a b 0
 
-    left_identity  := ♮,
-    right_identity := ♮,
-    associativity  := ♮
-  }
+@[simp]
+lemma add_right_cancel_iff' (a b : ℕ) : a + b = b ↔ a = 0 :=
+begin
+  note h := @add_right_cancel_iff _ _ b a 0,
+  simp at h,
+  exact h
+end
+
+@[reducible] definition ℕCategory : Category :=
+  begin
+    refine {
+        Obj := unit,
+        Hom := λ _ _, ℕ,
+        identity := _,
+        compose  := λ _ _ _ n m, n + m,
+
+        left_identity  := _,
+        right_identity := _,
+        associativity  := _
+    },
+    all_goals { intros, try { simp } }
+  end
 
 definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
   { onObjects   := id,

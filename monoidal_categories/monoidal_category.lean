@@ -23,7 +23,7 @@ structure LaxMonoidalCategory
   (pentagon                  : Pentagon associator_transformation)
   -- (triangle                  : Triangle ⟦tensor_unit⟧ left_unitor right_unitor associator_transformation)
 
--- attribute [ematch_lhs] LaxMonoidalCategory.pentagon
+attribute [ematch] LaxMonoidalCategory.pentagon
 
 -- TODO Unfortunately we need to copy these attributes; this isn't handled by inheritance.
 attribute [ematch,simp] LaxMonoidalCategory.left_identity
@@ -43,7 +43,7 @@ structure MonoidalCategory
 attribute [ematch,simp] MonoidalCategory.left_identity
 attribute [ematch,simp] MonoidalCategory.right_identity
 attribute [ematch] MonoidalCategory.associativity
--- attribute [ematch_lhs] MonoidalCategory.pentagon
+attribute [ematch] MonoidalCategory.pentagon
 
 -- Convenience methods which take two arguments, rather than a pair. (This seems to often help the elaborator avoid getting stuck on `prod.mk`.)
 @[reducible] definition MonoidalCategory.tensorObjects   ( C : MonoidalCategory ) ( X Y : C^.Obj ) : C^.Obj := C^.tensor (X, Y)

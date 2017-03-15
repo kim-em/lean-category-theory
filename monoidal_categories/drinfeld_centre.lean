@@ -32,29 +32,29 @@ structure HalfBraidingMorphism { C : MonoidalCategory } ( X Y : HalfBraiding C )
 
 -- TODO: most of the proofs don't work here. Hopefully after I learn to rewrite automatically this will work better.
 -- TODO: this takes way too long to compile
-definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
-  Obj := HalfBraiding C,
-  Hom := λ X Y, HalfBraidingMorphism X Y,
-  identity := λ X, {
-    morphism := C^.identity X,
-    witness  := begin
-                  blast,
-                  apply X^.commutor^.morphism^.naturality,
-                  exact sorry
-                end
-  },
-  compose := λ P Q R f g, {
-    morphism := C^.compose f^.morphism g^.morphism,
-    witness  := begin
-                  blast,
-                  -- TODO similarly, I don't understand why this doesn't work
-                  rewrite MonoidalCategory.interchange_left_identity,
-                  exact sorry
-                end
-  },
-  left_identity  := sorry,
-  right_identity := sorry,
-  associativity  := sorry
-}
+-- definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
+--   Obj := HalfBraiding C,
+--   Hom := λ X Y, HalfBraidingMorphism X Y,
+--   identity := λ X, {
+--     morphism := C^.identity X,
+--     witness  := begin
+--                   blast,
+--                   apply X^.commutor^.morphism^.naturality,
+--                   exact sorry
+--                 end
+--   },
+--   compose := λ P Q R f g, {
+--     morphism := C^.compose f^.morphism g^.morphism,
+--     witness  := begin
+--                   blast,
+--                   -- TODO similarly, I don't understand why this doesn't work
+--                   rewrite MonoidalCategory.interchange_left_identity,
+--                   exact sorry
+--                 end
+--   },
+--   left_identity  := sorry,
+--   right_identity := sorry,
+--   associativity  := sorry
+-- }
 
 end tqft.categories.drinfeld_centre
