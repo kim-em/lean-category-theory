@@ -20,13 +20,18 @@ lemma pentagon_in_terms_of_natural_transformations
   begin
     -- This isn't strictly necessary, but it makes the proof much faster.
     apply NaturalTransformations_componentwise_equal,
-    blast,
-    induction X with PQR S,
-    induction PQR with PQ R,
-    induction PQ with P Q,
-    -- TODO ideally ematch would take care of this for us.
-    pose p := C^.pentagon P Q R S,
-    exact p
+    intros,
+    simp at X,
+
+    -- The following works, but I want to experiment a bit:
+    -- apply NaturalTransformations_componentwise_equal,
+    -- blast,
+    -- induction X with PQR S,
+    -- induction PQR with PQ R,
+    -- induction PQ with P Q,
+    -- -- TODO ideally ematch would take care of this for us.
+    -- pose p := C^.pentagon P Q R S,
+    -- exact p
   end
 
 end tqft.categories.monoidal_category

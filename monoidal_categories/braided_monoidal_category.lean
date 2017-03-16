@@ -29,7 +29,6 @@ structure BraidedMonoidalCategory
 
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
 
-
 @[reducible] definition squared_Braiding { C : MonoidalCategory.{u v} } ( braiding : Braiding C )
   : NaturalTransformation C^.tensor C^.tensor :=
   begin
