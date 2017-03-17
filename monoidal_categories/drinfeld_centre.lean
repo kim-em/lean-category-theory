@@ -26,35 +26,29 @@ structure HalfBraidingMorphism { C : MonoidalCategory } ( X Y : HalfBraiding C )
   -- Probably there is a better way to express this condition!
   (witness : ∀ Z : C^.Obj, C^.compose (X^.commutor Z) (C^.tensorMorphisms (C^.identity Z) morphism) = C^.compose (C^.tensorMorphisms morphism (C^.identity Z)) (Y^.commutor Z))
 
--- --TODO: remove?, not actually used
--- instance HalfBraidingMorphism_coercion_to_morphism { C : MonoidalCategory } ( X Y : HalfBraiding C ): has_coe (HalfBraidingMorphism  X Y) (C^.Hom X Y) :=
---   { coe := HalfBraidingMorphism.morphism }
+attribute [ematch] HalfBraidingMorphism.witness
 
--- TODO: most of the proofs don't work here. Hopefully after I learn to rewrite automatically this will work better.
--- TODO: this takes way too long to compile
--- definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
---   Obj := HalfBraiding C,
---   Hom := λ X Y, HalfBraidingMorphism X Y,
---   identity := λ X, {
---     morphism := C^.identity X,
---     witness  := begin
---                   blast,
---                   apply X^.commutor^.morphism^.naturality,
---                   exact sorry
---                 end
---   },
---   compose := λ P Q R f g, {
---     morphism := C^.compose f^.morphism g^.morphism,
---     witness  := begin
---                   blast,
---                   -- TODO similarly, I don't understand why this doesn't work
---                   rewrite MonoidalCategory.interchange_left_identity,
---                   exact sorry
---                 end
---   },
---   left_identity  := sorry,
---   right_identity := sorry,
---   associativity  := sorry
--- }
+local attribute [reducible] lift_t coe_t coe_b
+
+definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
+  Obj := HalfBraiding C,
+  Hom := λ X Y, HalfBraidingMorphism X Y,
+  identity := λ X, {
+    morphism := C^.identity X,
+    witness  := ♮
+  },
+  compose := λ P Q R f g, {
+    morphism := C^.compose f^.morphism g^.morphism,
+    witness  := begin
+      blast,
+      -- It seems both of the next `apply`s should work, and I don't understand why they fail.
+      apply bifunctor_left_identity,
+      apply MonoidalCategory.interchange_right_identity
+    end
+  },
+  left_identity  := sorry,
+  right_identity := sorry,
+  associativity  := sorry
+}
 
 end tqft.categories.drinfeld_centre

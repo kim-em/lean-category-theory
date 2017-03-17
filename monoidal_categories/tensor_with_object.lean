@@ -16,7 +16,7 @@ local attribute [reducible] lift_t coe_t coe_b
 
 local attribute [ematch] MonoidalCategory.interchange_right_identity
 
-definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
+@[reducible] definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
 {
   onObjects := λ X, C^.tensorObjects Z X,
   onMorphisms := λ X Y f, C^.tensorMorphisms (C^.identity Z) f,
@@ -26,7 +26,7 @@ definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.
 
 local attribute [ematch] MonoidalCategory.interchange_left_identity
 
-definition tensor_on_right { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
+@[reducible] definition tensor_on_right { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=
 {
   onObjects := λ X, C^.tensorObjects X Z,
   onMorphisms := λ X Y f, C^.tensorMorphisms f (C^.identity Z),

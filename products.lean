@@ -94,6 +94,16 @@ lemma switch_twice_is_the_identity
   functoriality := ♮
 }
 
+@[ematch] lemma bifunctor_left_identity
+  { C D E : Category }
+  ( W : C^.Obj ) ( X Y Z : D^.Obj )
+  ( f : D X Y ) ( g : D Y Z )
+  ( F : Functor (C × D) E ) :
+    @Functor.onMorphisms _ _ F (W, X) (W, Z) (C^.identity W, D^.compose f g ) 
+    = E^.compose
+        (@Functor.onMorphisms _ _ F (W, X) (W, Y) (C^.identity W, f )) 
+        (@Functor.onMorphisms _ _ F (W, Y) (W, Z) (C^.identity W, g )) := ♮
+
 -- @[simp] lemma bifunctor_identities
 --   { C D E : Category }
 --   ( X : C^.Obj ) ( Y : D^.Obj )

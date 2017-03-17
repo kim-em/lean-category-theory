@@ -57,7 +57,7 @@ definition MonoidalCategory.associator
 instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCategory.{u v} LaxMonoidalCategory.{u v}   := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
 
 -- TODO This works, but why do we need to be so explicit??
-definition MonoidalCategory.interchange
+@[ematch] definition MonoidalCategory.interchange
   ( C : MonoidalCategory )
   { U V W X Y Z: C^.Obj }
   ( f : C^.Hom U V )( g : C^.Hom V W )( h : C^.Hom X Y )( k : C^.Hom Y Z ) :
@@ -67,14 +67,10 @@ definition MonoidalCategory.interchange
       (@Functor.onMorphisms _ _ C^.tensor (V, Y) (W, Z) (g, k)) :=
   @Functor.functoriality (C × C) C C^.tensor (U, X) (V, Y) (W, Z) (f, h) (g, k)
 
-local attribute [ematch] MonoidalCategory.interchange
-
 -- TODO it seems a shame we need to redine this for MonoidalCategory; it's already there on Category.
 lemma MonoidalCategory.identity_idempotent
   ( C : MonoidalCategory )
   ( X : C^.Obj ) : C^.identity X = C^.compose (C^.identity X) (C^.identity X) := ♮
-
-local attribute [ematch] MonoidalCategory.identity_idempotent
 
 lemma MonoidalCategory.interchange_left_identity
   ( C : MonoidalCategory )

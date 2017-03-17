@@ -24,7 +24,7 @@ meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
 
-meta def smt_simp   : tactic unit := using_smt $ intros >> try simp
+meta def smt_simp   : tactic unit := using_smt $ intros >> try dsimp >> try simp
 meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> try simp >> try eblast
 meta def smt_ematch : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch
 
@@ -57,7 +57,8 @@ attribute [reducible] cast
 
 meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute `unfoldable) and_then )
 
-meta def blast  : tactic unit := smt_eblast >> pointwise blast -- >> unfold_something blast
+-- meta def blast  : tactic unit := smt_eblast >> pointwise blast -- >> unfold_something blast
+meta def blast  : tactic unit := intros >> try dsimp >> try simp >> pointwise blast >> try smt_eblast >> pointwise blast -- >> unfold_something blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }
