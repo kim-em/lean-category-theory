@@ -16,8 +16,8 @@ namespace tqft.categories.universal
 
 structure InitialObject ( C : Category ) :=
   (object : C^.Obj)
-  (morphism : ∀ Y : C^.Obj, C^.Hom object Y)
-  (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom object Y, f = morphism Y)
+  (morphisms : ∀ Y : C^.Obj, C^.Hom object Y)
+  (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom object Y, f = morphisms Y)
 
 instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObject C) (C^.Obj) :=
   { coe := InitialObject.object }
@@ -25,6 +25,8 @@ instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObj
 structure is_initial { C : Category } ( X : C^.Obj ) :=
   (morphism : ∀ Y : C^.Obj, C^.Hom X Y)
   (uniqueness :  ∀ Y : C^.Obj, ∀ f : C^.Hom X Y, f = morphism Y)
+
+attribute [ematch] is_initial.uniqueness
 
 lemma InitialObjects_have_only_the_identity_endomorphism { C : Category } ( X: InitialObject C ) ( f : C^.Hom X X ) : f = C^.identity X :=
   begin
@@ -35,8 +37,8 @@ lemma InitialObjects_have_only_the_identity_endomorphism { C : Category } ( X: I
 
 lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Isomorphism C X Y :=
   {
-      morphism  := X^.morphism Y,
-      inverse   := Y^.morphism X,
+      morphism  := X^.morphisms Y,
+      inverse   := Y^.morphisms X,
       witness_1 := begin apply InitialObjects_have_only_the_identity_endomorphism end,
       witness_2 := begin apply InitialObjects_have_only_the_identity_endomorphism end
   }
@@ -58,8 +60,8 @@ definition TerminalObject ( C : Category ) := InitialObject (Opposite C)
 -- If not:
 -- structure TerminalObject ( C : Category ) :=
 --   (object : C^.Obj)
---   (morphism : ∀ Y : C^.Obj, C^.Hom Y object)
---   (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom Y object, f = morphism Y)
+--   (morphisms : ∀ Y : C^.Obj, C^.Hom Y object)
+--   (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom Y object, f = morphisms Y)
 
 open tqft.categories.functor
 open tqft.categories.natural_transformation
@@ -85,7 +87,7 @@ definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) 
 -- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
 local attribute [elab_simple]  sigma.snd
 
--- unfortunately one can't coerce along subtype.elt_of
+-- unfortunately one can't coerce along subtype.val
 open subtype
 
 local attribute [ematch] subtype.property
@@ -103,46 +105,43 @@ definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B
 
 -- TODO broken, waiting on DiscreteCategory
 
--- definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
--- {
---   onObjects     := λ _, X,
---   onMorphisms   := λ _ _ _, C^.identity X,
---   identities    := ♮,
---   functoriality := ♮
--- }
+definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
+{
+  onObjects     := λ _, X,
+  onMorphisms   := λ _ _ _, C^.identity X,
+  identities    := ♮,
+  functoriality := ♮
+}
 
--- -- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
--- definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
--- definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
+-- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
+definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
+definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
--- definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
--- definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
+definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
+definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
 
--- definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
--- definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
+definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
+definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
 
--- structure ExplicitLimit { J C : Category } ( F: Functor J C ) :=
---   ( limit : C^.Obj )
---   ( maps  : Π X : J^.Obj, C^.Hom limit (F X) )
---   ( commutativity : Π X Y : J^.Obj, Π f : J^.Hom X Y, C^.compose (maps X) (F^.onMorphisms f) = maps Y )
+structure ExplicitLimit { J C : Category } ( F: Functor J C ) :=
+  ( limit : C^.Obj )
+  ( maps  : Π X : J^.Obj, C^.Hom limit (F X) )
+  ( commutativity : Π X Y : J^.Obj, Π f : J^.Hom X Y, C^.compose (maps X) (F^.onMorphisms f) = maps Y )
 
--- open tqft.categories.examples.types
+open tqft.categories.examples.types
 
--- definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Limit F) (ExplicitLimit F) := {
---   morphism  := λ L, { 
---     limit := begin
---                unfold Limit at F, -- TODO why doesn't this do anything?
---                -- The idea here is that the underlying object of L is an object in the 
---                -- comma category. Taking its left projection (i.e. the first piece of the dependent pair) is an object in C, which is the one we want!
---                exact sorry
---              end,
---     maps  := sorry,
---     commutativity := sorry
---   },
---   inverse   := sorry,
---   witness_1 := sorry,
---   witness_2 := sorry
--- }
+definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Limit F) (ExplicitLimit F) := {
+  morphism  := λ L, { 
+    -- The idea here is that the underlying object of L is an object in the 
+    -- comma category. Taking its left projection (i.e. the first piece of the dependent pair) is an object in C, which is the one we want!
+    limit := L^.object^.1,
+    maps  := sorry,
+    commutativity := sorry
+  },
+  inverse   := sorry,
+  witness_1 := sorry,
+  witness_2 := sorry
+}
 
 -- -- TODO How do we even prove 0 < 2 ??! :-)
 -- def zero : fin 2 := ⟨ 0, sorry ⟩
