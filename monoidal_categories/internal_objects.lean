@@ -34,22 +34,33 @@ structure ModuleMorphism { C : MonoidalCategory } { A : SemigroupObject C } ( X 
 
 attribute [ematch,simp] ModuleMorphism.compatibility
 
+-- TODO this is obtuse
+@[pointwise] lemma ModuleMorphism_pointwisewise_equal
+  { C : MonoidalCategory }
+  { A : SemigroupObject C }
+  { X Y : ModuleObject A }
+  ( f g : ModuleMorphism X Y )
+  ( w : f^.map = g^.map ) : f = g :=
+  begin
+    induction f,
+    induction g,
+    blast
+  end
+
 instance ModuleMorphism_coercion_to_map { C : MonoidalCategory } { A : SemigroupObject C } ( X Y : ModuleObject A ) : has_coe (ModuleMorphism X Y) (C^.Hom X Y) :=
   { coe := ModuleMorphism.map }
 
--- local attribute [reducible] lift_t coe_t coe_b
+local attribute [reducible] lift_t coe_t coe_b
 
--- TODO wait for better tactics
--- TODO: also too slow!
--- definition CategoryOfModules { C: MonoidalCategory } ( A : SemigroupObject C ) : Category :=
--- {
---   Obj := ModuleObject A,
---   Hom := λ X Y, ModuleMorphism X Y,
---   identity := λ X, ⟨ C^.identity X, ♮ ⟩,
---   compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, sorry ⟩,
---   left_identity  := sorry,
---   right_identity := sorry,
---   associativity  := sorry
--- }
+definition CategoryOfModules { C: MonoidalCategory } ( A : SemigroupObject C ) : Category :=
+{
+  Obj := ModuleObject A,
+  Hom := λ X Y, ModuleMorphism X Y,
+  identity := λ X, ⟨ C^.identity X, ♮ ⟩,
+  compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, ♮ ⟩,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
+}
 
 end tqft.categories.internal_objects

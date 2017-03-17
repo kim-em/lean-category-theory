@@ -19,28 +19,33 @@ structure MonoidalFunctor ( C D : MonoidalCategory ) :=
 instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_coe (MonoidalFunctor C D) (Functor C D) :=
   { coe := MonoidalFunctor.functor }
 
--- TODO perhaps an example is in order!
-
 structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : MonoidalFunctor C D ) :=
   ( natural_transformation : NaturalTransformation F^.functor G^.functor )
-  ( compatibility_with_tensor : ∀ X Y : C^.Obj, D^.compose (F^.tensorator (X, Y)) (D^.tensorMorphisms (natural_transformation X) (natural_transformation Y)) = D^.compose (natural_transformation (C^.tensorObjects X Y)) (G^.tensorator (X, Y)))
+  ( compatibility_with_tensor : ∀ X Y : C^.Obj, D^.compose (natural_transformation (C^.tensorObjects X Y)) (G^.tensorator (X, Y)) = D^.compose (F^.tensorator (X, Y)) (D^.tensorMorphisms (natural_transformation X) (natural_transformation Y)) )
 -- TODO compatibility with unit
 
 attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
 
--- instance MonoidalNaturalTransformation_coercion_to_natural_transformation
---   { C D : MonoidalCategory }
---   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
---   { coe := MonoidalNaturalTransformation.natural_transformation }
+-- TODO this is obtuse
+@[pointwise] lemma MonoidalNaturalTransformation_componentwise_equal
+  { C D : MonoidalCategory }
+  { F G : MonoidalFunctor C D }
+  ( α β : MonoidalNaturalTransformation F G )
+  ( w : α^.natural_transformation = β^.natural_transformation ) : α = β :=
+  begin
+    induction α with α_components α_naturality,
+    induction β with β_components β_naturality,
+    blast
+  end
 
--- @[simp] definition foo_1 ( C : MonoidalCategory ) : Category.Obj (lift_t C) = C^.Obj := ♮
--- @[simp] definition foo_2 ( C : MonoidalCategory ) ( X Y : C^.Obj ) : Category.Hom (lift_t C) X Y = C^.Hom X Y := ♮
--- @[simp] definition foo_3 ( C : MonoidalCategory ) ( X Y Z : C^.Obj ) ( f : C^.Hom X Y ) ( g : C^.Hom Y Z ) : Category.compose (lift_t C) f g = C^.compose f g := ♮
+instance MonoidalNaturalTransformation_coercion_to_natural_transformation
+  { C D : MonoidalCategory }
+  ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
+  { coe := MonoidalNaturalTransformation.natural_transformation }
 
--- set_option pp.implicit true
+local attribute [reducible] lift_t coe_t coe_b
 
--- TODO strange inheritance issues here too!
-definition vertical_composition_of_MonoidalNaturalTransformations
+@[reducible] definition vertical_composition_of_MonoidalNaturalTransformations
   { C D : MonoidalCategory } 
   { F G H : MonoidalFunctor C D } 
   ( α : MonoidalNaturalTransformation F G ) 
@@ -48,24 +53,30 @@ definition vertical_composition_of_MonoidalNaturalTransformations
 {
   natural_transformation    := vertical_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
   compatibility_with_tensor := begin
-                                 blast,
-                                 -- TODO (lift_t D)^.compose is not D^.compose
-                                --  rewrite foo_3,
-                                --  rewrite D^.interchange
-                                exact sorry
+                                abstract {
+                                  -- TODO It seems that one round of blast should succeed here!
+                                  blast,
+                                  rewrite D^.associativity,
+                                  simp,
+                                  rewrite - D^.associativity,
+                                  simp,
+                                  blast
+                                }
                                end
 }
 
--- definition CategoryOfMonoidalFunctors ( C D : MonoidalCategory ) : Category :=
--- {
---   Obj := MonoidalFunctor C D,
---   Hom := λ F G, MonoidalNaturalTransformation F G,
---   identity := λ F, ⟨ IdentityNaturalTransformation F, sorry ⟩,
---   compose  := λ _ _ _ α β, vertical_composition_of_MonoidalNaturalTransformations α β,
+-- TODO horizontal_composition_of_MonoidalNaturalTransformations
 
---   left_identity  := sorry,
---   right_identity := sorry,
---   associativity  := sorry
--- }
+definition CategoryOfMonoidalFunctors ( C D : MonoidalCategory ) : Category :=
+{
+  Obj := MonoidalFunctor C D,
+  Hom := λ F G, MonoidalNaturalTransformation F G,
+  identity := λ F, ⟨ IdentityNaturalTransformation F, ♮ ⟩,
+  compose  := λ _ _ _ α β, vertical_composition_of_MonoidalNaturalTransformations α β,
+
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
+}
 
 end tqft.categories.monoidal_functor

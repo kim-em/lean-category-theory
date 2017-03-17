@@ -19,15 +19,21 @@ universe variables u v
 -- https://groups.google.com/d/msg/lean-user/3qzchWkut0g/0QR6_cS8AgAJ
 -/
 
-definition Braiding(C : MonoidalCategory.{u v}) := 
+@[reducible] definition Braiding(C : MonoidalCategory.{u v}) := 
   NaturalIsomorphism (C^.tensor) (FunctorComposition (SwitchProductCategory C C) C^.tensor)
 
 structure BraidedMonoidalCategory
   extends parent: MonoidalCategory :=
   (braiding: Braiding parent)
--- TODO hexagon!
+-- TODO hexagon, in component, and a theorem it holds as a natural transformation
 
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
+
+structure SymmetricMonoidalCategory
+  extends parent: BraidedMonoidalCategory :=
+  (symmetry: Π X Y : Obj, compose (braiding^.morphism^.components (X, Y)) (braiding^.morphism^.components (Y, X)) = identity (tensor^.onObjects (X, Y)) )
+
+-- TODO construct the symmetry at the level of natural transformations
 
 @[reducible] definition squared_Braiding { C : MonoidalCategory.{u v} } ( braiding : Braiding C )
   : NaturalTransformation C^.tensor C^.tensor :=
@@ -41,9 +47,5 @@ instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedM
 
 @[reducible] definition Symmetry(C : BraidedMonoidalCategory) : Prop :=
   squared_Braiding (C^.braiding) = IdentityNaturalTransformation C^.tensor
-
-structure SymmetricMonoidalCategory
-  extends parent: BraidedMonoidalCategory :=
-  (symmetry: Symmetry parent)
 
 end tqft.categories.braided_monoidal_category

@@ -68,11 +68,14 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
     inverse := {
       components := λ _, {
         map := λ t, ((t.1, t.2.1), t.2.2),
-        multiplicative := sorry
+        multiplicative := ♮
       },
-      naturality := sorry  
+      naturality := ♮  
     },
-    witness_1 := sorry,
+    witness_1 := begin
+                   intros,
+                   -- dsimp -- TODO seems to run forever?
+                 end,
     witness_2 := sorry
   },
   -- left_unitor_is_isomorphism := sorry,

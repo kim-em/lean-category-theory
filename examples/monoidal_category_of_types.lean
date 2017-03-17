@@ -3,12 +3,14 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import ..monoidal_categories.monoidal_category
+import ..monoidal_categories.braided_monoidal_category
 import .types
 
 namespace tqft.categories.examples.types
 
 open tqft.categories
 open tqft.categories.monoidal_category
+open tqft.categories.braided_monoidal_category
 
 definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 {
@@ -63,6 +65,23 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
 
   pentagon := ♮
   -- triangle := ♮
+}
+
+definition SymmetricMonoidalCategoryOfTypes : SymmetricMonoidalCategory := {
+  MonoidalCategoryOfTypes with
+  braiding := {
+   morphism  := {
+     components := λ p t, (t^.snd, t^.fst),
+     naturality := ♮
+   },
+   inverse   := {
+     components := λ p t, (t^.snd, t^.fst),
+     naturality := ♮
+   },
+   witness_1 := ♮,
+   witness_2 := ♮ 
+  },
+  symmetry := ♮
 }
 
 end tqft.categories.examples.types
