@@ -68,6 +68,7 @@ notation `♮` := by abstract { blast }
 @[pointwise] lemma {u v} pair_equality_2 {α : Type u} {β : Type v} { X: α × β } { B : β } ( p : B = X^.snd ) : (X^.fst, B) = X := begin induction X, blast end
 -- But let's not use this last one, as it introduces two goals.
 -- @[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X^.fst ) { B : β } ( p : B = X^.snd ) : (A, B) = X := begin induction X, blast end
+@[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := begin induction X, induction Y, blast end
 attribute [pointwise] subtype.eq
 
 @[reducible] def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a

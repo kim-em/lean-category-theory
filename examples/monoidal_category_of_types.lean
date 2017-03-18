@@ -12,7 +12,7 @@ open tqft.categories
 open tqft.categories.monoidal_category
 open tqft.categories.braided_monoidal_category
 
-definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
+@[reducible] definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 {
   onObjects     := λ p, p.1 × p.2,
   onMorphisms   := λ _ _ p q, (p.1 q.1, p.2 q.2),
@@ -20,6 +20,7 @@ definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
   functoriality := ♮
 }
 
+-- TODO it would be great to generate all these _is_isomorphism fields via refine
 definition MonoidalCategoryOfTypes : MonoidalCategory :=
 {
   CategoryOfTypes with
@@ -29,15 +30,14 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
     components := λ p t, (t.1.1, (t.1.2, t.2)),
     naturality := ♮
   },
-  -- left_unitor := {
-  --   components := λ p t, t.2,
-  --   naturality := ♮
-  -- },
-  -- right_unitor := {
-  --   components := λ p t, t.1,
-  --   naturality := ♮
-  -- },
-
+  left_unitor := {
+    components := λ p t, t.2,
+    naturality := ♮
+  },
+  right_unitor := {
+    components := λ p t, t.1,
+    naturality := ♮
+  },
   associator_is_isomorphism := {
     inverse := {
       components := λ p t, ((t.1, t.2.1), t.2.2),
@@ -46,25 +46,24 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
     witness_1 := ♮,
     witness_2 := ♮
   },
-  -- left_unitor_is_isomorphism := {
-  --   inverse := {
-  --     components := λ p t, (id, t),
-  --     naturality := ♮
-  --   },
-  --   witness_1 := sorry,
-  --   witness_2 := sorry
-  -- },
-  -- right_unitor_is_isomorphism := {
-  --   inverse := {
-  --     components := λ p t, (t, id),
-  --     naturality := ♮
-  --   },
-  --   witness_1 := sorry,
-  --   witness_2 := sorry
-  -- },
-
-  pentagon := ♮
-  -- triangle := ♮
+  left_unitor_is_isomorphism := {
+    inverse := {
+      components := λ p t, (punit.star, t),
+      naturality := ♮
+    },
+    witness_1 := ♮,
+    witness_2 := ♮
+  },
+  right_unitor_is_isomorphism := {
+    inverse := {
+      components := λ p t, (t, punit.star),
+      naturality := ♮
+    },
+    witness_1 := ♮,
+    witness_2 := ♮
+  },
+  pentagon := ♮,
+  triangle := ♮
 }
 
 definition SymmetricMonoidalCategoryOfTypes : SymmetricMonoidalCategory := {

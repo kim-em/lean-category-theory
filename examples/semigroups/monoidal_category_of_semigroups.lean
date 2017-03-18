@@ -62,8 +62,8 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
     },
     naturality := ♮ 
   },
-  -- left_unitor := sorry,
-  -- right_unitor := sorry,
+  left_unitor := sorry,
+  right_unitor := sorry,
   associator_is_isomorphism := {
     inverse := {
       components := λ _, {
@@ -78,10 +78,10 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
                  end,
     witness_2 := sorry
   },
-  -- left_unitor_is_isomorphism := sorry,
-  -- right_unitor_is_isomorphism := sorry,
-  pentagon := sorry
-  -- triangle := sorry
+  left_unitor_is_isomorphism := sorry,
+  right_unitor_is_isomorphism := sorry,
+  pentagon := sorry,
+  triangle := sorry
 }
 
 open tqft.categories.natural_transformation

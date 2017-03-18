@@ -17,11 +17,11 @@ structure LaxMonoidalCategory
   (tensor                    : TensorProduct carrier)
   (tensor_unit               : Obj)
   (associator_transformation : Associator tensor)
-  -- (left_unitor               : LeftUnitor ⟦tensor_unit⟧ tensor)
-  -- (right_unitor              : RightUnitor ⟦tensor_unit⟧ tensor)
+  (left_unitor               : LeftUnitor ⟦tensor_unit⟧ tensor)
+  (right_unitor              : RightUnitor ⟦tensor_unit⟧ tensor)
 
   (pentagon                  : Pentagon associator_transformation)
-  -- (triangle                  : Triangle ⟦tensor_unit⟧ left_unitor right_unitor associator_transformation)
+  (triangle                  : Triangle ⟦tensor_unit⟧ left_unitor right_unitor associator_transformation)
 
 attribute [ematch] LaxMonoidalCategory.pentagon
 
@@ -36,8 +36,8 @@ instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} Catego
 structure MonoidalCategory
   extends LaxMonoidalCategory :=
   (associator_is_isomorphism   : is_NaturalIsomorphism associator_transformation)
-  -- (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
-  -- (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
+  (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
+  (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
 
 -- TODO Unfortunately we need to copy these attributes; this isn't handled by inheritance.
 attribute [ematch,simp] MonoidalCategory.left_identity

@@ -51,35 +51,47 @@ definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
     functoriality := ♮
   }
 
--- What follows involves a lot of natural transformations than are
--- really the same thing (at least for the unitors). Can we get lean
--- to recognise this?
+-- TODO What follows involves a lot of boring natural transformations
+-- Can we construct them automatically?
 definition ℕMonoidalCategory : MonoidalCategory :=
- { ℕCategory with
+ begin
+ refine 
+   { ℕCategory with
    tensor                    := ℕTensorProduct,
    tensor_unit               := (),
    associator_transformation := { components := λ _, 0, naturality := ♮ },
-  --  left_unitor               := { components := λ _, 0, naturality := ♮ },
-  --  right_unitor              := { components := λ _, 0, naturality := ♮ },
+   left_unitor               := { components := λ _, 0, naturality := ♮ },
+   right_unitor              := { components := λ _, 0, naturality := ♮ },
 
    associator_is_isomorphism := {
+     inverse := { components := _, naturality := _ },
+     witness_1 := _,
+     witness_2 := _
+   },
+  --  associator_is_isomorphism := {
+  --    inverse := { components := λ _, 0, naturality := ♮ },
+  --    witness_1 := ♮,
+  --    witness_2 := ♮
+  --  },
+   left_unitor_is_isomorphism := {
      inverse := { components := λ _, 0, naturality := ♮ },
      witness_1 := ♮,
      witness_2 := ♮
    },
-  --  left_unitor_is_isomorphism := {
-  --    inverse := { components := λ _, 0, naturality := ♮ },
-  --    witness_1 := ♮,
-  --    witness_2 := ♮
-  --  },
-  --  right_unitor_is_isomorphism := {
-  --    inverse := { components := λ _, 0, naturality := ♮ },
-  --    witness_1 := ♮,
-  --    witness_2 := ♮
-  --  },
-
-   pentagon := ♮
-  --  triangle := ♮
- }
+   right_unitor_is_isomorphism := {
+     inverse := { components := λ _, 0, naturality := ♮ },
+     witness_1 := ♮,
+     witness_2 := ♮
+   },
+   pentagon := ♮,
+   triangle := ♮
+ },
+  all_goals { blast },
+  -- all_goals { induction X },
+  -- all_goals { induction fst },
+  -- all_goals { induction snd },
+  -- all_goals { induction fst_1 },
+  -- all_goals { induction snd_1 }
+ end
 
 end tqft.categories.examples.naturals
