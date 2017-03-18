@@ -63,4 +63,6 @@ definition CategoryOfModules { C: MonoidalCategory } ( A : SemigroupObject C ) :
   associativity  := ♮
 }
 
+-- TODO define modules over a monoid, directly and via (a-mod)(X->Y) = C(X->Ya), and then show that after idempotent completing they are equivalent?
+
 end tqft.categories.internal_objects

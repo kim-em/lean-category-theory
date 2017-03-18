@@ -23,10 +23,6 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 { F   := λ f, Π X : C^.Obj, D^.Hom (F X) (G X),
   coe := NaturalTransformation.components }
 
--- TODO can we simplify the next proof, by first using:
--- attribute [pointwise] funext
--- and then a bit of automation?
-
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
 @[pointwise] lemma NaturalTransformations_componentwise_equal
   { C D : Category }

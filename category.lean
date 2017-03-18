@@ -25,8 +25,8 @@ structure Category :=
   (associativity  : ∀ { W X Y Z : Obj } (f : Hom W X) (g : Hom X Y) (h : Hom Y Z),
     compose (compose f g) h = compose f (compose g h))
 
-attribute [ematch,simp] Category.left_identity
-attribute [ematch,simp] Category.right_identity
+attribute [simp] Category.left_identity
+attribute [simp] Category.right_identity
 attribute [ematch] Category.associativity
 
 instance Category_to_Hom : has_coe_to_fun Category :=

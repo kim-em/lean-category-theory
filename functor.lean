@@ -74,24 +74,16 @@ begin
   subst h_morphisms
 end
 
+open tactic.interactive
+
 definition CategoryOfCategoriesAndFunctors : Category := {
   Obj := Category,
   Hom := λ C D, Functor C D,
   identity := λ C, IdentityFunctor C,
   compose  := λ _ _ _ F G, FunctorComposition F G,
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
+  left_identity  := by blast_as_simp FunctorComposition_left_identity,
+  right_identity := by blast_as_simp FunctorComposition_right_identity,
+  associativity  := by blast_as FunctorComposition_associativity
 }
-
--- TODO think about where these should properly live.
-lemma FunctorComposition_left_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition (IdentityFunctor C) F = F := ♮                    
-
-lemma FunctorComposition_right_identity { C D : Category } ( F : Functor C D ) :
-  FunctorComposition F (IdentityFunctor D) = F := ♮
-
-lemma FunctorComposition_associative { B C D E : Category } ( F : Functor B C ) ( G : Functor C D ) ( H : Functor D E ) :
-  FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
 
 end tqft.categories.functor

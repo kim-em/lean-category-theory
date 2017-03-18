@@ -73,3 +73,50 @@ attribute [pointwise] subtype.eq
 @[reducible] def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a
 @[simp] lemma {u} auto_cast_identity {α : Type u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮
 notation `⟦` p `⟧` := @auto_cast _ _ (by smt_ematch) p
+
+-- TODO this is destined for the standard library?
+meta def mk_inhabitant_using (A : expr) (t : tactic unit) : tactic expr :=
+do m ← mk_meta_var A,
+   gs ← get_goals,
+   set_goals [m],
+   t,
+   r ← instantiate_mvars m,
+   set_goals gs,
+   return r
+
+namespace tactic
+meta def apply_and_mk_decl (n : name) (tac : tactic unit) : tactic unit := do
+ t ← target,
+ val ← mk_inhabitant_using t  tac,
+ add_aux_decl n t val tt,
+ apply val
+
+meta def tag_as_simp (n: name) : tactic unit := set_basic_attribute `simp n 
+-- TODO this doesn't work:
+meta def tag_as_ematch (n: name) : tactic unit := set_basic_attribute `ematch n 
+
+namespace interactive
+open lean.parser
+open interactive
+
+meta def apply_and_mk_decl (n : parse ident) (tac : itactic) : tactic unit :=
+tactic.apply_and_mk_decl n tac
+
+-- TODO restore tag_as_ematch when it works
+meta def apply_and_mk_simp_decl (n : parse ident) (tac : itactic) : tactic unit :=
+tactic.apply_and_mk_decl n tac >> tag_as_simp n -- >> tag_as_ematch n
+
+meta def apply_and_mk_ematch_decl (n : parse ident) (tac : itactic) : tactic unit :=
+tactic.apply_and_mk_decl n tac >> tag_as_ematch n
+
+meta def blast_as_simp (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_simp_decl n blast
+meta def blast_as_ematch (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_ematch_decl n blast
+meta def blast_as (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_decl n blast
+
+meta def blast_simp : tactic unit := mk_fresh_name >>= blast_as_simp
+meta def blast_ematch : tactic unit := mk_fresh_name >>= blast_as_ematch
+
+end interactive
+end tactic
+
+open tactic.interactive

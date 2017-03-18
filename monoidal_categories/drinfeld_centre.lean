@@ -41,7 +41,7 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
     morphism := C^.compose f^.morphism g^.morphism,
     witness  := begin
       blast,
-      -- It seems both of the next `apply`s should work, and I don't understand why they fail.
+      -- TODO It seems both of the next `apply`s should work, and I don't understand why they fail.
       apply bifunctor_left_identity,
       apply MonoidalCategory.interchange_right_identity
     end
