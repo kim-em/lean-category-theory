@@ -3,8 +3,12 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .category
+import .equivalence
+import .functor
 
 open tqft.categories
+open tqft.categories.functor
+open tqft.categories.natural_transformation
 
 namespace tqft.categories.idempotent_completion
 
@@ -27,5 +31,32 @@ definition IdempotentCompletion ( C: Category ) : Category :=
   right_identity := ♮,
   associativity  := ♮
 }
+
+definition embedding_in_IdempotentCompletion ( C : Category ) : Functor C (IdempotentCompletion C) := {
+  onObjects     := λ X, ⟨ X, C^.identity X, ♮ ⟩,
+  onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩,
+  identities    := ♮,
+  functoriality := ♮
+}
+
+-- TODO show the embedding really was full and faithful
+
+definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
+  FunctorComposition (embedding_in_IdempotentCompletion C) F
+
+open tqft.categories.equivalence
+
+lemma IdempotentCompletion_idempotent ( C : Category ) :
+  Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
+    sorry
+
+definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
+  Functor (IdempotentCompletion C) (IdempotentCompletion D) := 
+    sorry
+
+lemma Functor_from_IdempotentCompletion_determined_by_restriction 
+  { C D : Category } ( F : Functor (IdempotentCompletion C) (IdempotentCompletion D) ) :
+    NaturalIsomorphism (extend_Functor_to_IdempotentCompletion (restrict_Functor_from_IdempotentCompletion F)) F := 
+      sorry
 
 end tqft.categories.idempotent_completion

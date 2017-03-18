@@ -10,14 +10,11 @@ open tqft.categories.monoidal_category
 structure EnrichedCategory :=
   (V: MonoidalCategory)
   (Obj : Type )
-  (Hom : Obj -> Obj -> V^.Obj)
-  (compose :  Π ⦃X Y Z : Obj⦄, V^.Hom (V^.tensorObjects (Hom X Y) (Hom Y Z)) (Hom X Z))
+  (Hom : Obj → Obj → V^.Obj)
+  (compose :  Π { X Y Z : Obj }, V^.Hom (V^.tensorObjects (Hom X Y) (Hom Y Z)) (Hom X Z))
+  (identity : Π X : Obj, V^.Hom V^.tensor_unit (Hom X X))
   -- TODO and so on
 
--- TODO How would we define an additive category, now? We don't want to say:
---   Hom : Obj -> Obj -> AdditiveGroup
--- instead we want to express something like:
---   Hom : Obj -> Obj -> [something coercible to AdditiveGroup]
 
 
 end tqft.categories.enriched

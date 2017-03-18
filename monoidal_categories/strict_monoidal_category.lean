@@ -4,6 +4,7 @@
 import .monoidal_category
 
 open tqft.categories
+open tqft.categories.isomorphism
 open tqft.categories.functor
 open tqft.categories.natural_transformation
 open tqft.categories.products
@@ -46,19 +47,29 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
                        end,
     naturality := sorry
   },
-  -- left_unitor := sorry,
-  -- right_unitor := sorry,
+  left_unitor := sorry,
+  right_unitor := sorry,
   associator_is_isomorphism := sorry,
-  -- left_unitor_is_isomorphism := sorry,
-  -- right_unitor_is_isomorphism := sorry,
-  pentagon := sorry
-  -- triangle := sorry
+  left_unitor_is_isomorphism := sorry,
+  right_unitor_is_isomorphism := sorry,
+  pentagon := sorry,
+  triangle := sorry
 }  
+
+@[reducible] definition tensorList { C : MonoidalCategory } ( X : list C^.Obj ) : C^.Obj := list.foldl C^.tensorObjects C^.tensor_unit X
+
+@[reducible] definition tensorListConcatenation { C : MonoidalCategory } ( X : list C^.Obj × list C^.Obj ) : Isomorphism C (C^.tensorObjects (tensorList X.1) (tensorList X.2)) (tensorList (append X.1 X.2)) :=
+{
+  morphism  := sorry,
+  inverse   := sorry,
+  witness_1 := sorry,
+  witness_2 := sorry
+}
 
 @[reducible] definition ListObjectsCategory ( C : MonoidalCategory ) : Category := {
   Obj := list C^.Obj,
-  Hom := λ X Y, C^.Hom (list.foldl C^.tensorObjects C^.tensor_unit X) (list.foldl C^.tensorObjects C^.tensor_unit Y),
-  identity       := λ X, C^.identity (list.foldl C^.tensorObjects C^.tensor_unit X),
+  Hom := λ X Y, C^.Hom (tensorList X) (tensorList Y),
+  identity       := λ X, C^.identity (tensorList X),
   compose        := λ _ _ _ f g, C^.compose f g,
   left_identity  := ♮,
   right_identity := ♮,
@@ -66,8 +77,8 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
 }
 
 definition StrictTensorProduct ( C : MonoidalCategory ) : TensorProduct (ListObjectsCategory C) := {
-  onObjects     := λ p, append p.1 p.2,
-  onMorphisms   := sorry,
+  onObjects     := λ X, append X.1 X.2,
+  onMorphisms   := λ X Y f, sorry, -- C^.compose (C^.compose (tensorListConcatenation X)^.inverse f) (tensorListConcatenation Y)^.morphism,
   identities    := sorry,
   functoriality := sorry
 }
