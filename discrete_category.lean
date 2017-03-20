@@ -18,15 +18,33 @@ namespace tqft.categories
 --   right_identity := ♮,
 --   associativity  := ♮
 -- }
-definition DiscreteCategory ( α : Type ) : Category :=
+
+definition DiscreteCategory ( α : Type ) [ c : decidable_eq α ] : Category :=
 {
   Obj      := α,
-  Hom      := λ X Y, sorry,
-  identity := λ X, sorry,
-  compose  := λ X Y Z f g, sorry,
-  left_identity  := sorry,
-  right_identity := sorry,
-  associativity  := sorry
+  Hom      := λ X Y, if X = Y then unit else empty,
+  identity := λ X, match c X X with
+                     | is_true  hc  := ()
+                     | is_false hnc := absurd rfl hnc
+                   end,
+  compose  := λ X Y Z f g,
+                match (c X Z), (c X Y), (c Y Z) with
+                  | (is_true hxz), _, _  -- Is this sufficient? Does the inability to find an element of empty mean the bad cases can't show up?
+                      := ()
+                  | (is_false hnxz), (is_false hnxy), _
+                      := @auto_cast _ _ (if_neg hnxy) f
+                  | (is_false hnxz), _, (is_false hnyz)
+                      := @auto_cast _ _ (if_neg hnyz) g
+                  | (is_false hnxz), (is_true hxy), (is_true hyz)
+                      := absurd (eq.trans hxy hyz) hnxz
+                end,
+  left_identity  := λ X Y f,
+                      match (c X Y) with
+                        | (is_true h)   := sorry
+                        | (is_false hn) := sorry
+                      end,
+  right_identity := ♮,
+  associativity  := ♮
 }
 
 end tqft.categories

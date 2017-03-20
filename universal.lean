@@ -80,7 +80,7 @@ definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) 
     naturality := ♮
   },
   identities    := ♮,
-  functoriality := ♮  
+  functoriality := ♮
 }
 
 -- The elaborator has some trouble understanding what p.2.2 and q.2.2 mean below.
@@ -114,7 +114,7 @@ definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCa
 }
 
 -- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
-definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
+definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)
 definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
 definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
@@ -131,8 +131,8 @@ structure ExplicitLimit { J C : Category } ( F: Functor J C ) :=
 open tqft.categories.examples.types
 
 definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Limit F) (ExplicitLimit F) := {
-  morphism  := λ L, { 
-    -- The idea here is that the underlying object of L is an object in the 
+  morphism  := λ L, {
+    -- The idea here is that the underlying object of L is an object in the
     -- comma category. Taking its left projection (i.e. the first piece of the dependent pair) is an object in C, which is the one we want!
     limit := L^.object^.1,
     maps  := sorry,
@@ -143,20 +143,32 @@ definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C )
   witness_2 := sorry
 }
 
--- -- TODO How do we even prove 0 < 2 ??! :-)
--- def zero : fin 2 := ⟨ 0, sorry ⟩
--- def one  : fin 2 := ⟨ 1, sorry ⟩
+-- TODO How do we even prove 0 < 2 ??! :-)
+-- We could either write a tactic for doing this, or just rely on the
+-- of_nat function.  As a note, both of the following are already
+-- defined, due to fin being an instance of has_zero and has_one.
+--def zero : fin 2 := fin.of_nat 0
+--def one  : fin 2 := fin.of_nat 1
 
 -- TODO This breaks, with a mysterious error. Any ideas?
--- definition Product { C : Category } ( A B : C^.Obj ) := @Limit (DiscreteCategory (fin 2)) C {
---   onObjects     := λ X, match X with
---                           | zero := A
---                           | one  := B
---                         end, 
---   onMorphisms   := sorry,
---   identities    := sorry,
---   functoriality := sorry
--- }
+definition Product { C : Category } ( A B : C^.Obj ) :=
+  @Limit (DiscreteCategory (fin 2)) C
+  {
+    onObjects     := λ X,
+                       match X with
+                         | ⟨0, _⟩ := A
+                         | ⟨1, _⟩ := B
+                         | ⟨_, _⟩ := A -- This should be unneeded
+                       end,
+    onMorphisms   := λ X Y _,
+                       match X with
+                         | ⟨0, _⟩ := C^.identity A
+                         | ⟨1, _⟩ := C^.identity B
+                         | ⟨_, _⟩ := C^.identity A
+                       end,
+    identities    := sorry,
+    functoriality := sorry
+}
 
 -- TODO then products, equalizers, etc.
 -- perhaps a good way to find out if these definitions are usable is to verify that products are products.
