@@ -83,14 +83,14 @@ definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) 
   functoriality := ♮  
 }
 
--- The elaborator has some trouble understanding what p.2.2 and q.2.2 mean below.
--- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
-local attribute [elab_simple]  sigma.snd
-
 -- unfortunately one can't coerce along subtype.val
 open subtype
 
 local attribute [ematch] subtype.property
+
+-- The elaborator has some trouble understanding what p.2.2 and q.2.2 mean below.
+-- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
+local attribute [elab_simple]  sigma.snd
 
 definition CommaCategory { A B C : Category} ( S : Functor A C ) ( T : Functor B C ) : Category :=
 {
@@ -123,25 +123,16 @@ definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@Obj
 definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
 definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
 
-structure ExplicitLimit { J C : Category } ( F: Functor J C ) :=
+structure ExplicitCone { J C : Category } ( F: Functor J C ) :=
   ( limit : C^.Obj )
   ( maps  : Π X : J^.Obj, C^.Hom limit (F X) )
   ( commutativity : Π X Y : J^.Obj, Π f : J^.Hom X Y, C^.compose (maps X) (F^.onMorphisms f) = maps Y )
 
 open tqft.categories.examples.types
 
-definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Limit F) (ExplicitLimit F) := {
-  morphism  := λ L, { 
-    -- The idea here is that the underlying object of L is an object in the 
-    -- comma category. Taking its left projection (i.e. the first piece of the dependent pair) is an object in C, which is the one we want!
-    limit := L^.object^.1,
-    maps  := sorry,
-    commutativity := sorry
-  },
-  inverse   := sorry,
-  witness_1 := sorry,
-  witness_2 := sorry
-}
+definition Cone_agrees_with_ExplicitCone { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F)^.Obj (ExplicitCone F) := sorry
+-- TODO also define the category of explicit cones
+-- definition Cones_agrees_with_ExplicitCones { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F) (ExplicitCones F) := sorry
 
 -- -- TODO How do we even prove 0 < 2 ??! :-)
 -- def zero : fin 2 := ⟨ 0, sorry ⟩
