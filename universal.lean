@@ -143,7 +143,7 @@ definition Cone_agrees_with_ExplicitCone { J C : Category } ( F: Functor J C ) :
 
 lemma zeroNotOne : 0 ≠ 1 := by trivial
 
--- TODO This breaks, with a mysterious error. Any ideas?
+-- TODO This is not working: stop using fin 2?
 definition Product { C : Category } ( A B : C^.Obj ) [ c : decidable_eq (fin 2) ]:=
   @Limit (DiscreteCategory (fin 2)) C
   {

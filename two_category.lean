@@ -73,7 +73,7 @@ definition HomCategory ( C : StrictTwoCategory ) ( X Y : C^._0 ) : Category := {
   associativity  := ♮
 }
 
--- TODO show that HomCategory C X X is (strict) monoidal?
+-- PROJECT show that HomCategory C X X is (strict) monoidal?
 
 structure DualMorphisms { C : StrictTwoCategory } { X Y : C^._0 } ( f : C^._1 X Y ) ( g : C^._1 Y X ) :=
   ( unit : C^._2 (C^.compose_1 f g) (C^.identity_0 X) )

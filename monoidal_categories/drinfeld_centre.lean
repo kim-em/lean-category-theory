@@ -71,4 +71,6 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category :=
   associativity  := ♮
 }
 
+-- PROJECT Drinfeld centre as a monoidal category, and then as a braided category.
+
 end tqft.categories.drinfeld_centre

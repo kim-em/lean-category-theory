@@ -8,16 +8,16 @@ open tqft.categories
 
 namespace tqft.categories.isomorphism
 
-structure Isomorphism { C: Category } ( X Y : C^.Obj ) :=
+structure Isomorphism ( C: Category ) ( X Y : C^.Obj ) :=
   (morphism : C X Y)
   (inverse : C Y X)
   (witness_1 : C^.compose morphism inverse = C^.identity X)
   (witness_2 : C^.compose inverse morphism = C^.identity Y)
 
-instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } : has_coe (Isomorphism X Y) (C X Y) :=
+instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } : has_coe (Isomorphism C X Y) (C X Y) :=
   { coe := Isomorphism.morphism }
 
-definition Isomorphism.inverse_Isomorphism { C : Category } { X Y : C^.Obj } ( I : Isomorphism X Y ) : Isomorphism Y X :=
+definition Isomorphism.inverse_Isomorphism { C : Category } { X Y : C^.Obj } ( I : Isomorphism C X Y ) : Isomorphism C Y X :=
   {
     morphism  := I^.inverse,
     inverse   := I^.morphism,

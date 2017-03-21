@@ -101,7 +101,7 @@ open tactic.interactive
   associativity  := by blast_as_simp FunctorCategory_associativity
 }
 
-definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := @Isomorphism (FunctorCategory C D) F G
+definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
 
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.

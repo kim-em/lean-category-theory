@@ -26,6 +26,8 @@ universe variables u v
 @[reducible] definition Symmetry(C : BraidedMonoidalCategory) : Prop :=
   squared_Braiding (C^.braiding) = IdentityNaturalTransformation C^.tensor
 
+local attribute [reducible] lift_t coe_t coe_b
+
 lemma symmetry_in_terms_of_natural_transformations (C : SymmetricMonoidalCategory): Symmetry C := 
   begin
     blast,

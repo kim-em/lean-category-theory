@@ -34,7 +34,6 @@ structure ModuleMorphism { C : MonoidalCategory } { A : SemigroupObject C } ( X 
 
 attribute [ematch,simp] ModuleMorphism.compatibility
 
--- TODO this is obtuse
 @[pointwise] lemma ModuleMorphism_pointwisewise_equal
   { C : MonoidalCategory }
   { A : SemigroupObject C }
@@ -63,6 +62,6 @@ definition CategoryOfModules { C: MonoidalCategory } ( A : SemigroupObject C ) :
   associativity  := ♮
 }
 
--- TODO define modules over a monoid, directly and via (a-mod)(X->Y) = C(X->Ya), and then show that after idempotent completing they are equivalent?
+-- PROJECT define modules over a monoid, directly and via (a-mod)(X->Y) = C(X->Ya), and then show that after idempotent completing they are equivalent?
 
 end tqft.categories.internal_objects
