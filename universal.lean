@@ -150,21 +150,24 @@ definition Limit_agrees_with_ExplicitLimit { J C : Category } ( F: Functor J C )
 --def zero : fin 2 := fin.of_nat 0
 --def one  : fin 2 := fin.of_nat 1
 
+lemma zeroNotOne : 0 ≠ 1 := by trivial
+
 -- TODO This breaks, with a mysterious error. Any ideas?
-definition Product { C : Category } ( A B : C^.Obj ) :=
+definition Product { C : Category } ( A B : C^.Obj ) [ c : decidable_eq (fin 2) ]:=
   @Limit (DiscreteCategory (fin 2)) C
   {
     onObjects     := λ X,
-                       match X with
-                         | ⟨0, _⟩ := A
-                         | ⟨1, _⟩ := B
-                         | ⟨_, _⟩ := A  -- This should never be used
+                       match X.1 with
+                         | 0 := A
+                         | 1 := B
+                         --| _ := A  -- This should never be used
                        end,
     onMorphisms   := λ X Y f,
-                       match X, Y with
-                         | ⟨0, _⟩, ⟨0, _⟩ := C^.identity A
-                         | ⟨1, _⟩, ⟨1, _⟩ := C^.identity B
-                         | ⟨_, _⟩, ⟨_, _⟩ := sorry
+                       match (c X Y), X, Y with
+                         | is_true hc  , ⟨0, _⟩, ⟨0, _⟩ := C^.identity A
+                         | is_true hc  , ⟨1, _⟩, ⟨1, _⟩ := C^.identity B
+                         | is_true hc  , ⟨m, _⟩, ⟨n, _⟩ := sorry
+                         | is_false hnc, _     , _      := ex_nihilo (type_if_neg hnc f)
                        end,
     identities    := sorry,
     functoriality := sorry

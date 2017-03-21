@@ -71,7 +71,7 @@ notation `♮` := by abstract { blast }
 @[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := begin induction X, induction Y, blast end
 attribute [pointwise] subtype.eq
 
-@[reducible] def {u} auto_cast {α β : Type u} {h : α = β} (a : α) := cast h a
+@[reducible] def {u} auto_cast {α β : Sort u} {h : α = β} (a : α) := cast h a
 @[simp] lemma {u} auto_cast_identity {α : Type u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮
 notation `⟦` p `⟧` := @auto_cast _ _ (by smt_ematch) p
 
