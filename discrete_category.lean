@@ -6,8 +6,6 @@ import .category
 
 namespace tqft.categories
 
--- TODO extending Category to work with Sort breaks other things.
-
 structure w { α : Type }( X Y : α ) := ( eq : X = Y )
 @[reducible] def w.rfl { α : Type } ( X : α ) : w X X := { eq := rfl }
 @[reducible] def w.trans { α : Type} { X Y Z : α } ( a : w X Y ) ( b : w Y Z ) : w X Z := { eq := eq.trans a^.eq b^.eq }
@@ -24,15 +22,5 @@ definition DiscreteCategory ( α : Type ) : Category :=
   right_identity := ♮,
   associativity  := ♮
 }
--- definition DiscreteCategory ( α : Type ) : Category :=
--- {
---   Obj      := α,
---   Hom      := λ X Y, sorry,
---   identity := λ X, sorry,
---   compose  := λ X Y Z f g, sorry,
---   left_identity  := sorry,
---   right_identity := sorry,
---   associativity  := sorry
--- }
 
 end tqft.categories
