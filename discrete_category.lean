@@ -19,6 +19,11 @@ namespace tqft.categories
 --   associativity  := ♮
 -- }
 
+set_option pp.implicit true
+
+--lemma emptyExFalso {c : Sort*} (h : empty) : c :=
+--@false.elim c (empty.rec_on (λ_, false) h)
+
 definition DiscreteCategory ( α : Type ) [ c : decidable_eq α ] : Category :=
 {
   Obj      := α,
@@ -38,13 +43,9 @@ definition DiscreteCategory ( α : Type ) [ c : decidable_eq α ] : Category :=
                   | (is_false hnxz), (is_true hxy), (is_true hyz)
                       := absurd (eq.trans hxy hyz) hnxz
                 end,
-  left_identity  := λ X Y f,
-                      match (c X Y) with
-                        | (is_true h)   := sorry
-                        | (is_false hn) := sorry
-                      end,
-  right_identity := ♮,
-  associativity  := ♮
+  left_identity  := sorry,
+  right_identity := sorry,
+  associativity  := sorry
 }
 
 end tqft.categories

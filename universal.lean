@@ -158,13 +158,13 @@ definition Product { C : Category } ( A B : C^.Obj ) :=
                        match X with
                          | ⟨0, _⟩ := A
                          | ⟨1, _⟩ := B
-                         | ⟨_, _⟩ := A -- This should be unneeded
+                         | ⟨_, _⟩ := A  -- This should never be used
                        end,
-    onMorphisms   := λ X Y _,
-                       match X with
-                         | ⟨0, _⟩ := C^.identity A
-                         | ⟨1, _⟩ := C^.identity B
-                         | ⟨_, _⟩ := C^.identity A
+    onMorphisms   := λ X Y f,
+                       match X, Y with
+                         | ⟨0, _⟩, ⟨0, _⟩ := C^.identity A
+                         | ⟨1, _⟩, ⟨1, _⟩ := C^.identity B
+                         | ⟨_, _⟩, ⟨_, _⟩ := sorry
                        end,
     identities    := sorry,
     functoriality := sorry
