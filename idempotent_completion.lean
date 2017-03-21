@@ -39,7 +39,7 @@ definition embedding_in_IdempotentCompletion ( C : Category ) : Functor C (Idemp
   functoriality := ♮
 }
 
--- TODO show the embedding really was full and faithful
+-- PROJECT show the embedding really was full and faithful
 
 definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
   FunctorComposition (embedding_in_IdempotentCompletion C) F

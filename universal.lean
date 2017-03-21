@@ -105,8 +105,6 @@ definition CommaCategory
   associativity  := ♮
 }
 
--- TODO broken, waiting on DiscreteCategory
-
 definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
 {
   onObjects     := λ _, X,
@@ -115,7 +113,7 @@ definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCa
   functoriality := ♮
 }
 
--- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
+-- PROJECT give the direct definition of slice and coslice categories, and then prove equivalence with this.
 definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)
 definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 

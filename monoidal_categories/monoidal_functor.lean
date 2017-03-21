@@ -13,11 +13,16 @@ namespace tqft.categories.monoidal_functor
 structure MonoidalFunctor ( C D : MonoidalCategory ) :=
   ( functor : Functor C D )
   ( tensorator : NaturalIsomorphism (FunctorComposition C^.tensor functor) (FunctorComposition (functor × functor) D^.tensor) )
+  ( associativity : ∀ X Y Z : C^.Obj, 
+      D^.compose (tensorator (C^.tensor (X, Y), Z)) (D^.compose (D^.tensorMorphisms (tensorator (X, Y)) (D^.identity (functor Z))) (D^.associator (functor X) (functor Y) (functor Z)))
+      = D^.compose (functor^.onMorphisms (C^.associator X Y Z)) (D^.compose (tensorator (X, C^.tensor (Y, Z))) (D^.tensorMorphisms (D^.identity (functor X)) (tensorator (Y, Z))))
+  )
   -- TODO identerator and axiom
-  -- TODO associativity of the tensorator!
-
+  
 instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_coe (MonoidalFunctor C D) (Functor C D) :=
   { coe := MonoidalFunctor.functor }
+
+-- PROJECT composition of MonoidalFunctors
 
 structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : MonoidalFunctor C D ) :=
   ( natural_transformation : NaturalTransformation F^.functor G^.functor )
@@ -26,7 +31,6 @@ structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : Monoi
 
 attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
 
--- TODO this is getting ridiculous
 @[pointwise] lemma MonoidalNaturalTransformation_componentwise_equal
   { C D : MonoidalCategory }
   { F G : MonoidalFunctor C D }

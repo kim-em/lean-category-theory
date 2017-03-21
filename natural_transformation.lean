@@ -101,7 +101,7 @@ open tactic.interactive
   associativity  := by blast_as_simp FunctorCategory_associativity
 }
 
-definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
+definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := @Isomorphism (FunctorCategory C D) F G
 
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.
@@ -111,7 +111,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
 
 open NaturalTransformation
 
-definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α : NaturalTransformation F G ) := @is_isomorphism (FunctorCategory C D) F G α
+definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α : NaturalTransformation F G ) := @is_Isomorphism (FunctorCategory C D) F G α
 
 lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F : Functor C D ) : is_NaturalIsomorphism (IdentityNaturalTransformation F) :=
   { inverse := IdentityNaturalTransformation F,
@@ -119,21 +119,17 @@ lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F
     witness_2 := ♮
   }
 
-
--- Getting this coercion to work is really painful. We shouldn't have to write
---     @components C D F G α X
--- below, but rather just:
---     α X
--- or at least
---     α^.components X
-
-
 -- lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C^.Obj } :
---  Inverse (@components C D F G α X) :=
+--  Inverse (α X) :=
 --   {
 --     inverse := α^.inverse^.components X,
---     witness_1 := α^.witness_1, -- TODO we need to evaluate both sides of this equation at X.
+--     witness_1 := begin
+--                    pose p := congr_arg NaturalTransformation.components α^.witness_1,
+--                    -- TODO almost there! Note sure how to convince it that p is the answer.
+--                    -- PROJECT how can we automate away this proof?
+--                    exact sorry
+--                  end,
 --     witness_2 := sorry
-  -- }
+--   }
 
 end tqft.categories.natural_transformation

@@ -32,9 +32,6 @@ meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
    try (seq (any_apply cs) and_then)
 
--- TODO does this have any effect?
-attribute [pointwise] funext
-
 open tactic
 open lean.parser
 open interactive

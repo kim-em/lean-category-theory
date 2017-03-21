@@ -32,6 +32,10 @@ attribute [ematch] HalfBraidingMorphism.witness
 
 local attribute [reducible] lift_t coe_t coe_b
 
+-- set_option pp.universes true
+
+-- local attribute [ematch] MonoidalCategory.interchange_right_identity  MonoidalCategory.interchange_left_identity
+
 definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category := {
   Obj := HalfBraiding C,
   Hom := λ X Y, HalfBraidingMorphism X Y,
@@ -41,9 +45,13 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category :=
   },
   compose := λ P Q R f g, {
     morphism := C^.compose f^.morphism g^.morphism,
-    witness  := sorry
+    witness  := begin
+      blast,
+      rewrite MonoidalCategory.interchange_right_identity,
+      exact sorry
+    end
   },
-  left_identity  := sorry, -- TODO
+  left_identity  := sorry,
   right_identity := sorry,
   associativity  := sorry
 }

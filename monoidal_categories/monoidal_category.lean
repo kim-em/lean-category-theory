@@ -33,8 +33,6 @@ attribute [ematch] LaxMonoidalCategory.associativity
 instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} Category.{u v} :=
   ⟨LaxMonoidalCategory.to_Category⟩
 
-set_option pp.all true
-
 structure MonoidalCategory
   extends LaxMonoidalCategory :=
   (associator_is_isomorphism   : is_NaturalIsomorphism associator_transformation)
@@ -55,6 +53,10 @@ definition MonoidalCategory.associator
   ( C : MonoidalCategory )
   ( X Y Z : C^.Obj ) : C^.Hom (C^.tensorObjects (C^.tensorObjects X Y) Z) (C^.tensorObjects X (C^.tensorObjects Y Z)) :=
   C^.associator_transformation ⟨⟨X, Y⟩, Z⟩
+definition MonoidalCategory.inverse_associator
+  ( C : MonoidalCategory )
+  ( X Y Z : C^.Obj ) : C^.Hom (C^.tensorObjects X (C^.tensorObjects Y Z)) (C^.tensorObjects (C^.tensorObjects X Y) Z) :=
+  C^.associator_is_isomorphism^.inverse ⟨⟨X, Y⟩, Z⟩
 
 instance MonoidalCategory_coercion_to_LaxMonoidalCategory   : has_coe MonoidalCategory.{u v} LaxMonoidalCategory.{u v}   := ⟨MonoidalCategory.to_LaxMonoidalCategory⟩
 

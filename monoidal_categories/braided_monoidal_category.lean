@@ -19,13 +19,46 @@ universe variables u v
 -- https://groups.google.com/d/msg/lean-user/3qzchWkut0g/0QR6_cS8AgAJ
 -/
 
-@[reducible] definition Braiding(C : MonoidalCategory.{u v}) := 
+@[reducible] definition Braiding( C : MonoidalCategory.{u v} ) := 
   NaturalIsomorphism (C^.tensor) (FunctorComposition (SwitchProductCategory C C) C^.tensor)
+
+@[reducible] definition Hexagon_1 { C : MonoidalCategory } ( β : Braiding C ) :=
+  ∀ X Y Z : C^.Obj,
+    C^.compose
+      (C^.tensorMorphisms (C^.identity X) (β (Y, Z)))
+    (C^.compose
+      (C^.inverse_associator X Z Y)
+      (C^.tensorMorphisms (β (X, Z)) (C^.identity Y))
+    )
+      = 
+    C^.compose
+      (C^.inverse_associator X Y Z) 
+    (C^.compose
+      (β (C^.tensorObjects X Y, Z))
+      (C^.inverse_associator Z X Y)
+    )
+@[reducible] definition Hexagon_2 { C : MonoidalCategory } ( β : Braiding C ) :=
+  ∀ X Y Z : C^.Obj,
+    C^.compose
+      (C^.tensorMorphisms (C^.identity X) (β^.inverse (Z, Y)))
+    (C^.compose
+      (C^.inverse_associator X Z Y)
+      (C^.tensorMorphisms (β^.inverse (Z, X)) (C^.identity Y))
+    )
+      = 
+    C^.compose
+      (C^.inverse_associator X Y Z) 
+    (C^.compose
+      (β^.inverse (Z, C^.tensorObjects X Y))
+      (C^.inverse_associator Z X Y)
+    )
 
 structure BraidedMonoidalCategory
   extends parent: MonoidalCategory.{u v} :=
-  (braiding: Braiding parent)
--- TODO hexagon, in components, and a theorem it holds as a natural transformation
+  ( braiding: Braiding parent )
+  ( hexagon_1 : Hexagon_1 braiding )
+  ( hexagon_2 : Hexagon_2 braiding )
+-- PROJECT a theorem showing the hexagaons hold as natural transformations
 
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
 

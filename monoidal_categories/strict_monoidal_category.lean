@@ -13,8 +13,9 @@ open tqft.categories.monoidal_category
 namespace tqft.categories.strict_monoidal_category
 
 structure TensorProduct_is_strict { C : Category } ( tensor : TensorProduct C ) ( tensor_unit : C^.Obj ) :=
-  ( associativeOnObjects : ∀ X Y Z : C^.Obj, tensor^.onObjects (tensor^.onObjects (X, Y), Z) = tensor^.onObjects (X, tensor^.onObjects (Y, Z)) )
-  -- TODO strict identities
+  ( associativeOnObjects  : ∀ X Y Z : C^.Obj, tensor^.onObjects (tensor^.onObjects (X, Y), Z) = tensor^.onObjects (X, tensor^.onObjects (Y, Z)) )
+  ( strictLeftTensorUnit  : ∀ X : C^.Obj, tensor^.onObjects (tensor_unit, X) = X )
+  ( strictRightTensorUnit : ∀ X : C^.Obj, tensor^.onObjects (X, tensor_unit) = X )
 
 definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalCategory :=
 {
@@ -83,9 +84,9 @@ definition StrictTensorProduct ( C : MonoidalCategory ) : TensorProduct (ListObj
   functoriality := sorry
 }
 
--- TODO
--- show that StrictTensorProduct is strict
--- construct a functor from C
--- show that it is part of an equivalence
+-- PROJECT
+-- * show that StrictTensorProduct is strict
+-- * construct a functor from C
+-- * show that it is part of an equivalence
 
 end tqft.categories.strict_monoidal_category

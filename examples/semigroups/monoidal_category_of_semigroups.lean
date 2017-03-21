@@ -5,6 +5,8 @@
 import ...monoidal_categories.braided_monoidal_category
 import .semigroups
 
+open tqft.categories.natural_transformation
+
 namespace tqft.categories.examples.semigroups
 
 universe variables u
@@ -62,8 +64,20 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
     },
     naturality := ♮ 
   },
-  left_unitor := sorry,
-  right_unitor := sorry,
+  left_unitor := {
+    components := λ _, {
+      map := λ t, t.2,
+      multiplicative := ♮
+    },
+    naturality := ♮ 
+  },
+  right_unitor := {
+    components := λ _, {
+      map := λ t, t.1,
+      multiplicative := ♮
+    },
+    naturality := ♮ 
+  },
   associator_is_isomorphism := {
     inverse := {
       components := λ _, {
@@ -74,7 +88,7 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
     },
     witness_1 := begin
                    intros,
-                   -- dsimp -- FIXME seems to run forever?
+                  --  dsimp [FunctorCategory], -- FIXME seems to run forever?
                    exact sorry
                  end,
     witness_2 := sorry
