@@ -26,7 +26,7 @@ structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : Monoi
 
 attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
 
--- TODO this is obtuse
+-- TODO this is getting ridiculous
 @[pointwise] lemma MonoidalNaturalTransformation_componentwise_equal
   { C D : MonoidalCategory }
   { F G : MonoidalFunctor C D }

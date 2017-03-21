@@ -74,7 +74,8 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
     },
     witness_1 := begin
                    intros,
-                   -- dsimp -- TODO seems to run forever?
+                   -- dsimp -- FIXME seems to run forever?
+                   exact sorry
                  end,
     witness_2 := sorry
   },

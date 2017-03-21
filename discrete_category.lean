@@ -6,50 +6,22 @@ import .category
 
 namespace tqft.categories
 
--- TODO extending Category to work with Sort breaks other things.
+structure w { α : Type }( X Y : α ) := ( eq : X = Y )
+@[reducible] def w.rfl { α : Type } ( X : α ) : w X X := { eq := rfl }
+@[reducible] def w.trans { α : Type} { X Y Z : α } ( a : w X Y ) ( b : w Y Z ) : w X Z := { eq := eq.trans a^.eq b^.eq }
 
--- definition DiscreteCategory ( α : Type ) : Category :=
--- {
---   Obj      := α,
---   Hom      := λ X Y, X = Y,
---   identity := λ X, rfl,
---   compose  := λ X Y Z f g, eq.trans f g,
---   left_identity  := ♮,
---   right_identity := ♮,
---   associativity  := ♮
--- }
+@[pointwise] lemma w_pointwise { α : Type } ( X Y : α ) (w1 : w X Y) (w2 : w X Y) : w1 = w2 := begin induction w1, induction w2, trivial end
 
-set_option pp.implicit true
-
-universe variable u
-definition ex_nihilo {α : Sort u} : empty → α.
-
-definition type_if_pos { c : Prop } [ h : decidable c ] ( hc : c ) { t e : Sort u } ( x : ite c t e ) : t := @auto_cast _ _ (if_pos hc) x
-
-definition type_if_neg { c : Prop } [ h : decidable c ] ( hnc : ¬c ) { t e : Sort u } ( x : ite c t e ) : e := @auto_cast _ _ (if_neg hnc) x
-
-definition DiscreteCategory ( α : Type ) [ c : decidable_eq α ] : Category :=
+definition DiscreteCategory ( α : Type ) : Category :=
 {
   Obj      := α,
-  Hom      := λ X Y, if X = Y then unit else empty,
-  identity := λ X, match c X X with
-                     | is_true  hc  := ()
-                     | is_false hnc := absurd rfl hnc
-                   end,
-  compose  := λ X Y Z f g,
-                match (c X Z), (c X Y), (c Y Z) with
-                  | (is_true hxz), _, _  -- Is this sufficient? Does the inability to find an element of empty mean the bad cases can't show up?
-                      := ()
-                  | (is_false hnxz), (is_false hnxy), _
-                      := ex_nihilo (type_if_neg hnxy f)
-                  | (is_false hnxz), _, (is_false hnyz)
-                      := ex_nihilo (type_if_neg hnyz g)
-                  | (is_false hnxz), (is_true hxy), (is_true hyz)
-                      := absurd (eq.trans hxy hyz) hnxz
-                end,
-  left_identity  := sorry,
-  right_identity := sorry,
-  associativity  := sorry
+  Hom      := λ X Y, w X Y,
+  identity := λ X, w.rfl X,
+  compose  := λ X Y Z f g, w.trans f g,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
+>>>>>>> 2687ceb82f0d314c92787be9a87e05ccdf52f005
 }
 
 end tqft.categories
