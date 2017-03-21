@@ -11,15 +11,13 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.products
 
-universe variables u1 v1 u2 v2 u3 v3 u4 v4
-
-@[reducible] definition ProductCategory (C : Category.{u1 v1}) (D : Category.{u2 v2}) :
+@[reducible] definition ProductCategory (C D : Category) :
   Category :=
   {
     Obj      := C^.Obj × D^.Obj,
     Hom      := (λ X Y : C^.Obj × D^.Obj, C^.Hom (X^.fst) (Y^.fst) × D^.Hom (X^.snd) (Y^.snd)),
     identity := λ X, ⟨ C^.identity (X^.fst), D^.identity (X^.snd) ⟩,
-    compose  := λ _ _ _ f g, pprod.mk (C^.compose (f^.fst) (g^.fst)) (D^.compose (f^.snd) (g^.snd)),
+    compose  := λ _ _ _ f g, (C^.compose (f^.fst) (g^.fst), D^.compose (f^.snd) (g^.snd)),
 
     left_identity  := ♮,
     right_identity := ♮,
@@ -30,24 +28,24 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
-@[reducible] definition LeftInjectionAt { D : Category.{u2 v2} } ( Z : D^.Obj ) ( C : Category.{u1 v1} ) : Functor C (C × D) :=
-{ onObjects     := λ X, pprod.mk X Z,
-  onMorphisms   := λ X Y f, pprod.mk f (D^.identity Z),
+@[reducible] definition LeftInjectionAt { D : Category } ( Z : D^.Obj ) ( C : Category ) : Functor C (C × D) :=
+{ onObjects     := λ X, (X, Z),
+  onMorphisms   := λ X Y f, (f, D^.identity Z),
   identities    := ♮,
   functoriality := ♮
 }
 
-@[reducible] definition RightInjectionAt { C : Category.{u1 v1} } ( Z : C^.Obj) ( D : Category.{u2 v2} ) : Functor D (C × D) :=
-{ onObjects     := λ X, pprod.mk Z X,
-  onMorphisms   := λ X Y f, pprod.mk (C^.identity Z) f,
+@[reducible] definition RightInjectionAt { C : Category } ( Z : C^.Obj) ( D : Category ) : Functor D (C × D) :=
+{ onObjects     := λ X, (Z, X),
+  onMorphisms   := λ X Y f, (C^.identity Z, f),
   identities    := ♮,
   functoriality := ♮
 }
 
-@[reducible] definition ProductFunctor { A : Category.{u1 v1} } { B : Category.{u2 v2} } { C : Category.{u3 v3} } { D : Category.{u4 v4} } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
+@[reducible] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
-  onObjects     := λ X, pprod.mk (F X^.fst) (G X^.snd),
-  onMorphisms   := λ _ _ f, pprod.mk (F^.onMorphisms f^.fst) (G^.onMorphisms f^.snd),
+  onObjects     := λ X, (F X^.fst, G X^.snd),
+  onMorphisms   := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
   identities    := ♮,
   functoriality := ♮
 }
@@ -62,7 +60,7 @@ end ProductFunctor
   (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
     NaturalTransformation (F × H) (G × I) :=
 {
-  components := λ X, pprod.mk (α X^.fst) (β X^.snd),
+  components := λ X, (α X^.fst, β X^.snd),
   naturality := ♮
 }
 
@@ -70,10 +68,10 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-@[reducible] definition SwitchProductCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Functor (C × D) (D × C) :=
+@[reducible] definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
-  onObjects     := λ X, pprod.mk X^.snd X^.fst,
-  onMorphisms   := λ _ _ f, pprod.mk f^.snd f^.fst,
+  onObjects     := λ X, (X^.snd, X^.fst),
+  onMorphisms   := λ _ _ f, (f^.snd, f^.fst),
   identities    := ♮,
   functoriality := ♮
 }
@@ -83,13 +81,11 @@ lemma switch_twice_is_the_identity
   FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (ProductCategory C D) := ♮
 
 @[reducible] definition ProductCategoryAssociator
-  ( C : Category.{ u1 v1 } )
-  ( D : Category.{ u2 v2 } )
-  ( E : Category.{ u3 v3 } )
+  ( C D E: Category )
   : Functor ((C × D) × E) (C × (D × E)) :=
 {
-  onObjects     := λ X, pprod.mk X^.fst^.fst (pprod.mk X^.fst^.snd X^.snd),
-  onMorphisms   := λ _ _ f, pprod.mk f^.fst^.fst (pprod.mk f^.fst^.snd f^.snd),
+  onObjects     := λ X, (X^.fst^.fst, (X^.fst^.snd, X^.snd)),
+  onMorphisms   := λ _ _ f, (f^.fst^.fst, (f^.fst^.snd, f^.snd)),
   identities    := ♮,
   functoriality := ♮
 }

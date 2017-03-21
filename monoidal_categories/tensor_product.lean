@@ -14,24 +14,22 @@ universe variables u v
 
 @[reducible] definition TensorProduct ( C: Category ) := Functor ( C × C ) C
 
-set_option pp.all true
-
 @[reducible] definition left_associated_triple_tensor { C : Category.{ u v } } ( tensor : TensorProduct C ) : Functor ((C × C) × C) C :=
   FunctorComposition (tensor × IdentityFunctor C) tensor
 @[reducible] definition right_associated_triple_tensor { C : Category.{ u v } } ( tensor : TensorProduct C ) : Functor (C × (C × C)) C :=
   FunctorComposition (IdentityFunctor C × tensor) tensor
 
-@[reducible] definition Associator { C : Category.{ u v } } ( tensor : TensorProduct C ) :=
+@[reducible] definition Associator { C : Category.{u v} } ( tensor : TensorProduct C ) :=
   NaturalTransformation
     (left_associated_triple_tensor tensor)
     (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor tensor))
 
-@[reducible] definition LeftUnitor { C : Category.{ u v } } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
+@[reducible] definition LeftUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
   NaturalTransformation
     (FunctorComposition (RightInjectionAt I C) tensor)
     (IdentityFunctor C)
 
-@[reducible] definition RightUnitor { C : Category.{ u v } } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
+@[reducible] definition RightUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
   NaturalTransformation
     (FunctorComposition (LeftInjectionAt I C) tensor)
     (IdentityFunctor C)
