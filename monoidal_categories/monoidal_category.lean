@@ -13,7 +13,7 @@ namespace tqft.categories.monoidal_category
 universe variables u v
 
 structure LaxMonoidalCategory
-  extends carrier : Category.{u v} :=
+  extends carrier : Category :=
   (tensor                    : TensorProduct carrier)
   (tensor_unit               : Obj)
   (associator_transformation : Associator tensor)
@@ -36,7 +36,7 @@ instance LaxMonoidalCategory_coercion : has_coe LaxMonoidalCategory.{u v} Catego
 set_option pp.all true
 
 structure MonoidalCategory
-  extends LaxMonoidalCategory.{u v} :=
+  extends LaxMonoidalCategory :=
   (associator_is_isomorphism   : is_NaturalIsomorphism associator_transformation)
   (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
   (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)

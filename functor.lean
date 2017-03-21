@@ -58,7 +58,6 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
 --   for `morphismWitness`, leaving the `objectWitness` goal somehow "implicit" and likely unprovable.
 --   See https://groups.google.com/d/msg/lean-user/bhStu87PjiI/vqsyr9ZABAAJ for details.
 -- If you run into this problem, use `fapply Functors_pointwise_equal` instead.
-
 @[pointwise] lemma Functors_pointwise_equal
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} } 

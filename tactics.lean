@@ -63,11 +63,9 @@ meta def blast  : tactic unit := intros >> try dsimp >> try simp >> pointwise bl
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }
 
-notation α `×` β := pprod α β
-
-@[pointwise] lemma {u v} pair_equality {α : Sort u} {β : Sort v} { X: α × β }: pprod.mk X^.fst X^.snd = X := begin induction X, blast end
-@[pointwise] lemma {u v} pair_equality_1 {α : Sort u} {β : Sort v} { X: α × β } { A : α } ( p : A = X^.fst ) : pprod.mk A X^.snd = X := begin induction X, blast end
-@[pointwise] lemma {u v} pair_equality_2 {α : Sort u} {β : Sort v} { X: α × β } { B : β } ( p : B = X^.snd ) : pprod.mk X^.fst B = X := begin induction X, blast end
+@[pointwise] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X^.fst, X^.snd) = X := begin induction X, blast end
+@[pointwise] lemma {u v} pair_equality_1 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X^.fst ) : (A, X^.snd) = X := begin induction X, blast end
+@[pointwise] lemma {u v} pair_equality_2 {α : Type u} {β : Type v} { X: α × β } { B : β } ( p : B = X^.snd ) : (X^.fst, B) = X := begin induction X, blast end
 -- But let's not use this last one, as it introduces two goals.
 -- @[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X^.fst ) { B : β } ( p : B = X^.snd ) : (A, B) = X := begin induction X, blast end
 @[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := begin induction X, induction Y, blast end

@@ -38,15 +38,14 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
-@[reducible] definition IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
+@[reducible] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D^.identity (F X),
     naturality := ♮
   }
 
 @[reducible] definition vertical_composition_of_NaturalTransformations
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
+  { C D : Category }
   { F G H : Functor C D }
   ( α : NaturalTransformation F G )
   ( β : NaturalTransformation G H ) : NaturalTransformation F H :=
@@ -58,9 +57,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 open tqft.categories.functor
 
 @[reducible] definition horizontal_composition_of_NaturalTransformations
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
+  { C D E : Category }
   { F G : Functor C D }
   { H I : Functor D E }
   ( α : NaturalTransformation F G )
@@ -91,7 +88,7 @@ open tqft.categories.functor
 
 open tactic.interactive
 
-@[reducible] definition FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
+@[reducible] definition FunctorCategory ( C D : Category ) : Category :=
 {
   Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,

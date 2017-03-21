@@ -13,9 +13,9 @@ namespace tqft.categories.two_category
 universe variables u v w
 
 structure StrictTwoCategory :=
-  (_0 : Sort u)
-  (_1 : _0 → _0 → Sort v)
-  (_2 : Π { X Y : _0 }, _1 X Y → _1 X Y → Sort w)
+  (_0 : Type u)
+  (_1 : _0 → _0 → Type v)
+  (_2 : Π { X Y : _0 }, _1 X Y → _1 X Y → Type w)
   (identity_0 : Π X : _0, _1 X X)
   (identity_1 : Π { X Y : _0 }, Π f : _1 X Y, _2 f f)
   (compose_1  : Π { X Y Z : _0 }, _1 X Y → _1 Y Z → _1 X Z)
