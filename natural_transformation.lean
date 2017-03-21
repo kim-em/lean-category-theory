@@ -11,6 +11,8 @@ open tqft.categories.functor
 
 namespace tqft.categories.natural_transformation
 
+universe variables u1 v1 u2 v2 u3 v3
+
 structure NaturalTransformation { C D : Category } ( F G : Functor C D ) :=
   (components: Π X : C^.Obj, D^.Hom (F X) (G X))
   (naturality: ∀ { X Y : C^.Obj } (f : C^.Hom X Y),
@@ -36,14 +38,15 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
-@[reducible] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
+@[reducible] definition IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D^.identity (F X),
     naturality := ♮
   }
 
 @[reducible] definition vertical_composition_of_NaturalTransformations
-  { C D : Category }
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
   { F G H : Functor C D }
   ( α : NaturalTransformation F G )
   ( β : NaturalTransformation G H ) : NaturalTransformation F H :=
@@ -55,7 +58,9 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 open tqft.categories.functor
 
 @[reducible] definition horizontal_composition_of_NaturalTransformations
-  { C D E : Category }
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { E : Category.{u3 v3} }
   { F G : Functor C D }
   { H I : Functor D E }
   ( α : NaturalTransformation F G )
@@ -84,7 +89,9 @@ open tqft.categories.functor
 -- To define a natural isomorphism, we'll define the functor category, and ask for an isomorphism there.
 -- It's then a lemma that each component is an isomorphism, and vice versa.
 
-@[reducible] definition FunctorCategory ( C D : Category ) : Category :=
+open tactic.interactive
+
+@[reducible] definition FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
 {
   Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,
@@ -92,17 +99,10 @@ open tqft.categories.functor
   identity := λ F, IdentityNaturalTransformation F,
   compose  := @vertical_composition_of_NaturalTransformations C D,
 
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
+  left_identity  := by blast_as_simp FunctorCategory_left_identity,
+  right_identity := by blast_as_simp FunctorCategory_right_identity,
+  associativity  := by blast_as_simp FunctorCategory_associativity
 }
-
--- TODO This is pure boilerplate! How can we automatically form this lemma? Ideally we'd just annotate a field of FunctorCategory!
-@[simp] lemma FunctorCategory_left_identity
-  ( C D : Category )
-  ( F G : Functor C D ) 
-  ( α : NaturalTransformation F G ) : vertical_composition_of_NaturalTransformations (IdentityNaturalTransformation F) α = α := 
-    (FunctorCategory C D)^.left_identity α
 
 definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
 

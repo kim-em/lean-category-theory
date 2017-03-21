@@ -13,7 +13,7 @@ structure EnrichedCategory :=
   (Hom : Obj → Obj → V^.Obj)
   (compose :  Π { X Y Z : Obj }, V^.Hom (V^.tensorObjects (Hom X Y) (Hom Y Z)) (Hom X Z))
   (identity : Π X : Obj, V^.Hom V^.tensor_unit (Hom X X))
-  -- TODO and so on
+  -- PROJECT and so on
 
 
 

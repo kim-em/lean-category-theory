@@ -23,15 +23,15 @@ universe variables u v
   NaturalIsomorphism (C^.tensor) (FunctorComposition (SwitchProductCategory C C) C^.tensor)
 
 structure BraidedMonoidalCategory
-  extends parent: MonoidalCategory :=
+  extends parent: MonoidalCategory.{u v} :=
   (braiding: Braiding parent)
 -- TODO hexagon, in components, and a theorem it holds as a natural transformation
 
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
 
 structure SymmetricMonoidalCategory
-  extends parent: BraidedMonoidalCategory :=
-  (symmetry: Π X Y : Obj, compose (braiding^.morphism^.components (X, Y)) (braiding^.morphism^.components (Y, X)) = identity (tensor^.onObjects (X, Y)) )
+  extends parent: BraidedMonoidalCategory.{u v} :=
+  (symmetry: Π X Y : Obj, compose (braiding^.morphism^.components ⟨X, Y⟩) (braiding^.morphism^.components ⟨Y, X⟩) = identity (tensor^.onObjects ⟨X, Y⟩) )
 
 attribute [ematch,simp] SymmetricMonoidalCategory.symmetry
 

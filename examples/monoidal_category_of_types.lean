@@ -20,7 +20,7 @@ open tqft.categories.braided_monoidal_category
   functoriality := ♮
 }
 
--- TODO it would be great to generate all these _is_isomorphism fields via refine
+-- PROJECT it would be great to generate all these _is_isomorphism fields via refine
 definition MonoidalCategoryOfTypes : MonoidalCategory :=
 {
   CategoryOfTypes with

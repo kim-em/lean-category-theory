@@ -10,6 +10,6 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.adjunction
 
--- TODO, but as a special case of a duality in a 2-category.
+-- PROJECT, but as a special case of a duality in a 2-category.
 
 end tqft.categories.adjunction

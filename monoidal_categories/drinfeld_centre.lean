@@ -14,6 +14,8 @@ open tqft.categories.monoidal_category
 
 namespace tqft.categories.drinfeld_centre
 
+universe variables u v
+
 structure HalfBraiding ( C : MonoidalCategory ) :=
     (object   : C^.Obj)
     (commutor : NaturalIsomorphism (tensor_on_left object) (tensor_on_right object))
@@ -30,7 +32,7 @@ attribute [ematch] HalfBraidingMorphism.witness
 
 local attribute [reducible] lift_t coe_t coe_b
 
-definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
+definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category := {
   Obj := HalfBraiding C,
   Hom := λ X Y, HalfBraidingMorphism X Y,
   identity := λ X, {
@@ -39,14 +41,9 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
   },
   compose := λ P Q R f g, {
     morphism := C^.compose f^.morphism g^.morphism,
-    witness  := begin
-      blast,
-      -- TODO It seems both of the next `apply`s should work, and I don't understand why they fail.
-      apply bifunctor_left_identity,
-      apply MonoidalCategory.interchange_right_identity
-    end
+    witness  := sorry
   },
-  left_identity  := sorry,
+  left_identity  := sorry, -- TODO
   right_identity := sorry,
   associativity  := sorry
 }

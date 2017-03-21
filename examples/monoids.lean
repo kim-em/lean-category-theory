@@ -40,10 +40,6 @@ definition monoid_morphism_composition
   { α β : Type } { s : monoid α } { t: monoid β }
   ( f g : monoid_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=
-/-
--- This proof is identical to that of the lemma NaturalTransformations_componentwise_equal.
--- TODO: automate!
--/
 begin
     induction f with fc,
     induction g with gc,

@@ -80,7 +80,7 @@ definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) 
     naturality := ♮
   },
   identities    := ♮,
-  functoriality := ♮  
+  functoriality := ♮
 }
 
 -- unfortunately one can't coerce along subtype.val
@@ -114,7 +114,7 @@ definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCa
 }
 
 -- TODO probably better to give the simplified definition of slice and coslice categories, and then prove equivalence with this.
-definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X) 
+definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)
 definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
 definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
@@ -134,20 +134,32 @@ definition Cone_agrees_with_ExplicitCone { J C : Category } ( F: Functor J C ) :
 -- TODO also define the category of explicit cones
 -- definition Cones_agrees_with_ExplicitCones { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F) (ExplicitCones F) := sorry
 
--- -- TODO How do we even prove 0 < 2 ??! :-)
--- def zero : fin 2 := ⟨ 0, sorry ⟩
--- def one  : fin 2 := ⟨ 1, sorry ⟩
+-- TODO How do we even prove 0 < 2 ??! :-)
+-- We could either write a tactic for doing this, or just rely on the
+-- of_nat function.  As a note, both of the following are already
+-- defined, due to fin being an instance of has_zero and has_one.
+--def zero : fin 2 := fin.of_nat 0
+--def one  : fin 2 := fin.of_nat 1
 
 -- TODO This breaks, with a mysterious error. Any ideas?
--- definition Product { C : Category } ( A B : C^.Obj ) := @Limit (DiscreteCategory (fin 2)) C {
---   onObjects     := λ X, match X with
---                           | zero := A
---                           | one  := B
---                         end, 
---   onMorphisms   := sorry,
---   identities    := sorry,
---   functoriality := sorry
--- }
+definition Product { C : Category } ( A B : C^.Obj ) :=
+  @Limit (DiscreteCategory (fin 2)) C
+  {
+    onObjects     := λ X,
+                       match X with
+                         | ⟨0, _⟩ := A
+                         | ⟨1, _⟩ := B
+                         | ⟨_, _⟩ := A  -- This should never be used
+                       end,
+    onMorphisms   := λ X Y f,
+                       match X, Y with
+                         | ⟨0, _⟩, ⟨0, _⟩ := C^.identity A
+                         | ⟨1, _⟩, ⟨1, _⟩ := C^.identity B
+                         | ⟨_, _⟩, ⟨_, _⟩ := sorry
+                       end,
+    identities    := sorry,
+    functoriality := sorry
+}
 
 -- TODO then products, equalizers, etc.
 -- perhaps a good way to find out if these definitions are usable is to verify that products are products.

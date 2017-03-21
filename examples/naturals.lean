@@ -63,16 +63,17 @@ definition ℕMonoidalCategory : MonoidalCategory :=
    left_unitor               := { components := λ _, 0, naturality := ♮ },
    right_unitor              := { components := λ _, 0, naturality := ♮ },
 
-   associator_is_isomorphism := {
-     inverse := { components := _, naturality := _ },
-     witness_1 := _,
-     witness_2 := _
-   },
+  -- -- TODO I'd really like this to work, so we don't need to construct boring inverses by hand.
   --  associator_is_isomorphism := {
-  --    inverse := { components := λ _, 0, naturality := ♮ },
-  --    witness_1 := ♮,
-  --    witness_2 := ♮
+  --    inverse := { components := _, naturality := _ },
+  --    witness_1 := _,
+  --    witness_2 := _
   --  },
+   associator_is_isomorphism := {
+     inverse := { components := λ _, 0, naturality := ♮ },
+     witness_1 := ♮,
+     witness_2 := ♮
+   },
    left_unitor_is_isomorphism := {
      inverse := { components := λ _, 0, naturality := ♮ },
      witness_1 := ♮,

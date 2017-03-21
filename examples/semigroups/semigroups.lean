@@ -35,10 +35,6 @@ instance monoid_semigroup_to_map { α β : Type u } { s : semigroup α } { t: se
   { α β : Type u } { s : semigroup α } { t: semigroup β }
   ( f g : semigroup_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=
-/-
--- This proof is identical to that of the lemma NaturalTransformations_componentwise_equal.
--- TODO: automate!
--/
 begin
     induction f with fc,
     induction g with gc,
