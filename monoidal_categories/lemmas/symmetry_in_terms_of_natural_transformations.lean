@@ -17,7 +17,7 @@ universe variables u v
   : NaturalTransformation C^.tensor C^.tensor :=
   begin
     pose square := vertical_composition_of_NaturalTransformations braiding^.morphism (whisker_on_left (SwitchProductCategory C C) braiding^.morphism),
-    rewrite - FunctorComposition_associative at square,
+    rewrite - FunctorComposition_associativity at square,
     erewrite switch_twice_is_the_identity at square,
     rewrite FunctorComposition_left_identity at square,
     exact square
@@ -31,6 +31,7 @@ lemma symmetry_in_terms_of_natural_transformations (C : SymmetricMonoidalCategor
     blast,
     induction X,
     -- TODO how to get these eq.rec's out of the way?
+    exact sorry
   end
 
 end tqft.categories.braided_monoidal_category

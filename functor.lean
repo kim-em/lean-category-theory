@@ -8,7 +8,7 @@ open tqft.categories
 
 namespace tqft.categories.functor
 
-universe variables u1 v1 u2 v2
+universe variables u1 v1 u2 v2 u3 v3
 
 structure Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }) :=
   (onObjects   : C^.Obj → D^.Obj)
@@ -34,7 +34,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
 -- { F   := λ f, Π ⦃X Y : C^.Obj⦄, C^.Hom X Y → D^.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
 --  coe := Functor.onMorphisms }
 
-@[reducible] definition IdentityFunctor ( C: Category ) : Functor C C :=
+@[reducible] definition IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f,
@@ -42,7 +42,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
   functoriality := ♮
 }
 
-@[reducible] definition FunctorComposition { C D E : Category } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
+@[reducible] definition FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
 {
   onObjects     := λ X, G (F X),
   onMorphisms   := λ _ _ f, G^.onMorphisms (F^.onMorphisms f),
@@ -58,11 +58,13 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
 --   for `morphismWitness`, leaving the `objectWitness` goal somehow "implicit" and likely unprovable.
 --   See https://groups.google.com/d/msg/lean-user/bhStu87PjiI/vqsyr9ZABAAJ for details.
 -- If you run into this problem, use `fapply Functors_pointwise_equal` instead.
+
 @[pointwise] lemma Functors_pointwise_equal
-  { C D : Category } 
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} } 
   { F G : Functor C D } 
   ( objectWitness : ∀ X : C^.Obj, F^.onObjects X = G^.onObjects X ) 
-  ( morphismWitness : ∀ X Y : C^.Obj, ∀ f : C^.Hom X Y, ⟦ F^.onMorphisms f ⟧  = G^.onMorphisms f ) : F = G :=
+  ( morphismWitness : ∀ X Y : C^.Obj, ∀ f : C^.Hom X Y, ⟦ F^.onMorphisms f ⟧ = G^.onMorphisms f ) : F = G :=
 begin
   induction F with F_onObjects F_onMorphisms,
   induction G with G_onObjects G_onMorphisms,

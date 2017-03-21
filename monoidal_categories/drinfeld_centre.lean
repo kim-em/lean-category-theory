@@ -42,8 +42,9 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory ) : Category := {
     witness  := begin
       blast,
       -- TODO It seems both of the next `apply`s should work, and I don't understand why they fail.
-      apply bifunctor_left_identity,
-      apply MonoidalCategory.interchange_right_identity
+      -- apply bifunctor_left_identity,
+      -- apply MonoidalCategory.interchange_right_identity
+      exact sorry
     end
   },
   left_identity  := sorry,
