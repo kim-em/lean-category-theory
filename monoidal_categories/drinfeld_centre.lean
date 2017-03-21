@@ -30,11 +30,20 @@ structure HalfBraidingMorphism { C : MonoidalCategory } ( X Y : HalfBraiding C )
 
 attribute [ematch] HalfBraidingMorphism.witness
 
+@[pointwise] lemma HalfBraidingMorphism_equal
+  { C : MonoidalCategory }
+  { X Y : HalfBraiding C }
+  { f g : HalfBraidingMorphism X Y }
+  ( w : f^.morphism = g^.morphism ) : f = g :=
+  begin
+    induction f,
+    induction g,
+    blast
+  end
+
 local attribute [reducible] lift_t coe_t coe_b
 
--- set_option pp.universes true
-
--- local attribute [ematch] MonoidalCategory.interchange_right_identity  MonoidalCategory.interchange_left_identity
+local attribute [ematch] MonoidalCategory.interchange_right_identity  MonoidalCategory.interchange_left_identity
 
 definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category := {
   Obj := HalfBraiding C,
@@ -45,15 +54,21 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category :=
   },
   compose := λ P Q R f g, {
     morphism := C^.compose f^.morphism g^.morphism,
-    witness  := begin
-      blast,
-      rewrite MonoidalCategory.interchange_right_identity,
-      exact sorry
-    end
+    witness  :=
+      begin
+        blast, -- TODO It seems eblast should just finish this. Is it too many steps?
+        rewrite C^.interchange_right_identity,
+        rewrite C^.interchange_left_identity,
+        rewrite - C^.associativity,
+        rewrite f^.witness,
+        rewrite C^.associativity,
+        rewrite g^.witness,
+        rewrite C^.associativity
+      end
   },
-  left_identity  := sorry,
-  right_identity := sorry,
-  associativity  := sorry
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
 }
 
 end tqft.categories.drinfeld_centre
