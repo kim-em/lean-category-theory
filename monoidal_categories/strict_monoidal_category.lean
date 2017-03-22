@@ -17,6 +17,10 @@ structure TensorProduct_is_strict { C : Category } ( tensor : TensorProduct C ) 
   ( strictLeftTensorUnit  : ∀ X : C^.Obj, tensor^.onObjects (tensor_unit, X) = X )
   ( strictRightTensorUnit : ∀ X : C^.Obj, tensor^.onObjects (X, tensor_unit) = X )
 
+attribute [ematch] TensorProduct_is_strict.associativeOnObjects
+-- TODO why is this not a valid simplification lemma?
+-- attribute [simp,ematch] TensorProduct_is_strict.strictLeftTensorUnit TensorProduct_is_strict.strictRightTensorUnit
+
 definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalCategory :=
 {
   Obj := C^.Obj,
@@ -35,18 +39,17 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
   tensor_unit := tensor_unit,
   associator_transformation := {
     components := λ t, begin
-                        exact sorry
-                        -- -- TODO not sure why the rewrite below is failing?
-                        --  abstract {
-                        --    blast,
-                        --    dsimp [ProductCategory] at t,
-                        --    rewrite - is_strict^.associativeOnObjects,
-                        --    assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
-                        --    rewrite p,
-                        --    exact C^.identity (tensor^.onObjects (tensor^.onObjects (t^.fst), t^.snd))
-                        --  }
+                        -- PROJECT automate this.
+                        -- Really we want to be able to just write `exact ...` at the beginning, and be left with
+                        --  goals to show that really was the right type of thing, which can be automated.
+                           blast,
+                           dsimp [ProductCategory] at t,
+                           rewrite - is_strict^.associativeOnObjects,
+                           assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
+                           rewrite p,
+                           exact C^.identity (tensor^.onObjects (tensor^.onObjects t^.fst, t^.snd))
                        end,
-    naturality := sorry
+    naturality := sorry -- TODO Given how we constructed components, I have no idea how to prove naturality.
   },
   left_unitor := sorry,
   right_unitor := sorry,
@@ -74,7 +77,7 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
   compose        := λ _ _ _ f g, C^.compose f g,
   left_identity  := ♮,
   right_identity := ♮,
-  associativity  := ♮
+  associativity  := sorry
 }
 
 definition StrictTensorProduct ( C : MonoidalCategory ) : TensorProduct (ListObjectsCategory C) := {

@@ -126,6 +126,7 @@ lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F
 --     witness_1 := begin
 --                    pose p := congr_arg NaturalTransformation.components α^.witness_1,
 --                    -- TODO almost there! Note sure how to convince it that p is the answer.
+--                   --  dsimp [FunctorCategory] at p,
 --                    -- PROJECT how can we automate away this proof?
 --                    exact sorry
 --                  end,
