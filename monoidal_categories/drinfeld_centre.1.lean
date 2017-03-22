@@ -63,22 +63,22 @@ definition DrinfeldCentreAsMonoidalCategory ( C : MonoidalCategory ) : MonoidalC
     functoriality := sorry
   },
   associator_transformation := {
-    components := λ t, ⟨ C^.associator_transformation ((t.1.1^.object, t.1.2^.object), t.2^.object), ♮ ⟩,
-    naturality := ♮
+    components := λ t, ⟨ C^.associator_transformation ((t.1.1^.object, t.1.2^.object), t.2^.object), sorry ⟩,
+    naturality := sorry
   },
   associator_is_isomorphism := sorry,
   left_unitor  := {
-    components := λ X, ⟨ C^.left_unitor X^.object, ♮ ⟩,
-    naturality := ♮
+    components := λ X, ⟨ C^.left_unitor X^.object, sorry ⟩,
+    naturality := sorry
   },
   right_unitor  := {
-    components := λ X, ⟨ C^.right_unitor X^.object, ♮ ⟩,
-    naturality := ♮
+    components := λ X, ⟨ C^.right_unitor X^.object, sorry ⟩,
+    naturality := sorry
   },
   left_unitor_is_isomorphism  := sorry,
   right_unitor_is_isomorphism := sorry,
-  pentagon := ♮,
-  triangle := ♮
+  pentagon := sorry,
+  triangle := sorry
 }
 
 -- PROJECT Drinfeld centre as a braided category.
