@@ -28,16 +28,32 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
-@[reducible] definition LeftInjectionAt { D : Category } ( Z : D^.Obj ) ( C : Category ) : Functor C (C × D) :=
+@[reducible] definition RightInjectionAt { D : Category } ( Z : D^.Obj ) ( C : Category ) : Functor C (C × D) :=
 { onObjects     := λ X, (X, Z),
   onMorphisms   := λ X Y f, (f, D^.identity Z),
   identities    := ♮,
   functoriality := ♮
 }
 
-@[reducible] definition RightInjectionAt { C : Category } ( Z : C^.Obj) ( D : Category ) : Functor D (C × D) :=
+@[reducible] definition LeftInjectionAt { C : Category } ( Z : C^.Obj) ( D : Category ) : Functor D (C × D) :=
 { onObjects     := λ X, (Z, X),
   onMorphisms   := λ X Y f, (C^.identity Z, f),
+  identities    := ♮,
+  functoriality := ♮
+}
+
+@[reducible] definition LeftProjection ( C D : Category ) : Functor (C × D) C := 
+{
+  onObjects     := λ X, X.1,
+  onMorphisms   := λ X Y f, f.1,
+  identities    := ♮,
+  functoriality := ♮
+}
+
+@[reducible] definition RightProjection ( C D : Category ) : Functor (C × D) D := 
+{
+  onObjects     := λ X, X.2,
+  onMorphisms   := λ X Y f, f.2,
   identities    := ♮,
   functoriality := ♮
 }
@@ -84,11 +100,22 @@ lemma switch_twice_is_the_identity
   ( C D E: Category )
   : Functor ((C × D) × E) (C × (D × E)) :=
 {
-  onObjects     := λ X, (X^.fst^.fst, (X^.fst^.snd, X^.snd)),
-  onMorphisms   := λ _ _ f, (f^.fst^.fst, (f^.fst^.snd, f^.snd)),
+  onObjects     := λ X, (X.1.1, (X.1.2, X.2)),
+  onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2)),
   identities    := ♮,
   functoriality := ♮
 }
+
+@[reducible] definition ProductCategoryInverseAssociator
+  ( C D E: Category )
+  : Functor (C × (D × E)) ((C × D) × E) :=
+{
+  onObjects     := λ X, ((X.1, X.2.1), X.2.2),
+  onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2),
+  identities    := ♮,
+  functoriality := ♮
+}
+
 
 -- @[ematch] lemma bifunctor_left_identity
 --   { C D E : Category }

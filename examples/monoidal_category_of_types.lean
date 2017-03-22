@@ -82,7 +82,9 @@ definition SymmetricMonoidalCategoryOfTypes : SymmetricMonoidalCategory := {
    witness_1 := ♮,
    witness_2 := ♮ 
   },
-  symmetry := ♮
+  hexagon_1 := ♮,
+  hexagon_2 := ♮,
+  symmetry  := ♮
 }
 
 end tqft.categories.examples.types

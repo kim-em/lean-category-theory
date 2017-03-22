@@ -77,8 +77,8 @@ end
 
 open tactic.interactive
 
-definition CategoryOfCategoriesAndFunctors : Category := {
-  Obj := Category,
+@[reducible] definition CategoryOfCategoriesAndFunctors : Category := {
+  Obj := Category.{u1 v1},
   Hom := λ C D, Functor C D,
   identity := λ C, IdentityFunctor C,
   compose  := λ _ _ _ F G, FunctorComposition F G,

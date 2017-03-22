@@ -44,8 +44,18 @@ instance EnrichedCategory_to_Hom { V : MonoidalCategory } : has_coe_to_fun (Enri
 { F   := λ C, C^.Obj → C^.Obj → V^.Obj,
   coe := EnrichedCategory.Hom }
 
-  -- PROJECT functors, natural transformations
+structure Functor { V : MonoidalCategory } ( C D : EnrichedCategory V ) :=
+  ( onObjects : C^.Obj → D^.Obj )
+  ( onMorphisms : ∀ { X Y : C^.Obj }, V^.Hom (C X Y) (D (onObjects X) (onObjects Y)) )
+  ( identities : ∀ X : C^.Obj, V^.compose (C^.identity X) onMorphisms = D^.identity (onObjects X) )
+  ( functoriality : ∀ { X Y Z : C^.Obj }, V^.compose C^.compose (@onMorphisms X Z) = V^.compose (V^.tensorMorphisms (@onMorphisms X Y) (@onMorphisms Y Z)) D^.compose )
+
+attribute [simp,ematch] Functor.identities
+attribute [simp,ematch] Functor.functoriality
+
+  -- PROJECT natural transformations don't always exist; you need various limits!
   -- PROJECT products for categories enriched in symmetric categories
   -- PROJECT 2-categories as categories enriched in categories
+  -- PROJECT strict n-categories
 
 end tqft.categories.enriched

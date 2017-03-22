@@ -122,6 +122,8 @@ open tqft.categories.braided_monoidal_category
 --     witness_1 := ♮,
 --     witness_2 := ♮
 --   }
+--   hexagon_1 := ♮,
+--   hexagon_2 := ♮,
 -- }
 
 end tqft.categories.examples.semigroups

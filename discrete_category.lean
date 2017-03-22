@@ -6,17 +6,19 @@ import .category
 
 namespace tqft.categories
 
-open plift
+universe variables u v
+open plift -- we first plift propositional equality to Type 0,
+open ulift -- then ulift up to type v
 
-definition DiscreteCategory ( α : Type ) : Category :=
+definition DiscreteCategory ( α : Type u ) : Category.{u v} :=
 {
   Obj      := α,
-  Hom      := λ X Y, plift (X = Y),
-  identity := λ X, up rfl,
-  compose  := λ X Y Z f g, up (eq.trans (down f) (down g)),
-  left_identity  := by intros; induction f; trivial,
-  right_identity := by intros; induction f; trivial,
-  associativity  := by intros; induction f; induction g; induction h; trivial
+  Hom      := λ X Y, ulift (plift (X = Y)),
+  identity := λ X, up (up rfl),
+  compose  := λ X Y Z f g, up (up (eq.trans (down (down f)) (down (down g)))),
+  left_identity  := begin intros, induction f with f', induction f', trivial end,
+  right_identity := begin intros, induction f with f', induction f', trivial end,
+  associativity  := begin intros, trivial end
 }
 
 end tqft.categories

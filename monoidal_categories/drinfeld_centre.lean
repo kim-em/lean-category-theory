@@ -25,7 +25,6 @@ instance HalfBraiding_coercion_to_object { C : MonoidalCategory } : has_coe (Hal
 
 structure HalfBraidingMorphism { C : MonoidalCategory } ( X Y : HalfBraiding C ) :=
   (morphism : C^.Hom X Y)
-  -- Probably there is a better way to express this condition!
   (witness : ∀ Z : C^.Obj, C^.compose (X^.commutor Z) (C^.tensorMorphisms (C^.identity Z) morphism) = C^.compose (C^.tensorMorphisms morphism (C^.identity Z)) (Y^.commutor Z))
 
 attribute [ematch] HalfBraidingMorphism.witness
@@ -70,7 +69,5 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category :=
   right_identity := ♮,
   associativity  := ♮
 }
-
--- PROJECT Drinfeld centre as a monoidal category, and then as a braided category.
 
 end tqft.categories.drinfeld_centre

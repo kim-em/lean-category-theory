@@ -105,7 +105,7 @@ definition CommaCategory
   associativity  := ♮
 }
 
-definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory (fin 1)) C :=
+definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCategory unit) C :=
 {
   onObjects     := λ _, X,
   onMorphisms   := λ _ _ _, C^.identity X,
@@ -130,44 +130,40 @@ structure ExplicitCone { J C : Category } ( F: Functor J C ) :=
 
 open tqft.categories.examples.types
 
-definition Cone_agrees_with_ExplicitCone { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F)^.Obj (ExplicitCone F) := sorry
--- TODO also define the category of explicit cones
+-- PROJECT Give more straightforward definitions, and then show they agree.
+-- definition Cone_agrees_with_ExplicitCone { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F)^.Obj (ExplicitCone F) := sorry
 -- definition Cones_agrees_with_ExplicitCones { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F) (ExplicitCones F) := sorry
 
--- TODO How do we even prove 0 < 2 ??! :-)
--- We could either write a tactic for doing this, or just rely on the
--- of_nat function.  As a note, both of the following are already
--- defined, due to fin being an instance of has_zero and has_one.
---def zero : fin 2 := fin.of_nat 0
---def one  : fin 2 := fin.of_nat 1
+inductive Two : Type
+| _0 : Two
+| _1 : Two
 
-lemma zeroNotOne : 0 ≠ 1 := by trivial
+open Two
 
--- TODO This is not working: stop using fin 2?
-definition Product { C : Category } ( A B : C^.Obj ) [ c : decidable_eq (fin 2) ]:=
-  @Limit (DiscreteCategory (fin 2)) C
-  {
-    onObjects     := λ X,
-                       match X.1 with
-                         | 0 := A
-                         | 1 := B
-                         --| _ := A  -- This should never be used
-                       end,
-    onMorphisms   := λ X Y f,
-                       match (c X Y), X, Y with
-                         | is_true hc  , ⟨0, _⟩, ⟨0, _⟩ := C^.identity A
-                         | is_true hc  , ⟨1, _⟩, ⟨1, _⟩ := C^.identity B
-                         | is_true hc  , ⟨m, _⟩, ⟨n, _⟩ := sorry
-                         | is_false hnc, _     , _      := ex_nihilo (type_if_neg hnc f)
-                       end,
-    identities    := sorry,
-    functoriality := sorry
-}
+-- definition Product { C : Category } ( A B : C^.Obj ) :=
+--   @Limit (DiscreteCategory Two) C
+--   {
+--     onObjects     := λ X,
+--                        match X with
+--                          | _0 := A
+--                          | _1  := B
+--                        end,
+--     onMorphisms   := λ X Y f,
+--                        match X, Y, f with
+--                          | _0, _0, _ := C^.identity A
+--                          | _1, _1, _ := C^.identity B
+--                        end,
+--     identities    := begin
+--                        intros,
+--                        exact sorry -- TODO how do we expand out these definitions?
+--                      end,
+--     functoriality := sorry
+-- }
 
--- TODO then products, equalizers, etc.
+-- PROJECT then products, equalizers, etc.
 -- perhaps a good way to find out if these definitions are usable is to verify that products are products.
 
--- TODO ... how to handle dual notions without too much duplication?
+-- PROJECT ... how to handle dual notions without too much duplication?
 
 end tqft.categories.universal
 

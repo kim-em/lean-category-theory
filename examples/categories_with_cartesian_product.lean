@@ -2,6 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 import ..monoidal_categories.monoidal_category
+import ..discrete_category
 
 open tqft.categories
 open tqft.categories.functor
@@ -10,18 +11,42 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.monoidal_category
 
+universe variables u v
+
+set_option pp.universes true
+
 definition CategoryOfCategoriesAndFunctorsWithCartesianProduct : MonoidalCategory := {
-  CategoryOfCategoriesAndFunctors with
-  tensor      := sorry,
-  tensor_unit := sorry,
-  associator_transformation := sorry,
-  left_unitor  := sorry,
+  CategoryOfCategoriesAndFunctors.{u v} with
+  tensor      := {
+    onObjects     := λ p, ProductCategory p.1 p.2,
+    onMorphisms   := λ _ _ p, ProductFunctor p.1 p.2,
+    identities    := ♮,
+    functoriality := ♮
+  },
+  tensor_unit := DiscreteCategory.{u v} punit,
+  associator_transformation := {
+    components := λ t, ProductCategoryAssociator t.1.1 t.1.2 t.2,
+    naturality := ♮
+  },
+  left_unitor  := {
+    components := sorry, --λ p, RightProjection _ p,
+    naturality := sorry
+  },
   right_unitor := sorry,
-  pentagon := sorry,
+  pentagon := ♮,
   triangle := sorry,
-  associator_is_isomorphism   := sorry,
+  associator_is_isomorphism   := {
+    inverse := {
+      components := λ t, ProductCategoryInverseAssociator t.1.1 t.1.2 t.2,
+      naturality := ♮
+    },
+    witness_1 := ♮,
+    witness_2 := ♮
+  },
   left_unitor_is_isomorphism  := sorry,
   right_unitor_is_isomorphism := sorry
 }
+
+-- PROJECT it's symmetric
 
 end tqft.categories.monoidal_category

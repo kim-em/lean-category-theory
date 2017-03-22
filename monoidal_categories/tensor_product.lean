@@ -24,12 +24,12 @@ universe variables u v
     (left_associated_triple_tensor tensor)
     (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor tensor))
 
-@[reducible] definition LeftUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
+@[reducible] definition RightUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
   NaturalTransformation
     (FunctorComposition (RightInjectionAt I C) tensor)
     (IdentityFunctor C)
 
-@[reducible] definition RightUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
+@[reducible] definition LeftUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
   NaturalTransformation
     (FunctorComposition (LeftInjectionAt I C) tensor)
     (IdentityFunctor C)
