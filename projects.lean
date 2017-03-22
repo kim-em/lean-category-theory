@@ -1,0 +1,11 @@
+-- PROJECTS
+-- define Day convolution: the monoidal structure on FunctorCategory C D when D is monoidal.
+-- is this known: a monoidal structure on monoidal functors from C to D when D is braided?
+-- transporting structures along equivalences: e.g. given an equivalence of categories, transport a monoidal structure?
+-- equivalences can be turned into adjoint equivalences
+-- equivalences in bijection with the fully faithful essentially surjective functors (nonconstructively?)
+-- Idempotent completion as a left adjoint to the forgetful 2-functor from categories to semicategories.
+-- enriched categories!
+-- closed monoidal categories
+-- additive categories, additive envelopes
+-- the Yoneda embedding (also for enriched categories)
