@@ -54,7 +54,6 @@ attribute [reducible] cast
 
 meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute `unfoldable) and_then )
 
--- meta def blast  : tactic unit := smt_eblast >> pointwise blast -- >> unfold_something blast
 meta def blast  : tactic unit := intros >> try dsimp >> try simp >> pointwise blast >> try smt_eblast >> pointwise blast -- >> unfold_something blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
