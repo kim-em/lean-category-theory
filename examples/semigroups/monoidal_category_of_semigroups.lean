@@ -88,7 +88,7 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
     },
     witness_1 := begin
                    intros,
-                   dsimp [FunctorCategory], -- FIXME seems to run forever?
+                  --  dsimp [FunctorCategory], -- FIXME seems to run forever?
                    exact sorry
                  end,
     witness_2 := sorry
