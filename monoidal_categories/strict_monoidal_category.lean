@@ -22,43 +22,40 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 -- attribute [simp,ematch] TensorProduct_is_strict.strictLeftTensorUnit
 -- attribute [simp,ematch] TensorProduct_is_strict.strictRightTensorUnit
 
--- definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalCategory :=
--- {
---   Obj := C^.Obj,
---   Hom := λ X Y : C^.Obj, C^.Hom X Y,
---   compose := λ _ _ _ f g, C^.compose f g,
---   identity := λ X, C^.identity X,
---   left_identity := λ _ _ f, C^.left_identity f,
---   right_identity := λ _ _ f, C^.right_identity f,
---   associativity := λ _ _ _ _ f g h, C^.associativity f g h,
---   tensor := {
---     onObjects     := λ p, tensor^.onObjects p,
---     onMorphisms   := λ _ _ f, tensor^.onMorphisms f,
---     identities    := ♮,
---     functoriality := ♮
---   },
---   tensor_unit := tensor_unit,
---   associator_transformation := {
---     components := λ t, begin
---                         -- TODO Really we want to be able to just write `exact ...` at the beginning, and be left with
---                         --  goals to show that really was the right type of thing, which can be automated.
---                            blast,
---                            dsimp [ProductCategory] at t,
---                            rewrite - is_strict^.associativeOnObjects,
---                            assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
---                            rewrite p,
---                            exact C^.identity (tensor^.onObjects (tensor^.onObjects t^.fst, t^.snd))                           
---                        end,
---     naturality := sorry -- TODO Given how we constructed components, I have no idea how to prove naturality.
---   },
---   left_unitor := sorry,
---   right_unitor := sorry,
---   associator_is_isomorphism := sorry,
---   left_unitor_is_isomorphism := sorry,
---   right_unitor_is_isomorphism := sorry,
---   pentagon := sorry,
---   triangle := sorry
--- }  
+definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalCategory :=
+{
+  Obj := C^.Obj,
+  Hom := λ X Y : C^.Obj, C^.Hom X Y,
+  compose := λ _ _ _ f g, C^.compose f g,
+  identity := λ X, C^.identity X,
+  left_identity := λ _ _ f, C^.left_identity f,
+  right_identity := λ _ _ f, C^.right_identity f,
+  associativity := λ _ _ _ _ f g h, C^.associativity f g h,
+  tensor := {
+    onObjects     := λ p, tensor^.onObjects p,
+    onMorphisms   := λ _ _ f, tensor^.onMorphisms f,
+    identities    := ♮,
+    functoriality := ♮
+  },
+  tensor_unit := tensor_unit,
+  associator_transformation := {
+    components := λ t, begin
+                           refine (cast _ (C^.identity (tensor^.onObjects (tensor^.onObjects t^.fst, t^.snd)))),                          
+                           blast,
+                           rewrite - is_strict^.associativeOnObjects,
+                           assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
+                           rewrite p
+                       end,
+    naturality := sorry -- TODO Given how we constructed components, I have no idea how to prove naturality.
+  },
+  left_unitor := sorry,
+  right_unitor := sorry,
+  associator_is_isomorphism := sorry,
+  left_unitor_is_isomorphism := sorry,
+  right_unitor_is_isomorphism := sorry,
+  pentagon := sorry,
+  triangle := sorry
+}  
 
 @[reducible] definition tensorList { C : MonoidalCategory } ( X : list C^.Obj ) : C^.Obj := list.foldl C^.tensorObjects C^.tensor_unit X
 
