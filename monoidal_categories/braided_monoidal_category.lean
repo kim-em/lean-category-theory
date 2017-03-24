@@ -58,7 +58,7 @@ structure BraidedMonoidalCategory
   ( braiding: Braiding parent )
   ( hexagon_1 : Hexagon_1 braiding )
   ( hexagon_2 : Hexagon_2 braiding )
--- PROJECT a theorem showing the hexagaons hold as natural transformations
+-- PROJECT a theorem showing the hexagons hold as natural transformations
 
 instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
 

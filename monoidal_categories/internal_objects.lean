@@ -85,30 +85,30 @@ structure ModuleMorphism { C : MonoidalCategory } { A : MonoidObject C } ( X Y :
 
 attribute [ematch,simp] SemigroupModuleMorphism.compatibility
 
--- definition CategoryOfModules { C: MonoidalCategory } ( A : MonoidObject C ) : Category :=
--- {
---   Obj := ModuleObject A,
---   Hom := λ X Y, ModuleMorphism X Y,
---   identity := λ X, ⟨ C^.identity X^.module, ♮ ⟩,
---   compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, ♮ ⟩,
---   left_identity  := ♮,
---   right_identity := ♮,
---   associativity  := ♮
--- }
-
-definition CategoryOfFreeModules { C : MonoidalCategory } ( A : MonoidObject C ) : Category :=
+definition CategoryOfModules { C: MonoidalCategory } ( A : MonoidObject C ) : Category :=
 {
-  Obj := C^.Obj,
-  Hom := λ X Y, C^.Hom X (C^.tensorObjects A^.object Y),
-  identity := λ X, C^.compose (C^.left_unitor_is_isomorphism^.inverse X) (C^.tensorMorphisms A^.unit (C^.identity X)),
-  compose := λ _ _ Z f g, C^.compose (C^.compose (C^.compose f (C^.tensorMorphisms (C^.identity A^.object) g)) (C^.inverse_associator A^.object A^.object Z)) (C^.tensorMorphisms A^.multiplication (C^.identity Z)),
-  left_identity := begin
-                    --  blast -- TODO this seems to run forever
-                    exact sorry
-                   end,
-  right_identity := sorry,
-  associativity := sorry
+  Obj := ModuleObject A,
+  Hom := λ X Y, ModuleMorphism X Y,
+  identity := λ X, ⟨ C^.identity X^.module, ♮ ⟩,
+  compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, begin blast, end ⟩,
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
 }
+
+-- definition CategoryOfFreeModules { C : MonoidalCategory } ( A : MonoidObject C ) : Category :=
+-- {
+--   Obj := C^.Obj,
+--   Hom := λ X Y, C^.Hom X (C^.tensorObjects A^.object Y),
+--   identity := λ X, C^.compose (C^.left_unitor_is_isomorphism^.inverse X) (C^.tensorMorphisms A^.unit (C^.identity X)),
+--   compose := λ _ _ Z f g, C^.compose (C^.compose (C^.compose f (C^.tensorMorphisms (C^.identity A^.object) g)) (C^.inverse_associator A^.object A^.object Z)) (C^.tensorMorphisms A^.multiplication (C^.identity Z)),
+--   left_identity := begin
+--                     -- blast, -- TODO this seems to run forever
+--                     exact sorry
+--                    end,
+--   right_identity := sorry,
+--   associativity := sorry
+-- }
 
 
 -- PROJECT show that after idempotent completing the category of free modules we get the category of modules??

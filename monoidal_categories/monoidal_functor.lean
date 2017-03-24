@@ -22,6 +22,10 @@ structure MonoidalFunctor ( C D : MonoidalCategory ) :=
   ( left_identity  : ∀ X : C^.Obj, D^.compose (tensorator (C^.tensor_unit, X)) (D^.compose (D^.tensorMorphisms identerator^.morphism (D^.identity (functor X))) (D^.left_unitor  (functor X))) = functor^.onMorphisms (C^.left_unitor X)  )
   ( right_identity : ∀ X : C^.Obj, D^.compose (tensorator (X, C^.tensor_unit)) (D^.compose (D^.tensorMorphisms (D^.identity (functor X)) identerator^.morphism) (D^.right_unitor (functor X))) = functor^.onMorphisms (C^.right_unitor X) )
   
+attribute [ematch,simp] MonoidalFunctor.left_identity
+attribute [ematch,simp] MonoidalFunctor.right_identity
+attribute [ematch]      MonoidalFunctor.associativity
+
 instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_coe (MonoidalFunctor C D) (Functor C D) :=
   { coe := MonoidalFunctor.functor }
 

@@ -24,13 +24,7 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 
 definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalCategory :=
 {
-  Obj := C^.Obj,
-  Hom := λ X Y : C^.Obj, C^.Hom X Y,
-  compose := λ _ _ _ f g, C^.compose f g,
-  identity := λ X, C^.identity X,
-  left_identity := λ _ _ f, C^.left_identity f,
-  right_identity := λ _ _ f, C^.right_identity f,
-  associativity := λ _ _ _ _ f g h, C^.associativity f g h,
+  C with
   tensor := {
     onObjects     := λ p, tensor^.onObjects p,
     onMorphisms   := λ _ _ f, tensor^.onMorphisms f,
@@ -40,7 +34,8 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
   tensor_unit := tensor_unit,
   associator_transformation := {
     components := λ t, begin
-                           refine (cast _ (C^.identity (tensor^.onObjects (tensor^.onObjects t^.fst, t^.snd)))),                          
+                           refine (cast _ (C^.identity (tensor^.onObjects (tensor^.onObjects t^.fst, t^.snd)))),  
+                           -- TODO automate the rest                        
                            blast,
                            rewrite - is_strict^.associativeOnObjects,
                            assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
