@@ -134,36 +134,50 @@ open tqft.categories.examples.types
 -- definition Cone_agrees_with_ExplicitCone { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F)^.Obj (ExplicitCone F) := sorry
 -- definition Cones_agrees_with_ExplicitCones { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F) (ExplicitCones F) := sorry
 
+-- Could easily replace this with bool, if it were worthwhile
 inductive Two : Type
 | _0 : Two
 | _1 : Two
 
 open Two
 
--- definition Product { C : Category } ( A B : C^.Obj ) :=
---   @Limit (DiscreteCategory Two) C
---   {
---     onObjects     := λ X,
---                        match X with
---                          | _0 := A
---                          | _1  := B
---                        end,
---     onMorphisms   := λ X Y f,
---                        match X, Y, f with
---                          | _0, _0, _ := C^.identity A
---                          | _1, _1, _ := C^.identity B
---                        end,
---     identities    := begin
---                        intros,
---                        exact sorry -- TODO how do we expand out these definitions?
---                      end,
---     functoriality := sorry
--- }
+definition Product { C : Category } ( A B : C^.Obj ) :=
+  @Limit (DiscreteCategory Two) C
+  {
+    onObjects     := λ X,
+                       match X with
+                         | _0 := A
+                         | _1 := B
+                       end,
+    onMorphisms   := λ X Y f,
+                       match X, Y, f with
+                         | _0, _0, _ := C^.identity A
+                         | _1, _1, _ := C^.identity B
+                       end,
+    identities    := begin
+                       intros, induction X,
+                       repeat { blast },
+                     end,
+    functoriality := λ X Y Z f g,
+                       match X, Y, Z, f, g with
+                         | _0, _0, _0, _, _ :=
+                           begin
+                             unfold Product._match_2,
+                             blast
+                           end
+                         | _1, _1, _1, _, _ :=
+                           begin
+                             unfold Product._match_2,
+                             blast
+                           end
+                       end
+}
 
 -- PROJECT then products, equalizers, etc.
 -- perhaps a good way to find out if these definitions are usable is to verify that products are products.
 
 -- PROJECT ... how to handle dual notions without too much duplication?
+
 
 end tqft.categories.universal
 
