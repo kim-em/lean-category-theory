@@ -140,30 +140,62 @@ inductive Two : Type
 
 open Two
 
--- definition Product { C : Category } ( A B : C^.Obj ) :=
---   @Limit (DiscreteCategory Two) C
---   {
---     onObjects     := λ X,
---                        match X with
---                          | _0 := A
---                          | _1  := B
---                        end,
---     onMorphisms   := λ X Y f,
---                        match X, Y, f with
---                          | _0, _0, _ := C^.identity A
---                          | _1, _1, _ := C^.identity B
---                        end,
---     identities    := begin
---                        intros,
---                        exact sorry -- TODO how do we expand out these definitions?
---                      end,
---     functoriality := sorry
--- }
+definition Product { C : Category } ( A B : C^.Obj ) :=
+  @Limit (DiscreteCategory Two) C
+  {
+    onObjects     := λ X,
+                       match X with
+                         | _0 := A
+                         | _1  := B
+                       end,
+    onMorphisms   := λ X Y f,
+                       match X, Y, f with
+                         | _0, _0, _ := C^.identity A
+                         | _1, _1, _ := C^.identity B
+                       end,
+    identities    := begin
+                       intros, induction X,
+                       repeat { blast },
+                     end,
+    functoriality := λ X Y Z f g,
+                       match X, Y, Z, f, g with
+                         | _0, _0, _0, _, _ :=
+                           begin
+                             unfold Product._match_2,
+                             blast
+                           end
+                         | _1, _1, _1, _, _ :=
+                           begin
+                             unfold Product._match_2,
+                             blast
+                           end
+                       end
+}
 
 -- PROJECT then products, equalizers, etc.
 -- perhaps a good way to find out if these definitions are usable is to verify that products are products.
 
 -- PROJECT ... how to handle dual notions without too much duplication?
+
+
+-- TODO This breaks, with a mysterious error. Any ideas?
+--definition Product { C : Category } ( A B : C^.Obj ) :=
+--  @Limit (DiscreteCategory (fin 2)) C
+--  {
+--    onObjects     := λ X, match X.1 with
+--                            | 0 := A
+--                            | 1 := B
+--                            | _ := A  -- This should never be used
+--                          end,
+--    onMorphisms   := λ X Y f,
+--                       have h : X.1 = Y.1, from fin.veq_of_eq (plift.down f),
+--                       match (fin.of_nat X.1).1 with
+--                         | 0 := C^.identity A
+--                         | 1 := C^.identity B
+--                       end,
+--    identities    := sorry,
+--    functoriality := sorry
+--}
 
 end tqft.categories.universal
 
