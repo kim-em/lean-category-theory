@@ -134,6 +134,7 @@ open tqft.categories.examples.types
 -- definition Cone_agrees_with_ExplicitCone { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F)^.Obj (ExplicitCone F) := sorry
 -- definition Cones_agrees_with_ExplicitCones { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F) (ExplicitCones F) := sorry
 
+-- Could easily replace this with bool, if it were worthwhile
 inductive Two : Type
 | _0 : Two
 | _1 : Two
@@ -146,7 +147,7 @@ definition Product { C : Category } ( A B : C^.Obj ) :=
     onObjects     := λ X,
                        match X with
                          | _0 := A
-                         | _1  := B
+                         | _1 := B
                        end,
     onMorphisms   := λ X Y f,
                        match X, Y, f with
@@ -177,25 +178,6 @@ definition Product { C : Category } ( A B : C^.Obj ) :=
 
 -- PROJECT ... how to handle dual notions without too much duplication?
 
-
--- TODO This breaks, with a mysterious error. Any ideas?
---definition Product { C : Category } ( A B : C^.Obj ) :=
---  @Limit (DiscreteCategory (fin 2)) C
---  {
---    onObjects     := λ X, match X.1 with
---                            | 0 := A
---                            | 1 := B
---                            | _ := A  -- This should never be used
---                          end,
---    onMorphisms   := λ X Y f,
---                       have h : X.1 = Y.1, from fin.veq_of_eq (plift.down f),
---                       match (fin.of_nat X.1).1 with
---                         | 0 := C^.identity A
---                         | 1 := C^.identity B
---                       end,
---    identities    := sorry,
---    functoriality := sorry
---}
 
 end tqft.categories.universal
 
