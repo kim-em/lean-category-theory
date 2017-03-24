@@ -46,17 +46,21 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
 
 open tqft.categories.equivalence
 
-lemma IdempotentCompletion_idempotent ( C : Category ) :
-  Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
-    sorry
+-- PROJECT prove these lemmas about idempotent completion
 
-definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
-  Functor (IdempotentCompletion C) (IdempotentCompletion D) := 
-    sorry
+-- lemma IdempotentCompletion_idempotent ( C : Category ) :
+--   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
+--     sorry
 
-lemma Functor_from_IdempotentCompletion_determined_by_restriction 
-  { C D : Category } ( F : Functor (IdempotentCompletion C) (IdempotentCompletion D) ) :
-    NaturalIsomorphism (extend_Functor_to_IdempotentCompletion (restrict_Functor_from_IdempotentCompletion F)) F := 
-      sorry
+-- definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
+--   Functor (IdempotentCompletion C) (IdempotentCompletion D) := 
+--     sorry
+
+-- lemma Functor_from_IdempotentCompletion_determined_by_restriction 
+--   { C D : Category } ( F : Functor (IdempotentCompletion C) (IdempotentCompletion D) ) :
+--     NaturalIsomorphism (extend_Functor_to_IdempotentCompletion (restrict_Functor_from_IdempotentCompletion F)) F := 
+--       sorry
+
+-- PROJECT idempotent completion left adjoint to the forgetful functor from categories to semicategories?
 
 end tqft.categories.idempotent_completion
