@@ -46,8 +46,6 @@ open tqft.categories.monoidal_category
 
 open tqft.categories.products
 
-local attribute [reducible] lift_t coe_t coe_b
-
 definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
   CategoryOfSemigroups.{u} with
   tensor               := {

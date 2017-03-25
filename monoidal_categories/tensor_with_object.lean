@@ -12,8 +12,6 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
-local attribute [reducible] lift_t coe_t coe_b
-
 local attribute [ematch] MonoidalCategory.interchange_right_identity
 
 @[reducible] definition tensor_on_left { C: MonoidalCategory.{u v} } ( Z: C^.Obj ) : Functor.{u v u v} C C :=

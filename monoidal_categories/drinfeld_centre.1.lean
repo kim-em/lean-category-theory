@@ -11,7 +11,6 @@ open tqft.categories.monoidal_category
 
 namespace tqft.categories.drinfeld_centre
 
-local attribute [reducible] lift_t coe_t coe_b
 local attribute [ematch] MonoidalCategory.interchange_right_identity  MonoidalCategory.interchange_left_identity
 
 -- definition DrinfeldCentreAsMonoidalCategory ( C : MonoidalCategory ) : MonoidalCategory := {

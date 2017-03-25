@@ -49,11 +49,11 @@ attribute [ematch] MonoidalCategory.pentagon
 @[reducible] definition MonoidalCategory.tensorObjects   ( C : MonoidalCategory ) ( X Y : C^.Obj ) : C^.Obj := C^.tensor ⟨X, Y⟩
 @[reducible] definition MonoidalCategory.tensorMorphisms ( C : MonoidalCategory ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (C^.tensor ⟨W, Y⟩) (C^.tensor ⟨X, Z⟩) := C^.tensor^.onMorphisms ⟨f, g⟩
 
-definition MonoidalCategory.associator
+@[reducible] definition MonoidalCategory.associator
   ( C : MonoidalCategory )
   ( X Y Z : C^.Obj ) : C^.Hom (C^.tensorObjects (C^.tensorObjects X Y) Z) (C^.tensorObjects X (C^.tensorObjects Y Z)) :=
   C^.associator_transformation ⟨⟨X, Y⟩, Z⟩
-definition MonoidalCategory.inverse_associator
+@[reducible] definition MonoidalCategory.inverse_associator
   ( C : MonoidalCategory )
   ( X Y Z : C^.Obj ) : C^.Hom (C^.tensorObjects X (C^.tensorObjects Y Z)) (C^.tensorObjects (C^.tensorObjects X Y) Z) :=
   C^.associator_is_isomorphism^.inverse ⟨⟨X, Y⟩, Z⟩
@@ -90,7 +90,55 @@ lemma MonoidalCategory.interchange_right_identity
   @Functor.onMorphisms _ _ C^.tensor ⟨Z, W⟩ ⟨Z, Y⟩ ⟨C^.identity Z, C^.compose f g⟩
     = C^.compose (C^.tensorMorphisms (C^.identity Z) f) (C^.tensorMorphisms (C^.identity Z) g) := ♮
 
-@[simp] lemma TensorProduct_identities
+@[ematch] lemma MonoidalCategory.interchange_identities
+  ( C : MonoidalCategory )
+  { W X Y Z : C^.Obj }
+  ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) :
+  C^.compose (C^.tensorMorphisms (C^.identity Y) f) (C^.tensorMorphisms g (C^.identity X))
+    = C^.compose (C^.tensorMorphisms g (C^.identity W)) (C^.tensorMorphisms (C^.identity Z) f) := ♮
+
+-- This is just C^.tensor^.identities, but because of inheritance issues it is sometimes hard to apply directly.
+lemma TensorProduct_identities
+  { C : MonoidalCategory }
+  ( X Y : C^.Obj ) :
+  C^.tensorMorphisms (C^.identity X) (C^.identity Y) = C^.identity (C^.tensorObjects X Y) := ♮
+
+#print NaturalTransformation.naturality
+
+section
+
+local attribute [semireducible] left_associated_triple_tensor right_associated_triple_tensor
+
+lemma MonoidalCategory.inverse_associator_naturality
+  { C : MonoidalCategory }
+  { U V W X Y Z : C^.Obj }
+  (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
+    C^.compose
+      (C^.inverse_associator U W Y)
+      (@Functor.onMorphisms _ _ (left_associated_triple_tensor C^.tensor) ((U, W), Y) ((V, X), Z) ((f, g), h))
+    = C^.compose
+      (@Functor.onMorphisms _ _ (right_associated_triple_tensor C^.tensor) (U, (W, Y)) (V, (X, Z)) (f, (g, h))) 
+      (C^.inverse_associator V X Z) :=
+  begin
+    dsimp,
+    pose p := @NaturalTransformation.naturality _ _ _ _ ((C^.associator_is_isomorphism)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h),
+    simp at p,
+  end
+
+end
+
+lemma MonoidalCategory.inverse_associator_naturality'
+  { C : MonoidalCategory }
+  { U V W X Y Z : C^.Obj }
+  (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
+    C^.compose
+      (C^.inverse_associator U W Y)
+      (C^.tensorMorphisms (C^.tensorMorphisms f g) h)
+    = C^.compose
+      (C^.tensorMorphisms f (C^.tensorMorphisms g h))
+      (C^.inverse_associator V X Z) := sorry
+
+@[simp] lemma TensorProduct_two_identities
   { C : MonoidalCategory }
   ( X Y : C^.Obj ) : @Functor.onMorphisms _ _ C^.tensor ⟨X, Y⟩ ⟨X, Y⟩ ⟨C^.identity X, C^.identity Y⟩ = C^.identity (C^.tensor^.onObjects ⟨X, Y⟩) := ♮
 

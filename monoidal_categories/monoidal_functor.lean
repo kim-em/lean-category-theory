@@ -55,8 +55,6 @@ instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
   { coe := MonoidalNaturalTransformation.natural_transformation }
 
-local attribute [reducible] lift_t coe_t coe_b
-
 @[reducible] definition IdentityMonoidalNaturalTransformation
   { C D : MonoidalCategory }
   ( F : MonoidalFunctor C D ) : MonoidalNaturalTransformation F F :=

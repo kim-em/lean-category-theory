@@ -10,8 +10,6 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.monoidal_category
 
-local attribute [reducible] lift_t coe_t coe_b
-
 lemma pentagon_in_terms_of_natural_transformations
   ( C : MonoidalCategory ) :
   pentagon_3step C = pentagon_2step C :=

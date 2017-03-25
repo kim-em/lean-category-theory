@@ -51,6 +51,7 @@ namespace tactic.interactive
 end tactic.interactive
 
 attribute [reducible] cast
+attribute [reducible] lift_t coe_t coe_b
 
 meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute `unfoldable) and_then )
 

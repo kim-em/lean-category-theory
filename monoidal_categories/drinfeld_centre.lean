@@ -40,8 +40,6 @@ attribute [ematch] HalfBraidingMorphism.witness
     blast
   end
 
-local attribute [reducible] lift_t coe_t coe_b
-
 local attribute [ematch] MonoidalCategory.interchange_right_identity  MonoidalCategory.interchange_left_identity
 
 definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category := {
