@@ -31,9 +31,10 @@ definition CategoryOfFreeModules { C : MonoidalCategory } ( A : MonoidObject C )
                     -- We can't just rewrite along - C^.tensor^.identities, because it is confused about C as a category vs C as a monoidal category.
                     rewrite - TensorProduct_identities,
                     dsimp,
-                    -- dunfold MonoidalCategory.inverse_associator,
-                    -- dsimp,
-                    rewrite (C^.associator_is_isomorphism)^.inverse^.naturality,
+                    -- FIXME it seems naturality of the associator is unusable.
+                    -- I'm working on `lemma MonoidalCategory.inverse_associator_naturality` in monoidal_category.lean.
+                    -- rewrite (C^.associator_is_isomorphism)^.inverse^.naturality,
+                    
                     -- blast, -- TODO this seems to run forever
                     exact sorry
                    end,

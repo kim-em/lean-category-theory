@@ -103,40 +103,39 @@ lemma TensorProduct_identities
   ( X Y : C^.Obj ) :
   C^.tensorMorphisms (C^.identity X) (C^.identity Y) = C^.identity (C^.tensorObjects X Y) := ♮
 
-#print NaturalTransformation.naturality
+-- TODO I'm stuck waiting on https://groups.google.com/d/msg/lean-user/2mqdOxB-10M/2uWGbRhqCQAJ
+-- section
 
-section
+-- local attribute [semireducible] left_associated_triple_tensor right_associated_triple_tensor
 
-local attribute [semireducible] left_associated_triple_tensor right_associated_triple_tensor
+-- lemma MonoidalCategory.inverse_associator_naturality
+--   { C : MonoidalCategory }
+--   { U V W X Y Z : C^.Obj }
+--   (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
+--     C^.compose
+--       (C^.inverse_associator U W Y)
+--       (@Functor.onMorphisms _ _ (left_associated_triple_tensor C^.tensor) ((U, W), Y) ((V, X), Z) ((f, g), h))
+--     = C^.compose
+--       (@Functor.onMorphisms _ _ (right_associated_triple_tensor C^.tensor) (U, (W, Y)) (V, (X, Z)) (f, (g, h))) 
+--       (C^.inverse_associator V X Z) :=
+--   begin
+--     dsimp,
+--     pose p := @NaturalTransformation.naturality _ _ _ _ ((C^.associator_is_isomorphism)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h),
+--     simp at p,
+--   end
 
-lemma MonoidalCategory.inverse_associator_naturality
-  { C : MonoidalCategory }
-  { U V W X Y Z : C^.Obj }
-  (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
-    C^.compose
-      (C^.inverse_associator U W Y)
-      (@Functor.onMorphisms _ _ (left_associated_triple_tensor C^.tensor) ((U, W), Y) ((V, X), Z) ((f, g), h))
-    = C^.compose
-      (@Functor.onMorphisms _ _ (right_associated_triple_tensor C^.tensor) (U, (W, Y)) (V, (X, Z)) (f, (g, h))) 
-      (C^.inverse_associator V X Z) :=
-  begin
-    dsimp,
-    pose p := @NaturalTransformation.naturality _ _ _ _ ((C^.associator_is_isomorphism)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h),
-    simp at p,
-  end
+-- end
 
-end
-
-lemma MonoidalCategory.inverse_associator_naturality'
-  { C : MonoidalCategory }
-  { U V W X Y Z : C^.Obj }
-  (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
-    C^.compose
-      (C^.inverse_associator U W Y)
-      (C^.tensorMorphisms (C^.tensorMorphisms f g) h)
-    = C^.compose
-      (C^.tensorMorphisms f (C^.tensorMorphisms g h))
-      (C^.inverse_associator V X Z) := sorry
+-- lemma MonoidalCategory.inverse_associator_naturality'
+--   { C : MonoidalCategory }
+--   { U V W X Y Z : C^.Obj }
+--   (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
+--     C^.compose
+--       (C^.inverse_associator U W Y)
+--       (C^.tensorMorphisms (C^.tensorMorphisms f g) h)
+--     = C^.compose
+--       (C^.tensorMorphisms f (C^.tensorMorphisms g h))
+--       (C^.inverse_associator V X Z) := sorry
 
 @[simp] lemma TensorProduct_two_identities
   { C : MonoidalCategory }
