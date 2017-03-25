@@ -34,14 +34,18 @@ definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorPr
   tensor_unit := tensor_unit,
   associator_transformation := {
     components := λ t, begin
-                           refine (cast _ (C^.identity (tensor^.onObjects (tensor^.onObjects t^.fst, t^.snd)))),  
-                           -- TODO automate the rest                        
-                           blast,
-                           rewrite - is_strict^.associativeOnObjects,
-                           assert p : ((t^.fst)^.fst, (t^.fst)^.snd) = t^.fst, blast,
-                           rewrite p
+                           induction t with pq r,
+                           induction pq with p q,
+                           refine (cast _ (C^.identity (tensor^.onObjects (tensor^.onObjects (p, q), r)))),  
+                           blast, -- TODO Why doesn't blast do the next rewrite?
+                           rewrite - is_strict^.associativeOnObjects
                        end,
-    naturality := sorry -- TODO Given how we constructed components, I have no idea how to prove naturality.
+    naturality := begin
+                    -- TODO Given how we constructed components, I have no idea how to prove naturality.
+                    intros,
+                    dsimp,
+                    exact sorry
+                  end
   },
   left_unitor := sorry,
   right_unitor := sorry,
