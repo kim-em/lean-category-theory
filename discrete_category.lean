@@ -8,7 +8,7 @@ namespace tqft.categories
 
 universe variables u v
 open plift -- we first plift propositional equality to Type 0,
-open ulift -- then ulift up to type v
+open ulift -- then ulift up to Type v
 
 definition DiscreteCategory ( α : Type u ) : Category.{u v} :=
 {

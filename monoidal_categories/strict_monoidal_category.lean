@@ -22,6 +22,8 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 -- attribute [simp,ematch] TensorProduct_is_strict.strictLeftTensorUnit
 -- attribute [simp,ematch] TensorProduct_is_strict.strictRightTensorUnit
 
+-- set_option pp.implicit true
+
 definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalCategory :=
 {
   C with
