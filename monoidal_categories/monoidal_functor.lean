@@ -31,69 +31,110 @@ instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_co
 
 -- PROJECT composition of MonoidalFunctors
 
-structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : MonoidalFunctor C D ) :=
-  ( natural_transformation : NaturalTransformation F^.functor G^.functor )
-  ( compatibility_with_tensor : ∀ X Y : C^.Obj, D^.compose (F^.tensorator (X, Y)) (D^.tensorMorphisms (natural_transformation X) (natural_transformation Y)) = D^.compose (natural_transformation (C^.tensorObjects X Y)) (G^.tensorator (X, Y)) )
-  ( compatibility_with_unit   : D^.compose (natural_transformation C^.tensor_unit) G^.identerator^.morphism = F^.identerator^.morphism )
+-- PROJECT Automation should construct even the tensorator! Perhaps we need to mark certain transformations and isomorphisms as allowed.
 
-attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
-attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_unit
+-- open tactic
+-- open interactive
+-- meta def precompose { C : Category } { X Y : C^.Obj } ( f : C X Y ) : tactic unit := refine { exact (C^.compose f _) }
 
-@[pointwise] lemma MonoidalNaturalTransformation_componentwise_equal
-  { C D : MonoidalCategory }
-  { F G : MonoidalFunctor C D }
-  ( α β : MonoidalNaturalTransformation F G )
-  ( w : α^.natural_transformation = β^.natural_transformation ) : α = β :=
-  begin
-    induction α with α_components α_naturality,
-    induction β with β_components β_naturality,
-    blast
-  end
-
-instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
-  { C D : MonoidalCategory }
-  ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
-  { coe := MonoidalNaturalTransformation.natural_transformation }
-
-@[reducible] definition IdentityMonoidalNaturalTransformation
-  { C D : MonoidalCategory }
-  ( F : MonoidalFunctor C D ) : MonoidalNaturalTransformation F F :=
-    ⟨ IdentityNaturalTransformation F^.functor, ♮, ♮ ⟩
-
-@[reducible] definition vertical_composition_of_MonoidalNaturalTransformations
-  { C D : MonoidalCategory } 
-  { F G H : MonoidalFunctor C D } 
-  ( α : MonoidalNaturalTransformation F G ) 
-  ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
+#check FunctorComposition_associativity
+set_option pp.all true
+definition MonoidalFunctorComposition { C D E : MonoidalCategory } ( F : MonoidalFunctor C D ) ( G : MonoidalFunctor D E ) : MonoidalFunctor C E :=
 {
-  natural_transformation    := vertical_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
-  compatibility_with_tensor := begin
-                                abstract {
-                                  -- TODO It seems that one round of blast should succeed here!
-                                  blast,
-                                  rewrite D^.interchange,
-                                  rewrite - D^.associativity,
-                                  rewrite α^.compatibility_with_tensor,
-                                  rewrite D^.associativity,
-                                  rewrite β^.compatibility_with_tensor,
-                                  blast
-                                }
-                               end,
-  compatibility_with_unit   := ♮                               
+  functor        := @FunctorComposition C D E F G,
+  tensorator     := {
+    morphism  := begin
+                   rewrite FunctorComposition_associativity,
+                   rewrite FunctorComposition_associativity,
+                   rewrite FunctorComposition_associativity,
+                 end,
+    inverse   := sorry,
+    witness_1 := sorry,
+    witness_2 := sorry
+  },
+  associativity  := sorry,
+  identerator    := sorry,
+  left_identity  := sorry,
+  right_identity := sorry
 }
 
--- PROJECT horizontal_composition_of_MonoidalNaturalTransformations
+-- structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : MonoidalFunctor C D ) :=
+--   ( natural_transformation : NaturalTransformation F^.functor G^.functor )
+--   ( compatibility_with_tensor : ∀ X Y : C^.Obj, D^.compose (F^.tensorator (X, Y)) (D^.tensorMorphisms (natural_transformation X) (natural_transformation Y)) = D^.compose (natural_transformation (C^.tensorObjects X Y)) (G^.tensorator (X, Y)) )
+--   ( compatibility_with_unit   : D^.compose (natural_transformation C^.tensor_unit) G^.identerator^.morphism = F^.identerator^.morphism )
 
-definition CategoryOfMonoidalFunctors ( C D : MonoidalCategory ) : Category :=
-{
-  Obj := MonoidalFunctor C D,
-  Hom := MonoidalNaturalTransformation,
-  identity := IdentityMonoidalNaturalTransformation,
-  compose  := λ _ _ _ α β, vertical_composition_of_MonoidalNaturalTransformations α β,
+-- attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
+-- attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_unit
 
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
-}
+-- @[pointwise] lemma MonoidalNaturalTransformation_componentwise_equal
+--   { C D : MonoidalCategory }
+--   { F G : MonoidalFunctor C D }
+--   ( α β : MonoidalNaturalTransformation F G )
+--   ( w : α^.natural_transformation = β^.natural_transformation ) : α = β :=
+--   begin
+--     induction α with α_components α_naturality,
+--     induction β with β_components β_naturality,
+--     blast
+--   end
+
+-- instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
+--   { C D : MonoidalCategory }
+--   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
+--   { coe := MonoidalNaturalTransformation.natural_transformation }
+
+-- @[reducible] definition IdentityMonoidalNaturalTransformation
+--   { C D : MonoidalCategory }
+--   ( F : MonoidalFunctor C D ) : MonoidalNaturalTransformation F F :=
+--     ⟨ IdentityNaturalTransformation F^.functor, ♮, ♮ ⟩
+
+-- @[reducible] definition vertical_composition_of_MonoidalNaturalTransformations
+--   { C D : MonoidalCategory } 
+--   { F G H : MonoidalFunctor C D } 
+--   ( α : MonoidalNaturalTransformation F G ) 
+--   ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
+-- {
+--   natural_transformation    := vertical_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
+--   compatibility_with_tensor := begin
+--                                 -- abstract {
+--                                   -- TODO It seems that one round of blast should succeed here!
+--                                   -- blast,
+--                                   intros, dsimp,
+--                                   rewrite D^.interchange,
+--                                   rewrite - D^.associativity,
+--                                   rewrite α^.compatibility_with_tensor,
+--                                   -- blast, -- This blast seems to cause the CPU to pin at maximum, and start ignoring earlier edits.
+--                                   rewrite D^.associativity,
+--                                   rewrite β^.compatibility_with_tensor,
+--                                   blast
+--                                 -- }
+--                                end,
+--   compatibility_with_unit   := ♮                               
+-- }
+
+-- -- PROJECT horizontal_composition_of_MonoidalNaturalTransformations
+-- @[reducible] definition horizontal_composition_of_MonoidalNaturalTransformations
+--   { C D E : MonoidalCategory } 
+--   { F G : MonoidalFunctor C D } 
+--   { H K : MonoidalFunctor D E } 
+--   ( α : MonoidalNaturalTransformation F G ) 
+--   ( β : MonoidalNaturalTransformation H K ) : MonoidalNaturalTransformation (MonoidalFunctorComposition F H) (MonoidalFunctorComposition G K) :=
+-- {
+--   natural_transformation    := horizontal_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
+--   compatibility_with_tensor := sorry,
+--   compatibility_with_unit   := sorry
+-- }
+
+
+-- definition CategoryOfMonoidalFunctors ( C D : MonoidalCategory ) : Category :=
+-- {
+--   Obj := MonoidalFunctor C D,
+--   Hom := MonoidalNaturalTransformation,
+--   identity := IdentityMonoidalNaturalTransformation,
+--   compose  := λ _ _ _ α β, vertical_composition_of_MonoidalNaturalTransformations α β,
+
+--   left_identity  := ♮,
+--   right_identity := ♮,
+--   associativity  := ♮
+-- }
 
 end tqft.categories.monoidal_functor
