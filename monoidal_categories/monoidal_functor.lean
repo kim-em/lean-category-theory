@@ -39,6 +39,7 @@ instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_co
 
 #check FunctorComposition_associativity
 -- set_option pp.all true
+-- waiting on https://github.com/leanprover/lean/issues/1492
 definition MonoidalFunctorComposition { C D E : MonoidalCategory } ( F : MonoidalFunctor C D ) ( G : MonoidalFunctor D E ) : MonoidalFunctor C E :=
 {
   functor        := @FunctorComposition C D E F G,
