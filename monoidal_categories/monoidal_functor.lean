@@ -38,7 +38,7 @@ instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_co
 -- meta def precompose { C : Category } { X Y : C^.Obj } ( f : C X Y ) : tactic unit := refine { exact (C^.compose f _) }
 
 #check FunctorComposition_associativity
-set_option pp.all true
+-- set_option pp.all true
 definition MonoidalFunctorComposition { C D E : MonoidalCategory } ( F : MonoidalFunctor C D ) ( G : MonoidalFunctor D E ) : MonoidalFunctor C E :=
 {
   functor        := @FunctorComposition C D E F G,

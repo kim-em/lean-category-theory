@@ -37,6 +37,7 @@ open lean.parser
 open interactive
 
 namespace tactic.interactive
+  -- Thanks to Sebastian Ullrich: https://groups.google.com/d/msg/lean-user/PXiYQEZjLpE/SqYiwiJoEAAJ
   meta def force (t : itactic) : tactic unit :=
   do gs ← get_goals,
      t,
