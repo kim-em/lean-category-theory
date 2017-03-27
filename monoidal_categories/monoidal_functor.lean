@@ -106,7 +106,7 @@ definition MonoidalFunctorComposition { C D E : MonoidalCategory } ( F : Monoida
 --                                   -- blast, -- This blast seems to cause the CPU to pin at maximum, and start ignoring earlier edits.
 --                                   rewrite D^.associativity,
 --                                   rewrite β^.compatibility_with_tensor,
---                                   blast
+--                                   blast -- What is this blast even doing? It seems dsimp should be enough.
 --                                 -- }
 --                                end,
 --   compatibility_with_unit   := ♮                               
