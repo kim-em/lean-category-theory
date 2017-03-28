@@ -38,6 +38,7 @@ definition CategoryOfFreeModules { C : MonoidalCategory } ( A : MonoidObject C )
                     -- We can't just rewrite along - C^.tensor^.identities, because it is confused about C as a category vs C as a monoidal category?
                     rewrite - TensorProduct.identities,
                     dsimp,
+                    -- FIXME waiting on https://groups.google.com/d/msg/lean-user/epIwoOxtUn8/a8II-QBMCgAJ
                     rewrite MonoidalCategory.inverse_associator_naturality_0 A^.unit (C^.identity A^.object) (C^.identity Y),
                     
                     exact sorry

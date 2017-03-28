@@ -10,6 +10,8 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.monoidal_category
 
+#check MonoidalCategory.pentagon
+
 lemma pentagon_in_terms_of_natural_transformations
   ( C : MonoidalCategory ) :
   pentagon_3step C = pentagon_2step C :=
@@ -18,7 +20,7 @@ lemma pentagon_in_terms_of_natural_transformations
     induction X with PQR S,
     induction PQR with PQ R,
     induction PQ with P Q,
-    -- -- TODO ideally ematch would take care of this for us.
+    -- TODO ideally ematch would take care of this for us.
     pose p := C^.pentagon P Q R S,
     exact p
   end

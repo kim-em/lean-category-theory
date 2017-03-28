@@ -46,6 +46,9 @@ open tqft.categories.monoidal_category
 
 open tqft.categories.products
 
+set_option trace.dsimplify true
+set_option trace.debug.dsimplify true
+
 definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
   CategoryOfSemigroups.{u} with
   tensor               := {
@@ -86,7 +89,8 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
     },
     witness_1 := begin
                    intros,
-                  --  dsimp [FunctorCategory], -- FIXME seems to run forever?
+                   trace "Beginning dsimp",
+                   dsimp [FunctorCategory], -- FIXME seems to run forever?
                    exact sorry
                  end,
     witness_2 := sorry
