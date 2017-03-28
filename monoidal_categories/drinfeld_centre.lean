@@ -29,6 +29,7 @@ structure HalfBraidingMorphism { C : MonoidalCategory } ( X Y : HalfBraiding C )
 
 attribute [ematch] HalfBraidingMorphism.witness
 
+
 @[pointwise] lemma HalfBraidingMorphism_equal
   { C : MonoidalCategory }
   { X Y : HalfBraiding C }
@@ -42,6 +43,20 @@ attribute [ematch] HalfBraidingMorphism.witness
 
 local attribute [ematch] MonoidalCategory.interchange_right_identity  MonoidalCategory.interchange_left_identity
 
+-- TODO understand why we can't just blast this; see below
+
+@[ematch] lemma HalfBraidingMorphism.witness' { C : MonoidalCategory } { X Y : HalfBraiding C } ( f : HalfBraidingMorphism X Y ) ( Z : C^.Obj )
+  : C^.compose (X^.commutor Z) (@Functor.onMorphisms _ _ C^.tensor (Z, _) (Z, _) (C^.identity Z, f^.morphism)) = C^.compose (@Functor.onMorphisms _ _ C^.tensor (_, Z) (_, Z) (f^.morphism, C^.identity Z)) (Y^.commutor Z)
+  := begin
+       rewrite f^.witness
+     end
+@[ematch] lemma HalfBraidingMorphism.witness'' { C : MonoidalCategory } { X Y : HalfBraiding C } ( f : HalfBraidingMorphism X Y ) ( Z : C^.Obj )
+  : C^.compose (X^.commutor^.morphism^.components Z) (@Functor.onMorphisms _ _ C^.tensor (Z, _) (Z, _) (C^.identity Z, f^.morphism)) = C^.compose (@Functor.onMorphisms _ _ C^.tensor (_, Z) (_, Z) (f^.morphism, C^.identity Z)) (Y^.commutor^.morphism^.components Z)
+  := begin
+       rewrite f^.witness
+     end
+#check HalfBraidingMorphism.witness''
+
 definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category := {
   Obj := HalfBraiding C,
   Hom := λ X Y, HalfBraidingMorphism X Y,
@@ -53,13 +68,16 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category :=
     morphism := C^.compose f^.morphism g^.morphism,
     witness  :=
       begin
-        blast, -- TODO It seems eblast should just finish this. Is it too many steps?
+        intros, 
+        dsimp,
         rewrite C^.interchange_right_identity,
         rewrite C^.interchange_left_identity,
         rewrite - C^.associativity,
         rewrite f^.witness,
         rewrite C^.associativity,
-        rewrite g^.witness,
+        -- blast, -- TODO I guess blast might not want to rewrite along witness, but surely witness'' is okay?
+        rewrite HalfBraidingMorphism.witness'' g,
+        -- rewrite g^.witness,
         rewrite C^.associativity
       end
   },
