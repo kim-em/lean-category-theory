@@ -10,6 +10,10 @@ namespace tqft.categories.internal_objects
 
 -- set_option pp.max_steps 50000
 -- set_option pp.implicit true
+-- set_option pp.universes true
+-- set_option pp.coercions true
+set_option pp.all true
+set_option pp.implicit false
 
 definition CategoryOfFreeModules { C : MonoidalCategory } ( A : MonoidObject C ) : Category :=
 {
@@ -31,7 +35,7 @@ definition CategoryOfFreeModules { C : MonoidalCategory } ( A : MonoidObject C )
                     rewrite - MonoidalCategory.interchange_identities,
                     rewrite C^.associativity,
                     rewrite - C^.associativity (MonoidalCategory.tensorMorphisms C (A^.unit) (C^.identity ((C^.tensor)^.onObjects (A^.object, Y)))),
-                    -- We can't just rewrite along - C^.tensor^.identities, because it is confused about C as a category vs C as a monoidal category.
+                    -- We can't just rewrite along - C^.tensor^.identities, because it is confused about C as a category vs C as a monoidal category?
                     rewrite - TensorProduct.identities,
                     dsimp,
                     rewrite MonoidalCategory.inverse_associator_naturality_0 A^.unit (C^.identity A^.object) (C^.identity Y),
