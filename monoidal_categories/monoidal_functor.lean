@@ -37,6 +37,9 @@ instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_co
 -- open interactive
 -- meta def precompose { C : Category } { X Y : C^.Obj } ( f : C X Y ) : tactic unit := refine { exact (C^.compose f _) }
 
+set_option trace.rewrite true
+set_option trace.kabstract true
+
 #check FunctorComposition_associativity
 -- set_option pp.all true
 -- waiting on https://github.com/leanprover/lean/issues/1492
