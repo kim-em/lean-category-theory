@@ -8,7 +8,7 @@ open tqft.categories
 
 namespace tqft.categories.functor
 
-universe variables u1 v1 u2 v2 u3 v3
+universe variables u1 v1 u2 v2 u3 v3 u4 v4
 
 structure Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }) :=
   (onObjects   : C^.Obj → D^.Obj)
@@ -77,6 +77,17 @@ end
 
 open tactic.interactive
 
+lemma FunctorComposition.associativity
+  { B : Category.{u1 v1} }
+  { C : Category.{u2 v2} }
+  { D : Category.{u3 v3} }
+  { E : Category.{u4 v4} }
+  ( F : Functor B C )
+  ( G : Functor C D )
+  ( H : Functor D E )
+   : FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
+
+-- Note that this definition fixes the universe level of all the categories involved.
 @[reducible] definition CategoryOfCategoriesAndFunctors : Category := {
   Obj := Category.{u1 v1},
   Hom := λ C D, Functor C D,
