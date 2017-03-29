@@ -34,7 +34,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
 -- { F   := λ f, Π ⦃X Y : C^.Obj⦄, C^.Hom X Y → D^.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
 --  coe := Functor.onMorphisms }
 
-@[reducible] definition IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
+definition IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f,
@@ -42,7 +42,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
   functoriality := ♮
 }
 
-@[reducible] definition FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
+@[unfoldable] definition FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
 {
   onObjects     := λ X, G (F X),
   onMorphisms   := λ _ _ f, G^.onMorphisms (F^.onMorphisms f),
@@ -77,7 +77,7 @@ end
 
 open tactic.interactive
 
-@[reducible] definition CategoryOfCategoriesAndFunctors : Category := {
+definition CategoryOfCategoriesAndFunctors : Category := {
   Obj := Category.{u1 v1},
   Hom := λ C D, Functor C D,
   identity := λ C, IdentityFunctor C,

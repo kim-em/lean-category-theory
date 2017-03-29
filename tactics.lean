@@ -12,12 +12,12 @@ def pointwise_attribute : user_attribute := {
 
 run_cmd attribute.register `pointwise_attribute
 
--- def unfoldable_attribute : user_attribute := {
---   name := `unfoldable,
---   descr := "A definition that may be unfoldable, but hesitantly."
--- }
+def unfoldable_attribute : user_attribute := {
+  name := `unfoldable,
+  descr := "A definition that may be unfoldable, but hesitantly."
+}
 
--- run_cmd attribute.register `unfoldable_attribute
+run_cmd attribute.register `unfoldable_attribute
 
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
@@ -32,31 +32,35 @@ meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
    try (seq (any_apply cs) and_then)
 
-open tactic
+-- open tactic
 open lean.parser
 open interactive
-
-namespace tactic.interactive
-  -- Thanks to Sebastian Ullrich: https://groups.google.com/d/msg/lean-user/PXiYQEZjLpE/SqYiwiJoEAAJ
-  meta def force (t : itactic) : tactic unit :=
-  do gs ← get_goals,
-     t,
-     gs' ← get_goals,
-     guard (gs ≠ gs') <|> tactic.fail "force tactic failed"
-
-  meta def trace_dunfold ( n : name ) : tactic unit := (force (dunfold [n] [])) -- >> (trace ("unfolding " ++ to_string n)) 
-
-  meta def unfold_at_least_one_with_attribute (attr : parse ident) : tactic unit :=
-  do defs ← attribute.get_instances attr,
-     list.foldl orelse (tactic.fail "") (list.map trace_dunfold defs)
-end tactic.interactive
 
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b
 
-meta def unfold_something (and_then : tactic unit) : tactic unit := try ( seq (tactic.interactive.unfold_at_least_one_with_attribute `unfoldable) and_then )
+meta def tag_as_reducible : list name -> tactic unit
+| [] := skip
+| (n::ns) := set_basic_attribute `reducible n >> tag_as_reducible ns
+meta def untag_as_reducible : list name -> tactic unit
+| [] := skip
+| (n::ns) := unset_attribute `reducible n >> untag_as_reducible ns
 
-meta def blast  : tactic unit := intros >> try dsimp >> try simp >> pointwise blast >> try smt_eblast >> pointwise blast -- >> unfold_something blast
+meta def tag_unfoldable_as_reducible : tactic unit := 
+do cs ← attribute.get_instances `unfoldable,
+   tag_as_reducible cs
+meta def untag_unfoldable_as_reducible : tactic unit := 
+do cs ← attribute.get_instances `unfoldable,
+   untag_as_reducible cs
+
+namespace tactic.interactive
+meta def unfold_unfoldable : tactic unit := 
+do cs ← attribute.get_instances `unfoldable,
+   dunfold cs []
+end tactic.interactive
+
+-- open tactic.interactive
+meta def blast  : tactic unit := intros >> try tactic.interactive.unfold_unfoldable >> try dsimp >> try simp >> pointwise blast >> try smt_eblast >> pointwise blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { blast }

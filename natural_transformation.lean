@@ -38,13 +38,13 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
-@[reducible] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
+@[unfoldable] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D^.identity (F X),
     naturality := ♮
   }
 
-@[reducible] definition vertical_composition_of_NaturalTransformations
+@[unfoldable] definition vertical_composition_of_NaturalTransformations
   { C D : Category }
   { F G H : Functor C D }
   ( α : NaturalTransformation F G )
@@ -56,7 +56,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 
 open tqft.categories.functor
 
-@[reducible] definition horizontal_composition_of_NaturalTransformations
+@[unfoldable] definition horizontal_composition_of_NaturalTransformations
   { C D E : Category }
   { F G : Functor C D }
   { H I : Functor D E }
@@ -67,7 +67,7 @@ open tqft.categories.functor
     naturality := ♮
   }
 
-@[reducible] definition whisker_on_left
+@[unfoldable] definition whisker_on_left
   { C D E : Category }
   ( F : Functor C D )
   { G H : Functor D E }
@@ -75,7 +75,7 @@ open tqft.categories.functor
   NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
   horizontal_composition_of_NaturalTransformations (IdentityNaturalTransformation F) α
 
-@[reducible] definition whisker_on_right
+@[unfoldable] definition whisker_on_right
   { C D E : Category }
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
@@ -88,7 +88,7 @@ open tqft.categories.functor
 
 open tactic.interactive
 
-@[reducible] definition FunctorCategory ( C D : Category ) : Category :=
+@[unfoldable] definition FunctorCategory ( C D : Category ) : Category :=
 {
   Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,

@@ -19,55 +19,49 @@ universe variables u v
 -- https://groups.google.com/d/msg/lean-user/3qzchWkut0g/0QR6_cS8AgAJ
 -/
 
-@[reducible] definition Braiding( C : MonoidalCategory.{u v} ) := 
-  NaturalIsomorphism (C^.tensor) (FunctorComposition (SwitchProductCategory C C) C^.tensor)
+definition Commutor { C : Category.{u v} } (m : MonoidalStructure C) := 
+  NaturalIsomorphism (m^.tensor) (FunctorComposition (SwitchProductCategory C C) m^.tensor)
 
-@[reducible] definition Hexagon_1 { C : MonoidalCategory } ( β : Braiding C ) :=
+definition Hexagon_1 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
   ∀ X Y Z : C^.Obj,
     C^.compose
-      (C^.tensorMorphisms (C^.identity X) (β (Y, Z)))
+      (m^.tensorMorphisms (C^.identity X) (β^.morphism^.components (Y, Z))) -- TODO why ^.morphism^.components?
     (C^.compose
-      (C^.inverse_associator X Z Y)
-      (C^.tensorMorphisms (β (X, Z)) (C^.identity Y))
+      (m^.inverse_associator X Z Y)
+      (m^.tensorMorphisms (β^.morphism^.components (X, Z)) (C^.identity Y))
     )
       = 
     C^.compose
-      (C^.inverse_associator X Y Z) 
+      (m^.inverse_associator X Y Z) 
     (C^.compose
-      (β (C^.tensorObjects X Y, Z))
-      (C^.inverse_associator Z X Y)
+      (β^.morphism^.components (m^.tensorObjects X Y, Z))
+      (m^.inverse_associator Z X Y)
     )
-@[reducible] definition Hexagon_2 { C : MonoidalCategory } ( β : Braiding C ) :=
+definition Hexagon_2 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
   ∀ X Y Z : C^.Obj,
     C^.compose
-      (C^.tensorMorphisms (C^.identity X) (β^.inverse (Z, Y)))
+      (m^.tensorMorphisms (C^.identity X) (β^.inverse^.components (Z, Y)))    -- TODO why components?
     (C^.compose
-      (C^.inverse_associator X Z Y)
-      (C^.tensorMorphisms (β^.inverse (Z, X)) (C^.identity Y))
+      (m^.inverse_associator X Z Y)
+      (m^.tensorMorphisms (β^.inverse^.components (Z, X)) (C^.identity Y))
     )
       = 
     C^.compose
-      (C^.inverse_associator X Y Z) 
+      (m^.inverse_associator X Y Z) 
     (C^.compose
-      (β^.inverse (Z, C^.tensorObjects X Y))
-      (C^.inverse_associator Z X Y)
+      (β^.inverse^.components (Z, m^.tensorObjects X Y))
+      (m^.inverse_associator Z X Y)
     )
 
-structure BraidedMonoidalCategory
-  extends parent: MonoidalCategory.{u v} :=
-  ( braiding: Braiding parent )
+structure Braiding { C : Category.{u v} } ( m : MonoidalStructure C ) :=
+  ( braiding: Commutor m )
   ( hexagon_1 : Hexagon_1 braiding )
   ( hexagon_2 : Hexagon_2 braiding )
 -- PROJECT a theorem showing the hexagons hold as natural transformations
 
-instance BraidedMonoidalCategory_coercion_to_MonoidalCategory : has_coe BraidedMonoidalCategory MonoidalCategory := ⟨BraidedMonoidalCategory.to_MonoidalCategory⟩
+structure Symmetry { C : Category.{u v} } ( m : MonoidalStructure C ) extends parent: Braiding m :=
+  (symmetry: Π X Y : C^.Obj, C^.compose (braiding^.morphism^.components ⟨X, Y⟩) (braiding^.morphism^.components ⟨Y, X⟩) = C^.identity (m^.tensor^.onObjects ⟨X, Y⟩) )
 
-structure SymmetricMonoidalCategory
-  extends parent: BraidedMonoidalCategory.{u v} :=
-  (symmetry: Π X Y : Obj, compose (braiding^.morphism^.components ⟨X, Y⟩) (braiding^.morphism^.components ⟨Y, X⟩) = identity (tensor^.onObjects ⟨X, Y⟩) )
-
-attribute [ematch,simp] SymmetricMonoidalCategory.symmetry
-
-instance SymmetricMonoidalCategory_coercion_to_BraidedMonoidalCategory : has_coe SymmetricMonoidalCategory BraidedMonoidalCategory := ⟨SymmetricMonoidalCategory.to_BraidedMonoidalCategory⟩
+attribute [ematch,simp] Symmetry.symmetry
 
 end tqft.categories.braided_monoidal_category
