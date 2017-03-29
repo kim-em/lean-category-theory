@@ -10,11 +10,11 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.monoidal_category
 
-#check MonoidalCategory.pentagon
+universe variables u v
 
 lemma pentagon_in_terms_of_natural_transformations
-  ( C : MonoidalCategory ) :
-  pentagon_3step C = pentagon_2step C :=
+   { C : Category.{u v} } ( m : MonoidalStructure C ) :
+  pentagon_3step m = pentagon_2step m :=
   begin
     blast,
     induction X with PQR S,

@@ -16,23 +16,24 @@ namespace tqft.categories.drinfeld_centre
 
 universe variables u v
 
-structure HalfBraiding ( C : MonoidalCategory ) :=
+structure HalfBraiding { C : Category } ( m : MonoidalStructure C ) :=
     (object   : C^.Obj)
-    (commutor : NaturalIsomorphism (tensor_on_left object) (tensor_on_right object))
+    (commutor : NaturalIsomorphism (m^.tensor_on_left object) (m^.tensor_on_right object))
 
-instance HalfBraiding_coercion_to_object { C : MonoidalCategory } : has_coe (HalfBraiding C) (C^.Obj) :=
+instance HalfBraiding_coercion_to_object { C : Category } ( m : MonoidalStructure C ) : has_coe (HalfBraiding m) (C^.Obj) :=
   { coe := HalfBraiding.object }
 
-structure HalfBraidingMorphism { C : MonoidalCategory } ( X Y : HalfBraiding C ) :=
+structure HalfBraidingMorphism  { C : Category } { m : MonoidalStructure C } ( X Y : HalfBraiding m ) :=
   (morphism : C^.Hom X Y)
-  (witness : ∀ Z : C^.Obj, C^.compose (X^.commutor Z) (C^.tensorMorphisms (C^.identity Z) morphism) = C^.compose (C^.tensorMorphisms morphism (C^.identity Z)) (Y^.commutor Z))
+  (witness : ∀ Z : C^.Obj, C^.compose (X^.commutor Z) (m^.tensorMorphisms (C^.identity Z) morphism) = C^.compose (m^.tensorMorphisms morphism (C^.identity Z)) (Y^.commutor Z))
 
 attribute [ematch] HalfBraidingMorphism.witness
 
 
 @[pointwise] lemma HalfBraidingMorphism_equal
-  { C : MonoidalCategory }
-  { X Y : HalfBraiding C }
+  { C : Category }
+  { m : MonoidalStructure C }
+  { X Y : HalfBraiding m }
   { f g : HalfBraidingMorphism X Y }
   ( w : f^.morphism = g^.morphism ) : f = g :=
   begin
@@ -41,28 +42,18 @@ attribute [ematch] HalfBraidingMorphism.witness
     blast
   end
 
-local attribute [ematch] MonoidalCategory.interchange_right_identity  MonoidalCategory.interchange_left_identity
+local attribute [ematch] MonoidalStructure.interchange_right_identity  MonoidalStructure.interchange_left_identity
 
--- TODO understand why we can't just blast this; see below
-
-@[ematch] lemma HalfBraidingMorphism.witness' { C : MonoidalCategory } { X Y : HalfBraiding C } ( f : HalfBraidingMorphism X Y ) ( Z : C^.Obj )
-  : C^.compose (X^.commutor Z) (@Functor.onMorphisms _ _ C^.tensor (Z, _) (Z, _) (C^.identity Z, f^.morphism)) = C^.compose (@Functor.onMorphisms _ _ C^.tensor (_, Z) (_, Z) (f^.morphism, C^.identity Z)) (Y^.commutor Z)
-  := begin
-       rewrite f^.witness
-     end
-@[ematch] lemma HalfBraidingMorphism.witness'' { C : MonoidalCategory } { X Y : HalfBraiding C } ( f : HalfBraidingMorphism X Y ) ( Z : C^.Obj )
-  : C^.compose (X^.commutor^.morphism^.components Z) (@Functor.onMorphisms _ _ C^.tensor (Z, _) (Z, _) (C^.identity Z, f^.morphism)) = C^.compose (@Functor.onMorphisms _ _ C^.tensor (_, Z) (_, Z) (f^.morphism, C^.identity Z)) (Y^.commutor^.morphism^.components Z)
-  := begin
-       rewrite f^.witness
-     end
-#check HalfBraidingMorphism.witness''
-
-definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category := {
-  Obj := HalfBraiding C,
+-- FIXME automation!
+definition DrinfeldCentreAsCategory { C : Category } ( m : MonoidalStructure C )  : Category := {
+  Obj := HalfBraiding m,
   Hom := λ X Y, HalfBraidingMorphism X Y,
   identity := λ X, {
     morphism := C^.identity X,
-    witness  := ♮
+    witness  := begin
+                 intros,
+                 rewrite X^.commutor^.morphism^.naturality
+                end
   },
   compose := λ P Q R f g, {
     morphism := C^.compose f^.morphism g^.morphism,
@@ -70,14 +61,12 @@ definition DrinfeldCentreAsCategory ( C : MonoidalCategory.{u v} ) : Category :=
       begin
         intros, 
         dsimp,
-        rewrite C^.interchange_right_identity,
-        rewrite C^.interchange_left_identity,
+        rewrite m^.interchange_right_identity,
+        rewrite m^.interchange_left_identity,
         rewrite - C^.associativity,
         rewrite f^.witness,
         rewrite C^.associativity,
-        -- blast, -- TODO I guess blast might not want to rewrite along witness, but surely witness'' is okay?
-        rewrite HalfBraidingMorphism.witness'' g,
-        -- rewrite g^.witness,
+        rewrite g^.witness,
         rewrite C^.associativity
       end
   },

@@ -13,22 +13,22 @@ namespace tqft.categories.monoidal_functor
 
 universe variables u1 v1 u2 v2 u3 v3
 
-structure MonoidalFunctor ( C : MonoidalCategory.{u1 v1} ) ( D : MonoidalCategory.{u2 v2} ) :=
+structure MonoidalFunctor { C : Category.{u1 v1} } ( m : MonoidalStructure C ) { D : Category.{u2 v2} } ( n : MonoidalStructure D ) :=
   ( functor : Functor C D )
-  ( tensorator : NaturalIsomorphism (FunctorComposition C^.tensor functor) (FunctorComposition (functor × functor) D^.tensor) )
+  ( tensorator : NaturalIsomorphism (FunctorComposition m^.tensor functor) (FunctorComposition (functor × functor) n^.tensor) )
   ( associativity : ∀ X Y Z : C^.Obj, 
-      D^.compose (tensorator (C^.tensor (X, Y), Z)) (D^.compose (D^.tensorMorphisms (tensorator (X, Y)) (D^.identity (functor Z))) (D^.associator (functor X) (functor Y) (functor Z)))
-      = D^.compose (functor^.onMorphisms (C^.associator X Y Z)) (D^.compose (tensorator (X, C^.tensor (Y, Z))) (D^.tensorMorphisms (D^.identity (functor X)) (tensorator (Y, Z))))
+      D^.compose (tensorator (m^.tensor (X, Y), Z)) (D^.compose (n^.tensorMorphisms (tensorator (X, Y)) (D^.identity (functor Z))) (n^.associator (functor X) (functor Y) (functor Z)))
+      = D^.compose (functor^.onMorphisms (m^.associator X Y Z)) (D^.compose (tensorator (X, m^.tensor (Y, Z))) (n^.tensorMorphisms (D^.identity (functor X)) (tensorator (Y, Z))))
   )
-  ( identerator : Isomorphism D (functor C^.tensor_unit) D^.tensor_unit)
-  ( left_identity  : ∀ X : C^.Obj, D^.compose (tensorator (C^.tensor_unit, X)) (D^.compose (D^.tensorMorphisms identerator^.morphism (D^.identity (functor X))) (D^.left_unitor  (functor X))) = functor^.onMorphisms (C^.left_unitor X)  )
-  ( right_identity : ∀ X : C^.Obj, D^.compose (tensorator (X, C^.tensor_unit)) (D^.compose (D^.tensorMorphisms (D^.identity (functor X)) identerator^.morphism) (D^.right_unitor (functor X))) = functor^.onMorphisms (C^.right_unitor X) )
+  ( identerator : Isomorphism D (functor m^.tensor_unit) n^.tensor_unit)
+  ( left_identity  : ∀ X : C^.Obj, D^.compose (tensorator (m^.tensor_unit, X)) (D^.compose (n^.tensorMorphisms identerator^.morphism (D^.identity (functor X))) (n^.left_unitor  (functor X))) = functor^.onMorphisms (m^.left_unitor X)  )
+  ( right_identity : ∀ X : C^.Obj, D^.compose (tensorator (X, m^.tensor_unit)) (D^.compose (n^.tensorMorphisms (D^.identity (functor X)) identerator^.morphism) (n^.right_unitor (functor X))) = functor^.onMorphisms (m^.right_unitor X) )
   
 attribute [ematch,simp] MonoidalFunctor.left_identity
 attribute [ematch,simp] MonoidalFunctor.right_identity
 attribute [ematch]      MonoidalFunctor.associativity
 
-instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_coe (MonoidalFunctor C D) (Functor C D) :=
+instance MonoidalFunctor_coercion_to_functor { C : Category.{u1 v1} } ( m : MonoidalStructure C ) { D : Category.{u2 v2} } ( n : MonoidalStructure D ) : has_coe (MonoidalFunctor m n) (Functor C D) :=
   { coe := MonoidalFunctor.functor }
 
 -- PROJECT composition of MonoidalFunctors
@@ -39,24 +39,20 @@ instance MonoidalFunctor_coercion_to_functor { C D : MonoidalCategory } : has_co
 -- open interactive
 -- meta def precompose { C : Category } { X Y : C^.Obj } ( f : C X Y ) : tactic unit := refine { exact (C^.compose f _) }
 
-set_option trace.rewrite true
-set_option trace.kabstract true
-
-#check FunctorComposition_associativity
-set_option pp.all true
--- waiting on https://github.com/leanprover/lean/issues/1492
 definition MonoidalFunctorComposition
-  { C : MonoidalCategory.{u1 v1} }
-  { D : MonoidalCategory.{u2 v2} }
-  { E : MonoidalCategory.{u3 v3} }
-  ( F : MonoidalFunctor C D ) ( G : MonoidalFunctor D E ) : MonoidalFunctor C E :=
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { E : Category.{u3 v3} }
+  { m : MonoidalStructure C }
+  { n : MonoidalStructure D }
+  { o : MonoidalStructure E }
+  ( F : MonoidalFunctor m n ) ( G : MonoidalFunctor n o ) : MonoidalFunctor m o :=
 {
   functor        := @FunctorComposition C D E F G,
   tensorator     := {
-    morphism  := begin
-                   rewrite FunctorComposition.associativity,
-                   rewrite FunctorComposition.associativity,
-                   rewrite FunctorComposition.associativity,
+    morphism  := begin                   
+                   rewrite - FunctorComposition.associativity,
+                   exact sorry
                  end,
     inverse   := sorry,
     witness_1 := sorry,

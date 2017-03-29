@@ -14,7 +14,7 @@ open tqft.categories.braided_monoidal_category
 
 local attribute [pointwise] funext
 
-@[reducible] definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
+definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 {
   onObjects     := λ p, p.1 × p.2,
   onMorphisms   := λ _ _ p q, (p.1 q.1, p.2 q.2),
@@ -23,9 +23,8 @@ local attribute [pointwise] funext
 }
 
 -- PROJECT it would be great to generate all these _is_isomorphism fields via refine
-definition MonoidalCategoryOfTypes : MonoidalCategory :=
+definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
 {
-  CategoryOfTypes with
   tensor      := TensorProductOfTypes,
   tensor_unit := punit,
   associator_transformation := {
@@ -68,8 +67,7 @@ definition MonoidalCategoryOfTypes : MonoidalCategory :=
   triangle := ♮
 }
 
-definition SymmetricMonoidalCategoryOfTypes : SymmetricMonoidalCategory := {
-  MonoidalCategoryOfTypes with
+definition SymmetricMonoidalCategoryOfTypes : Symmetry MonoidalCategoryOfTypes := {
   braiding := {
    morphism  := {
      components := λ p t, (t^.snd, t^.fst),

@@ -13,20 +13,17 @@ namespace tqft.categories.braided_monoidal_category
 
 universe variables u v
 
-@[reducible] definition squared_Braiding { C : MonoidalCategory.{u v} } ( braiding : Braiding C )
-  : NaturalTransformation C^.tensor C^.tensor :=
+@[reducible] definition squared_Braiding { C : Category.{u v} } { m : MonoidalStructure C } ( commutor : Commutor m )
+  : NaturalTransformation m^.tensor m^.tensor :=
   begin
-    pose square := vertical_composition_of_NaturalTransformations braiding^.morphism (whisker_on_left (SwitchProductCategory C C) braiding^.morphism),
+    pose square := vertical_composition_of_NaturalTransformations commutor^.morphism (whisker_on_left (SwitchProductCategory C C) commutor^.morphism),
     rewrite - FunctorComposition_associativity at square,
     erewrite switch_twice_is_the_identity at square,
     rewrite FunctorComposition_left_identity at square,
     exact square
   end 
 
-@[reducible] definition Symmetry(C : BraidedMonoidalCategory) : Prop :=
-  squared_Braiding (C^.braiding) = IdentityNaturalTransformation C^.tensor
-
-lemma symmetry_in_terms_of_natural_transformations (C : SymmetricMonoidalCategory): Symmetry C := 
+lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Braiding m ) : squared_Braiding (β^.braiding) = IdentityNaturalTransformation m^.tensor := 
   begin
     blast,
     induction X,

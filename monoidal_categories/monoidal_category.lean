@@ -30,8 +30,8 @@ structure MonoidalStructure ( C: Category ) extends LaxMonoidalStructure C :=
   (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
 
 -- Convenience methods which take two arguments, rather than a pair. (This seems to often help the elaborator avoid getting stuck on `prod.mk`.)
-definition MonoidalStructure.tensorObjects { C : Category } ( m : MonoidalStructure C ) ( X Y : C^.Obj ) : C^.Obj := m^.tensor ⟨X, Y⟩
-@[unfoldable] definition MonoidalStructure.tensorMorphisms { C : Category } ( m : MonoidalStructure C ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (m^.tensor ⟨W, Y⟩) (m^.tensor ⟨X, Z⟩) := m^.tensor^.onMorphisms ⟨f, g⟩
+@[reducible] definition MonoidalStructure.tensorObjects { C : Category } ( m : MonoidalStructure C ) ( X Y : C^.Obj ) : C^.Obj := m^.tensor ⟨X, Y⟩
+@[reducible] definition MonoidalStructure.tensorMorphisms { C : Category } ( m : MonoidalStructure C ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (m^.tensor ⟨W, Y⟩) (m^.tensor ⟨X, Z⟩) := m^.tensor^.onMorphisms ⟨f, g⟩
 
 definition MonoidalStructure.associator
   { C : Category }
@@ -57,7 +57,7 @@ definition MonoidalStructure.inverse_associator
       (@Functor.onMorphisms _ _ m^.tensor ⟨V, Y⟩ ⟨W, Z⟩ ⟨g, k⟩) :=
   @Functor.functoriality (C × C) C m^.tensor ⟨U, X⟩ ⟨V, Y⟩ ⟨W, Z⟩ ⟨f, h⟩ ⟨g, k⟩
 
--- set_option pp.implicit true
+set_option pp.implicit true
 
 lemma MonoidalStructure.interchange_left_identity
   { C : Category }
@@ -65,7 +65,7 @@ lemma MonoidalStructure.interchange_left_identity
   { W X Y Z : C^.Obj }
   ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :
   @Functor.onMorphisms _ _ m^.tensor ⟨W, Z⟩ ⟨Y, Z⟩ ⟨C^.compose f g, C^.identity Z⟩
-    = C^.compose (m^.tensorMorphisms f (C^.identity Z)) (m^.tensorMorphisms g (C^.identity Z)) := ♮
+    = C^.compose (m^.tensorMorphisms f (C^.identity Z)) (m^.tensorMorphisms g (C^.identity Z)) := begin  rewrite - m^.tensor^.functoriality, blast end -- FIXME tactics
 
 lemma MonoidalStructure.interchange_right_identity
   { C : Category }
@@ -73,7 +73,7 @@ lemma MonoidalStructure.interchange_right_identity
   { W X Y Z : C^.Obj }
   ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :
   @Functor.onMorphisms _ _ m^.tensor ⟨Z, W⟩ ⟨Z, Y⟩ ⟨C^.identity Z, C^.compose f g⟩
-    = C^.compose (m^.tensorMorphisms (C^.identity Z) f) (m^.tensorMorphisms (C^.identity Z) g) := ♮
+    = C^.compose (m^.tensorMorphisms (C^.identity Z) f) (m^.tensorMorphisms (C^.identity Z) g) := begin  rewrite - m^.tensor^.functoriality, blast end
 
 @[ematch] lemma MonoidalStructure.interchange_identities
   { C : Category }
@@ -185,5 +185,16 @@ lemma TensorProduct.identities
   { C : Category }
   ( m : MonoidalStructure C )
   ( X Y : C^.Obj ) : @Functor.onMorphisms _ _ m^.tensor ⟨X, Y⟩ ⟨X, Y⟩ ⟨C^.identity X, C^.identity Y⟩ = C^.identity (m^.tensor^.onObjects ⟨X, Y⟩) := ♮
+
+-- PROJECT If multiple coercions were allowed, and field access could use coercions, then we might try:
+-- structure MonoidalCategory :=
+--   ( C : Category )
+--   ( m : MonoidalStructure C )
+
+-- instance MonoidalCategory_coercion_to_MonoidalStructure : has_coe_to_fun (MonoidalCategory) :=
+-- { F   := λ m, MonoidalStructure m^.C,
+--   coe := MonoidalCategory.m }
+-- instance MonoidalCategory_coercion_to_Category (C : MonoidalCategory) : has_coe MonoidalCategory Category :=
+--   { coe := MonoidalCategory.C }
 
 end tqft.categories.monoidal_category
