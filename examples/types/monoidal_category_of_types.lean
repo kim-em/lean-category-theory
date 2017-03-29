@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ..monoidal_categories.monoidal_category
-import ..monoidal_categories.braided_monoidal_category
+import ...monoidal_categories.monoidal_category
+import ...monoidal_categories.braided_monoidal_category
 import .types
 
 namespace tqft.categories.examples.types
@@ -44,15 +44,15 @@ definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
       components := λ p t, ((t.1, t.2.1), t.2.2),
       naturality := ♮
     },
-    witness_1 := ♮,
-    witness_2 := ♮
+    witness_1 := ♯,
+    witness_2 := ♯
   },
   left_unitor_is_isomorphism := {
     inverse := {
       components := λ p t, (punit.star, t),
       naturality := ♮
     },
-    witness_1 := ♮,
+    witness_1 := ♯,
     witness_2 := ♮
   },
   right_unitor_is_isomorphism := {
@@ -60,11 +60,11 @@ definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
       components := λ p t, (t, punit.star),
       naturality := ♮
     },
-    witness_1 := ♮,
+    witness_1 := ♯,
     witness_2 := ♮
   },
-  pentagon := ♮,
-  triangle := ♮
+  pentagon := ♯,
+  triangle := ♯
 }
 
 definition SymmetricMonoidalCategoryOfTypes : Symmetry MonoidalCategoryOfTypes := {
@@ -77,12 +77,12 @@ definition SymmetricMonoidalCategoryOfTypes : Symmetry MonoidalCategoryOfTypes :
      components := λ p t, (t^.snd, t^.fst),
      naturality := ♮
    },
-   witness_1 := ♮,
-   witness_2 := ♮ 
+   witness_1 := ♯,
+   witness_2 := ♯ 
   },
-  hexagon_1 := ♮,
-  hexagon_2 := ♮,
-  symmetry  := ♮
+  hexagon_1 := ♯,
+  hexagon_2 := ♯,
+  symmetry  := ♯
 }
 
 end tqft.categories.examples.types

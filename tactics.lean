@@ -39,28 +39,19 @@ open interactive
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b
 
-meta def tag_as_reducible : list name -> tactic unit
-| [] := skip
-| (n::ns) := set_basic_attribute `reducible n >> tag_as_reducible ns
-meta def untag_as_reducible : list name -> tactic unit
-| [] := skip
-| (n::ns) := unset_attribute `reducible n >> untag_as_reducible ns
-
-meta def tag_unfoldable_as_reducible : tactic unit := 
-do cs ← attribute.get_instances `unfoldable,
-   tag_as_reducible cs
-meta def untag_unfoldable_as_reducible : tactic unit := 
-do cs ← attribute.get_instances `unfoldable,
-   untag_as_reducible cs
 
 namespace tactic.interactive
+meta def dunfold_all : list name → tactic unit
+| [] := skip
+| (n::ns) := dunfold [n] [] >> dsimp [] [] [] [] >> dunfold_all ns
+
 meta def unfold_unfoldable : tactic unit := 
 do cs ← attribute.get_instances `unfoldable,
-   dunfold cs []
+   dunfold_all cs
 end tactic.interactive
 
 -- open tactic.interactive
-meta def blast  : tactic unit := intros >> try tactic.interactive.unfold_unfoldable >> try dsimp >> try simp >> pointwise blast >> try smt_eblast >> pointwise blast
+meta def blast  : tactic unit := intros >> pointwise blast >> try tactic.interactive.unfold_unfoldable >> try simp >> try smt_eblast >> pointwise blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }

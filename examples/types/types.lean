@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ..category
+import ...category
 
 namespace tqft.categories.examples.types
 
@@ -10,7 +10,7 @@ open tqft.categories
 
 universe variables u
 
-@[reducible] definition CategoryOfTypes : Category :=
+@[unfoldable] definition CategoryOfTypes : Category :=
 {
     Obj := Type u,
     Hom := λ a b, a → b,
