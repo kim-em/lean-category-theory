@@ -45,7 +45,7 @@ attribute [ematch] HalfBraidingMorphism.witness
 local attribute [ematch] MonoidalStructure.interchange_right_identity  MonoidalStructure.interchange_left_identity
 
 -- FIXME automation!
-definition DrinfeldCentreAsCategory { C : Category } ( m : MonoidalStructure C )  : Category := {
+definition DrinfeldCentre { C : Category } ( m : MonoidalStructure C )  : Category := {
   Obj := HalfBraiding m,
   Hom := λ X Y, HalfBraidingMorphism X Y,
   identity := λ X, {
