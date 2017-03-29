@@ -50,14 +50,11 @@ definition DrinfeldCentreAsCategory { C : Category } ( m : MonoidalStructure C )
   Hom := λ X Y, HalfBraidingMorphism X Y,
   identity := λ X, {
     morphism := C^.identity X,
-    witness  := begin
-                 intros,
-                 rewrite X^.commutor^.morphism^.naturality
-                end
+    witness  := ♮
   },
   compose := λ P Q R f g, {
     morphism := C^.compose f^.morphism g^.morphism,
-    witness  :=
+    witness  := 
       begin
         intros, 
         dsimp,
@@ -70,9 +67,9 @@ definition DrinfeldCentreAsCategory { C : Category } ( m : MonoidalStructure C )
         rewrite C^.associativity
       end
   },
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
+  left_identity  := ♯,
+  right_identity := ♯,
+  associativity  := ♯
 }
 
 end tqft.categories.drinfeld_centre

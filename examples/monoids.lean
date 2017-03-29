@@ -55,8 +55,8 @@ definition CategoryOfMonoids : Category :=
     identity := λ s, monoid_identity s.2,
     compose  := λ _ _ _ f g, monoid_morphism_composition f g,
 
-    left_identity  := ♮,
-    right_identity := ♮,
+    left_identity  := ♯,
+    right_identity := ♯,
     associativity  := ♮
 }
 

@@ -18,7 +18,7 @@ definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 {
   onObjects     := λ p, p.1 × p.2,
   onMorphisms   := λ _ _ p q, (p.1 q.1, p.2 q.2),
-  identities    := ♮,
+  identities    := ♯,
   functoriality := ♮
 }
 

@@ -50,8 +50,8 @@ end
     identity := λ s, semigroup_identity s.2,
     compose  := λ _ _ _ f g, semigroup_morphism_composition f g,
 
-    left_identity  := ♮,
-    right_identity := ♮,
+    left_identity  := ♯,
+    right_identity := ♯,
     associativity  := ♮
 }
 

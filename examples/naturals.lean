@@ -22,6 +22,7 @@ begin
   exact h
 end
 
+-- FIXME This reducible is gross
 @[reducible] definition ℕCategory : Category :=
   begin
     refine {
@@ -44,23 +45,23 @@ definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
     functoriality := ♮
   }
 
-@[reducible] definition ℕTensorProduct : TensorProduct ℕCategory :=
+@[unfoldable] definition ℕTensorProduct : TensorProduct ℕCategory :=
   { onObjects     := prod.fst,
     onMorphisms   := λ _ _ n, n^.fst + n^.snd,
     identities    := ♮,
-    functoriality := ♮
+    functoriality := ♯
   }
 
 -- TODO What follows involves a lot of boring natural transformations
 -- Can we construct them automatically?
-definition ℕMonoidalCategory : MonoidalCategory :=
+definition ℕMonoidalCategory : MonoidalStructure ℕCategory :=
  begin
  refine 
-   { ℕCategory with
+   { 
    tensor                    := ℕTensorProduct,
    tensor_unit               := (),
-   associator_transformation := { components := λ _, 0, naturality := ♮ },
-   left_unitor               := { components := λ _, 0, naturality := ♮ },
+   associator_transformation := { components := λ _, 0, naturality := ♯ },
+   left_unitor               := { components := λ _, 0, naturality := ♯ },
    right_unitor              := { components := λ _, 0, naturality := ♮ },
 
   -- -- I'd really like this to work, so we don't need to construct boring inverses by hand.
@@ -84,8 +85,8 @@ definition ℕMonoidalCategory : MonoidalCategory :=
      witness_1 := ♮,
      witness_2 := ♮
    },
-   pentagon := ♮,
-   triangle := ♮
+   pentagon := ♯,
+   triangle := ♯
  },
   all_goals { blast },
   -- all_goals { induction X },

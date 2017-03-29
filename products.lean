@@ -28,18 +28,18 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
-definition RightInjectionAt { D : Category } ( Z : D^.Obj ) ( C : Category ) : Functor C (C × D) :=
+@[unfoldable] definition RightInjectionAt { D : Category } ( Z : D^.Obj ) ( C : Category ) : Functor C (C × D) :=
 { onObjects     := λ X, (X, Z),
   onMorphisms   := λ X Y f, (f, D^.identity Z),
   identities    := ♮,
-  functoriality := ♮
+  functoriality := ♯
 }
 
-definition LeftInjectionAt { C : Category } ( Z : C^.Obj) ( D : Category ) : Functor D (C × D) :=
+@[unfoldable] definition LeftInjectionAt { C : Category } ( Z : C^.Obj) ( D : Category ) : Functor D (C × D) :=
 { onObjects     := λ X, (Z, X),
   onMorphisms   := λ X Y f, (C^.identity Z, f),
   identities    := ♮,
-  functoriality := ♮
+  functoriality := ♯
 }
 
 definition LeftProjection ( C D : Category ) : Functor (C × D) C := 
@@ -62,22 +62,22 @@ definition RightProjection ( C D : Category ) : Functor (C × D) D :=
 {
   onObjects     := λ X, (F X^.fst, G X^.snd),
   onMorphisms   := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
-  identities    := ♮,
-  functoriality := ♮
+  identities    := ♯,
+  functoriality := ♯
 }
 
 namespace ProductFunctor
   notation F `×` G := ProductFunctor F G
 end ProductFunctor
 
-definition ProductNaturalTransformation
+@[unfoldable] definition ProductNaturalTransformation
   { A B C D : Category } 
   { F G : Functor A B } { H I : Functor C D } 
   (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
     NaturalTransformation (F × H) (G × I) :=
 {
   components := λ X, (α X^.fst, β X^.snd),
-  naturality := ♮
+  naturality := ♯
 }
 
 namespace ProductNaturalTransformation
@@ -94,9 +94,9 @@ definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) 
 
 lemma switch_twice_is_the_identity
   ( C D : Category ) :
-  FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (ProductCategory C D) := ♮
+  FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (ProductCategory C D) := ♯
 
-definition ProductCategoryAssociator
+@[unfoldable] definition ProductCategoryAssociator
   ( C D E: Category )
   : Functor ((C × D) × E) (C × (D × E)) :=
 {
@@ -106,7 +106,7 @@ definition ProductCategoryAssociator
   functoriality := ♮
 }
 
-definition ProductCategoryInverseAssociator
+@[unfoldable] definition ProductCategoryInverseAssociator
   ( C D E: Category )
   : Functor (C × (D × E)) ((C × D) × E) :=
 {

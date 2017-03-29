@@ -16,12 +16,10 @@ open tqft.categories.monoidal_category
 @[reducible] definition semigroup_product { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) : semigroup (α × β) := {
   mul := λ p q, (p^.fst * q^.fst, p^.snd * q^.snd),
   -- From https://groups.google.com/d/msg/lean-user/bVs5FdjClp4/cbDZOqq_BAAJ
-  mul_assoc := begin
+  mul_assoc := begin 
                 abstract {
                   intros,
-                  simp [@mul.equations._eqn_1 (α × β)],
-                  dsimp,
-                  simp
+                  simp [@mul.equations._eqn_1 (α × β)]
                 }
               end
 }
@@ -46,15 +44,14 @@ open tqft.categories.monoidal_category
 
 open tqft.categories.products
 
-set_option trace.dsimplify true
-set_option trace.debug.dsimplify true
+-- set_option trace.dsimplify true
+-- set_option trace.debug.dsimplify true
 
-definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
-  CategoryOfSemigroups.{u} with
+definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
   tensor               := {
     onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
     onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
-    identities    := ♮,
+    identities    := ♯,
     functoriality := ♮
   },
   tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
@@ -89,8 +86,8 @@ definition MonoidalCategoryOfSemigroups : MonoidalCategory := {
     },
     witness_1 := begin
                    intros,
-                   trace "Beginning dsimp",
-                   dsimp [FunctorCategory], -- FIXME seems to run forever?
+                  --  trace "Beginning dsimp",
+                  --  dsimp [FunctorCategory], -- FIXME seems to run forever?
                    exact sorry
                  end,
     witness_2 := sorry

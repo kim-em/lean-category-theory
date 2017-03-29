@@ -63,8 +63,11 @@ end tactic.interactive
 meta def blast  : tactic unit := intros >> try tactic.interactive.unfold_unfoldable >> try dsimp >> try simp >> pointwise blast >> try smt_eblast >> pointwise blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
-notation `♮` := by abstract { blast }
+notation `♮` := by abstract { smt_eblast }
+notation `♯` := by abstract { blast }
 
+@[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b)^.fst = a := ♮
+@[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b)^.snd = b := ♮
 @[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X^.fst, X^.snd) = X := begin induction X, blast end
 @[pointwise] lemma {u v} pair_equality_1 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X^.fst ) : (A, X^.snd) = X := begin induction X, blast end
 @[pointwise] lemma {u v} pair_equality_2 {α : Type u} {β : Type v} { X: α × β } { B : β } ( p : B = X^.snd ) : (X^.fst, B) = X := begin induction X, blast end

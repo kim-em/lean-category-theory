@@ -12,16 +12,29 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
+-- TODO automation
 lemma pentagon_in_terms_of_natural_transformations
    { C : Category.{u v} } ( m : MonoidalStructure C ) :
   pentagon_3step m = pentagon_2step m :=
   begin
-    blast,
+    dsimp,
+    apply NaturalTransformations_componentwise_equal,
+    intros,
+    unfold_unfoldable,
+    dsimp,
     induction X with PQR S,
     induction PQR with PQ R,
     induction PQ with P Q,
-    -- TODO ideally ematch would take care of this for us.
-    pose p := C^.pentagon P Q R S,
+    dsimp, 
+    simp,
+    erewrite C^.right_identity, -- TODO why are these erewrites necessary? simp should just do it!
+    erewrite C^.right_identity,
+    erewrite C^.right_identity,
+    erewrite C^.right_identity,
+    -- erewrite m^.pentagon P Q R S, --- This is pretty weird; Pentagon has λs in it.
+    pose p := m^.pentagon P Q R S,
+    simp at p,
+    dsimp at p,
     exact p
   end
 

@@ -13,14 +13,11 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
-set_option pp.universes true
-
-definition CategoryOfCategoriesAndFunctorsWithCartesianProduct : MonoidalCategory := {
-  CategoryOfCategoriesAndFunctors.{u v} with
+definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategoriesAndFunctors.{u v} := {
   tensor      := {
     onObjects     := λ p, ProductCategory p.1 p.2,
     onMorphisms   := λ _ _ p, ProductFunctor p.1 p.2,
-    identities    := ♮,
+    identities    := ♯,
     functoriality := ♮
   },
   tensor_unit := DiscreteCategory.{u v} punit,
@@ -33,15 +30,15 @@ definition CategoryOfCategoriesAndFunctorsWithCartesianProduct : MonoidalCategor
     naturality := sorry
   },
   right_unitor := sorry,
-  pentagon := ♮,
+  pentagon := ♯,
   triangle := sorry,
   associator_is_isomorphism   := {
     inverse := {
       components := λ t, ProductCategoryInverseAssociator t.1.1 t.1.2 t.2,
       naturality := ♮
     },
-    witness_1 := ♮,
-    witness_2 := ♮
+    witness_1 := ♯,
+    witness_2 := ♯
   },
   left_unitor_is_isomorphism  := sorry,
   right_unitor_is_isomorphism := sorry

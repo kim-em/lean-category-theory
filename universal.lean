@@ -100,8 +100,8 @@ definition CommaCategory
   Hom      := λ p q, { gh : (A^.Hom p.1 q.1) × (B^.Hom p.2.1 q.2.1) // C^.compose (S^.onMorphisms gh.1) q.2.2 = C^.compose p.2.2 (T^.onMorphisms gh.2) },
   identity := λ p, ⟨ (A^.identity p.1, B^.identity p.2.1), ♮ ⟩,
   compose  := λ p q r f g, ⟨ (A^.compose (val f).1 (val g).1, B^.compose (val f).2 (val g).2), ♮ ⟩,
-  left_identity  := ♮,
-  right_identity := ♮,
+  left_identity  := ♯,
+  right_identity := ♯,
   associativity  := ♮
 }
 

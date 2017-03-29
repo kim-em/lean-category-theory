@@ -5,50 +5,51 @@ import .monoidal_categories.monoidal_category
 
 namespace tqft.categories.enriched
 
+open tqft.categories
 open tqft.categories.monoidal_category
 
-structure EnrichedCategory (V: MonoidalCategory) :=
+structure EnrichedCategory { V: Category } ( m : MonoidalStructure V ) :=
   (Obj : Type )
   (Hom : Obj → Obj → V^.Obj)
-  (compose :  Π { X Y Z : Obj }, V^.Hom (V^.tensorObjects (Hom X Y) (Hom Y Z)) (Hom X Z))
-  (identity : Π X : Obj, V^.Hom V^.tensor_unit (Hom X X))
+  (compose :  Π { X Y Z : Obj }, V^.Hom (m^.tensorObjects (Hom X Y) (Hom Y Z)) (Hom X Z))
+  (identity : Π X : Obj, V^.Hom m^.tensor_unit (Hom X X))
   (left_identity  : ∀ { X Y : Obj }, 
     V^.compose 
-      (V^.left_unitor_is_isomorphism^.inverse (Hom X Y)) 
+      (m^.left_unitor_is_isomorphism^.inverse^.components (Hom X Y)) -- TODO components
     (V^.compose 
-      (V^.tensorMorphisms (identity X) (V^.identity (Hom X Y))) 
+      (m^.tensorMorphisms (identity X) (V^.identity (Hom X Y))) 
       compose
     ) = V^.identity (Hom X Y) )
   (right_identity  : ∀ { X Y : Obj }, 
     V^.compose 
-      (V^.right_unitor_is_isomorphism^.inverse (Hom X Y)) 
+      (m^.right_unitor_is_isomorphism^.inverse^.components (Hom X Y)) 
     (V^.compose 
-      (V^.tensorMorphisms (V^.identity (Hom X Y)) (identity Y)) 
+      (m^.tensorMorphisms (V^.identity (Hom X Y)) (identity Y)) 
       compose
     ) = V^.identity (Hom X Y) )
   (associativity : ∀ { W X Y Z : Obj },
     V^.compose 
-      (V^.tensorMorphisms compose (V^.identity (Hom Y Z))) 
+      (m^.tensorMorphisms compose (V^.identity (Hom Y Z))) 
       compose
    = V^.compose 
-      (V^.associator (Hom W X) (Hom X Y) (Hom Y Z)) 
+      (m^.associator (Hom W X) (Hom X Y) (Hom Y Z)) 
     (V^.compose 
-      (V^.tensorMorphisms (V^.identity (Hom W X)) compose)
+      (m^.tensorMorphisms (V^.identity (Hom W X)) compose)
       compose) )
 
 attribute [simp,ematch] EnrichedCategory.left_identity
 attribute [simp,ematch] EnrichedCategory.right_identity
 attribute [ematch] EnrichedCategory.associativity
 
-instance EnrichedCategory_to_Hom { V : MonoidalCategory } : has_coe_to_fun (EnrichedCategory V) :=
+instance EnrichedCategory_to_Hom { V : Category } { m : MonoidalStructure V } : has_coe_to_fun (EnrichedCategory m) :=
 { F   := λ C, C^.Obj → C^.Obj → V^.Obj,
   coe := EnrichedCategory.Hom }
 
-structure Functor { V : MonoidalCategory } ( C D : EnrichedCategory V ) :=
+structure Functor { V : Category } { m : MonoidalStructure V } ( C D : EnrichedCategory m ) :=
   ( onObjects : C^.Obj → D^.Obj )
   ( onMorphisms : ∀ { X Y : C^.Obj }, V^.Hom (C X Y) (D (onObjects X) (onObjects Y)) )
   ( identities : ∀ X : C^.Obj, V^.compose (C^.identity X) onMorphisms = D^.identity (onObjects X) )
-  ( functoriality : ∀ { X Y Z : C^.Obj }, V^.compose C^.compose (@onMorphisms X Z) = V^.compose (V^.tensorMorphisms (@onMorphisms X Y) (@onMorphisms Y Z)) D^.compose )
+  ( functoriality : ∀ { X Y Z : C^.Obj }, V^.compose C^.compose (@onMorphisms X Z) = V^.compose (m^.tensorMorphisms (@onMorphisms X Y) (@onMorphisms Y Z)) D^.compose )
 
 attribute [simp,ematch] Functor.identities
 attribute [simp,ematch] Functor.functoriality

@@ -4,6 +4,7 @@
 import .monoids
 
 open tqft.categories
+open tqft.categories.functor
 open tqft.categories.monoidal_category
 
 namespace tqft.categories.internal_objects
@@ -12,15 +13,18 @@ namespace tqft.categories.internal_objects
 -- set_option pp.implicit true
 -- set_option pp.universes true
 -- set_option pp.coercions true
-set_option pp.all true
-set_option pp.implicit false
+-- set_option pp.all true
+-- set_option pp.implicit false
 
-definition CategoryOfFreeModules { C : MonoidalCategory } ( A : MonoidObject C ) : Category :=
+-- local attribute [elab_simple] prod.mk
+
+definition CategoryOfFreeModules { C : Category } { m : MonoidalStructure C } ( A : MonoidObject m ) : Category :=
 {
   Obj := C^.Obj,
-  Hom := λ X Y, C^.Hom X (C^.tensorObjects A^.object Y),
-  identity := λ X, C^.compose (C^.left_unitor_is_isomorphism^.inverse X) (C^.tensorMorphisms A^.unit (C^.identity X)),
-  compose := λ _ _ Z f g, C^.compose (C^.compose (C^.compose f (C^.tensorMorphisms (C^.identity A^.object) g)) (C^.inverse_associator A^.object A^.object Z)) (C^.tensorMorphisms A^.multiplication (C^.identity Z)),
+  Hom := λ X Y, C^.Hom X (m^.tensorObjects A^.object Y),
+  -- TODO components
+  identity := λ X, C^.compose (m^.left_unitor_is_isomorphism^.inverse^.components X) (m^.tensorMorphisms A^.unit (C^.identity X)),
+  compose := λ _ _ Z f g, C^.compose (C^.compose (C^.compose f (m^.tensorMorphisms (C^.identity A^.object) g)) (m^.inverse_associator A^.object A^.object Z)) (m^.tensorMorphisms A^.multiplication (C^.identity Z)),
   left_identity := begin
                     -- PROJECT dealing with associativity here is quite tedious.
                     -- PROJECT this is a great example problem for clever automation.
@@ -31,16 +35,17 @@ definition CategoryOfFreeModules { C : MonoidalCategory } ( A : MonoidObject C )
                     rewrite C^.associativity,
                     rewrite C^.associativity,
                     rewrite C^.associativity,
-                    rewrite - C^.associativity (C^.tensorMorphisms A^.unit (C^.identity X)),
-                    rewrite - MonoidalCategory.interchange_identities,
+                    erewrite - C^.associativity (m^.tensorMorphisms A^.unit (C^.identity X)),
+                    rewrite - MonoidalStructure.interchange_identities,
                     rewrite C^.associativity,
-                    rewrite - C^.associativity (MonoidalCategory.tensorMorphisms C (A^.unit) (C^.identity ((C^.tensor)^.onObjects (A^.object, Y)))),
-                    -- We can't just rewrite along - C^.tensor^.identities, because it is confused about C as a category vs C as a monoidal category?
-                    rewrite - TensorProduct.identities,
-                    dsimp,
-                    -- FIXME waiting on https://groups.google.com/d/msg/lean-user/epIwoOxtUn8/a8II-QBMCgAJ
-                    rewrite MonoidalCategory.inverse_associator_naturality_0 A^.unit (C^.identity A^.object) (C^.identity Y),
-                    
+                    rewrite - C^.associativity (m^.tensorMorphisms A^.unit (C^.identity (m^.tensorObjects A^.object Y))),
+                    rewrite - m^.tensor^.identities,
+                    erewrite m^.inverse_associator_naturality_0 A^.unit (C^.identity A^.object) (C^.identity Y),
+                    erewrite C^.associativity,
+                    erewrite - m^.interchange,
+                    rewrite A^.left_identity,
+                    simp, dsimp,
+                    erewrite C^.right_identity,
                     exact sorry
                    end,
   right_identity := sorry,

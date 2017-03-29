@@ -27,8 +27,8 @@ definition IdempotentCompletion ( C: Category ) : Category :=
   Hom            := λ X Y, { f : C X^.obj Y^.obj // C^.compose X^.idempotent f = f ∧ C^.compose f Y^.idempotent = f },
   identity       := λ X, ⟨ X^.idempotent, ♮ ⟩,
   compose        := λ X Y Z f g, ⟨ C^.compose f^.val g^.val, ♮ ⟩,
-  left_identity  := ♮,
-  right_identity := ♮,
+  left_identity  := ♯,
+  right_identity := ♯,
   associativity  := ♮
 }
 

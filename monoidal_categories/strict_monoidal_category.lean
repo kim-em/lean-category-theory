@@ -24,41 +24,41 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 
 -- set_option pp.implicit true
 
-definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalCategory :=
-{
-  C with
-  tensor := {
-    onObjects     := λ p, tensor^.onObjects p,
-    onMorphisms   := λ _ _ f, tensor^.onMorphisms f,
-    identities    := ♮,
-    functoriality := ♮
-  },
-  tensor_unit := tensor_unit,
-  associator_transformation := {
-    components := λ t, begin
-                           induction t with pq r,
-                           induction pq with p q,
-                           refine (cast _ (C^.identity (tensor^.onObjects (tensor^.onObjects (p, q), r)))),  
-                           blast, -- TODO Why doesn't blast do the next rewrite?
-                           rewrite - is_strict^.associativeOnObjects
-                       end,
-    naturality := begin
-                    -- TODO Given how we constructed components, I have no idea how to prove naturality.
-                    intros,
-                    dsimp,
-                    exact sorry
-                  end
-  },
-  left_unitor := sorry,
-  right_unitor := sorry,
-  associator_is_isomorphism := sorry,
-  left_unitor_is_isomorphism := sorry,
-  right_unitor_is_isomorphism := sorry,
-  pentagon := sorry,
-  triangle := sorry
-}  
+-- definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalStructure C :=
+-- {
+--   tensor := {
+--     onObjects     := λ p, tensor^.onObjects p,
+--     onMorphisms   := λ _ _ f, tensor^.onMorphisms f,
+--     identities    := ♮,
+--     functoriality := ♮
+--   },
+--   tensor_unit := tensor_unit,
+--   associator_transformation := {
+--     components := λ t, begin
+--                            induction t with pq r,
+--                            induction pq with p q,
+--                            refine (cast _ (C^.identity (tensor^.onObjects (tensor^.onObjects (p, q), r)))),  
+--                            blast, -- TODO Why doesn't blast do the next rewrite?
+--                            rewrite - is_strict^.associativeOnObjects,
+--                            exact sorry
+--                        end,
+--     naturality := begin
+--                     -- TODO Given how we constructed components, I have no idea how to prove naturality.
+--                     intros,
+--                     dsimp,
+--                     exact sorry
+--                   end
+--   },
+--   left_unitor := sorry,
+--   right_unitor := sorry,
+--   associator_is_isomorphism := sorry,
+--   left_unitor_is_isomorphism := sorry,
+--   right_unitor_is_isomorphism := sorry,
+--   pentagon := sorry,
+--   triangle := sorry
+-- }  
 
-@[reducible] definition tensorList { C : MonoidalCategory } ( X : list C^.Obj ) : C^.Obj := list.foldl C^.tensorObjects C^.tensor_unit X
+@[reducible] definition tensorList { C : Category } ( m : MonoidalStructure C ) ( X : list C^.Obj ) : C^.Obj := list.foldl m^.tensorObjects m^.tensor_unit X
 
 -- @[reducible] definition tensorListConcatenation { C : MonoidalCategory } ( X : list C^.Obj × list C^.Obj ) : Isomorphism C (C^.tensorObjects (tensorList X.1) (tensorList X.2)) (tensorList (append X.1 X.2)) :=
 -- {

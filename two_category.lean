@@ -52,15 +52,15 @@ definition CAT : StrictTwoCategory :=
     compose_2_vertically := λ _ _ _ _ _ α β, vertical_composition_of_NaturalTransformations α β,
     compose_2_horizontally := λ _ _ _ _ _ _ _ α β, horizontal_composition_of_NaturalTransformations α β,
 
-    left_identity   := ♮,
-    right_identity  := ♮,
+    left_identity   := ♯,
+    right_identity  := ♯,
     associativity_1 := ♮,
 
-    up_identity                := ♮,
-    down_identity              := ♮,
-    associativity_2_vertical   := ♮,
-    associativity_2_horizontal := ♮,
-    interchange                := ♮
+    up_identity                := ♯,
+    down_identity              := ♯,
+    associativity_2_vertical   := ♯,
+    associativity_2_horizontal := ♯,
+    interchange                := ♯
 }  
 
 definition HomCategory ( C : StrictTwoCategory ) ( X Y : C^._0 ) : Category := {

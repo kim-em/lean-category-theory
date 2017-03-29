@@ -9,19 +9,21 @@ open tqft.categories.monoidal_category
 
 namespace tqft.categories.internal_objects
 
-structure ModuleObject { C : MonoidalCategory } ( A : MonoidObject C ) extends SemigroupModuleObject A^.to_SemigroupObject :=
-  ( identity  : C^.compose (C^.left_unitor_is_isomorphism^.inverse module)  (C^.compose (C^.tensorMorphisms A^.unit (C^.identity module)) action) = C^.identity module )
+structure ModuleObject { C : Category } { m : MonoidalStructure C } ( A : MonoidObject m ) extends SemigroupModuleObject A^.to_SemigroupObject :=
+-- TODO components
+  ( identity  : C^.compose (m^.left_unitor_is_isomorphism^.inverse^.components module)  (C^.compose (m^.tensorMorphisms A^.unit (C^.identity module)) action) = C^.identity module )
 
 attribute [simp,ematch] ModuleObject.identity
 attribute [ematch] ModuleObject.associativity
 
-structure ModuleMorphism { C : MonoidalCategory } { A : MonoidObject C } ( X Y : ModuleObject A ) extends SemigroupModuleMorphism X^.to_SemigroupModuleObject Y^.to_SemigroupModuleObject
+structure ModuleMorphism { C : Category } { m : MonoidalStructure C } { A : MonoidObject m } ( X Y : ModuleObject A ) extends SemigroupModuleMorphism X^.to_SemigroupModuleObject Y^.to_SemigroupModuleObject
 
 attribute [ematch,simp] ModuleMorphism.compatibility
 
 @[pointwise] lemma ModuleMorphism_pointwisewise_equal
-  { C : MonoidalCategory }
-  { A : MonoidObject C }
+  { C : Category }
+  { m : MonoidalStructure C }
+  { A : MonoidObject m }
   { X Y : ModuleObject A }
   ( f g : ModuleMorphism X Y )
   ( w : f^.map = g^.map ) : f = g :=
@@ -31,14 +33,14 @@ attribute [ematch,simp] ModuleMorphism.compatibility
     blast
   end
 
-definition CategoryOfModules { C: MonoidalCategory } ( A : MonoidObject C ) : Category :=
+definition CategoryOfModules { C : Category } { m : MonoidalStructure C } ( A : MonoidObject m ) : Category :=
 {
   Obj := ModuleObject A,
   Hom := λ X Y, ModuleMorphism X Y,
   identity := λ X, ⟨ C^.identity X^.module, ♮ ⟩,
   compose  := λ _ _ _ f g, ⟨ C^.compose f^.map g^.map, ♮ ⟩,
-  left_identity  := ♮,
-  right_identity := ♮,
+  left_identity  := ♯,
+  right_identity := ♯,
   associativity  := ♮
 }
 

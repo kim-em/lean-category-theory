@@ -64,7 +64,7 @@ open tqft.categories.functor
   ( β : NaturalTransformation H I ) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
   {
     components := λ X : C^.Obj, E^.compose (β (F X)) (I^.onMorphisms (α X)),
-    naturality := ♮
+    naturality := ♯
   }
 
 @[unfoldable] definition whisker_on_left
@@ -115,8 +115,8 @@ definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α :
 
 lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F : Functor C D ) : is_NaturalIsomorphism (IdentityNaturalTransformation F) :=
   { inverse := IdentityNaturalTransformation F,
-    witness_1 := ♮,
-    witness_2 := ♮
+    witness_1 := ♯,
+    witness_2 := ♯
   }
 
 -- lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C^.Obj } :

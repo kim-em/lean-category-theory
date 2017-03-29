@@ -57,23 +57,21 @@ definition MonoidalStructure.inverse_associator
       (@Functor.onMorphisms _ _ m^.tensor ⟨V, Y⟩ ⟨W, Z⟩ ⟨g, k⟩) :=
   @Functor.functoriality (C × C) C m^.tensor ⟨U, X⟩ ⟨V, Y⟩ ⟨W, Z⟩ ⟨f, h⟩ ⟨g, k⟩
 
-set_option pp.implicit true
-
-lemma MonoidalStructure.interchange_left_identity
+@[ematch] lemma MonoidalStructure.interchange_left_identity
   { C : Category }
   ( m : MonoidalStructure C )
   { W X Y Z : C^.Obj }
   ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :
   @Functor.onMorphisms _ _ m^.tensor ⟨W, Z⟩ ⟨Y, Z⟩ ⟨C^.compose f g, C^.identity Z⟩
-    = C^.compose (m^.tensorMorphisms f (C^.identity Z)) (m^.tensorMorphisms g (C^.identity Z)) := begin  rewrite - m^.tensor^.functoriality, blast end -- FIXME tactics
+    = C^.compose (m^.tensorMorphisms f (C^.identity Z)) (m^.tensorMorphisms g (C^.identity Z)) := begin erewrite - m^.tensor^.functoriality, blast end -- FIXME tactics
 
-lemma MonoidalStructure.interchange_right_identity
+@[ematch] lemma MonoidalStructure.interchange_right_identity
   { C : Category }
   ( m : MonoidalStructure C )
   { W X Y Z : C^.Obj }
   ( f : C^.Hom W X ) ( g : C^.Hom X Y ) :
   @Functor.onMorphisms _ _ m^.tensor ⟨Z, W⟩ ⟨Z, Y⟩ ⟨C^.identity Z, C^.compose f g⟩
-    = C^.compose (m^.tensorMorphisms (C^.identity Z) f) (m^.tensorMorphisms (C^.identity Z) g) := begin  rewrite - m^.tensor^.functoriality, blast end
+    = C^.compose (m^.tensorMorphisms (C^.identity Z) f) (m^.tensorMorphisms (C^.identity Z) g) := begin erewrite - m^.tensor^.functoriality, blast end
 
 @[ematch] lemma MonoidalStructure.interchange_identities
   { C : Category }
@@ -167,18 +165,6 @@ lemma MonoidalStructure.inverse_associator_naturality
   begin
     dsimp,
     apply @NaturalTransformation.naturality _ _ _ _ ((m^.associator_is_isomorphism)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h)
-  end
-
--- This is just C^.tensor^.identities, but because of inheritance issues it is sometimes hard to apply directly.
-lemma TensorProduct.identities
-  { C : Category }
-  ( m : MonoidalStructure C )
-  ( X Y : C^.Obj ) :
-  m^.tensorMorphisms (C^.identity X) (C^.identity Y) = C^.identity (m^.tensorObjects X Y) :=
-  begin
-  dunfold MonoidalStructure.tensorMorphisms, dunfold MonoidalStructure.tensorObjects,
-  rewrite - m^.tensor^.identities,
-  blast
   end
 
 @[simp] lemma TensorProduct.two_identities
