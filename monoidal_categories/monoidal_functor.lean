@@ -11,7 +11,9 @@ open tqft.categories.isomorphism
 
 namespace tqft.categories.monoidal_functor
 
-structure MonoidalFunctor ( C D : MonoidalCategory ) :=
+universe variables u1 v1 u2 v2 u3 v3
+
+structure MonoidalFunctor ( C : MonoidalCategory.{u1 v1} ) ( D : MonoidalCategory.{u2 v2} ) :=
   ( functor : Functor C D )
   ( tensorator : NaturalIsomorphism (FunctorComposition C^.tensor functor) (FunctorComposition (functor × functor) D^.tensor) )
   ( associativity : ∀ X Y Z : C^.Obj, 
@@ -41,16 +43,20 @@ set_option trace.rewrite true
 set_option trace.kabstract true
 
 #check FunctorComposition_associativity
--- set_option pp.all true
+set_option pp.all true
 -- waiting on https://github.com/leanprover/lean/issues/1492
-definition MonoidalFunctorComposition { C D E : MonoidalCategory } ( F : MonoidalFunctor C D ) ( G : MonoidalFunctor D E ) : MonoidalFunctor C E :=
+definition MonoidalFunctorComposition
+  { C : MonoidalCategory.{u1 v1} }
+  { D : MonoidalCategory.{u2 v2} }
+  { E : MonoidalCategory.{u3 v3} }
+  ( F : MonoidalFunctor C D ) ( G : MonoidalFunctor D E ) : MonoidalFunctor C E :=
 {
   functor        := @FunctorComposition C D E F G,
   tensorator     := {
     morphism  := begin
-                   rewrite FunctorComposition_associativity,
-                   rewrite FunctorComposition_associativity,
-                   rewrite FunctorComposition_associativity,
+                   rewrite FunctorComposition.associativity,
+                   rewrite FunctorComposition.associativity,
+                   rewrite FunctorComposition.associativity,
                  end,
     inverse   := sorry,
     witness_1 := sorry,
