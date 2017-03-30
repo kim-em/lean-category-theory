@@ -7,7 +7,7 @@ import .isomorphism
 import .discrete_category
 import .functor
 import .natural_transformation
-import .examples.types
+import .examples.types.types
 
 open tqft.categories
 open tqft.categories.isomorphism
@@ -18,6 +18,8 @@ structure InitialObject ( C : Category ) :=
   (object : C^.Obj)
   (morphisms : ∀ Y : C^.Obj, C^.Hom object Y)
   (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom object Y, f = morphisms Y)
+
+attribute [ematch] InitialObject.uniqueness
 
 instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObject C) (C^.Obj) :=
   { coe := InitialObject.object }
@@ -30,7 +32,7 @@ attribute [ematch] is_initial.uniqueness
 
 lemma InitialObjects_have_only_the_identity_endomorphism { C : Category } ( X: InitialObject C ) ( f : C^.Hom X X ) : f = C^.identity X :=
   begin
-   blast, -- blast is not actually doing anything here; but perhaps later it will.
+   blast, -- TODO blast is not actually doing anything here; but perhaps later it will.
    rewrite X^.uniqueness X f,
    rewrite X^.uniqueness X (C^.identity X)
   end

@@ -13,72 +13,77 @@ namespace tqft.categories.drinfeld_centre
 
 local attribute [ematch] MonoidalStructure.interchange_right_identity  MonoidalStructure.interchange_left_identity
 
-definition DrinfeldCentreAsMonoidalCategory { C : Category } ( m : MonoidalStructure C ) : MonoidalStructure (DrinfeldCentre m) := {
-  DrinfeldCentreAsCategory C with
-  tensor_unit := {
-    object := C^.tensor_unit,
+definition DrinfeldCentreTensorUnit { C : Category } ( m : MonoidalStructure C ) : (DrinfeldCentre m)^.Obj := {
+    object := m^.tensor_unit,
     commutor := {
       morphism  := {
-        components := λ X, C^.compose (C^.left_unitor X) (C^.right_unitor_is_isomorphism^.inverse X),
+        components := λ X, C^.compose (m^.left_unitor X) (m^.right_unitor_is_isomorphism^.inverse^.components X),
         naturality := sorry
       },
       inverse   := {
-        components := λ X, C^.compose (C^.right_unitor X) (C^.left_unitor_is_isomorphism^.inverse X),
+        components := λ X, C^.compose (m^.right_unitor X) (m^.left_unitor_is_isomorphism^.inverse^.components X),
         naturality := sorry
       },
       witness_1 := sorry,
       witness_2 := sorry
     }
-  },
-  tensor := {
-    onObjects   := λ p, {
-      object   := C^.tensor (p.1^.object, p.2^.object),
-      commutor := {
-        morphism := {
-          components := λ X,
-            C^.compose (C^.compose (C^.compose (C^.compose (
-              C^.associator p.1^.object p.2^.object X
-            ) (
-              C^.tensorMorphisms (C^.identity p.1^.object) (p.2^.commutor^.morphism X)
-            )) (
-              C^.inverse_associator p.1^.object X p.2^.object
-            )) (
-              C^.tensorMorphisms (p.1^.commutor^.morphism X) (C^.identity p.2^.object)
-            )) (
-              C^.associator X p.1^.object p.2^.object
-            ),
-          naturality := sorry
-        },
-        inverse := {
-          components := sorry,
-          naturality := sorry
-        },
-        witness_1 := sorry,
-        witness_2 := sorry
-      }
-    },
-    onMorphisms := sorry,
-    identities := sorry,
-    functoriality := sorry
-  },
-  associator_transformation := {
-    components := λ t, ⟨ C^.associator_transformation ((t.1.1^.object, t.1.2^.object), t.2^.object), sorry ⟩,
-    naturality := sorry
-  },
-  associator_is_isomorphism := sorry,
-  left_unitor  := {
-    components := λ X, ⟨ C^.left_unitor X^.object, sorry ⟩,
-    naturality := sorry
-  },
-  right_unitor  := {
-    components := λ X, ⟨ C^.right_unitor X^.object, sorry ⟩,
-    naturality := sorry
-  },
-  left_unitor_is_isomorphism  := sorry,
-  right_unitor_is_isomorphism := sorry,
-  pentagon := sorry,
-  triangle := sorry
-}
+  }
+
+-- definition DrinfeldCentreTensorProduct { C : Category } ( m : MonoidalStructure C ) : TensorProduct (DrinfeldCentre m) := {
+--     onObjects   := λ p, {
+--       object   := m^.tensor (p.1^.object, p.2^.object),
+--       commutor := {
+--         morphism := {
+--           components := λ X,
+--             C^.compose (C^.compose (C^.compose (C^.compose (
+--               m^.associator p.1^.object p.2^.object X
+--             ) (
+--               m^.tensorMorphisms (C^.identity p.1^.object) (p.2^.commutor^.morphism^.components X)
+--             )) (
+--               m^.inverse_associator p.1^.object X p.2^.object
+--             )) (
+--               m^.tensorMorphisms (p.1^.commutor^.morphism^.components X) (C^.identity p.2^.object)
+--             )) (
+--               m^.associator X p.1^.object p.2^.object
+--             ),
+--           naturality := sorry
+--         },
+--         inverse := {
+--           components := sorry,
+--           naturality := sorry
+--         },
+--         witness_1 := sorry,
+--         witness_2 := sorry
+--       }
+--     },
+--     onMorphisms := sorry,
+--     identities := sorry,
+--     functoriality := sorry
+--   }
+
+-- definition DrinfeldCentreAssociator { C : Category } ( m : MonoidalStructure C ) : Associator (DrinfeldCentreTensorProduct m) := {
+--     components := sorry, --λ t, ⟨ m^.associator_transformation ((t.1.1^.object, t.1.2^.object), t.2^.object), sorry ⟩,
+--     naturality := sorry
+--   }
+
+-- definition DrinfeldCentreAsMonoidalCategory { C : Category } ( m : MonoidalStructure C ) : MonoidalStructure (DrinfeldCentre m) := {
+--   tensor_unit := DrinfeldCentreTensorUnit m,
+--   tensor := DrinfeldCentreTensorProduct m,
+--   associator_transformation := DrinfeldCentreAssociator m,
+--   associator_is_isomorphism := sorry,
+--   left_unitor  := {
+--     components := sorry, --λ X, ⟨ m^.left_unitor X^.object, sorry ⟩,
+--     naturality := sorry
+--   },
+--   right_unitor  := {
+--     components := sorry, --λ X, ⟨ m^.right_unitor X^.object, sorry ⟩,
+--     naturality := sorry
+--   },
+--   left_unitor_is_isomorphism  := sorry,
+--   right_unitor_is_isomorphism := sorry,
+--   pentagon := sorry,
+--   triangle := sorry
+-- }
 
 -- PROJECT Drinfeld centre as a braided category.
 
