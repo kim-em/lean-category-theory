@@ -22,20 +22,10 @@ definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategories
   },
   tensor_unit := DiscreteCategory.{u v} punit,
   associator_transformation := {
-    components := λ t, ProductCategoryAssociator t.1.1 t.1.2 t.2,
-    naturality := ♮
-  },
-  left_unitor  := {
-    components := λ p, RightProjection _ p,
-    naturality := ♮
-  },
-  right_unitor := {
-    components := λ p, LeftProjection p _,
-    naturality := ♮
-  },
-  pentagon := ♯,
-  triangle := ♮,
-  associator_is_isomorphism   := {
+    morphism := {
+      components := λ t, ProductCategoryAssociator t.1.1 t.1.2 t.2,
+      naturality := ♮
+    },
     inverse := {
       components := λ t, ProductCategoryInverseAssociator t.1.1 t.1.2 t.2,
       naturality := ♮
@@ -43,7 +33,11 @@ definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategories
     witness_1 := ♯,
     witness_2 := ♯
   },
-  left_unitor_is_isomorphism  := {
+  left_unitor  := {
+    morphism := {
+      components := λ p, RightProjection _ p,
+      naturality := ♮
+    },
     inverse := {
       components := λ t, LeftInjectionAt punit.star t,
       naturality := ♮
@@ -51,14 +45,20 @@ definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategories
     witness_1 := ♯,
     witness_2 := ♯
   },
-  right_unitor_is_isomorphism := {
+  right_unitor := {
+    morphism := {
+      components := λ p, LeftProjection p _,
+      naturality := ♮
+    },
     inverse := {
       components := λ t, RightInjectionAt punit.star t,
       naturality := ♮
     },
     witness_1 := ♯,
     witness_2 := ♯
-  }
+  },
+  pentagon := ♯,
+  triangle := ♮
 }
 
 -- PROJECT it's symmetric

@@ -15,14 +15,14 @@ structure EnrichedCategory { V: Category } ( m : MonoidalStructure V ) :=
   (identity : Π X : Obj, V^.Hom m^.tensor_unit (Hom X X))
   (left_identity  : ∀ { X Y : Obj }, 
     V^.compose 
-      (m^.left_unitor_is_isomorphism^.inverse^.components (Hom X Y)) -- TODO components
+      (m^.left_unitor^.inverse^.components (Hom X Y)) -- TODO components
     (V^.compose 
       (m^.tensorMorphisms (identity X) (V^.identity (Hom X Y))) 
       compose
     ) = V^.identity (Hom X Y) )
   (right_identity  : ∀ { X Y : Obj }, 
     V^.compose 
-      (m^.right_unitor_is_isomorphism^.inverse^.components (Hom X Y)) 
+      (m^.right_unitor^.inverse^.components (Hom X Y)) 
     (V^.compose 
       (m^.tensorMorphisms (V^.identity (Hom X Y)) (identity Y)) 
       compose

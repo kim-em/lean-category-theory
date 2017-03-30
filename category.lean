@@ -29,9 +29,9 @@ attribute [simp] Category.left_identity
 attribute [simp] Category.right_identity
 attribute [ematch] Category.associativity
 
-instance Category_to_Hom : has_coe_to_fun Category :=
-{ F   := λ C, C^.Obj → C^.Obj → Type v,
-  coe := Category.Hom }
+-- instance Category_to_Hom : has_coe_to_fun Category :=
+-- { F   := λ C, C^.Obj → C^.Obj → Type v,
+--   coe := Category.Hom }
 
 @[ematch] lemma Category.identity_idempotent
   ( C : Category )

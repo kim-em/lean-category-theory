@@ -28,18 +28,10 @@ definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
   tensor      := TensorProductOfTypes,
   tensor_unit := punit,
   associator_transformation := {
-    components := λ p t, (t.1.1, (t.1.2, t.2)),
-    naturality := ♮
-  },
-  left_unitor := {
-    components := λ p t, t.2,
-    naturality := ♮
-  },
-  right_unitor := {
-    components := λ p t, t.1,
-    naturality := ♮
-  },
-  associator_is_isomorphism := {
+    morphism := {
+      components := λ p t, (t.1.1, (t.1.2, t.2)),
+      naturality := ♮
+    },
     inverse := {
       components := λ p t, ((t.1, t.2.1), t.2.2),
       naturality := ♮
@@ -47,7 +39,11 @@ definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
     witness_1 := ♯,
     witness_2 := ♯
   },
-  left_unitor_is_isomorphism := {
+  left_unitor := {
+    morphism := {
+      components := λ p t, t.2,
+      naturality := ♮
+    },
     inverse := {
       components := λ p t, (punit.star, t),
       naturality := ♮
@@ -55,7 +51,11 @@ definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
     witness_1 := ♯,
     witness_2 := ♮
   },
-  right_unitor_is_isomorphism := {
+  right_unitor := {
+    morphism := {
+      components := λ p t, t.1,
+      naturality := ♮
+    },
     inverse := {
       components := λ p t, (t, punit.star),
       naturality := ♮

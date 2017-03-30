@@ -12,22 +12,22 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
-structure LaxMonoidalStructure ( C : Category ) :=
+structure MonoidalStructure ( C : Category ) :=
   (tensor                    : TensorProduct C)
   (tensor_unit               : C^.Obj)
   (associator_transformation : Associator tensor)
-  (left_unitor               : LeftUnitor ⟦tensor_unit⟧ tensor)
-  (right_unitor              : RightUnitor ⟦tensor_unit⟧ tensor)
+  (left_unitor               : LeftUnitor tensor_unit tensor)
+  (right_unitor              : RightUnitor tensor_unit tensor)
 
   (pentagon                  : Pentagon associator_transformation)
-  (triangle                  : Triangle ⟦tensor_unit⟧ left_unitor right_unitor associator_transformation)
+  (triangle                  : Triangle tensor_unit left_unitor right_unitor associator_transformation)
 
-attribute [ematch] LaxMonoidalStructure.pentagon
+attribute [ematch] MonoidalStructure.pentagon
 
-structure MonoidalStructure ( C: Category ) extends LaxMonoidalStructure C :=
-  (associator_is_isomorphism   : is_NaturalIsomorphism associator_transformation)
-  (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
-  (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
+-- structure MonoidalStructure ( C: Category ) extends LaxMonoidalStructure C :=
+--   (associator_is_isomorphism   : is_NaturalIsomorphism associator_transformation)
+--   (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
+--   (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
 
 instance MonoidalStructure_coercion_to_TensorProduct { C : Category } : has_coe (MonoidalStructure C) (TensorProduct C) :=
   { coe := MonoidalStructure.tensor }
@@ -46,7 +46,7 @@ definition MonoidalStructure.inverse_associator
   { C : Category }
   ( m : MonoidalStructure C )
   ( X Y Z : C^.Obj ) : C^.Hom (m^.tensorObjects X (m^.tensorObjects Y Z)) (m^.tensorObjects (m^.tensorObjects X Y) Z) :=
-  m^.associator_is_isomorphism^.inverse^.components ⟨⟨X, Y⟩, Z⟩ -- TODO why is the explicit ^.components required here?
+  m^.associator_transformation^.inverse^.components ⟨⟨X, Y⟩, Z⟩ -- TODO why is the explicit ^.components required here?
 
 -- TODO This works, but why do we need to be so explicit??
 @[ematch] definition MonoidalStructure.interchange
@@ -91,69 +91,69 @@ definition MonoidalStructure.inverse_associator
      simp
     end
 
-lemma MonoidalStructure.associator_naturality_0
-  { C : Category }
-  ( m : MonoidalStructure C )
-  { U V W X Y Z : C^.Obj }
-  (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
-    C^.compose
-      (m^.tensorMorphisms (m^.tensorMorphisms f g) h)
-      (m^.associator_transformation ((V, X), Z))
-    = C^.compose
-      (m^.associator_transformation ((U, W), Y))
-      (m^.tensorMorphisms f (m^.tensorMorphisms g h)) := 
-  begin
-    dsimp,
-    apply @NaturalTransformation.naturality _ _ _ _ m^.associator_transformation ((U, W), Y) ((V, X), Z) ((f, g), h)
-  end
+-- lemma MonoidalStructure.associator_naturality_0
+--   { C : Category }
+--   ( m : MonoidalStructure C )
+--   { U V W X Y Z : C^.Obj }
+--   (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
+--     C^.compose
+--       (m^.tensorMorphisms (m^.tensorMorphisms f g) h)
+--       (m^.associator_transformation ((V, X), Z))
+--     = C^.compose
+--       (m^.associator_transformation ((U, W), Y))
+--       (m^.tensorMorphisms f (m^.tensorMorphisms g h)) := 
+--   begin
+--     dsimp,
+--     apply @NaturalTransformation.naturality _ _ _ _ m^.associator_transformation ((U, W), Y) ((V, X), Z) ((f, g), h)
+--   end
 
 lemma MonoidalStructure.inverse_associator_naturality_0
   { C : Category }
   ( m : MonoidalStructure C )
   { U V W X Y Z : C^.Obj }
-  (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
+  (f : C^.Hom U V ) ( g : C^.Hom W X ) ( h : C^.Hom Y Z ) :
     C^.compose
       (@Functor.onMorphisms _ _ m^.tensor (U, _) (V, _) (f, (@Functor.onMorphisms _ _ m^.tensor (W, _) (X, _) (g, h))))
-      (((m^.associator_is_isomorphism)^.inverse)^.components ((V, X), Z))
+      (((m^.associator_transformation)^.inverse)^.components ((V, X), Z))
     = C^.compose
-      (((m^.associator_is_isomorphism)^.inverse)^.components ((U, W), Y))
+      (((m^.associator_transformation)^.inverse)^.components ((U, W), Y))
       (@Functor.onMorphisms _ _ m^.tensor (_, Y) (_, Z) ((@Functor.onMorphisms _ _ m^.tensor (U, _) (V, _) (f, g)), h)) :=
   begin
     dsimp,
-    apply @NaturalTransformation.naturality _ _ _ _ ((m^.associator_is_isomorphism)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h)
+    apply @NaturalTransformation.naturality _ _ _ _ ((m^.associator_transformation)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h)
   end
 
-lemma MonoidalStructure.associator_naturality
-  { C : Category }
-  ( m : MonoidalStructure C )
-  { U V W X Y Z : C^.Obj }
-  (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
-    C^.compose
-      (m^.tensorMorphisms (m^.tensorMorphisms f g) h)
-      (m^.associator V X Z)
-    = C^.compose
-      (m^.associator U W Y)
-      (m^.tensorMorphisms f (m^.tensorMorphisms g h)) := 
-  begin
-    dsimp,
-    apply @NaturalTransformation.naturality _ _ _ _ m^.associator_transformation ((U, W), Y) ((V, X), Z) ((f, g), h)
-  end
+-- lemma MonoidalStructure.associator_naturality
+--   { C : Category }
+--   ( m : MonoidalStructure C )
+--   { U V W X Y Z : C^.Obj }
+--   (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
+--     C^.compose
+--       (m^.tensorMorphisms (m^.tensorMorphisms f g) h)
+--       (m^.associator V X Z)
+--     = C^.compose
+--       (m^.associator U W Y)
+--       (m^.tensorMorphisms f (m^.tensorMorphisms g h)) := 
+--   begin
+--     dsimp,
+--     apply @NaturalTransformation.naturality _ _ _ _ m^.associator_transformation ((U, W), Y) ((V, X), Z) ((f, g), h)
+--   end
 
-lemma MonoidalStructure.inverse_associator_naturality
-  { C : Category }
-  ( m : MonoidalStructure C )
-  { U V W X Y Z : C^.Obj }
-  (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
-    C^.compose
-      (m^.tensorMorphisms f (m^.tensorMorphisms g h))
-      (m^.inverse_associator V X Z)
-    = C^.compose
-      (m^.inverse_associator U W Y)
-      (m^.tensorMorphisms (m^.tensorMorphisms f g) h) := 
-  begin
-    dsimp,
-    apply @NaturalTransformation.naturality _ _ _ _ ((m^.associator_is_isomorphism)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h)
-  end
+-- lemma MonoidalStructure.inverse_associator_naturality
+--   { C : Category }
+--   ( m : MonoidalStructure C )
+--   { U V W X Y Z : C^.Obj }
+--   (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
+--     C^.compose
+--       (m^.tensorMorphisms f (m^.tensorMorphisms g h))
+--       (m^.inverse_associator V X Z)
+--     = C^.compose
+--       (m^.inverse_associator U W Y)
+--       (m^.tensorMorphisms (m^.tensorMorphisms f g) h) := 
+--   begin
+--     dsimp,
+--     apply @NaturalTransformation.naturality _ _ _ _ ((m^.associator_is_isomorphism)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h)
+--   end
 
 @[simp] lemma TensorProduct.two_identities
   { C : Category }

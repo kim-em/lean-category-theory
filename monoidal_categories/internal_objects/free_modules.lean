@@ -23,7 +23,7 @@ definition CategoryOfFreeModules { C : Category } { m : MonoidalStructure C } ( 
   Obj := C^.Obj,
   Hom := λ X Y, C^.Hom X (m^.tensorObjects A^.object Y),
   -- TODO components
-  identity := λ X, C^.compose (m^.left_unitor_is_isomorphism^.inverse^.components X) (m^.tensorMorphisms A^.unit (C^.identity X)),
+  identity := λ X, C^.compose (m^.left_unitor^.inverse^.components X) (m^.tensorMorphisms A^.unit (C^.identity X)),
   compose := λ _ _ Z f g, C^.compose (C^.compose (C^.compose f (m^.tensorMorphisms (C^.identity A^.object) g)) (m^.inverse_associator A^.object A^.object Z)) (m^.tensorMorphisms A^.multiplication (C^.identity Z)),
   left_identity := begin
                     -- PROJECT dealing with associativity here is quite tedious.
@@ -36,16 +36,19 @@ definition CategoryOfFreeModules { C : Category } { m : MonoidalStructure C } ( 
                     rewrite C^.associativity,
                     rewrite C^.associativity,
                     erewrite - C^.associativity (m^.tensorMorphisms A^.unit (C^.identity X)),
-                    rewrite - MonoidalStructure.interchange_identities,
+                    rewrite - m^.interchange_identities,
                     rewrite C^.associativity,
                     rewrite - C^.associativity (m^.tensorMorphisms A^.unit (C^.identity (m^.tensorObjects A^.object Y))),
                     rewrite - m^.tensor^.identities,
                     erewrite m^.inverse_associator_naturality_0 A^.unit (C^.identity A^.object) (C^.identity Y),
                     erewrite C^.associativity,
                     erewrite - m^.interchange,
-                    rewrite A^.left_identity,
+                    rewrite A^.left_identity, -- <<--- here is the only interesting step!
                     simp, dsimp,
                     erewrite C^.right_identity,
+                    erewrite - C^.associativity,
+                    erewrite - m^.left_unitor^.inverse^.naturality,
+                    dunfold IdentityFunctor, dsimp,
                     exact sorry
                    end,
   right_identity := sorry,

@@ -9,15 +9,17 @@ open tqft.categories
 namespace tqft.categories.isomorphism
 
 structure Isomorphism ( C: Category ) ( X Y : C^.Obj ) :=
-  (morphism : C X Y)
-  (inverse : C Y X)
+  (morphism : C^.Hom X Y)
+  (inverse : C^.Hom Y X)
   (witness_1 : C^.compose morphism inverse = C^.identity X)
   (witness_2 : C^.compose inverse morphism = C^.identity Y)
 
-instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } : has_coe (Isomorphism C X Y) (C X Y) :=
+attribute [simp,ematch] Isomorphism.witness_1 Isomorphism.witness_2
+
+instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } : has_coe (Isomorphism C X Y) (C^.Hom X Y) :=
   { coe := Isomorphism.morphism }
 
-definition Isomorphism.inverse_Isomorphism { C : Category } { X Y : C^.Obj } ( I : Isomorphism C X Y ) : Isomorphism C Y X :=
+definition Isomorphism.reverse { C : Category } { X Y : C^.Obj } ( I : Isomorphism C X Y ) : Isomorphism C Y X :=
   {
     morphism  := I^.inverse,
     inverse   := I^.morphism,
@@ -25,17 +27,14 @@ definition Isomorphism.inverse_Isomorphism { C : Category } { X Y : C^.Obj } ( I
     witness_2 := I^.witness_1
   }
 
-structure is_Isomorphism { C : Category } { X Y : C^.Obj } ( morphism : C X Y ) :=
-  (inverse : C Y X)
+structure is_Isomorphism { C : Category } { X Y : C^.Obj } ( morphism : C^.Hom X Y ) :=
+  (inverse : C^.Hom Y X)
   (witness_1 : C^.compose morphism inverse = C^.identity X)
   (witness_2 : C^.compose inverse morphism = C^.identity Y)
 
-instance is_Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } ( f : C X Y ): has_coe (is_Isomorphism f) (C X Y) :=
+attribute [simp,ematch] is_Isomorphism.witness_1 is_Isomorphism.witness_2
+
+instance is_Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } ( f : C^.Hom X Y ): has_coe (is_Isomorphism f) (C^.Hom X Y) :=
   { coe := λ _, f }
-
-structure Inverse { C: Category } { X Y : C^.Obj } ( morphism: C X Y ) :=
-  (inverse : C Y X)
-  (witness_1 : C^.compose morphism inverse = C^.identity X)
-  (witness_2 : C^.compose inverse morphism = C^.identity Y)
 
 end tqft.categories.isomorphism

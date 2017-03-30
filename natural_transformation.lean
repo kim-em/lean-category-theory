@@ -109,9 +109,64 @@ definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomor
 instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category } ( F G : Functor C D ) : has_coe (NaturalIsomorphism F G) (NaturalTransformation F G) :=
   { coe := Isomorphism.morphism }
 
+@[ematch] lemma NaturalIsomorphism_componentwise_witness_1
+  { C D : Category }
+  { F G : Functor C D }
+  ( α : NaturalIsomorphism F G )
+  ( X : C^.Obj )
+   : D^.compose (α^.morphism^.components X) (α^.inverse^.components X) = D^.identity (F X)
+   := congr_arg (λ β, NaturalTransformation.components β X) α^.witness_1
+@[ematch] lemma NaturalIsomorphism_componentwise_witness_2
+  { C D : Category }
+  { F G : Functor C D }
+  ( α : NaturalIsomorphism F G )
+  ( X : C^.Obj )
+   : D^.compose (α^.inverse^.components X) (α^.morphism^.components X) = D^.identity (G X)
+   := congr_arg (λ β, NaturalTransformation.components β X) α^.witness_2
+
+definition vertical_composition_of_NaturalIsomorphisms 
+  { C D : Category }
+  { F G H : Functor C D }
+  ( α : NaturalIsomorphism F G )
+  ( β : NaturalIsomorphism G H )
+   : NaturalIsomorphism F H := {
+  morphism := (FunctorCategory C D)^.compose α^.morphism β^.morphism,
+  inverse  := (FunctorCategory C D)^.compose β^.inverse  α^.inverse,
+  witness_1 := begin
+                --  smt_eblast, -- FIXME why doesn't this work?
+                 rewrite Category.associativity,
+                 rewrite - (FunctorCategory C D)^.associativity β^.morphism,
+                 simp
+               end,
+  witness_2 := begin
+                --  smt_eblast, -- FIXME why doesn't this work?
+                 rewrite Category.associativity,
+                 rewrite - (FunctorCategory C D)^.associativity α^.inverse,
+                 simp
+               end
+}
+
 open NaturalTransformation
 
 definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α : NaturalTransformation F G ) := @is_Isomorphism (FunctorCategory C D) F G α
+
+@[ematch] lemma is_NaturalIsomorphism_componentwise_witness_1
+  { C D : Category }
+  { F G : Functor C D }
+  ( α : NaturalTransformation F G )
+  ( w : is_NaturalIsomorphism α )
+  ( X : C^.Obj )
+   : D^.compose (α^.components X) (w^.inverse^.components X) = D^.identity (F X)
+   := congr_arg (λ β, NaturalTransformation.components β X) w^.witness_1
+@[ematch] lemma is_NaturalIsomorphism_componentwise_witness_2
+  { C D : Category }
+  { F G : Functor C D }
+  ( α : NaturalTransformation F G )
+  ( w : is_NaturalIsomorphism α )
+  ( X : C^.Obj )
+   : D^.compose (w^.inverse^.components X) (α^.components X) = D^.identity (G X)
+   := congr_arg (λ β, NaturalTransformation.components β X) w^.witness_2
+
 
 lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F : Functor C D ) : is_NaturalIsomorphism (IdentityNaturalTransformation F) :=
   { inverse := IdentityNaturalTransformation F,

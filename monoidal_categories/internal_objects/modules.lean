@@ -11,7 +11,7 @@ namespace tqft.categories.internal_objects
 
 structure ModuleObject { C : Category } { m : MonoidalStructure C } ( A : MonoidObject m ) extends SemigroupModuleObject A^.to_SemigroupObject :=
 -- TODO components
-  ( identity  : C^.compose (m^.left_unitor_is_isomorphism^.inverse^.components module)  (C^.compose (m^.tensorMorphisms A^.unit (C^.identity module)) action) = C^.identity module )
+  ( identity  : C^.compose (m^.left_unitor^.inverse^.components module)  (C^.compose (m^.tensorMorphisms A^.unit (C^.identity module)) action) = C^.identity module )
 
 attribute [simp,ematch] ModuleObject.identity
 attribute [ematch] ModuleObject.associativity

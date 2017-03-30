@@ -21,21 +21,19 @@ universe variables u v
   FunctorComposition (IdentityFunctor C × tensor) tensor
 
 @[reducible] definition Associator { C : Category.{u v} } ( tensor : TensorProduct C ) :=
-  NaturalTransformation
+  NaturalIsomorphism
     (left_associated_triple_tensor tensor)
     (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor tensor))
 
 @[reducible] definition RightUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
-  NaturalTransformation
+  NaturalIsomorphism
     (FunctorComposition (RightInjectionAt I C) tensor)
     (IdentityFunctor C)
 
 @[reducible] definition LeftUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
-  NaturalTransformation
+  NaturalIsomorphism
     (FunctorComposition (LeftInjectionAt I C) tensor)
     (IdentityFunctor C)
-
-@[reducible] definition TensorProduct.objects { C : Category } ( tensor : TensorProduct C ) ( X Y : C^.Obj ) := tensor^.onObjects (X, Y)
 
 -- TODO all the let statements cause problems later...
 @[unfoldable] definition Pentagon { C : Category } { tensor : TensorProduct C } ( associator : Associator tensor ) :=

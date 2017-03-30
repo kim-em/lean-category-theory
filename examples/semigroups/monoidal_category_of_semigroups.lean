@@ -48,35 +48,21 @@ open tqft.categories.products
 -- set_option trace.debug.dsimplify true
 
 definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
-  tensor               := {
+  tensor := {
     onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
     onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
     identities    := ♯,
     functoriality := ♮
   },
-  tensor_unit          := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
+  tensor_unit := ⟨ punit, trivial_semigroup ⟩, -- punit is just a universe-parameterized version of unit
   associator_transformation := {
-    components := λ _, {
-      map := λ t, (t.1.1, (t.1.2, t.2)),
-      multiplicative := ♮
+    morphism := {
+      components := λ _, {
+        map := λ t, (t.1.1, (t.1.2, t.2)),
+        multiplicative := ♮
+      },
+      naturality := ♮ 
     },
-    naturality := ♮ 
-  },
-  left_unitor := {
-    components := λ _, {
-      map := λ t, t.2,
-      multiplicative := ♮
-    },
-    naturality := ♮ 
-  },
-  right_unitor := {
-    components := λ _, {
-      map := λ t, t.1,
-      multiplicative := ♮
-    },
-    naturality := ♮ 
-  },
-  associator_is_isomorphism := {
     inverse := {
       components := λ _, {
         map := λ t, ((t.1, t.2.1), t.2.2),
@@ -84,19 +70,35 @@ definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryO
       },
       naturality := ♮  
     },
-    witness_1 := begin
-                   blast,
-                   intros,
-                  --  trace "Beginning dsimp",
-                  --  dsimp [FunctorCategory], -- FIXME seems to run forever?
-                   exact sorry
-                 end,
+    witness_1 := ♮,
+    witness_2 := ♮
+  },
+  left_unitor := {
+    morphism := {
+      components := λ _, {
+        map := λ t, t.2,
+        multiplicative := ♮
+      },
+      naturality := ♮ 
+    },
+    inverse := sorry,
+    witness_1 := sorry,
     witness_2 := sorry
   },
-  left_unitor_is_isomorphism := sorry,
-  right_unitor_is_isomorphism := sorry,
-  pentagon := sorry,
-  triangle := sorry
+  right_unitor := {
+    morphism := {
+      components := λ _, {
+        map := λ t, t.1,
+        multiplicative := ♮
+      },
+      naturality := ♮ 
+    },
+    inverse := sorry,
+    witness_1 := sorry,
+    witness_2 := sorry
+  },
+  pentagon := ♮,
+  triangle := ♮
 }
 
 open tqft.categories.natural_transformation

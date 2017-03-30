@@ -15,7 +15,7 @@ universe variables u v
 @[reducible] definition pentagon_3step_1 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
   let α := m^.associator_transformation in
   whisker_on_right
-    (α × IdentityNaturalTransformation (IdentityFunctor C))
+    (α^.morphism × IdentityNaturalTransformation (IdentityFunctor C))
     m^.tensor
 
 @[reducible] definition pentagon_3step_2 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
@@ -24,7 +24,7 @@ universe variables u v
     (FunctorComposition
       (ProductCategoryAssociator C C C × IdentityFunctor C)
       ((IdentityFunctor C × m^.tensor) × IdentityFunctor C))
-    α
+    α^.morphism
 
 @[reducible] definition pentagon_3step_3 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
   let α := m^.associator_transformation in
@@ -33,7 +33,7 @@ universe variables u v
       (ProductCategoryAssociator C C C × IdentityFunctor C)
       (ProductCategoryAssociator C (C × C) C))
     (whisker_on_right
-      (IdentityNaturalTransformation (IdentityFunctor C) × α)
+      (IdentityNaturalTransformation (IdentityFunctor C) × α^.morphism)
       m^.tensor)
 
 @[reducible] definition pentagon_3step { C : Category.{u v} } ( m : MonoidalStructure C ) :=
@@ -47,7 +47,7 @@ universe variables u v
   let α := m^.associator_transformation in
   whisker_on_left
     ((m^.tensor × IdentityFunctor C) × IdentityFunctor C)
-    α
+    α^.morphism
 
 @[reducible] definition pentagon_2step_2 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
   let α := m^.associator_transformation in
@@ -55,7 +55,7 @@ universe variables u v
     (FunctorComposition
       (ProductCategoryAssociator (C × C) C C)
       (IdentityFunctor (C × C) × m^.tensor))
-    α
+    α^.morphism
 
 @[reducible] definition pentagon_2step { C : Category.{u v} } ( m : MonoidalStructure C ) :=
   vertical_composition_of_NaturalTransformations
