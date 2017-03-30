@@ -17,8 +17,8 @@ structure MonoidalFunctor { C : Category.{u1 v1} } ( m : MonoidalStructure C ) {
   ( functor : Functor C D )
   ( tensorator : NaturalIsomorphism (FunctorComposition m^.tensor functor) (FunctorComposition (functor × functor) n^.tensor) )
   ( associativity : ∀ X Y Z : C^.Obj, 
-      D^.compose (tensorator (m^.tensor (X, Y), Z)) (D^.compose (n^.tensorMorphisms (tensorator (X, Y)) (D^.identity (functor Z))) (n^.associator (functor X) (functor Y) (functor Z)))
-      = D^.compose (functor^.onMorphisms (m^.associator X Y Z)) (D^.compose (tensorator (X, m^.tensor (Y, Z))) (n^.tensorMorphisms (D^.identity (functor X)) (tensorator (Y, Z))))
+      D^.compose (tensorator (m (X, Y), Z)) (D^.compose (n^.tensorMorphisms (tensorator (X, Y)) (D^.identity (functor Z))) (n^.associator (functor X) (functor Y) (functor Z)))
+      = D^.compose (functor^.onMorphisms (m^.associator X Y Z)) (D^.compose (tensorator (X, m (Y, Z))) (n^.tensorMorphisms (D^.identity (functor X)) (tensorator (Y, Z))))
   )
   ( identerator : Isomorphism D (functor m^.tensor_unit) n^.tensor_unit)
   ( left_identity  : ∀ X : C^.Obj, D^.compose (tensorator (m^.tensor_unit, X)) (D^.compose (n^.tensorMorphisms identerator^.morphism (D^.identity (functor X))) (n^.left_unitor  (functor X))) = functor^.onMorphisms (m^.left_unitor X)  )

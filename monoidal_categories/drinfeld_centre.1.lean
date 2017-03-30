@@ -24,14 +24,18 @@ definition DrinfeldCentreTensorUnit { C : Category } ( m : MonoidalStructure C )
         components := λ X, C^.compose (m^.right_unitor X) (m^.left_unitor_is_isomorphism^.inverse^.components X),
         naturality := sorry
       },
-      witness_1 := sorry,
+      witness_1 := begin
+                     intros,
+                     unfold_unfoldable, 
+                     rewrite - C^.associativity
+                   end,
       witness_2 := sorry
     }
   }
 
 -- definition DrinfeldCentreTensorProduct { C : Category } ( m : MonoidalStructure C ) : TensorProduct (DrinfeldCentre m) := {
 --     onObjects   := λ p, {
---       object   := m^.tensor (p.1^.object, p.2^.object),
+--       object   := m (p.1^.object, p.2^.object),
 --       commutor := {
 --         morphism := {
 --           components := λ X,

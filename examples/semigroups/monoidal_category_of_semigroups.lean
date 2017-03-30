@@ -85,6 +85,7 @@ definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryO
       naturality := ♮  
     },
     witness_1 := begin
+                   blast,
                    intros,
                   --  trace "Beginning dsimp",
                   --  dsimp [FunctorCategory], -- FIXME seems to run forever?

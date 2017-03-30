@@ -29,9 +29,12 @@ structure MonoidalStructure ( C: Category ) extends LaxMonoidalStructure C :=
   (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
   (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
 
+instance MonoidalStructure_coercion_to_TensorProduct { C : Category } : has_coe (MonoidalStructure C) (TensorProduct C) :=
+  { coe := MonoidalStructure.tensor }
+
 -- Convenience methods which take two arguments, rather than a pair. (This seems to often help the elaborator avoid getting stuck on `prod.mk`.)
-@[reducible] definition MonoidalStructure.tensorObjects { C : Category } ( m : MonoidalStructure C ) ( X Y : C^.Obj ) : C^.Obj := m^.tensor ⟨X, Y⟩
-@[reducible] definition MonoidalStructure.tensorMorphisms { C : Category } ( m : MonoidalStructure C ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (m^.tensor ⟨W, Y⟩) (m^.tensor ⟨X, Z⟩) := m^.tensor^.onMorphisms ⟨f, g⟩
+@[reducible] definition MonoidalStructure.tensorObjects { C : Category } ( m : MonoidalStructure C ) ( X Y : C^.Obj ) : C^.Obj := m ⟨X, Y⟩
+@[reducible] definition MonoidalStructure.tensorMorphisms { C : Category } ( m : MonoidalStructure C ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (m ⟨W, Y⟩) (m ⟨X, Z⟩) := m^.tensor^.onMorphisms ⟨f, g⟩
 
 definition MonoidalStructure.associator
   { C : Category }
@@ -87,21 +90,6 @@ definition MonoidalStructure.inverse_associator
      rewrite - MonoidalStructure.interchange,
      simp
     end
-
--- lemma MonoidalCategory.inverse_associator_naturality'
---   { C : MonoidalCategory }
---   { U V W X Y Z : C^.Obj }
---   (f : C U V ) ( g : C W X ) ( h : C Y Z ) :
---     C^.compose
---       (@Functor.onMorphisms _ _ (right_associated_triple_tensor C^.tensor) (U, (W, Y)) (V, (X, Z)) (f, (g, h))) 
---       (C^.inverse_associator V X Z)
---     = C^.compose
---       (C^.inverse_associator U W Y)
---       (@Functor.onMorphisms _ _ (left_associated_triple_tensor C^.tensor) ((U, W), Y) ((V, X), Z) ((f, g), h)) :=
---   begin
---     dsimp,
---     apply @NaturalTransformation.naturality _ _ _ _ ((C^.associator_is_isomorphism)^.inverse) ((U, W), Y) ((V, X), Z) ((f, g), h)
---   end
 
 lemma MonoidalStructure.associator_naturality_0
   { C : Category }

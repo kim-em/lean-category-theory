@@ -26,12 +26,15 @@ definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategories
     naturality := ♮
   },
   left_unitor  := {
-    components := sorry, --λ p, RightProjection _ p,
-    naturality := sorry
+    components := λ p, RightProjection _ p,
+    naturality := ♮
   },
-  right_unitor := sorry,
+  right_unitor := {
+    components := λ p, LeftProjection p _,
+    naturality := ♮
+  },
   pentagon := ♯,
-  triangle := sorry,
+  triangle := ♮,
   associator_is_isomorphism   := {
     inverse := {
       components := λ t, ProductCategoryInverseAssociator t.1.1 t.1.2 t.2,
@@ -40,8 +43,22 @@ definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategories
     witness_1 := ♯,
     witness_2 := ♯
   },
-  left_unitor_is_isomorphism  := sorry,
-  right_unitor_is_isomorphism := sorry
+  left_unitor_is_isomorphism  := {
+    inverse := {
+      components := λ t, LeftInjectionAt punit.star t,
+      naturality := ♮
+    },
+    witness_1 := ♯,
+    witness_2 := ♯
+  },
+  right_unitor_is_isomorphism := {
+    inverse := {
+      components := λ t, RightInjectionAt punit.star t,
+      naturality := ♮
+    },
+    witness_1 := ♯,
+    witness_2 := ♯
+  }
 }
 
 -- PROJECT it's symmetric
