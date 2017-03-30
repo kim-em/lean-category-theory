@@ -109,14 +109,14 @@ definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomor
 instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category } ( F G : Functor C D ) : has_coe (NaturalIsomorphism F G) (NaturalTransformation F G) :=
   { coe := Isomorphism.morphism }
 
-@[ematch] lemma NaturalIsomorphism_componentwise_witness_1
+@[ematch] lemma NaturalIsomorphism.componentwise_witness_1
   { C D : Category }
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
   ( X : C^.Obj )
    : D^.compose (α^.morphism^.components X) (α^.inverse^.components X) = D^.identity (F X)
    := congr_arg (λ β, NaturalTransformation.components β X) α^.witness_1
-@[ematch] lemma NaturalIsomorphism_componentwise_witness_2
+@[ematch] lemma NaturalIsomorphism.componentwise_witness_2
   { C D : Category }
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )

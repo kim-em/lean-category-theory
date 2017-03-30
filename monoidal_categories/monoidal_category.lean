@@ -23,11 +23,7 @@ structure MonoidalStructure ( C : Category ) :=
   (triangle                  : Triangle tensor_unit left_unitor right_unitor associator_transformation)
 
 attribute [ematch] MonoidalStructure.pentagon
-
--- structure MonoidalStructure ( C: Category ) extends LaxMonoidalStructure C :=
---   (associator_is_isomorphism   : is_NaturalIsomorphism associator_transformation)
---   (left_unitor_is_isomorphism  : is_NaturalIsomorphism left_unitor)
---   (right_unitor_is_isomorphism : is_NaturalIsomorphism right_unitor)
+attribute [simp,ematch] MonoidalStructure.triangle
 
 instance MonoidalStructure_coercion_to_TensorProduct { C : Category } : has_coe (MonoidalStructure C) (TensorProduct C) :=
   { coe := MonoidalStructure.tensor }
@@ -36,17 +32,35 @@ instance MonoidalStructure_coercion_to_TensorProduct { C : Category } : has_coe 
 @[reducible] definition MonoidalStructure.tensorObjects { C : Category } ( m : MonoidalStructure C ) ( X Y : C^.Obj ) : C^.Obj := m ⟨X, Y⟩
 @[reducible] definition MonoidalStructure.tensorMorphisms { C : Category } ( m : MonoidalStructure C ) { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (m ⟨W, Y⟩) (m ⟨X, Z⟩) := m^.tensor^.onMorphisms ⟨f, g⟩
 
-definition MonoidalStructure.associator
+@[reducible] definition MonoidalStructure.associator
   { C : Category }
   ( m : MonoidalStructure C )
   ( X Y Z : C^.Obj ) : C^.Hom (m^.tensorObjects (m^.tensorObjects X Y) Z) (m^.tensorObjects X (m^.tensorObjects Y Z)) :=
   m^.associator_transformation ⟨⟨X, Y⟩, Z⟩
 
-definition MonoidalStructure.inverse_associator
+@[reducible] definition MonoidalStructure.inverse_associator
   { C : Category }
   ( m : MonoidalStructure C )
   ( X Y Z : C^.Obj ) : C^.Hom (m^.tensorObjects X (m^.tensorObjects Y Z)) (m^.tensorObjects (m^.tensorObjects X Y) Z) :=
   m^.associator_transformation^.inverse^.components ⟨⟨X, Y⟩, Z⟩ -- TODO why is the explicit ^.components required here?
+
+-- -- FIXME why do we need this?!
+-- @[ematch] lemma MonoidalStructure.triangle_components { C : Category } ( m : MonoidalStructure C ) ( X Y : C^.Obj ) :
+--   C^.compose (m^.associator X m^.tensor_unit Y) (m^.tensorMorphisms (C^.identity X) (m^.left_unitor Y)) = m^.tensorMorphisms (m^.right_unitor X) (C^.identity Y) := 
+--   begin
+--     exact m^.triangle X Y,
+--   end
+
+-- @[ematch] lemma MonoidalStructure.triangle_components_inverse { C : Category } ( m : MonoidalStructure C ) ( X Y : C^.Obj ) :
+--   C^.compose (m^.inverse_associator X m^.tensor_unit Y) (m^.tensorMorphisms (m^.right_unitor X) (C^.identity Y)) = m^.tensorMorphisms (C^.identity X) (m^.left_unitor Y) := 
+--   begin
+--     erewrite - m^.triangle_components X Y,
+--     erewrite - C^.associativity,
+--     dsimp,
+--     erewrite m^.associator_transformation^.componentwise_witness_2 ((X, m^.tensor_unit), Y),
+--     simp,
+--     trivial
+--   end
 
 -- TODO This works, but why do we need to be so explicit??
 @[ematch] definition MonoidalStructure.interchange

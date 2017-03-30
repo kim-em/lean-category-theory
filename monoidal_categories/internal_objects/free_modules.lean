@@ -49,6 +49,8 @@ definition CategoryOfFreeModules { C : Category } { m : MonoidalStructure C } ( 
                     erewrite - C^.associativity,
                     erewrite - m^.left_unitor^.inverse^.naturality,
                     dunfold IdentityFunctor, dsimp,
+                    erewrite C^.associativity,
+                    -- PROJECT this needs Proposition 2.2.4 of Etingof's "Tensor Categories" to finish; and that seems awkward to prove in our setup!
                     exact sorry
                    end,
   right_identity := sorry,

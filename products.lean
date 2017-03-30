@@ -42,7 +42,7 @@ end ProductCategory
   functoriality := ♯
 }
 
-definition LeftProjection ( C D : Category ) : Functor (C × D) C := 
+@[unfoldable] definition LeftProjection ( C D : Category ) : Functor (C × D) C := 
 {
   onObjects     := λ X, X.1,
   onMorphisms   := λ X Y f, f.1,
@@ -50,7 +50,7 @@ definition LeftProjection ( C D : Category ) : Functor (C × D) C :=
   functoriality := ♮
 }
 
-definition RightProjection ( C D : Category ) : Functor (C × D) D := 
+@[unfoldable] definition RightProjection ( C D : Category ) : Functor (C × D) D := 
 {
   onObjects     := λ X, X.2,
   onMorphisms   := λ X Y f, f.2,

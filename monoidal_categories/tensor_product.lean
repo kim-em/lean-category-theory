@@ -49,7 +49,7 @@ universe variables u v
       tensorObjects ( X Y : C^.Obj ) := tensor^.onObjects ⟨X, Y⟩,
       tensorMorphisms { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor^.onMorphisms ⟨f, g⟩ in
   ∀ X Y : C^.Obj,
-    tensorMorphisms (right_unitor X) (C^.identity Y)
-  = C^.compose (α X I Y) (tensorMorphisms (C^.identity X) (left_unitor Y))
+    C^.compose (α X I Y) (tensorMorphisms (C^.identity X) (left_unitor Y))
+  = tensorMorphisms (right_unitor X) (C^.identity Y)
 
 end tqft.categories.monoidal_category
