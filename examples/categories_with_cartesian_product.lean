@@ -13,15 +13,14 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
-definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategoriesAndFunctors.{u v} := {
-  tensor      := {
+definition TensorProductOfCategories : TensorProduct CategoryOfCategoriesAndFunctors.{u v} := {
     onObjects     := λ p, ProductCategory p.1 p.2,
     onMorphisms   := λ _ _ p, ProductFunctor p.1 p.2,
     identities    := ♯,
     functoriality := ♮
-  },
-  tensor_unit := DiscreteCategory.{u v} punit,
-  associator_transformation := {
+  }
+
+definition CategoryAssociator : Associator TensorProductOfCategories.{u v} := {
     morphism := {
       components := λ t, ProductCategoryAssociator t.1.1 t.1.2 t.2,
       naturality := ♮
@@ -32,33 +31,42 @@ definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategories
     },
     witness_1 := ♯,
     witness_2 := ♯
+  }
+
+definition CategoryLeftUnitor : @LeftUnitor CategoryOfCategoriesAndFunctors.{u v} (DiscreteCategory.{u v} punit) TensorProductOfCategories := {
+  morphism := {
+    components := λ p, RightProjection _ p,
+    naturality := ♮
   },
-  left_unitor  := {
-    morphism := {
-      components := λ p, RightProjection _ p,
-      naturality := ♮
-    },
-    inverse := {
-      components := λ t, LeftInjectionAt punit.star t,
-      naturality := ♮
-    },
-    witness_1 := ♯,
-    witness_2 := ♯
+  inverse := {
+    components := λ t, LeftInjectionAt punit.star t,
+    naturality := ♮
   },
-  right_unitor := {
-    morphism := {
-      components := λ p, LeftProjection p _,
-      naturality := ♮
-    },
-    inverse := {
-      components := λ t, RightInjectionAt punit.star t,
-      naturality := ♮
-    },
-    witness_1 := ♯,
-    witness_2 := ♯
+  witness_1 := ♯,
+  witness_2 := ♯
+}
+
+definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u v} (DiscreteCategory.{u v} punit) TensorProductOfCategories := {
+  morphism := {
+    components := λ p, LeftProjection p _,
+    naturality := ♮
   },
+  inverse := {
+    components := λ t, RightInjectionAt punit.star t,
+    naturality := ♮
+  },
+  witness_1 := ♯,
+  witness_2 := ♯
+}
+
+definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategoriesAndFunctors.{u v} := {
+  tensor      := TensorProductOfCategories,
+  tensor_unit := DiscreteCategory.{u v} punit,
+  associator_transformation := CategoryAssociator,
+  left_unitor  := CategoryLeftUnitor,
+  right_unitor := CategoryRightUnitor,
   pentagon := ♯,
-  triangle := ♮
+  triangle := ♯
 }
 
 -- PROJECT it's symmetric
