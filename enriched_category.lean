@@ -8,8 +8,8 @@ namespace tqft.categories.enriched
 open tqft.categories
 open tqft.categories.monoidal_category
 
-structure EnrichedCategory { V: Category } ( m : MonoidalStructure V ) :=
-  (Obj : Type )
+structure {u v w} EnrichedCategory { V: Category.{v w} } ( m : MonoidalStructure V ) :=
+  (Obj : Type u)
   (Hom : Obj → Obj → V^.Obj)
   (compose :  Π { X Y Z : Obj }, V^.Hom (m^.tensorObjects (Hom X Y) (Hom Y Z)) (Hom X Z))
   (identity : Π X : Obj, V^.Hom m^.tensor_unit (Hom X X))

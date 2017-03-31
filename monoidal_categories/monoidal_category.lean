@@ -182,7 +182,10 @@ lemma MonoidalStructure.inverse_associator_naturality_0
 -- instance MonoidalCategory_coercion_to_MonoidalStructure : has_coe_to_fun (MonoidalCategory) :=
 -- { F   := λ m, MonoidalStructure m^.C,
 --   coe := MonoidalCategory.m }
--- instance MonoidalCategory_coercion_to_Category (C : MonoidalCategory) : has_coe MonoidalCategory Category :=
+-- instance MonoidalCategory_coercion_to_Category : has_coe MonoidalCategory Category :=
 --   { coe := MonoidalCategory.C }
+
+-- def f ( C : MonoidalCategory ) := Category.identity C
+-- def g ( C : MonoidalCategory ) := MonoidalStructure.tensor_unit C
 
 end tqft.categories.monoidal_category

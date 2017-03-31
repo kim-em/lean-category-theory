@@ -88,8 +88,8 @@ lemma FunctorComposition.associativity
    : FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
 
 -- Note that this definition fixes the universe level of all the categories involved.
-@[unfoldable] definition CategoryOfCategoriesAndFunctors : Category := {
-  Obj := Category.{u1 v1},
+@[unfoldable] definition {u v} CategoryOfCategoriesAndFunctors : Category := {
+  Obj := Category.{u v},
   Hom := λ C D, Functor C D,
   identity := λ C, IdentityFunctor C,
   compose  := λ _ _ _ F G, FunctorComposition F G,
