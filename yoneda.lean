@@ -33,8 +33,9 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
     functoriality := ♯
 }
 
-#check id_locked
-#check eq.mp
+-- It seems these might be generally useful!
+local attribute [unfoldable] eq.mp
+local attribute [simp] id_locked_eq
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
 begin
@@ -57,15 +58,7 @@ begin
     end,
     -- then verify that it really is a preimage
     begin
-        -- TODO but now what do we do? id_locked is in the way
-        intros,
-        apply funext,
-        simp,
-        intros f,
-        rewrite id_locked_eq,
-        dsimp,
-        unfold eq.mp,
-        simp
+        blast
     end,
   end,
   -- Second we show it is faithful.
