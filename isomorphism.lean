@@ -37,4 +37,7 @@ attribute [simp,ematch] is_Isomorphism.witness_1 is_Isomorphism.witness_2
 instance is_Isomorphism_coercion_to_morphism { C : Category } { X Y : C^.Obj } ( f : C^.Hom X Y ): has_coe (is_Isomorphism f) (C^.Hom X Y) :=
   { coe := λ _, f }
 
+definition Epimorphism { C : Category } { X Y : C^.Obj } ( f : C^.Hom X Y ) := Π { Z : C^.Obj } ( g h : C^.Hom Y Z ) ( w : C^.compose f g = C^.compose f h), g = h
+definition Monomorphism { C : Category } { X Y : C^.Obj } ( f : C^.Hom X Y ) := Π { Z : C^.Obj } ( g h : C^.Hom Z X ) ( w : C^.compose g f = C^.compose h f), g = h
+
 end tqft.categories.isomorphism

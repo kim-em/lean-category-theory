@@ -9,30 +9,37 @@ open tqft.categories
 open tqft.categories.functor
 open tqft.categories.natural_transformation
 open tqft.categories.enriched
+open tqft.categories.products
 open tqft.categories.monoidal_category
 
 namespace tqft.categories.two_category_1
 
--- universe variables u v
-
-definition {v w} TwoCategory := EnrichedCategory.{(max (v+1) (w+1))} CartesianProductOfCategories.{v w}
+definition {u} TwoCategory := EnrichedCategory CartesianProductOfCategories.{u u}
 
 -- PROJECT test if this is viable --- construct examples, etc.
 
-set_option pp.all true
+-- set_option pp.all true
 
 #check TwoCategory
 #check CategoryOfCategoriesAndFunctors
 
-definition {v w} CAT : TwoCategory.{v w} :=
+@[unfoldable] definition horizontal_composition_on_FunctorCategories { C D E : Category } : Functor (ProductCategory (FunctorCategory C D) (FunctorCategory D E)) (FunctorCategory C E) :=
 {
-    Obj := Category.{v w},
-    Hom := λ C D, ⟦ FunctorCategory C D ⟧,
-    compose  := λ _ _ _ F G, sorry,
-    identity := sorry,
-    left_identity := sorry,
-    right_identity := sorry,
-    associativity := sorry
+    onObjects     := λ p, FunctorComposition p.1 p.2,
+    onMorphisms   := λ _ _ p, horizontal_composition_of_NaturalTransformations p.1 p.2,
+    identities    := ♯,
+    functoriality := ♯
+}
+
+definition {u} CAT : TwoCategory.{u} :=
+{
+    Obj            := Category.{u u},
+    Hom            := λ C D, FunctorCategory C D,
+    compose        := λ _ _ _, horizontal_composition_on_FunctorCategories,
+    identity       := λ C, { onObjects := λ _, IdentityFunctor C, onMorphisms := λ _ _ _, IdentityNaturalTransformation (IdentityFunctor C), identities := ♮, functoriality := ♯ },
+    left_identity  := ♯,
+    right_identity := ♮,
+    associativity  := ♮
 }  
 
 end tqft.categories.two_category_1

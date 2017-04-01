@@ -33,7 +33,9 @@ universe variables u v
     witness_2 := ♯
   }
 
-@[unfoldable] definition CategoryLeftUnitor : @LeftUnitor CategoryOfCategoriesAndFunctors.{u v} (DiscreteCategory.{u v} punit) TensorProductOfCategories := {
+@[unfoldable] definition CategoryTensorUnit := DiscreteCategory.{u v} punit
+
+@[unfoldable] definition CategoryLeftUnitor : @LeftUnitor CategoryOfCategoriesAndFunctors.{u v} CategoryTensorUnit TensorProductOfCategories := {
   morphism := {
     components := λ p, RightProjection _ p,
     naturality := ♮
@@ -81,7 +83,7 @@ universe variables u v
                end
 }
 
-@[unfoldable] definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u v} (DiscreteCategory.{u v} punit) TensorProductOfCategories := {
+@[unfoldable] definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u v} CategoryTensorUnit TensorProductOfCategories := {
   morphism := {
     components := λ p, LeftProjection p _,
     naturality := ♮
@@ -129,9 +131,9 @@ universe variables u v
                end
 }
 
-definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategoriesAndFunctors.{u v} := {
+@[unfoldable] definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategoriesAndFunctors.{u v} := {
   tensor      := TensorProductOfCategories,
-  tensor_unit := DiscreteCategory.{u v} punit,
+  tensor_unit := CategoryTensorUnit,
   associator_transformation := CategoryAssociator,
   left_unitor  := CategoryLeftUnitor,
   right_unitor := CategoryRightUnitor,

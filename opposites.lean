@@ -8,7 +8,7 @@ open tqft.categories
 
 namespace tqft.categories
 
-definition Opposite ( C : Category ) : Category :=
+@[unfoldable] definition Opposite ( C : Category ) : Category :=
 {
     Obj := C^.Obj,
     Hom := λ X Y, C^.Hom Y X,

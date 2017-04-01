@@ -9,31 +9,33 @@ definition Equalizer_in_Types { α β : Type } ( f g : α → β ) := @Equalizer
 
 local attribute [pointwise] funext
 
-lemma subtype_is_ExplicitEqualizer_in_Types { α β : Type } ( f g : α → β ) : Equalizer_in_Types f g :=
+lemma subtype_is_Equalizer_in_Types { α β : Type } ( f g : α → β ) : Equalizer_in_Types f g :=
 {
   equalizer     := { x : α // f x = g x },
   inclusion     := λ x, x.val,
   witness       := begin blast, induction x, blast end,
   factorisation := begin
                      blast, 
+                     refine ⟨ _, _ ⟩,
+                     -- First show that a factorisation exists
                      fapply subtype.mk, 
                      intros, 
                      unfold CategoryOfTypes at k, 
                      dsimp at k, 
-                     refine ⟨ k a, _ ⟩, 
+                     refine ⟨ k a, _ ⟩,
+                     -- we still need to show that it has the factorisation property.
                      intros, 
                      unfold CategoryOfTypes at w, 
                      dsimp at w, 
                      exact congr_arg (λ x: Z → β, x a) w, 
-                     blast
+                     blast,
+                     -- Second, show that the factorisation is unique!
+                     pose p := congr_fun X^.property x,
+                     simp at p,
+                     rewrite p,
+                     pose q := congr_fun Y^.property x,
+                     simp at q,
+                     rewrite q,
                    end
 }
 
-lemma ExplicitEqualizer_in_Types_is_subtype { α β : Type } ( f g : α → β ) ( equalizer : Equalizer_in_Types f g )
-  : @Isomorphism CategoryOfTypes equalizer^.equalizer { x : α // f x = g x } :=
-{
-  morphism := sorry,  
-  inverse  := sorry,
-  witness_1 := sorry,
-  witness_2 := sorry
-}
