@@ -47,8 +47,8 @@ begin
     unfold Full,
     intros,
     unfold Surjective,
-    refine ⟨ _ ⟩,
-    refine ⟨ _, _ ⟩,
+    refine ⟨ _ ⟩,     -- we need to build a `nonempty`
+    refine ⟨ _, _ ⟩,  -- we ned to build a preimage, which is expressed as a subtype.
     -- Now we have to construct the preimage
     begin
         intros,
@@ -68,7 +68,7 @@ begin
     unfold Injective,
     intros f g,
     simp,
-    intros,
+    intros a,
     pose p := congr_arg (λ T, NaturalTransformation.components T) a,
     simp at p,
     pose p' := congr_fun p X,
