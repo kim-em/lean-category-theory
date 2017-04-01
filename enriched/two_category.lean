@@ -3,7 +3,7 @@
 -- Authors: Scott Morrison
 
 import .enriched_category
-import .examples.categories.cartesian_product
+import ..examples.categories.cartesian_product
 
 open tqft.categories
 open tqft.categories.functor
@@ -15,13 +15,6 @@ open tqft.categories.monoidal_category
 namespace tqft.categories.two_category_1
 
 definition {u} TwoCategory := EnrichedCategory CartesianProductOfCategories.{u u}
-
--- PROJECT test if this is viable --- construct examples, etc.
-
--- set_option pp.all true
-
-#check TwoCategory
-#check CategoryOfCategoriesAndFunctors
 
 @[unfoldable] definition horizontal_composition_on_FunctorCategories { C D E : Category } : Functor (ProductCategory (FunctorCategory C D) (FunctorCategory D E)) (FunctorCategory C E) :=
 {
@@ -41,5 +34,7 @@ definition {u} CAT : TwoCategory.{u} :=
     right_identity := ♮,
     associativity  := ♮
 }  
+
+-- PROJECT strict n-categories; for this we'll need to define products of enriched categories, and show that (n-1) categories are symmetric.
 
 end tqft.categories.two_category_1

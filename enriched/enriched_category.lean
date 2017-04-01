@@ -1,7 +1,7 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
-import .monoidal_categories.monoidal_category
+import ..monoidal_categories.monoidal_category
 
 namespace tqft.categories.enriched
 
@@ -56,7 +56,5 @@ attribute [simp,ematch] Functor.functoriality
 
   -- PROJECT natural transformations don't always exist; you need various limits!
   -- PROJECT products for categories enriched in symmetric categories
-  -- PROJECT 2-categories as categories enriched in categories
-  -- PROJECT strict n-categories
-
+  
 end tqft.categories.enriched
