@@ -33,23 +33,57 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
     functoriality := ♯
 }
 
+#check id_locked
+#check eq.mp
+
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
 begin
   unfold Embedding,
   unfold Yoneda,
   split,
-  unfold Full,
-  intros,
-  unfold Surjective,
-  refine ⟨ _ ⟩,
-  refine ⟨ _, _ ⟩,
-  -- Now we have to construct the preimage
-  intros,
-  unfold FunctorCategory at a,
-  simp at a,
-  exact (a^.components X) (C^.identity X), -- <-- this is a critical step for surjectivity
-  blast,
-  -- TODO but now what do we do? id_locked is in the way
+  -- First we show it is full.
+  begin
+    unfold Full,
+    intros,
+    unfold Surjective,
+    refine ⟨ _ ⟩,
+    refine ⟨ _, _ ⟩,
+    -- Now we have to construct the preimage
+    begin
+        intros,
+        unfold FunctorCategory at a,
+        simp at a,
+        exact (a^.components X) (C^.identity X), -- <-- this is a critical step for surjectivity
+    end,
+    -- then verify that it really is a preimage
+    begin
+        -- TODO but now what do we do? id_locked is in the way
+        intros,
+        apply funext,
+        simp,
+        intros f,
+        rewrite id_locked_eq,
+        dsimp,
+        unfold eq.mp,
+        simp
+    end,
+  end,
+  -- Second we show it is faithful.
+  begin
+    unfold Faithful,
+    intros,
+    unfold Injective,
+    intros f g,
+    simp,
+    intros,
+    pose p := congr_arg (λ T, NaturalTransformation.components T) a,
+    simp at p,
+    pose p' := congr_fun p X,
+    simp at p',
+    pose p'' := congr_fun p' (C^.identity X),
+    simp at p'',
+    exact p''
+  end
 end
 
 end tqft.categories.yoneda
