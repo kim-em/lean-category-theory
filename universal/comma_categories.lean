@@ -2,17 +2,16 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .category
-import .isomorphism
-import .discrete_category
-import .functor
-import .natural_transformation
-import .examples.types.types
+import ..isomorphism
+import ..discrete_category
+import ..natural_transformation
+import ..graph
 
 open tqft.categories
 open tqft.categories.isomorphism
+open tqft.categories.graph
 
-namespace tqft.categories.universal
+namespace tqft.categories.comma
 
 structure InitialObject ( C : Category ) :=
   (object : C^.Obj)
@@ -115,7 +114,6 @@ definition ObjectAsFunctor { C : Category } ( X : C^.Obj ) : Functor (DiscreteCa
   functoriality := ♮
 }
 
--- PROJECT give the direct definition of slice and coslice categories, and then prove equivalence with this.
 definition SliceCategory   { C : Category } ( X : C^.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)
 definition CosliceCategory { C : Category } ( X : C^.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
@@ -125,61 +123,47 @@ definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@Obj
 definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
 definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
 
-structure ExplicitCone { J C : Category } ( F: Functor J C ) :=
-  ( limit : C^.Obj )
-  ( maps  : Π X : J^.Obj, C^.Hom limit (F X) )
-  ( commutativity : Π X Y : J^.Obj, Π f : J^.Hom X Y, C^.compose (maps X) (F^.onMorphisms f) = maps Y )
-
-open tqft.categories.examples.types
-
--- PROJECT Give more straightforward definitions, and then show they agree.
--- definition Cone_agrees_with_ExplicitCone { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F)^.Obj (ExplicitCone F) := sorry
--- definition Cones_agrees_with_ExplicitCones { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (Cones F) (ExplicitCones F) := sorry
-
--- Could easily replace this with bool, if it were worthwhile
 inductive Two : Type
 | _0 : Two
 | _1 : Two
 
 open Two
 
-definition Product { C : Category } ( A B : C^.Obj ) :=
-  @Limit (DiscreteCategory Two) C
-  {
-    onObjects     := λ X,
-                       match X with
-                         | _0 := A
-                         | _1 := B
-                       end,
-    onMorphisms   := λ X Y f,
-                       match X, Y, f with
-                         | _0, _0, _ := C^.identity A
-                         | _1, _1, _ := C^.identity B
-                       end,
-    identities    := begin
-                       intros, induction X,
-                       repeat { blast },
-                     end,
-    functoriality := λ X Y Z f g,
-                       match X, Y, Z, f, g with
-                         | _0, _0, _0, _, _ :=
-                           begin
-                             unfold Product._match_2,
-                             blast
-                           end
-                         | _1, _1, _1, _, _ :=
-                           begin
-                             unfold Product._match_2,
-                             blast
-                           end
-                       end
+definition WalkingPair : Graph := {
+  vertices := Two,
+  edges    := λ X Y, empty
+}
+definition WalkingParallelPair : Graph := {
+  vertices := Two,
+  edges    := λ X Y, match X, Y with 
+                       | _0, _1 := Two
+                       | _,  _  := empty
+                     end
 }
 
--- PROJECT then products, equalizers, etc.
--- perhaps a good way to find out if these definitions are usable is to verify that products are products.
+definition Pair_homomorphism { C : Category } ( α β : C^.Obj ) : GraphHomomorphism WalkingPair C := {
+  onVertices := λ X, match X with
+                       | _0 := α
+                       | _1 := β
+                    end,
+  onEdges    := λ X Y e, match X, Y, e with end
+}
 
--- PROJECT ... how to handle dual notions without too much duplication?
+definition ParallelPair_homomorphism { C : Category } { α β : C^.Obj } ( f g : C^.Hom α β ) : GraphHomomorphism WalkingParallelPair C := {
+  onVertices := λ X, match X with
+                       | _0 := α
+                       | _1 := β
+                    end,
+  onEdges    := λ X Y e, match X, Y, e with
+                           | _0, _1, _0 := f
+                           | _0, _1, _1 := g
+                         end
+}
 
+definition Product { C : Category } ( α β : C^.Obj ) := Limit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
+definition Coproduct { C : Category } ( α β : C^.Obj ) := Colimit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
+definition Equalizer { C : Category } { α β : C^.Obj } ( f g : C^.Hom α β ) := Limit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
+definition Coequalizer { C : Category } { α β : C^.Obj } ( f g : C^.Hom α β ) := Colimit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
 
-end tqft.categories.universal
+end tqft.categories.comma
 

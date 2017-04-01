@@ -1,52 +1,107 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
--- Authors: Scott Morrison
+-- Authors: Stephen Morgan and Scott Morrison
 
-import .category
+import .functor
+import .examples.types.types
 
 open tqft.categories
+
+namespace tqft.categories.graph
 
 structure {u v} Graph :=
   ( vertices : Type u )
   ( edges : vertices → vertices → Type v )
 
-inductive {u v} path { G : Graph.{u v} } : Graph.vertices G → Graph.vertices G → list G^.vertices → Type (max u v)
-| nil  : Π (x : G^.vertices), path x x [x]
-| cons : Π {x y z: G^.vertices} {l : list G^.vertices}, G^.edges x y → path y z l → path x z (x::l)
+open Graph
 
-definition {u v} path_between { G : Graph.{u v} } ( x : G^.vertices ) ( y : G^.vertices ) : Type (max u v)
-  := Σ l : list G^.vertices, path x y l
+inductive {u v} path { G : Graph.{u v} } : vertices G → vertices G → Type (max u v)
+| nil  : Π ( h : G^.vertices ), path h h
+| cons : Π { h s t : G^.vertices } ( e : G^.edges h s ) ( l : path s t ), path h t
 
-definition concatenate_paths
+@[unfoldable] definition concatenate_paths
  { G : Graph }
- { x y z : G^.vertices }
- { l : list G^.vertices }
- { m : list G^.vertices }
- ( p : path x y l )
- ( q : path y z m )
-  : path x z (l ++ m.tail)
-  := match q with
-     | path.nil y     := q
-     | path.cons e p' := path.cons e (concatenate_paths p' q)
+ { x y z : G^.vertices } : path x y → path y z → path x z :=
+     begin
+       intros p q,
+       induction p,
+       -- Deal with the case with p is nil
+       exact q,
+       -- Now the case where p is a cons
+       exact path.cons e (ih_1 q)
+     end
 
-definition concatenate_paths_between
-  { G : Graph }
-  { x y z : G^.vertices } 
-  ( p : path_between x y ) 
-  ( q: path_between y z ) 
-   : path_between x z 
-   := ⟨ p.1 ++ q.1.tail, concatenate_paths p.2 q.2 ⟩
-
-instance path_coercion_to_path_between { G : Graph } { x y : G^.vertices } { l : list G^.vertices } : has_coe (path x y l) (path_between x y) :=
-  { coe := λ p, ⟨ l, p ⟩ }
-
-definition PathCategory ( G : Graph ) : Category :=
+@[unfoldable] definition PathCategory ( G : Graph ) : Category :=
 {
   Obj            := G^.vertices,
-  Hom            := λ x y, path_between x y,
+  Hom            := λ x y, path x y,
   identity       := λ x, path.nil x,
-  compose        := λ _ _ _ f g, concatenate_paths_between f g,
-  left_identity  := sorry,
-  right_identity := sorry,
-  associativity  := sorry
+  compose        := λ _ _ _ f g, concatenate_paths f g,
+  left_identity  := ♮,
+  right_identity := begin
+                      blast,
+                      induction f,
+                      -- when f is nil
+                      dsimp,
+                      trivial,
+                      -- when f is cons
+                      dsimp,
+                      exact congr_arg (λ p, path.cons e p) ih_1
+                    end,
+  associativity  := begin
+                      blast,
+                      induction f,
+                      -- when f is nil
+                      dsimp,
+                      trivial,
+                      -- when f is cons
+                      dsimp,
+                      exact congr_arg (λ p, path.cons e p) (ih_1 g)
+                    end
 }
+
+structure GraphHomomorphism ( G H : Graph ) := 
+  ( onVertices : G^.vertices → H^.vertices )
+  ( onEdges    : ∀ { X Y : G^.vertices }, G^.edges X Y → H^.edges (onVertices X) (onVertices Y) )
+
+definition Graph.from_Category ( C : Category ) : Graph := {
+    vertices := C^.Obj,
+    edges    := λ X Y, C^.Hom X Y
+  }
+
+instance Category_to_Graph_coercion: has_coe Category Graph :=
+  { coe := Graph.from_Category }
+
+open tqft.categories.functor
+
+-- TODO it would be nice if we could use:
+-- definition path_to_morphism { G : Graph } { C : Category } ( h : GraphHomomorphism G C ) { X Y : G^.vertices } : path X Y → C^.Hom (h^.onVertices X) (h^.onVertices Y)
+-- | (path.nil X)    := C^.identity h^.onVertices X
+-- | (path.cons e p) := C^.compose (h^.onEdges e) (path_to_morphism p)
+
+@[unfoldable] definition path_to_morphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) { X Y : G^.vertices } : path X Y → C^.Hom (H^.onVertices X) (H^.onVertices Y) :=
+begin
+ intros p,
+ induction p with Z h s t e p i,
+ exact C^.identity (H^.onVertices Z),
+ exact C^.compose (H^.onEdges e) i
+end
+
+definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) : Functor (PathCategory G) C :=
+{
+  onObjects     := H^.onVertices,
+  onMorphisms   := λ _ _ f, path_to_morphism H f,
+  identities    := ♮,
+  functoriality := begin
+                     blast,
+                     induction f,
+                     simp,
+                     pose p := ih_1 g,
+                     blast
+                   end
+}
+
+instance GraphHomomorphism_to_Functor_coercion { G : Graph } { C : Category }: has_coe (GraphHomomorphism G C) (Functor (PathCategory G) C) :=
+  { coe := Functor.from_GraphHomomorphism }
+
+end net.tqft.categories.graph
