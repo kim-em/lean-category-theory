@@ -10,6 +10,15 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.adjunction
 
--- PROJECT, but as a special case of a duality in a 2-category.
+
+
+-- PROJECT, show these are a special case of a duality in a 2-category.
+
+structure Adjunction ( C D : Category ) :=
+  ( left_adjoint : Functor C D )
+  ( right_adjoint : Functor D C )
+  ( counit : NaturalTransformation (FunctorComposition left_adjoint right_adjoint) (IdentityFunctor C) )
+  ( unit : NaturalTransformation (IdentityFunctor D) (FunctorComposition right_adjoint left_adjoint) )
+  -- TODO triangles
 
 end tqft.categories.adjunction
