@@ -55,6 +55,5 @@ attribute [simp,ematch] Functor.identities
 attribute [simp,ematch] Functor.functoriality
 
   -- PROJECT natural transformations don't always exist; you need various limits!
-  -- PROJECT products for categories enriched in symmetric categories
   
 end tqft.categories.enriched

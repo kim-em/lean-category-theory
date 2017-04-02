@@ -36,11 +36,12 @@ structure Adjunction ( C D : Category ) :=
   ( triangle_1    : Triangle_1 unit counit )
   ( triangle_2    : Triangle_2 unit counit )
 
+-- PROJECT examples
 -- PROJECT adjoints are unique
 -- PROJECT equivalences can be lifted to adjoint equivalences
--- PROJECT examples
 -- PROJECT hom-set adjunctions
 -- PROJECT universal properties of adjunctions
 -- PROJECT show these are a special case of a duality in a 2-category.
+-- PROJECT adjoints of monoidal functors are (op)lax
 
 end tqft.categories.adjunction

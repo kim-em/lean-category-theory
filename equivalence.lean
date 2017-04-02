@@ -28,4 +28,7 @@ definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v
 
 definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π d : D^.Obj, Σ c : C^.Obj, Isomorphism D (F c) d
 
+-- PROJECT equivalences are fully faithful and essentially surjective
+-- PROJECT iff
+
 end tqft.categories.equivalence

@@ -88,7 +88,7 @@ open tactic.interactive
 @[simp,ematch] lemma {u1 v1 u2 v2} FunctorComposition.left_identity ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) ( F : Functor C D ) : FunctorComposition (IdentityFunctor C) F = F := ♯
 @[simp,ematch] lemma {u1 v1 u2 v2} FunctorComposition.right_identity ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) ( F : Functor C D ) : FunctorComposition F (IdentityFunctor D) = F := ♯
 
--- Note that this definition fixes the universe level of all the categories involved, so the witness fields are not useful as lemmas..
+-- Note that this definition fixes the universe level of all the categories involved, so the witness fields are not useful as lemmas.
 @[unfoldable] definition {u v} CategoryOfCategoriesAndFunctors : Category := {
   Obj := Category.{u v},
   Hom := λ C D, Functor C D,
