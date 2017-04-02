@@ -73,7 +73,7 @@ definition Associator_for_Semigroups : Associator TensorProduct_for_Semigroups :
     witness_2 := ♯
   }
 
-definition TensorUnit_for_Semigroups : CategoryOfSemigroups.Obj := ⟨ punit, trivial_semigroup ⟩
+definition TensorUnit_for_Semigroups : CategoryOfSemigroups.Obj := ⟨ punit, trivial_semigroup ⟩  -- punit is just a universe-parameterized version of unit
 
 definition LeftUnitor_for_Semigroups : @LeftUnitor CategoryOfSemigroups TensorUnit_for_Semigroups TensorProduct_for_Semigroups := {
     morphism := {
@@ -115,7 +115,7 @@ definition RightUnitor_for_Semigroups : @RightUnitor CategoryOfSemigroups Tensor
 
 @[unfoldable] definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
   tensor := TensorProduct_for_Semigroups,
-  tensor_unit := TensorUnit_for_Semigroups, -- punit is just a universe-parameterized version of unit
+  tensor_unit := TensorUnit_for_Semigroups,
   associator_transformation := Associator_for_Semigroups,
   left_unitor := LeftUnitor_for_Semigroups,
   right_unitor := RightUnitor_for_Semigroups,
@@ -126,28 +126,29 @@ definition RightUnitor_for_Semigroups : @RightUnitor CategoryOfSemigroups Tensor
 open tqft.categories.natural_transformation
 open tqft.categories.braided_monoidal_category
 
-@[unfoldable] definition SymmetryOnCategoryOfSemigroups : Symmetry MonoidalStructureOnCategoryOfSemigroups := {
-  braiding             := {
-    morphism  := {
-      components := λ _, {
-                           map := λ p, (p.2, p.1),
-                           multiplicative := ♮
-                         },
-      naturality := ♮
-    },
-    inverse   := {
-      components := λ _, {
-                           map := λ p, (p.2, p.1), -- PROJECT this is sufficiently obvious that automation should be doing it for us!
-                           multiplicative := ♮
-                         },
-      naturality := ♮
-    },
-    witness_1 := ♮,
-    witness_2 := ♮
-  },
-  hexagon_1 := ♮,
-  hexagon_2 := ♮,
-  symmetry  := ♮
-}
+-- Commented out while I work on an alternative.
+-- @[unfoldable] definition SymmetryOnCategoryOfSemigroups : Symmetry MonoidalStructureOnCategoryOfSemigroups := {
+--   braiding             := {
+--     morphism  := {
+--       components := λ _, {
+--                            map := λ p, (p.2, p.1),
+--                            multiplicative := ♮
+--                          },
+--       naturality := ♮
+--     },
+--     inverse   := {
+--       components := λ _, {
+--                            map := λ p, (p.2, p.1), -- PROJECT this is sufficiently obvious that automation should be doing it for us!
+--                            multiplicative := ♮
+--                          },
+--       naturality := ♮
+--     },
+--     witness_1 := ♯,
+--     witness_2 := ♯
+--   },
+--   hexagon_1 := ♯,
+--   hexagon_2 := ♯,
+--   symmetry  := ♮
+-- }
 
 end tqft.categories.examples.semigroups
