@@ -48,8 +48,8 @@ refine {
    triangle := _
  },
  all_goals { intros },
---  all_goals { dsimp }, -- FIXME For now this segfaults. Waiting on https://github.com/leanprover/lean/issues/1502
- 
+--  all_goals { dsimp }, -- FIXME Segfault has been fixed: https://github.com/leanprover/lean/issues/1502
+                          
  end 
 
 end tqft.categories.examples.naturals
