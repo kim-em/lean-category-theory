@@ -63,11 +63,11 @@ definition CAT : StrictTwoCategory :=
     interchange                := ♯
 }  
 
-definition HomCategory ( C : StrictTwoCategory ) ( X Y : C^._0 ) : Category := {
-  Obj            := C^._1 X Y,
-  Hom            := λ f g, C^._2 f g,
-  identity       := λ f, C^.identity_1 f,
-  compose        := λ _ _ _ α β, C^.compose_2_vertically α β,
+definition HomCategory ( C : StrictTwoCategory ) ( X Y : C._0 ) : Category := {
+  Obj            := C._1 X Y,
+  Hom            := λ f g, C._2 f g,
+  identity       := λ f, C.identity_1 f,
+  compose        := λ _ _ _ α β, C.compose_2_vertically α β,
   left_identity  := ♮,
   right_identity := ♮,
   associativity  := ♮
@@ -75,11 +75,11 @@ definition HomCategory ( C : StrictTwoCategory ) ( X Y : C^._0 ) : Category := {
 
 -- PROJECT show that HomCategory C X X is (strict) monoidal?
 
-structure DualMorphisms { C : StrictTwoCategory } { X Y : C^._0 } ( f : C^._1 X Y ) ( g : C^._1 Y X ) :=
-  ( unit : C^._2 (C^.compose_1 f g) (C^.identity_0 X) )
-  ( counit : C^._2 (C^.identity_0 Y) (C^.compose_1 g f) )
+structure DualMorphisms { C : StrictTwoCategory } { X Y : C._0 } ( f : C._1 X Y ) ( g : C._1 Y X ) :=
+  ( unit : C._2 (C.compose_1 f g) (C.identity_0 X) )
+  ( counit : C._2 (C.identity_0 Y) (C.compose_1 g f) )
   -- TODO we need to rewrite along associativity_1
-  -- ( zigzag_right : C^.compose_2_vertically (C^.compose_2_horizontally (C^.identity_1 f) counit) (C^.compose_2_horizontally unit (C^.identity_1 f)) = C^.identity_1 f)
+  -- ( zigzag_right : C.compose_2_vertically (C.compose_2_horizontally (C.identity_1 f) counit) (C.compose_2_horizontally unit (C.identity_1 f)) = C.identity_1 f)
   -- TODO the other zigzag
 
 end tqft.categories.two_category

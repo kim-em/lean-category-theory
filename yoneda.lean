@@ -20,13 +20,13 @@ local attribute [pointwise] funext
 definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opposite C) CategoryOfTypes.{v}) :=
 {
     onObjects := λ X, {
-        onObjects     := λ Y, C^.Hom Y X,
-        onMorphisms   := λ Y Y' f, λ g, C^.compose f g,
+        onObjects     := λ Y, C.Hom Y X,
+        onMorphisms   := λ Y Y' f, λ g, C.compose f g,
         identities    := ♯,
         functoriality := ♯
     },
     onMorphisms   := λ X X' f, {
-        components := λ Y, λ g, C^.compose g f,
+        components := λ Y, λ g, C.compose g f,
         naturality := ♯
     },
     identities    := ♮,
@@ -54,7 +54,7 @@ begin
         intros,
         unfold FunctorCategory at a,
         simp at a,
-        exact (a^.components X) (C^.identity X), -- <-- this is a critical step for surjectivity
+        exact (a.components X) (C.identity X), -- <-- this is a critical step for surjectivity
     end,
     -- then verify that it really is a preimage
     begin
@@ -73,7 +73,7 @@ begin
     simp at p,
     pose p' := congr_fun p X,
     simp at p',
-    pose p'' := congr_fun p' (C^.identity X),
+    pose p'' := congr_fun p' (C.identity X),
     simp at p'',
     exact p''
   end

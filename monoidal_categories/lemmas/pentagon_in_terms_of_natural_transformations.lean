@@ -29,12 +29,12 @@ lemma pentagon_in_terms_of_natural_transformations
     induction PQ with P Q,
     dsimp, 
     simp,
-    erewrite C^.right_identity, -- TODO why are these erewrites necessary? simp should just do it!
-    erewrite C^.right_identity,
-    erewrite C^.right_identity,
-    erewrite C^.right_identity,
-    -- erewrite m^.pentagon P Q R S, --- TODO This is pretty weird; Pentagon has λs in it.
-    pose p := m^.pentagon P Q R S,
+    erewrite C.right_identity, -- TODO why are these erewrites necessary? simp should just do it!
+    erewrite C.right_identity,
+    erewrite C.right_identity,
+    erewrite C.right_identity,
+    -- erewrite m.pentagon P Q R S, --- TODO This is pretty weird; Pentagon has λs in it.
+    pose p := m.pentagon P Q R S,
     simp at p,
     dsimp at p,
     exact p

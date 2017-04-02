@@ -16,12 +16,12 @@ structure {u v} Graph :=
 open Graph
 
 inductive {u v} path { G : Graph.{u v} } : vertices G → vertices G → Type (max u v)
-| nil  : Π ( h : G^.vertices ), path h h
-| cons : Π { h s t : G^.vertices } ( e : G^.edges h s ) ( l : path s t ), path h t
+| nil  : Π ( h : G.vertices ), path h h
+| cons : Π { h s t : G.vertices } ( e : G.edges h s ) ( l : path s t ), path h t
 
 @[unfoldable] definition concatenate_paths
  { G : Graph }
- { x y z : G^.vertices } : path x y → path y z → path x z :=
+ { x y z : G.vertices } : path x y → path y z → path x z :=
      begin
        intros p q,
        induction p,
@@ -33,7 +33,7 @@ inductive {u v} path { G : Graph.{u v} } : vertices G → vertices G → Type (m
 
 @[unfoldable] definition PathCategory ( G : Graph ) : Category :=
 {
-  Obj            := G^.vertices,
+  Obj            := G.vertices,
   Hom            := λ x y, path x y,
   identity       := λ x, path.nil x,
   compose        := λ _ _ _ f g, concatenate_paths f g,
@@ -61,12 +61,12 @@ inductive {u v} path { G : Graph.{u v} } : vertices G → vertices G → Type (m
 }
 
 structure GraphHomomorphism ( G H : Graph ) := 
-  ( onVertices : G^.vertices → H^.vertices )
-  ( onEdges    : ∀ { X Y : G^.vertices }, G^.edges X Y → H^.edges (onVertices X) (onVertices Y) )
+  ( onVertices : G.vertices → H.vertices )
+  ( onEdges    : ∀ { X Y : G.vertices }, G.edges X Y → H.edges (onVertices X) (onVertices Y) )
 
 definition Graph.from_Category ( C : Category ) : Graph := {
-    vertices := C^.Obj,
-    edges    := λ X Y, C^.Hom X Y
+    vertices := C.Obj,
+    edges    := λ X Y, C.Hom X Y
   }
 
 instance Category_to_Graph_coercion: has_coe Category Graph :=
@@ -75,21 +75,21 @@ instance Category_to_Graph_coercion: has_coe Category Graph :=
 open tqft.categories.functor
 
 -- TODO it would be nice if we could use:
--- definition path_to_morphism { G : Graph } { C : Category } ( h : GraphHomomorphism G C ) { X Y : G^.vertices } : path X Y → C^.Hom (h^.onVertices X) (h^.onVertices Y)
--- | (path.nil X)    := C^.identity h^.onVertices X
--- | (path.cons e p) := C^.compose (h^.onEdges e) (path_to_morphism p)
+-- definition path_to_morphism { G : Graph } { C : Category } ( h : GraphHomomorphism G C ) { X Y : G.vertices } : path X Y → C.Hom (h.onVertices X) (h.onVertices Y)
+-- | (path.nil X)    := C.identity h.onVertices X
+-- | (path.cons e p) := C.compose (h.onEdges e) (path_to_morphism p)
 
-@[unfoldable] definition path_to_morphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) { X Y : G^.vertices } : path X Y → C^.Hom (H^.onVertices X) (H^.onVertices Y) :=
+@[unfoldable] definition path_to_morphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) { X Y : G.vertices } : path X Y → C.Hom (H.onVertices X) (H.onVertices Y) :=
 begin
  intros p,
  induction p with Z h s t e p i,
- exact C^.identity (H^.onVertices Z),
- exact C^.compose (H^.onEdges e) i
+ exact C.identity (H.onVertices Z),
+ exact C.compose (H.onEdges e) i
 end
 
 definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) : Functor (PathCategory G) C :=
 {
-  onObjects     := H^.onVertices,
+  onObjects     := H.onVertices,
   onMorphisms   := λ _ _ f, path_to_morphism H f,
   identities    := ♮,
   functoriality := begin
@@ -104,4 +104,4 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
 instance GraphHomomorphism_to_Functor_coercion { G : Graph } { C : Category }: has_coe (GraphHomomorphism G C) (Functor (PathCategory G) C) :=
   { coe := Functor.from_GraphHomomorphism }
 
-end net.tqft.categories.graph
+end tqft.categories.graph

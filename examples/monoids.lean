@@ -70,8 +70,8 @@ definition ForgetfulFunctor_Monoids_to_Semigroups : Functor CategoryOfMonoids Ca
   onObjects     := λ s, sigma.mk s.1 (@monoid.to_semigroup s.1 s.2),
   onMorphisms   := λ s t, λ f : monoid_morphism s.2 t.2, 
                   {
-                    map            := f^.map,
-                    multiplicative := f^.multiplicative
+                    map            := f.map,
+                    multiplicative := f.multiplicative
                   },
 
   identities    := ♮,

@@ -70,11 +70,11 @@ definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
 definition SymmetricMonoidalCategoryOfTypes : Symmetry MonoidalCategoryOfTypes := {
   braiding := {
    morphism  := {
-     components := λ p t, (t^.snd, t^.fst),
+     components := λ p t, (t.snd, t.fst),
      naturality := ♮
    },
    inverse   := {
-     components := λ p t, (t^.snd, t^.fst),
+     components := λ p t, (t.snd, t.fst),
      naturality := ♮
    },
    witness_1 := ♯,

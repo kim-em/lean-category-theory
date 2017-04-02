@@ -9,18 +9,18 @@ open tqft.categories.monoidal_category
 namespace tqft.categories.internal_objects
 
 structure SemigroupModuleObject { C : Category } { m : MonoidalStructure C } ( A : SemigroupObject m ) :=
-  ( module : C^.Obj )
-  ( action : C^.Hom (m^.tensorObjects A module) module )
-  ( associativity : C^.compose (m^.tensorMorphisms A^.multiplication (C^.identity module)) action = C^.compose (m^.associator A A module) (C^.compose (m^.tensorMorphisms (C^.identity A) action) action) )
+  ( module : C.Obj )
+  ( action : C.Hom (m.tensorObjects A module) module )
+  ( associativity : C.compose (m.tensorMorphisms A.multiplication (C.identity module)) action = C.compose (m.associator A A module) (C.compose (m.tensorMorphisms (C.identity A) action) action) )
 
 attribute [ematch] SemigroupModuleObject.associativity
 
-instance SemigroupModuleObject_coercion_to_module { C : Category } { m : MonoidalStructure C } ( A : SemigroupObject m ) : has_coe (SemigroupModuleObject A) (C^.Obj) :=
+instance SemigroupModuleObject_coercion_to_module { C : Category } { m : MonoidalStructure C } ( A : SemigroupObject m ) : has_coe (SemigroupModuleObject A) (C.Obj) :=
   { coe := SemigroupModuleObject.module }
 
 structure SemigroupModuleMorphism { C : Category } { m : MonoidalStructure C } { A : SemigroupObject m } ( X Y : SemigroupModuleObject A ) :=
-  ( map : C^.Hom X Y )
-  ( compatibility : C^.compose (m^.tensorMorphisms (C^.identity A) map) Y^.action = C^.compose X^.action map )
+  ( map : C.Hom X Y )
+  ( compatibility : C.compose (m.tensorMorphisms (C.identity A) map) Y.action = C.compose X.action map )
 
 attribute [ematch,simp] SemigroupModuleMorphism.compatibility
 
@@ -30,14 +30,14 @@ attribute [ematch,simp] SemigroupModuleMorphism.compatibility
   { A : SemigroupObject m }
   { X Y : SemigroupModuleObject A }
   ( f g : SemigroupModuleMorphism X Y )
-  ( w : f^.map = g^.map ) : f = g :=
+  ( w : f.map = g.map ) : f = g :=
   begin
     induction f,
     induction g,
     blast
   end
 
-instance SemigroupModuleMorphism_coercion_to_map { C : Category } { m : MonoidalStructure C }  { A : SemigroupObject m } ( X Y : SemigroupModuleObject A ) : has_coe (SemigroupModuleMorphism X Y) (C^.Hom X Y) :=
+instance SemigroupModuleMorphism_coercion_to_map { C : Category } { m : MonoidalStructure C }  { A : SemigroupObject m } ( X Y : SemigroupModuleObject A ) : has_coe (SemigroupModuleMorphism X Y) (C.Hom X Y) :=
   { coe := SemigroupModuleMorphism.map }
 
 -- set_option pp.implicit true
@@ -46,8 +46,8 @@ definition CategoryOfSemigroupModules { C : Category } { m : MonoidalStructure C
 {
   Obj := SemigroupModuleObject A,
   Hom := λ X Y, SemigroupModuleMorphism X Y,
-  identity := λ X, ⟨ C^.identity X, ♮ ⟩,
-  compose  := λ X Y Z f g, ⟨ C^.compose f^.map g^.map, ♮ ⟩,
+  identity := λ X, ⟨ C.identity X, ♮ ⟩,
+  compose  := λ X Y Z f g, ⟨ C.compose f.map g.map, ♮ ⟩,
   left_identity  := ♯,
   right_identity := ♯,
   associativity  := ♮

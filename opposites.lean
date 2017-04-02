@@ -10,10 +10,10 @@ namespace tqft.categories
 
 @[unfoldable] definition Opposite ( C : Category ) : Category :=
 {
-    Obj := C^.Obj,
-    Hom := λ X Y, C^.Hom Y X,
-    compose  := λ _ _ _ f g, C^.compose g f,
-    identity := λ X, C^.identity X,
+    Obj := C.Obj,
+    Hom := λ X Y, C.Hom Y X,
+    compose  := λ _ _ _ f g, C.compose g f,
+    identity := λ X, C.identity X,
     left_identity  := ♮,
     right_identity := ♮,
     associativity  := ♮

@@ -17,25 +17,30 @@ lemma subtype_is_Equalizer_in_Types { α β : Type } ( f g : α → β ) : Equal
   factorisation := begin
                      blast, 
                      refine ⟨ _, _ ⟩,
-                     -- First show that a factorisation exists
-                     fapply subtype.mk, 
-                     intros, 
-                     unfold CategoryOfTypes at k, 
-                     dsimp at k, 
-                     refine ⟨ k a, _ ⟩,
-                     -- we still need to show that it has the factorisation property.
-                     intros, 
-                     unfold CategoryOfTypes at w, 
-                     dsimp at w, 
-                     exact congr_arg (λ x: Z → β, x a) w, 
-                     blast,
-                     -- Second, show that the factorisation is unique!
-                     pose p := congr_fun X^.property x,
-                     simp at p,
-                     rewrite p,
-                     pose q := congr_fun Y^.property x,
-                     simp at q,
-                     rewrite q,
+                     begin
+                      -- First show that a factorisation exists
+                      fapply subtype.mk, 
+                      intros, 
+                      unfold CategoryOfTypes at k, 
+                      dsimp at k, 
+                      refine ⟨ k a, _ ⟩,
+                      -- we still need to show that it has the factorisation property.
+                      intros, 
+                      unfold CategoryOfTypes at w, 
+                      dsimp at w, 
+                      exact congr_arg (λ x: Z → β, x a) w, 
+                      blast
+                     end,
+                     begin                      
+                      -- Second, show that the factorisation is unique!
+                      blast,
+                      pose p := congr_fun X.property x,
+                      simp at p,
+                      rewrite p,
+                      pose q := congr_fun Y.property x,
+                      simp at q,
+                      rewrite q
+                     end
                    end
 }
 

@@ -9,13 +9,13 @@ open tqft.categories.monoidal_category
 namespace tqft.categories.internal_objects
 
 structure SemigroupObject { C : Category } ( m : MonoidalStructure C ) :=
-  ( object         : C^.Obj )
-  ( multiplication : C^.Hom (m (object, object)) object)
-  ( associativity  : C^.compose (m^.tensorMorphisms multiplication (C^.identity object)) multiplication = C^.compose (m^.associator object object object) (C^.compose (m^.tensorMorphisms (C^.identity object) multiplication) multiplication) )
+  ( object         : C.Obj )
+  ( multiplication : C.Hom (m (object, object)) object)
+  ( associativity  : C.compose (m.tensorMorphisms multiplication (C.identity object)) multiplication = C.compose (m.associator object object object) (C.compose (m.tensorMorphisms (C.identity object) multiplication) multiplication) )
 
 attribute [ematch] SemigroupObject.associativity
 
-instance SemigroupObject_coercion_to_object { C : Category } { m : MonoidalStructure C } : has_coe (SemigroupObject m) (C^.Obj) :=
+instance SemigroupObject_coercion_to_object { C : Category } { m : MonoidalStructure C } : has_coe (SemigroupObject m) (C.Obj) :=
   { coe := SemigroupObject.object }
 
 end tqft.categories.internal_objects

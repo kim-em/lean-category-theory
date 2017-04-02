@@ -14,15 +14,15 @@ namespace tqft.categories.natural_transformation
 universe variables u1 v1 u2 v2 u3 v3
 
 structure NaturalTransformation { C D : Category } ( F G : Functor C D ) :=
-  (components: Π X : C^.Obj, D^.Hom (F X) (G X))
-  (naturality: ∀ { X Y : C^.Obj } (f : C^.Hom X Y),
-     D^.compose (F^.onMorphisms f) (components Y) = D^.compose (components X) (G^.onMorphisms f))
+  (components: Π X : C.Obj, D.Hom (F X) (G X))
+  (naturality: ∀ { X Y : C.Obj } (f : C.Hom X Y),
+     D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f))
 
 attribute [ematch] NaturalTransformation.naturality
 
 -- This defines a coercion so we can write `α X` for `components α X`.
 instance NaturalTransformation_to_components { C D : Category } { F G : Functor C D } : has_coe_to_fun (NaturalTransformation F G) :=
-{ F   := λ f, Π X : C^.Obj, D^.Hom (F X) (G X),
+{ F   := λ f, Π X : C.Obj, D.Hom (F X) (G X),
   coe := NaturalTransformation.components }
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
@@ -30,7 +30,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   { C D : Category }
   { F G : Functor C D }
   ( α β : NaturalTransformation F G )
-  ( w : ∀ X : C^.Obj, α X = β X ) : α = β :=
+  ( w : ∀ X : C.Obj, α X = β X ) : α = β :=
   begin
     induction α with α_components α_naturality,
     induction β with β_components β_naturality,
@@ -40,7 +40,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 
 @[unfoldable] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
   {
-    components := λ X, D^.identity (F X),
+    components := λ X, D.identity (F X),
     naturality := ♮
   }
 
@@ -50,7 +50,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   ( α : NaturalTransformation F G )
   ( β : NaturalTransformation G H ) : NaturalTransformation F H :=
   {
-    components := λ X, D^.compose (α X) (β X),
+    components := λ X, D.compose (α X) (β X),
     naturality := ♮
   }
 
@@ -63,7 +63,7 @@ open tqft.categories.functor
   ( α : NaturalTransformation F G )
   ( β : NaturalTransformation H I ) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
   {
-    components := λ X : C^.Obj, E^.compose (β (F X)) (I^.onMorphisms (α X)),
+    components := λ X : C.Obj, E.compose (β (F X)) (I.onMorphisms (α X)),
     naturality := ♯
   }
 
@@ -113,16 +113,16 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
   { C D : Category }
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
-  ( X : C^.Obj )
-   : D^.compose (α^.morphism^.components X) (α^.inverse^.components X) = D^.identity (F X)
-   := congr_arg (λ β, NaturalTransformation.components β X) α^.witness_1
+  ( X : C.Obj )
+   : D.compose (α.morphism.components X) (α.inverse.components X) = D.identity (F X)
+   := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
 @[ematch] lemma NaturalIsomorphism.componentwise_witness_2
   { C D : Category }
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
-  ( X : C^.Obj )
-   : D^.compose (α^.inverse^.components X) (α^.morphism^.components X) = D^.identity (G X)
-   := congr_arg (λ β, NaturalTransformation.components β X) α^.witness_2
+  ( X : C.Obj )
+   : D.compose (α.inverse.components X) (α.morphism.components X) = D.identity (G X)
+   := congr_arg (λ β, NaturalTransformation.components β X) α.witness_2
 
 definition vertical_composition_of_NaturalIsomorphisms 
   { C D : Category }
@@ -130,18 +130,18 @@ definition vertical_composition_of_NaturalIsomorphisms
   ( α : NaturalIsomorphism F G )
   ( β : NaturalIsomorphism G H )
    : NaturalIsomorphism F H := {
-  morphism := (FunctorCategory C D)^.compose α^.morphism β^.morphism,
-  inverse  := (FunctorCategory C D)^.compose β^.inverse  α^.inverse,
+  morphism := (FunctorCategory C D).compose α.morphism β.morphism,
+  inverse  := (FunctorCategory C D).compose β.inverse  α.inverse,
   witness_1 := begin
                 --  smt_eblast, -- FIXME why doesn't this work?
                  rewrite Category.associativity,
-                 rewrite - (FunctorCategory C D)^.associativity β^.morphism,
+                 rewrite - (FunctorCategory C D).associativity β.morphism,
                  simp
                end,
   witness_2 := begin
                 --  smt_eblast, -- FIXME why doesn't this work?
                  rewrite Category.associativity,
-                 rewrite - (FunctorCategory C D)^.associativity α^.inverse,
+                 rewrite - (FunctorCategory C D).associativity α.inverse,
                  simp
                end
 }
@@ -155,17 +155,17 @@ definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α :
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
   ( w : is_NaturalIsomorphism α )
-  ( X : C^.Obj )
-   : D^.compose (α^.components X) (w^.inverse^.components X) = D^.identity (F X)
-   := congr_arg (λ β, NaturalTransformation.components β X) w^.witness_1
+  ( X : C.Obj )
+   : D.compose (α.components X) (w.inverse.components X) = D.identity (F X)
+   := congr_arg (λ β, NaturalTransformation.components β X) w.witness_1
 @[ematch] lemma is_NaturalIsomorphism_componentwise_witness_2
   { C D : Category }
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
   ( w : is_NaturalIsomorphism α )
-  ( X : C^.Obj )
-   : D^.compose (w^.inverse^.components X) (α^.components X) = D^.identity (G X)
-   := congr_arg (λ β, NaturalTransformation.components β X) w^.witness_2
+  ( X : C.Obj )
+   : D.compose (w.inverse.components X) (α.components X) = D.identity (G X)
+   := congr_arg (λ β, NaturalTransformation.components β X) w.witness_2
 
 
 lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F : Functor C D ) : is_NaturalIsomorphism (IdentityNaturalTransformation F) :=
@@ -174,12 +174,12 @@ lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F
     witness_2 := ♯
   }
 
--- lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C^.Obj } :
+-- lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C.Obj } :
 --  Inverse (α X) :=
 --   {
---     inverse := α^.inverse^.components X,
+--     inverse := α.inverse.components X,
 --     witness_1 := begin
---                    pose p := congr_arg NaturalTransformation.components α^.witness_1,
+--                    pose p := congr_arg NaturalTransformation.components α.witness_1,
 --                    -- TODO almost there! Note sure how to convince it that p is the answer.
 --                   --  dsimp [FunctorCategory] at p,
 --                    -- PROJECT how can we automate away this proof?

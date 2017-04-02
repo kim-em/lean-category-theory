@@ -44,7 +44,7 @@ end
     all_goals { blast }
   end
 
--- @[simp] lemma ℕCategory.hom { X Y : ℕCategory^.Obj } : ℕCategory^.Hom X Y = ℕ := ♮
+-- @[simp] lemma ℕCategory.hom { X Y : ℕCategory.Obj } : ℕCategory.Hom X Y = ℕ := ♮
 
 local attribute [simp] id_locked_eq
 

@@ -13,28 +13,28 @@ namespace tqft.categories.monoidal_category
 universe variables u v
 
 @[reducible] definition pentagon_3step_1 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
-  let α := m^.associator_transformation in
+  let α := m.associator_transformation in
   whisker_on_right
-    (α^.morphism × IdentityNaturalTransformation (IdentityFunctor C))
-    m^.tensor
+    (α.morphism × IdentityNaturalTransformation (IdentityFunctor C))
+    m.tensor
 
 @[reducible] definition pentagon_3step_2 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
-  let α := m^.associator_transformation in
+  let α := m.associator_transformation in
   whisker_on_left
     (FunctorComposition
       (ProductCategoryAssociator C C C × IdentityFunctor C)
-      ((IdentityFunctor C × m^.tensor) × IdentityFunctor C))
-    α^.morphism
+      ((IdentityFunctor C × m.tensor) × IdentityFunctor C))
+    α.morphism
 
 @[reducible] definition pentagon_3step_3 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
-  let α := m^.associator_transformation in
+  let α := m.associator_transformation in
   whisker_on_left
     (FunctorComposition
       (ProductCategoryAssociator C C C × IdentityFunctor C)
       (ProductCategoryAssociator C (C × C) C))
     (whisker_on_right
-      (IdentityNaturalTransformation (IdentityFunctor C) × α^.morphism)
-      m^.tensor)
+      (IdentityNaturalTransformation (IdentityFunctor C) × α.morphism)
+      m.tensor)
 
 @[reducible] definition pentagon_3step { C : Category.{u v} } ( m : MonoidalStructure C ) :=
   vertical_composition_of_NaturalTransformations
@@ -44,18 +44,18 @@ universe variables u v
     (pentagon_3step_3 m)
 
 @[reducible] definition pentagon_2step_1 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
-  let α := m^.associator_transformation in
+  let α := m.associator_transformation in
   whisker_on_left
-    ((m^.tensor × IdentityFunctor C) × IdentityFunctor C)
-    α^.morphism
+    ((m.tensor × IdentityFunctor C) × IdentityFunctor C)
+    α.morphism
 
 @[reducible] definition pentagon_2step_2 { C : Category.{u v} } ( m : MonoidalStructure C ) :=
-  let α := m^.associator_transformation in
+  let α := m.associator_transformation in
   whisker_on_left
     (FunctorComposition
       (ProductCategoryAssociator (C × C) C C)
-      (IdentityFunctor (C × C) × m^.tensor))
-    α^.morphism
+      (IdentityFunctor (C × C) × m.tensor))
+    α.morphism
 
 @[reducible] definition pentagon_2step { C : Category.{u v} } ( m : MonoidalStructure C ) :=
   vertical_composition_of_NaturalTransformations

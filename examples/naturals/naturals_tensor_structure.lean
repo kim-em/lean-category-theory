@@ -12,7 +12,7 @@ open tqft.categories.monoidal_category
 
 @[unfoldable] definition ℕTensorProduct : TensorProduct ℕCategory :=
   { onObjects     := prod.fst,
-    onMorphisms   := λ _ _ n, n^.fst + n^.snd,
+    onMorphisms   := λ _ _ n, n.fst + n.snd,
     identities    := ♮,
     functoriality := ♯
   }

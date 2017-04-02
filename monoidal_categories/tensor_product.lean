@@ -25,31 +25,31 @@ universe variables u v
     (left_associated_triple_tensor tensor)
     (FunctorComposition (ProductCategoryAssociator C C C) (right_associated_triple_tensor tensor))
 
-@[reducible] definition RightUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
+@[reducible] definition RightUnitor { C : Category } ( I : C.Obj ) ( tensor : TensorProduct C ) :=
   NaturalIsomorphism
     (FunctorComposition (RightInjectionAt I C) tensor)
     (IdentityFunctor C)
 
-@[reducible] definition LeftUnitor { C : Category } ( I : C^.Obj ) ( tensor : TensorProduct C ) :=
+@[reducible] definition LeftUnitor { C : Category } ( I : C.Obj ) ( tensor : TensorProduct C ) :=
   NaturalIsomorphism
     (FunctorComposition (LeftInjectionAt I C) tensor)
     (IdentityFunctor C)
 
 -- TODO all the let statements cause problems later...
 @[unfoldable] definition Pentagon { C : Category } { tensor : TensorProduct C } ( associator : Associator tensor ) :=
-  let α ( X Y Z : C^.Obj ) := associator ⟨⟨X, Y⟩, Z⟩,
-      tensorObjects ( X Y : C^.Obj ) := tensor^.onObjects ⟨X, Y⟩,
-      tensorMorphisms { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor^.onMorphisms ⟨f, g⟩ in
-  ∀ W X Y Z : C^.Obj,
-    C^.compose (C^.compose (tensorMorphisms (α W X Y) (C^.identity Z)) (α W (tensorObjects X Y) Z)) (tensorMorphisms (C^.identity W) (α X Y Z))
-  = C^.compose (α (tensorObjects W X) Y Z) (α W X (tensorObjects Y Z)) 
+  let α ( X Y Z : C.Obj ) := associator ⟨⟨X, Y⟩, Z⟩,
+      tensorObjects ( X Y : C.Obj ) := tensor.onObjects ⟨X, Y⟩,
+      tensorMorphisms { W X Y Z : C.Obj } ( f : C.Hom W X ) ( g : C.Hom Y Z ) : C.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor.onMorphisms ⟨f, g⟩ in
+  ∀ W X Y Z : C.Obj,
+    C.compose (C.compose (tensorMorphisms (α W X Y) (C.identity Z)) (α W (tensorObjects X Y) Z)) (tensorMorphisms (C.identity W) (α X Y Z))
+  = C.compose (α (tensorObjects W X) Y Z) (α W X (tensorObjects Y Z)) 
 
-@[unfoldable] definition Triangle { C : Category } { tensor : TensorProduct C } ( I : C^.Obj ) ( left_unitor : LeftUnitor I tensor ) ( right_unitor : RightUnitor I tensor ) ( associator : Associator tensor ) :=
-  let α ( X Y Z : C^.Obj ) := associator ⟨⟨X, Y⟩, Z⟩,
-      tensorObjects ( X Y : C^.Obj ) := tensor^.onObjects ⟨X, Y⟩,
-      tensorMorphisms { W X Y Z : C^.Obj } ( f : C^.Hom W X ) ( g : C^.Hom Y Z ) : C^.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor^.onMorphisms ⟨f, g⟩ in
-  ∀ X Y : C^.Obj,
-    C^.compose (α X I Y) (tensorMorphisms (C^.identity X) (left_unitor Y))
-  = tensorMorphisms (right_unitor X) (C^.identity Y)
+@[unfoldable] definition Triangle { C : Category } { tensor : TensorProduct C } ( I : C.Obj ) ( left_unitor : LeftUnitor I tensor ) ( right_unitor : RightUnitor I tensor ) ( associator : Associator tensor ) :=
+  let α ( X Y Z : C.Obj ) := associator ⟨⟨X, Y⟩, Z⟩,
+      tensorObjects ( X Y : C.Obj ) := tensor.onObjects ⟨X, Y⟩,
+      tensorMorphisms { W X Y Z : C.Obj } ( f : C.Hom W X ) ( g : C.Hom Y Z ) : C.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor.onMorphisms ⟨f, g⟩ in
+  ∀ X Y : C.Obj,
+    C.compose (α X I Y) (tensorMorphisms (C.identity X) (left_unitor Y))
+  = tensorMorphisms (right_unitor X) (C.identity Y)
 
 end tqft.categories.monoidal_category

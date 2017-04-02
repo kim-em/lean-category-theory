@@ -13,9 +13,9 @@ open tqft.categories.natural_transformation
 namespace tqft.categories.idempotent_completion
 
 structure Idempotent ( C : Category ) :=
-   ( obj : C^.Obj )
-   ( idempotent : C^.Hom obj obj )
-   ( witness : C^.compose idempotent idempotent = idempotent )
+   ( obj : C.Obj )
+   ( idempotent : C.Hom obj obj )
+   ( witness : C.compose idempotent idempotent = idempotent )
 
 attribute [simp,ematch] Idempotent.witness
 
@@ -24,16 +24,16 @@ local attribute [ematch] subtype.property
 definition IdempotentCompletion ( C: Category ) : Category :=
 {
   Obj            := Idempotent C,
-  Hom            := λ X Y, { f : C^.Hom X^.obj Y^.obj // C^.compose X^.idempotent f = f ∧ C^.compose f Y^.idempotent = f },
-  identity       := λ X, ⟨ X^.idempotent, ♮ ⟩,
-  compose        := λ X Y Z f g, ⟨ C^.compose f^.val g^.val, ♮ ⟩,
+  Hom            := λ X Y, { f : C.Hom X.obj Y.obj // C.compose X.idempotent f = f ∧ C.compose f Y.idempotent = f },
+  identity       := λ X, ⟨ X.idempotent, ♮ ⟩,
+  compose        := λ X Y Z f g, ⟨ C.compose f.val g.val, ♮ ⟩,
   left_identity  := ♯,
   right_identity := ♯,
   associativity  := ♮
 }
 
 definition embedding_in_IdempotentCompletion ( C : Category ) : Functor C (IdempotentCompletion C) := {
-  onObjects     := λ X, ⟨ X, C^.identity X, ♮ ⟩,
+  onObjects     := λ X, ⟨ X, C.identity X, ♮ ⟩,
   onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩,
   identities    := ♮,
   functoriality := ♮

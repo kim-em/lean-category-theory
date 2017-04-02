@@ -20,37 +20,37 @@ universe variables u v
 -/
 
 definition Commutor { C : Category.{u v} } (m : MonoidalStructure C) := 
-  NaturalIsomorphism (m^.tensor) (FunctorComposition (SwitchProductCategory C C) m^.tensor)
+  NaturalIsomorphism (m.tensor) (FunctorComposition (SwitchProductCategory C C) m.tensor)
 
 @[unfoldable] definition Hexagon_1 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
-  ∀ X Y Z : C^.Obj,
-    C^.compose
-      (m^.tensorMorphisms (C^.identity X) (β^.morphism^.components (Y, Z))) -- TODO why ^.morphism^.components?
-    (C^.compose
-      (m^.inverse_associator X Z Y)
-      (m^.tensorMorphisms (β^.morphism^.components (X, Z)) (C^.identity Y))
+  ∀ X Y Z : C.Obj,
+    C.compose
+      (m.tensorMorphisms (C.identity X) (β.morphism.components (Y, Z))) -- TODO why .morphism.components?
+    (C.compose
+      (m.inverse_associator X Z Y)
+      (m.tensorMorphisms (β.morphism.components (X, Z)) (C.identity Y))
     )
       = 
-    C^.compose
-      (m^.inverse_associator X Y Z) 
-    (C^.compose
-      (β^.morphism^.components (m^.tensorObjects X Y, Z))
-      (m^.inverse_associator Z X Y)
+    C.compose
+      (m.inverse_associator X Y Z) 
+    (C.compose
+      (β.morphism.components (m.tensorObjects X Y, Z))
+      (m.inverse_associator Z X Y)
     )
 @[unfoldable] definition Hexagon_2 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
-  ∀ X Y Z : C^.Obj,
-    C^.compose
-      (m^.tensorMorphisms (C^.identity X) (β^.inverse^.components (Z, Y)))    -- TODO why components?
-    (C^.compose
-      (m^.inverse_associator X Z Y)
-      (m^.tensorMorphisms (β^.inverse^.components (Z, X)) (C^.identity Y))
+  ∀ X Y Z : C.Obj,
+    C.compose
+      (m.tensorMorphisms (C.identity X) (β.inverse.components (Z, Y)))    -- TODO why components?
+    (C.compose
+      (m.inverse_associator X Z Y)
+      (m.tensorMorphisms (β.inverse.components (Z, X)) (C.identity Y))
     )
       = 
-    C^.compose
-      (m^.inverse_associator X Y Z) 
-    (C^.compose
-      (β^.inverse^.components (Z, m^.tensorObjects X Y))
-      (m^.inverse_associator Z X Y)
+    C.compose
+      (m.inverse_associator X Y Z) 
+    (C.compose
+      (β.inverse.components (Z, m.tensorObjects X Y))
+      (m.inverse_associator Z X Y)
     )
 
 structure Braiding { C : Category.{u v} } ( m : MonoidalStructure C ) :=
@@ -60,7 +60,7 @@ structure Braiding { C : Category.{u v} } ( m : MonoidalStructure C ) :=
 -- PROJECT a theorem showing the hexagons hold as natural transformations
 
 structure Symmetry { C : Category.{u v} } ( m : MonoidalStructure C ) extends parent: Braiding m :=
-  (symmetry: Π X Y : C^.Obj, C^.compose (braiding^.morphism^.components ⟨X, Y⟩) (braiding^.morphism^.components ⟨Y, X⟩) = C^.identity (m^.tensor^.onObjects ⟨X, Y⟩) )
+  (symmetry: Π X Y : C.Obj, C.compose (braiding.morphism.components ⟨X, Y⟩) (braiding.morphism.components ⟨Y, X⟩) = C.identity (m.tensor.onObjects ⟨X, Y⟩) )
 
 attribute [ematch,simp] Symmetry.symmetry
 

@@ -12,10 +12,10 @@ open tqft.categories.monoidal_category
 
 namespace tqft.categories.strict_monoidal_category
 
-structure TensorProduct_is_strict { C : Category } ( tensor : TensorProduct C ) ( tensor_unit : C^.Obj ) :=
-  ( associativeOnObjects  : ∀ X Y Z : C^.Obj, tensor^.onObjects (tensor^.onObjects (X, Y), Z) = tensor^.onObjects (X, tensor^.onObjects (Y, Z)) )
-  ( strictLeftTensorUnit  : ∀ X : C^.Obj, tensor^.onObjects (tensor_unit, X) = X )
-  ( strictRightTensorUnit : ∀ X : C^.Obj, tensor^.onObjects (X, tensor_unit) = X )
+structure TensorProduct_is_strict { C : Category } ( tensor : TensorProduct C ) ( tensor_unit : C.Obj ) :=
+  ( associativeOnObjects  : ∀ X Y Z : C.Obj, tensor.onObjects (tensor.onObjects (X, Y), Z) = tensor.onObjects (X, tensor.onObjects (Y, Z)) )
+  ( strictLeftTensorUnit  : ∀ X : C.Obj, tensor.onObjects (tensor_unit, X) = X )
+  ( strictRightTensorUnit : ∀ X : C.Obj, tensor.onObjects (X, tensor_unit) = X )
 
 attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 -- TODO why is this not a valid simplification lemma?
@@ -24,11 +24,11 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 
 -- set_option pp.implicit true
 
--- definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C^.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalStructure C :=
+-- definition construct_StrictMonoidalCategory { C : Category } { tensor : TensorProduct C } { tensor_unit : C.Obj } ( is_strict : TensorProduct_is_strict tensor tensor_unit ) : MonoidalStructure C :=
 -- {
 --   tensor := {
---     onObjects     := λ p, tensor^.onObjects p,
---     onMorphisms   := λ _ _ f, tensor^.onMorphisms f,
+--     onObjects     := λ p, tensor.onObjects p,
+--     onMorphisms   := λ _ _ f, tensor.onMorphisms f,
 --     identities    := ♮,
 --     functoriality := ♮
 --   },
@@ -37,9 +37,9 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 --     components := λ t, begin
 --                            induction t with pq r,
 --                            induction pq with p q,
---                            refine (cast _ (C^.identity (tensor^.onObjects (tensor^.onObjects (p, q), r)))),  
+--                            refine (cast _ (C.identity (tensor.onObjects (tensor.onObjects (p, q), r)))),  
 --                            blast, -- TODO Why doesn't blast do the next rewrite?
---                            rewrite - is_strict^.associativeOnObjects,
+--                            rewrite - is_strict.associativeOnObjects,
 --                            exact sorry
 --                        end,
 --     naturality := begin
@@ -58,9 +58,9 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 --   triangle := sorry
 -- }  
 
-@[reducible] definition tensorList { C : Category } ( m : MonoidalStructure C ) ( X : list C^.Obj ) : C^.Obj := list.foldl m^.tensorObjects m^.tensor_unit X
+@[reducible] definition tensorList { C : Category } ( m : MonoidalStructure C ) ( X : list C.Obj ) : C.Obj := list.foldl m.tensorObjects m.tensor_unit X
 
--- @[reducible] definition tensorListConcatenation { C : MonoidalCategory } ( X : list C^.Obj × list C^.Obj ) : Isomorphism C (C^.tensorObjects (tensorList X.1) (tensorList X.2)) (tensorList (append X.1 X.2)) :=
+-- @[reducible] definition tensorListConcatenation { C : MonoidalCategory } ( X : list C.Obj × list C.Obj ) : Isomorphism C (C.tensorObjects (tensorList X.1) (tensorList X.2)) (tensorList (append X.1 X.2)) :=
 -- {
 --   morphism  := sorry,
 --   inverse   := sorry,
@@ -69,10 +69,10 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 -- }
 
 -- @[reducible] definition ListObjectsCategory ( C : MonoidalCategory ) : Category := {
---   Obj := list C^.Obj,
---   Hom := λ X Y, C^.Hom (tensorList X) (tensorList Y),
---   identity       := λ X, C^.identity (tensorList X),
---   compose        := λ _ _ _ f g, C^.compose f g,
+--   Obj := list C.Obj,
+--   Hom := λ X Y, C.Hom (tensorList X) (tensorList Y),
+--   identity       := λ X, C.identity (tensorList X),
+--   compose        := λ _ _ _ f g, C.compose f g,
 --   left_identity  := ♮,
 --   right_identity := ♮,
 --   associativity  := sorry
@@ -80,7 +80,7 @@ attribute [ematch] TensorProduct_is_strict.associativeOnObjects
 
 -- definition StrictTensorProduct ( C : MonoidalCategory ) : TensorProduct (ListObjectsCategory C) := {
 --   onObjects     := λ X, append X.1 X.2,
---   onMorphisms   := λ X Y f, sorry, -- C^.compose (C^.compose (tensorListConcatenation X)^.inverse f) (tensorListConcatenation Y)^.morphism,
+--   onMorphisms   := λ X Y f, sorry, -- C.compose (C.compose (tensorListConcatenation X).inverse f) (tensorListConcatenation Y).morphism,
 --   identities    := sorry,
 --   functoriality := sorry
 -- }

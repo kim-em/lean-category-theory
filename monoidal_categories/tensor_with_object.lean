@@ -14,20 +14,20 @@ universe variables u v
 
 local attribute [ematch] MonoidalStructure.interchange_right_identity
 
-@[reducible] definition MonoidalStructure.tensor_on_left { C: Category.{u v} } ( m : MonoidalStructure C ) ( Z: C^.Obj ) : Functor.{u v u v} C C :=
+@[reducible] definition MonoidalStructure.tensor_on_left { C: Category.{u v} } ( m : MonoidalStructure C ) ( Z: C.Obj ) : Functor.{u v u v} C C :=
 {
-  onObjects := λ X, m^.tensorObjects Z X,
-  onMorphisms := λ X Y f, m^.tensorMorphisms (C^.identity Z) f,
+  onObjects := λ X, m.tensorObjects Z X,
+  onMorphisms := λ X Y f, m.tensorMorphisms (C.identity Z) f,
   identities := ♮, -- This uses lemma TensorProduct_identities
   functoriality := ♮ -- This uses lemma MonoidalStructure.interchange_right_identity
 }
 
 local attribute [ematch] MonoidalStructure.interchange_left_identity
 
-@[reducible] definition MonoidalStructure.tensor_on_right { C: Category.{u v} } ( m : MonoidalStructure C ) ( Z: C^.Obj ) : Functor.{u v u v} C C :=
+@[reducible] definition MonoidalStructure.tensor_on_right { C: Category.{u v} } ( m : MonoidalStructure C ) ( Z: C.Obj ) : Functor.{u v u v} C C :=
 {
-  onObjects := λ X, m^.tensorObjects X Z,
-  onMorphisms := λ X Y f, m^.tensorMorphisms f (C^.identity Z),
+  onObjects := λ X, m.tensorObjects X Z,
+  onMorphisms := λ X Y f, m.tensorMorphisms f (C.identity Z),
   identities := ♮, -- This uses lemma TensorProduct_identities
   functoriality := ♮ -- This uses lemma MonoidalStructure.interchange_left_identity
 }

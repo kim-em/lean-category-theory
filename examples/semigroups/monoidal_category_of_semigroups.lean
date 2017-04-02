@@ -14,7 +14,7 @@ universe variables u
 open tqft.categories.monoidal_category
 
 @[reducible] definition semigroup_product { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) : semigroup (α × β) := {
-  mul := λ p q, (p^.fst * q^.fst, p^.snd * q^.snd),
+  mul := λ p q, (p.fst * q.fst, p.snd * q.snd),
   -- From https://groups.google.com/d/msg/lean-user/bVs5FdjClp4/cbDZOqq_BAAJ
   mul_assoc := begin 
                 abstract {
@@ -73,7 +73,7 @@ definition Associator_for_Semigroups : Associator TensorProduct_for_Semigroups :
     witness_2 := ♯
   }
 
-definition TensorUnit_for_Semigroups : CategoryOfSemigroups^.Obj := ⟨ punit, trivial_semigroup ⟩
+definition TensorUnit_for_Semigroups : CategoryOfSemigroups.Obj := ⟨ punit, trivial_semigroup ⟩
 
 definition LeftUnitor_for_Semigroups : @LeftUnitor CategoryOfSemigroups TensorUnit_for_Semigroups TensorProduct_for_Semigroups := {
     morphism := {
@@ -113,7 +113,7 @@ definition RightUnitor_for_Semigroups : @RightUnitor CategoryOfSemigroups Tensor
     witness_2 := ♮
   }
 
-definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
+@[unfoldable] definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
   tensor := TensorProduct_for_Semigroups,
   tensor_unit := TensorUnit_for_Semigroups, -- punit is just a universe-parameterized version of unit
   associator_transformation := Associator_for_Semigroups,
@@ -126,7 +126,7 @@ definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryO
 open tqft.categories.natural_transformation
 open tqft.categories.braided_monoidal_category
 
-definition SymmetryOnCategoryOfSemigroups : Symmetry MonoidalStructureOnCategoryOfSemigroups := {
+@[unfoldable] definition SymmetryOnCategoryOfSemigroups : Symmetry MonoidalStructureOnCategoryOfSemigroups := {
   braiding             := {
     morphism  := {
       components := λ _, {

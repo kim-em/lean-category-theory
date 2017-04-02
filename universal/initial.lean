@@ -12,32 +12,32 @@ open tqft.categories.isomorphism
 namespace tqft.categories.initial
 
 structure InitialObject ( C : Category ) :=
-  (object : C^.Obj)
-  (morphisms : ∀ Y : C^.Obj, C^.Hom object Y)
-  (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom object Y, f = morphisms Y)
+  (object : C.Obj)
+  (morphisms : ∀ Y : C.Obj, C.Hom object Y)
+  (uniqueness : ∀ Y : C.Obj, ∀ f : C.Hom object Y, f = morphisms Y)
 
 attribute [ematch] InitialObject.uniqueness
 
-instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObject C) (C^.Obj) :=
+instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObject C) (C.Obj) :=
   { coe := InitialObject.object }
 
-structure is_initial { C : Category } ( X : C^.Obj ) :=
-  (morphism : ∀ Y : C^.Obj, C^.Hom X Y)
-  (uniqueness :  ∀ Y : C^.Obj, ∀ f : C^.Hom X Y, f = morphism Y)
+structure is_initial { C : Category } ( X : C.Obj ) :=
+  (morphism : ∀ Y : C.Obj, C.Hom X Y)
+  (uniqueness :  ∀ Y : C.Obj, ∀ f : C.Hom X Y, f = morphism Y)
 
 attribute [ematch] is_initial.uniqueness
 
-lemma InitialObjects_have_only_the_identity_endomorphism { C : Category } ( X: InitialObject C ) ( f : C^.Hom X X ) : f = C^.identity X :=
+lemma InitialObjects_have_only_the_identity_endomorphism { C : Category } ( X: InitialObject C ) ( f : C.Hom X X ) : f = C.identity X :=
   begin
    blast, -- TODO blast is not actually doing anything here; but perhaps later it will.
-   rewrite X^.uniqueness X f,
-   rewrite X^.uniqueness X (C^.identity X)
+   rewrite X.uniqueness X f,
+   rewrite X.uniqueness X (C.identity X)
   end
 
 lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Isomorphism C X Y :=
   {
-      morphism  := X^.morphisms Y,
-      inverse   := Y^.morphisms X,
+      morphism  := X.morphisms Y,
+      inverse   := Y.morphisms X,
       witness_1 := begin apply InitialObjects_have_only_the_identity_endomorphism end,
       witness_2 := begin apply InitialObjects_have_only_the_identity_endomorphism end
   }
@@ -47,8 +47,8 @@ definition TerminalObject ( C : Category ) := InitialObject (Opposite C)
 
 -- If not:
 -- structure TerminalObject ( C : Category ) :=
---   (object : C^.Obj)
---   (morphisms : ∀ Y : C^.Obj, C^.Hom Y object)
---   (uniqueness : ∀ Y : C^.Obj, ∀ f : C^.Hom Y object, f = morphisms Y)
+--   (object : C.Obj)
+--   (morphisms : ∀ Y : C.Obj, C.Hom Y object)
+--   (uniqueness : ∀ Y : C.Obj, ∀ f : C.Hom Y object, f = morphisms Y)
 
 end tqft.categories.initial

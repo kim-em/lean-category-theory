@@ -15,14 +15,14 @@ universe variables u1 v1 u2 v2 u3 v3
 
 structure MonoidalFunctor { C : Category.{u1 v1} } ( m : MonoidalStructure C ) { D : Category.{u2 v2} } ( n : MonoidalStructure D ) :=
   ( functor : Functor C D )
-  ( tensorator : NaturalIsomorphism (FunctorComposition m^.tensor functor) (FunctorComposition (functor × functor) n^.tensor) )
-  ( associativity : ∀ X Y Z : C^.Obj, 
-      D^.compose (tensorator (m (X, Y), Z)) (D^.compose (n^.tensorMorphisms (tensorator (X, Y)) (D^.identity (functor Z))) (n^.associator (functor X) (functor Y) (functor Z)))
-      = D^.compose (functor^.onMorphisms (m^.associator X Y Z)) (D^.compose (tensorator (X, m (Y, Z))) (n^.tensorMorphisms (D^.identity (functor X)) (tensorator (Y, Z))))
+  ( tensorator : NaturalIsomorphism (FunctorComposition m.tensor functor) (FunctorComposition (functor × functor) n.tensor) )
+  ( associativity : ∀ X Y Z : C.Obj, 
+      D.compose (tensorator (m (X, Y), Z)) (D.compose (n.tensorMorphisms (tensorator (X, Y)) (D.identity (functor Z))) (n.associator (functor X) (functor Y) (functor Z)))
+      = D.compose (functor.onMorphisms (m.associator X Y Z)) (D.compose (tensorator (X, m (Y, Z))) (n.tensorMorphisms (D.identity (functor X)) (tensorator (Y, Z))))
   )
-  ( identerator : Isomorphism D (functor m^.tensor_unit) n^.tensor_unit)
-  ( left_identity  : ∀ X : C^.Obj, D^.compose (tensorator (m^.tensor_unit, X)) (D^.compose (n^.tensorMorphisms identerator^.morphism (D^.identity (functor X))) (n^.left_unitor  (functor X))) = functor^.onMorphisms (m^.left_unitor X)  )
-  ( right_identity : ∀ X : C^.Obj, D^.compose (tensorator (X, m^.tensor_unit)) (D^.compose (n^.tensorMorphisms (D^.identity (functor X)) identerator^.morphism) (n^.right_unitor (functor X))) = functor^.onMorphisms (m^.right_unitor X) )
+  ( identerator : Isomorphism D (functor m.tensor_unit) n.tensor_unit)
+  ( left_identity  : ∀ X : C.Obj, D.compose (tensorator (m.tensor_unit, X)) (D.compose (n.tensorMorphisms identerator.morphism (D.identity (functor X))) (n.left_unitor  (functor X))) = functor.onMorphisms (m.left_unitor X)  )
+  ( right_identity : ∀ X : C.Obj, D.compose (tensorator (X, m.tensor_unit)) (D.compose (n.tensorMorphisms (D.identity (functor X)) identerator.morphism) (n.right_unitor (functor X))) = functor.onMorphisms (m.right_unitor X) )
   
 attribute [ematch,simp] MonoidalFunctor.left_identity
 attribute [ematch,simp] MonoidalFunctor.right_identity
@@ -37,7 +37,7 @@ instance MonoidalFunctor_coercion_to_functor { C : Category.{u1 v1} } ( m : Mono
 
 -- open tactic
 -- open interactive
--- meta def precompose { C : Category } { X Y : C^.Obj } ( f : C X Y ) : tactic unit := refine { exact (C^.compose f _) }
+-- meta def precompose { C : Category } { X Y : C.Obj } ( f : C X Y ) : tactic unit := refine { exact (C.compose f _) }
 
 definition MonoidalFunctorComposition
   { C : Category.{u1 v1} }
@@ -65,9 +65,9 @@ definition MonoidalFunctorComposition
 }
 
 -- structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : MonoidalFunctor C D ) :=
---   ( natural_transformation : NaturalTransformation F^.functor G^.functor )
---   ( compatibility_with_tensor : ∀ X Y : C^.Obj, D^.compose (F^.tensorator (X, Y)) (D^.tensorMorphisms (natural_transformation X) (natural_transformation Y)) = D^.compose (natural_transformation (C^.tensorObjects X Y)) (G^.tensorator (X, Y)) )
---   ( compatibility_with_unit   : D^.compose (natural_transformation C^.tensor_unit) G^.identerator^.morphism = F^.identerator^.morphism )
+--   ( natural_transformation : NaturalTransformation F.functor G.functor )
+--   ( compatibility_with_tensor : ∀ X Y : C.Obj, D.compose (F.tensorator (X, Y)) (D.tensorMorphisms (natural_transformation X) (natural_transformation Y)) = D.compose (natural_transformation (C.tensorObjects X Y)) (G.tensorator (X, Y)) )
+--   ( compatibility_with_unit   : D.compose (natural_transformation C.tensor_unit) G.identerator.morphism = F.identerator.morphism )
 
 -- attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
 -- attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_unit
@@ -76,7 +76,7 @@ definition MonoidalFunctorComposition
 --   { C D : MonoidalCategory }
 --   { F G : MonoidalFunctor C D }
 --   ( α β : MonoidalNaturalTransformation F G )
---   ( w : α^.natural_transformation = β^.natural_transformation ) : α = β :=
+--   ( w : α.natural_transformation = β.natural_transformation ) : α = β :=
 --   begin
 --     induction α with α_components α_naturality,
 --     induction β with β_components β_naturality,
@@ -85,13 +85,13 @@ definition MonoidalFunctorComposition
 
 -- instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
 --   { C D : MonoidalCategory }
---   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F^.functor G^.functor) :=
+--   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F.functor G.functor) :=
 --   { coe := MonoidalNaturalTransformation.natural_transformation }
 
 -- @[reducible] definition IdentityMonoidalNaturalTransformation
 --   { C D : MonoidalCategory }
 --   ( F : MonoidalFunctor C D ) : MonoidalNaturalTransformation F F :=
---     ⟨ IdentityNaturalTransformation F^.functor, ♮, ♮ ⟩
+--     ⟨ IdentityNaturalTransformation F.functor, ♮, ♮ ⟩
 
 -- @[reducible] definition vertical_composition_of_MonoidalNaturalTransformations
 --   { C D : MonoidalCategory } 
@@ -99,18 +99,18 @@ definition MonoidalFunctorComposition
 --   ( α : MonoidalNaturalTransformation F G ) 
 --   ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
 -- {
---   natural_transformation    := vertical_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
+--   natural_transformation    := vertical_composition_of_NaturalTransformations α.natural_transformation β.natural_transformation,
 --   compatibility_with_tensor := begin
 --                                 -- abstract {
 --                                   -- TODO It seems that one round of blast should succeed here!
 --                                   -- blast,
 --                                   intros, dsimp,
---                                   rewrite D^.interchange,
---                                   rewrite - D^.associativity,
---                                   rewrite α^.compatibility_with_tensor,
+--                                   rewrite D.interchange,
+--                                   rewrite - D.associativity,
+--                                   rewrite α.compatibility_with_tensor,
 --                                   -- blast, -- This blast seems to cause the CPU to pin at maximum, and start ignoring earlier edits.
---                                   rewrite D^.associativity,
---                                   rewrite β^.compatibility_with_tensor,
+--                                   rewrite D.associativity,
+--                                   rewrite β.compatibility_with_tensor,
 --                                   blast -- What is this blast even doing? It seems dsimp should be enough.
 --                                 -- }
 --                                end,
@@ -125,7 +125,7 @@ definition MonoidalFunctorComposition
 --   ( α : MonoidalNaturalTransformation F G ) 
 --   ( β : MonoidalNaturalTransformation H K ) : MonoidalNaturalTransformation (MonoidalFunctorComposition F H) (MonoidalFunctorComposition G K) :=
 -- {
---   natural_transformation    := horizontal_composition_of_NaturalTransformations α^.natural_transformation β^.natural_transformation,
+--   natural_transformation    := horizontal_composition_of_NaturalTransformations α.natural_transformation β.natural_transformation,
 --   compatibility_with_tensor := sorry,
 --   compatibility_with_unit   := sorry
 -- }

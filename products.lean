@@ -14,10 +14,10 @@ namespace tqft.categories.products
 @[unfoldable] definition ProductCategory (C D : Category) :
   Category :=
   {
-    Obj      := C^.Obj × D^.Obj,
-    Hom      := (λ X Y : C^.Obj × D^.Obj, C^.Hom (X^.fst) (Y^.fst) × D^.Hom (X^.snd) (Y^.snd)),
-    identity := λ X, ⟨ C^.identity (X^.fst), D^.identity (X^.snd) ⟩,
-    compose  := λ _ _ _ f g, (C^.compose (f^.fst) (g^.fst), D^.compose (f^.snd) (g^.snd)),
+    Obj      := C.Obj × D.Obj,
+    Hom      := (λ X Y : C.Obj × D.Obj, C.Hom (X.fst) (Y.fst) × D.Hom (X.snd) (Y.snd)),
+    identity := λ X, ⟨ C.identity (X.fst), D.identity (X.snd) ⟩,
+    compose  := λ _ _ _ f g, (C.compose (f.fst) (g.fst), D.compose (f.snd) (g.snd)),
 
     left_identity  := ♮,
     right_identity := ♮,
@@ -28,16 +28,16 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
-@[unfoldable] definition RightInjectionAt { D : Category } ( Z : D^.Obj ) ( C : Category ) : Functor C (C × D) :=
+@[unfoldable] definition RightInjectionAt { D : Category } ( Z : D.Obj ) ( C : Category ) : Functor C (C × D) :=
 { onObjects     := λ X, (X, Z),
-  onMorphisms   := λ X Y f, (f, D^.identity Z),
+  onMorphisms   := λ X Y f, (f, D.identity Z),
   identities    := ♮,
   functoriality := ♯
 }
 
-@[unfoldable] definition LeftInjectionAt { C : Category } ( Z : C^.Obj) ( D : Category ) : Functor D (C × D) :=
+@[unfoldable] definition LeftInjectionAt { C : Category } ( Z : C.Obj) ( D : Category ) : Functor D (C × D) :=
 { onObjects     := λ X, (Z, X),
-  onMorphisms   := λ X Y f, (C^.identity Z, f),
+  onMorphisms   := λ X Y f, (C.identity Z, f),
   identities    := ♮,
   functoriality := ♯
 }
@@ -60,8 +60,8 @@ end ProductCategory
 
 @[unfoldable] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
-  onObjects     := λ X, (F X^.fst, G X^.snd),
-  onMorphisms   := λ _ _ f, (F^.onMorphisms f^.fst, G^.onMorphisms f^.snd),
+  onObjects     := λ X, (F X.fst, G X.snd),
+  onMorphisms   := λ _ _ f, (F.onMorphisms f.fst, G.onMorphisms f.snd),
   identities    := ♯,
   functoriality := ♯
 }
@@ -76,7 +76,7 @@ end ProductFunctor
   (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
     NaturalTransformation (F × H) (G × I) :=
 {
-  components := λ X, (α X^.fst, β X^.snd),
+  components := λ X, (α X.fst, β X.snd),
   naturality := ♯
 }
 
@@ -86,8 +86,8 @@ end ProductNaturalTransformation
 
 @[unfoldable] definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
-  onObjects     := λ X, (X^.snd, X^.fst),
-  onMorphisms   := λ _ _ f, (f^.snd, f^.fst),
+  onObjects     := λ X, (X.snd, X.fst),
+  onMorphisms   := λ _ _ f, (f.snd, f.fst),
   identities    := ♮,
   functoriality := ♮
 }
@@ -119,22 +119,22 @@ lemma switch_twice_is_the_identity
 
 -- @[ematch] lemma bifunctor_left_identity
 --   { C D E : Category }
---   ( W : C^.Obj ) ( X Y Z : D^.Obj )
+--   ( W : C.Obj ) ( X Y Z : D.Obj )
 --   ( f : D X Y ) ( g : D Y Z )
 --   ( F : Functor (C × D) E ) :
---     @Functor.onMorphisms _ _ F (W, X) (W, Z) (C^.identity W, D^.compose f g ) 
---     = E^.compose
---         (@Functor.onMorphisms _ _ F (W, X) (W, Y) (C^.identity W, f )) 
---         (@Functor.onMorphisms _ _ F (W, Y) (W, Z) (C^.identity W, g )) := ♮
+--     @Functor.onMorphisms _ _ F (W, X) (W, Z) (C.identity W, D.compose f g ) 
+--     = E.compose
+--         (@Functor.onMorphisms _ _ F (W, X) (W, Y) (C.identity W, f )) 
+--         (@Functor.onMorphisms _ _ F (W, Y) (W, Z) (C.identity W, g )) := ♮
 
 -- @[simp] lemma bifunctor_identities
 --   { C D E : Category }
---   ( X : C^.Obj ) ( Y : D^.Obj )
---   ( F : Functor (C × D) E ) : @Functor.onMorphisms _ _ F (X, Y) (X, Y) (C^.identity X, D^.identity Y) = E^.identity (F^.onObjects (X, Y)) :=
+--   ( X : C.Obj ) ( Y : D.Obj )
+--   ( F : Functor (C × D) E ) : @Functor.onMorphisms _ _ F (X, Y) (X, Y) (C.identity X, D.identity Y) = E.identity (F.onObjects (X, Y)) :=
 --   begin
---     assert p : (C^.identity X, D^.identity Y) = (C × D)^.identity (X, Y), blast,
+--     assert p : (C.identity X, D.identity Y) = (C × D).identity (X, Y), blast,
 --     rewrite p,
---     rewrite F^.identities
+--     rewrite F.identities
 --   end 
 
 end tqft.categories.products
