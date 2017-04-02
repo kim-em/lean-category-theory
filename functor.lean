@@ -8,9 +8,7 @@ open tqft.categories
 
 namespace tqft.categories.functor
 
-universe variables u1 v1 u2 v2 u3 v3 u4 v4
-
-structure Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }) :=
+structure {u1 v1 u2 v2} Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }) :=
   (onObjects   : C^.Obj → D^.Obj)
   (onMorphisms : Π { X Y : C^.Obj },
                 C^.Hom X Y → D^.Hom (onObjects X) (onObjects Y))
@@ -34,7 +32,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
 -- { F   := λ f, Π ⦃X Y : C^.Obj⦄, C^.Hom X Y → D^.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
 --  coe := Functor.onMorphisms }
 
-@[unfoldable] definition IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
+@[unfoldable] definition {u1 v1} IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f,
@@ -42,7 +40,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
   functoriality := ♮
 }
 
-@[unfoldable] definition FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
+@[unfoldable] definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
 {
   onObjects     := λ X, G (F X),
   onMorphisms   := λ _ _ f, G^.onMorphisms (F^.onMorphisms f),
@@ -58,7 +56,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
 --   for `morphismWitness`, leaving the `objectWitness` goal somehow "implicit" and likely unprovable.
 --   See https://groups.google.com/d/msg/lean-user/bhStu87PjiI/vqsyr9ZABAAJ for details.
 -- If you run into this problem, use `fapply Functors_pointwise_equal` instead.
-@[pointwise] lemma Functors_pointwise_equal
+@[pointwise] lemma {u1 v1 u2 v2} Functors_pointwise_equal
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} } 
   { F G : Functor C D } 
@@ -77,7 +75,7 @@ end
 
 open tactic.interactive
 
-lemma FunctorComposition.associativity
+@[ematch] lemma {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition.associativity
   { B : Category.{u1 v1} }
   { C : Category.{u2 v2} }
   { D : Category.{u3 v3} }
@@ -87,15 +85,18 @@ lemma FunctorComposition.associativity
   ( H : Functor D E )
    : FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
 
--- Note that this definition fixes the universe level of all the categories involved.
+@[simp,ematch] lemma {u1 v1 u2 v2} FunctorComposition.left_identity ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) ( F : Functor C D ) : FunctorComposition (IdentityFunctor C) F = F := ♯
+@[simp,ematch] lemma {u1 v1 u2 v2} FunctorComposition.right_identity ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) ( F : Functor C D ) : FunctorComposition F (IdentityFunctor D) = F := ♯
+
+-- Note that this definition fixes the universe level of all the categories involved, so the witness fields are not useful as lemmas..
 @[unfoldable] definition {u v} CategoryOfCategoriesAndFunctors : Category := {
   Obj := Category.{u v},
   Hom := λ C D, Functor C D,
   identity := λ C, IdentityFunctor C,
   compose  := λ _ _ _ F G, FunctorComposition F G,
-  left_identity  := by blast_as_simp FunctorComposition_left_identity,
-  right_identity := by blast_as_simp FunctorComposition_right_identity,
-  associativity  := by blast_as FunctorComposition_associativity
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
 }
 
 end tqft.categories.functor
