@@ -12,7 +12,7 @@ open tqft.categories.enriched
 open tqft.categories.products
 open tqft.categories.monoidal_category
 
-namespace tqft.categories.two_category_1
+namespace tqft.categories.enriched.two_category
 
 definition {u} TwoCategory := EnrichedCategory CartesianProductOfCategories.{u u}
 
@@ -24,17 +24,23 @@ definition {u} TwoCategory := EnrichedCategory CartesianProductOfCategories.{u u
     functoriality := ♯
 }
 
+-- It seems these might be generally useful!
+local attribute [unfoldable] eq.mp
+local attribute [simp] id_locked_eq
+
 definition {u} CAT : TwoCategory.{u} :=
 {
     Obj            := Category.{u u},
     Hom            := λ C D, FunctorCategory C D,
     compose        := λ _ _ _, horizontal_composition_on_FunctorCategories,
     identity       := λ C, { onObjects := λ _, IdentityFunctor C, onMorphisms := λ _ _ _, IdentityNaturalTransformation (IdentityFunctor C), identities := ♮, functoriality := ♯ },
-    left_identity  := ♯,
+    left_identity  := begin
+                        
+                      end,
     right_identity := ♮,
     associativity  := ♮
 }  
 
 -- PROJECT strict n-categories; for this we'll need to define products of enriched categories, and show that (n-1) categories are symmetric.
 
-end tqft.categories.two_category_1
+end tqft.categories.enriched.two_category
