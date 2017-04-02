@@ -25,10 +25,11 @@ instance HalfBraiding_coercion_to_object { C : Category } ( m : MonoidalStructur
 
 structure HalfBraidingMorphism  { C : Category } { m : MonoidalStructure C } ( X Y : HalfBraiding m ) :=
   (morphism : C^.Hom X Y)
-  (witness : ∀ Z : C^.Obj, C^.compose (X^.commutor Z) (m^.tensorMorphisms (C^.identity Z) morphism) = C^.compose (m^.tensorMorphisms morphism (C^.identity Z)) (Y^.commutor Z))
+  -- FIXME I've had to write out the statement gorily, so that it can match.
+  -- (witness : ∀ Z : C^.Obj, C^.compose (X^.commutor Z) (m^.tensorMorphisms (C^.identity Z) morphism) = C^.compose (m^.tensorMorphisms morphism (C^.identity Z)) (Y^.commutor Z))
+  (witness : ∀ Z : C^.Obj, C^.compose (X^.commutor^.morphism^.components Z) (@Functor.onMorphisms _ _ m^.tensor (Z, X) (Z, Y) (C^.identity Z, morphism)) = C^.compose (@Functor.onMorphisms _ _ m^.tensor (X, Z) (Y, Z) (morphism, C^.identity Z)) (Y^.commutor Z))
 
 attribute [ematch] HalfBraidingMorphism.witness
-
 
 @[pointwise] lemma HalfBraidingMorphism_equal
   { C : Category }
@@ -44,7 +45,6 @@ attribute [ematch] HalfBraidingMorphism.witness
 
 local attribute [ematch] MonoidalStructure.interchange_right_identity  MonoidalStructure.interchange_left_identity
 
--- FIXME automation!
 definition DrinfeldCentre { C : Category } ( m : MonoidalStructure C )  : Category := {
   Obj := HalfBraiding m,
   Hom := λ X Y, HalfBraidingMorphism X Y,
@@ -63,8 +63,10 @@ definition DrinfeldCentre { C : Category } ( m : MonoidalStructure C )  : Catego
         rewrite - C^.associativity,
         rewrite f^.witness,
         rewrite C^.associativity,
-        rewrite g^.witness,
-        rewrite C^.associativity
+        -- blast,
+        erewrite g^.witness, -- FIXME why is erewrite needed here? We can't blast because of it.
+        blast,
+        -- rewrite C^.associativity
       end
   },
   left_identity  := ♯,

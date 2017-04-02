@@ -3,20 +3,38 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import ..category
+import ..monoidal_categories.monoidal_category
 
 open tqft.categories
+open tqft.categories.monoidal_category
 
 namespace tqft.categories.examples
 
-definition monoid_as_category { α : Type } ( m : monoid α ) : Category :=
+@[unfoldable] definition monoid_as_Category { α : Type } ( m : monoid α ) : Category :=
 {
     Obj      := unit,
     Hom      := λ _ _, α,
-    compose  := λ _ _ _ f g, f * g,
+    compose  := λ _ _ _ f g, @monoid.mul α m f g,
     identity := λ _, one,
     left_identity  := ♮,
     right_identity := ♮,
     associativity  := ♮
+}
+
+definition comm_monoid_as_MonoidalCategory { α : Type } ( m : comm_monoid α ) : MonoidalStructure (monoid_as_Category (@comm_monoid.to_monoid α m)) :=
+{
+  tensor := {
+    onObjects := λ _, unit.star,
+    onMorphisms := λ _ _ p, @comm_monoid.mul α m p.1 p.2,
+    identities := ♯,
+    functoriality := ♯    
+  },
+  tensor_unit := unit.star,
+  associator_transformation := sorry,
+  left_unitor := sorry,
+  right_unitor := sorry,
+  pentagon := sorry,
+  triangle := sorry
 }
 
 structure CategoryWithOneObject extends Category :=

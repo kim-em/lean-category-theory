@@ -84,7 +84,7 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
+@[unfoldable] definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
   onObjects     := λ X, (X^.snd, X^.fst),
   onMorphisms   := λ _ _ f, (f^.snd, f^.fst),

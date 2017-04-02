@@ -44,7 +44,6 @@ instance MonoidalStructure_coercion_to_TensorProduct { C : Category } : has_coe 
   ( X Y Z : C^.Obj ) : C^.Hom (m^.tensorObjects X (m^.tensorObjects Y Z)) (m^.tensorObjects (m^.tensorObjects X Y) Z) :=
   m^.associator_transformation^.inverse^.components ⟨⟨X, Y⟩, Z⟩ -- TODO why is the explicit ^.components required here?
 
--- -- FIXME why do we need this?!
 -- @[ematch] lemma MonoidalStructure.triangle_components { C : Category } ( m : MonoidalStructure C ) ( X Y : C^.Obj ) :
 --   C^.compose (m^.associator X m^.tensor_unit Y) (m^.tensorMorphisms (C^.identity X) (m^.left_unitor Y)) = m^.tensorMorphisms (m^.right_unitor X) (C^.identity Y) := 
 --   begin

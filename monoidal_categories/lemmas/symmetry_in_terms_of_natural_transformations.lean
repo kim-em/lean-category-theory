@@ -17,16 +17,18 @@ universe variables u v
   : NaturalTransformation m^.tensor m^.tensor :=
   begin
     pose square := vertical_composition_of_NaturalTransformations commutor^.morphism (whisker_on_left (SwitchProductCategory C C) commutor^.morphism),
-    rewrite - FunctorComposition_associativity at square,
-    erewrite switch_twice_is_the_identity at square,
-    rewrite FunctorComposition_left_identity at square,
-    exact square
+    refine ( cast _ square ),
+    rewrite - FunctorComposition.associativity,
+    erewrite switch_twice_is_the_identity,
+    rewrite FunctorComposition.left_identity,
   end 
 
-lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Braiding m ) : squared_Braiding (β^.braiding) = IdentityNaturalTransformation m^.tensor := 
+lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β^.braiding) = IdentityNaturalTransformation m^.tensor := 
   begin
     blast,
     induction X,
+    unfold squared_Braiding._proof_1,
+    blast,
     -- TODO how to get these eq.rec's out of the way?
     exact sorry
   end
