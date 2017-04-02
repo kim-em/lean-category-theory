@@ -42,6 +42,8 @@ open tqft.categories.monoidal_category
     end
 }
 
+-- PROJECT really this should be a special case of the (uniquely braided, symmetric) monoidal structure coming from a product.
+
 open tqft.categories.products
 
 -- set_option trace.dsimplify true

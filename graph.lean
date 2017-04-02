@@ -75,6 +75,7 @@ instance Category_to_Graph_coercion: has_coe Category Graph :=
 open tqft.categories.functor
 
 -- TODO it would be nice if we could use:
+-- Jeremy explained a solution at https://groups.google.com/d/msg/lean-user/JqaI12tdk3g/F9MZDxkFDAAJ
 -- definition path_to_morphism { G : Graph } { C : Category } ( h : GraphHomomorphism G C ) { X Y : G.vertices } : path X Y → C.Hom (h.onVertices X) (h.onVertices Y)
 -- | (path.nil X)    := C.identity h.onVertices X
 -- | (path.cons e p) := C.compose (h.onEdges e) (path_to_morphism p)
@@ -86,6 +87,8 @@ begin
  exact C.identity (H.onVertices Z),
  exact C.compose (H.onEdges e) i
 end
+
+-- PROJECT obtain this as the left adjoint to the forgetful functor.
 
 definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) : Functor (PathCategory G) C :=
 {
