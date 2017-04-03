@@ -31,6 +31,35 @@ structure IsomorphicTypes ( α β : Type ) :=
   ( witness_1 : morphism ∘ inverse = id )
   ( witness_2 : inverse ∘ morphism = id )
 
+open list
+open tactic monad expr
+
+meta def destruct_conjunctions : tactic unit :=
+repeat (do
+  l ← local_context,
+  first $ l^.for (λ h, do
+    ht ← infer_type h >>= whnf,
+    match ht with
+    | ``(and %%a %%b) := do
+      n ← get_unused_name `h none,
+      mk_mapp ``and.left [none, none, some h] >>= assertv n a,
+      n ← get_unused_name `h none,
+      mk_mapp ``and.right [none, none, some h] >>= assertv n b,
+      clear h
+    | _ := failed
+    end))
+
+meta def induction' ( h : expr ) : tactic ( list expr ) :=
+  induction h >>= 
+
+meta def induction_list : list expr → tactic unit
+| nil       := skip
+| (h :: hs) := induction h >> induction_list hs
+
+meta def intros_induction : tactic unit := 
+do h ← intros,
+   induction_list h
+
 definition test : IsomorphicTypes (((ℕ × ℕ) × ℕ)) (ℕ × (ℕ × ℕ)) :=
 begin
     refine {

@@ -64,24 +64,32 @@ definition MonoidalFunctorComposition
   right_identity := sorry
 }
 
--- structure MonoidalNaturalTransformation { C D : MonoidalCategory } ( F G : MonoidalFunctor C D ) :=
---   ( natural_transformation : NaturalTransformation F.functor G.functor )
---   ( compatibility_with_tensor : ∀ X Y : C.Obj, D.compose (F.tensorator (X, Y)) (D.tensorMorphisms (natural_transformation X) (natural_transformation Y)) = D.compose (natural_transformation (C.tensorObjects X Y)) (G.tensorator (X, Y)) )
---   ( compatibility_with_unit   : D.compose (natural_transformation C.tensor_unit) G.identerator.morphism = F.identerator.morphism )
+structure MonoidalNaturalTransformation
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { m : MonoidalStructure C }
+  { n : MonoidalStructure D }
+  ( F G : MonoidalFunctor m n ) :=
+  ( natural_transformation : NaturalTransformation F.functor G.functor )
+  ( compatibility_with_tensor : ∀ X Y : C.Obj, D.compose (F.tensorator (X, Y)) (n.tensorMorphisms (natural_transformation X) (natural_transformation Y)) = D.compose (natural_transformation (m.tensorObjects X Y)) (G.tensorator (X, Y)) )
+  ( compatibility_with_unit   : D.compose (natural_transformation m.tensor_unit) G.identerator.morphism = F.identerator.morphism )
 
--- attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
--- attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_unit
+attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_tensor
+attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_unit
 
--- @[pointwise] lemma MonoidalNaturalTransformation_componentwise_equal
---   { C D : MonoidalCategory }
---   { F G : MonoidalFunctor C D }
---   ( α β : MonoidalNaturalTransformation F G )
---   ( w : α.natural_transformation = β.natural_transformation ) : α = β :=
---   begin
---     induction α with α_components α_naturality,
---     induction β with β_components β_naturality,
---     blast
---   end
+@[pointwise] lemma MonoidalNaturalTransformation_componentwise_equal
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { m : MonoidalStructure C }
+  { n : MonoidalStructure D }
+  ( F G : MonoidalFunctor m n )
+  ( α β : MonoidalNaturalTransformation F G )
+  ( w : α.natural_transformation = β.natural_transformation ) : α = β :=
+  begin
+    induction α with α_components α_naturality,
+    induction β with β_components β_naturality,
+    blast
+  end
 
 -- instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
 --   { C D : MonoidalCategory }

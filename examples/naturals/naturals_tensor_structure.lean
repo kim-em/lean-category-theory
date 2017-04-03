@@ -8,6 +8,8 @@ namespace tqft.categories.examples.naturals
 
 open tqft.categories
 open tqft.categories.functor
+open tqft.categories.natural_transformation
+open tqft.categories.products
 open tqft.categories.monoidal_category
 
 @[unfoldable] definition ℕTensorProduct : TensorProduct ℕCategory :=
@@ -47,9 +49,11 @@ refine {
    pentagon := _,
    triangle := _
  },
- all_goals { intros },
---  all_goals { dsimp }, -- FIXME Segfault has been fixed: https://github.com/leanprover/lean/issues/1502
-                          
+ dsimp,
+ dsimp at _x,
+ unfold ProductCategory at _x,
+ dsimp at _x,
+
  end 
 
 end tqft.categories.examples.naturals

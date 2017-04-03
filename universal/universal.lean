@@ -2,6 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
+import .initial
 import ..isomorphism
 import ..natural_transformation
 import ..graph
@@ -9,6 +10,7 @@ import ..graph
 open tqft.categories
 open tqft.categories.functor
 open tqft.categories.isomorphism
+open tqft.categories.initial
 
 namespace tqft.categories.universal
 
@@ -110,12 +112,12 @@ structure Coproduct { C : Category } ( X Y : C.Obj ) :=
 
 definition {u} unique_up_to_isomorphism ( α : Type u ) { C : Category } ( f : α → C.Obj ) := Π X Y : α, Isomorphism C (f X) (f Y)
 
-lemma Equalizers_are_unique
-  { C : Category }  
-  { X Y : C.Obj } 
-  ( f g : C.Hom X Y )
-   : unique_up_to_isomorphism (Equalizer f g) Equalizer.equalizer
-   := sorry -- PROJECT prove this via the comma category formulation, using lemmas in comparisons.lean
+-- TODO should these be classes?
+structure has_InitialObject ( C : Category ) :=
+  ( initial_object : InitialObject C )
+structure has_FiniteProducts ( C : Category ) extends has_InitialObject C :=
+  ( binary_product : Π X Y : C^.Obj, Product X Y )
+-- PROJECT construct finite products from these
 
 end tqft.categories.universal
 

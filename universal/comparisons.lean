@@ -15,6 +15,7 @@ open tqft.categories.isomorphism
 open tqft.categories.examples.types
 open tqft.categories.universal
 
+namespace tqft.categories.universal
 -- PROJECT give the direct definition of slice and coslice categories, and then prove equivalence with this.
 
 -- PROJECT Give more straightforward definitions, and then show they agree.
@@ -37,3 +38,5 @@ lemma Equalizers_agree { C : Category } { α β : C.Obj } ( f g : C.Hom α β )
 --    : unique_up_to_isomorphism (Equalizer f g) Equalizer.equalizer
 --    := λ (E1 E2 : Equalizer f g), 
 --        comma.InitialObjects_are_unique (Isomorphism.inverse (Equalizers_agree f g) E1) ((Equalizers_agree f g).inverse E2)
+
+end tqft.categories.universal
