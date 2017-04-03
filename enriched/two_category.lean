@@ -69,7 +69,7 @@ definition {u} CAT : TwoCategory.{u} :=
                           dsimp at f,
                           apply NaturalTransformations_componentwise_equal,
                           intros,
-                          unfold_unfoldable, -- FIXME ugh, and we hit the same problem with `eq.rec (eq.refl A) B`
+                          -- unfold_unfoldable, -- FIXME ugh, and we hit the same problem with `eq.rec (eq.refl A) B`
                         end
                       end,
     right_identity := sorry,

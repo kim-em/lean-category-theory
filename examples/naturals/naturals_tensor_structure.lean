@@ -53,7 +53,8 @@ refine {
  dsimp at _x,
  unfold ProductCategory at _x,
  dsimp at _x,
-
+ 
+ all_goals { admit } 
  end 
 
 end tqft.categories.examples.naturals

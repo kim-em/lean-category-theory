@@ -13,6 +13,8 @@ namespace tqft.categories.braided_monoidal_category
 
 universe variables u v
 
+-- set_option pp.all true
+
 @[reducible] definition squared_Braiding { C : Category.{u v} } { m : MonoidalStructure C } ( commutor : Commutor m )
   : NaturalTransformation m.tensor m.tensor :=
   begin
@@ -23,14 +25,20 @@ universe variables u v
     rewrite FunctorComposition.left_identity,
   end 
 
+#print squared_Braiding
+#print squared_Braiding._proof_1
+
 lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
   begin
-    blast,
-    induction X,
+    apply NaturalTransformations_componentwise_equal,
+    intros,
+    dsimp,
+    unfold_unfoldable_hypotheses,
+    induction X with X1 X2,
     unfold squared_Braiding._proof_1,
-    blast,
-    -- TODO how to get these eq.rec's out of the way?
-    exact sorry
+    -- unfold_unfoldable_goals,
+    -- simp,
+    admit   
   end
 
 end tqft.categories.braided_monoidal_category

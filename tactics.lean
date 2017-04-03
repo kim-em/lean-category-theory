@@ -33,25 +33,36 @@ do cs ← attribute.get_instances `pointwise,
    try (seq (any_apply cs) and_then)
 
 -- open tactic
-open lean.parser
-open interactive
-
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b
 
+meta def dunfold_all_at (names : list name) : list expr → tactic unit
+| []      := skip
+| (H::Hs) := dunfold_at names H >> dsimp_at H >> dunfold_all_at Hs
 
-namespace tactic.interactive
-meta def dunfold_all : list name → tactic unit
-| [] := skip
-| (n::ns) := dunfold [n] [] >> dsimp [] [] [] [] >> dunfold_all ns
+meta def dunfold_all_hypotheses (names : list name) : tactic unit :=
+do hyps ← local_context,
+   dunfold_all_at names hyps
+
+open lean.parser
+open interactive
+
+meta def dunfold_all (names : list name) : tactic unit :=
+dunfold names >> dsimp
+
+meta def unfold_unfoldable_hypotheses : tactic unit := 
+do cs ← attribute.get_instances `unfoldable,
+   try (dunfold_all_hypotheses cs)
+
+meta def unfold_unfoldable_goals : tactic unit := 
+do cs ← attribute.get_instances `unfoldable,
+   try (dunfold_all cs)
 
 meta def unfold_unfoldable : tactic unit := 
-do cs ← attribute.get_instances `unfoldable,
-   dunfold_all cs
-end tactic.interactive
+  unfold_unfoldable_hypotheses >> unfold_unfoldable_goals
 
 -- open tactic.interactive
-meta def blast  : tactic unit := intros >> pointwise blast >> try tactic.interactive.unfold_unfoldable >> try simp >> try smt_eblast >> pointwise blast
+meta def blast  : tactic unit := intros >> pointwise blast >> try unfold_unfoldable >> try simp >> try smt_eblast >> pointwise blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }

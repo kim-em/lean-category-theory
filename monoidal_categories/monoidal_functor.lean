@@ -91,64 +91,82 @@ attribute [ematch,simp] MonoidalNaturalTransformation.compatibility_with_unit
     blast
   end
 
--- instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
---   { C D : MonoidalCategory }
---   ( F G : MonoidalFunctor C D ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F.functor G.functor) :=
---   { coe := MonoidalNaturalTransformation.natural_transformation }
+instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { m : MonoidalStructure C }
+  { n : MonoidalStructure D }
+  ( F G : MonoidalFunctor m n ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F.functor G.functor) :=
+  { coe := MonoidalNaturalTransformation.natural_transformation }
 
--- @[reducible] definition IdentityMonoidalNaturalTransformation
---   { C D : MonoidalCategory }
---   ( F : MonoidalFunctor C D ) : MonoidalNaturalTransformation F F :=
---     ⟨ IdentityNaturalTransformation F.functor, ♮, ♮ ⟩
+@[unfoldable] definition IdentityMonoidalNaturalTransformation
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { m : MonoidalStructure C }
+  { n : MonoidalStructure D }
+  ( F : MonoidalFunctor m n ) : MonoidalNaturalTransformation F F :=
+    ⟨ IdentityNaturalTransformation F.functor, ♮, ♮ ⟩
 
--- @[reducible] definition vertical_composition_of_MonoidalNaturalTransformations
---   { C D : MonoidalCategory } 
---   { F G H : MonoidalFunctor C D } 
---   ( α : MonoidalNaturalTransformation F G ) 
---   ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
--- {
---   natural_transformation    := vertical_composition_of_NaturalTransformations α.natural_transformation β.natural_transformation,
---   compatibility_with_tensor := begin
---                                 -- abstract {
---                                   -- TODO It seems that one round of blast should succeed here!
---                                   -- blast,
---                                   intros, dsimp,
---                                   rewrite D.interchange,
---                                   rewrite - D.associativity,
---                                   rewrite α.compatibility_with_tensor,
---                                   -- blast, -- This blast seems to cause the CPU to pin at maximum, and start ignoring earlier edits.
---                                   rewrite D.associativity,
---                                   rewrite β.compatibility_with_tensor,
---                                   blast -- What is this blast even doing? It seems dsimp should be enough.
---                                 -- }
---                                end,
---   compatibility_with_unit   := ♮                               
--- }
+@[unfoldable] definition vertical_composition_of_MonoidalNaturalTransformations
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { m : MonoidalStructure C }
+  { n : MonoidalStructure D }
+  { F G H : MonoidalFunctor m n } 
+  ( α : MonoidalNaturalTransformation F G ) 
+  ( β : MonoidalNaturalTransformation G H ) : MonoidalNaturalTransformation F H :=
+{
+  natural_transformation    := vertical_composition_of_NaturalTransformations α.natural_transformation β.natural_transformation,
+  compatibility_with_tensor := begin
+                                -- abstract {
+                                  -- TODO It seems that one round of blast should succeed here!
+                                  -- blast,
+                                  intros, dsimp,
+                                  rewrite D.interchange,
+                                  rewrite - D.associativity,
+                                  rewrite α.compatibility_with_tensor,
+                                  -- blast, -- This blast seems to cause the CPU to pin at maximum, and start ignoring earlier edits.
+                                  rewrite D.associativity,
+                                  rewrite β.compatibility_with_tensor,
+                                  blast -- What is this blast even doing? It seems dsimp should be enough.
+                                -- }
+                               end,
+  compatibility_with_unit   := ♮                               
+}
 
--- -- PROJECT horizontal_composition_of_MonoidalNaturalTransformations
--- @[reducible] definition horizontal_composition_of_MonoidalNaturalTransformations
---   { C D E : MonoidalCategory } 
---   { F G : MonoidalFunctor C D } 
---   { H K : MonoidalFunctor D E } 
---   ( α : MonoidalNaturalTransformation F G ) 
---   ( β : MonoidalNaturalTransformation H K ) : MonoidalNaturalTransformation (MonoidalFunctorComposition F H) (MonoidalFunctorComposition G K) :=
--- {
---   natural_transformation    := horizontal_composition_of_NaturalTransformations α.natural_transformation β.natural_transformation,
---   compatibility_with_tensor := sorry,
---   compatibility_with_unit   := sorry
--- }
+-- PROJECT horizontal_composition_of_MonoidalNaturalTransformations
+@[unfoldable] definition horizontal_composition_of_MonoidalNaturalTransformations
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { E : Category.{u3 v3} }
+  { m : MonoidalStructure C }
+  { n : MonoidalStructure C }
+  { o : MonoidalStructure C }
+  { F G : MonoidalFunctor m n } 
+  { H K : MonoidalFunctor n o } 
+  ( α : MonoidalNaturalTransformation F G ) 
+  ( β : MonoidalNaturalTransformation H K ) : MonoidalNaturalTransformation (MonoidalFunctorComposition F H) (MonoidalFunctorComposition G K) :=
+{
+  natural_transformation    := horizontal_composition_of_NaturalTransformations α.natural_transformation β.natural_transformation,
+  compatibility_with_tensor := sorry,
+  compatibility_with_unit   := sorry
+}
 
 
--- definition CategoryOfMonoidalFunctors ( C D : MonoidalCategory ) : Category :=
--- {
---   Obj := MonoidalFunctor C D,
---   Hom := MonoidalNaturalTransformation,
---   identity := IdentityMonoidalNaturalTransformation,
---   compose  := λ _ _ _ α β, vertical_composition_of_MonoidalNaturalTransformations α β,
+definition CategoryOfMonoidalFunctors   
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { m : MonoidalStructure C }
+  { n : MonoidalStructure D } : Category :=
+{
+  Obj := MonoidalFunctor C D,
+  Hom := MonoidalNaturalTransformation,
+  identity := IdentityMonoidalNaturalTransformation,
+  compose  := λ _ _ _ α β, vertical_composition_of_MonoidalNaturalTransformations α β,
 
---   left_identity  := ♮,
---   right_identity := ♮,
---   associativity  := ♮
--- }
+  left_identity  := ♮,
+  right_identity := ♮,
+  associativity  := ♮
+}
 
 end tqft.categories.monoidal_functor

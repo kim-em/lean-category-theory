@@ -19,17 +19,12 @@ inductive {u v} path { G : Graph.{u v} } : vertices G → vertices G → Type (m
 | nil  : Π ( h : G.vertices ), path h h
 | cons : Π { h s t : G.vertices } ( e : G.edges h s ) ( l : path s t ), path h t
 
+-- The pattern matching trick used here was explained by Jeremy Avigad at https://groups.google.com/d/msg/lean-user/JqaI12tdk3g/F9MZDxkFDAAJ
 @[unfoldable] definition concatenate_paths
- { G : Graph }
- { x y z : G.vertices } : path x y → path y z → path x z :=
-     begin
-       intros p q,
-       induction p,
-       -- Deal with the case with p is nil
-       exact q,
-       -- Now the case where p is a cons
-       exact path.cons e (ih_1 q)
-     end
+ { G : Graph } :
+ Π { x y z : G.vertices }, path x y → path y z → path x z
+| ._ ._ _ (path.nil _)               q := q
+| ._ ._ _ (@path.cons ._ _ _ _ e p') q := path.cons e (concatenate_paths p' q)
 
 @[unfoldable] definition PathCategory ( G : Graph ) : Category :=
 {
@@ -74,19 +69,13 @@ instance Category_to_Graph_coercion: has_coe Category Graph :=
 
 open tqft.categories.functor
 
--- TODO it would be nice if we could use:
--- Jeremy explained a solution at https://groups.google.com/d/msg/lean-user/JqaI12tdk3g/F9MZDxkFDAAJ
--- definition path_to_morphism { G : Graph } { C : Category } ( h : GraphHomomorphism G C ) { X Y : G.vertices } : path X Y → C.Hom (h.onVertices X) (h.onVertices Y)
--- | (path.nil X)    := C.identity h.onVertices X
--- | (path.cons e p) := C.compose (h.onEdges e) (path_to_morphism p)
-
-@[unfoldable] definition path_to_morphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) { X Y : G.vertices } : path X Y → C.Hom (H.onVertices X) (H.onVertices Y) :=
-begin
- intros p,
- induction p with Z h s t e p i,
- exact C.identity (H.onVertices Z),
- exact C.compose (H.onEdges e) i
-end
+@[unfoldable] definition path_to_morphism
+  { G : Graph }
+  { C : Category }
+  ( H : GraphHomomorphism G C )
+  : Π { X Y : G.vertices }, path X Y → C.Hom (H.onVertices X) (H.onVertices Y) 
+| ._ ._ (path.nil Z)              := C.identity (H.onVertices Z)
+| ._ ._ (@path.cons ._ _ _ _ e p) := C.compose (H.onEdges e) (path_to_morphism p)
 
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
 
@@ -98,7 +87,7 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
   functoriality := begin
                      blast,
                      induction f,
-                     simp,
+                     blast,
                      pose p := ih_1 g,
                      blast
                    end

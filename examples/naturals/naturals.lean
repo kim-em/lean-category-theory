@@ -34,7 +34,7 @@ end
     refine {
         Obj := unit,
         Hom := λ _ _, ℕ,
-        identity := _,
+        identity := _, -- Notice we don't specify the identity here: `refine` works it out for us.
         compose  := λ _ _ _ n m, n + m,
 
         left_identity  := _,
