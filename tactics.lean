@@ -81,6 +81,30 @@ attribute [pointwise] subtype.eq
 @[simp] lemma {u} auto_cast_identity {α : Sort u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮
 notation `⟦` p `⟧` := @auto_cast _ _ (by smt_ematch) p
 
+meta def new_names ( e : expr ) : list name :=
+  [ 
+    name.append (e.local_pp_name) (mk_simple_name "_1"), 
+    name.append (e.local_pp_name) (mk_simple_name "_2")
+  ]
+
+meta def induction_on_pairs : tactic unit :=
+repeat( do l ← local_context,
+   l.reverse.mfor' $ λ h, do
+     ```(prod _ _) ← infer_type h >>= whnf | skip,
+     induction h /-(new_names h)-/ >> skip )
+
+meta def induction_on_unit : tactic unit :=
+do l ← local_context,
+   l.reverse.mfor' $ λ h, do
+     ```(unit) ← infer_type h >>= whnf | skip,
+     induction h >> skip
+
+meta def automatic_inductions : tactic unit :=
+  induction_on_pairs >> induction_on_unit
+
+meta def intros_and_inductions : tactic unit := intros >> automatic_inductions
+
+
 -- TODO this is destined for the standard library?
 meta def mk_inhabitant_using (A : expr) (t : tactic unit) : tactic expr :=
 do m ← mk_meta_var A,

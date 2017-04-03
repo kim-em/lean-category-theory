@@ -47,12 +47,12 @@ definition {u} CAT : TwoCategory.{u} :=
                           fapply Functors_pointwise_equal,
                           begin
                             intros,
-                            unfold_unfoldable,
+                            unfold_unfoldable_goals,
                             trivial
                           end,
                           begin
                             intros,
-                            unfold_unfoldable,
+                            unfold_unfoldable_goals,
                             trivial
                           end
                         end,

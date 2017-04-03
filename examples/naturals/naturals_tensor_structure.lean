@@ -34,27 +34,35 @@ refine {
      witness_1 := _,
      witness_2 := _
    },
-   left_unitor               := {
-     morphism := { components := λ _, 0, naturality := ♯ },
-     inverse  := { components := λ _, 0, naturality := ♯ },
-     witness_1 := ♮,
-     witness_2 := ♮
-   },
-   right_unitor              := {
-     morphism := { components := λ _, 0, naturality := ♯ },
-     inverse  := { components := λ _, 0, naturality := ♯ },
-     witness_1 := ♮,
-     witness_2 := ♮
-   },
-   pentagon := _,
-   triangle := _
+   left_unitor := sorry,
+   right_unitor := sorry,
+  --  left_unitor               := {
+  --    morphism := { components := λ _, 0, naturality := ♯ },
+  --    inverse  := { components := λ _, 0, naturality := ♯ },
+  --    witness_1 := ♮,
+  --    witness_2 := ♮
+  --  },
+  --  right_unitor              := {
+  --    morphism := { components := λ _, 0, naturality := ♯ },
+  --    inverse  := { components := λ _, 0, naturality := ♯ },
+  --    witness_1 := ♮,
+  --    witness_2 := ♮
+  --  },
+   pentagon := sorry,
+   triangle := sorry
  },
- dsimp,
- dsimp at _x,
- unfold ProductCategory at _x,
- dsimp at _x,
+--  dsimp,
+--  dsimp at _x,
+--  unfold ProductCategory at _x,
+--  dsimp at _x,
  
- all_goals { admit } 
+ all_goals { intros_and_inductions },
+ all_goals { unfold_unfoldable_hypotheses },
+--  all_goals { dunfold ℕCategory at snd },
+--  all_goals { dsimp at snd }
+--  all_goals { dsimp },
+--  all_goals { unfold_unfoldable },
+ 
  end 
 
 end tqft.categories.examples.naturals

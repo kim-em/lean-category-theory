@@ -19,8 +19,11 @@ definition MonoidalStructure_from_Products { C : Category } ( products : has_Fin
 {
     tensor := {
         onObjects     := λ p, (products.binary_product p.1 p.2).product,
-        onMorphisms   := λ X Y f, sorry,
-        identities    := sorry,
+        onMorphisms   := λ X Y f, ((products.binary_product Y.1 Y.2).map
+                                    (C^.compose (products.binary_product X.1 X.2).left_projection (f.1))
+                                    (C^.compose (products.binary_product X.1 X.2).right_projection (f.2))
+                                  ).element,
+        identities    := sorry, -- This is not easy...
         functoriality := sorry
     },
     tensor_unit := products.initial_object,

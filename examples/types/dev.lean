@@ -23,7 +23,7 @@ open tqft.categories.braided_monoidal_category
 --   functoriality := ♮
 -- }
 
--- local attribute [simp] id_locked_eq
+local attribute [simp] id_locked_eq
 
 structure IsomorphicTypes ( α β : Type ) :=
   ( morphism : α → β )
@@ -34,31 +34,6 @@ structure IsomorphicTypes ( α β : Type ) :=
 open list
 open tactic monad expr
 
-meta def destruct_conjunctions : tactic unit :=
-repeat (do
-  l ← local_context,
-  first $ l^.for (λ h, do
-    ht ← infer_type h >>= whnf,
-    match ht with
-    | ``(and %%a %%b) := do
-      n ← get_unused_name `h none,
-      mk_mapp ``and.left [none, none, some h] >>= assertv n a,
-      n ← get_unused_name `h none,
-      mk_mapp ``and.right [none, none, some h] >>= assertv n b,
-      clear h
-    | _ := failed
-    end))
-
-meta def induction' ( h : expr ) : tactic ( list expr ) :=
-  induction h >>= 
-
-meta def induction_list : list expr → tactic unit
-| nil       := skip
-| (h :: hs) := induction h >> induction_list hs
-
-meta def intros_induction : tactic unit := 
-do h ← intros,
-   induction_list h
 
 definition test : IsomorphicTypes (((ℕ × ℕ) × ℕ)) (ℕ × (ℕ × ℕ)) :=
 begin
@@ -68,18 +43,12 @@ begin
         witness_1 := _,
         witness_2 := _
     },
-    intros,
-    induction a with a1 a23,
-    induction a23 with a2 a3,
+    intros_and_inductions,
     split,
     split,
-    all_goals { try { apply funext, intros } },
+    all_goals { try { apply funext, intros_and_inductions } },
     all_goals { try { simp } },
-    all_goals { try { dsimp } },
-    apply prod.rec,
-    induction x with x1 x23,
-    induction x23 with x2 x3,
-    dsimp,
+    all_goals { try { dsimp } }
 end
 
 definition test' : Isomorphism CategoryOfTypes ((ℕ × ℕ) × ℕ) (ℕ × (ℕ × ℕ)) :=
@@ -91,21 +60,19 @@ begin
         witness_2 := _
     },
     unfold_unfoldable,
-    intros,
-    induction a with a1 a23,
-    induction a23 with a2 a3,
-    split,
-    split,
-    all_goals { try { apply funext, intros } },
+    intros_and_inductions,
     all_goals { unfold CategoryOfTypes },
+    split,
+    split,
+    all_goals { try { apply funext, intros_and_inductions } },
     all_goals { try { simp } },
     all_goals { try { dsimp } },
     apply pair_equality_3,
     apply pair_equality_3,
-    induction x with x12 x3,
-    induction x12 with x1 x2,
     dsimp,
-
+    trivial,
+    trivial,
+    dsimp
 end
 
 -- definition AssociatorForTypes : Associator TensorProductOfTypes :=

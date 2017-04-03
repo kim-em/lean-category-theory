@@ -11,9 +11,7 @@ open tqft.categories.functor
 
 namespace tqft.categories.natural_transformation
 
-universe variables u1 v1 u2 v2 u3 v3
-
-structure NaturalTransformation { C D : Category } ( F G : Functor C D ) :=
+structure {u1 v1 u2 v2} NaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) :=
   (components: Π X : C.Obj, D.Hom (F X) (G X))
   (naturality: ∀ { X Y : C.Obj } (f : C.Hom X Y),
      D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f))
@@ -26,8 +24,8 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   coe := NaturalTransformation.components }
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
-@[pointwise] lemma NaturalTransformations_componentwise_equal
-  { C D : Category }
+@[pointwise] lemma {u1 v1 u2 v2} NaturalTransformations_componentwise_equal
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α β : NaturalTransformation F G )
   ( w : ∀ X : C.Obj, α X = β X ) : α = β :=
@@ -38,14 +36,14 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
-@[unfoldable] definition IdentityNaturalTransformation { C D : Category } (F : Functor C D) : NaturalTransformation F F :=
+@[unfoldable] definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D.identity (F X),
     naturality := ♮
   }
 
-@[unfoldable] definition vertical_composition_of_NaturalTransformations
-  { C D : Category }
+@[unfoldable] definition {u1 v1 u2 v2} vertical_composition_of_NaturalTransformations
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G H : Functor C D }
   ( α : NaturalTransformation F G )
   ( β : NaturalTransformation G H ) : NaturalTransformation F H :=
@@ -56,8 +54,8 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
 
 open tqft.categories.functor
 
-@[unfoldable] definition horizontal_composition_of_NaturalTransformations
-  { C D E : Category }
+@[unfoldable] definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   { F G : Functor C D }
   { H I : Functor D E }
   ( α : NaturalTransformation F G )
@@ -67,16 +65,16 @@ open tqft.categories.functor
     naturality := ♯
   }
 
-@[unfoldable] definition whisker_on_left
-  { C D E : Category }
+@[unfoldable] definition {u1 v1 u2 v2 u3 v3} whisker_on_left
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   ( F : Functor C D )
   { G H : Functor D E }
   ( α : NaturalTransformation G H ) :
   NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
   horizontal_composition_of_NaturalTransformations (IdentityNaturalTransformation F) α
 
-@[unfoldable] definition whisker_on_right
-  { C D E : Category }
+@[unfoldable] definition {u1 v1 u2 v2 u3 v3} whisker_on_right
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
   ( H : Functor D E ) :
@@ -88,7 +86,7 @@ open tqft.categories.functor
 
 open tactic.interactive
 
-@[unfoldable] definition FunctorCategory ( C D : Category ) : Category :=
+@[unfoldable] definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
 {
   Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,
@@ -101,7 +99,7 @@ open tactic.interactive
   associativity  := by blast_as_simp FunctorCategory_associativity
 }
 
-definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
+definition {u1 v1 u2 v2} NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
 
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.
@@ -109,23 +107,53 @@ definition NaturalIsomorphism { C D : Category } ( F G : Functor C D ) := Isomor
 instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category } ( F G : Functor C D ) : has_coe (NaturalIsomorphism F G) (NaturalTransformation F G) :=
   { coe := Isomorphism.morphism }
 
-@[ematch] lemma NaturalIsomorphism.componentwise_witness_1
-  { C D : Category }
+@[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.componentwise_witness_1
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
   ( X : C.Obj )
    : D.compose (α.morphism.components X) (α.inverse.components X) = D.identity (F X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
-@[ematch] lemma NaturalIsomorphism.componentwise_witness_2
-  { C D : Category }
+@[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.componentwise_witness_2
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
   ( X : C.Obj )
    : D.compose (α.inverse.components X) (α.morphism.components X) = D.identity (G X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_2
 
-definition vertical_composition_of_NaturalIsomorphisms 
-  { C D : Category }
+@[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_1 
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
+  { F G : Functor C D }
+  ( α : NaturalIsomorphism F G )
+  { X Y : C.Obj }
+  ( f : C.Hom X Y )
+   : D^.compose (D^.compose (α.inverse.components X) (F.onMorphisms f)) (α.morphism.components Y) = G.onMorphisms f := 
+   begin
+    --  blast, -- FIXME ahh, I see; unfold_unfoldable is acting in the implicit arguments, making a mess.
+     dsimp,
+     rewrite - α.inverse.naturality,
+     rewrite D.associativity,
+     rewrite α.componentwise_witness_2,
+     simp
+   end
+@[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
+  { F G : Functor C D }
+  ( α : NaturalIsomorphism F G )
+  { X Y : C.Obj }
+  ( f : C.Hom X Y )
+   : D^.compose (D^.compose (α.morphism.components X) (G.onMorphisms f)) (α.inverse.components Y) = F.onMorphisms f :=    begin
+    --  blast, -- FIXME ahh, I see; unfold_unfoldable is acting in the implicit arguments, making a mess.
+     dsimp,
+     rewrite - α.morphism.naturality,
+     rewrite D.associativity,
+     rewrite α.componentwise_witness_1,
+     simp
+   end
+
+definition {u1 v1 u2 v2} vertical_composition_of_NaturalIsomorphisms 
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G H : Functor C D }
   ( α : NaturalIsomorphism F G )
   ( β : NaturalIsomorphism G H )
@@ -133,7 +161,7 @@ definition vertical_composition_of_NaturalIsomorphisms
   morphism := (FunctorCategory C D).compose α.morphism β.morphism,
   inverse  := (FunctorCategory C D).compose β.inverse  α.inverse,
   witness_1 := begin
-                --  smt_eblast, -- FIXME why doesn't this work?
+                --  smt_eblast, -- FIXME why doesn't this work?                 
                  rewrite Category.associativity,
                  rewrite - (FunctorCategory C D).associativity β.morphism,
                  simp
@@ -148,18 +176,18 @@ definition vertical_composition_of_NaturalIsomorphisms
 
 open NaturalTransformation
 
-definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α : NaturalTransformation F G ) := @is_Isomorphism (FunctorCategory C D) F G α
+definition {u1 v1 u2 v2} is_NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} }  { F G : Functor C D } ( α : NaturalTransformation F G ) := @is_Isomorphism (FunctorCategory C D) F G α
 
-@[ematch] lemma is_NaturalIsomorphism_componentwise_witness_1
-  { C D : Category }
+@[ematch] lemma {u1 v1 u2 v2} is_NaturalIsomorphism_componentwise_witness_1
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
   ( w : is_NaturalIsomorphism α )
   ( X : C.Obj )
    : D.compose (α.components X) (w.inverse.components X) = D.identity (F X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_1
-@[ematch] lemma is_NaturalIsomorphism_componentwise_witness_2
-  { C D : Category }
+@[ematch] lemma {u1 v1 u2 v2} is_NaturalIsomorphism_componentwise_witness_2
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
   ( w : is_NaturalIsomorphism α )
@@ -168,7 +196,7 @@ definition is_NaturalIsomorphism { C D : Category } { F G : Functor C D } ( α :
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_2
 
 
-lemma IdentityNaturalTransformation_is_NaturalIsomorphism { C D : Category } ( F : Functor C D ) : is_NaturalIsomorphism (IdentityNaturalTransformation F) :=
+lemma {u1 v1 u2 v2} IdentityNaturalTransformation_is_NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) : is_NaturalIsomorphism (IdentityNaturalTransformation F) :=
   { inverse := IdentityNaturalTransformation F,
     witness_1 := ♯,
     witness_2 := ♯
