@@ -2,9 +2,10 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .category
+import .functor
 
 open tqft.categories
+open tqft.categories.functor
 
 namespace tqft.categories
 
@@ -17,6 +18,14 @@ namespace tqft.categories
     left_identity  := ♮,
     right_identity := ♮,
     associativity  := ♮
+}
+
+@[unfoldable] definition OppositeFunctor { C D : Category } ( F : Functor C D ) : Functor (Opposite C) (Opposite D) :=
+{
+  onObjects     := F.onObjects,
+  onMorphisms   := λ X Y f, F.onMorphisms f,
+  identities    := ♯,
+  functoriality := ♯
 }
 
 end tqft.categories
