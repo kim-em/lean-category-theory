@@ -36,13 +36,26 @@ do cs ← attribute.get_instances `pointwise,
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b
 
-meta def dunfold_all_at (names : list name) : list expr → tactic unit
-| []      := skip
-| (H::Hs) := dunfold_at names H >> dsimp_at H >> dunfold_all_at Hs
+-- This tactic is a combination of dunfold_at and dsimp_at_core
+meta def dunfold_and_simp_at (s : simp_lemmas) (cs : list name) (h : expr) : tactic unit :=
+do num_reverted ← revert h,
+   (expr.pi n bi d b : expr) ← target,
+   new_d ← dunfold_core reducible default_max_steps cs d,
+   new_d_simp ← s.dsimplify new_d,
+   change $ expr.pi n bi new_d_simp b,
+   intron num_reverted
 
-meta def dunfold_all_hypotheses (names : list name) : tactic unit :=
-do hyps ← local_context,
-   dunfold_all_at names hyps
+
+meta def dunfold_and_simp_all_hypotheses (names : list name) : tactic unit :=
+do l ← local_context,
+   s ← simp_lemmas.mk_default,
+   l.reverse.mfor' $ λ h, do
+     try (dunfold_and_simp_at s names h)
+
+meta def dsimp_all_hypotheses : tactic unit :=
+do l ← local_context,
+   l.reverse.mfor' $ λ h, do
+     try (dsimp_at h)
 
 open lean.parser
 open interactive
@@ -52,7 +65,7 @@ dunfold names >> dsimp
 
 meta def unfold_unfoldable_hypotheses : tactic unit := 
 do cs ← attribute.get_instances `unfoldable,
-   try (dunfold_all_hypotheses cs)
+   try (dunfold_and_simp_all_hypotheses cs)
 
 meta def unfold_unfoldable_goals : tactic unit := 
 do cs ← attribute.get_instances `unfoldable,
@@ -61,8 +74,31 @@ do cs ← attribute.get_instances `unfoldable,
 meta def unfold_unfoldable : tactic unit := 
   unfold_unfoldable_hypotheses >> unfold_unfoldable_goals
 
+meta def new_names ( e : expr ) : list name :=
+  [ 
+    name.append (e.local_pp_name) (mk_simple_name "_1"), 
+    name.append (e.local_pp_name) (mk_simple_name "_2")
+  ]
+
+meta def induction_on_pairs : tactic unit :=
+repeat( do l ← local_context,
+   l.reverse.mfor' $ λ h, do
+     ```(prod _ _) ← infer_type h >>= whnf | skip,
+     induction h (new_names h) >> skip )
+
+meta def induction_on_unit : tactic unit :=
+do l ← local_context,
+   l.reverse.mfor' $ λ h, do
+     ```(unit) ← infer_type h >>= whnf | skip,
+     induction h >> skip
+
+meta def automatic_inductions : tactic unit :=
+  induction_on_pairs >> induction_on_unit
+
+meta def intros_and_inductions : tactic unit := intros >> automatic_inductions >> dsimp_all_hypotheses
+
 -- open tactic.interactive
-meta def blast  : tactic unit := intros >> pointwise blast >> try unfold_unfoldable >> try simp >> try smt_eblast >> pointwise blast
+meta def blast  : tactic unit := intros/-_and_inductions-/ >> pointwise blast >> try unfold_unfoldable >> try simp >> try smt_eblast >> pointwise blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }
@@ -81,28 +117,7 @@ attribute [pointwise] subtype.eq
 @[simp] lemma {u} auto_cast_identity {α : Sort u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮
 notation `⟦` p `⟧` := @auto_cast _ _ (by smt_ematch) p
 
-meta def new_names ( e : expr ) : list name :=
-  [ 
-    name.append (e.local_pp_name) (mk_simple_name "_1"), 
-    name.append (e.local_pp_name) (mk_simple_name "_2")
-  ]
 
-meta def induction_on_pairs : tactic unit :=
-repeat( do l ← local_context,
-   l.reverse.mfor' $ λ h, do
-     ```(prod _ _) ← infer_type h >>= whnf | skip,
-     induction h /-(new_names h)-/ >> skip )
-
-meta def induction_on_unit : tactic unit :=
-do l ← local_context,
-   l.reverse.mfor' $ λ h, do
-     ```(unit) ← infer_type h >>= whnf | skip,
-     induction h >> skip
-
-meta def automatic_inductions : tactic unit :=
-  induction_on_pairs >> induction_on_unit
-
-meta def intros_and_inductions : tactic unit := intros >> automatic_inductions
 
 
 -- TODO this is destined for the standard library?
