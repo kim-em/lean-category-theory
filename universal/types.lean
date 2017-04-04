@@ -5,13 +5,46 @@ open tqft.categories.universal
 open tqft.categories.isomorphism
 open tqft.categories.examples.types
 
-definition Equalizer_in_Types { α β : Type } ( f g : α → β ) := @Equalizer CategoryOfTypes _ _ f g
+definition {u} Types_has_FiniteProducts : has_FiniteProducts CategoryOfTypes.{u} :=
+{
+  initial_object := {
+    object := ulift empty,
+    morphisms := λ t, λ x, match x with end,
+    uniqueness := begin intros, apply funext, intros, induction x, induction down end
+  },
+  binary_product := λ X Y,
+  {
+    product := X × Y,
+    left_projection  := λ p, p.1,
+    right_projection := λ p, p.2,
+    map := λ Z f g, {
+      element := ⟨ λ z, (f z, g z), ♯ ⟩,
+      uniqueness := begin
+                      blast, 
+                      
+                      pose p := congr_fun X_1.property.left x, 
+                      simp at p, 
+                      rewrite - p, 
+                      pose q := congr_fun Y_1.property.left x, 
+                      simp at q, 
+                      rewrite - q,
 
-local attribute [pointwise] funext
-local attribute [ematch] subtype.property
+                      pose p := congr_fun X_1.property.right x, 
+                      simp at p, 
+                      rewrite - p, 
+                      pose q := congr_fun Y_1.property.right x, 
+                      simp at q, 
+                      rewrite - q                      
+                    end
+    }
+  }
+}
+attribute [instance] Types_has_FiniteProducts
+
+definition {u} Equalizer_in_Types { α β : Type u } ( f g : α → β ) := @Equalizer CategoryOfTypes _ _ f g
 
 -- PROJECT better automation.
-lemma subtype_is_Equalizer_in_Types { α β : Type } ( f g : α → β ) : Equalizer_in_Types f g :=
+lemma {u} subtype_is_Equalizer_in_Types { α β : Type u } ( f g : α → β ) : Equalizer_in_Types f g :=
 {
   equalizer     := { x : α // f x = g x },
   inclusion     := λ x, x.val,

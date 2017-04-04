@@ -122,10 +122,9 @@ structure Coproduct { C : Category } ( X Y : C.Obj ) :=
 
 definition {u} unique_up_to_isomorphism ( α : Type u ) { C : Category } ( f : α → C.Obj ) := Π X Y : α, Isomorphism C (f X) (f Y)
 
--- TODO should these be classes?
-structure has_InitialObject ( C : Category ) :=
+class has_InitialObject ( C : Category ) :=
   ( initial_object : InitialObject C )
-structure has_FiniteProducts ( C : Category ) extends has_InitialObject C :=
+class has_FiniteProducts ( C : Category ) extends has_InitialObject C :=
   ( binary_product : Π X Y : C^.Obj, Product X Y )
 -- PROJECT construct finite products from these
 

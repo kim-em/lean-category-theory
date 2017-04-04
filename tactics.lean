@@ -39,6 +39,8 @@ attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b
 attribute [unfoldable] eq.mp
 attribute [simp] id_locked_eq
+attribute [pointwise] funext
+attribute [ematch] subtype.property
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (cs : list name) (h : expr) : tactic unit :=
@@ -48,7 +50,6 @@ do num_reverted ← revert h,
    new_d_simp ← s.dsimplify new_d,
    change $ expr.pi n bi new_d_simp b,
    intron num_reverted
-
 
 meta def dunfold_and_simp_all_hypotheses (names : list name) : tactic unit :=
 do l ← local_context,
@@ -106,10 +107,10 @@ do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, 
    mk_const c >>= fapply
 
 meta def split_goals' : expr → tactic unit
-| ```(and _ _) := split
+| ```(and _ _)     := split
 | ```(nonempty _)  := split
-| ```(unit)  := split
-| ```(punit)  := split
+| ```(unit)        := split
+| ```(punit)       := split
 -- | ```(subtype _)  := fsplit
 | _                := failed
 
@@ -136,6 +137,7 @@ notation `♯` := by abstract { blast }
 -- @[pointwise] lemma {u v} pair_equality_1 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X.fst ) : (A, X.snd) = X := begin induction X, blast end
 -- @[pointwise] lemma {u v} pair_equality_2 {α : Type u} {β : Type v} { X: α × β } { B : β } ( p : B = X.snd ) : (X.fst, B) = X := begin induction X, blast end
 @[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X.fst ) { B : β } ( p : B = X.snd ) : (A, B) = X := begin induction X, blast end
+@[pointwise] lemma {u v} pair_equality_4 {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := begin induction X, blast end
 @[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := begin induction X, induction Y, blast end
 attribute [pointwise] subtype.eq
 

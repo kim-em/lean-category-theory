@@ -152,6 +152,24 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
      simp
    end
 
+-- definition NaturalIsomorphism.from_components
+--   { C D : Category }
+--   { F G : Functor C D }
+--   ( components : ∀ X : C.Obj, Isomorphism D (F X) (G X) )
+--   ( naturality : ∀ { X Y : C.Obj } ( f : C.Hom X Y ), D.compose (F.onMorphisms f) (components Y).morphism = D.compose (components X).morphism (G.onMorphisms f) ) : NaturalIsomorphism F G :=
+--   {
+--     morphism  := {
+--       components := λ X, (components X).morphism,
+--       naturality := λ _ _ f, naturality f
+--     },
+--     inverse   := {
+--       components := λ X, (components X).inverse,
+--       naturality := sorry
+--     },
+--     witness_1 := ♯,
+--     witness_2 := ♯
+  -- }
+
 definition {u1 v1 u2 v2} vertical_composition_of_NaturalIsomorphisms 
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G H : Functor C D }
@@ -202,9 +220,10 @@ lemma {u1 v1 u2 v2} IdentityNaturalTransformation_is_NaturalIsomorphism { C : Ca
     witness_2 := ♯
   }
 
-lemma components_of_NaturalIsomorphism_are_Isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C.Obj } :
- is_Isomorphism (α X) :=
+lemma NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( α : NaturalIsomorphism F G ) ( X : C.Obj ) :
+ Isomorphism D (F X) (G X) :=
   {
+    morphism := α.morphism.components X,
     inverse := α.inverse.components X,
     witness_1 := ♮,
     witness_2 := ♮
