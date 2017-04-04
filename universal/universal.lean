@@ -126,6 +126,9 @@ class has_InitialObject ( C : Category ) :=
   ( initial_object : InitialObject C )
 class has_FiniteProducts ( C : Category ) extends has_InitialObject C :=
   ( binary_product : Π X Y : C^.Obj, Product X Y )
+
+definition product { C : Category } [ has_FiniteProducts C ] ( X Y : C.Obj ) := has_FiniteProducts.binary_product X Y
+definition initial_object { C : Category } [ has_FiniteProducts C ] : C.Obj := has_FiniteProducts.initial_object C
 -- PROJECT construct finite products from these
 
 end tqft.categories.universal
