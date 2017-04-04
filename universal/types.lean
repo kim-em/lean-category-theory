@@ -5,12 +5,53 @@ open tqft.categories.universal
 open tqft.categories.isomorphism
 open tqft.categories.examples.types
 
-definition {u} Types_has_FiniteProducts : has_FiniteProducts CategoryOfTypes.{u} :=
+  -- initial_object := {
+  --   object := ulift empty,
+  --   morphisms := λ t, λ x, match x with end,
+  --   uniqueness := begin intros, apply funext, intros, induction x, induction down end
+  -- },
+
+definition {u} Types_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfTypes.{u} :=
 {
   initial_object := {
     object := ulift empty,
     morphisms := λ t, λ x, match x with end,
     uniqueness := begin intros, apply funext, intros, induction x, induction down end
+  },
+  binary_coproduct := λ X Y,
+  {
+    coproduct := sum X Y,
+    left_inclusion := λ x, sum.inl x,
+    right_inclusion := λ y, sum.inr y,
+    map := λ Z f g, {
+      element := ⟨ λ z, match z with | sum.inl x := f x | sum.inr y := g y end, ♯ ⟩,
+      uniqueness := begin
+                      blast,
+                      induction x,
+                      pose p := congr_fun X_1.property.left a,
+                      simp at p,
+                      rewrite - p,
+                      pose q := congr_fun Y_1.property.left a,
+                      simp at q,
+                      rewrite - q,
+                      pose p := congr_fun X_1.property.right a,
+                      simp at p,
+                      rewrite - p,
+                      pose q := congr_fun Y_1.property.right a,
+                      simp at q,
+                      rewrite - q,
+                    end
+    }
+  }
+}
+attribute [instance] Types_has_FiniteCoproducts
+
+definition {u} Types_has_FiniteProducts : has_FiniteProducts CategoryOfTypes.{u} :=
+{
+  terminal_object := {
+    object := punit,
+    morphisms := λ t, λ x, punit.star,
+    uniqueness := begin intros, apply funext, intros, blast end
   },
   binary_product := λ X Y,
   {

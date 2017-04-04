@@ -45,6 +45,10 @@ lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Iso
 -- Do we dare:
 definition TerminalObject ( C : Category ) := InitialObject (Opposite C)
 
+instance TerminalObject_coercion_to_object { C : Category } : has_coe (TerminalObject C) (C.Obj) :=
+  { coe := InitialObject.object }
+
+
 -- If not:
 -- structure TerminalObject ( C : Category ) :=
 --   (object : C.Obj)

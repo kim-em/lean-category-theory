@@ -122,14 +122,20 @@ structure Coproduct { C : Category } ( X Y : C.Obj ) :=
 
 definition {u} unique_up_to_isomorphism ( α : Type u ) { C : Category } ( f : α → C.Obj ) := Π X Y : α, Isomorphism C (f X) (f Y)
 
+class has_TerminalObject ( C : Category ) :=
+  ( terminal_object : TerminalObject C )
+class has_FiniteProducts ( C : Category ) extends has_TerminalObject C :=
+  ( binary_product : Π X Y : C^.Obj, Product X Y )
 class has_InitialObject ( C : Category ) :=
   ( initial_object : InitialObject C )
-class has_FiniteProducts ( C : Category ) extends has_InitialObject C :=
-  ( binary_product : Π X Y : C^.Obj, Product X Y )
+class has_FiniteCoproducts ( C : Category ) extends has_InitialObject C :=
+  ( binary_coproduct : Π X Y : C^.Obj, Coproduct X Y )
 
 definition product { C : Category } [ has_FiniteProducts C ] ( X Y : C.Obj ) := has_FiniteProducts.binary_product X Y
-definition initial_object { C : Category } [ has_FiniteProducts C ] : C.Obj := has_FiniteProducts.initial_object C
--- PROJECT construct finite products from these
+definition terminal_object { C : Category } [ has_TerminalObject C ] : C.Obj := has_TerminalObject.terminal_object C
+definition coproduct { C : Category } [ has_FiniteCoproducts C ] ( X Y : C.Obj ) := has_FiniteCoproducts.binary_coproduct X Y
+definition initial_object { C : Category } [ has_InitialObject C ] : C.Obj := has_InitialObject.initial_object C
+-- PROJECT construct finite (co)products from these
 
 end tqft.categories.universal
 
