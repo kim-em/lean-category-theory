@@ -17,29 +17,43 @@ open tqft.categories.examples.types
 
 namespace tqft.categories.adjunction
 
-@[reducible] definition Triangle_1
-  { C D : Category }
-  { L : Functor C D }
-  { R : Functor D C }
-  ( unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
-  ( counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) ) :=
-  @vertical_composition_of_NaturalTransformations D C R (FunctorComposition (FunctorComposition R L) R) R ⟦ whisker_on_left R unit ⟧ ⟦ whisker_on_right counit R ⟧
-  = IdentityNaturalTransformation R
-
-@[reducible] definition Triangle_2
-  { C D : Category }
-  { L : Functor C D }
-  { R : Functor D C }
-  ( unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
-  ( counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) ) :=
-  @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
-  = IdentityNaturalTransformation L
-
 structure Adjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
   ( unit          : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
   ( counit        : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) )
-  ( triangle_1    : Triangle_1 unit counit )
-  ( triangle_2    : Triangle_2 unit counit )
+  ( triangle_1   : ∀ X : D.Obj, C.compose (unit.components (R X)) (R.onMorphisms (counit.components X)) = C.identity (R X) )
+  ( triangle_2   : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L X)) = D.identity (L X) )
+
+attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
+
+@[pointwise] lemma Adjunctions_pointwise_equal
+  { C D : Category } ( L : Functor C D ) ( R : Functor D C )
+  ( A B : Adjunction L R )
+  ( w1 : A.unit = B.unit ) ( w2 : A.counit = B.counit ) : A = B :=
+  begin
+    induction A,
+    induction B,
+    blast
+  end
+
+
+-- PROJECT: from an adjunction construct the triangles as equations between natural transformations.
+-- definition Triangle_1
+--   { C D : Category }
+--   { L : Functor C D }
+--   { R : Functor D C }
+--   ( unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
+--   ( counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) ) :=
+--   @vertical_composition_of_NaturalTransformations D C R (FunctorComposition (FunctorComposition R L) R) R ⟦ whisker_on_left R unit ⟧ ⟦ whisker_on_right counit R ⟧
+--   = IdentityNaturalTransformation R
+
+-- definition Triangle_2
+--   { C D : Category }
+--   { L : Functor C D }
+--   { R : Functor D C }
+--   ( unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
+--   ( counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) ) :=
+--   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
+--   = IdentityNaturalTransformation L
 
 @[ematch] lemma Adjunction.unit_naturality
   { C D : Category } 
@@ -75,10 +89,8 @@ local attribute [pointwise] funext
     (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
     (FunctorComposition (IdentityFunctor (Opposite C) × R) (HomPairing C))
 
-definition Adjunctions_agree { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :
-  Isomorphism CategoryOfTypes (Adjunction L R) (HomAdjunction L R) := 
+@[unfoldable] definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : Adjunction L R ) : HomAdjunction L R := 
 {
-  morphism  := λ A, {
     morphism  := {
       components := λ P, 
         -- We need to construct the map from D.Hom (L P.1) P.2 to D.Hom P.1 (R P.2)
@@ -103,15 +115,23 @@ definition Adjunctions_agree { C D : Category } ( L : Functor C D ) ( R : Functo
     },
     witness_1 := begin
                    blast,
-                   
-                   admit
+                   rewrite D.associativity,
+                   erewrite A.counit_naturality,
+                   erewrite - D.associativity,
+                   erewrite A.triangle_2,
+                   simp
                  end,
-    witness_2 := sorry
-  },
-  inverse   := sorry,
-  witness_1 := sorry,
-  witness_2 := sorry
-}
+    witness_2 := begin
+                   blast,
+                   rewrite - C.associativity,
+                   erewrite - A.unit_naturality,
+                   erewrite C.associativity,
+                   erewrite A.triangle_1,
+                   simp
+                 end
+  }
+
+
 
 -- PROJECT examples
 -- PROJECT adjoints are unique
