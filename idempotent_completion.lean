@@ -89,17 +89,20 @@ lemma IdempotentCompletion_idempotent ( C : Category ) :
 {
   functor := {
     onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, ♮ ⟩,
-    onMorphisms   := λ X Y f, ⟨ f.val.val, begin blast, end ⟩,
-    identities    := sorry,
-    functoriality := sorry
+    onMorphisms   := λ X Y f, ⟨ f.val.val, begin blast, exact congr_arg subtype.val f.property.left end ⟩,
+    identities    := ♮,
+    functoriality := ♮
   },
   inverse := {
     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
     onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩,
-    identities    := sorry,
-    functoriality := sorry
+    identities    := ♮,
+    functoriality := ♮
   },
-  isomorphism_1 := sorry,
+  isomorphism_1 := begin
+                     blast,
+                     admit
+                   end,
   isomorphism_2 := sorry
 }
 
