@@ -13,18 +13,18 @@ open tqft.categories.natural_transformation
 namespace tqft.categories.idempotent_completion
 
 structure Idempotent ( C : Category ) :=
-   ( obj : C.Obj )
-   ( idempotent : C.Hom obj obj )
+   ( object : C.Obj )
+   ( idempotent : C.Hom object object )
    ( witness : C.compose idempotent idempotent = idempotent )
 
 attribute [simp,ematch] Idempotent.witness
 
 local attribute [ematch] subtype.property
 
-definition IdempotentCompletion ( C: Category ) : Category :=
+@[unfoldable] definition IdempotentCompletion ( C: Category ) : Category :=
 {
   Obj            := Idempotent C,
-  Hom            := λ X Y, { f : C.Hom X.obj Y.obj // C.compose X.idempotent f = f ∧ C.compose f Y.idempotent = f },
+  Hom            := λ X Y, { f : C.Hom X.object Y.object // C.compose X.idempotent f = f ∧ C.compose f Y.idempotent = f },
   identity       := λ X, ⟨ X.idempotent, ♮ ⟩,
   compose        := λ X Y Z f g, ⟨ C.compose f.val g.val, ♮ ⟩,
   left_identity  := ♯,
@@ -32,25 +32,76 @@ definition IdempotentCompletion ( C: Category ) : Category :=
   associativity  := ♮
 }
 
-definition embedding_in_IdempotentCompletion ( C : Category ) : Functor C (IdempotentCompletion C) := {
+@[unfoldable] definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (IdempotentCompletion C) := {
   onObjects     := λ X, ⟨ X, C.identity X, ♮ ⟩,
   onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩,
   identities    := ♮,
   functoriality := ♮
 }
 
+open tqft.categories.equivalence
+
+@[simp] lemma subtype.first { α : Type } { P : α → Prop } { X Y : α } { hX : P X} { hY : P Y } : (subtype.mk X hX  = subtype.mk Y hY) ↔ (X = Y) := begin
+  split,
+  intros,
+  exact congr_arg subtype.val a,
+  intros,
+  blast
+end
+
 -- PROJECT show the embedding really was full and faithful
+lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
+begin
+  unfold Embedding,
+  split,
+  begin 
+    -- TODO blast should just do this, if not for the tactic.change problem.
+    unfold Full,
+    unfold Surjective,
+    unfold functor_to_IdempotentCompletion,
+    intros,
+    split,
+    dsimp,
+    unfold functor_to_IdempotentCompletion._aux_2,
+    dsimp,
+    fsplit,
+    unfold IdempotentCompletion,
+    dsimp,
+    intros f,
+    exact f.val,  
+    apply funext,
+    intros,  
+    simp
+  end,
+  begin
+    blast, -- This should finish it off. How do we get subtype.first, above, to do its job?
+    exact congr_arg subtype.val a
+  end
+end
 
 definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
-  FunctorComposition (embedding_in_IdempotentCompletion C) F
-
-open tqft.categories.equivalence
+  FunctorComposition (functor_to_IdempotentCompletion C) F
 
 -- PROJECT prove these lemmas about idempotent completion
 
--- lemma IdempotentCompletion_idempotent ( C : Category ) :
---   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
---     sorry
+lemma IdempotentCompletion_idempotent ( C : Category ) :
+  Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
+{
+  functor := {
+    onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, ♮ ⟩,
+    onMorphisms   := λ X Y f, ⟨ f.val.val, begin blast, end ⟩,
+    identities    := sorry,
+    functoriality := sorry
+  },
+  inverse := {
+    onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
+    onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩,
+    identities    := sorry,
+    functoriality := sorry
+  },
+  isomorphism_1 := sorry,
+  isomorphism_2 := sorry
+}
 
 -- definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
 --   Functor (IdempotentCompletion C) (IdempotentCompletion D) := 

@@ -3,7 +3,6 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 open tactic
-open smt_tactic
 
 def pointwise_attribute : user_attribute := {
   name := `pointwise,
@@ -24,9 +23,12 @@ meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
 
+section
+open smt_tactic
 meta def smt_simp   : tactic unit := using_smt $ intros >> try dsimp >> try simp
 meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> try simp >> try eblast
-meta def smt_ematch : tactic unit := using_smt $ intros >> add_lemmas_from_facts >> try ematch
+meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
+end
 
 meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
@@ -35,6 +37,8 @@ do cs ← attribute.get_instances `pointwise,
 -- open tactic
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b
+attribute [unfoldable] eq.mp
+attribute [simp] id_locked_eq
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (cs : list name) (h : expr) : tactic unit :=
@@ -97,8 +101,30 @@ meta def automatic_inductions : tactic unit :=
 
 meta def intros_and_inductions : tactic unit := intros >> automatic_inductions >> dsimp_all_hypotheses
 
+meta def fsplit : tactic unit :=
+do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, target is not an inductive datatype with only one constructor",
+   mk_const c >>= fapply
+
+meta def split_goals' : expr → tactic unit
+| ```(and _ _) := split
+| ```(nonempty _)  := split
+| ```(unit)  := split
+| ```(punit)  := split
+-- | ```(subtype _)  := fsplit
+| _                := failed
+
+meta def split_goals : tactic unit := target >>= split_goals'
+
+meta def split_goals_and_then ( and_then : tactic unit ) := try ( seq split_goals and_then )
+
+meta def trace_goal_type : tactic unit :=
+do g ← target,
+   trace g,
+   infer_type g >>= trace,
+   skip
+
 -- open tactic.interactive
-meta def blast  : tactic unit := intros/-_and_inductions-/ >> pointwise blast >> try unfold_unfoldable >> try simp >> try smt_eblast >> pointwise blast
+meta def blast  : tactic unit := intros/-_and_inductions-/ >> pointwise blast >> try unfold_unfoldable >> try simp >> try smt_eblast >> pointwise blast >> split_goals_and_then blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }

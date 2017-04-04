@@ -24,10 +24,6 @@ definition {u} TwoCategory := EnrichedCategory CartesianProductOfCategories.{u u
     functoriality := ♯
 }
 
--- It seems these might be generally useful!
-local attribute [unfoldable] eq.mp
-local attribute [simp] id_locked_eq
-
 definition {u} CAT : TwoCategory.{u} :=
 {
     Obj            := Category.{u u},

@@ -19,6 +19,27 @@ attribute [simp,ematch] Isomorphism.witness_1 Isomorphism.witness_2
 instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } : has_coe (Isomorphism C X Y) (C.Hom X Y) :=
   { coe := Isomorphism.morphism }
 
+@[pointwise] lemma {u1 v1} Isomorphism_pointwise_equal
+  { C : Category.{u1 v1} }
+  { X Y : C.Obj }
+  ( α β : Isomorphism C X Y )
+  ( w : α.morphism = β.morphism ) : α = β :=
+  begin
+    induction α with f g wα1 wα2,
+    induction β with h k wβ1 wβ2,
+    simp at w,    
+    assert p : g = k,
+      begin
+        rewrite - C.left_identity k,
+        rewrite - wα2,
+        rewrite C.associativity,
+        rewrite w,
+        rewrite wβ1,
+        simp
+      end,
+    blast,
+  end
+
 definition Isomorphism.reverse { C : Category } { X Y : C.Obj } ( I : Isomorphism C X Y ) : Isomorphism C Y X :=
   {
     morphism  := I.inverse,

@@ -33,10 +33,6 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
     functoriality := ♯
 }
 
--- It seems these might be generally useful!
-local attribute [unfoldable] eq.mp
-local attribute [simp] id_locked_eq
-
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
 begin
   unfold Embedding,

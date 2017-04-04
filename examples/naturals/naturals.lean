@@ -46,8 +46,6 @@ end
 
 -- @[simp] lemma ℕCategory.hom { X Y : ℕCategory.Obj } : ℕCategory.Hom X Y = ℕ := ♮
 
-local attribute [simp] id_locked_eq
-
 definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
   { onObjects   := id,
     onMorphisms := λ _ _ n, n + n, -- TODO this is ugly.

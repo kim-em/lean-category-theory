@@ -10,11 +10,6 @@ definition Equalizer_in_Types { α β : Type } ( f g : α → β ) := @Equalizer
 local attribute [pointwise] funext
 local attribute [ematch] subtype.property
 
-open tactic
-meta def fsplit : tactic unit :=
-do [c] ← target >>= get_constructors_for | fail "fsplit tactic failed, target is not an inductive datatype with only one constructor",
-   mk_const c >>= fapply
-
 -- PROJECT better automation.
 lemma subtype_is_Equalizer_in_Types { α β : Type } ( f g : α → β ) : Equalizer_in_Types f g :=
 {

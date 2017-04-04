@@ -23,8 +23,6 @@ open tqft.categories.braided_monoidal_category
 --   functoriality := ♮
 -- }
 
-local attribute [simp] id_locked_eq
-
 structure IsomorphicTypes ( α β : Type ) :=
   ( morphism : α → β )
   ( inverse  : β → α )

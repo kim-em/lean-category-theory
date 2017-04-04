@@ -44,7 +44,10 @@ definition Adjunctions_agree { C D : Category } ( L : Functor C D ) ( R : Functo
   morphism  := Adjunction_to_HomAdjunction L R,
   inverse   := HomAdjunction_to_Adjunction L R,
   witness_1 := ♯,
-  witness_2 := ♯
+  witness_2 := begin
+                 blast,
+                 
+               end
 }
 
 end tqft.categories.adjunction
