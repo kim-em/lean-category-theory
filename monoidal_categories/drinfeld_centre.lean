@@ -45,6 +45,8 @@ attribute [ematch] HalfBraidingMorphism.witness
 
 local attribute [ematch] MonoidalStructure.interchange_right_identity  MonoidalStructure.interchange_left_identity
 
+set_option pp.implicit true
+
 definition DrinfeldCentre { C : Category } ( m : MonoidalStructure C )  : Category := {
   Obj := HalfBraiding m,
   Hom := λ X Y, HalfBraidingMorphism X Y,
@@ -64,9 +66,10 @@ definition DrinfeldCentre { C : Category } ( m : MonoidalStructure C )  : Catego
         rewrite f.witness,
         rewrite C.associativity,
         -- blast,
-        erewrite g.witness, -- FIXME why is erewrite needed here? We can't blast because of it.
-        blast,
-        -- rewrite C.associativity
+        rewrite g.witness,
+        -- blast, -- FIXME these blasts are unfolding too many implicit arguments.
+        rewrite - C.associativity,
+        -- trivial
       end
   },
   left_identity  := ♯,

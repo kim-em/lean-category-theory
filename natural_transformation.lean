@@ -202,18 +202,12 @@ lemma {u1 v1 u2 v2} IdentityNaturalTransformation_is_NaturalIsomorphism { C : Ca
     witness_2 := ♯
   }
 
--- lemma components_of_NaturalIsomorphism_are_isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C.Obj } :
---  Inverse (α X) :=
---   {
---     inverse := α.inverse.components X,
---     witness_1 := begin
---                    pose p := congr_arg NaturalTransformation.components α.witness_1,
---                    -- TODO almost there! Note sure how to convince it that p is the answer.
---                   --  dsimp [FunctorCategory] at p,
---                    -- PROJECT how can we automate away this proof?
---                    exact sorry
---                  end,
---     witness_2 := sorry
---   }
+lemma components_of_NaturalIsomorphism_are_Isomorphisms { C D : Category } { F G : Functor C D } { α : NaturalIsomorphism F G } { X : C.Obj } :
+ is_Isomorphism (α X) :=
+  {
+    inverse := α.inverse.components X,
+    witness_1 := ♮,
+    witness_2 := ♮
+  }
 
 end tqft.categories.natural_transformation

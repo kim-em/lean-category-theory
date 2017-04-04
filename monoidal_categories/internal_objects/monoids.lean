@@ -10,9 +10,6 @@ namespace tqft.categories.internal_objects
 
 structure MonoidObject { C : Category } ( m : MonoidalStructure C ) extends SemigroupObject m := 
   ( unit : C.Hom m.tensor_unit object )
-  -- TODO why is components needed here
-  -- ( left_identity  : C.compose (m.left_unitor_is_isomorphism.inverse.components object) (C.compose (m.tensorMorphisms unit (C.identity object)) multiplication) = C.identity object )
-  -- ( right_identity : C.compose (m.right_unitor_is_isomorphism.inverse.components object) (C.compose (m.tensorMorphisms (C.identity object) unit) multiplication) = C.identity object )
   ( left_identity  : C.compose (m.tensorMorphisms unit (C.identity object)) multiplication = C.compose (m.left_unitor object) (C.identity object) )
   ( right_identity : C.compose (m.tensorMorphisms (C.identity object) unit) multiplication = C.compose (m.right_unitor object) (C.identity object) )
 

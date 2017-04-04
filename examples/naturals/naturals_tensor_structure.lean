@@ -21,7 +21,7 @@ open tqft.categories.monoidal_category
 
 -- local attribute [simp] id_locked_eq
 
--- TODO What follows involves a lot of boring natural transformations
+-- PROJECT What follows involves a lot of boring natural transformations
 -- Can we construct them automatically?
 definition ℕMonoidalCategory : MonoidalStructure ℕCategory :=
 begin
@@ -62,7 +62,7 @@ refine {
 --  all_goals { dsimp at snd }
 --  all_goals { dsimp },
 --  all_goals { unfold_unfoldable },
- 
+  all_goals { admit }
  end 
 
 end tqft.categories.examples.naturals

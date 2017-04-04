@@ -25,8 +25,8 @@ universe variables u v
     rewrite FunctorComposition.left_identity,
   end 
 
-#print squared_Braiding
-#print squared_Braiding._proof_1
+-- #print squared_Braiding
+-- #print squared_Braiding._proof_1
 
 lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
   begin

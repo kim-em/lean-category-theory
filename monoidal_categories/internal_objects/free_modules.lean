@@ -22,7 +22,6 @@ definition CategoryOfFreeModules { C : Category } { m : MonoidalStructure C } ( 
 {
   Obj := C.Obj,
   Hom := λ X Y, C.Hom X (m.tensorObjects A.object Y),
-  -- TODO components
   identity := λ X, C.compose (m.left_unitor.inverse.components X) (m.tensorMorphisms A.unit (C.identity X)),
   compose := λ _ _ Z f g, C.compose (C.compose (C.compose f (m.tensorMorphisms (C.identity A.object) g)) (m.inverse_associator A.object A.object Z)) (m.tensorMorphisms A.multiplication (C.identity Z)),
   left_identity := begin

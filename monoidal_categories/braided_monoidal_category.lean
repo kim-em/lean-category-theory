@@ -25,7 +25,7 @@ definition Commutor { C : Category.{u v} } (m : MonoidalStructure C) :=
 @[unfoldable] definition Hexagon_1 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
   ∀ X Y Z : C.Obj,
     C.compose
-      (m.tensorMorphisms (C.identity X) (β.morphism.components (Y, Z))) -- TODO why .morphism.components?
+      (m.tensorMorphisms (C.identity X) (β.morphism.components (Y, Z)))
     (C.compose
       (m.inverse_associator X Z Y)
       (m.tensorMorphisms (β.morphism.components (X, Z)) (C.identity Y))
@@ -40,7 +40,7 @@ definition Commutor { C : Category.{u v} } (m : MonoidalStructure C) :=
 @[unfoldable] definition Hexagon_2 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
   ∀ X Y Z : C.Obj,
     C.compose
-      (m.tensorMorphisms (C.identity X) (β.inverse.components (Z, Y)))    -- TODO why components?
+      (m.tensorMorphisms (C.identity X) (β.inverse.components (Z, Y)))
     (C.compose
       (m.inverse_associator X Z Y)
       (m.tensorMorphisms (β.inverse.components (Z, X)) (C.identity Y))

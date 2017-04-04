@@ -15,7 +15,7 @@ structure {u v w} EnrichedCategory { V: Category.{v w} } ( m : MonoidalStructure
   (identity : Π X : Obj, V.Hom m.tensor_unit (Hom X X))
   (left_identity  : ∀ { X Y : Obj }, 
     V.compose 
-      (m.left_unitor.inverse.components (Hom X Y)) -- TODO components
+      (m.left_unitor.inverse.components (Hom X Y))
     (V.compose 
       (m.tensorMorphisms (identity X) (V.identity (Hom X Y))) 
       compose
