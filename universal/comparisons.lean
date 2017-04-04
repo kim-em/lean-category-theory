@@ -16,7 +16,6 @@ open tqft.categories.examples.types
 open tqft.categories.universal
 
 namespace tqft.categories.universal
--- PROJECT give the direct definition of slice and coslice categories, and then prove equivalence with this.
 
 -- PROJECT Give more straightforward definitions, and then show they agree.
 definition Cones_agree { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (comma.Cones F).Obj (Cone F) := sorry

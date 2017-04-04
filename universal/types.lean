@@ -41,7 +41,7 @@ definition {u} Types_has_FiniteProducts : has_FiniteProducts CategoryOfTypes.{u}
 }
 attribute [instance] Types_has_FiniteProducts
 
-definition {u} Equalizer_in_Types { α β : Type u } ( f g : α → β ) := @Equalizer CategoryOfTypes _ _ f g
+@[reducible] definition {u} Equalizer_in_Types { α β : Type u } ( f g : α → β ) := @Equalizer CategoryOfTypes _ _ f g
 
 -- PROJECT better automation.
 lemma {u} subtype_is_Equalizer_in_Types { α β : Type u } ( f g : α → β ) : Equalizer_in_Types f g :=
