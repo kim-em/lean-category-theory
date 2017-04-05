@@ -13,8 +13,6 @@ namespace tqft.categories.braided_monoidal_category
 
 universe variables u v
 
--- set_option pp.all true
-
 @[reducible] definition squared_Braiding { C : Category.{u v} } { m : MonoidalStructure C } ( commutor : Commutor m )
   : NaturalTransformation m.tensor m.tensor :=
   begin
@@ -25,9 +23,6 @@ universe variables u v
     rewrite FunctorComposition.left_identity,
   end 
 
--- #print squared_Braiding
--- #print squared_Braiding._proof_1
-
 lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
   begin
     apply NaturalTransformations_componentwise_equal,
@@ -36,8 +31,23 @@ lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : 
     unfold_unfoldable_hypotheses,
     induction X with X1 X2,
     unfold squared_Braiding._proof_1,
-    -- unfold_unfoldable_goals,
-    -- simp,
+    -- At this point we have an unpleasant goal involving many eq.rec's, that I can't seem to do anything with.
+      -- C : Category,
+      -- m : MonoidalStructure C,
+      -- β : braided_monoidal_category.Symmetry m,
+      -- X1 X2 : C.Obj
+      -- ⊢ (eq.rec
+      -- (vertical_composition_of_NaturalTransformations ((β.braiding).morphism)
+      --     (whisker_on_left (SwitchProductCategory C C) ((β.braiding).morphism)))
+      -- (eq.rec
+      --     (eq.rec
+      --       (eq.rec (eq.refl (NaturalTransformation (m.tensor) (m.tensor)))
+      --           (eq.symm (FunctorComposition.left_identity (C × C) C (m.tensor))))
+      --       (eq.symm (switch_twice_is_the_identity C C)))
+      --     (FunctorComposition.associativity (SwitchProductCategory C C) (SwitchProductCategory C C)
+      --       (m.tensor)))).components
+      -- (X1, X2) = (IdentityNaturalTransformation (m.tensor)).components (X1, X2)
+
     admit   
   end
 
