@@ -11,19 +11,30 @@ open tqft.categories.monoidal_category
 
 namespace tqft.categories.braided_monoidal_category
 
-universe variables u v
+-- universe variables u v
 
-@[reducible] definition squared_Braiding { C : Category.{u v} } { m : MonoidalStructure C } ( commutor : Commutor m )
+definition {u v} transport {A : Type u} { P : A → Type v} {x y : A} (p : x = y)
+(u : P x) : P y :=
+by induction p; exact u
+
+definition {u v w} apdt011 {A : Type u} {Z : Type w} {B : A → Type v} (f : Πa, B a → Z) {a a' : A} {b : B a} {b' : B a'} (Ha : a = a') (Hb : transport Ha b = b')
+      : f a b = f a' b' :=
+by cases Ha; cases Hb; reflexivity
+
+set_option trace.check true
+
+@[reducible] definition {u v} squared_Braiding { C : Category.{u v} } { m : MonoidalStructure C } ( commutor : Commutor m )
   : NaturalTransformation m.tensor m.tensor :=
   begin
     pose square := vertical_composition_of_NaturalTransformations commutor.morphism (whisker_on_left (SwitchProductCategory C C) commutor.morphism),
-    refine ( cast _ square ),
+    -- refine ( cast _ square ),
+    refine ( transport _ square ),
     rewrite - FunctorComposition.associativity,
     erewrite switch_twice_is_the_identity,
     rewrite FunctorComposition.left_identity,
   end 
 
-lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
+lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
   begin
     apply NaturalTransformations_componentwise_equal,
     intros,
@@ -31,6 +42,7 @@ lemma symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : 
     unfold_unfoldable_hypotheses,
     induction X with X1 X2,
     unfold squared_Braiding._proof_1,
+
     -- At this point we have an unpleasant goal involving many eq.rec's, that I can't seem to do anything with.
       -- C : Category,
       -- m : MonoidalStructure C,

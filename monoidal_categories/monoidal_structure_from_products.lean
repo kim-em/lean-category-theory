@@ -26,7 +26,7 @@ definition MonoidalStructure_from_Products { C : Category } [ has_FiniteProducts
         identities    := sorry, -- This is not easy...
         functoriality := sorry
     },
-    tensor_unit := initial_object,
+    tensor_unit := terminal_object,
     associator_transformation := sorry,
     left_unitor               := sorry,
     right_unitor              := sorry,
