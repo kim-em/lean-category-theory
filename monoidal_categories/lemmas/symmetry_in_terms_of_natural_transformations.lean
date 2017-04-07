@@ -71,6 +71,16 @@ set_option trace.check true
 -- @eq.rec α a T b e : T b
 -- T b == b
 
+-- now we want to apply
+--   f === @NaturalTransformation.components (C × C) C (@MonoidalStructure.tensor C m) (@MonoidalStructure.tensor C m)
+-- to T b.
+-- actually, we're going to need to think of this as applying 
+--   f' === @NaturalTransformation.components (C × C) C (@MonoidalStructure.tensor C m)
+--      : Π (F : Functor (C × C) C), NaturalTransformation m.tensor F → Π (x : (C × C).Obj), C.Hom (m.tensor x) (F x)
+-- and here we may as well introduce S : Functor (C × C) C → Type as S = 
+
+-------------
+
 -- f === @NaturalTransformation.components (C × C) C (@MonoidalStructure.tensor C m)
 -- What sort of thing is f?
 -- f : Π F : (Functor (C × C) C), S F → T F
@@ -118,12 +128,6 @@ begin
   reflexivity
 end
 
-@[simp] lemma {u v w} function_of_eq.rec' { α : Type u } { a : α } { T : α → Type v } { S : α → Type w } ( t : T a ) { b : α } ( e : a = b ) ( f : Π { c : α }, T c → S c ) :
-  f ( @eq.rec α a T t b e ) = @eq.rec α a S (f t) b e :=
-begin
-  cases e,
-  reflexivity
-end
 
 
 lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
