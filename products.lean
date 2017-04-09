@@ -11,7 +11,7 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.products
 
-@[unfoldable] definition ProductCategory (C D : Category) :
+definition ProductCategory (C D : Category) :
   Category :=
   {
     Obj      := C.Obj × D.Obj,
@@ -29,21 +29,21 @@ namespace ProductCategory
 end ProductCategory
 
 -- TODO change the order of arguments here?
-@[unfoldable] definition RightInjectionAt { D : Category } ( Z : D.Obj ) ( C : Category ) : Functor C (C × D) :=
+definition RightInjectionAt { D : Category } ( Z : D.Obj ) ( C : Category ) : Functor C (C × D) :=
 { onObjects     := λ X, (X, Z),
   onMorphisms   := λ X Y f, (f, D.identity Z),
   identities    := ♮,
   functoriality := ♯
 }
 
-@[unfoldable] definition LeftInjectionAt { C : Category } ( Z : C.Obj) ( D : Category ) : Functor D (C × D) :=
+definition LeftInjectionAt { C : Category } ( Z : C.Obj) ( D : Category ) : Functor D (C × D) :=
 { onObjects     := λ X, (Z, X),
   onMorphisms   := λ X Y f, (C.identity Z, f),
   identities    := ♮,
   functoriality := ♯
 }
 
-@[unfoldable] definition LeftProjection ( C D : Category ) : Functor (C × D) C := 
+definition LeftProjection ( C D : Category ) : Functor (C × D) C := 
 {
   onObjects     := λ X, X.1,
   onMorphisms   := λ X Y f, f.1,
@@ -51,7 +51,7 @@ end ProductCategory
   functoriality := ♮
 }
 
-@[unfoldable] definition RightProjection ( C D : Category ) : Functor (C × D) D := 
+definition RightProjection ( C D : Category ) : Functor (C × D) D := 
 {
   onObjects     := λ X, X.2,
   onMorphisms   := λ X Y f, f.2,
@@ -59,7 +59,7 @@ end ProductCategory
   functoriality := ♮
 }
 
-@[unfoldable] definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
+definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
   onObjects     := λ X, (F X.fst, G X.snd),
   onMorphisms   := λ _ _ f, (F.onMorphisms f.fst, G.onMorphisms f.snd),
@@ -71,7 +71,7 @@ namespace ProductFunctor
   notation F `×` G := ProductFunctor F G
 end ProductFunctor
 
-@[unfoldable] definition ProductNaturalTransformation
+definition ProductNaturalTransformation
   { A B C D : Category } 
   { F G : Functor A B } { H I : Functor C D } 
   (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
@@ -85,7 +85,7 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-@[unfoldable] definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
+definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
   onObjects     := λ X, (X.snd, X.fst),
   onMorphisms   := λ _ _ f, (f.snd, f.fst),
@@ -97,7 +97,7 @@ lemma switch_twice_is_the_identity
   ( C D : Category ) :
   FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (ProductCategory C D) := ♯
 
-@[unfoldable] definition SwitchSymmetry ( C D : Category ) : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) :=
+definition SwitchSymmetry ( C D : Category ) : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) :=
 {
   morphism := {
     components := begin blast, exact (C.identity X.fst, D.identity X.snd) end,
@@ -111,7 +111,7 @@ lemma switch_twice_is_the_identity
   witness_2 := ♯
 }
 
-@[unfoldable] definition ProductCategoryAssociator
+definition ProductCategoryAssociator
   ( C D E: Category )
   : Functor ((C × D) × E) (C × (D × E)) :=
 {
@@ -121,7 +121,7 @@ lemma switch_twice_is_the_identity
   functoriality := ♮
 }
 
-@[unfoldable] definition ProductCategoryInverseAssociator
+definition ProductCategoryInverseAssociator
   ( C D E: Category )
   : Functor (C × (D × E)) ((C × D) × E) :=
 {

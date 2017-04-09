@@ -10,7 +10,7 @@ universe variables u v
 open plift -- we first plift propositional equality to Type 0,
 open ulift -- then ulift up to Type v
 
-@[unfoldable] definition DiscreteCategory ( α : Type u ) : Category.{u v} :=
+definition DiscreteCategory ( α : Type u ) : Category.{u v} :=
 {
   Obj      := α,
   Hom      := λ X Y, ulift (plift (X = Y)),

@@ -45,7 +45,7 @@ inductive {u v} morphism_path { C : Category.{u v} } : Obj C → Obj C → Type 
 notation a :: b := morphism_path.cons a b
 notation `c[` l:(foldr `, ` (h t, morphism_path.cons h t) morphism_path.nil _ `]`) := l
 
-@[unfoldable] definition {u v} concatenate_paths
+definition {u v} concatenate_paths
  { C : Category.{u v} } :
  Π { x y z : C.Obj }, morphism_path x y → morphism_path y z → morphism_path x z
 | ._ ._ _ (morphism_path.nil _)               q := q

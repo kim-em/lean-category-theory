@@ -9,7 +9,7 @@ open tqft.categories.functor
 
 namespace tqft.categories
 
-@[unfoldable] definition Opposite ( C : Category ) : Category :=
+definition Opposite ( C : Category ) : Category :=
 {
     Obj := C.Obj,
     Hom := λ X Y, C.Hom Y X,
@@ -20,7 +20,7 @@ namespace tqft.categories
     associativity  := ♮
 }
 
-@[unfoldable] definition OppositeFunctor { C D : Category } ( F : Functor C D ) : Functor (Opposite C) (Opposite D) :=
+definition OppositeFunctor { C D : Category } ( F : Functor C D ) : Functor (Opposite C) (Opposite D) :=
 {
   onObjects     := F.onObjects,
   onMorphisms   := λ X Y f, F.onMorphisms f,

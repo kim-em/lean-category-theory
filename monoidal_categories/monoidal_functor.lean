@@ -99,7 +99,7 @@ instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
   ( F G : MonoidalFunctor m n ) : has_coe (MonoidalNaturalTransformation F G) (NaturalTransformation F.functor G.functor) :=
   { coe := MonoidalNaturalTransformation.natural_transformation }
 
-@[unfoldable] definition IdentityMonoidalNaturalTransformation
+definition IdentityMonoidalNaturalTransformation
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} }
   { m : MonoidalStructure C }
@@ -107,7 +107,7 @@ instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
   ( F : MonoidalFunctor m n ) : MonoidalNaturalTransformation F F :=
     ⟨ IdentityNaturalTransformation F.functor, ♮, ♮ ⟩
 
-@[unfoldable] definition vertical_composition_of_MonoidalNaturalTransformations
+definition vertical_composition_of_MonoidalNaturalTransformations
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} }
   { m : MonoidalStructure C }
@@ -135,7 +135,7 @@ instance MonoidalNaturalTransformation_coercion_to_NaturalTransformation
 }
 
 -- PROJECT horizontal_composition_of_MonoidalNaturalTransformations
-@[unfoldable] definition horizontal_composition_of_MonoidalNaturalTransformations
+definition horizontal_composition_of_MonoidalNaturalTransformations
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} }
   { E : Category.{u3 v3} }

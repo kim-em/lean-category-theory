@@ -14,7 +14,7 @@ open tqft.categories.braided_monoidal_category
 
 -- PROJECT really this should be a special case of the (uniquely braided, symmetric) monoidal structure coming from a product.
 
-@[unfoldable] definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
+definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 {
   onObjects     := λ p, p.1 × p.2,
   onMorphisms   := λ _ _ p q, (p.1 q.1, p.2 q.2),
@@ -23,7 +23,7 @@ open tqft.categories.braided_monoidal_category
 }
 
 -- PROJECT it would be great to generate all these _is_isomorphism fields via refine
-@[unfoldable] definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
+definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
 {
   tensor      := TensorProductOfTypes,
   tensor_unit := punit,
@@ -67,7 +67,7 @@ open tqft.categories.braided_monoidal_category
   triangle := ♯
 }
 
-@[unfoldable] definition SymmetricMonoidalCategoryOfTypes : Symmetry MonoidalCategoryOfTypes := {
+definition SymmetricMonoidalCategoryOfTypes : Symmetry MonoidalCategoryOfTypes := {
   braiding := {
    morphism  := {
      components := λ p t, (t.snd, t.fst),

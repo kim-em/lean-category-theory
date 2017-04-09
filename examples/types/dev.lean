@@ -13,7 +13,7 @@ open tqft.categories.isomorphism
 open tqft.categories.monoidal_category
 open tqft.categories.braided_monoidal_category
 
--- @[unfoldable] definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
+-- definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 -- {
 --   onObjects     := λ p, p.1 × p.2,
 --   onMorphisms   := λ _ _ p q, (p.1 q.1, p.2 q.2),

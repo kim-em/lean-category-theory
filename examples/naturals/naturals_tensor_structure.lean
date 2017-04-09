@@ -12,7 +12,7 @@ open tqft.categories.natural_transformation
 open tqft.categories.products
 open tqft.categories.monoidal_category
 
-@[unfoldable] definition ℕTensorProduct : TensorProduct ℕCategory :=
+definition ℕTensorProduct : TensorProduct ℕCategory :=
   { onObjects     := prod.fst,
     onMorphisms   := λ _ _ n, n.fst + n.snd,
     identities    := ♮,

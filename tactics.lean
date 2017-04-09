@@ -34,10 +34,8 @@ meta def pointwise (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
    try (seq (any_apply cs) and_then)
 
--- open tactic
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b
-attribute [unfoldable] eq.mp
 attribute [simp] id_locked_eq
 attribute [pointwise] funext
 attribute [ematch] subtype.property
@@ -49,22 +47,20 @@ let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
 in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
       return new_e
 
-
 -- This tactic is a combination of dunfold_at and dsimp_at_core
-meta def dunfold_and_simp_at (s : simp_lemmas) (cs : list name) (h : expr) : tactic unit :=
+meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
 do num_reverted ← revert h,
    (expr.pi n bi d b : expr) ← target,
-  --  new_d ← dunfold_core reducible default_max_steps cs d,
    new_d ← dunfold_core' reducible default_max_steps d,
    new_d_simp ← s.dsimplify new_d,
    change $ expr.pi n bi new_d_simp b,
    intron num_reverted
 
-meta def dunfold_and_simp_all_hypotheses (names : list name) : tactic unit :=
+meta def dunfold_and_simp_all_hypotheses : tactic unit :=
 do l ← local_context,
    s ← simp_lemmas.mk_default,
    l.reverse.mfor' $ λ h, do
-     try (dunfold_and_simp_at s names h)
+     try (dunfold_and_simp_at s h)
 
 meta def dsimp_all_hypotheses : tactic unit :=
 do l ← local_context,
@@ -76,20 +72,8 @@ open interactive
 
 meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
 
-meta def dunfold_all (names : list name) : tactic unit :=
-dunfold names >> dsimp
-
-meta def unfold_unfoldable_hypotheses : tactic unit := 
-do cs ← attribute.get_instances `unfoldable,
-   try (dunfold_and_simp_all_hypotheses cs)
-
-meta def unfold_unfoldable_goals : tactic unit := 
-do cs ← attribute.get_instances `unfoldable,
-  --  try (dunfold_all cs)
-   try (dunfold_everything)
-
 meta def unfold_unfoldable : tactic unit := 
-  unfold_unfoldable_hypotheses >> unfold_unfoldable_goals
+  dunfold_and_simp_all_hypotheses >> dunfold_everything
 
 -- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=

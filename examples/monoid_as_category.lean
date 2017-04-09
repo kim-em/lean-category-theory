@@ -12,7 +12,7 @@ namespace tqft.categories.examples
 
 -- PROJECT none of these proofs work, because we're not using type classes, because type classes don't resolve correctly here.
 
--- @[unfoldable] definition monoid_as_Category { α : Type } ( m : monoid α ) : Category :=
+-- definition monoid_as_Category { α : Type } ( m : monoid α ) : Category :=
 -- {
 --     Obj      := unit,
 --     Hom      := λ _ _, α,

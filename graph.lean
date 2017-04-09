@@ -30,19 +30,19 @@ notation a :: b := path_of_paths.cons a b
 notation `pp[` l:(foldr `, ` (h t, path_of_paths.cons h t) path_of_paths.nil _ `]`) := l
 
 -- The pattern matching trick used here was explained by Jeremy Avigad at https://groups.google.com/d/msg/lean-user/JqaI12tdk3g/F9MZDxkFDAAJ
-@[unfoldable] definition concatenate_paths
+definition concatenate_paths
  { G : Graph } :
  Π { x y z : G.vertices }, path x y → path y z → path x z
 | ._ ._ _ (path.nil _)               q := q
 | ._ ._ _ (@path.cons ._ _ _ _ e p') q := path.cons e (concatenate_paths p' q)
 
-@[unfoldable] definition concatenate_path_of_paths
+definition concatenate_path_of_paths
  { G : Graph } :
  Π { x y : G.vertices }, path_of_paths x y → path x y
 | ._ ._ (path_of_paths.nil X) := path.nil X
 | ._ ._ (@path_of_paths.cons ._ _ _ _ e p') := concatenate_paths e (concatenate_path_of_paths p')
 
-@[unfoldable] definition PathCategory ( G : Graph ) : Category :=
+definition PathCategory ( G : Graph ) : Category :=
 {
   Obj            := G.vertices,
   Hom            := λ x y, path x y,
@@ -85,7 +85,7 @@ instance Category_to_Graph_coercion: has_coe Category Graph :=
 
 open tqft.categories.functor
 
-@[unfoldable] definition path_to_morphism
+definition path_to_morphism
   { G : Graph }
   { C : Category }
   ( H : GraphHomomorphism G C )

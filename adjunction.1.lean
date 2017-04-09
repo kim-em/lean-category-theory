@@ -24,7 +24,7 @@ lemma triangle_1_lemma { C D : Category } ( L : Functor C D ) ( R : Functor D C 
     
   end
 
--- @[unfoldable] definition HomAdjunction_to_Adjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : HomAdjunction L R ) : Adjunction L R := 
+-- definition HomAdjunction_to_Adjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : HomAdjunction L R ) : Adjunction L R := 
 -- {
 --   unit       := {
 --     components := λ X : C.Obj, A.morphism.components (X, L X) (D.identity (L X)),

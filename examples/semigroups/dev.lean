@@ -10,7 +10,7 @@ open tqft.categories.braided_monoidal_category
 
 namespace tqft.categories.examples.semigroups
 
-@[unfoldable] definition SymmetryOnCategoryOfSemigroups' : Symmetry MonoidalStructureOnCategoryOfSemigroups :=
+definition SymmetryOnCategoryOfSemigroups' : Symmetry MonoidalStructureOnCategoryOfSemigroups :=
 begin
   refine {
     braiding             := {

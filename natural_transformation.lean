@@ -36,13 +36,13 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
-@[unfoldable] definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
+definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D.identity (F X),
     naturality := ♮
   }
 
-@[unfoldable] definition {u1 v1 u2 v2} vertical_composition_of_NaturalTransformations
+definition {u1 v1 u2 v2} vertical_composition_of_NaturalTransformations
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G H : Functor C D }
   ( α : NaturalTransformation F G )
@@ -56,7 +56,7 @@ notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
 
 open tqft.categories.functor
 
-@[unfoldable] definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
+definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   { F G : Functor C D }
   { H I : Functor D E }
@@ -70,7 +70,7 @@ open tqft.categories.functor
 -- FIXME Visual Studio Code can't seem to display the subscript h?
 notation α `∘ᵤ` β := horizontal_composition_of_NaturalTransformations α β
 
-@[unfoldable] definition {u1 v1 u2 v2 u3 v3} whisker_on_left
+definition {u1 v1 u2 v2 u3 v3} whisker_on_left
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   ( F : Functor C D )
   { G H : Functor D E }
@@ -78,7 +78,7 @@ notation α `∘ᵤ` β := horizontal_composition_of_NaturalTransformations α �
   NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
   horizontal_composition_of_NaturalTransformations (IdentityNaturalTransformation F) α
 
-@[unfoldable] definition {u1 v1 u2 v2 u3 v3} whisker_on_right
+definition {u1 v1 u2 v2 u3 v3} whisker_on_right
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   { F G : Functor C D }
   ( α : NaturalTransformation F G )
@@ -91,7 +91,7 @@ notation α `∘ᵤ` β := horizontal_composition_of_NaturalTransformations α �
 
 open tactic.interactive
 
-@[unfoldable] definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
+definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
 {
   Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,
@@ -245,7 +245,7 @@ lemma NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( �
     witness_2 := ♮
   }
 
-@[unfoldable] definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
+definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
   { B : Category.{u1 v1} } { C : Category.{u2 v2} } { D : Category.{u3 v3} } { E : Category.{u4 v4} }
   ( F : Functor B C )
   ( G : Functor C D )
@@ -264,7 +264,7 @@ lemma NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( �
   witness_2 := ♯
 }
 
-@[unfoldable] definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_left_unitor
+definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_left_unitor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( F : Functor C D )
 : NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := 
@@ -281,7 +281,7 @@ lemma NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( �
   witness_2 := ♯
 }
 
-@[unfoldable] definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_right_unitor
+definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_right_unitor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( F : Functor C D )
 : NaturalIsomorphism (FunctorComposition F (IdentityFunctor D) ) F := 

@@ -11,7 +11,7 @@ open tqft.categories.graph
 
 namespace tqft.categories.n_ary
 
-@[unfoldable] definition {u v} compose_each_path
+definition {u v} compose_each_path
   { G : Graph.{u v} }
   { composition : Π { A B : G.vertices }, path A B → G.edges A B } :
    Π { X Y : G.vertices }, path_of_paths X Y → path X Y
@@ -33,7 +33,7 @@ attribute [simp,ematch] n_ary_Category.associativity
 
 open tqft.categories
 
-@[unfoldable] definition {u v} compose_path
+definition {u v} compose_path
   { G : Graph.{u v} }
   { identity : Π X : G.vertices, G.edges X X }
   { composition : Π { A B C : G.vertices }, G.edges A B → G.edges B C → G.edges A C } :

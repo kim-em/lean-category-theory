@@ -115,7 +115,7 @@ definition RightUnitor_for_Semigroups : @RightUnitor CategoryOfSemigroups Tensor
     witness_2 := ♮
   }
 
-@[unfoldable] definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
+definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
   tensor := TensorProduct_for_Semigroups,
   tensor_unit := TensorUnit_for_Semigroups,
   associator_transformation := Associator_for_Semigroups,
@@ -129,7 +129,7 @@ open tqft.categories.natural_transformation
 open tqft.categories.braided_monoidal_category
 
 -- Commented out while I work on an alternative.
--- @[unfoldable] definition SymmetryOnCategoryOfSemigroups : Symmetry MonoidalStructureOnCategoryOfSemigroups := {
+-- definition SymmetryOnCategoryOfSemigroups : Symmetry MonoidalStructureOnCategoryOfSemigroups := {
 --   braiding             := {
 --     morphism  := {
 --       components := λ _, {

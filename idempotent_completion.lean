@@ -21,7 +21,7 @@ attribute [simp,ematch] Idempotent.witness
 
 local attribute [ematch] subtype.property
 
-@[unfoldable] definition IdempotentCompletion ( C: Category ) : Category :=
+definition IdempotentCompletion ( C: Category ) : Category :=
 {
   Obj            := Idempotent C,
   Hom            := λ X Y, { f : C.Hom X.object Y.object // C.compose X.idempotent f = f ∧ C.compose f Y.idempotent = f },
@@ -32,7 +32,7 @@ local attribute [ematch] subtype.property
   associativity  := ♮
 }
 
-@[unfoldable] definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (IdempotentCompletion C) := {
+definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (IdempotentCompletion C) := {
   onObjects     := λ X, ⟨ X, C.identity X, ♮ ⟩,
   onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩,
   identities    := ♮,

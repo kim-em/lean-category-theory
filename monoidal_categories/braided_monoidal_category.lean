@@ -22,7 +22,7 @@ universe variables u v
 definition Commutor { C : Category.{u v} } (m : MonoidalStructure C) := 
   NaturalIsomorphism (m.tensor) (FunctorComposition (SwitchProductCategory C C) m.tensor)
 
-@[unfoldable] definition Hexagon_1 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
+definition Hexagon_1 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
   ∀ X Y Z : C.Obj,
     C.compose
       (m.tensorMorphisms (C.identity X) (β.morphism.components (Y, Z)))
@@ -37,7 +37,7 @@ definition Commutor { C : Category.{u v} } (m : MonoidalStructure C) :=
       (β.morphism.components (m.tensorObjects X Y, Z))
       (m.inverse_associator Z X Y)
     )
-@[unfoldable] definition Hexagon_2 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
+definition Hexagon_2 { C : Category.{u v} } { m : MonoidalStructure C } ( β : Commutor m ) :=
   ∀ X Y Z : C.Obj,
     C.compose
       (m.tensorMorphisms (C.identity X) (β.inverse.components (Z, Y)))

@@ -13,14 +13,14 @@ namespace tqft.categories.monoidal_category
 
 universe variables u v
 
-@[unfoldable] definition TensorProductOfCategories : TensorProduct CategoryOfCategoriesAndFunctors.{u v} := {
+definition TensorProductOfCategories : TensorProduct CategoryOfCategoriesAndFunctors.{u v} := {
     onObjects     := λ p, ProductCategory p.1 p.2,
     onMorphisms   := λ _ _ p, ProductFunctor p.1 p.2,
     identities    := ♯,
     functoriality := ♮
   }
 
-@[unfoldable] definition CategoryAssociator : Associator TensorProductOfCategories.{u v} := {
+definition CategoryAssociator : Associator TensorProductOfCategories.{u v} := {
     morphism := {
       components := λ t, ProductCategoryAssociator t.1.1 t.1.2 t.2,
       naturality := ♮
@@ -33,9 +33,9 @@ universe variables u v
     witness_2 := ♯
   }
 
-@[unfoldable] definition CategoryTensorUnit := DiscreteCategory.{u v} punit
+definition CategoryTensorUnit := DiscreteCategory.{u v} punit
 
-@[unfoldable] definition CategoryLeftUnitor : @LeftUnitor CategoryOfCategoriesAndFunctors.{u v} CategoryTensorUnit TensorProductOfCategories := {
+definition CategoryLeftUnitor : @LeftUnitor CategoryOfCategoriesAndFunctors.{u v} CategoryTensorUnit TensorProductOfCategories := {
   morphism := {
     components := λ p, RightProjection _ p,
     naturality := ♮
@@ -83,7 +83,7 @@ universe variables u v
                end
 }
 
-@[unfoldable] definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u v} CategoryTensorUnit TensorProductOfCategories := {
+definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u v} CategoryTensorUnit TensorProductOfCategories := {
   morphism := {
     components := λ p, LeftProjection p _,
     naturality := ♮
@@ -131,7 +131,7 @@ universe variables u v
                end
 }
 
-@[unfoldable] definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategoriesAndFunctors.{u v} := {
+definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategoriesAndFunctors.{u v} := {
   tensor      := TensorProductOfCategories,
   tensor_unit := CategoryTensorUnit,
   associator_transformation := CategoryAssociator,
@@ -141,7 +141,7 @@ universe variables u v
   triangle := ♯
 }
 
-@[unfoldable] definition SymmetryOnCartesianProductOfCategories : Symmetry CartesianProductOfCategories := {
+definition SymmetryOnCartesianProductOfCategories : Symmetry CartesianProductOfCategories := {
   braiding             := {
     morphism  := {
       components := λ p, SwitchProductCategory p.1 p.2,

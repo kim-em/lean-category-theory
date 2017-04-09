@@ -32,7 +32,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
 -- { F   := λ f, Π ⦃X Y : C.Obj⦄, C.Hom X Y → D.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
 --  coe := Functor.onMorphisms }
 
-@[unfoldable] definition {u1 v1} IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
+definition {u1 v1} IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f,
@@ -40,7 +40,7 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
   functoriality := ♮
 }
 
-@[unfoldable] definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
+definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
 {
   onObjects     := λ X, G (F X),
   onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f),
@@ -89,7 +89,7 @@ open tactic.interactive
 @[simp,ematch] lemma {u1 v1 u2 v2} FunctorComposition.right_identity ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) ( F : Functor C D ) : FunctorComposition F (IdentityFunctor D) = F := ♯
 
 -- Note that this definition fixes the universe level of all the categories involved, so the witness fields are not useful as lemmas.
-@[unfoldable] definition {u v} CategoryOfCategoriesAndFunctors : Category := {
+definition {u v} CategoryOfCategoriesAndFunctors : Category := {
   Obj := Category.{u v},
   Hom := λ C D, Functor C D,
   identity := λ C, IdentityFunctor C,

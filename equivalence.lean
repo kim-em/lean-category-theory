@@ -28,15 +28,15 @@ definition Equivalence.reverse { C D : Category } ( e : Equivalence C D ) : Equi
   isomorphism_2 := e.isomorphism_1
 }
 
-@[unfoldable] definition {u v} Surjective { α : Type u } { β : Type v } ( f : α → β ) := { g : β → α // g ∘ f = id } -- This is the constructive version!
-@[unfoldable] definition {u v} Injective  { α : Type u } { β : Type v } ( f : α → β ) := Π { X Y : α }, (f X = f Y) → (X = Y)
+definition {u v} Surjective { α : Type u } { β : Type v } ( f : α → β ) := { g : β → α // g ∘ f = id } -- This is the constructive version!
+definition {u v} Injective  { α : Type u } { β : Type v } ( f : α → β ) := Π { X Y : α }, (f X = f Y) → (X = Y)
 
-@[unfoldable] definition {u1 v1 u2 v2} Full     { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π ( X Y : C.Obj ), Surjective (@Functor.onMorphisms _ _ F X Y)
-@[unfoldable] definition {u1 v1 u2 v2} Faithful { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π ( X Y : C.Obj ), Injective  (@Functor.onMorphisms _ _ F X Y)
+definition {u1 v1 u2 v2} Full     { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π ( X Y : C.Obj ), Surjective (@Functor.onMorphisms _ _ F X Y)
+definition {u1 v1 u2 v2} Faithful { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π ( X Y : C.Obj ), Injective  (@Functor.onMorphisms _ _ F X Y)
 
-@[unfoldable] definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := (Full F) × plift (Faithful F)
+definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := (Full F) × plift (Faithful F)
 
-@[unfoldable] definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F c) d
+definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F c) d
 
 lemma Equivalences_are_EssentiallySurjective { C D : Category } ( e : Equivalence C D ) : EssentiallySurjective (e.functor) :=
   λ Y : D.Obj, ⟨ e.inverse Y, e.isomorphism_2.components Y ⟩

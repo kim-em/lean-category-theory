@@ -8,7 +8,7 @@ namespace tqft.categories.examples.types
 
 open tqft.categories
 
-@[unfoldable] definition {u} CategoryOfTypes : Category :=
+definition {u} CategoryOfTypes : Category :=
 {
     Obj := Type u,
     Hom := λ a b, a → b,

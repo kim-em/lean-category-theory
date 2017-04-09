@@ -74,7 +74,7 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
     blast
   end
 
-@[unfoldable] definition { u v } HomPairing ( C : Category.{u v} ) : Functor ((Opposite C) × C) CategoryOfTypes.{v} :=
+definition { u v } HomPairing ( C : Category.{u v} ) : Functor ((Opposite C) × C) CategoryOfTypes.{v} :=
 {
   onObjects     := λ p, C.Hom p.1 p.2,
   onMorphisms   := λ X F f, λ g, C.compose (C.compose f.1 g) f.2,
@@ -82,12 +82,12 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
   functoriality := ♯
 }
 
-@[unfoldable] definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
+definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
   NaturalIsomorphism
     (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
     (FunctorComposition (IdentityFunctor (Opposite C) × R) (HomPairing C))
 
-@[unfoldable] definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : Adjunction L R ) : HomAdjunction L R := 
+definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : Adjunction L R ) : HomAdjunction L R := 
 {
     morphism  := {
       components := λ P, 
