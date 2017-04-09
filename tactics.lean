@@ -47,6 +47,15 @@ let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
 in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
       return new_e
 
+meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
+do s ← simp_lemmas.mk_default,
+let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
+  new_e ← dunfold_expr_core m e,
+  new_e_simp ← s.dsimplify new_e,
+  return (u, new_e_simp, tt)
+in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
+      return new_e
+
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
 do num_reverted ← revert h,
@@ -70,7 +79,7 @@ do l ← local_context,
 open lean.parser
 open interactive
 
-meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
+meta def dunfold_everything : tactic unit := target >>= dunfold_and_simp reducible default_max_steps >>= change
 
 meta def unfold_unfoldable : tactic unit := 
   dunfold_and_simp_all_hypotheses >> dunfold_everything

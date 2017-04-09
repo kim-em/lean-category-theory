@@ -68,6 +68,7 @@ definition DrinfeldCentre { C : Category } ( m : MonoidalStructure C )  : Catego
         -- blast,
         rewrite g.witness,
         -- blast, -- FIXME these blasts are unfolding too many implicit arguments.
+                  -- https://github.com/leanprover/lean/issues/1509
         rewrite - C.associativity,
         -- trivial
       end

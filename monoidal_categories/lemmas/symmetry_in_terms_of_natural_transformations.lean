@@ -31,6 +31,8 @@ lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } 
     apply NaturalTransformations_componentwise_equal,
     intros,
     induction X with X_1 X_2,
+    -- unfold_unfoldable, -- FIXME unfold_unfoldable messes up implicit arguments
+    -- simp
     unfold squared_Braiding, 
     unfold IdentityNaturalTransformation,
     unfold vertical_composition_of_NaturalTransformations,
@@ -47,7 +49,13 @@ lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } 
     dsimp,
     unfold SwitchProductCategory,
     dsimp,
-    simp 
+    simp,
+    unfold eq.mpr,
+    unfold eq.mpr._proof_1,
+    unfold FunctorComposition_associator._proof_2,
+    unfold SwitchSymmetry._proof_1,
+    unfold FunctorComposition_left_unitor._proof_1,
+    simp
   end
 
 lemma {u v} symmetric_in_terms_of_components { C : Category.{u v} } { m : MonoidalStructure C } ( β : Braiding m ) ( e : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor ) : Symmetry m := {
@@ -70,7 +78,7 @@ lemma {u v} symmetric_in_terms_of_components { C : Category.{u v} } { m : Monoid
                                  dsimp,
                                  unfold SwitchProductCategory,
                                  dsimp,
-                                 simp 
+                                 simp
                                end
 }
 

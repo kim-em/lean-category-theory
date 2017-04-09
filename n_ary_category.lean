@@ -41,37 +41,37 @@ definition {u v} compose_path
 | ._ ._ (path.nil X) := identity X
 | ._ ._ (@path.cons ._ _ _ _ e p) := composition e (compose_path p)
 
-definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Category :=
-{
-  Obj := C.graph.vertices,
-  Hom := C.graph.edges,
-  identity := C.identity,
-  compose := λ X Y Z f g, C.compose ( p[ f, g ] ),
-  left_identity  := begin
-                      intros,       
-                      refine ( cast _ (C.associativity pp[ p[ ], p[ f ]]) ),
-                      blast
-                    end,
-  right_identity := begin
-                      intros,
-                      refine ( cast _ (C.associativity pp[ p[ f ], p[ ]]) ),
-                      blast                      
-                    end,
-  associativity  := begin
-                      intros,
+-- definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Category :=
+-- {
+--   Obj := C.graph.vertices,
+--   Hom := C.graph.edges,
+--   identity := C.identity,
+--   compose := λ X Y Z f g, C.compose ( p[ f, g ] ),
+--   left_identity  := begin
+--                       intros,       
+--                       refine ( cast _ (C.associativity pp[ p[ ], p[ f ]]) ),
+--                       blast
+--                     end,
+--   right_identity := begin
+--                       intros,
+--                       refine ( cast _ (C.associativity pp[ p[ f ], p[ ]]) ),
+--                       blast                      
+--                     end,
+--   associativity  := begin
+--                       intros,
 
-                      -- FIXME why don't these unfolds work?
-                      -- pose p := (C.associativity pp[ p[ f, g ], p[ h ]]),
-                      -- unfold n_ary.compose_each_path at p,
-                      -- unfold graph.concatenate_path_of_paths at p,
+--                       -- FIXME why don't these unfolds work?
+--                       -- pose p := (C.associativity pp[ p[ f, g ], p[ h ]]),
+--                       -- unfold n_ary.compose_each_path at p,
+--                       -- unfold graph.concatenate_path_of_paths at p,
 
-                      -- pose q := (C.associativity pp[ p[ f ], p[ g, h ]]),
-                      -- unfold n_ary.compose_each_path at q,
-                      -- unfold graph.concatenate_path_of_paths at q,
+--                       -- pose q := (C.associativity pp[ p[ f ], p[ g, h ]]),
+--                       -- unfold n_ary.compose_each_path at q,
+--                       -- unfold graph.concatenate_path_of_paths at q,
 
-                      admit
-                    end
-}
+--                       admit
+--                     end
+-- }
 
 definition {u v} Category_to_n_ary_Category ( C : Category.{u v} ) : n_ary_Category :=
 {

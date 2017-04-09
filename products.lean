@@ -85,51 +85,6 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
-{
-  onObjects     := λ X, (X.snd, X.fst),
-  onMorphisms   := λ _ _ f, (f.snd, f.fst),
-  identities    := ♮,
-  functoriality := ♮
-}
-
-lemma switch_twice_is_the_identity
-  ( C D : Category ) :
-  FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (ProductCategory C D) := ♯
-
-definition SwitchSymmetry ( C D : Category ) : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) :=
-{
-  morphism := {
-    components := begin blast, exact (C.identity X.fst, D.identity X.snd) end,
-    naturality := ♯
-  },
-  inverse := {
-    components := begin blast, exact (C.identity X.fst, D.identity X.snd) end,
-    naturality := ♯
-  },
-  witness_1 := ♯,
-  witness_2 := ♯
-}
-
-definition ProductCategoryAssociator
-  ( C D E: Category )
-  : Functor ((C × D) × E) (C × (D × E)) :=
-{
-  onObjects     := λ X, (X.1.1, (X.1.2, X.2)),
-  onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2)),
-  identities    := ♮,
-  functoriality := ♮
-}
-
-definition ProductCategoryInverseAssociator
-  ( C D E: Category )
-  : Functor (C × (D × E)) ((C × D) × E) :=
-{
-  onObjects     := λ X, ((X.1, X.2.1), X.2.2),
-  onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2),
-  identities    := ♮,
-  functoriality := ♮
-}
 
 
 -- @[ematch] lemma bifunctor_left_identity

@@ -13,16 +13,16 @@ open tqft.categories.examples.types
 
 namespace tqft.categories.adjunction
 
-lemma triangle_1_lemma { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : HomAdjunction L R ) ( X : D.Obj ) :
-  C.compose ((A.morphism).components (R X, L (R X)) (D.identity (L (R X))))
-    (R.onMorphisms ((A.inverse).components (R X, X) (C.identity (R X)))) = C.identity (R X) :=
-  begin
-    pose q := @NaturalTransformation.naturality _ _ _ _ A.morphism _ _ ((Opposite C × D).identity (R X, X)),
-    pose q' := @NaturalTransformation.naturality _ _ _ _ A.inverse _ _ ((Opposite C × D).identity (R X, X)),
+-- lemma triangle_1_lemma { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : HomAdjunction L R ) ( X : D.Obj ) :
+--   C.compose ((A.morphism).components (R X, L (R X)) (D.identity (L (R X))))
+--     (R.onMorphisms ((A.inverse).components (R X, X) (C.identity (R X)))) = C.identity (R X) :=
+--   begin
+--     pose q := @NaturalTransformation.naturality _ _ _ _ A.morphism _ _ ((Opposite C × D).identity (R X, X)),
+--     pose q' := @NaturalTransformation.naturality _ _ _ _ A.inverse _ _ ((Opposite C × D).identity (R X, X)),
     
-    pose p := congr_fun q' (C.identity (R X)),
+--     pose p := congr_fun q' (C.identity (R X)),
     
-  end
+--   end
 
 -- definition HomAdjunction_to_Adjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : HomAdjunction L R ) : Adjunction L R := 
 -- {

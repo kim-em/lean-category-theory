@@ -29,28 +29,28 @@ end
 -- lemma nat_add_commutativity (a b : ℕ) : nat.add a b = nat.add a b := ♮
 
 -- FIXME This reducible is gross
-@[reducible] definition ℕCategory : Category :=
-  begin
-    refine {
-        Obj := unit,
-        Hom := λ _ _, ℕ,
-        identity := _, -- Notice we don't specify the identity here: `refine` works it out for us.
-        compose  := λ _ _ _ n m, n + m,
+-- @[reducible] definition ℕCategory : Category :=
+--   begin
+--     refine {
+--         Obj := unit,
+--         Hom := λ _ _, ℕ,
+--         identity := _, -- Notice we don't specify the identity here: `refine` works it out for us.
+--         compose  := λ _ _ _ n m, n + m,
 
-        left_identity  := _,
-        right_identity := _,
-        associativity  := _
-    },
-    all_goals { blast }
-  end
+--         left_identity  := _,
+--         right_identity := _,
+--         associativity  := _
+--     },
+--     all_goals { blast }
+--   end
 
--- @[simp] lemma ℕCategory.hom { X Y : ℕCategory.Obj } : ℕCategory.Hom X Y = ℕ := ♮
+-- -- @[simp] lemma ℕCategory.hom { X Y : ℕCategory.Obj } : ℕCategory.Hom X Y = ℕ := ♮
 
-definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
-  { onObjects   := id,
-    onMorphisms := λ _ _ n, n + n, -- TODO this is ugly.
-    identities    := ♯,
-    functoriality := ♯
-  }
+-- definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
+--   { onObjects   := id,
+--     onMorphisms := λ _ _ n, n + n, -- TODO this is ugly.
+--     identities    := ♯,
+--     functoriality := ♯
+--   }
 
 end tqft.categories.examples.naturals

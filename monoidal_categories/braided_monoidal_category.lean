@@ -2,6 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 import .monoidal_category
+import ..products_switch
 
 namespace tqft.categories.braided_monoidal_category
 
@@ -62,6 +63,6 @@ structure Braiding { C : Category.{u v} } ( m : MonoidalStructure C ) :=
 structure Symmetry { C : Category.{u v} } ( m : MonoidalStructure C ) extends parent: Braiding m :=
   (symmetry: Π X Y : C.Obj, C.compose (braiding.morphism.components ⟨X, Y⟩) (braiding.morphism.components ⟨Y, X⟩) = C.identity (m.tensor.onObjects ⟨X, Y⟩) )
 
-attribute [ematch,simp] Symmetry.symmetry
+attribute [simp,ematch] Symmetry.symmetry
 
 end tqft.categories.braided_monoidal_category

@@ -22,7 +22,7 @@ structure SemigroupModuleMorphism { C : Category } { m : MonoidalStructure C } {
   ( map : C.Hom X Y )
   ( compatibility : C.compose (m.tensorMorphisms (C.identity A) map) Y.action = C.compose X.action map )
 
-attribute [ematch,simp] SemigroupModuleMorphism.compatibility
+attribute [simp,ematch] SemigroupModuleMorphism.compatibility
 
 @[pointwise] lemma SemigroupModuleMorphism_pointwisewise_equal
   { C : Category } 

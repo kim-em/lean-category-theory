@@ -50,61 +50,61 @@ open tqft.categories.equivalence
 end
 
 -- PROJECT show the embedding really was full and faithful
-lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
-begin
-  unfold Embedding,
-  split,
-  begin 
-    -- TODO blast should just do this, if not for the tactic.change problem.
-    unfold Full,
-    unfold Surjective,
-    unfold functor_to_IdempotentCompletion,
-    intros,
-    split,
-    dsimp,
-    unfold functor_to_IdempotentCompletion._aux_2,
-    dsimp,
-    fsplit,
-    unfold IdempotentCompletion,
-    dsimp,
-    intros f,
-    exact f.val,  
-    apply funext,
-    intros,  
-    simp
-  end,
-  begin
-    blast, -- This should finish it off. How do we get subtype.first, above, to do its job?
-    exact congr_arg subtype.val a
-  end
-end
+-- lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
+-- begin
+--   unfold Embedding,
+--   split,
+--   begin 
+--     -- TODO blast should just do this, if not for the tactic.change problem.
+--     unfold Full,
+--     unfold Surjective,
+--     unfold functor_to_IdempotentCompletion,
+--     intros,
+--     split,
+--     dsimp, -- FIXME tactic.change error: https://github.com/leanprover/lean/issues/1503
+--     unfold functor_to_IdempotentCompletion._aux_2,
+--     dsimp,
+--     fsplit,
+--     unfold IdempotentCompletion,
+--     dsimp,
+--     intros f,
+--     exact f.val,  
+--     apply funext,
+--     intros,  
+--     simp
+--   end,
+--   begin
+--     blast, -- This should finish it off. How do we get subtype.first, above, to do its job?
+--     exact congr_arg subtype.val a
+--   end
+-- end
 
 definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
   FunctorComposition (functor_to_IdempotentCompletion C) F
 
 -- PROJECT prove these lemmas about idempotent completion
 
-lemma IdempotentCompletion_idempotent ( C : Category ) :
-  Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
-{
-  functor := {
-    onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, ♮ ⟩,
-    onMorphisms   := λ X Y f, ⟨ f.val.val, begin blast, exact congr_arg subtype.val f.property.left end ⟩,
-    identities    := ♮,
-    functoriality := ♮
-  },
-  inverse := {
-    onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
-    onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩,
-    identities    := ♮,
-    functoriality := ♮
-  },
-  isomorphism_1 := begin
-                     blast,
-                     admit
-                   end,
-  isomorphism_2 := sorry
-}
+-- lemma IdempotentCompletion_idempotent ( C : Category ) :
+--   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
+-- {
+--   functor := {
+--     onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, ♮ ⟩,
+--     onMorphisms   := λ X Y f, ⟨ f.val.val, begin blast, exact congr_arg subtype.val f.property.left end ⟩,
+--     identities    := ♮,
+--     functoriality := ♮
+--   },
+--   inverse := {
+--     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
+--     onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩,
+--     identities    := ♮,
+--     functoriality := ♮
+--   },
+--   isomorphism_1 := begin
+--                      blast,
+--                      admit
+--                    end,
+--   isomorphism_2 := sorry
+-- }
 
 -- definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
 --   Functor (IdempotentCompletion C) (IdempotentCompletion D) := 

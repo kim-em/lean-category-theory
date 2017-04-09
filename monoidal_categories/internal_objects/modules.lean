@@ -18,7 +18,7 @@ attribute [ematch] ModuleObject.associativity
 
 structure ModuleMorphism { C : Category } { m : MonoidalStructure C } { A : MonoidObject m } ( X Y : ModuleObject A ) extends SemigroupModuleMorphism X.to_SemigroupModuleObject Y.to_SemigroupModuleObject
 
-attribute [ematch,simp] ModuleMorphism.compatibility
+attribute [simp,ematch] ModuleMorphism.compatibility
 
 @[pointwise] lemma ModuleMorphism_pointwisewise_equal
   { C : Category }
