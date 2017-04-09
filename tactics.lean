@@ -42,11 +42,20 @@ attribute [simp] id_locked_eq
 attribute [pointwise] funext
 attribute [ematch] subtype.property
 
+meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
+let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
+  new_e ← dunfold_expr_core m e,
+  return (u, new_e, tt)
+in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
+      return new_e
+
+
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (cs : list name) (h : expr) : tactic unit :=
 do num_reverted ← revert h,
    (expr.pi n bi d b : expr) ← target,
-   new_d ← dunfold_core reducible default_max_steps cs d,
+  --  new_d ← dunfold_core reducible default_max_steps cs d,
+   new_d ← dunfold_core' reducible default_max_steps d,
    new_d_simp ← s.dsimplify new_d,
    change $ expr.pi n bi new_d_simp b,
    intron num_reverted
@@ -65,6 +74,8 @@ do l ← local_context,
 open lean.parser
 open interactive
 
+meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
+
 meta def dunfold_all (names : list name) : tactic unit :=
 dunfold names >> dsimp
 
@@ -74,11 +85,13 @@ do cs ← attribute.get_instances `unfoldable,
 
 meta def unfold_unfoldable_goals : tactic unit := 
 do cs ← attribute.get_instances `unfoldable,
-   try (dunfold_all cs)
+  --  try (dunfold_all cs)
+   try (dunfold_everything)
 
 meta def unfold_unfoldable : tactic unit := 
   unfold_unfoldable_hypotheses >> unfold_unfoldable_goals
 
+-- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=
   [ 
     name.append (e.local_pp_name) (mk_simple_name "_1"), 
@@ -111,6 +124,8 @@ meta def split_goals' : expr → tactic unit
 | ```(nonempty _)  := split
 | ```(unit)        := split
 | ```(punit)       := split
+| ```(plift _)     := split
+| ```(ulift _)     := split
 -- | ```(subtype _)  := fsplit
 | _                := failed
 
@@ -134,19 +149,21 @@ notation `♯` := by abstract { blast }
 @[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b).fst = a := ♮
 @[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b).snd = b := ♮
 @[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X.fst, X.snd) = X := begin induction X, blast end
--- @[pointwise] lemma {u v} pair_equality_1 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X.fst ) : (A, X.snd) = X := begin induction X, blast end
--- @[pointwise] lemma {u v} pair_equality_2 {α : Type u} {β : Type v} { X: α × β } { B : β } ( p : B = X.snd ) : (X.fst, B) = X := begin induction X, blast end
 @[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X.fst ) { B : β } ( p : B = X.snd ) : (A, B) = X := begin induction X, blast end
 @[pointwise] lemma {u v} pair_equality_4 {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := begin induction X, blast end
+@[pointwise] lemma {u v} dependent_pair_equality {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := begin induction X, induction Y, blast end
 @[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := begin induction X, induction Y, blast end
+@[pointwise] lemma {u} plift_equality { α : Sort u } ( X Y : plift α ) ( p : X.down = Y.down ) : X = Y := begin induction X, induction Y, blast end
+@[pointwise] lemma {u v} ulift_equality { α : Type v } ( X Y : ulift.{u v} α ) ( p : X.down = Y.down ) : X = Y := begin induction X, induction Y, blast end
 attribute [pointwise] subtype.eq
 
 @[reducible] def {u} auto_cast {α β : Sort u} {h : α = β} (a : α) := cast h a
 @[simp] lemma {u} auto_cast_identity {α : Sort u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮
 notation `⟦` p `⟧` := @auto_cast _ _ (by smt_ematch) p
 
-
-
+definition {u v} transport {A : Type u} { P : A → Type v} {x y : A} (p : x = y)
+(u : P x) : P y :=
+by induction p; exact u
 
 -- TODO this is destined for the standard library?
 meta def mk_inhabitant_using (A : expr) (t : tactic unit) : tactic expr :=

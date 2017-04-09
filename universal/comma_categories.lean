@@ -16,7 +16,7 @@ open tqft.categories.initial
 namespace tqft.categories.comma
 
 -- The diagonal functor sends X to the constant functor that sends everything to X.
-definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) :=
+@[unfoldable] definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) :=
 {
   onObjects     := λ X : C.Obj, {
     onObjects     := λ _, X,
@@ -41,7 +41,7 @@ local attribute [ematch] subtype.property
 -- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
 local attribute [elab_simple]  sigma.snd
 
-definition CommaCategory
+@[unfoldable] definition CommaCategory
   { A B C : Category }
   ( S : Functor A C ) ( T : Functor B C ) : Category :=
 {
@@ -54,7 +54,7 @@ definition CommaCategory
   associativity  := ♮
 }
 
-definition ObjectAsFunctor { C : Category } ( X : C.Obj ) : Functor (DiscreteCategory unit) C :=
+@[unfoldable] definition ObjectAsFunctor { C : Category } ( X : C.Obj ) : Functor (DiscreteCategory unit) C :=
 {
   onObjects     := λ _, X,
   onMorphisms   := λ _ _ _, C.identity X,
@@ -62,14 +62,18 @@ definition ObjectAsFunctor { C : Category } ( X : C.Obj ) : Functor (DiscreteCat
   functoriality := ♮
 }
 
-definition SliceCategory   { C : Category } ( X : C.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)
-definition CosliceCategory { C : Category } ( X : C.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
+@[unfoldable] definition SliceCategory   { C : Category } ( X : C.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)
+@[unfoldable] definition CosliceCategory { C : Category } ( X : C.Obj ) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
-definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
-definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
+-- In Cones, we have
+--   A = C
+--   B = .
+--   C = FunctorCategory J C
+@[unfoldable] definition Cones   { J C : Category } ( F : Functor J C ) := CommaCategory (DiagonalFunctor J C)                      (ObjectAsFunctor F)
+@[unfoldable] definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@ObjectAsFunctor (FunctorCategory J C) F) (DiagonalFunctor J C)
 
-definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
-definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
+@[unfoldable] definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
+@[unfoldable] definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
 
 inductive Two : Type
 | _0 : Two

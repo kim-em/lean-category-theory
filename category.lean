@@ -12,9 +12,7 @@ import .tactics
 
 namespace tqft.categories
 
-universe variables u v
-
-structure Category :=
+structure {u v} Category :=
   (Obj : Type u)
   (Hom : Obj → Obj → Type v)
   (identity : Π X : Obj, Hom X X)
@@ -36,5 +34,25 @@ attribute [ematch] Category.associativity
 @[ematch] lemma Category.identity_idempotent
   ( C : Category )
   ( X : C.Obj ) : C.identity X = C.compose (C.identity X) (C.identity X) := ♮
+
+open Category
+
+-- TODO, eventually unify this code with the corresponding code for Graph, perhaps just by making Categories Graphs.
+inductive {u v} morphism_path { C : Category.{u v} } : Obj C → Obj C → Type (max u v)
+| nil  : Π ( h : C.Obj ), morphism_path h h
+| cons : Π { h s t : C.Obj } ( e : C.Hom h s ) ( l : morphism_path s t ), morphism_path h t
+
+notation a :: b := morphism_path.cons a b
+notation `c[` l:(foldr `, ` (h t, morphism_path.cons h t) morphism_path.nil _ `]`) := l
+
+@[unfoldable] definition {u v} concatenate_paths
+ { C : Category.{u v} } :
+ Π { x y z : C.Obj }, morphism_path x y → morphism_path y z → morphism_path x z
+| ._ ._ _ (morphism_path.nil _)               q := q
+| ._ ._ _ (@morphism_path.cons ._ _ _ _ e p') q := morphism_path.cons e (concatenate_paths p' q)
+
+definition {u v} Category.compose_path ( C : Category.{u v} ) : Π { X Y : C.Obj }, morphism_path X Y → C.Hom X Y
+| X ._  (morphism_path.nil ._)                := C.identity X
+| _ _   (@morphism_path.cons ._ ._ _ ._ e p)  := C.compose e (Category.compose_path p)
 
 end tqft.categories

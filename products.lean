@@ -28,6 +28,7 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
+-- TODO change the order of arguments here?
 @[unfoldable] definition RightInjectionAt { D : Category } ( Z : D.Obj ) ( C : Category ) : Functor C (C × D) :=
 { onObjects     := λ X, (X, Z),
   onMorphisms   := λ X Y f, (f, D.identity Z),
@@ -95,6 +96,20 @@ end ProductNaturalTransformation
 lemma switch_twice_is_the_identity
   ( C D : Category ) :
   FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (ProductCategory C D) := ♯
+
+@[unfoldable] definition SwitchSymmetry ( C D : Category ) : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) :=
+{
+  morphism := {
+    components := begin blast, exact (C.identity X.fst, D.identity X.snd) end,
+    naturality := ♯
+  },
+  inverse := {
+    components := begin blast, exact (C.identity X.fst, D.identity X.snd) end,
+    naturality := ♯
+  },
+  witness_1 := ♯,
+  witness_2 := ♯
+}
 
 @[unfoldable] definition ProductCategoryAssociator
   ( C D E: Category )

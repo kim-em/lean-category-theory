@@ -104,6 +104,12 @@ instance MonoidalStructure_coercion_to_TensorProduct { C : Category } : has_coe 
      simp
     end
 
+@[simp,ematch] lemma MonoidalStructure.tensor_identities
+  { C : Category }
+  ( m : MonoidalStructure C )
+  ( X Y : C.Obj ) :
+   @Functor.onMorphisms _ _ (m.tensor) (X, Y) (X, Y) (C.identity X, C.identity Y) = C.identity (m.tensor.onObjects (X, Y)) := ♮
+
 -- lemma MonoidalStructure.associator_naturality_0
 --   { C : Category }
 --   ( m : MonoidalStructure C )

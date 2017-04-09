@@ -74,8 +74,6 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
     blast
   end
 
-local attribute [pointwise] funext
-
 @[unfoldable] definition { u v } HomPairing ( C : Category.{u v} ) : Functor ((Opposite C) × C) CategoryOfTypes.{v} :=
 {
   onObjects     := λ p, C.Hom p.1 p.2,

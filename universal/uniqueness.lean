@@ -10,12 +10,12 @@ open tqft.categories.universal
 
 namespace tqft.categories.universal
 
-lemma Equalizers_are_unique
-  { C : Category }  
-  { X Y : C.Obj } 
-  ( f g : C.Hom X Y )
-   : unique_up_to_isomorphism (Equalizer f g) Equalizer.equalizer
-   := sorry -- PROJECT prove this via the comma category formulation, using lemmas in comparisons.lean
+-- lemma Equalizers_are_unique
+--   { C : Category }  
+--   { X Y : C.Obj } 
+--   ( f g : C.Hom X Y )
+--    : unique_up_to_isomorphism (Equalizer f g) Equalizer.equalizer
+--    := sorry -- PROJECT prove this via the comma category formulation, using lemmas in comparisons.lean
 
 end tqft.categories.universal
 

@@ -14,8 +14,6 @@ open tqft.categories.braided_monoidal_category
 
 -- PROJECT really this should be a special case of the (uniquely braided, symmetric) monoidal structure coming from a product.
 
-local attribute [pointwise] funext
-
 @[unfoldable] definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 {
   onObjects     := λ p, p.1 × p.2,

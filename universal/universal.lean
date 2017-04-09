@@ -16,16 +16,16 @@ namespace tqft.categories.universal
 
 structure Cone { J C : Category } ( F : Functor J C ) :=
   ( limit : C.Obj )
-  ( maps  : Π X : J.Obj, C.Hom limit (F X) )
-  ( commutativity : Π X Y : J.Obj, Π f : J.Hom X Y, C.compose (maps X) (F.onMorphisms f) = maps Y )
+  ( maps  : Π j : J.Obj, C.Hom limit (F j) )
+  ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (maps j) (F.onMorphisms f) = maps k )
 
-local attribute [simp,ematch] Cone.commutativity
+attribute [simp,ematch] Cone.commutativity
 
 structure ConeMorphism { J C : Category } { F : Functor J C } ( X Y : Cone F ) :=
   ( morphism : C.Hom X.limit Y.limit )
-  ( commutativity : Π P : J.Obj, C.compose morphism (Y.maps P) = (X.maps P) )
+  ( commutativity : Π j : J.Obj, C.compose morphism (Y.maps j) = (X.maps j) )
 
-local attribute [simp,ematch] ConeMorphism.commutativity
+attribute [simp,ematch] ConeMorphism.commutativity
 
 @[pointwise] lemma ConeMorphism_componentwise_equal
   { J C : Category } { F : Functor J C } { X Y : Cone F }
@@ -50,14 +50,14 @@ definition Cones { J C : Category } ( F : Functor J C ) : Category :=
 
 structure Cocone { J C : Category } ( F : Functor J C ) :=
   ( colimit : C.Obj )
-  ( maps  : Π X : J.Obj, C.Hom (F X) colimit )
-  ( commutativity : Π X Y : J.Obj, Π f : J.Hom X Y, C.compose (F.onMorphisms f) (maps Y) = maps X )
+  ( maps  : Π j : J.Obj, C.Hom (F j) colimit )
+  ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (F.onMorphisms f) (maps k) = maps j )
 
 local attribute [simp,ematch] Cocone.commutativity
 
 structure CoconeMorphism { J C : Category } { F : Functor J C } ( X Y : Cocone F ) :=
   ( morphism : C.Hom X.colimit Y.colimit )
-  ( commutativity : Π P : J.Obj, C.compose (X.maps P) morphism = (Y.maps P) )
+  ( commutativity : Π j : J.Obj, C.compose (X.maps j) morphism = (Y.maps j) )
 
 local attribute [simp,ematch] CoconeMorphism.commutativity
 

@@ -13,8 +13,6 @@ open tqft.categories.isomorphism
 open tqft.categories.monoidal_category
 open tqft.categories.braided_monoidal_category
 
--- local attribute [pointwise] funext
-
 -- @[unfoldable] definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 -- {
 --   onObjects     := λ p, p.1 × p.2,

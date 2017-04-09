@@ -29,7 +29,12 @@ definition {u} CAT : TwoCategory.{u} :=
     Obj            := Category.{u u},
     Hom            := λ C D, FunctorCategory C D,
     compose        := λ _ _ _, horizontal_composition_on_FunctorCategories,
-    identity       := λ C, { onObjects := λ _, IdentityFunctor C, onMorphisms := λ _ _ _, IdentityNaturalTransformation (IdentityFunctor C), identities := ♮, functoriality := ♯ },
+    identity       := λ C, {
+                        onObjects := λ _, IdentityFunctor C,
+                        onMorphisms := λ _ _ _, IdentityNaturalTransformation (IdentityFunctor C),
+                        identities := ♮,
+                        functoriality := ♯
+                      },
     left_identity  := begin
                         intros,
                         dunfold CategoryOfCategoriesAndFunctors,
@@ -65,7 +70,7 @@ definition {u} CAT : TwoCategory.{u} :=
                           dsimp at f,
                           apply NaturalTransformations_componentwise_equal,
                           intros,
-                          -- unfold_unfoldable, -- FIXME ugh, and we hit the same problem with `eq.rec (eq.refl A) B`
+                          unfold_unfoldable, -- FIXME ugh, and we hit the same problem with `eq.rec (eq.refl A) B`
                         end
                       end,
     right_identity := sorry,

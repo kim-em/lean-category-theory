@@ -52,6 +52,8 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     naturality := ♮
   }
 
+notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
+
 open tqft.categories.functor
 
 @[unfoldable] definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
@@ -64,6 +66,9 @@ open tqft.categories.functor
     components := λ X : C.Obj, E.compose (β (F X)) (I.onMorphisms (α X)),
     naturality := ♯
   }
+
+-- FIXME Visual Studio Code can't seem to display the subscript h?
+notation α `∘ᵤ` β := horizontal_composition_of_NaturalTransformations α β
 
 @[unfoldable] definition {u1 v1 u2 v2 u3 v3} whisker_on_left
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
@@ -152,23 +157,34 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
      simp
    end
 
--- definition NaturalIsomorphism.from_components
---   { C D : Category }
---   { F G : Functor C D }
---   ( components : ∀ X : C.Obj, Isomorphism D (F X) (G X) )
---   ( naturality : ∀ { X Y : C.Obj } ( f : C.Hom X Y ), D.compose (F.onMorphisms f) (components Y).morphism = D.compose (components X).morphism (G.onMorphisms f) ) : NaturalIsomorphism F G :=
---   {
---     morphism  := {
---       components := λ X, (components X).morphism,
---       naturality := λ _ _ f, naturality f
---     },
---     inverse   := {
---       components := λ X, (components X).inverse,
---       naturality := sorry
---     },
---     witness_1 := ♯,
---     witness_2 := ♯
-  -- }
+definition NaturalIsomorphism.from_components
+  { C D : Category }
+  { F G : Functor C D }
+  ( components : ∀ X : C.Obj, Isomorphism D (F X) (G X) )
+  ( naturality : ∀ { X Y : C.Obj } ( f : C.Hom X Y ), D.compose (F.onMorphisms f) (components Y).morphism = D.compose (components X).morphism (G.onMorphisms f) ) : NaturalIsomorphism F G :=
+  {
+    morphism  := {
+      components := λ X, (components X).morphism,
+      naturality := λ _ _ f, naturality f
+    },
+    inverse   := {
+      components := λ X, (components X).inverse,
+      naturality := λ X Y f, begin
+                               pose p := congr_arg (λ f : D.Hom (F X) (G Y), D.compose (components X).inverse (D.compose f (components Y).inverse)) (eq.symm (naturality f)),
+                               simp at p,
+                               rewrite D.associativity at p,
+                               rewrite D.associativity at p,
+                               rewrite Isomorphism.witness_1 at p,
+                               rewrite - D.associativity at p,
+                               rewrite D.right_identity at p,
+                               rewrite Isomorphism.witness_2 at p,
+                               rewrite D.left_identity at p,
+                               exact p
+                             end
+    },
+    witness_1 := ♯,
+    witness_2 := ♯
+  }
 
 definition {u1 v1 u2 v2} vertical_composition_of_NaturalIsomorphisms 
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
@@ -228,5 +244,58 @@ lemma NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( �
     witness_1 := ♮,
     witness_2 := ♮
   }
+
+@[unfoldable] definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
+  { B : Category.{u1 v1} } { C : Category.{u2 v2} } { D : Category.{u3 v3} } { E : Category.{u4 v4} }
+  ( F : Functor B C )
+  ( G : Functor C D )
+  ( H : Functor D E )
+: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := 
+{
+  morphism := {
+    components := begin blast, exact E.identity _ end,
+    naturality := ♯
+  },
+  inverse := {
+    components := begin blast, exact E.identity _ end,
+    naturality := ♯
+  },
+  witness_1 := ♯,
+  witness_2 := ♯
+}
+
+@[unfoldable] definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_left_unitor
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} }
+  ( F : Functor C D )
+: NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := 
+{
+  morphism := {
+    components := begin blast, exact D.identity _ end,
+    naturality := ♯
+  },
+  inverse := {
+    components := begin blast, exact D.identity _ end,
+    naturality := ♯
+  },
+  witness_1 := ♯,
+  witness_2 := ♯
+}
+
+@[unfoldable] definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_right_unitor
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} }
+  ( F : Functor C D )
+: NaturalIsomorphism (FunctorComposition F (IdentityFunctor D) ) F := 
+{
+  morphism := {
+    components := begin blast, exact D.identity _ end,
+    naturality := ♯
+  },
+  inverse := {
+    components := begin blast, exact D.identity _ end,
+    naturality := ♯
+  },
+  witness_1 := ♯,
+  witness_2 := ♯
+}
 
 end tqft.categories.natural_transformation
