@@ -50,12 +50,6 @@ lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } 
     unfold SwitchProductCategory,
     dsimp,
     simp,
-    unfold eq.mpr,
-    unfold eq.mpr._proof_1,
-    unfold FunctorComposition_associator._proof_2,
-    unfold SwitchSymmetry._proof_1,
-    unfold FunctorComposition_left_unitor._proof_1,
-    simp
   end
 
 lemma {u v} symmetric_in_terms_of_components { C : Category.{u v} } { m : MonoidalStructure C } ( β : Braiding m ) ( e : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor ) : Symmetry m := {
