@@ -134,7 +134,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
   ( α : NaturalIsomorphism F G )
   { X Y : C.Obj }
   ( f : C.Hom X Y )
-   : D^.compose (D^.compose (α.inverse.components X) (F.onMorphisms f)) (α.morphism.components Y) = G.onMorphisms f := 
+   : D.compose (D.compose (α.inverse.components X) (F.onMorphisms f)) (α.morphism.components Y) = G.onMorphisms f := 
    begin
     --  blast, -- FIXME ahh, I see; unfold_unfoldable is acting in the implicit arguments, making a mess.
      dsimp,
@@ -149,7 +149,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
   ( α : NaturalIsomorphism F G )
   { X Y : C.Obj }
   ( f : C.Hom X Y )
-   : D^.compose (D^.compose (α.morphism.components X) (G.onMorphisms f)) (α.inverse.components Y) = F.onMorphisms f :=    begin
+   : D.compose (D.compose (α.morphism.components X) (G.onMorphisms f)) (α.inverse.components Y) = F.onMorphisms f :=    begin
     --  blast, -- FIXME ahh, I see; unfold_unfoldable is acting in the implicit arguments, making a mess.
      dsimp,
      rewrite - α.morphism.naturality,

@@ -31,8 +31,8 @@ definition MonoidalStructure_from_Products { C : Category } [ has_FiniteProducts
     tensor := {
         onObjects     := λ p, (product p.1 p.2).product,
         onMorphisms   := λ X Y f, ((product Y.1 Y.2).map
-                                    (C^.compose (product X.1 X.2).left_projection (f.1))
-                                    (C^.compose (product X.1 X.2).right_projection (f.2))
+                                    (C.compose (product X.1 X.2).left_projection (f.1))
+                                    (C.compose (product X.1 X.2).right_projection (f.2))
                                   ),
         identities    := ♯,
         functoriality := sorry
