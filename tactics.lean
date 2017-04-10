@@ -139,6 +139,9 @@ attribute [pointwise] unit.star
 attribute [pointwise] punit.star
 attribute [pointwise] plift.up
 attribute [pointwise] ulift.up
+attribute [pointwise] prod.mk
+attribute [pointwise] pprod.mk
+attribute [pointwise] subtype.mk
 
 -- open tactic.interactive
 meta def blast  : tactic unit := intros/-_and_inductions-/ >> pointwise blast >> try unfold_unfoldable >> try smt_eblast >> pointwise blast -- >> split_goals_and_then blast

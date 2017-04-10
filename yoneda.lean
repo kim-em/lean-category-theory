@@ -35,6 +35,18 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
 begin
+--   This almost works very quickly with blast, but somehow the deferred goal has trouble.
+--   blast,
+--   rewrite id_locked_eq, -- FIXME why doesn't blast do this?
+--   all_goals { try {
+--       pose p := congr_arg (λ T, NaturalTransformation.components T) a,
+--       simp at p,
+--       pose p' := congr_fun p X,
+--       simp at p',
+--       pose p'' := congr_fun p' (C.identity X),
+--       simp at p'',
+--       exact p''
+--   } },
   unfold Embedding,
   unfold Yoneda,
   split,
@@ -43,12 +55,10 @@ begin
     unfold Full,
     intros,
     unfold Surjective,
-    refine ⟨ _, _ ⟩,  -- we ned to build a preimage, which is expressed as a subtype.
+    fapply subtype.mk, -- we ned to build a preimage, which is expressed as a subtype.
     -- Now we have to construct the preimage
     begin
         intros,
-        unfold FunctorCategory at a,
-        simp at a,
         exact (a.components X) (C.identity X), -- <-- this is a critical step for surjectivity
     end,
     -- then verify that it really is a preimage
@@ -61,7 +71,7 @@ begin
     unfold Faithful,
     intros,
     unfold Injective,
-    split,
+    apply plift.up,
     intros X Y f g,
     simp,
     intros a,
