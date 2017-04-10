@@ -3,8 +3,6 @@
 -- Authors: Stephen Morgan, Scott Morrison
 import .products
 
--- set_option pp.universes true
-
 open tqft.categories
 open tqft.categories.functor
 open tqft.categories.natural_transformation
@@ -19,22 +17,6 @@ definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) 
   functoriality := ♮
 }
 
--- lemma switch_twice_is_the_identity
---   ( C D : Category ) :
---   FunctorComposition ( SwitchProductCategory C D ) ( SwitchProductCategory D C ) = IdentityFunctor (ProductCategory C D) := ♯
-
-definition SwitchSymmetry ( C D : Category ) : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) :=
-{
-  morphism := {
-    components := begin blast, exact (C.identity X.fst, D.identity X.snd) end,
-    naturality := ♯
-  },
-  inverse := {
-    components := begin blast, exact (C.identity X.fst, D.identity X.snd) end,
-    naturality := ♯
-  },
-  witness_1 := ♯,
-  witness_2 := ♯
-}
+definition SwitchSymmetry ( C D : Category ) : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) := ♯
 
 end tqft.categories.products

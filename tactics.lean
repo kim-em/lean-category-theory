@@ -40,6 +40,17 @@ attribute [simp] id_locked_eq
 attribute [pointwise] funext
 attribute [ematch] subtype.property
 
+open tactic
+open lean.parser
+open interactive
+namespace tactic.interactive
+  meta def force (t : itactic) : tactic unit :=
+  do gs ← get_goals,
+     t,
+     gs' ← get_goals,
+     guard (gs ≠ gs') <|> fail "force tactic failed"
+end tactic.interactive
+
 meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
 let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
   new_e ← dunfold_expr_core m e,
@@ -80,10 +91,12 @@ open lean.parser
 open interactive
 
 meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
-meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try ( seq simp dunfold_everything' )
+meta def dunfold_everything' : nat → tactic unit
+| 0            := trace "dunfold_everything seems to be stuck in a loop" >> failed
+| (nat.succ n) := dunfold_everything >> try dsimp >> try ( seq simp (dunfold_everything' n) )
 
 meta def unfold_unfoldable : tactic unit := 
-  dunfold_and_simp_all_hypotheses >> dunfold_everything'
+  dunfold_and_simp_all_hypotheses >> (dunfold_everything' 5)
 
 -- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=

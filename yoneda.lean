@@ -35,7 +35,7 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
 begin
---   This almost works very quickly with blast, but somehow the deferred goal has trouble.
+--   This almost works very quickly with blast, but too much gets deferred.
 --   blast,
 --   rewrite id_locked_eq, -- FIXME why doesn't blast do this?
 --   all_goals { try {

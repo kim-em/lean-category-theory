@@ -111,8 +111,8 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
                      unfold concatenate_paths,
                      unfold path_to_morphism,
                      rewrite p,
-                    --  dsimp,                       -- FIXME, this and the next line are required because of https://github.com/leanprover/lean/issues/1509
-                    --  unfold Graph.from_Category,
+                     dsimp,                       -- FIXME, this and the next line are required because of https://github.com/leanprover/lean/issues/1509
+                     unfold Graph.from_Category,
                      rewrite - C.associativity,
                    end
 }

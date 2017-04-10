@@ -20,6 +20,7 @@ open tqft.categories.universal
 
 namespace tqft.categories.universal
 
+-- This works fine; commented out for speed.
 -- definition Cones_agree { J C : Category } ( F: Functor J C ) : Isomorphism CategoryOfTypes (comma.Cones F).Obj (Cone F) := {
 --   morphism := λ C, {
 --     limit         := C.1,

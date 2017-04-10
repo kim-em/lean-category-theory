@@ -82,9 +82,13 @@ definition Cocones { J C : Category } ( F : Functor J C ) : Category :=
   associativity  := ♯
 }
 
+-- TODO remove use of Singleton, in favour of the style Product
+
 structure {u} Singleton ( α : Type u ) :=
   ( element : α )
   ( uniqueness : ∀ X Y : α, (X = Y) )
+
+attribute [ematch] Singleton.uniqueness
 
 structure Equalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( equalizer : C.Obj )
@@ -96,17 +100,18 @@ structure Product { C : Category } ( X Y : C.Obj ) :=
   ( product          : C.Obj )
   ( left_projection  : C.Hom product X )
   ( right_projection : C.Hom product Y )
-  ( map : ∀ { Z : C.Obj } ( f : C.Hom Z X ) ( g : C.Hom Z Y ), Singleton { i : C.Hom Z product // f = C.compose i left_projection ∧ g = C.compose i right_projection } )
+  ( map : ∀ { Z : C.Obj } ( f : C.Hom Z X ) ( g : C.Hom Z Y ), C.Hom Z product )
+  ( left_factorisation  : ∀ { Z : C.Obj } ( f : C.Hom Z X ) ( g : C.Hom Z Y ), C.compose (map f g) left_projection  = f ) 
+  ( right_factorisation : ∀ { Z : C.Obj } ( f : C.Hom Z X ) ( g : C.Hom Z Y ), C.compose (map f g) right_projection = g ) 
+  ( uniqueness : ∀ { Z : C.Obj } ( f g : C.Hom Z product )
+                   ( left_witness  : C.compose f left_projection  = C.compose g left_projection  )
+                   ( right_witness : C.compose f right_projection = C.compose g right_projection ), f = g )
+
+attribute [simp,ematch] Product.left_factorisation Product.right_factorisation 
+attribute [pointwise] Product.left_projection Product.right_projection Product.map
+attribute [pointwise] Product.uniqueness
 
 -- definition {u} subtype.val_eq { α : Type u } { P : α → Prop } { X Y : { a : α // P a } } ( h : X = Y ) : X.val = Y.val := ♮
-
--- definition Product.uniqueness
---   { C : Category } { X Y Z : C.Obj } { p : Product X Y }
---   { f : C.Hom Z X } { g : C.Hom Z Y }
---   { i1 i2 : C.Hom Z p.product }
---   ( w1 : f = C.compose i1 p.left_projection ∧ g = C.compose i1 p.right_projection )
---   ( w2 : f = C.compose i2 p.left_projection ∧ g = C.compose i2 p.right_projection ) : i1 = i2 :=
---   subtype.val_eq ((p.map f g).uniqueness ⟨ i1, ♮ ⟩ ⟨ i2, ♮ ⟩)
 
 structure Coequalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( coequalizer : C.Obj )

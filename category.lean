@@ -26,6 +26,7 @@ structure {u v} Category :=
 attribute [simp] Category.left_identity
 attribute [simp] Category.right_identity
 attribute [ematch] Category.associativity
+attribute [pointwise] Category.identity
 
 -- instance Category_to_Hom : has_coe_to_fun Category :=
 -- { F   := λ C, C.Obj → C.Obj → Type v,

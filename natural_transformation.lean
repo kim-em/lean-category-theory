@@ -17,6 +17,7 @@ structure {u1 v1 u2 v2} NaturalTransformation { C : Category.{u1 v1} } { D : Cat
      D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f))
 
 attribute [ematch] NaturalTransformation.naturality
+attribute [pointwise] NaturalTransformation.mk
 
 -- This defines a coercion so we can write `α X` for `components α X`.
 instance NaturalTransformation_to_components { C D : Category } { F G : Functor C D } : has_coe_to_fun (NaturalTransformation F G) :=
@@ -250,52 +251,16 @@ definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
   ( F : Functor B C )
   ( G : Functor C D )
   ( H : Functor D E )
-: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := 
-{
-  morphism := {
-    components := begin blast, exact E.identity _ end,
-    naturality := ♯
-  },
-  inverse := {
-    components := begin blast, exact E.identity _ end,
-    naturality := ♯
-  },
-  witness_1 := ♯,
-  witness_2 := ♯
-}
+: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := ♯
 
 definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_left_unitor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( F : Functor C D )
-: NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := 
-{
-  morphism := {
-    components := begin blast, exact D.identity _ end,
-    naturality := ♯
-  },
-  inverse := {
-    components := begin blast, exact D.identity _ end,
-    naturality := ♯
-  },
-  witness_1 := ♯,
-  witness_2 := ♯
-}
+: NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := ♯
 
 definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_right_unitor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( F : Functor C D )
-: NaturalIsomorphism (FunctorComposition F (IdentityFunctor D) ) F := 
-{
-  morphism := {
-    components := begin blast, exact D.identity _ end,
-    naturality := ♯
-  },
-  inverse := {
-    components := begin blast, exact D.identity _ end,
-    naturality := ♯
-  },
-  witness_1 := ♯,
-  witness_2 := ♯
-}
+: NaturalIsomorphism (FunctorComposition F (IdentityFunctor D) ) F := ♯
 
 end tqft.categories.natural_transformation
