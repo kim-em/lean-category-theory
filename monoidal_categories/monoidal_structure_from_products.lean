@@ -63,9 +63,6 @@ definition MonoidalStructure_from_Products { C : Category } [ has_FiniteProducts
                                    simp at f3,
                                    simp,
                                    force { pointwise tactic.skip },
-                                      begin[smt]
-                                        eblast
-                                      end,
                                       dsimp,
                                       rewrite C.associativity,
                                       rewrite C.associativity,
@@ -80,7 +77,10 @@ definition MonoidalStructure_from_Products { C : Category } [ has_FiniteProducts
                                       dsimp,
                                       rewrite C.associativity,
                                       rewrite C.associativity,
-                                      
+                                      rewrite C.associativity,                                      
+                                      rewrite - C.associativity,  
+                                      -- FIXME ugh, associativity has got me, and
+                                      -- ematch isn't working here: https://github.com/leanprover/lean/issues/1512                                    
                                       simp,
                                       rewrite - C.associativity,
                                       rewrite - C.associativity,

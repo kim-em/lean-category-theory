@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 import .monoidal_category
-import ..products_switch
+import ..products.switch
 
 namespace tqft.categories.braided_monoidal_category
 

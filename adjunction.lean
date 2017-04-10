@@ -4,7 +4,7 @@
 
 import .natural_transformation
 import .opposites
-import .products
+import .products.products
 import .isomorphism
 import .examples.types.types
 

@@ -46,16 +46,24 @@ lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } 
     unfold SwitchSymmetry,
     unfold FunctorComposition_associator,
     unfold FunctorComposition_left_unitor,
+    unfold FunctorComposition_associator._aux_1,
+    unfold SwitchSymmetry._aux_1,
+    unfold FunctorComposition_left_unitor._aux_1,
     dsimp,
     unfold SwitchProductCategory,
+    unfold FunctorComposition,
     dsimp,
     simp,
+    unfold IdentityFunctor,
+    dsimp,
+    simp
   end
 
 lemma {u v} symmetric_in_terms_of_components { C : Category.{u v} } { m : MonoidalStructure C } ( β : Braiding m ) ( e : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor ) : Symmetry m := {
   β with 
     symmetry := λ X Y : C.Obj, begin
                                  refine ( cast _ (congr_fun (congr_arg NaturalTransformation.components e) (X, Y)) ),
+                                 -- FIXME lame!
                                  unfold squared_Braiding,
                                  unfold IdentityNaturalTransformation,
                                  unfold vertical_composition_of_NaturalTransformations,
@@ -69,8 +77,15 @@ lemma {u v} symmetric_in_terms_of_components { C : Category.{u v} } { m : Monoid
                                  unfold SwitchSymmetry,
                                  unfold FunctorComposition_associator,
                                  unfold FunctorComposition_left_unitor,
+                                 unfold FunctorComposition_associator._aux_1,
+                                 unfold SwitchSymmetry._aux_1,
+                                 unfold FunctorComposition_left_unitor._aux_1,
                                  dsimp,
                                  unfold SwitchProductCategory,
+                                 unfold FunctorComposition,
+                                 dsimp,
+                                 simp,
+                                 unfold IdentityFunctor,
                                  dsimp,
                                  simp
                                end

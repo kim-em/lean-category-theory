@@ -3,8 +3,6 @@
 -- Authors: Stephen Morgan, Scott Morrison
 import .products
 
--- set_option pp.universes true
-
 open tqft.categories
 open tqft.categories.functor
 open tqft.categories.natural_transformation
