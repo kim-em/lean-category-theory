@@ -44,17 +44,17 @@ meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic 
 let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
   new_e ← dunfold_expr_core m e,
   return (u, new_e, tt)
-in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
+in do (c, new_e) ← dsimplify_core () max_steps ff (λ c e, failed) unfold e,
       return new_e
 
-meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
-do s ← simp_lemmas.mk_default,
-let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
-  new_e ← dunfold_expr_core m e,
-  new_e_simp ← s.dsimplify new_e,
-  return (u, new_e_simp, tt)
-in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
-      return new_e
+-- meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
+-- do s ← simp_lemmas.mk_default,
+-- let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
+--   new_e ← dunfold_expr_core m e,
+--   new_e_simp ← s.dsimplify new_e,
+--   return (u, new_e_simp, ff)
+-- in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
+--       return new_e
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
@@ -79,10 +79,11 @@ do l ← local_context,
 open lean.parser
 open interactive
 
-meta def dunfold_everything : tactic unit := target >>= dunfold_and_simp reducible default_max_steps >>= change
+meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
+meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try ( seq simp dunfold_everything' )
 
 meta def unfold_unfoldable : tactic unit := 
-  dunfold_and_simp_all_hypotheses >> dunfold_everything
+  dunfold_and_simp_all_hypotheses >> dunfold_everything'
 
 -- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=
@@ -112,19 +113,19 @@ meta def fsplit : tactic unit :=
 do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, target is not an inductive datatype with only one constructor",
    mk_const c >>= fapply
 
-meta def split_goals' : expr → tactic unit
-| ```(and _ _)     := split
-| ```(nonempty _)  := split
-| ```(unit)        := split
-| ```(punit)       := split
-| ```(plift _)     := split
-| ```(ulift _)     := split
--- | ```(subtype _)  := fsplit
-| _                := failed
+-- meta def split_goals' : expr → tactic unit
+-- | ```(and _ _)     := split
+-- | ```(nonempty _)  := split
+-- | ```(unit)        := split
+-- | ```(punit)       := split
+-- | ```(plift _)     := split
+-- | ```(ulift _)     := split
+-- -- | ```(subtype _)  := fsplit
+-- | _                := failed
 
-meta def split_goals : tactic unit := target >>= split_goals'
+-- meta def split_goals : tactic unit := target >>= split_goals'
 
-meta def split_goals_and_then ( and_then : tactic unit ) := try ( seq split_goals and_then )
+-- meta def split_goals_and_then ( and_then : tactic unit ) := try ( seq split_goals and_then )
 
 meta def trace_goal_type : tactic unit :=
 do g ← target,
@@ -132,8 +133,15 @@ do g ← target,
    infer_type g >>= trace,
    skip
 
+attribute [pointwise] and.intro
+attribute [pointwise] nonempty.intro
+attribute [pointwise] unit.star
+attribute [pointwise] punit.star
+attribute [pointwise] plift.up
+attribute [pointwise] ulift.up
+
 -- open tactic.interactive
-meta def blast  : tactic unit := intros/-_and_inductions-/ >> pointwise blast >> try unfold_unfoldable >> try simp >> try smt_eblast >> pointwise blast >> split_goals_and_then blast
+meta def blast  : tactic unit := intros/-_and_inductions-/ >> pointwise blast >> try unfold_unfoldable >> try smt_eblast >> pointwise blast -- >> split_goals_and_then blast
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }

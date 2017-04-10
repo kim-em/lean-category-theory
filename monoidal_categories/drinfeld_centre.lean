@@ -14,16 +14,16 @@ open tqft.categories.monoidal_category
 
 namespace tqft.categories.drinfeld_centre
 
-universe variables u v
-
-structure HalfBraiding { C : Category } ( m : MonoidalStructure C ) :=
+structure {u v} HalfBraiding { C : Category.{u v} } ( m : MonoidalStructure C ) :=
     (object   : C.Obj)
     (commutor : NaturalIsomorphism (m.tensor_on_left object) (m.tensor_on_right object))
 
-instance HalfBraiding_coercion_to_object { C : Category } ( m : MonoidalStructure C ) : has_coe (HalfBraiding m) (C.Obj) :=
+definition {u v} HalfBraiding_coercion_to_object { C : Category.{u v} } ( m : MonoidalStructure C ) : has_coe (HalfBraiding m) (C.Obj) :=
   { coe := HalfBraiding.object }
 
-structure HalfBraidingMorphism  { C : Category } { m : MonoidalStructure C } ( X Y : HalfBraiding m ) :=
+attribute [instance] HalfBraiding_coercion_to_object
+
+structure {u v} HalfBraidingMorphism  { C : Category.{u v} } { m : MonoidalStructure C } ( X Y : HalfBraiding m ) :=
   (morphism : C.Hom X Y)
   -- FIXME I've had to write out the statement gorily, so that it can match.
   -- (witness : ∀ Z : C.Obj, C.compose (X.commutor Z) (m.tensorMorphisms (C.identity Z) morphism) = C.compose (m.tensorMorphisms morphism (C.identity Z)) (Y.commutor Z))
@@ -46,8 +46,9 @@ attribute [ematch] HalfBraidingMorphism.witness
 local attribute [ematch] MonoidalStructure.interchange_right_identity  MonoidalStructure.interchange_left_identity
 
 set_option pp.implicit true
+set_option pp.all true
 
-definition DrinfeldCentre { C : Category } ( m : MonoidalStructure C )  : Category := {
+definition {u v} DrinfeldCentre { C : Category.{u v} } ( m : MonoidalStructure C )  : Category := {
   Obj := HalfBraiding m,
   Hom := λ X Y, HalfBraidingMorphism X Y,
   identity := λ X, {
@@ -75,7 +76,11 @@ definition DrinfeldCentre { C : Category } ( m : MonoidalStructure C )  : Catego
   },
   left_identity  := ♯,
   right_identity := ♯,
-  associativity  := ♯
+  associativity  := begin
+                      blast,
+                      smt_eblast,
+                      rewrite C.associativity,
+                    end
 }
 
 end tqft.categories.drinfeld_centre

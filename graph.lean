@@ -94,7 +94,7 @@ definition path_to_morphism
 | ._ ._ (@path.cons ._ _ _ _ e p) := C.compose (H.onEdges e) (path_to_morphism p)
 
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
-
+set_option pp.implicit true
 definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) : Functor (PathCategory G) C :=
 {
   onObjects     := H.onVertices,
@@ -102,10 +102,18 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
   identities    := ♮,
   functoriality := begin
                      blast,
+                     unfold PathCategory,
+                     dsimp,
                      induction f,
                      blast,
+                     dsimp,
                      pose p := ih_1 g,
-                     blast
+                     unfold concatenate_paths,
+                     unfold path_to_morphism,
+                     rewrite p,
+                    --  dsimp,                       -- FIXME, this and the next line are required because of https://github.com/leanprover/lean/issues/1509
+                    --  unfold Graph.from_Category,
+                     rewrite - C.associativity,
                    end
 }
 

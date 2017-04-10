@@ -47,29 +47,30 @@ begin
     all_goals { try { dsimp } }
 end
 
-definition test' : Isomorphism CategoryOfTypes ((ℕ × ℕ) × ℕ) (ℕ × (ℕ × ℕ)) :=
-begin
-    refine {
-        morphism := λ t, (t.1.1, (t.1.2, t.2)),
-        inverse  := _,
-        witness_1 := _,
-        witness_2 := _
-    },
-    unfold_unfoldable,
-    intros_and_inductions,
-    all_goals { unfold CategoryOfTypes },
-    split,
-    split,
-    all_goals { try { apply funext, intros_and_inductions } },
-    all_goals { try { simp } },
-    all_goals { try { dsimp } },
-    apply pair_equality_3,
-    apply pair_equality_3,
-    dsimp,
-    trivial,
-    trivial,
-    dsimp
-end
+-- FIXME dsimp here causes a tactic.change error, as in https://github.com/leanprover/lean/issues/1503
+-- definition test' : Isomorphism CategoryOfTypes ((ℕ × ℕ) × ℕ) (ℕ × (ℕ × ℕ)) :=
+-- begin
+--     refine {
+--         morphism := λ t, (t.1.1, (t.1.2, t.2)),
+--         inverse  := _,
+--         witness_1 := _,
+--         witness_2 := _
+--     },
+--     unfold_unfoldable,
+--     intros_and_inductions,
+--     all_goals { unfold CategoryOfTypes },
+--     split,
+--     split,
+--     all_goals { try { apply funext, intros_and_inductions } },
+--     all_goals { try { simp } },
+--     all_goals { try { dsimp } },
+--     apply pair_equality_3,
+--     apply pair_equality_3,
+--     dsimp,
+--     trivial,
+--     trivial,
+--     dsimp
+-- end
 
 -- definition AssociatorForTypes : Associator TensorProductOfTypes :=
 -- begin

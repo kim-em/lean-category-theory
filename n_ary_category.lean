@@ -86,12 +86,19 @@ definition {u v} Category_to_n_ary_Category ( C : Category.{u v} ) : n_ary_Categ
                           -- if p was nil
                           blast,
                           -- if p was a path
-                          blast,
                           induction e with k l m n e p ih_2, -- FIXME if we leave off the last one here, we get two ih_1's
                           -- if e was nil
-                          blast,
+                          -- FIXME blast should handle this branch?
+                          unfold n_ary.compose_each_path,
+                          unfold compose_path,
+                          unfold graph.concatenate_path_of_paths,
+                          unfold graph.concatenate_paths,
+                          simp,
+                          exact ih_1,
                           -- if e was a path
-                          blast,
+                          blast, -- FIXME why do we have to follow blast with dunfold_everything?
+                          dunfold_everything,
+                          dsimp,
                           rewrite C.associativity,
                           refine ( congr_arg (C.compose e) _ ),
                           exact ih_2 l_1 ih_1
