@@ -24,6 +24,23 @@ namespace tqft.categories.monoidal_category
 @[pointwise] definition right_associated_triple_Product_projection_3 { C : Category } [ has_FiniteProducts C ] { X Y Z : C.Obj } : C.Hom (product X (product Y Z).product).product Z :=
   C.compose (Product.right_projection _) (Product.right_projection _)
 
+  -- ( left_factorisation  : ∀ { Z : C.Obj } ( f : C.Hom Z X ) ( g : C.Hom Z Y ), C.compose (map f g) left_projection  = f ) 
+  -- ( right_factorisation : ∀ { Z : C.Obj } ( f : C.Hom Z X ) ( g : C.Hom Z Y ), C.compose (map f g) right_projection = g ) 
+
+
+@[simp] lemma left_factorisation_associated_1 { C : Category } [ has_FiniteProducts C ] { W X Y Z : C.Obj } 
+  ( h : C.Hom W Z ) ( f : C.Hom Z X ) ( g : C.Hom Z Y ) : C.compose (C.compose h ((product X Y).map f g)) (product X Y).left_projection = C.compose h f :=
+  begin rewrite C.associativity, simp end
+@[simp] lemma left_factorisation_associated_2 { C : Category } [ has_FiniteProducts C ] { W X Y Z : C.Obj } 
+  ( h : C.Hom X W ) ( f : C.Hom Z X ) ( g : C.Hom Z Y ) : C.compose ((product X Y).map f g) (C.compose (product X Y).left_projection h) = C.compose f h :=
+  begin rewrite - C.associativity, simp end
+@[simp] lemma right_factorisation_associated_1 { C : Category } [ has_FiniteProducts C ] { W X Y Z : C.Obj } 
+  ( h : C.Hom W Z ) ( f : C.Hom Z X ) ( g : C.Hom Z Y ) : C.compose (C.compose h ((product X Y).map f g)) (product X Y).right_projection = C.compose h g :=
+  begin rewrite C.associativity, simp end
+@[simp] lemma right_factorisation_associated_2 { C : Category } [ has_FiniteProducts C ] { W X Y Z : C.Obj } 
+  ( h : C.Hom Y W ) ( f : C.Hom Z X ) ( g : C.Hom Z Y ) : C.compose ((product X Y).map f g) (C.compose (product X Y).right_projection h) = C.compose g h :=
+  begin rewrite - C.associativity, simp end
+
 -- set_option pp.implicit true
 
 definition MonoidalStructure_from_Products { C : Category } [ has_FiniteProducts C ] : MonoidalStructure C :=
