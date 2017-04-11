@@ -82,14 +82,6 @@ definition Cocones { J C : Category } ( F : Functor J C ) : Category :=
   associativity  := ♯
 }
 
--- TODO remove use of Singleton, in favour of the style Product
-
-structure {u} Singleton ( α : Type u ) :=
-  ( element : α )
-  ( uniqueness : ∀ X Y : α, (X = Y) )
-
-attribute [ematch] Singleton.uniqueness
-
 structure Equalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( equalizer : C.Obj )
   ( inclusion : C.Hom equalizer X )
@@ -143,7 +135,7 @@ structure Coproduct { C : Category } ( X Y : C.Obj ) :=
                    ( right_witness : C.compose right_inclusion f = C.compose right_inclusion g ), f = g )
 
 attribute [simp,ematch] Coproduct.left_factorisation Coproduct.right_factorisation 
-attribute [pointwise] Coproduct.left_inclusion Coproduct.right_inclusion Product.map
+attribute [pointwise] Coproduct.left_inclusion Coproduct.right_inclusion Coproduct.map
 attribute [pointwise] Coproduct.uniqueness
 
 definition {u} unique_up_to_isomorphism ( α : Type u ) { C : Category } ( f : α → C.Obj ) := Π X Y : α, Isomorphism C (f X) (f Y)

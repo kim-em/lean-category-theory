@@ -5,12 +5,6 @@ open tqft.categories.universal
 open tqft.categories.isomorphism
 open tqft.categories.examples.types
 
-  -- initial_object := {
-  --   object := ulift empty,
-  --   morphisms := λ t, λ x, match x with end,
-  --   uniqueness := begin intros, apply funext, intros, induction x, induction down end
-  -- },
-
 definition {u} Types_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfTypes.{u} :=
 {
   initial_object := {

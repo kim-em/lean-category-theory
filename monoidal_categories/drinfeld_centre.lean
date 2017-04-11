@@ -76,11 +76,7 @@ definition {u v} DrinfeldCentre { C : Category.{u v} } ( m : MonoidalStructure C
   },
   left_identity  := ♯,
   right_identity := ♯,
-  associativity  := begin
-                      blast,
-                      smt_eblast,
-                      rewrite C.associativity,
-                    end
+  associativity  := ♯
 }
 
 end tqft.categories.drinfeld_centre

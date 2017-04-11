@@ -21,7 +21,7 @@ run_cmd attribute.register `unfoldable_attribute
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
 | []      := failed
-| (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
+| (c::cs) := (mk_const c >>= fapply >> trace ("applying " ++ to_string c)) <|> any_apply cs
 
 section
 open smt_tactic
@@ -53,9 +53,10 @@ end tactic.interactive
 
 meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
 let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
+  guard (e.is_app),
   new_e ← dunfold_expr_core m e,
   return (u, new_e, tt)
-in do (c, new_e) ← dsimplify_core () max_steps ff (λ c e, failed) unfold e,
+in do (c, new_e) ← dsimplify_core () max_steps ff ff (λ c e, failed) unfold e,
       return new_e
 
 -- meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
@@ -91,12 +92,13 @@ open lean.parser
 open interactive
 
 meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
-meta def dunfold_everything' : nat → tactic unit
-| 0            := trace "dunfold_everything seems to be stuck in a loop" >> failed
-| (nat.succ n) := dunfold_everything >> try dsimp >> try ( seq simp (dunfold_everything' n) )
+meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try ( seq simp dunfold_everything' )
+-- meta def dunfold_everything' : nat → tactic unit
+-- | 0            := trace "dunfold_everything seems to be stuck in a loop" >> failed
+-- | (nat.succ n) := dunfold_everything >> try dsimp >> try ( seq simp (dunfold_everything' n) )
 
 meta def unfold_unfoldable : tactic unit := 
-  dunfold_and_simp_all_hypotheses >> (dunfold_everything' 5)
+  dunfold_and_simp_all_hypotheses >> dunfold_everything'
 
 -- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=

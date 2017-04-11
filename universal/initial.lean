@@ -14,9 +14,10 @@ namespace tqft.categories.initial
 structure InitialObject ( C : Category ) :=
   (object : C.Obj)
   (morphisms : ∀ Y : C.Obj, C.Hom object Y)
-  (uniqueness : ∀ Y : C.Obj, ∀ f : C.Hom object Y, f = morphisms Y)
+  (uniqueness : ∀ Y : C.Obj, ∀ f g : C.Hom object Y, f = g)
 
-attribute [ematch] InitialObject.uniqueness
+attribute [pointwise] InitialObject.morphisms
+attribute [pointwise,ematch] InitialObject.uniqueness
 
 instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObject C) (C.Obj) :=
   { coe := InitialObject.object }
@@ -25,34 +26,27 @@ structure is_initial { C : Category } ( X : C.Obj ) :=
   (morphism : ∀ Y : C.Obj, C.Hom X Y)
   (uniqueness :  ∀ Y : C.Obj, ∀ f : C.Hom X Y, f = morphism Y)
 
-attribute [ematch] is_initial.uniqueness
+attribute [pointwise,ematch] is_initial.uniqueness
 
-lemma InitialObjects_have_only_the_identity_endomorphism { C : Category } ( X: InitialObject C ) ( f : C.Hom X X ) : f = C.identity X :=
-  begin
-   blast, -- TODO blast is not actually doing anything here; but perhaps later it will.
-   rewrite X.uniqueness X f,
-   rewrite X.uniqueness X (C.identity X)
-  end
+lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Isomorphism C X Y := ♯
 
-lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Isomorphism C X Y :=
-  {
-      morphism  := X.morphisms Y,
-      inverse   := Y.morphisms X,
-      witness_1 := begin apply InitialObjects_have_only_the_identity_endomorphism end,
-      witness_2 := begin apply InitialObjects_have_only_the_identity_endomorphism end
-  }
+structure TerminalObject ( C : Category ) :=
+  (object : C.Obj)
+  (morphisms : ∀ Y : C.Obj, C.Hom Y object)
+  (uniqueness : ∀ Y : C.Obj, ∀ f g : C.Hom Y object, f = g)
 
--- Do we dare:
-definition TerminalObject ( C : Category ) := InitialObject (Opposite C)
+attribute [pointwise] TerminalObject.morphisms
+attribute [pointwise,ematch] TerminalObject.uniqueness
 
 instance TerminalObject_coercion_to_object { C : Category } : has_coe (TerminalObject C) (C.Obj) :=
-  { coe := InitialObject.object }
+  { coe := TerminalObject.object }
 
+structure is_terminal { C : Category } ( X : C.Obj ) :=
+  (morphism : ∀ Y : C.Obj, C.Hom Y X)
+  (uniqueness :  ∀ Y : C.Obj, ∀ f : C.Hom Y X, f = morphism Y)
 
--- If not:
--- structure TerminalObject ( C : Category ) :=
---   (object : C.Obj)
---   (morphisms : ∀ Y : C.Obj, C.Hom Y object)
---   (uniqueness : ∀ Y : C.Obj, ∀ f : C.Hom Y object, f = morphisms Y)
+attribute [pointwise,ematch] is_terminal.uniqueness
+
+lemma TerminalObjects_are_unique { C : Category } ( X Y : TerminalObject C ) : Isomorphism C X Y := ♯
 
 end tqft.categories.initial
