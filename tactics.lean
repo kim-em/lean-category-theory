@@ -21,7 +21,7 @@ run_cmd attribute.register `unfoldable_attribute
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
 | []      := failed
-| (c::cs) := (mk_const c >>= fapply >> trace ("applying " ++ to_string c)) <|> any_apply cs
+| (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
 
 section
 open smt_tactic
@@ -30,9 +30,12 @@ meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> try simp
 meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
 end
 
-meta def pointwise (and_then : tactic unit) : tactic unit :=
+meta def pointwise_and_then (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
-   try (seq (any_apply cs) and_then)
+   seq (any_apply cs) and_then
+
+meta def force_pointwise : tactic unit := pointwise_and_then skip
+meta def pointwise : tactic unit := try ( force_pointwise )
 
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b
@@ -43,20 +46,34 @@ attribute [ematch] subtype.property
 open tactic
 open lean.parser
 open interactive
+
+-- meta def force { α : Type } (t : tactic α) : tactic α :=
+--   do 
+--      hypotheses ← local_context,
+--      goals ← get_goals,
+--      result ← t,
+--      hypotheses' ← local_context,
+--      goals' ← get_goals,
+--      guard ((goals ≠ goals') || (hypotheses ≠ hypotheses')) <|> fail "force tactic failed",
+--      return result
+meta def force { α : Type } (t : tactic α) : tactic α :=
+  do 
+     goals ← get_goals,
+     result ← t,
+     goals' ← get_goals,
+     guard (goals ≠ goals') <|> fail "force tactic failed",
+     return result
+
 namespace tactic.interactive
-  meta def force (t : itactic) : tactic unit :=
-  do gs ← get_goals,
-     t,
-     gs' ← get_goals,
-     guard (gs ≠ gs') <|> fail "force tactic failed"
+  meta def force (t : itactic) : tactic unit := _root_.force t
 end tactic.interactive
 
 meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
 let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
   guard (e.is_app),
   new_e ← dunfold_expr_core m e,
-  return (u, new_e, tt)
-in do (c, new_e) ← dsimplify_core () max_steps ff ff (λ c e, failed) unfold e,
+  return (u, new_e, ff)
+in do (c, new_e) ← dsimplify_core () max_steps tt ff (λ c e, failed) unfold e,
       return new_e
 
 -- meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
@@ -91,7 +108,9 @@ do l ← local_context,
 open lean.parser
 open interactive
 
-meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
+-- #eval default_max_steps
+
+meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible /-default_max_steps-/ 10000 >>= change
 meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try ( seq simp dunfold_everything' )
 -- meta def dunfold_everything' : nat → tactic unit
 -- | 0            := trace "dunfold_everything seems to be stuck in a loop" >> failed
@@ -159,15 +178,47 @@ attribute [pointwise] pprod.mk
 attribute [pointwise] subtype.mk
 
 -- open tactic.interactive
-meta def blast  : tactic unit := intros/-_and_inductions-/ >> pointwise blast >> try unfold_unfoldable >> try smt_eblast >> pointwise blast -- >> split_goals_and_then blast
+-- meta def blast  : tactic unit := intros >> try ( pointwise_and_then blast ) >> unfold_unfoldable >> try smt_eblast >> try ( pointwise_and_then blast ) -- >> split_goals_and_then blast
+
+meta def done : tactic unit :=
+  do goals ← get_goals,
+     guard (goals = []),
+     trace "no goals",
+     skip
+open nat
+
+private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
+| 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
+| _        []        := done <|> trace "We've tried all tactics in the chain, but there are still unsolved goals." -- We've run out of tactics to apply!
+| (succ n) (t :: ts) := done <|> (seq t (chain' n tactics)) <|> chain' (succ n) ts
+
+meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 1000 tactics
+
+meta def auto : tactic unit := chain [ force ( intros >> skip ), force_pointwise ]
+meta def auto' : tactic unit := chain [ force ( intros >> skip ), force_pointwise, force ( smt_eblast ) ]
+
+meta def blast : tactic unit :=
+  -- trace "starting blast" >>
+  chain [
+    force ( intros >> skip ),
+    force_pointwise,
+    /-dunfold_and_simp_all_hypotheses >>-/ force ( dunfold_everything' ),
+    force ( smt_eblast )
+  ]
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }
 
+set_option formatter.hide_full_terms false
+
 @[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b).fst = a := ♮
 @[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b).snd = b := ♮
-@[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X.fst, X.snd) = X := begin induction X, blast end
+@[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X.fst, X.snd) = X :=
+begin
+  induction X,
+  blast,
+end
 @[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X.fst ) { B : β } ( p : B = X.snd ) : (A, B) = X := begin induction X, blast end
 @[pointwise] lemma {u v} pair_equality_4 {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := begin induction X, blast end
 @[pointwise] lemma {u v} dependent_pair_equality {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := begin induction X, induction Y, blast end
@@ -228,5 +279,3 @@ meta def blast_ematch : tactic unit := mk_fresh_name >>= blast_as_ematch
 
 end interactive
 end tactic
-
-open tactic.interactive

@@ -45,15 +45,19 @@ attribute [ematch] HalfBraidingMorphism.witness
 
 local attribute [ematch] MonoidalStructure.interchange_right_identity  MonoidalStructure.interchange_left_identity
 
-set_option pp.implicit true
-set_option pp.all true
+-- set_option pp.implicit true
+-- set_option pp.all true
+
+local attribute [ematch] MonoidalStructure.interchange_right_identity
+local attribute [ematch] MonoidalStructure.interchange_left_identity
+
 
 definition {u v} DrinfeldCentre { C : Category.{u v} } ( m : MonoidalStructure C )  : Category := {
   Obj := HalfBraiding m,
   Hom := λ X Y, HalfBraidingMorphism X Y,
   identity := λ X, {
     morphism := C.identity X,
-    witness  := ♮
+    witness  := ♯
   },
   compose := λ P Q R f g, {
     morphism := C.compose f.morphism g.morphism,
@@ -63,15 +67,15 @@ definition {u v} DrinfeldCentre { C : Category.{u v} } ( m : MonoidalStructure C
         dsimp,
         rewrite m.interchange_right_identity,
         rewrite m.interchange_left_identity,
-        rewrite - C.associativity,
+        erewrite - C.associativity,
         rewrite f.witness,
         rewrite C.associativity,
         -- blast,
-        rewrite g.witness,
+        erewrite g.witness,
         -- blast, -- FIXME these blasts are unfolding too many implicit arguments.
                   -- https://github.com/leanprover/lean/issues/1509
-        rewrite - C.associativity,
-        -- trivial
+        erewrite - C.associativity,
+        trivial
       end
   },
   left_identity  := ♯,

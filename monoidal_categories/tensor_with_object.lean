@@ -14,7 +14,7 @@ universe variables u v
 
 local attribute [ematch] MonoidalStructure.interchange_right_identity
 
-@[reducible] definition MonoidalStructure.tensor_on_left { C: Category.{u v} } ( m : MonoidalStructure C ) ( Z: C.Obj ) : Functor.{u v u v} C C :=
+definition MonoidalStructure.tensor_on_left { C: Category.{u v} } ( m : MonoidalStructure C ) ( Z: C.Obj ) : Functor.{u v u v} C C :=
 {
   onObjects := λ X, m.tensorObjects Z X,
   onMorphisms := λ X Y f, m.tensorMorphisms (C.identity Z) f,
@@ -24,7 +24,7 @@ local attribute [ematch] MonoidalStructure.interchange_right_identity
 
 local attribute [ematch] MonoidalStructure.interchange_left_identity
 
-@[reducible] definition MonoidalStructure.tensor_on_right { C: Category.{u v} } ( m : MonoidalStructure C ) ( Z: C.Obj ) : Functor.{u v u v} C C :=
+definition MonoidalStructure.tensor_on_right { C: Category.{u v} } ( m : MonoidalStructure C ) ( Z: C.Obj ) : Functor.{u v u v} C C :=
 {
   onObjects := λ X, m.tensorObjects X Z,
   onMorphisms := λ X Y f, m.tensorMorphisms f (C.identity Z),

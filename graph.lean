@@ -94,7 +94,7 @@ definition path_to_morphism
 | ._ ._ (@path.cons ._ _ _ _ e p) := C.compose (H.onEdges e) (path_to_morphism p)
 
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
-set_option pp.implicit true
+-- set_option pp.implicit true
 definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C ) : Functor (PathCategory G) C :=
 {
   onObjects     := H.onVertices,

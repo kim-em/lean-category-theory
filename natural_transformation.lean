@@ -57,6 +57,14 @@ notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
 
 open tqft.categories.functor
 
+@[simp] lemma {u1 v1 u2 v2 u3 v3} FunctorComposition.onObjects { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
+  { F : Functor C D }
+  { G : Functor D E }
+  ( X : C.Obj ) : (FunctorComposition F G).onObjects X = G.onObjects (F.onObjects X) := begin blast end 
+
+-- set_option pp.all true
+-- set_option trace.check true
+
 definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   { F G : Functor C D }
