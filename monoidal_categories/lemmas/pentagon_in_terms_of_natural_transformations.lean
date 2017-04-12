@@ -24,7 +24,6 @@ lemma pentagon_in_terms_of_natural_transformations
     intros,
     unfold_unfoldable,
     unfold_unfoldable, -- FIXME
-    dsimp,
     induction X with PQR S,
     induction PQR with PQ R,
     induction PQ with P Q,

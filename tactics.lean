@@ -76,14 +76,15 @@ let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
 in do (c, new_e) ← dsimplify_core () max_steps tt ff (λ c e, failed) unfold e,
       return new_e
 
--- meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
--- do s ← simp_lemmas.mk_default,
--- let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
---   new_e ← dunfold_expr_core m e,
---   new_e_simp ← s.dsimplify new_e,
---   return (u, new_e_simp, ff)
--- in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
---       return new_e
+meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
+do s ← simp_lemmas.mk_default,
+let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
+  guard (e.is_app),
+  new_e ← dunfold_expr_core m e,
+  new_e_simp ← s.dsimplify new_e,
+  return (u, new_e_simp, tt)
+in do (c, new_e) ← dsimplify_core () max_steps tt ff (λ c e, failed) unfold e,
+      return new_e
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
@@ -110,8 +111,17 @@ open interactive
 
 -- #eval default_max_steps
 
-meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible /-default_max_steps-/ 10000 >>= change
-meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try ( seq simp dunfold_everything' )
+meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible /-default_max_steps-/ 1000000 >>= change
+meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try simp
+-- do goals ← get_goals,
+--    dunfold_everything,
+--    try dsimp,
+--    try simp,
+--    trace goals,
+--    goals' ← get_goals,
+--    if goals ≠ goals' then dunfold_everything' else skip
+
+-- dunfold_everything >> try dsimp >> try ( seq simp dunfold_everything' )
 -- meta def dunfold_everything' : nat → tactic unit
 -- | 0            := trace "dunfold_everything seems to be stuck in a loop" >> failed
 -- | (nat.succ n) := dunfold_everything >> try dsimp >> try ( seq simp (dunfold_everything' n) )
