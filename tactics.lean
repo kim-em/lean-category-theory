@@ -73,7 +73,7 @@ let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
   guard (e.is_app),
   new_e ← dunfold_expr_core m e,
   return (u, new_e, ff)
-in do (c, new_e) ← dsimplify_core () max_steps tt ff (λ c e, failed) unfold e,
+in do (c, new_e) ← dsimplify_core () max_steps ff (λ c e, failed) unfold e,
       return new_e
 
 meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
@@ -83,7 +83,7 @@ let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
   new_e ← dunfold_expr_core m e,
   new_e_simp ← s.dsimplify new_e,
   return (u, new_e_simp, tt)
-in do (c, new_e) ← dsimplify_core () max_steps tt ff (λ c e, failed) unfold e,
+in do (c, new_e) ← dsimplify_core () max_steps ff (λ c e, failed) unfold e,
       return new_e
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
