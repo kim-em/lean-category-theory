@@ -74,6 +74,8 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
     blast
   end
 
+-- set_option pp.all true
+
 definition { u v } HomPairing ( C : Category.{u v} ) : Functor ((Opposite C) × C) CategoryOfTypes.{v} :=
 {
   onObjects     := λ p, C.Hom p.1 p.2,
@@ -94,34 +96,49 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
         -- We need to construct the map from D.Hom (L P.1) P.2 to D.Hom P.1 (R P.2)
         λ f, C.compose (A.unit P.1) (R.onMorphisms f),
       naturality := begin
-                      blast,
+                      intros,
+                      pointwise,
+                      intros,
+                      unfold_unfoldable,
                       repeat { rewrite - C.associativity },
                       erewrite A.unit_naturality,
-                      blast
+                      trivial
                     end
     },
-    inverse   := {
+    inverse   := 
+    {
       components := λ P, 
         -- We need to construct the map back to D.Hom (L P.1) P.2 from D.Hom P.1 (R P.2)
         λ f, D.compose (L.onMorphisms f) (A.counit P.2),
       naturality := begin
-                      blast,
+                      intros,
+                      pointwise,
+                      intros,
+                      unfold_unfoldable,
                       repeat { rewrite D.associativity },
                       erewrite - A.counit_naturality,
-                      blast
+                      trivial
                     end
     },
     witness_1 := begin
-                   blast,
-                   rewrite D.associativity,
+                   pointwise,
+                   intros,
+                   pointwise,
+                   intros,
+                   unfold_unfoldable,
+                   erewrite D.associativity,
                    erewrite A.counit_naturality,
                    erewrite - D.associativity,
                    erewrite A.triangle_2,
                    simp
                  end,
     witness_2 := begin
-                   blast,
-                   rewrite - C.associativity,
+                   pointwise,
+                   intros,
+                   pointwise,
+                   intros,
+                   unfold_unfoldable,
+                   erewrite - C.associativity,
                    erewrite - A.unit_naturality,
                    erewrite C.associativity,
                    erewrite A.triangle_1,

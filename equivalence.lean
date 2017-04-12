@@ -12,21 +12,23 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.equivalence
 
-structure Equivalence ( C D : Category ) :=
+structure {u1 v1 u2 v2} Equivalence ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) :=
   ( functor : Functor C D )
   ( inverse : Functor D C )
   ( isomorphism_1 : NaturalIsomorphism (FunctorComposition functor inverse) (IdentityFunctor C) )
   ( isomorphism_2 : NaturalIsomorphism (FunctorComposition inverse functor) (IdentityFunctor D) )
 
-definition is_Equivalence { C D : Category } ( F : Functor C D ) := { e : Equivalence C D // e.functor = F }
+definition {u1 v1 u2 v2} is_Equivalence { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := { e : Equivalence C D // e.functor = F }
 
-definition Equivalence.reverse { C D : Category } ( e : Equivalence C D ) : Equivalence D C :=
+definition {u1 v1 u2 v2} Equivalence.reverse { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Equivalence D C :=
 {
   functor := e.inverse,
   inverse := e.functor,
   isomorphism_1 := e.isomorphism_2,
   isomorphism_2 := e.isomorphism_1
 }
+
+-- TODO these probably need a redesign, as for Product
 
 definition {u v} Surjective { α : Type u } { β : Type v } ( f : α → β ) := { g : β → α // g ∘ f = id } -- This is the constructive version!
 definition {u v} Injective  { α : Type u } { β : Type v } ( f : α → β ) := Π { X Y : α }, (f X = f Y) → (X = Y)
@@ -40,7 +42,11 @@ definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Ca
 
 lemma Equivalences_are_EssentiallySurjective { C D : Category } ( e : Equivalence C D ) : EssentiallySurjective (e.functor) :=
   λ Y : D.Obj, ⟨ e.inverse Y, e.isomorphism_2.components Y ⟩
-lemma Equivalences_are_Full { C D : Category } ( e : Equivalence C D ) : Full (e.functor) :=
+
+-- set_option pp.all true
+-- set_option pp.max_steps 40000
+
+lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Full (e.functor) :=
   λ X Y : C.Obj,
       ⟨ λ f : D.Hom (e.functor X) (e.functor Y),
           C.compose (C.compose (e.isomorphism_1.inverse.components X) (e.inverse.onMorphisms f)) (e.isomorphism_1.morphism.components Y),
@@ -61,32 +67,43 @@ lemma Equivalences_are_Full { C D : Category } ( e : Equivalence C D ) : Full (e
 -- lemma Equivalences_are_Faithful { C D : Category } ( e : Equivalence C D ) : Faithful (e.functor) := sorry
 
 -- PROJECT finish this
--- lemma FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
---   { C D : Category } 
---   ( F : Functor C D ) 
---   ( full : Full F ) 
---   ( faithful : Faithful F ) 
---   ( essentially_surjective : EssentiallySurjective F ) : is_Equivalence F :=
---   ⟨
---     {
---       functor := F,
---       inverse := {
---         onObjects     := λ X : D.Obj, (essentially_surjective X).1,
---         onMorphisms   := λ X Y f,
---                            (full (essentially_surjective X).1 (essentially_surjective Y).1).val
---                              (D.compose (D.compose (
---                                (essentially_surjective X).2.morphism)
---                                f
---                               ) (
---                                (essentially_surjective Y).2.inverse)
---                               ),
---         identities    := sorry,
---         functoriality := sorry
---       },
---       isomorphism_1 := sorry, -- Construct these using NaturalIsomorphism.from_components
---       isomorphism_2 := sorry
---     },
---     ♮
---   ⟩
+lemma {u1 v1 u2 v2} FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
+  ( F : Functor C D ) 
+  ( full : Full F ) 
+  ( faithful : Faithful F ) 
+  ( essentially_surjective : EssentiallySurjective F ) : is_Equivalence F :=
+  ⟨
+    {
+      functor := F,
+      inverse := {
+        onObjects     := λ X : D.Obj, (essentially_surjective X).1,
+        onMorphisms   := λ X Y f,
+                           (full (essentially_surjective X).1 (essentially_surjective Y).1).val
+                             (D.compose (D.compose (
+                               (essentially_surjective X).2.morphism)
+                               f
+                              ) (
+                               (essentially_surjective Y).2.inverse)
+                              ),
+        identities    := sorry,
+        functoriality := sorry
+      },
+      isomorphism_1 := begin
+                         pointwise,
+                         {
+                           -- Construct the forward map
+                           pointwise,
+                           all_goals { intros },
+                           unfold_unfoldable,
+                           exact (full _ _).val (essentially_surjective (F.onObjects X)).2.morphism,
+                           unfold_unfoldable,
+                           
+                         }
+                       end,
+      isomorphism_2 := sorry
+    },
+    ♮
+  ⟩
 
 end tqft.categories.equivalence

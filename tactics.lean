@@ -68,12 +68,22 @@ namespace tactic.interactive
   meta def force (t : itactic) : tactic unit := _root_.force t
 end tactic.interactive
 
+-- #check dunfold_core
+
+-- meta def dunfold_core (m : transparency) (max_steps : nat) (cs : list name) (e : expr) : tactic expr :=
+-- let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
+--   guard (cs.any e.is_app_of),
+--   new_e ← dunfold_expr_core m e,
+--   return (u, new_e, tt)
+-- in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
+--       return new_e
+
 meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
 let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
-  guard (e.is_app),
+  -- guard (e.is_app),
   new_e ← dunfold_expr_core m e,
-  return (u, new_e, ff)
-in do (c, new_e) ← dsimplify_core () max_steps ff (λ c e, failed) unfold e,
+  return (u, new_e, tt)
+in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
       return new_e
 
 meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
@@ -83,7 +93,7 @@ let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
   new_e ← dunfold_expr_core m e,
   new_e_simp ← s.dsimplify new_e,
   return (u, new_e_simp, tt)
-in do (c, new_e) ← dsimplify_core () max_steps ff (λ c e, failed) unfold e,
+in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
       return new_e
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
@@ -121,13 +131,8 @@ meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >>
 --    goals' ← get_goals,
 --    if goals ≠ goals' then dunfold_everything' else skip
 
--- dunfold_everything >> try dsimp >> try ( seq simp dunfold_everything' )
--- meta def dunfold_everything' : nat → tactic unit
--- | 0            := trace "dunfold_everything seems to be stuck in a loop" >> failed
--- | (nat.succ n) := dunfold_everything >> try dsimp >> try ( seq simp (dunfold_everything' n) )
-
 meta def unfold_unfoldable : tactic unit := 
-  dunfold_and_simp_all_hypotheses >> dunfold_everything'
+   dunfold_and_simp_all_hypotheses >> dunfold_everything'
 
 -- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=
@@ -188,33 +193,41 @@ attribute [pointwise] pprod.mk
 attribute [pointwise] subtype.mk
 
 -- open tactic.interactive
--- meta def blast  : tactic unit := intros >> try ( pointwise_and_then blast ) >> unfold_unfoldable >> try smt_eblast >> try ( pointwise_and_then blast ) -- >> split_goals_and_then blast
+meta def blast  : tactic unit := intros >> try ( pointwise_and_then blast ) >> try ( unfold_unfoldable ) >> try smt_eblast >> try ( pointwise_and_then blast ) -- >> split_goals_and_then blast
 
 meta def done : tactic unit :=
   do goals ← get_goals,
      guard (goals = []),
      trace "no goals",
      skip
+
+meta def monitor_progress { α : Type } ( t : tactic α ) : tactic (bool × α) :=
+do goals ← get_goals,
+   result ← t,
+   goals' ← get_goals,
+   return (goals ≠ goals', result)
+
+-- We can't use this because of
+-- https://github.com/leanprover/lean/issues/1517
+meta def chain ( tactics : list (tactic unit) ) : tactic unit := repeat ( first tactics )
+
 open nat
 
-private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
-| 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
-| _        []        := done <|> trace "We've tried all tactics in the chain, but there are still unsolved goals." -- We've run out of tactics to apply!
-| (succ n) (t :: ts) := done <|> (seq t (chain' n tactics)) <|> chain' (succ n) ts
+-- private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
+-- | 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
+-- | _        []        := done <|> trace "We've tried all tactics in the chain, but there are still unsolved goals." >> skip -- We've run out of tactics to apply!
+-- | (succ n) (t :: ts) := done <|> (seq t (chain' n tactics)) <|> chain' (succ n) ts
 
-meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 1000 tactics
+-- meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 5 tactics
 
-meta def auto : tactic unit := chain [ force ( intros >> skip ), force_pointwise ]
-meta def auto' : tactic unit := chain [ force ( intros >> skip ), force_pointwise, force ( smt_eblast ) ]
-
-meta def blast : tactic unit :=
-  -- trace "starting blast" >>
-  chain [
-    force ( intros >> skip ),
-    force_pointwise,
-    /-dunfold_and_simp_all_hypotheses >>-/ force ( dunfold_everything' ),
-    force ( smt_eblast )
-  ]
+-- meta def blast : tactic unit :=
+--   -- trace "starting blast" >>
+--   chain [
+--     force ( intros >> skip ),
+--     force_pointwise,
+--     dunfold_and_simp_all_hypotheses >> force ( dunfold_everything' ),
+--     force ( smt_eblast )
+--   ]
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }
