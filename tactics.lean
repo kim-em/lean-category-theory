@@ -207,8 +207,6 @@ do goals ← get_goals,
    goals' ← get_goals,
    return (goals ≠ goals', result)
 
--- We can't use this because of
--- https://github.com/leanprover/lean/issues/1517
 meta def chain ( tactics : list (tactic unit) ) : tactic unit := repeat ( first tactics )
 
 open nat
