@@ -224,9 +224,10 @@ open nat
 --   -- trace "starting blast" >>
 --   chain [
 --     force ( intros >> skip ),
+--     force ( cases ),
 --     force_pointwise,
---     dunfold_and_simp_all_hypotheses >> force ( dunfold_everything' ),
---     force ( smt_eblast )
+--     dunfold_and_simp_all_hypotheses >> force ( dunfold_everything' ), -- FIXME See https://github.com/leanprover/lean/issues/1517#issuecomment-293827843 for a nice solution for hypotheses
+--     focus ( smt_eblast )
 --   ]
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
