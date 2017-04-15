@@ -241,6 +241,19 @@ definition {u1 v1 u2 v2} vertical_composition_of_NaturalIsomorphisms
                end
 }
 
+-- Newtype for isomorphisms in functor categories. This specialisation helps type inference.
+structure {u1 v1 u2 v2} NaturalIsomorphism' {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F G : Functor C D) :=
+  mkNatIso :: (iso : Isomorphism (FunctorCategory C D) F G)
+
+infix `≅ₙ`:50 := NaturalIsomorphism'
+
+@[trans] definition {u1 v1 u2 v2} NaturalIsomorphismComposition
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { F G H : Functor C D }
+  ( α : F ≅ₙ G ) ( β : G ≅ₙ H ) : F ≅ₙ H :=
+  NaturalIsomorphism'.mkNatIso (vertical_composition_of_NaturalIsomorphisms α.iso β.iso)
+
 open NaturalTransformation
 
 definition {u1 v1 u2 v2} is_NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} }  { F G : Functor C D } ( α : NaturalTransformation F G ) := @is_Isomorphism (FunctorCategory C D) F G α
