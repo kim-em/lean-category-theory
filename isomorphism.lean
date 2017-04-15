@@ -20,6 +20,14 @@ attribute [pointwise] Isomorphism.mk
 instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } : has_coe (Isomorphism C X Y) (C.Hom X Y) :=
   { coe := Isomorphism.morphism }
 
+definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isomorphism C X Y ) ( β : Isomorphism C Y Z ) : Isomorphism C X Z :=
+{
+  morphism := C.compose α.morphism β.morphism,
+  inverse := C.compose β.inverse α.inverse,
+  witness_1 := ♯,
+  witness_2 := ♯
+}
+
 @[pointwise] lemma {u1 v1} Isomorphism_pointwise_equal
   { C : Category.{u1 v1} }
   { X Y : C.Obj }
