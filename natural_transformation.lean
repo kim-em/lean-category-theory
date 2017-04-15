@@ -200,22 +200,8 @@ definition {u1 v1 u2 v2} vertical_composition_of_NaturalIsomorphisms
   { F G H : Functor C D }
   ( α : NaturalIsomorphism F G )
   ( β : NaturalIsomorphism G H )
-   : NaturalIsomorphism F H := {
-  morphism := (FunctorCategory C D).compose α.morphism β.morphism,
-  inverse  := (FunctorCategory C D).compose β.inverse  α.inverse,
-  witness_1 := begin
-                --  smt_eblast, -- FIXME why doesn't this work?                 
-                 rewrite Category.associativity,
-                 rewrite - (FunctorCategory C D).associativity β.morphism,
-                 simp
-               end,
-  witness_2 := begin
-                --  smt_eblast, -- FIXME why doesn't this work?
-                 rewrite Category.associativity,
-                 rewrite - (FunctorCategory C D).associativity α.inverse,
-                 simp
-               end
-}
+   : NaturalIsomorphism F H :=
+  IsomorphismComposition α β
 
 open NaturalTransformation
 
