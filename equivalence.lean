@@ -59,24 +59,38 @@ lemma {u1 v1 u2 v2 u3 v3} FunctorComposition_is_composition
   { f : C.Hom X Y } :
   (FunctorComposition F G).onMorphisms f = G.onMorphisms (F.onMorphisms f) := ♯
 
+private definition {u1 v1 u2 v2} preimage
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} }
+  ( e : Equivalence C D )
+  ( X Y : C.Obj )
+  ( h : D.Hom (e.functor X) (e.functor Y) ) :=
+  C.compose (C.compose (e.isomorphism_1.inverse.components X) (e.inverse.onMorphisms h)) (e.isomorphism_1.morphism.components Y)
 
+private lemma {u1 v1 u2 v2} preimage_is_retraction
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} }
+  ( e : Equivalence C D )
+  ( X Y : C.Obj )
+  ( f : C.Hom X Y ) :
+  preimage e X Y (e.functor.onMorphisms f) = f :=
+  e.isomorphism_1.naturality_1 f
+
+private lemma {u v} sections_are_injective
+  { A : Type u } { B : Type v }
+  ( f : A → B ) ( g : B → A )
+  ( f_section_of_g : ∀ (a : A), g (f a) = a )
+  ( a b : A )
+  ( H : f a = f b ) :
+  a = b :=
+    calc
+      a   = g (f a) : eq.symm (f_section_of_g a)
+      ... = g (f b) : congr_arg g H
+      ... = b       : f_section_of_g b
 
 lemma {u1 v1 u2 v2} Equivalences_are_Faithful { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Faithful (e.functor) := {
-  injectivity := begin
-                  admit
-                  --  intros,
-                  --  pose wf := e.isomorphism_1.naturality_1 f,
-                  --  pose wg := e.isomorphism_1.naturality_1 g,
-                  --  rewrite IdentityFunctor_is_identity f at wf,
-                  --  rewrite IdentityFunctor_is_identity g at wg,
-                  --  rewrite - wf,
-                  --  rewrite - wg,
-                  --  unfold_unfoldable,
-                  --  rewrite p
-                 end
+  injectivity :=
+    λ {X Y : C.Obj} (f g : C.Hom X Y),
+      sections_are_injective e.functor.onMorphisms (preimage e X Y) (preimage_is_retraction e X Y) f g
 }
-
-private definition {u1 v1 u2 v2} preimage { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor X) (e.functor Y) ) := C.compose (C.compose (e.isomorphism_1.inverse.components X) (e.inverse.onMorphisms h)) (e.isomorphism_1.morphism.components Y)
 
 private lemma {u1 v1 u2 v2} preimage_lemma { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor X) (e.functor Y) ) : (e.inverse).onMorphisms ((e.functor).onMorphisms (preimage e X Y h)) = (e.inverse).onMorphisms h :=
 begin
@@ -112,9 +126,6 @@ lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Categor
           trivial
         end
   }
-
--- PROJECT finish this
--- lemma Equivalences_are_Faithful { C D : Category } ( e : Equivalence C D ) : Faithful (e.functor) := sorry
 
 -- PROJECT finish this
 -- lemma {u1 v1 u2 v2} FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
