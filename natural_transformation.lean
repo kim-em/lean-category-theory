@@ -245,7 +245,7 @@ lemma {u1 v1 u2 v2} IdentityNaturalTransformation_is_NaturalIsomorphism { C : Ca
     witness_2 := ♯
   }
 
-lemma NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( α : NaturalIsomorphism F G ) ( X : C.Obj ) :
+definition NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( α : NaturalIsomorphism F G ) ( X : C.Obj ) :
  Isomorphism D (F X) (G X) :=
   {
     morphism := α.morphism.components X,
