@@ -40,6 +40,55 @@ structure {u1 v1 u2 v2} Faithful { C : Category.{u1 v1} } { D : Category.{u2 v2}
 
 attribute [pointwise] Faithful.injectivity
 
+section FullyFaithfulPreimage
+
+  universes u1 v1 u2 v2
+  parameters { C : Category.{u1 v1} } { D : Category.{u2 v2} }
+  parameter ( F : Functor C D )
+  parameters ( full : Full F ) ( faithful : Faithful F )
+
+  lemma preimage_identity ( X : C.Obj ) : full.preimage (D.identity (F X)) = C.identity X :=
+    faithful.injectivity (full.preimage (D.identity (F X))) (C.identity X) $
+      calc
+        F.onMorphisms (full.preimage (D.identity (F X)))
+            = D.identity (F X) : full.witness (D.identity (F X))
+        ... = F.onMorphisms (C.identity X) : ♮
+
+  lemma preimage_functoriality
+    { X Y Z : C.Obj }
+    ( f : D.Hom (F X) (F Y) )
+    ( g : D.Hom (F Y) (F Z) ) :
+    C.compose (full.preimage f) (full.preimage g) = full.preimage (D.compose f g) :=
+    faithful.injectivity (C.compose (full.preimage f) (full.preimage g)) (full.preimage (D.compose f g)) $
+      calc
+        F.onMorphisms (C.compose (full.preimage f) (full.preimage g))
+            = D.compose (F.onMorphisms (full.preimage f)) (F.onMorphisms (full.preimage g)) : ♮
+        ... = D.compose f g
+            : by erewrite [full.witness f, full.witness g]
+        ... = F.onMorphisms (full.preimage (D.compose f g))
+            : by erewrite full.witness (D.compose f g)
+
+  lemma preimage_composition_identity
+    { X Y : C.Obj }
+    ( f : D.Hom (F X) (F Y) )
+    ( g : D.Hom (F Y) (F X) )
+    ( eq : D.compose f g = D.identity (F X) ) :
+    C.compose (full.preimage f) (full.preimage g) = C.identity X :=
+      calc
+        C.compose (full.preimage f) (full.preimage g)
+            = full.preimage (D.compose f g)    : preimage_functoriality f g
+        ... = full.preimage (D.identity (F X)) : by rewrite eq
+        ... = C.identity X                     : preimage_identity X
+
+  definition preimage_isomorphism { X Y : C.Obj } ( f : Isomorphism D (F X) (F Y) ) : Isomorphism C X Y := {
+    morphism := full.preimage f.morphism,
+    inverse := full.preimage f.inverse,
+    witness_1 := preimage_composition_identity f.morphism f.inverse f.witness_1,
+    witness_2 := preimage_composition_identity f.inverse f.morphism f.witness_2
+  }
+
+end FullyFaithfulPreimage
+
 definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := (Full F) × (Faithful F)
 
 definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F c) d
