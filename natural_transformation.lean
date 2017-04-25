@@ -113,6 +113,30 @@ definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category
   associativity  := by blast_as_simp FunctorCategory_associativity
 }
 
+definition {u1 v1 u2 v2 u3 v3} whisker_on_left_functor
+  { C : Category.{u1 v1} } { D : Category.{u2 v2} }
+  ( E : Category.{u3 v3} )
+  ( F : Functor C D ) :
+  Functor (FunctorCategory D E) (FunctorCategory C E) :=
+  {
+    onObjects := λ G, FunctorComposition F G,
+    onMorphisms := λ {G} {H} α, whisker_on_left F α,
+    identities := ♯,
+    functoriality := ♯
+  }
+
+definition {u1 v1 u2 v2 u3 v3} whisker_on_right_functor
+  ( C : Category.{u1 v1} )
+  { D : Category.{u2 v2} } { E : Category.{u3 v3} }
+  ( H : Functor D E ) :
+  Functor (FunctorCategory C D) (FunctorCategory C E) :=
+  {
+    onObjects := λ F, FunctorComposition F H,
+    onMorphisms := λ {F} {G} α, whisker_on_right α H,
+    identities := ♯,
+    functoriality := ♯
+  }
+
 definition {u1 v1 u2 v2} NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
 
 -- It's a pity we need to separately define this coercion.
@@ -202,6 +226,19 @@ definition {u1 v1 u2 v2} vertical_composition_of_NaturalIsomorphisms
   ( β : NaturalIsomorphism G H )
    : NaturalIsomorphism F H :=
   IsomorphismComposition α β
+
+-- Newtype for isomorphisms in functor categories. This specialisation helps type inference.
+structure {u1 v1 u2 v2} NaturalIsomorphism' {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F G : Functor C D) :=
+  mkNatIso :: (iso : Isomorphism (FunctorCategory C D) F G)
+
+infix `≅ₙ`:50 := NaturalIsomorphism'
+
+@[trans] definition {u1 v1 u2 v2} NaturalIsomorphismComposition
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { F G H : Functor C D }
+  ( α : F ≅ₙ G ) ( β : G ≅ₙ H ) : F ≅ₙ H :=
+  NaturalIsomorphism'.mkNatIso (vertical_composition_of_NaturalIsomorphisms α.iso β.iso)
 
 open NaturalTransformation
 

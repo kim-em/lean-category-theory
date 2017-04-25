@@ -3,8 +3,10 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .category
+import .isomorphism
 
 open tqft.categories
+open tqft.categories.isomorphism
 
 namespace tqft.categories.functor
 
@@ -99,5 +101,20 @@ definition {u v} CategoryOfCategoriesAndFunctors : Category := {
   right_identity := ♮,
   associativity  := ♮
 }
+
+-- Functors preserve isomorphisms
+definition {u1 v1 u2 v2} Functor_onIsomorphisms
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} } 
+  {X Y : C.Obj}
+  (F : Functor C D)
+  (g : Isomorphism C X Y) :
+  Isomorphism D (F X) (F Y) :=
+  {
+    morphism := F.onMorphisms g.morphism,
+    inverse := F.onMorphisms g.inverse,
+    witness_1 := ♯,
+    witness_2 := ♯
+  }
 
 end tqft.categories.functor

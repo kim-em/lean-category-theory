@@ -28,6 +28,39 @@ definition {u1 v1 u2 v2} Equivalence.reverse { C : Category.{u1 v1} } { D : Cate
   isomorphism_2 := e.isomorphism_1
 }
 
+definition {u1 v1 u2 v2 u3 v3} EquivalenceComposition
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { E : Category.{u3 v3} }
+  ( e : Equivalence C D )
+  ( f : Equivalence D E )
+   : Equivalence C E := {
+  functor := FunctorComposition e.functor f.functor,
+  inverse := FunctorComposition f.inverse e.inverse,
+  isomorphism_1 :=
+    (
+      calc
+             FunctorComposition e.functor (FunctorComposition (FunctorComposition f.functor f.inverse) e.inverse)
+          ≅ₙ FunctorComposition e.functor e.inverse
+           : NaturalIsomorphism'.mkNatIso
+               (Functor_onIsomorphisms (whisker_on_right_functor C e.inverse)
+                 (Functor_onIsomorphisms (whisker_on_left_functor D e.functor) f.isomorphism_1))
+      ... ≅ₙ IdentityFunctor C
+           : NaturalIsomorphism'.mkNatIso e.isomorphism_1
+     ).iso,
+  isomorphism_2 :=
+    (
+      calc
+            FunctorComposition f.inverse (FunctorComposition (FunctorComposition e.inverse e.functor) f.functor)
+          ≅ₙ FunctorComposition f.inverse f.functor
+           : NaturalIsomorphism'.mkNatIso
+               (Functor_onIsomorphisms (whisker_on_right_functor E f.functor)
+                 (Functor_onIsomorphisms (whisker_on_left_functor D f.inverse) e.isomorphism_2))
+      ... ≅ₙ IdentityFunctor E
+           : NaturalIsomorphism'.mkNatIso f.isomorphism_2
+     ).iso
+}
+
 structure {u1 v1 u2 v2} Full     { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) :=
   ( preimage : ∀ { X Y : C.Obj } ( f : D.Hom (F X) (F Y) ), C.Hom X Y )
   ( witness  : ∀ { X Y : C.Obj } ( f : D.Hom (F X) (F Y) ), F.onMorphisms (preimage f) = f )
