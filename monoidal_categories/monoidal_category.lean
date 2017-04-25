@@ -177,8 +177,6 @@ lemma MonoidalStructure.inverse_associator_naturality_0
   ( m : MonoidalStructure C )
   ( X Y : C.Obj ) : @Functor.onMorphisms _ _ m.tensor ⟨X, Y⟩ ⟨X, Y⟩ ⟨C.identity X, C.identity Y⟩ = C.identity (m.tensor.onObjects ⟨X, Y⟩) := ♮
 
--- set_option old_structure_cmd true
-
 structure {u v} MonoidalCategory extends C : Category.{u v} :=
   ( m : MonoidalStructure C )
 
@@ -186,20 +184,5 @@ definition {u v} MonoidalCategory_coercion_to_Category : has_coe MonoidalCategor
   { coe := MonoidalCategory.C }
 
 attribute [instance] MonoidalCategory_coercion_to_Category
-
-
--- PROJECT If multiple coercions were allowed, and field access could use coercions, then we might try:
--- structure MonoidalCategory :=
---   ( C : Category )
---   ( m : MonoidalStructure C )
-
--- instance MonoidalCategory_coercion_to_MonoidalStructure : has_coe_to_fun (MonoidalCategory) :=
--- { F   := λ m, MonoidalStructure m.C,
---   coe := MonoidalCategory.m }
--- instance MonoidalCategory_coercion_to_Category : has_coe MonoidalCategory Category :=
---   { coe := MonoidalCategory.C }
-
--- def f ( C : MonoidalCategory ) := Category.identity C
--- def g ( C : MonoidalCategory ) := MonoidalStructure.tensor_unit C
 
 end tqft.categories.monoidal_category
