@@ -22,8 +22,7 @@ lemma pentagon_in_terms_of_natural_transformations
     dsimp,
     apply NaturalTransformations_componentwise_equal,
     intros,
-    unfold_unfoldable,
-    unfold_unfoldable, -- FIXME
+    unfold_unfoldable, -- probably we're unfolding far too much here.
     induction X with PQR S,
     induction PQR with PQ R,
     induction PQ with P Q,
@@ -33,8 +32,6 @@ lemma pentagon_in_terms_of_natural_transformations
     erewrite C.right_identity,
     erewrite C.right_identity,
     erewrite C.right_identity,
-    erewrite C.left_identity,
-    erewrite C.left_identity,
     -- erewrite m.pentagon P Q R S, --- TODO This is pretty weird; Pentagon has λs in it.
     pose p := m.pentagon P Q R S,
     simp at p,
