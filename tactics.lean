@@ -178,7 +178,7 @@ namespace tactic.interactive
 
   private meta def congr_aux : expr → expr → tactic unit
   | (app f₁ a₁) (app f₂ a₂) :=
-  do apply ``(congr),
+     do fapply ``(@congr _ _ %%f₁ %%f₂ %%a₁ %%a₂),
      swap, reflexivity <|> swap,
      congr_aux f₁ f₂
   | _ _ := try reflexivity

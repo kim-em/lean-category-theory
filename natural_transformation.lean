@@ -25,17 +25,17 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   coe := NaturalTransformation.components }
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
-@[pointwise] lemma {u1 v1 u2 v2} NaturalTransformations_componentwise_equal
-  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
-  { F G : Functor C D }
-  ( α β : NaturalTransformation F G )
-  ( w : ∀ X : C.Obj, α X = β X ) : α = β :=
-  begin
-    induction α with α_components α_naturality,
-    induction β with β_components β_naturality,
-    have hc : α_components = β_components, from funext w,
-    by subst hc
-  end
+-- @[pointwise] lemma {u1 v1 u2 v2} NaturalTransformations_componentwise_equal
+--   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
+--   { F G : Functor C D }
+--   ( α β : NaturalTransformation F G )
+--   ( w : ∀ X : C.Obj, α X = β X ) : α = β :=
+--   begin
+--     induction α with α_components α_naturality,
+--     induction β with β_components β_naturality,
+--     have hc : α_components = β_components, from funext w,
+--     by subst hc
+--   end
 
 definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
   {
@@ -100,7 +100,7 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_right
 
 open tactic.interactive
 
-set_option pp.all true
+-- set_option pp.all true
 
 definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
 {
@@ -110,7 +110,7 @@ definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category
   identity := λ F, IdentityNaturalTransformation F,
   compose  := @vertical_composition_of_NaturalTransformations C D,
 
-  left_identity  := ♯,
+  left_identity  := begin blast, congr_struct end,
   right_identity := ♯,
   associativity  := ♯
 }
