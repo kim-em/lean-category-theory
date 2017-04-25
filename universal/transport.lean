@@ -1,7 +1,5 @@
 set_option pp.all true
 
-#check prod.rec
-
 lemma transport_refl { α : Type } ( a b : α ) ( p : a = b ) : @eq.rec α a _ (eq.refl a) b p = eq.refl b :=
 begin
   simp

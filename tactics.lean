@@ -68,8 +68,6 @@ namespace tactic.interactive
   meta def force (t : itactic) : tactic unit := _root_.force t
 end tactic.interactive
 
--- #check dunfold_core
-
 -- meta def dunfold_core (m : transparency) (max_steps : nat) (cs : list name) (e : expr) : tactic expr :=
 -- let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
 --   guard (cs.any e.is_app_of),

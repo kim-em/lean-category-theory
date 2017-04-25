@@ -182,9 +182,6 @@ lemma MonoidalStructure.inverse_associator_naturality_0
 structure {u v} MonoidalCategory extends C : Category.{u v} :=
   ( m : MonoidalStructure C )
 
-set_option pp.universes true
-#print MonoidalCategory
-
 definition {u v} MonoidalCategory_coercion_to_Category : has_coe MonoidalCategory.{u v} Category.{u v} :=
   { coe := MonoidalCategory.C }
 
