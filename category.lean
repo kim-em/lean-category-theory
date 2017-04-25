@@ -3,18 +3,13 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .tactics
+import .graph
 
-/-
--- We've decided that Obj and Hom should be fields of Category, rather than parameters.
--- Mostly this is for the sake of simpler signatures, but it's possible that it is not the right choice.
--- Functor and NaturalTransformation are each parameterized by both their source and target.
--/
+open tqft.categories.graph
 
 namespace tqft.categories
 
-structure {u v} Category :=
-  (Obj : Type u)
-  (Hom : Obj → Obj → Type v)
+structure {u v} Category extends graph : Graph.{u v} :=
   (identity : Π X : Obj, Hom X X)
   (compose  : Π { X Y Z : Obj }, Hom X Y → Hom Y Z → Hom X Z)
 
@@ -38,8 +33,8 @@ attribute [pointwise] Category.identity
 
 open Category
 
--- TODO, eventually unify this code with the corresponding code for Graph, perhaps just by making Categories Graphs.
-inductive {u v} morphism_path { C : Category.{u v} } : Obj C → Obj C → Type (max u v)
+-- FIXME see https://github.com/leanprover/lean/issues/1507
+inductive {u v} morphism_path { C : Category.{u v} } : Graph.Obj C.graph → Graph.Obj C.graph → Type (max u v)
 | nil  : Π ( h : C.Obj ), morphism_path h h
 | cons : Π { h s t : C.Obj } ( e : C.Hom h s ) ( l : morphism_path s t ), morphism_path h t
 

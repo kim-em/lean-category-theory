@@ -219,7 +219,7 @@ open nat
 
 private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
 | 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
-| _        []        := done <|> trace "We've tried all tactics in the chain, but there are still unsolved goals." >> skip -- We've run out of tactics to apply!
+| _        []        := done <|> /-trace "We've tried all tactics in the chain, but there are still unsolved goals." >>-/ skip -- We've run out of tactics to apply!
 | (succ n) (t :: ts) := done <|> /-trace (list.length ts) >>-/ (seq t (chain' n tactics)) <|> chain' (succ n) ts
 
 meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 20 tactics
