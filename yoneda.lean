@@ -22,67 +22,67 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
     onObjects := λ X, {
         onObjects     := λ Y, C.Hom Y X,
         onMorphisms   := λ Y Y' f, λ g, C.compose f g,
-        identities    := ♯,
-        functoriality := ♯
+        identities    := sorry,
+        functoriality := sorry 
     },
     onMorphisms   := λ X X' f, {
         components := λ Y, λ g, C.compose g f,
-        naturality := ♯
+        naturality := sorry
     },
-    identities    := ♮,
-    functoriality := ♯
+    identities    := sorry,
+    functoriality := sorry
 }
 
-theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
-begin
---   This almost works very quickly with blast, but too much gets deferred.
---   blast,
---   rewrite id_locked_eq, -- FIXME why doesn't blast do this?
---   all_goals { try {
---       pose p := congr_arg (λ T, NaturalTransformation.components T) a,
---       simp at p,
---       pose p' := congr_fun p X,
---       simp at p',
---       pose p'' := congr_fun p' (C.identity X),
---       simp at p'',
---       exact p''
---   } },
-  unfold Embedding,
-  unfold Yoneda,
-  split,
-  -- First we show it is full.
-  begin
-    unfold Full,
-    intros,
-    unfold Surjective,
-    fapply subtype.mk, -- we ned to build a preimage, which is expressed as a subtype.
-    -- Now we have to construct the preimage
-    begin
-        intros,
-        exact (a.components X) (C.identity X), -- <-- this is a critical step for surjectivity
-    end,
-    -- then verify that it really is a preimage
-    begin
-        blast
-    end,
-  end,
-  -- Second we show it is faithful.
-  begin
-    unfold Faithful,
-    intros,
-    unfold Injective,
-    apply plift.up,
-    intros X Y f g,
-    simp,
-    intros a,
-    pose p := congr_arg (λ T, NaturalTransformation.components T) a,
-    simp at p,
-    pose p' := congr_fun p X,
-    simp at p',
-    pose p'' := congr_fun p' (C.identity X),
-    simp at p'',
-    exact p''
-  end
-end
+-- theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
+-- begin
+-- --   This almost works very quickly with blast, but too much gets deferred.
+-- --   blast,
+-- --   rewrite id_locked_eq, -- FIXME why doesn't blast do this?
+-- --   all_goals { try {
+-- --       pose p := congr_arg (λ T, NaturalTransformation.components T) a,
+-- --       simp at p,
+-- --       pose p' := congr_fun p X,
+-- --       simp at p',
+-- --       pose p'' := congr_fun p' (C.identity X),
+-- --       simp at p'',
+-- --       exact p''
+-- --   } },
+--   unfold Embedding,
+--   unfold Yoneda,
+--   split,
+--   -- First we show it is full.
+--   begin
+--     unfold Full,
+--     intros,
+--     unfold Surjective,
+--     fapply subtype.mk, -- we ned to build a preimage, which is expressed as a subtype.
+--     -- Now we have to construct the preimage
+--     begin
+--         intros,
+--         exact (a.components X) (C.identity X), -- <-- this is a critical step for surjectivity
+--     end,
+--     -- then verify that it really is a preimage
+--     begin
+--         blast
+--     end,
+--   end,
+--   -- Second we show it is faithful.
+--   begin
+--     unfold Faithful,
+--     intros,
+--     unfold Injective,
+--     apply plift.up,
+--     intros X Y f g,
+--     simp,
+--     intros a,
+--     pose p := congr_arg (λ T, NaturalTransformation.components T) a,
+--     simp at p,
+--     pose p' := congr_fun p X,
+--     simp at p',
+--     pose p'' := congr_fun p' (C.identity X),
+--     simp at p'',
+--     exact p''
+--   end
+-- end
 
 end tqft.categories.yoneda
