@@ -1,6 +1,6 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
--- Authors: Stephen Morgan, Scott Morrison
+-- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
 import .natural_transformation
 import .isomorphism
@@ -37,7 +37,7 @@ definition {u1 v1 u2 v2 u3 v3} EquivalenceComposition
    : Equivalence C E := {
   functor := FunctorComposition e.functor f.functor,
   inverse := FunctorComposition f.inverse e.inverse,
-  isomorphism_1 :=
+  isomorphism_1 := 
     (
       calc
              FunctorComposition e.functor (FunctorComposition (FunctorComposition f.functor f.inverse) e.inverse)
