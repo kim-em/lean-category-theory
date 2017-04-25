@@ -71,7 +71,7 @@ attribute [simp,ematch] Full.witness
 structure {u1 v1 u2 v2} Faithful { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) :=
   ( injectivity : ∀ { X Y : C.Obj } ( f g : C.Hom X Y ) ( p : F.onMorphisms f = F.onMorphisms g ), f = g )
 
-attribute [pointwise] Faithful.injectivity
+-- attribute [pointwise] Faithful.injectivity -- This would cause problems! We'd try to prove morphisms are equal by inventing faithful functors.
 
 definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := (Full F) × (Faithful F)
 

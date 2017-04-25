@@ -40,7 +40,7 @@ end
   reflexivity
 end
 
-lemma foo { α β : Type } ( a b : α ) ( p : a = b ) : @eq.rec α a _ (eq.refl (@prod.mk α β a)) b p = eq.refl (@prod.mk α β b) := by simp
+-- lemma foo { α β : Type } ( a b : α ) ( p : a = b ) : @eq.rec α a _ (eq.refl (@prod.mk α β a)) b p = eq.refl (@prod.mk α β b) := by simp
 
 -- set_option pp.implicit true
 set_option pp.max_steps 50000
@@ -55,39 +55,40 @@ definition {u v} Categories_has_FiniteProducts : has_FiniteProducts CategoryOfCa
     map                 := λ Z, Functor_to_ProductCategory,
     left_factorisation  := ♯,
     right_factorisation := ♯,
-    uniqueness          := begin
-                             intros,
-                             pointwise tactic.skip,
-                             {
-                               intros,
-                               apply pair_equality_4,
-                               {
-                                 pose p := congr_arg Functor.onObjects left_witness,
-                                 pose p' := congr_fun p X,
-                                 dsimp_all_hypotheses,
-                                 exact p'
-                               },
-                               {
-                                 pose p := congr_arg Functor.onObjects right_witness,
-                                 pose p' := congr_fun p X,
-                                 dsimp_all_hypotheses,
-                                 exact p'
-                               }
-                             },
-                             {
-                               intros X Y φ,
-                               apply pair_equality_4,
-                               {
-                                 pose p := congr_darg (λ T, @Functor.onMorphisms Z C T X Y φ) left_witness,
-                                 dsimp_all_hypotheses,
-                                 dunfold_everything',
-                                --  repeat { rewrite transport_Prop },
-                                rewrite foo,
-                                 exact p
-                               },
-                               admit
-                             },
-                           end
+    uniqueness          := sorry -- PROJECT:
+                          --  begin
+                          --    intros,
+                          --    pointwise,
+                          --    {
+                          --      intros,
+                          --      apply pair_equality_4,
+                          --      {
+                          --        pose p := congr_arg Functor.onObjects left_witness,
+                          --        pose p' := congr_fun p X,
+                          --        dsimp_all_hypotheses,
+                          --        exact p'
+                          --      },
+                          --      {
+                          --        pose p := congr_arg Functor.onObjects right_witness,
+                          --        pose p' := congr_fun p X,
+                          --        dsimp_all_hypotheses,
+                          --        exact p'
+                          --      }
+                          --    },
+                          --    {
+                          --      intros X Y φ,
+                          --      apply pair_equality_4,
+                          --      {
+                          --        pose p := congr_darg (λ T, @Functor.onMorphisms Z C T X Y φ) left_witness,
+                          --        dsimp_all_hypotheses,
+                          --        dunfold_everything,
+                          --       --  repeat { rewrite transport_Prop },
+                          --       --  rewrite foo,
+                          --        exact p
+                          --      },
+                          --      admit
+                          --    }
+                          --  end
   }
 }
 attribute [instance] Categories_has_FiniteProducts

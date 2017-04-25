@@ -39,7 +39,7 @@ definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (Idempot
   functoriality := ♮
 }
 
-open tqft.categories.equivalence
+-- open tqft.categories.equivalence
 
 @[simp] lemma subtype.first { α : Type } { P : α → Prop } { X Y : α } { hX : P X} { hY : P Y } : (subtype.mk X hX  = subtype.mk Y hY) ↔ (X = Y) := begin
   split,
@@ -79,8 +79,8 @@ end
 --   end
 -- end
 
-definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
-  FunctorComposition (functor_to_IdempotentCompletion C) F
+-- definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
+--   FunctorComposition (functor_to_IdempotentCompletion C) F
 
 -- PROJECT prove these lemmas about idempotent completion
 

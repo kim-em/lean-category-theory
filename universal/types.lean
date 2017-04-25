@@ -60,8 +60,8 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
   {
     equalizer     := { x : α // f x = g x },
     inclusion     := λ x, x.val,
-    witness       := begin blast, exact x.property end,
-    map           := begin blast, intros, fsplit, exact k a, exact congr_fun w a end,
+    witness       := ♯,
+    map           := begin blast, intros, exact k a, exact congr_fun w a end,
     factorisation := ♯,
     uniqueness    := begin blast, exact congr_fun witness x end
   }

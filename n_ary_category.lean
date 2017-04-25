@@ -29,26 +29,26 @@ attribute [simp,ematch] n_ary_Category.compose_empty_path
 attribute [simp,ematch] n_ary_Category.compose_length_one_path
 attribute [simp,ematch] n_ary_Category.associativity
 
-lemma n_ary_Category.associativity' { C: n_ary_Category } { X Y Z : C.Obj } ( e : C.Hom X Y ) ( p : path Y Z ) : C.compose ( e :: p ) = (C.compose p[ e, C.compose p ]) :=
-begin
-  rewrite - C.compose_length_one_path e,
-  rewrite - C.associativity,
-  blast,
-  admit
-end
+-- lemma n_ary_Category.associativity' { C: n_ary_Category } { X Y Z : C.Obj } ( e : C.Hom X Y ) ( p : path Y Z ) : C.compose ( e :: p ) = (C.compose p[ e, C.compose p ]) :=
+-- begin
+--   rewrite - C.compose_length_one_path e,
+--   rewrite - C.associativity,
+--   blast,
+--   admit
+-- end
 
-lemma n_ary_Category.associativity'' { C: n_ary_Category } { X Y : C.Obj } ( p : path_of_paths X Y ) :
-    C.compose (@compose_each_path C.graph (@n_ary_Category.compose C) X Y p) = C.compose (concatenate_path_of_paths p) :=
-    begin
-      induction p,
-      blast,
-      unfold compose_each_path._main,
-      unfold concatenate_path_of_paths,
-      rewrite C.associativity,
-      rewrite - ih_1,
-      unfold compose_each_path._main,
-      apply n_ary_Category.associativity'
-    end
+-- lemma n_ary_Category.associativity'' { C: n_ary_Category } { X Y : C.Obj } ( p : path_of_paths X Y ) :
+--     C.compose (@compose_each_path C.graph (@n_ary_Category.compose C) X Y p) = C.compose (concatenate_path_of_paths p) :=
+--     begin
+--       induction p,
+--       blast,
+--       unfold compose_each_path._main,
+--       unfold concatenate_path_of_paths,
+--       rewrite C.associativity,
+--       rewrite - ih_1,
+--       unfold compose_each_path._main,
+--       apply n_ary_Category.associativity'
+--     end
 
 open tqft.categories
 

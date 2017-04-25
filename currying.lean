@@ -15,19 +15,19 @@ namespace tqft.categories.natural_transformation
 
 -- PROJECT show Fun(C → Fun(D → E)) is equivalent to Fun(C × D → E)
 
-theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
-  ( C : Category.{u1 v1} )
-  ( D : Category.{u2 v2} )
-  ( E : Category.{u3 v3} ) :
-  Equivalence (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) :=
-  begin
-    fsplit,
-    fsplit,
-    dunfold_everything,
-    -- FIXME
-    -- I'd really like a satisfactory answer to https://groups.google.com/d/msg/lean-user/6Du2cNKwURs/Z9D4fYNVAwAJ
-    -- before proceeding here.
-  end
+-- theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
+  -- ( C : Category.{u1 v1} )
+  -- ( D : Category.{u2 v2} )
+  -- ( E : Category.{u3 v3} ) :
+  -- Equivalence (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) :=
+  -- begin
+  --   fsplit,
+  --   fsplit,
+  --   dunfold_everything,
+  --   -- FIXME
+  --   -- I'd really like a satisfactory answer to https://groups.google.com/d/msg/lean-user/6Du2cNKwURs/Z9D4fYNVAwAJ
+  --   -- before proceeding here.
+  -- end
 
   -- {
   --   functor := {
