@@ -22,7 +22,7 @@ lemma pentagon_in_terms_of_natural_transformations
     dsimp,
     apply NaturalTransformations_componentwise_equal,
     intros,
-    unfold_unfoldable, -- probably we're unfolding far too much here.
+    unfold_unfoldable, -- FIXME probably we're unfolding far too much here.
     induction X with PQR S,
     induction PQR with PQ R,
     induction PQ with P Q,
