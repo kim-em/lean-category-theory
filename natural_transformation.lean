@@ -100,6 +100,8 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_right
 
 open tactic.interactive
 
+set_option pp.all true
+
 definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
 {
   Obj := Functor C D,
@@ -108,9 +110,9 @@ definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category
   identity := λ F, IdentityNaturalTransformation F,
   compose  := @vertical_composition_of_NaturalTransformations C D,
 
-  left_identity  := by blast_as_simp FunctorCategory_left_identity,
-  right_identity := by blast_as_simp FunctorCategory_right_identity,
-  associativity  := by blast_as_simp FunctorCategory_associativity
+  left_identity  := ♯,
+  right_identity := ♯,
+  associativity  := ♯
 }
 
 definition {u1 v1 u2 v2 u3 v3} whisker_on_left_functor

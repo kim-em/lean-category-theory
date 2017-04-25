@@ -78,7 +78,7 @@ end tactic.interactive
 
 meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
 let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
-  guard (e.is_app),
+  -- guard (e.is_app), -- Nope, sometimes we nee to do this, too!
   new_e ← dunfold_expr_core m e,
   return (changed ∨ (new_e ≠ e), new_e, ff)
 in do (c, new_e) ← dsimplify_core ff max_steps tt (λ c e, failed) unfold e,
@@ -129,18 +129,8 @@ open interactive
 
 -- #eval default_max_steps
 
-meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible /-default_max_steps-/ 1000000 >>= change
-meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try simp
--- do goals ← get_goals,
---    dunfold_everything,
---    try dsimp,
---    try simp,
---    trace goals,
---    goals' ← get_goals,
---    if goals ≠ goals' then dunfold_everything' else skip
-
-meta def unfold_unfoldable : tactic unit := 
-   try ( dunfold_and_simp_all_hypotheses ) >> dunfold_everything'
+meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
+-- meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try simp
 
 -- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=
@@ -184,6 +174,33 @@ do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, 
 
 -- meta def split_goals_and_then ( and_then : tactic unit ) := try ( seq split_goals and_then )
 
+namespace tactic.interactive
+  open expr tactic
+
+  private meta def congr_aux : expr → expr → tactic unit
+  | (app f₁ a₁) (app f₂ a₂) :=
+  do apply ``(congr),
+     swap, reflexivity <|> swap,
+     congr_aux f₁ f₂
+  | _ _ := try reflexivity
+
+  /-- Given a goal of form `f a1 ... an = f' a1' ... an'`, this tactic breaks it down to subgoals
+      `f = f'`, `a1 = a1'`, ... Subgoals provable by reflexivity are dispensed automatically. -/
+  meta def congruence : tactic unit :=
+  do ```(%%lhs = %%rhs) ← target | fail "goal is not an equality",
+     congr_aux lhs rhs
+
+  /-- Given a goal that equates two structure values, this tactic breaks it down to subgoals equating each
+      pair of fields. -/
+  meta def congr_struct : tactic unit :=
+  do ```(%%lhs = %%rhs) ← target | fail "goal is not an equality",
+     ty ← infer_type lhs,
+     [ctor] ← get_constructors_for ty | fail "equated type is not a structure",
+     tactic.cases lhs,
+     tactic.cases rhs,
+     congruence
+end tactic.interactive
+
 meta def trace_goal_type : tactic unit :=
 do g ← target,
    trace g,
@@ -224,13 +241,24 @@ private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic 
 
 meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 20 tactics
 
+meta def unfold_unfoldable : tactic unit := 
+   chain [
+      dunfold_and_simp_all_hypotheses,
+      dunfold_everything,
+      force ( dsimp ),
+      simp
+   ]
+
 meta def blast : tactic unit :=
   -- trace "starting blast" >>
   chain [
     force ( intros >> skip ),
+    tactic.interactive.congr_struct,
     force_pointwise,
     dunfold_and_simp_all_hypotheses,
-    dunfold_everything',
+    dunfold_everything,
+    force ( dsimp ),
+    simp,
     smt_eblast >> done
   ]
 

@@ -9,7 +9,9 @@ open tqft.categories.graph
 
 namespace tqft.categories
 
-structure {u v} Category extends graph : Graph.{u v} :=
+structure {u v} Category :=
+  ( Obj : Type u )
+  ( Hom : Obj → Obj → Type v )
   (identity : Π X : Obj, Hom X X)
   (compose  : Π { X Y Z : Obj }, Hom X Y → Hom Y Z → Hom X Z)
 
@@ -26,6 +28,12 @@ attribute [pointwise] Category.identity
 -- instance Category_to_Hom : has_coe_to_fun Category :=
 -- { F   := λ C, C.Obj → C.Obj → Type v,
 --   coe := Category.Hom }
+
+definition Category.graph ( C : Category ) : Graph := 
+{
+  Obj := C.Obj,
+  Hom := C.Hom
+}
 
 @[ematch] lemma Category.identity_idempotent
   ( C : Category )
