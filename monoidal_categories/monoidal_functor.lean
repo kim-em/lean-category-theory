@@ -13,6 +13,16 @@ namespace tqft.categories.monoidal_functor
 
 universe variables u1 v1 u2 v2 u3 v3
 
+-- structure MonoidalFunctor ( C : MonoidalCategory.{u1 v1} ) ( D : MonoidalCategory.{u2 v2} ) :=
+--   ( functor : Functor.{u1 v1 u2 v2} C D )
+--   ( tensorator : NaturalIsomorphism (FunctorComposition C.m.tensor functor) (FunctorComposition (functor × functor) D.m.tensor) )
+--   ( associativity : ∀ X Y Z : C.Obj, 
+--       D.compose (tensorator (C.m (X, Y), Z)) (D.compose (D.m.tensorMorphisms (tensorator (X, Y)) (D.identity (functor Z))) (D.m.associator (functor X) (functor Y) (functor Z)))
+--       = D.compose (functor.onMorphisms (C.m.associator X Y Z)) (D.compose (tensorator (X, C.m (Y, Z))) (D.m.tensorMorphisms (D.identity (functor X)) (tensorator (Y, Z))))
+--   )
+--   ( identerator : Isomorphism.{u2 v2} D (functor C.m.tensor_unit) D.m.tensor_unit)
+--   ( left_identity  : ∀ X : C.Obj, D.compose (tensorator (C.m.tensor_unit, X)) (D.compose (D.m.tensorMorphisms identerator.morphism (D.identity (functor X))) (D.m.left_unitor  (functor X))) = functor.onMorphisms (C.m.left_unitor X)  )
+--   ( right_identity : ∀ X : C.Obj, D.compose (tensorator (X, C.m.tensor_unit)) (D.compose (D.m.tensorMorphisms (D.identity (functor X)) identerator.morphism) (D.m.right_unitor (functor X))) = functor.onMorphisms (C.m.right_unitor X) )
 structure MonoidalFunctor { C : Category.{u1 v1} } ( m : MonoidalStructure C ) { D : Category.{u2 v2} } ( n : MonoidalStructure D ) :=
   ( functor : Functor C D )
   ( tensorator : NaturalIsomorphism (FunctorComposition m.tensor functor) (FunctorComposition (functor × functor) n.tensor) )

@@ -10,9 +10,7 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.monoidal_category
 
-universe variables u v
-
-structure MonoidalStructure ( C : Category ) :=
+structure {u v} MonoidalStructure ( C : Category.{u v} ) :=
   (tensor                    : TensorProduct C)
   (tensor_unit               : C.Obj)
   (associator_transformation : Associator tensor)
@@ -178,6 +176,20 @@ lemma MonoidalStructure.inverse_associator_naturality_0
   { C : Category }
   ( m : MonoidalStructure C )
   ( X Y : C.Obj ) : @Functor.onMorphisms _ _ m.tensor ⟨X, Y⟩ ⟨X, Y⟩ ⟨C.identity X, C.identity Y⟩ = C.identity (m.tensor.onObjects ⟨X, Y⟩) := ♮
+
+-- set_option old_structure_cmd true
+
+structure {u v} MonoidalCategory extends C : Category.{u v} :=
+  ( m : MonoidalStructure C )
+
+set_option pp.universes true
+#print MonoidalCategory
+
+definition {u v} MonoidalCategory_coercion_to_Category : has_coe MonoidalCategory.{u v} Category.{u v} :=
+  { coe := MonoidalCategory.C }
+
+attribute [instance] MonoidalCategory_coercion_to_Category
+
 
 -- PROJECT If multiple coercions were allowed, and field access could use coercions, then we might try:
 -- structure MonoidalCategory :=
