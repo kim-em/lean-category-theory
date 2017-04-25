@@ -120,13 +120,13 @@ begin
   pose p := e.isomorphism_1.naturality_2 (preimage e X Y h),
   rewrite FunctorComposition_is_composition at p,
   rewrite (eq.symm p),
-  unfold_unfoldable,
   repeat { erewrite - C.associativity },
   erewrite e.isomorphism_1.componentwise_witness_1,
   repeat { rewrite C.associativity },
   erewrite e.isomorphism_1.componentwise_witness_1,
   erewrite C.right_identity,
-  erewrite C.left_identity
+  erewrite C.left_identity,
+  trivial
 end
 
 -- FIXME this is lame.
@@ -134,7 +134,7 @@ meta def rewrite_once : tactic unit :=
 do r ← tactic.to_expr `(preimage_lemma e X Y h),
    tactic.rewrite_core semireducible tt tt (occurrences.pos [2]) tt r
 
-
+set_option pp.all true
 lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Full (e.functor) :=
   {
     preimage := preimage e,
@@ -142,11 +142,10 @@ lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Categor
         begin 
           intros X Y h,
           apply (Equivalences_are_Faithful e.reverse).injectivity,
-          unfold_unfoldable,
+          unfold_unfoldable, -- FIXME This is going berserk unfolding implicit arguments.
           -- erewrite - (preimage_lemma e X Y h),
           rewrite_once,
-          unfold_unfoldable,
-          trivial
+          unfold_unfoldable
         end
   }
 

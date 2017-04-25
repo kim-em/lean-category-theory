@@ -39,6 +39,7 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
     simp at w,    
     assert p : g = k,
       begin
+        -- FIXME why can't we automate this?
         rewrite - C.left_identity k,
         rewrite - wα2,
         rewrite C.associativity,

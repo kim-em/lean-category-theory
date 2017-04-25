@@ -120,8 +120,7 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
                       trivial
                     end
     },
-    witness_1 := --sorry,
-                 begin
+    witness_1 := begin
                    pointwise,
                    intros,
                    pointwise,
@@ -133,19 +132,18 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
                    erewrite A.triangle_2,
                    simp
                  end,
-    witness_2 := sorry
-                --  begin
-                --    pointwise,
-                --    intros,
-                --    pointwise,
-                --    intros,
-                --    unfold_unfoldable,
-                --    erewrite - C.associativity,
-                --    erewrite - A.unit_naturality,
-                --    erewrite C.associativity,
-                --    erewrite A.triangle_1,
-                --    simp
-                --  end
+    witness_2 := begin
+                   pointwise,
+                   intros,
+                   pointwise,
+                   intros,
+                   unfold_unfoldable,
+                   erewrite - C.associativity,
+                   erewrite - A.unit_naturality,
+                   erewrite C.associativity,
+                   erewrite A.triangle_1,
+                   simp
+                 end
   }
 
 

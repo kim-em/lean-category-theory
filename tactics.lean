@@ -130,7 +130,6 @@ open interactive
 -- #eval default_max_steps
 
 meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
--- meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >> try simp
 
 -- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=
@@ -243,10 +242,10 @@ meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 
 
 meta def unfold_unfoldable : tactic unit := 
    chain [
-      dunfold_and_simp_all_hypotheses,
-      dunfold_everything,
       force ( dsimp ),
-      simp
+      simp,
+      dunfold_and_simp_all_hypotheses,
+      dunfold_everything
    ]
 
 meta def blast : tactic unit :=
@@ -255,10 +254,10 @@ meta def blast : tactic unit :=
     force ( intros >> skip ),
     tactic.interactive.congr_struct,
     force_pointwise,
-    dunfold_and_simp_all_hypotheses,
-    dunfold_everything,
     force ( dsimp ),
     simp,
+    dunfold_and_simp_all_hypotheses,
+    dunfold_everything,
     smt_eblast >> done
   ]
 

@@ -16,9 +16,9 @@ definition DiscreteCategory ( α : Type u ) : Category.{u v} :=
   Hom      := λ X Y, ulift (plift (X = Y)),
   identity := λ X, up (up rfl),
   compose  := λ X Y Z f g, up (up (eq.trans (down (down f)) (down (down g)))),
-  left_identity  := begin intros, induction f with f', induction f', trivial end,
-  right_identity := begin intros, induction f with f', induction f', trivial end,
-  associativity  := begin intros, trivial end
+  left_identity  := ♯,
+  right_identity := ♯,
+  associativity  := ♯
 }
 
 end tqft.categories
