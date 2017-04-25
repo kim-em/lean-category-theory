@@ -79,11 +79,12 @@ end tactic.interactive
 --       return new_e
 
 meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
-let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
-  -- guard (e.is_app),
+let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
+  guard (e.is_app),
   new_e ← dunfold_expr_core m e,
-  return (u, new_e, tt)
-in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
+  return (changed ∨ (new_e ≠ e), new_e, ff)
+in do (c, new_e) ← dsimplify_core ff max_steps tt (λ c e, failed) unfold e,
+      guard (c = tt), -- make sure something actually changed
       return new_e
 
 meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
@@ -102,19 +103,28 @@ do num_reverted ← revert h,
    (expr.pi n bi d b : expr) ← target,
    new_d ← dunfold_core' reducible default_max_steps d,
    new_d_simp ← s.dsimplify new_d,
+   guard (new_d_simp ≠ d),
    change $ expr.pi n bi new_d_simp b,
    intron num_reverted
+
+-- Applies a list of tactics in turn, always succeeding.
+meta def list_try_seq : list (tactic unit) → tactic unit
+| list.nil  := skip
+| (t :: ts) := seq (try t) (list_try_seq ts)
+
+-- Applies a list of tactics in turn, succeeding if at least one succeeds.
+meta def at_least_one : list (tactic unit) → tactic unit
+| list.nil  := fail "at_least_one tactic failed, no more tactics"
+| (t :: ts) := (t >> (list_try_seq ts)) <|> (at_least_one ts)
 
 meta def dunfold_and_simp_all_hypotheses : tactic unit :=
 do l ← local_context,
    s ← simp_lemmas.mk_default,
-   l.reverse.mfor' $ λ h, do
-     try (dunfold_and_simp_at s h)
+   at_least_one (l.reverse.for (λ h, dunfold_and_simp_at s h))
 
 meta def dsimp_all_hypotheses : tactic unit :=
 do l ← local_context,
-   l.reverse.mfor' $ λ h, do
-     try (dsimp_at h)
+   at_least_one (l.reverse.for (λ h, dsimp_at h))
 
 open lean.parser
 open interactive
@@ -132,7 +142,7 @@ meta def dunfold_everything' : tactic unit := dunfold_everything >> try dsimp >>
 --    if goals ≠ goals' then dunfold_everything' else skip
 
 meta def unfold_unfoldable : tactic unit := 
-   dunfold_and_simp_all_hypotheses >> dunfold_everything'
+   try ( dunfold_and_simp_all_hypotheses ) >> dunfold_everything'
 
 -- TODO try using get_unused_name
 meta def new_names ( e : expr ) : list name :=
@@ -193,12 +203,12 @@ attribute [pointwise] pprod.mk
 attribute [pointwise] subtype.mk
 
 -- open tactic.interactive
-meta def blast  : tactic unit := intros >> try ( pointwise_and_then blast ) >> try ( unfold_unfoldable ) >> try smt_eblast >> try ( pointwise_and_then blast ) -- >> split_goals_and_then blast
+-- meta def blast  : tactic unit := intros >> try ( pointwise_and_then blast ) >> try ( unfold_unfoldable ) >> try smt_eblast >> try ( pointwise_and_then blast ) -- >> split_goals_and_then blast
 
 meta def done : tactic unit :=
   do goals ← get_goals,
      guard (goals = []),
-     trace "no goals",
+    --  trace "no goals",
      skip
 
 meta def monitor_progress { α : Type } ( t : tactic α ) : tactic (bool × α) :=
@@ -207,26 +217,24 @@ do goals ← get_goals,
    goals' ← get_goals,
    return (goals ≠ goals', result)
 
-meta def chain ( tactics : list (tactic unit) ) : tactic unit := repeat ( first tactics )
-
 open nat
 
--- private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
--- | 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
--- | _        []        := done <|> trace "We've tried all tactics in the chain, but there are still unsolved goals." >> skip -- We've run out of tactics to apply!
--- | (succ n) (t :: ts) := done <|> (seq t (chain' n tactics)) <|> chain' (succ n) ts
+private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
+| 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
+| _        []        := done <|> trace "We've tried all tactics in the chain, but there are still unsolved goals." >> skip -- We've run out of tactics to apply!
+| (succ n) (t :: ts) := done <|> /-trace (list.length ts) >>-/ (seq t (chain' n tactics)) <|> chain' (succ n) ts
 
--- meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 5 tactics
+meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 20 tactics
 
--- meta def blast : tactic unit :=
---   -- trace "starting blast" >>
---   chain [
---     force ( intros >> skip ),
---     force ( cases ), -- FIXME remove lots of pointwises from .mk's; this should handle them
---     force_pointwise,
---     dunfold_and_simp_all_hypotheses >> force ( dunfold_everything' ), -- FIXME See https://github.com/leanprover/lean/issues/1517#issuecomment-293827843 for a nice solution for hypotheses
---     focus ( smt_eblast )
---   ]
+meta def blast : tactic unit :=
+  -- trace "starting blast" >>
+  chain [
+    force ( intros >> skip ),
+    force_pointwise,
+    dunfold_and_simp_all_hypotheses,
+    dunfold_everything',
+    smt_eblast >> done
+  ]
 
 -- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }
