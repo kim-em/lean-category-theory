@@ -41,8 +41,7 @@ definition Category.graph ( C : Category ) : Graph :=
 
 open Category
 
--- FIXME see https://github.com/leanprover/lean/issues/1507
-inductive {u v} morphism_path { C : Category.{u v} } : Graph.Obj C.graph → Graph.Obj C.graph → Type (max u v)
+inductive {u v} morphism_path { C : Category.{u v} } : C.Obj → C.Obj → Type (max u v)
 | nil  : Π ( h : C.Obj ), morphism_path h h
 | cons : Π { h s t : C.Obj } ( e : C.Hom h s ) ( l : morphism_path s t ), morphism_path h t
 

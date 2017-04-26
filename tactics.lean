@@ -173,15 +173,25 @@ do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, 
 
 -- meta def split_goals_and_then ( and_then : tactic unit ) := try ( seq split_goals and_then )
 
+set_option trace.check true
+lemma {u v w} dcongr {α : Sort u} { Z : α → Sort v } {γ : Sort w} 
+                     {f₁ f₂ : Π a : α, Z a → γ} {a₁ a₂ : α} {b₁ : Z a₁} {b₂ : Z a₂} (h₁ : f₁ = f₂) (h₂ : a₁ = a₂) (h₃ : @eq.rec α a₁ Z b₁ a₂ h₂ = b₂): f₁ a₁ b₁ = f₂ a₂ b₂ :=
+begin
+  cases h₁,
+  cases h₂,
+  cases h₃,
+  reflexivity
+end
+
 namespace tactic.interactive
   open expr tactic
 
   private meta def congr_aux : expr → expr → tactic unit
+  | (app (app f₁ a₁) b₁) (app (app f₂ a₂) b₂) :=
+     fapply ``(@dcongr _ _ _ %%f₁ %%f₂ %%a₁ %%a₂ %%b₁ %%b₂)
   | (app f₁ a₁) (app f₂ a₂) :=
-     do fapply ``(@congr _ _ %%f₁ %%f₂ %%a₁ %%a₂),
-     swap, reflexivity <|> swap,
-     congr_aux f₁ f₂
-  | _ _ := try reflexivity
+     fapply ``(@congr _ _ %%f₁ %%f₂ %%a₁ %%a₂)
+  | _ _ := failed
 
   /-- Given a goal of form `f a1 ... an = f' a1' ... an'`, this tactic breaks it down to subgoals
       `f = f'`, `a1 = a1'`, ... Subgoals provable by reflexivity are dispensed automatically. -/
@@ -251,8 +261,9 @@ meta def unfold_unfoldable : tactic unit :=
 meta def blast : tactic unit :=
   -- trace "starting blast" >>
   chain [
+    force ( reflexivity ),
     force ( intros >> skip ),
-    tactic.interactive.congr_struct,
+    -- tactic.interactive.congr_struct,
     force_pointwise,
     force ( dsimp ),
     simp,
