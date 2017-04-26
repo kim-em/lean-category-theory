@@ -82,31 +82,31 @@ inductive Two : Type
 open Two
 
 definition WalkingPair : Graph := {
-  vertices := Two,
-  edges    := λ X Y, empty
+  Obj := Two,
+  Hom := λ X Y, empty
 }
 definition WalkingParallelPair : Graph := {
-  vertices := Two,
-  edges    := λ X Y, match X, Y with 
-                       | _0, _1 := Two
-                       | _,  _  := empty
-                     end
+  Obj := Two,
+  Hom := λ X Y, match X, Y with 
+                  | _0, _1 := Two
+                  | _,  _  := empty
+                end
 }
 
 definition Pair_homomorphism { C : Category } ( α β : C.Obj ) : GraphHomomorphism WalkingPair C := {
-  onVertices := λ X, match X with
+  onObjects   := λ X, match X with
                        | _0 := α
                        | _1 := β
-                    end,
-  onEdges    := λ X Y e, match X, Y, e with end
+                      end,
+  onMorphisms := λ X Y e, match X, Y, e with end
 }
 
 definition ParallelPair_homomorphism { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : GraphHomomorphism WalkingParallelPair C := {
-  onVertices := λ X, match X with
+  onObjects   := λ X, match X with
                        | _0 := α
                        | _1 := β
-                    end,
-  onEdges    := λ X Y e, match X, Y, e with
+                     end,
+  onMorphisms := λ X Y e, match X, Y, e with
                            | _0, _1, _0 := f
                            | _0, _1, _1 := g
                          end

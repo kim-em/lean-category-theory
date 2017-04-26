@@ -65,17 +65,18 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
   identities    := ♮,
   functoriality := begin
                      blast,
-                     unfold PathCategory,
-                     dsimp,
                      induction f,
-                     blast,
-                     dsimp,
-                     pose p := ih_1 g,
-                     unfold concatenate_paths,
-                     unfold path_to_morphism,
-                     rewrite p,
-                     erewrite - C.associativity,
-                     trivial
+                     {
+                        blast,
+                        unfold_unfoldable -- TODO investigate why we need this.
+                     },
+                     {
+                      pose p := ih_1 g,
+                      unfold concatenate_paths,
+                      unfold path_to_morphism,
+                      rewrite p,
+                      erewrite - C.associativity
+                     }
                    end
 }
 

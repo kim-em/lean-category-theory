@@ -63,8 +63,8 @@ definition MonoidalCategoryOfTypes : MonoidalStructure CategoryOfTypes :=
     witness_1 := ♯,
     witness_2 := ♮
   },
-  pentagon := ♯,
-  triangle := ♯
+  pentagon := begin unfold Pentagon, blast end, -- TODO investigate automating this unfold,
+  triangle := begin unfold Triangle, blast end
 }
 
 definition SymmetricMonoidalCategoryOfTypes : Symmetry MonoidalCategoryOfTypes := {
@@ -80,8 +80,8 @@ definition SymmetricMonoidalCategoryOfTypes : Symmetry MonoidalCategoryOfTypes :
    witness_1 := ♯,
    witness_2 := ♯ 
   },
-  hexagon_1 := ♯,
-  hexagon_2 := ♯,
+  hexagon_1 := begin unfold Hexagon_1, blast end, -- TODO investigate automating this unfold,
+  hexagon_2 := begin unfold Hexagon_2, blast end,
   symmetry  := ♯
 }
 

@@ -125,8 +125,7 @@ begin
   repeat { rewrite C.associativity },
   erewrite e.isomorphism_1.componentwise_witness_1,
   erewrite C.right_identity,
-  erewrite C.left_identity,
-  trivial
+  erewrite C.left_identity
 end
 
 -- FIXME this is lame.

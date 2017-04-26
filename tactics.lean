@@ -95,6 +95,17 @@ let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
 in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
       return new_e
 
+meta def unfold_projections_core (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
+let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
+  new_e ← unfold_projection_core m e,
+  return (changed ∨ (new_e ≠ e), new_e, tt)
+in do (c, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unfold e,
+      guard (c = tt), -- make sure something actually changed
+      return new_e
+
+meta def unfold_projections : tactic unit :=
+target >>= unfold_projections_core semireducible default_max_steps >>= change
+
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
 do num_reverted ← revert h,
@@ -268,7 +279,8 @@ meta def blast : tactic unit :=
     force ( dsimp ),
     simp,
     dunfold_and_simp_all_hypotheses,
-    dunfold_everything,
+    unfold_projections,
+    -- dunfold_everything,
     smt_eblast >> done
   ]
 

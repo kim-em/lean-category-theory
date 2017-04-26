@@ -23,8 +23,16 @@ definition {u} Types_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfTypes
     uniqueness := begin
                     blast,                    
                     induction x,
-                    exact congr_fun left_witness a,
-                    exact congr_fun right_witness a,
+                    {
+                      pose p := (congr_fun left_witness a), -- TODO it's a pity this simp is needed.
+                      simp at p,
+                      exact p
+                    },
+                    {
+                      pose p := (congr_fun right_witness a),
+                      simp at p,
+                      exact p
+                    }
                   end
     }
   }
@@ -61,7 +69,17 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
     equalizer     := { x : α // f x = g x },
     inclusion     := λ x, x.val,
     witness       := ♯,
-    map           := begin blast, intros, exact k a, exact congr_fun w a end,
+    map           := begin
+                       blast,
+                       {
+                         exact k a
+                       },
+                       {
+                         pose p := congr_fun w a,
+                         simp at p,
+                         exact p
+                       }
+                    end,
     factorisation := ♯,
     uniqueness    := begin blast, exact congr_fun witness x end
   }

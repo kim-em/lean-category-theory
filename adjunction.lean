@@ -99,10 +99,9 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
                       intros,
                       pointwise,
                       intros,
-                      unfold_unfoldable,
+                      unfold_unfoldable, -- TODO investigate unfolding less here
                       repeat { rewrite - C.associativity },
-                      erewrite A.unit_naturality,
-                      trivial
+                      erewrite A.unit_naturality
                     end
     },
     inverse   := 
@@ -116,8 +115,7 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
                       intros,
                       unfold_unfoldable,
                       repeat { rewrite D.associativity },
-                      erewrite - A.counit_naturality,
-                      trivial
+                      erewrite - A.counit_naturality
                     end
     },
     witness_1 := begin
