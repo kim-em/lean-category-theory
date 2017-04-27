@@ -266,8 +266,9 @@ meta def unfold_unfoldable : tactic unit :=
       force ( dsimp ),
       simp,
       dunfold_and_simp_all_hypotheses,
-      dunfold_everything
-   ]
+      unfold_projections
+      -- dunfold_everything
+  ]
 
 meta def blast : tactic unit :=
   -- trace "starting blast" >>

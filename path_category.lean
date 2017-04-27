@@ -68,7 +68,8 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
                      induction f,
                      {
                         blast,
-                        unfold_unfoldable -- TODO investigate why we need this.
+                        dunfold_everything, -- TODO investigate why we need this.
+                        simp
                      },
                      {
                       pose p := ih_1 g,

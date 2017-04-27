@@ -29,40 +29,16 @@ namespace tqft.categories.braided_monoidal_category
 lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
   begin
     apply NaturalTransformations_componentwise_equal,
-    intros,
+    intros, 
     induction X with X_1 X_2,
-    -- unfold_unfoldable, -- FIXME unfold_unfoldable messes up implicit arguments
-    -- simp
-    unfold squared_Braiding, 
-    unfold IdentityNaturalTransformation,
-    unfold vertical_composition_of_NaturalTransformations,
-    dsimp,
-    unfold whisker_on_left,
-    unfold whisker_on_right,
-    unfold horizontal_composition_of_NaturalTransformations,
-    unfold IdentityNaturalTransformation,
-    dsimp,
-    unfold FunctorComposition,
-    unfold SwitchSymmetry,
-    unfold FunctorComposition_associator,
-    unfold FunctorComposition_left_unitor,
-    unfold FunctorComposition_associator._aux_1,
-    unfold SwitchSymmetry._aux_1,
-    unfold FunctorComposition_left_unitor._aux_1,
-    dsimp,
-    unfold SwitchProductCategory,
-    unfold FunctorComposition,
-    dsimp,
-    simp,
-    unfold IdentityFunctor,
-    dsimp,
-    simp
+    blast
   end
 
 lemma {u v} symmetric_in_terms_of_components { C : Category.{u v} } { m : MonoidalStructure C } ( β : Braiding m ) ( e : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor ) : Symmetry m := {
   β with 
     symmetry := λ X Y : C.Obj, begin
                                  refine ( cast _ (congr_fun (congr_arg NaturalTransformation.components e) (X, Y)) ),
+                                 
                                  -- FIXME lame!
                                  unfold squared_Braiding,
                                  unfold IdentityNaturalTransformation,
@@ -83,9 +59,6 @@ lemma {u v} symmetric_in_terms_of_components { C : Category.{u v} } { m : Monoid
                                  dsimp,
                                  unfold SwitchProductCategory,
                                  unfold FunctorComposition,
-                                 dsimp,
-                                 simp,
-                                 unfold IdentityFunctor,
                                  dsimp,
                                  simp
                                end

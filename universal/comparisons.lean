@@ -73,8 +73,7 @@ definition comma_Cone_to_Cone { J C : Category } { F : Functor J C } ( cone : (c
   commutativity := λ ( j k : J.Obj ) ( f : J.Hom j k ),
                       begin
                         refine ( cast _ (eq.symm ((cone.2.2).naturality f)) ),
-                        unfold_unfoldable,
-                        simp
+                        unfold_unfoldable
                       end
 }
 
@@ -83,7 +82,7 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
 {
   morphism      := f.val.1,
   commutativity := λ j : J.Obj, begin
-                                  blast, 
+   -- PROJECT improve automation
                                   induction X with X1 X23,
                                   induction X23 with X2 X3, 
                                   induction X2,
@@ -96,7 +95,10 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
                                   pose q := congr_arg (λ t : NaturalTransformation _ _, t.components j) p,
                                   simp at q,
                                   dsimp at q,
-                                  unfold_unfoldable_hypotheses,
+                                  dunfold_and_simp_all_hypotheses,                                  
+                                  dunfold_and_simp_all_hypotheses,
+                                  unfold_projections,
+                                  simp,                              
                                   rewrite q,
                                   blast
                                 end
@@ -107,8 +109,7 @@ definition Cone_to_comma_Cone { J C : Category } { F : Functor J C } ( cone : Co
     components := λ j, cone.maps j,
     naturality := λ _ _ f, begin
                             refine ( cast _ (eq.symm (cone.commutativity f)) ), 
-                            unfold_unfoldable, 
-                            simp
+                            unfold_unfoldable
                           end
   } ⟩
 
@@ -129,14 +130,14 @@ definition Cones_to_comma_Cones { J C : Category } ( F : Functor J C ) : Functor
     functoriality := ♯
   }
 
-lemma Equalizers_agree { C : Category } { α β : C.Obj } ( f g : C.Hom α β )
- : @Isomorphism CategoryOfTypes (comma.Equalizer f g) (Equalizer f g) :=
- {
-  morphism := sorry,  
-  inverse  := sorry,
-  witness_1 := sorry,
-  witness_2 := sorry
-}
+-- lemma Equalizers_agree { C : Category } { α β : C.Obj } ( f g : C.Hom α β )
+--  : @Isomorphism CategoryOfTypes (comma.Equalizer f g) (Equalizer f g) :=
+--  {
+--   morphism := sorry,  
+--   inverse  := sorry,
+--   witness_1 := sorry,
+--   witness_2 := sorry
+-- }
 
 -- lemma Equalizers_are_unique
 --   { C : Category }  

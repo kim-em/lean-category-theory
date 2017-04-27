@@ -49,10 +49,11 @@ structure Functor { V : Category } { m : MonoidalStructure V } ( C D : EnrichedC
   ( onObjects : C.Obj → D.Obj )
   ( onMorphisms : ∀ { X Y : C.Obj }, V.Hom (C X Y) (D (onObjects X) (onObjects Y)) )
   ( identities : ∀ X : C.Obj, V.compose (C.identity X) onMorphisms = D.identity (onObjects X) )
-  ( functoriality : ∀ { X Y Z : C.Obj }, V.compose C.compose (@onMorphisms X Z) = V.compose (m.tensorMorphisms (@onMorphisms X Y) (@onMorphisms Y Z)) D.compose )
+  -- TODO fix this
+  -- ( functoriality : ∀ { X Y Z : C.Obj }, V.compose C.compose (@onMorphisms X Z) = V.compose (m.tensorMorphisms (@onMorphisms X Y) (@onMorphisms Y Z)) D.compose )
 
 attribute [simp,ematch] Functor.identities
-attribute [simp,ematch] Functor.functoriality
+-- attribute [simp,ematch] Functor.functoriality
 
   -- PROJECT natural transformations don't always exist; you need various limits!
   

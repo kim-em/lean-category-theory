@@ -62,7 +62,7 @@ meta def factorisation : tactic unit :=
 meta def foo : tactic unit :=
       trace_number_of_goals >> intros >>
       ( (tactic.interactive.force dsimp)
-      <|> (tactic.interactive.force (pointwise tactic.skip))
+      <|> force_pointwise
       <|> (tactic.interactive.force tactic.factorisation)
       <|> (tactic.interactive.force dunfold_everything) )
 end tactic

@@ -4,6 +4,7 @@
 
 import ..discrete_category
 import ..graph
+import ..path_category
 import .initial
 
 open tqft.categories
@@ -93,7 +94,7 @@ definition WalkingParallelPair : Graph := {
                 end
 }
 
-definition Pair_homomorphism { C : Category } ( α β : C.Obj ) : GraphHomomorphism WalkingPair C := {
+definition Pair_homomorphism { C : Category } ( α β : C.Obj ) : GraphHomomorphism WalkingPair C.graph := {
   onObjects   := λ X, match X with
                        | _0 := α
                        | _1 := β
@@ -101,7 +102,7 @@ definition Pair_homomorphism { C : Category } ( α β : C.Obj ) : GraphHomomorph
   onMorphisms := λ X Y e, match X, Y, e with end
 }
 
-definition ParallelPair_homomorphism { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : GraphHomomorphism WalkingParallelPair C := {
+definition ParallelPair_homomorphism { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : GraphHomomorphism WalkingParallelPair C.graph := {
   onObjects   := λ X, match X with
                        | _0 := α
                        | _1 := β

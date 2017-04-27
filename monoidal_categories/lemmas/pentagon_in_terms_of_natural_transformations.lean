@@ -22,16 +22,11 @@ lemma pentagon_in_terms_of_natural_transformations
     dsimp,
     apply NaturalTransformations_componentwise_equal,
     intros,
-    unfold_unfoldable, -- FIXME probably we're unfolding far too much here.
+    unfold_unfoldable, -- FIXME why does this hit the iteration limit?
     induction X with PQR S,
     induction PQR with PQ R,
     induction PQ with P Q,
-    dsimp, 
-    simp,
-    erewrite C.right_identity, -- TODO why are these erewrites necessary? simp should just do it!
-    erewrite C.right_identity,
-    erewrite C.right_identity,
-    erewrite C.right_identity,
+    unfold_unfoldable,
     -- erewrite m.pentagon P Q R S, --- TODO This is pretty weird; Pentagon has λs in it.
     pose p := m.pentagon P Q R S,
     simp at p,

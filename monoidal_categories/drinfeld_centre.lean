@@ -67,15 +67,12 @@ definition {u v} DrinfeldCentre { C : Category.{u v} } ( m : MonoidalStructure C
         dsimp,
         rewrite m.interchange_right_identity,
         rewrite m.interchange_left_identity,
-        erewrite - C.associativity,
+        rewrite - C.associativity,
         rewrite f.witness,
         rewrite C.associativity,
-        -- blast,
-        erewrite g.witness,
-        -- blast, -- FIXME these blasts are unfolding too many implicit arguments.
-                  -- https://github.com/leanprover/lean/issues/1509
-        erewrite - C.associativity,
-        trivial
+        -- blast, -- PROJECT improve automation
+        rewrite g.witness,
+        blast
       end
   },
   left_identity  := ♯,

@@ -2,11 +2,13 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 import .cartesian_product
+import ...monoidal_categories.braided_monoidal_category
 
 open tqft.categories
 open tqft.categories.functor
 open tqft.categories.products
 open tqft.categories.natural_transformation
+open tqft.categories.braided_monoidal_category
 
 namespace tqft.categories.monoidal_category
 

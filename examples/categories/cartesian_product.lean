@@ -137,8 +137,8 @@ definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategories
   associator_transformation := CategoryAssociator,
   left_unitor  := CategoryLeftUnitor,
   right_unitor := CategoryRightUnitor,
-  pentagon := begin unfold Pentagon, blast end, -- TODO investigate automating this unfold
-  triangle := begin unfold Triangle, blast end
+  pentagon := ♯,
+  triangle := ♯
 }
 
 end tqft.categories.monoidal_category

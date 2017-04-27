@@ -128,12 +128,6 @@ begin
   erewrite C.left_identity
 end
 
--- FIXME this is lame.
-meta def rewrite_once : tactic unit :=
-do r ← tactic.to_expr `(preimage_lemma e X Y h),
-   tactic.rewrite_core semireducible tt tt (occurrences.pos [2]) tt r
-
-set_option pp.all true
 lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Full (e.functor) :=
   {
     preimage := preimage e,
@@ -141,10 +135,8 @@ lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Categor
         begin 
           intros X Y h,
           apply (Equivalences_are_Faithful e.reverse).injectivity,
-          unfold_unfoldable, -- FIXME This is going berserk unfolding implicit arguments.
-          -- erewrite - (preimage_lemma e X Y h),
-          rewrite_once,
-          unfold_unfoldable
+          unfold_unfoldable,
+          rewrite (preimage_lemma e X Y h)
         end
   }
 
