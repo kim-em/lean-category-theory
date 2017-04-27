@@ -22,15 +22,15 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
     onObjects := λ X, {
         onObjects     := λ Y, C.Hom Y X,
         onMorphisms   := λ Y Y' f, λ g, C.compose f g,
-        identities    := sorry,
-        functoriality := sorry 
+        identities    := ♯,
+        functoriality := ♯ 
     },
     onMorphisms   := λ X X' f, {
         components := λ Y, λ g, C.compose g f,
-        naturality := sorry
+        naturality := ♯
     },
-    identities    := sorry,
-    functoriality := sorry
+    identities    := ♯,
+    functoriality := ♯
 }
 
 -- theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
