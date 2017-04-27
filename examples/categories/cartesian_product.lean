@@ -49,38 +49,22 @@ definition CategoryLeftUnitor : @LeftUnitor CategoryOfCategoriesAndFunctors.{u v
                 intros C,
                 unfold_unfoldable,
                 fapply Functors_pointwise_equal,
-                -- First show identity on objects:
-                simp,
-                intros X,
-                induction X with X_1 X_2,
-                induction X_1,
-                dsimp,
-                trivial,
-                -- Now show identity on morphisms:
-                intros X Y f,
-                simp,
-                induction f with f_1 f_2,
-                induction X with X_1 X_2,
-                induction X_1,
-                induction Y with Y_1 Y_2,
-                induction Y_1,
-                simp,
-                induction f_1 with f_1',
-                induction f_1' with f_1'',
-                simp at f_1''
+                {
+                  -- First show identity on objects:
+                  blast
+                },
+                {
+                  -- Now show identity on morphisms:
+                  blast,                  
+                  induction f with f_1 f_2,
+                  induction X with X_1 X_2,
+                  induction X_1,
+                  induction Y with Y_1 Y_2,
+                  induction Y_1,
+                  simp
+                }               
                end,
-  witness_2 := begin
-                apply NaturalTransformations_componentwise_equal,
-                intros C,
-                unfold_unfoldable,
-                fapply Functors_pointwise_equal,
-                -- First show identity on objects:
-                intros X,
-                trivial,
-                -- Now show identity on morphisms:
-                intros X Y f,
-                simp
-               end
+  witness_2 := ♯
 }
 
 definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u v} CategoryTensorUnit TensorProductOfCategories := {
@@ -93,42 +77,26 @@ definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u
     naturality := ♮
   },
   witness_1 := begin
-                apply NaturalTransformations_componentwise_equal,
+  apply NaturalTransformations_componentwise_equal,
                 intros C,
                 unfold_unfoldable,
                 fapply Functors_pointwise_equal,
-                -- First show identity on objects:
-                simp,
-                intros X,
-                induction X with X_1 X_2,
-                induction X_2,
-                dsimp,
-                trivial,
-                -- Now show identity on morphisms:
-                intros X Y f,
-                simp,
-                induction f with f_1 f_2,
-                induction X with X_1 X_2,
-                induction X_2,
-                induction Y with Y_1 Y_2,
-                induction Y_2,
-                simp,
-                induction f_2 with f_2',
-                induction f_2' with f_2'',
-                simp at f_2''
+                {
+                  -- First show identity on objects:
+                  blast
+                },
+                {
+                  -- Now show identity on morphisms:
+                  blast, -- PROJECT automate the inevitable inductions                  
+                  induction f with f_1 f_2,
+                  induction X with X_1 X_2,
+                  induction X_2,
+                  induction Y with Y_1 Y_2,
+                  induction Y_2,
+                  simp
+                }
                end,
-  witness_2 := begin
-                apply NaturalTransformations_componentwise_equal,
-                intros C,
-                unfold_unfoldable,
-                fapply Functors_pointwise_equal,
-                -- First show identity on objects:
-                intros X,
-                trivial,
-                -- Now show identity on morphisms:
-                intros X Y f,
-                simp
-               end
+  witness_2 := ♯
 }
 
 definition CartesianProductOfCategories : MonoidalStructure CategoryOfCategoriesAndFunctors.{u v} := {
