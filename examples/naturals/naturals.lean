@@ -28,7 +28,7 @@ end
 -- @[ematch]
 -- lemma nat_add_commutativity (a b : ℕ) : nat.add a b = nat.add a b := ♮
 
--- FIXME This reducible is gross
+-- FIXME This reducible is gross, but without it we can't see what NCategory.Hom is...
 -- @[reducible] definition ℕCategory : Category :=
 --   begin
 --     refine {

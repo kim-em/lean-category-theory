@@ -106,6 +106,13 @@ in do (c, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unf
 meta def unfold_projections : tactic unit :=
 target >>= unfold_projections_core semireducible default_max_steps >>= change
 
+meta def unfold_projections_at (h : expr) : tactic unit :=
+do num_reverted ← revert h,
+   (expr.pi n bi d b : expr) ← target,
+   new_d ← unfold_projections_core reducible default_max_steps d,
+   change $ expr.pi n bi new_d b,
+   intron num_reverted
+
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
 do num_reverted ← revert h,
@@ -125,6 +132,11 @@ meta def list_try_seq : list (tactic unit) → tactic unit
 meta def at_least_one : list (tactic unit) → tactic unit
 | list.nil  := fail "at_least_one tactic failed, no more tactics"
 | (t :: ts) := (t >> (list_try_seq ts)) <|> (at_least_one ts)
+
+meta def unfold_projections_all_hypotheses : tactic unit :=
+do l ← local_context,
+   s ← simp_lemmas.mk_default,
+   at_least_one (l.reverse.for (λ h, unfold_projections_at h))
 
 meta def dunfold_and_simp_all_hypotheses : tactic unit :=
 do l ← local_context,
@@ -265,7 +277,7 @@ meta def unfold_unfoldable : tactic unit :=
    chain [
       force ( dsimp ),
       simp,
-      dunfold_and_simp_all_hypotheses,
+      unfold_projections_all_hypotheses,
       unfold_projections
       -- dunfold_everything
   ]
@@ -274,13 +286,15 @@ meta def blast : tactic unit :=
   -- trace "starting blast" >>
   chain [
     force ( reflexivity ),
+
+    force ( dsimp ),
+    simp,
+    unfold_projections_all_hypotheses,
+    unfold_projections,
+
     force ( intros >> skip ),
     -- tactic.interactive.congr_struct,
     force_pointwise,
-    force ( dsimp ),
-    simp,
-    dunfold_and_simp_all_hypotheses,
-    unfold_projections,
     -- dunfold_everything,
     smt_eblast >> done
   ]

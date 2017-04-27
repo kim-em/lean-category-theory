@@ -16,18 +16,32 @@ namespace tqft.categories.natural_transformation
 -- PROJECT show Fun(C → Fun(D → E)) is equivalent to Fun(C × D → E)
 
 -- theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
-  -- ( C : Category.{u1 v1} )
-  -- ( D : Category.{u2 v2} )
-  -- ( E : Category.{u3 v3} ) :
-  -- Equivalence (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) :=
-  -- begin
-  --   fsplit,
-  --   fsplit,
-  --   dunfold_everything,
-  --   -- FIXME
-  --   -- I'd really like a satisfactory answer to https://groups.google.com/d/msg/lean-user/6Du2cNKwURs/Z9D4fYNVAwAJ
-  --   -- before proceeding here.
-  -- end
+--   ( C : Category.{u1 v1} )
+--   ( D : Category.{u2 v2} )
+--   ( E : Category.{u3 v3} ) :
+--   Equivalence (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) :=
+--   begin
+--     fsplit,
+--     fsplit,
+--     {      
+--       -- Define the functor
+--       unfold_projections,
+--       intros F,
+--       fsplit,
+--       {
+--         -- define it on objects
+--         intros,
+--         induction a with c d,
+--         exact (F.onObjects c).onObjects d,
+--       },
+--       {
+--         intros,
+--         induction a with f g,
+--         pose p := (F.onMorphisms f),
+--         dsimp at p, -- FIXME match failed on dsimp, again :-(   
+--       }
+--     }
+--   end
 
   -- {
   --   functor := {

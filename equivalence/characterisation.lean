@@ -64,8 +64,7 @@ section FullyFaithfulPreimage
 
 end FullyFaithfulPreimage
 
--- These is an annoying hack, because I can't simplify hypotheses automatically. FIXME
-lemma {u1 v1} IdentityFunctor_is_identity { C : Category.{u1 v1} } { X Y : C.Obj } ( f : C.Hom X Y ) : (IdentityFunctor C).onMorphisms f = f := ♯
+-- These is an annoying hack, because I can't simplify hypotheses automatically; see `dsimp at p` below. FIXME
 lemma {u1 v1 u2 v2 u3 v3} FunctorComposition_is_composition 
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} }
@@ -74,13 +73,7 @@ lemma {u1 v1 u2 v2 u3 v3} FunctorComposition_is_composition
   { G : Functor D E }
   { X Y : C.Obj }
   { f : C.Hom X Y } :
-  (FunctorComposition F G).onMorphisms f = G.onMorphisms (F.onMorphisms f) :=
-  begin
-    -- FIXME blast gets stuck here!
-    dunfold_everything,
-    dsimp,
-    reflexivity
-  end
+  (FunctorComposition F G).onMorphisms f = G.onMorphisms (F.onMorphisms f) := ♯
 
 private definition {u1 v1 u2 v2} preimage
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
@@ -118,6 +111,7 @@ lemma {u1 v1 u2 v2} Equivalences_are_Faithful { C : Category.{u1 v1} } { D : Cat
 private lemma {u1 v1 u2 v2} preimage_lemma { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor X) (e.functor Y) ) : (e.inverse).onMorphisms ((e.functor).onMorphisms (preimage e X Y h)) = (e.inverse).onMorphisms h :=
 begin
   pose p := e.isomorphism_1.naturality_2 (preimage e X Y h),
+  -- dsimp at p, FIXME fails with 'match failed'
   rewrite FunctorComposition_is_composition at p,
   rewrite (eq.symm p),
   repeat { erewrite - C.associativity },
