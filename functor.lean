@@ -47,7 +47,7 @@ definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D :
 {
   onObjects     := λ X, G (F X),
   onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f),
-  identities    := ♮,
+  identities    := ♯,
   functoriality := ♮
 }
 
