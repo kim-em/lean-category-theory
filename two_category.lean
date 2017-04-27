@@ -10,8 +10,6 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.two_category
 
--- FIXME this is segfaulting: https://github.com/leanprover/lean/issues/1539
-
 universe variables u v w
 
 structure StrictTwoCategory :=

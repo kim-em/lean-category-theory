@@ -35,7 +35,6 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
 begin
---   This almost works very quickly with blast, but too much gets deferred.
   blast,
   {
     -- Show it is full
