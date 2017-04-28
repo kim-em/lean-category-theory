@@ -11,24 +11,10 @@ def pointwise_attribute : user_attribute := {
 
 run_cmd attribute.register `pointwise_attribute
 
-def unfoldable_attribute : user_attribute := {
-  name := `unfoldable,
-  descr := "A definition that may be unfoldable, but hesitantly."
-}
-
-run_cmd attribute.register `unfoldable_attribute
-
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
-
-section
-open smt_tactic
-meta def smt_simp   : tactic unit := using_smt $ intros >> try dsimp >> try simp
-meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> try simp >> try eblast
-meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
-end
 
 meta def pointwise_and_then (and_then : tactic unit) : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
@@ -38,7 +24,7 @@ meta def force_pointwise : tactic unit := pointwise_and_then skip
 meta def pointwise : tactic unit := try ( force_pointwise )
 
 attribute [reducible] cast
-attribute [reducible] lift_t coe_t coe_b
+attribute [reducible] lift_t coe_t coe_b has_coe_to_fun.coe
 attribute [simp] id_locked_eq
 attribute [pointwise] funext
 attribute [ematch] subtype.property
@@ -96,22 +82,22 @@ in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
       return new_e
 
 -- TODO pull request for these:
-meta def unfold_projections_core (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
-let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
-  new_e ← unfold_projection_core m e,
-  return (changed ∨ (new_e ≠ e), new_e, tt)
-in do (tt, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unfold e | fail "no projections to unfold",
-      return new_e
+-- meta def unfold_projections_core (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
+-- let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
+--   new_e ← unfold_projection_core m e,
+--   return (changed ∨ (new_e ≠ e), new_e, tt)
+-- in do (tt, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unfold e | fail "no projections to unfold",
+--       return new_e
 
-meta def unfold_projections : tactic unit :=
-target >>= unfold_projections_core semireducible default_max_steps >>= change
+-- meta def unfold_projections : tactic unit :=
+-- target >>= unfold_projections_core semireducible default_max_steps >>= change
 
-meta def unfold_projections_at (h : expr) : tactic unit :=
-do num_reverted ← revert h,
-   (expr.pi n bi d b : expr) ← target,
-   new_d ← unfold_projections_core reducible default_max_steps d,
-   change $ expr.pi n bi new_d b,
-   intron num_reverted
+-- meta def unfold_projections_at (h : expr) : tactic unit :=
+-- do num_reverted ← revert h,
+--    (expr.pi n bi d b : expr) ← target,
+--    new_d ← unfold_projections_core reducible default_max_steps d,
+--    change $ expr.pi n bi new_d b,
+--    intron num_reverted
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
@@ -133,10 +119,10 @@ meta def at_least_one : list (tactic unit) → tactic unit
 | list.nil  := fail "at_least_one tactic failed, no more tactics"
 | (t :: ts) := (t >> (list_try_seq ts)) <|> (at_least_one ts)
 
-meta def unfold_projections_all_hypotheses : tactic unit :=
-do l ← local_context,
-   s ← simp_lemmas.mk_default,
-   at_least_one (l.reverse.for (λ h, unfold_projections_at h))
+-- meta def unfold_projections_all_hypotheses : tactic unit :=
+-- do l ← local_context,
+--    s ← simp_lemmas.mk_default,
+--    at_least_one (l.reverse.for (λ h, unfold_projections_at h))
 
 meta def dunfold_and_simp_all_hypotheses : tactic unit :=
 do l ← local_context,
@@ -259,6 +245,14 @@ do g ← target,
    infer_type g >>= trace,
    skip
 
+section
+open smt_tactic
+meta def smt_simp   : tactic unit := using_smt $ intros >> try dsimp >> try simp
+meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> try simp >> try eblast
+meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
+end
+
+
 attribute [pointwise] and.intro
 attribute [pointwise] nonempty.intro
 attribute [pointwise] unit.star
@@ -297,9 +291,9 @@ meta def unfold_unfoldable : tactic unit :=
    chain [
       force ( dsimp ),
       simp,
-      unfold_projections_all_hypotheses,
-      unfold_projections
-      -- dunfold_everything
+      -- unfold_projections_all_hypotheses,
+      -- unfold_projections
+      dunfold_everything
   ]
 
 meta def blast : tactic unit :=
@@ -309,13 +303,13 @@ meta def blast : tactic unit :=
 
     force ( dsimp ),
     simp,
-    unfold_projections_all_hypotheses,
-    unfold_projections,
+    -- unfold_projections_all_hypotheses,
+    -- unfold_projections,
 
     force ( intros >> skip ),
     -- tactic.interactive.congr_struct,
     force_pointwise,
-    -- dunfold_everything,
+    dunfold_everything,
     smt_eblast >> done
   ]
 

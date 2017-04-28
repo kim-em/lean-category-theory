@@ -37,6 +37,8 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
+set_option pp.all true
+
 definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D.identity (F X),
