@@ -7,6 +7,7 @@ import .isomorphism
 import .opposites
 import .equivalence
 import .products.products
+import .products.switch
 import .examples.types.types
 
 open tqft.categories
@@ -35,82 +36,96 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
     functoriality := ♯
 }
 
--- PROJECT
--- How do we even get the universes to work?
--- theorem {u v} WeakYonedaLemma ( C : Category.{u v} ) ( X : C.Obj ) ( F : Functor (Opposite C) (CategoryOfTypes) ) :
---   Isomorphism CategoryOfTypes (NaturalTransformation (Yoneda C X) F) (F X) :=
---   sorry
-
 -- PROJECT set up the Yoneda lemma as a natural isomorphism
--- definition {u v} Evaluation ( C : Category.{u v} ) : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{v} :=
--- {
---     onObjects     := λ p, (p.1.onObjects p.2),
---     onMorphisms   := λ x y f, (f.1.components y.2) ∘ (x.1.onMorphisms f.2),
---     identities    := begin blast, erewrite Functor.identities, blast end,
---     functoriality := begin
---                       intros X Y Z,
---                       induction X with X1 X2,
---                       induction Y with Y1 Y2,
---                       induction Z with Z1 Z2,
---                       intros f g,
---                       induction f with f1 f2,
---                       induction g with g1 g2,
---                       unfold_unfoldable,
---                       blast,
---                       apply congr_arg,
---                       erewrite X1.functoriality,
---                       unfold_unfoldable,                      
---                       admit,
---                     end
--- } 
-
--- definition {u v} Pairing ( C : Category.{u v} ) : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{max u v} :=
--- {
---     onObjects     := λ p, NaturalTransformation p.1 (Yoneda C p.2),
---     onMorphisms   := λ x y f, sorry,
---     identities    := sorry,
---     functoriality := sorry
--- }
-
--- theorem {u v} YonedaLemma ( C : Category.{u v} ) : NaturalIsomorphism (Pairing C) (Evaluation C) := sorry
+-- between evaluation : Fun(C^op → Type) × C^op → Type
+--     and    pairing : Fun(C^op → Type) × C^op → Fun(C^op → Type) × Fun(C^op → Type)^op  → Type
+@[reducible] definition {v} YonedaEvaluation ( C : Category.{v v} )
+  : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{v}
+  := Evaluation (Opposite C) CategoryOfTypes.{v}
+@[reducible] definition {v} YonedaPairing ( C : Category.{v v} ) 
+  : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{v}
+  := FunctorComposition
+      (FunctorComposition
+        (ProductFunctor (IdentityFunctor _) (OppositeFunctor (Yoneda C)))
+        (SwitchProductCategory _ _))
+      (HomPairing (FunctorCategory (Opposite C) CategoryOfTypes.{v})) 
 
 private lemma {u v w} composition {α : Sort u} {β : Sort v} {γ : Sort w} {f : α → β} {g : β → γ} (a : α) : (g ∘ f) a = g (f a) := ♯
 
-theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
-begin
-  blast,
-  {
-    -- Show it is full
-    fsplit,
-    {
-        intros,
-        exact (f.components X) (C.identity X)
-    },
-    {
-        blast,
-        pose p := f.naturality x,
-        simp at p,
-        unfold CategoryOfTypes at p,
-        simp at p,
-        pose q := congr_fun p (C.identity X),
-        rewrite composition at q,
-        rewrite C.right_identity at q,
-        exact (eq.symm q)
-    }
-  },
-  {
-    -- Show it is faithful
-    fsplit,
-    unfold_unfoldable,
-    intros,
-    pose q := congr_arg NaturalTransformation.components p,
-    simp at q,
-    pose q' := congr_fun q X,
-    simp at q',
-    pose q'' := congr_fun q' (C.identity X),
-    simp at q'',
-    exact q''
-  }
-end
+-- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+-- begin
+--   unfold NaturalIsomorphism,
+--   fsplit,
+--   {
+--     unfold FunctorCategory,
+--     dsimp,
+--     fsplit,
+--     {
+--       intros,
+--       dsimp at X,
+--       unfold CategoryOfTypes,
+--       dsimp,
+--       intros,
+--       unfold Evaluation,
+--       dsimp,
+--       simp at a,
+--       dunfold_and_simp_all_hypotheses,
+--       exact ((a.components X.2) (C.identity X.2))
+--     },
+--     {
+--       intros,
+--       blast,
+--       pose p := x.naturality f.2,
+--       unfold CategoryOfTypes at p,
+--       simp at p,
+--       pose q := congr_fun p (C.identity X.2),
+--       rewrite composition at q,
+--       rewrite C.right_identity at q,
+
+--     },
+--     {
+      
+--     }
+--   }
+-- end
+
+
+-- FIXME waiting on the restoration of unfold_projections
+-- theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
+-- begin
+--   blast,
+--   {
+--     -- Show it is full
+--     fsplit,
+--     {
+--         intros,
+--         exact (f.components X) (C.identity X)
+--     },
+--     {
+--         blast,
+--         pose p := f.naturality x,
+--         simp at p,
+--         unfold CategoryOfTypes at p,
+--         simp at p,
+--         pose q := congr_fun p (C.identity X),
+--         rewrite composition at q,
+--         rewrite C.right_identity at q,
+--         exact (eq.symm q)
+--     }
+--   },
+--   {
+--     -- Show it is faithful
+--     fsplit,
+--     unfold_unfoldable,
+--     intros,
+--     pose q := congr_arg NaturalTransformation.components p,
+--     simp at q,
+--     pose q' := congr_fun q X,
+--     simp at q',
+--     pose q'' := congr_fun q' (C.identity X),
+--     simp at q'',
+--     exact q''
+--   }
+-- end
 
 end tqft.categories.yoneda
