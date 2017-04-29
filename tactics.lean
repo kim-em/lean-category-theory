@@ -309,7 +309,7 @@ meta def blast : tactic unit :=
     unfold_projections,
 
     force ( intros >> skip ),
-    -- tactic.interactive.congr_struct,
+    tactic.interactive.congr_struct,
     force_pointwise,
     -- dunfold_everything,
     smt_eblast >> done

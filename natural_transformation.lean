@@ -37,8 +37,6 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
     by subst hc
   end
 
-set_option pp.all true
-
 definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
   {
     components := λ X, D.identity (F.onObjects X),
@@ -63,9 +61,6 @@ open tqft.categories.functor
   { F : Functor C D }
   { G : Functor D E }
   ( X : C.Obj ) : (FunctorComposition F G).onObjects X = G.onObjects (F.onObjects X) := begin blast end 
-
--- set_option pp.all true
--- set_option trace.check true
 
 definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
@@ -101,8 +96,6 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_right
 -- It's then a lemma that each component is an isomorphism, and vice versa.
 
 open tactic.interactive
-
--- set_option pp.all true
 
 definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
 {
