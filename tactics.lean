@@ -85,7 +85,7 @@ in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
 meta def unfold_projections_core (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
 let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
   new_e ← unfold_projection_core m e,
-  return (changed ∨ (new_e ≠ e), new_e, tt)
+  return (tt, new_e, tt)
 in do (tt, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unfold e | fail "no projections to unfold",
       return new_e
 
@@ -95,15 +95,28 @@ target >>= unfold_projections_core semireducible default_max_steps >>= change
 meta def unfold_projections_at (h : expr) : tactic unit :=
 do num_reverted ← revert h,
    (expr.pi n bi d b : expr) ← target,
-   new_d ← unfold_projections_core reducible default_max_steps d,
+   new_d ← unfold_projections_core semireducible default_max_steps d,
    change $ expr.pi n bi new_d b,
    intron num_reverted
+
+namespace tactic.interactive
+open lean.parser
+open interactive.types
+
+private meta def unfold_projections_hyps : list name → tactic unit
+| []      := skip
+| (h::hs) := get_local h >>= unfold_projections_at >> unfold_projections_hyps hs
+
+meta def unfold_projections : parse location → tactic unit
+| [] := _root_.unfold_projections
+| hs := unfold_projections_hyps hs
+end tactic.interactive
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
 do num_reverted ← revert h,
    (expr.pi n bi d b : expr) ← target,
-   new_d ← dunfold_core' reducible default_max_steps d,
+   new_d ← dunfold_core' reducible default_max_steps d, -- FIXME should this be semireducible??
    new_d_simp ← s.dsimplify new_d,
    guard (new_d_simp ≠ d),
    change $ expr.pi n bi new_d_simp b,
@@ -117,7 +130,7 @@ meta def list_try_seq : list (tactic unit) → tactic unit
 -- Applies a list of tactics in turn, succeeding if at least one succeeds.
 meta def at_least_one : list (tactic unit) → tactic unit
 | list.nil  := fail "at_least_one tactic failed, no more tactics"
-| (t :: ts) := (t >> (list_try_seq ts)) <|> (at_least_one ts)
+| (t :: ts) := (seq t (list_try_seq ts)) <|> (at_least_one ts)
 
 meta def unfold_projections_all_hypotheses : tactic unit :=
 do l ← local_context,
@@ -133,10 +146,26 @@ meta def dsimp_all_hypotheses : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.for (λ h, dsimp_at h))
 
+meta def automatic_induction' (h : expr) (t : expr) : tactic unit :=
+match t with
+| ```(unit)    := induction h >>= λ x, skip
+| ```(punit)   := induction h >>= λ x, skip
+| ```(empty)   := induction h >>= λ x, skip
+| ```(ulift _) := induction h >>= λ x, skip
+| ```(plift _) := induction h >>= λ x, skip
+| _            := failed
+end
+
+meta def automatic_induction_at (h : expr) : tactic unit :=
+do t ← infer_type h,
+   automatic_induction' h t
+
+meta def automatic_induction : tactic unit :=
+do l ← local_context,
+   at_least_one (l.reverse.for (λ h, automatic_induction_at h))
+
 open lean.parser
 open interactive
-
--- #eval default_max_steps
 
 meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
 
@@ -153,34 +182,9 @@ repeat( do l ← local_context,
      ```(prod _ _) ← infer_type h >>= whnf | skip,
      induction h (new_names h) >> skip )
 
-meta def induction_on_unit : tactic unit :=
-do l ← local_context,
-   l.reverse.mfor' $ λ h, do
-     ```(unit) ← infer_type h >>= whnf | skip,
-     induction h >> skip
-
-meta def automatic_inductions : tactic unit :=
-  induction_on_pairs >> induction_on_unit
-
-meta def intros_and_inductions : tactic unit := intros >> automatic_inductions >> dsimp_all_hypotheses
-
 meta def fsplit : tactic unit :=
 do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, target is not an inductive datatype with only one constructor",
    mk_const c >>= fapply
-
--- meta def split_goals' : expr → tactic unit
--- | ```(and _ _)     := split
--- | ```(nonempty _)  := split
--- | ```(unit)        := split
--- | ```(punit)       := split
--- | ```(plift _)     := split
--- | ```(ulift _)     := split
--- -- | ```(subtype _)  := fsplit
--- | _                := failed
-
--- meta def split_goals : tactic unit := target >>= split_goals'
-
--- meta def split_goals_and_then ( and_then : tactic unit ) := try ( seq split_goals and_then )
 
 namespace tactic
   open expr
@@ -293,10 +297,24 @@ meta def unfold_unfoldable : tactic unit :=
    chain [
       force ( dsimp ),
       simp,
-      -- unfold_projections_all_hypotheses,
-      -- unfold_projections
+      unfold_projections_all_hypotheses,
+      unfold_projections,
       dunfold_everything
   ]
+
+meta def tidy : tactic unit := 
+   chain [
+      force ( reflexivity ),
+      force ( dsimp ),
+      simp,
+      unfold_projections_all_hypotheses,
+      unfold_projections,
+      force ( intros >> skip ),
+      automatic_induction,
+      -- tactic.interactive.congr_struct,
+      force_pointwise
+  ]
+
 
 meta def blast : tactic unit :=
   -- trace "starting blast" >>
@@ -309,13 +327,13 @@ meta def blast : tactic unit :=
     unfold_projections,
 
     force ( intros >> skip ),
-    tactic.interactive.congr_struct,
+    automatic_induction,
+    -- tactic.interactive.congr_struct,
     force_pointwise,
     -- dunfold_everything,
     smt_eblast >> done
   ]
 
--- In a timing test on 2017-02-18, I found that using `abstract { blast }` instead of just `blast` resulted in a 5x speed-up!
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }
 

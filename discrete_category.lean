@@ -3,14 +3,15 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .category
+import .functor
 
 namespace tqft.categories
 
-universe variables u v
+open tqft.categories.functor
 open plift -- we first plift propositional equality to Type 0,
 open ulift -- then ulift up to Type v
 
-definition DiscreteCategory ( α : Type u ) : Category.{u v} :=
+definition {u v} DiscreteCategory ( α : Type u ) : Category.{u v} :=
 {
   Obj      := α,
   Hom      := λ X Y, ulift (plift (X = Y)),
@@ -20,5 +21,9 @@ definition DiscreteCategory ( α : Type u ) : Category.{u v} :=
   right_identity := ♯,
   associativity  := ♯
 }
+
+definition {u v} EmptyCategory := DiscreteCategory.{u v} (ulift empty)
+
+definition {u1 v1 u2 v2} EmptyFunctor ( C : Category.{u2 v2} ) : Functor EmptyCategory.{u1 v1} C := ♯
 
 end tqft.categories
