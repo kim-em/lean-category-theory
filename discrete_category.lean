@@ -13,10 +13,10 @@ open ulift -- then ulift up to Type v
 
 definition {u v} DiscreteCategory ( α : Type u ) : Category.{u v} :=
 {
-  Obj      := α,
-  Hom      := λ X Y, ulift (plift (X = Y)),
-  identity := λ X, up (up rfl),
-  compose  := λ X Y Z f g, up (up (eq.trans (down (down f)) (down (down g)))),
+  Obj            := α,
+  Hom            := λ X Y, ulift (plift (X = Y)),
+  identity       := ♯,
+  compose        := ♯,
   left_identity  := ♯,
   right_identity := ♯,
   associativity  := ♯

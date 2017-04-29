@@ -19,8 +19,8 @@ definition {u v} Categories_has_TerminalObject : has_TerminalObject CategoryOfCa
 definition {u v} Categories_has_InitialObject : has_InitialObject CategoryOfCategoriesAndFunctors.{u v} :=
 {
   initial_object := {
-    object := DiscreteCategory.{u v} (ulift empty),
-    morphisms := ♯,
+    object     := DiscreteCategory.{u v} (ulift empty),
+    morphisms  := ♯,
     uniqueness := ♯
   }
 }
