@@ -20,8 +20,8 @@ namespace tqft.categories.adjunction
 structure Adjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
   ( unit          : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
   ( counit        : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) )
-  ( triangle_1   : ∀ X : D.Obj, C.compose (unit.components (R X)) (R.onMorphisms (counit.components X)) = C.identity (R X) )
-  ( triangle_2   : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L X)) = D.identity (L X) )
+  ( triangle_1   : ∀ X : D.Obj, C.compose (unit.components (R.onObjects X)) (R.onMorphisms (counit.components X)) = C.identity (R.onObjects X) )
+  ( triangle_2   : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L.onObjects X)) = D.identity (L.onObjects X) )
 
 attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
@@ -86,7 +86,7 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
     morphism  := {
       components := λ P, 
         -- We need to construct the map from D.Hom (L P.1) P.2 to D.Hom P.1 (R P.2)
-        λ f, C.compose (A.unit P.1) (R.onMorphisms f),
+        λ f, C.compose (A.unit.components P.1) (R.onMorphisms f),
       naturality := begin
                       intros,
                       pointwise,
@@ -100,7 +100,7 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
     {
       components := λ P, 
         -- We need to construct the map back to D.Hom (L P.1) P.2 from D.Hom P.1 (R P.2)
-        λ f, D.compose (L.onMorphisms f) (A.counit P.2),
+        λ f, D.compose (L.onMorphisms f) (A.counit.components P.2),
       naturality := begin
                       intros,
                       pointwise,

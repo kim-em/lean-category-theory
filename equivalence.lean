@@ -62,8 +62,8 @@ definition {u1 v1 u2 v2 u3 v3} EquivalenceComposition
 }
 
 structure {u1 v1 u2 v2} Full     { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) :=
-  ( preimage : ∀ { X Y : C.Obj } ( f : D.Hom (F X) (F Y) ), C.Hom X Y )
-  ( witness  : ∀ { X Y : C.Obj } ( f : D.Hom (F X) (F Y) ), F.onMorphisms (preimage f) = f )
+  ( preimage : ∀ { X Y : C.Obj } ( f : D.Hom (F.onObjects X) (F.onObjects Y) ), C.Hom X Y )
+  ( witness  : ∀ { X Y : C.Obj } ( f : D.Hom (F.onObjects X) (F.onObjects Y) ), F.onMorphisms (preimage f) = f )
 
 attribute [pointwise] Full.preimage
 attribute [simp,ematch] Full.witness
@@ -75,6 +75,6 @@ structure {u1 v1 u2 v2} Faithful { C : Category.{u1 v1} } { D : Category.{u2 v2}
 
 definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := (Full F) × (Faithful F)
 
-definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F c) d
+definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F.onObjects c) d
 
 end tqft.categories.equivalence

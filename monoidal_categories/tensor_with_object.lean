@@ -19,7 +19,7 @@ definition MonoidalStructure.tensor_on_left { C: Category.{u v} } ( m : Monoidal
   onObjects := λ X, m.tensorObjects Z X,
   onMorphisms := λ X Y f, m.tensorMorphisms (C.identity Z) f,
   identities := ♮, -- This uses lemma TensorProduct_identities
-  functoriality := ♮ -- This uses lemma MonoidalStructure.interchange_right_identity
+  functoriality := ♯ -- This uses lemma MonoidalStructure.interchange_right_identity
 }
 
 local attribute [ematch] MonoidalStructure.interchange_left_identity
@@ -29,7 +29,7 @@ definition MonoidalStructure.tensor_on_right { C: Category.{u v} } ( m : Monoida
   onObjects := λ X, m.tensorObjects X Z,
   onMorphisms := λ X Y f, m.tensorMorphisms f (C.identity Z),
   identities := ♮, -- This uses lemma TensorProduct_identities
-  functoriality := ♮ -- This uses lemma MonoidalStructure.interchange_left_identity
+  functoriality := ♯ -- This uses lemma MonoidalStructure.interchange_left_identity
 }
 
 end tqft.categories.monoidal_category

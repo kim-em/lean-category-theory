@@ -37,7 +37,7 @@ definition right_associated_triple_tensor { C : Category.{ u v } } ( tensor : Te
 
 -- TODO all the let statements cause problems later...
 @[reducible] definition Pentagon { C : Category } { tensor : TensorProduct C } ( associator : Associator tensor ) :=
-  let α ( X Y Z : C.Obj ) := associator ⟨⟨X, Y⟩, Z⟩,
+  let α ( X Y Z : C.Obj ) := associator.morphism.components ⟨⟨X, Y⟩, Z⟩,
       tensorObjects ( X Y : C.Obj ) := tensor.onObjects ⟨X, Y⟩,
       tensorMorphisms { W X Y Z : C.Obj } ( f : C.Hom W X ) ( g : C.Hom Y Z ) : C.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor.onMorphisms ⟨f, g⟩ in
   ∀ W X Y Z : C.Obj,
@@ -45,11 +45,11 @@ definition right_associated_triple_tensor { C : Category.{ u v } } ( tensor : Te
   = C.compose (α (tensorObjects W X) Y Z) (α W X (tensorObjects Y Z)) 
 
 @[reducible] definition Triangle { C : Category } { tensor : TensorProduct C } ( I : C.Obj ) ( left_unitor : LeftUnitor I tensor ) ( right_unitor : RightUnitor I tensor ) ( associator : Associator tensor ) :=
-  let α ( X Y Z : C.Obj ) := associator ⟨⟨X, Y⟩, Z⟩,
+  let α ( X Y Z : C.Obj ) := associator.morphism.components ⟨⟨X, Y⟩, Z⟩,
       tensorObjects ( X Y : C.Obj ) := tensor.onObjects ⟨X, Y⟩,
       tensorMorphisms { W X Y Z : C.Obj } ( f : C.Hom W X ) ( g : C.Hom Y Z ) : C.Hom (tensorObjects W Y) (tensorObjects X Z) := tensor.onMorphisms ⟨f, g⟩ in
   ∀ X Y : C.Obj,
-    C.compose (α X I Y) (tensorMorphisms (C.identity X) (left_unitor Y))
-  = tensorMorphisms (right_unitor X) (C.identity Y)
+    C.compose (α X I Y) (tensorMorphisms (C.identity X) (left_unitor.morphism.components Y))
+  = tensorMorphisms (right_unitor.morphism.components X) (C.identity Y)
 
 end tqft.categories.monoidal_category

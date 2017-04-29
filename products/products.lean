@@ -61,7 +61,7 @@ definition RightProjection ( C D : Category ) : Functor (C × D) D :=
 
 definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
-  onObjects     := λ X, (F X.fst, G X.snd),
+  onObjects     := λ X, (F.onObjects X.fst, G.onObjects X.snd),
   onMorphisms   := λ _ _ f, (F.onMorphisms f.fst, G.onMorphisms f.snd),
   identities    := ♯,
   functoriality := ♯
@@ -77,7 +77,7 @@ definition ProductNaturalTransformation
   (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
     NaturalTransformation (F × H) (G × I) :=
 {
-  components := λ X, (α X.fst, β X.snd),
+  components := λ X, (α.components X.fst, β.components X.snd),
   naturality := ♯
 }
 
@@ -91,25 +91,5 @@ definition {u1 v1 u2 v2} Evaluation ( C : Category.{u1 v1} ) ( D : Category.{u2 
   identities    := ♯,
   functoriality := ♯
 }
-
--- @[ematch] lemma bifunctor_left_identity
---   { C D E : Category }
---   ( W : C.Obj ) ( X Y Z : D.Obj )
---   ( f : D X Y ) ( g : D Y Z )
---   ( F : Functor (C × D) E ) :
---     @Functor.onMorphisms _ _ F (W, X) (W, Z) (C.identity W, D.compose f g ) 
---     = E.compose
---         (@Functor.onMorphisms _ _ F (W, X) (W, Y) (C.identity W, f )) 
---         (@Functor.onMorphisms _ _ F (W, Y) (W, Z) (C.identity W, g )) := ♮
-
--- @[simp] lemma bifunctor_identities
---   { C D E : Category }
---   ( X : C.Obj ) ( Y : D.Obj )
---   ( F : Functor (C × D) E ) : @Functor.onMorphisms _ _ F (X, Y) (X, Y) (C.identity X, D.identity Y) = E.identity (F.onObjects (X, Y)) :=
---   begin
---     assert p : (C.identity X, D.identity Y) = (C × D).identity (X, Y), blast,
---     rewrite p,
---     rewrite F.identities
---   end 
 
 end tqft.categories.products

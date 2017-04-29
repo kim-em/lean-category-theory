@@ -12,8 +12,7 @@ open tqft.categories.natural_transformation
 namespace tqft.categories.equivalence
 
 lemma Equivalences_are_EssentiallySurjective { C D : Category } ( e : Equivalence C D ) : EssentiallySurjective (e.functor) :=
-  λ Y : D.Obj, ⟨ e.inverse Y, e.isomorphism_2.components Y ⟩
-
+  λ Y : D.Obj, ⟨ e.inverse.onObjects Y, e.isomorphism_2.components Y ⟩
 
 section FullyFaithfulPreimage
 
@@ -22,17 +21,17 @@ section FullyFaithfulPreimage
   parameter ( F : Functor C D )
   parameters ( full : Full F ) ( faithful : Faithful F )
 
-  lemma preimage_identity ( X : C.Obj ) : full.preimage (D.identity (F X)) = C.identity X :=
-    faithful.injectivity (full.preimage (D.identity (F X))) (C.identity X) $
+  lemma preimage_identity ( X : C.Obj ) : full.preimage (D.identity (F.onObjects X)) = C.identity X :=
+    faithful.injectivity (full.preimage (D.identity (F.onObjects X))) (C.identity X) $
       calc
-        F.onMorphisms (full.preimage (D.identity (F X)))
-            = D.identity (F X) : full.witness (D.identity (F X))
+        F.onMorphisms (full.preimage (D.identity (F.onObjects X)))
+            = D.identity (F.onObjects X) : full.witness (D.identity (F.onObjects X))
         ... = F.onMorphisms (C.identity X) : ♮
 
   lemma preimage_functoriality
     { X Y Z : C.Obj }
-    ( f : D.Hom (F X) (F Y) )
-    ( g : D.Hom (F Y) (F Z) ) :
+    ( f : D.Hom (F.onObjects X) (F.onObjects Y) )
+    ( g : D.Hom (F.onObjects Y) (F.onObjects Z) ) :
     C.compose (full.preimage f) (full.preimage g) = full.preimage (D.compose f g) :=
     faithful.injectivity (C.compose (full.preimage f) (full.preimage g)) (full.preimage (D.compose f g)) $
       calc
@@ -45,17 +44,17 @@ section FullyFaithfulPreimage
 
   lemma preimage_composition_identity
     { X Y : C.Obj }
-    ( f : D.Hom (F X) (F Y) )
-    ( g : D.Hom (F Y) (F X) )
-    ( eq : D.compose f g = D.identity (F X) ) :
+    ( f : D.Hom (F.onObjects X) (F.onObjects Y) )
+    ( g : D.Hom (F.onObjects Y) (F.onObjects X) )
+    ( eq : D.compose f g = D.identity (F.onObjects X) ) :
     C.compose (full.preimage f) (full.preimage g) = C.identity X :=
       calc
         C.compose (full.preimage f) (full.preimage g)
-            = full.preimage (D.compose f g)    : preimage_functoriality f g
-        ... = full.preimage (D.identity (F X)) : by rewrite eq
-        ... = C.identity X                     : preimage_identity X
+            = full.preimage (D.compose f g)              : preimage_functoriality f g
+        ... = full.preimage (D.identity (F.onObjects X)) : by rewrite eq
+        ... = C.identity X                               : preimage_identity X
 
-  definition preimage_isomorphism { X Y : C.Obj } ( f : Isomorphism D (F X) (F Y) ) : Isomorphism C X Y := {
+  definition preimage_isomorphism { X Y : C.Obj } ( f : Isomorphism D (F.onObjects X) (F.onObjects Y) ) : Isomorphism C X Y := {
     morphism := full.preimage f.morphism,
     inverse := full.preimage f.inverse,
     witness_1 := preimage_composition_identity f.morphism f.inverse f.witness_1,
@@ -79,7 +78,7 @@ private definition {u1 v1 u2 v2} preimage
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( e : Equivalence C D )
   ( X Y : C.Obj )
-  ( h : D.Hom (e.functor X) (e.functor Y) ) :=
+  ( h : D.Hom (e.functor.onObjects X) (e.functor.onObjects Y) ) :=
   C.compose (C.compose (e.isomorphism_1.inverse.components X) (e.inverse.onMorphisms h)) (e.isomorphism_1.morphism.components Y)
 
 private lemma {u1 v1 u2 v2} preimage_is_retraction
@@ -108,7 +107,7 @@ lemma {u1 v1 u2 v2} Equivalences_are_Faithful { C : Category.{u1 v1} } { D : Cat
       sections_are_injective (@Functor.onMorphisms _ _ e.functor X Y) (preimage e X Y) (preimage_is_retraction e X Y) f g
 }
 
-private lemma {u1 v1 u2 v2} preimage_lemma { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor X) (e.functor Y) ) : (e.inverse).onMorphisms ((e.functor).onMorphisms (preimage e X Y h)) = (e.inverse).onMorphisms h :=
+private lemma {u1 v1 u2 v2} preimage_lemma { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor.onObjects X) (e.functor.onObjects Y) ) : (e.inverse).onMorphisms ((e.functor).onMorphisms (preimage e X Y h)) = (e.inverse).onMorphisms h :=
 begin
   pose p := e.isomorphism_1.naturality_2 (preimage e X Y h),
   -- dsimp at p, FIXME fails with 'match failed'
@@ -129,7 +128,7 @@ lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Categor
         begin 
           intros X Y h,
           apply (Equivalences_are_Faithful e.reverse).injectivity,
-          unfold_unfoldable,
+          unfold Equivalence.reverse,
           rewrite (preimage_lemma e X Y h)
         end
   }
@@ -150,10 +149,10 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
     λ X : D.Obj,
       (ess_surj X).1
   
-  @[reducible] def ε_mor (X : D.Obj) : D.Hom (F (G_onObjects X)) X :=
+  @[reducible] def ε_mor (X : D.Obj) : D.Hom (F.onObjects (G_onObjects X)) X :=
     (ess_surj X).2.morphism
   
-  @[reducible] def ε_inv (X : D.Obj) : D.Hom X (F (G_onObjects X)) :=
+  @[reducible] def ε_inv (X : D.Obj) : D.Hom X (F.onObjects (G_onObjects X)) :=
     (ess_surj X).2.inverse
   
   def G_onMorphisms : Π {X Y : D.Obj}, D.Hom X Y → C.Hom (G_onObjects X) (G_onObjects Y) :=
@@ -169,7 +168,7 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
         let g' := ε_mor X ⟩D⟩ D.identity X ⟩D⟩ ε_inv X in
         calc
           full.preimage g'
-              = full.preimage (D.identity (F (G_onObjects X))) : ♮
+              = full.preimage (D.identity (F.onObjects (G_onObjects X))) : ♮
           ... = C.identity (G_onObjects X)
               : preimage_identity F full faithful (G_onObjects X),
     functoriality :=
@@ -202,22 +201,22 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
   definition ε : NaturalIsomorphism (FunctorComposition G F) (IdentityFunctor D) :=
     NaturalIsomorphism.from_components (λ X, (ess_surj X).2) (λ {X Y : D.Obj}, ε_natural)
 
-  def η_comp (X : C.Obj) : Isomorphism C (G (F X)) X :=
-    preimage_isomorphism F full faithful (NaturalIsomorphism.components ε (F X))
+  def η_comp (X : C.Obj) : Isomorphism C (G.onObjects (F.onObjects X)) X :=
+    preimage_isomorphism F full faithful (NaturalIsomorphism.components ε (F.onObjects X))
 
   lemma η_natural {X Y : C.Obj} (f : C.Hom X Y) : G.onMorphisms (F.onMorphisms f) ⟩C⟩ (η_comp Y).morphism = (η_comp X).morphism ⟩C⟩ f :=
     faithful.injectivity (G.onMorphisms (F.onMorphisms f) ⟩C⟩ (η_comp Y).morphism) ((η_comp X).morphism ⟩C⟩ f) $
-      let H := full.witness (ε_mor (F X)) in
+      let H := full.witness (ε_mor (F.onObjects X)) in
       calc
         F.onMorphisms (G.onMorphisms (F.onMorphisms f) ⟩C⟩ (η_comp Y).morphism)
-            = F.onMorphisms (G.onMorphisms (F.onMorphisms f)) ⟩D⟩ F.onMorphisms (full.preimage (ε_mor (F Y)))
+            = F.onMorphisms (G.onMorphisms (F.onMorphisms f)) ⟩D⟩ F.onMorphisms (full.preimage (ε_mor (F.onObjects Y)))
             : F.functoriality _ _
-        ... = F.onMorphisms (G.onMorphisms (F.onMorphisms f)) ⟩D⟩ ε_mor (F Y)
-            : congr_arg (λ k, F.onMorphisms (G.onMorphisms (F.onMorphisms f)) ⟩D⟩ k) (full.witness (ε_mor (F Y)))
-        ... = ε_mor (F X) ⟩D⟩ F.onMorphisms f
+        ... = F.onMorphisms (G.onMorphisms (F.onMorphisms f)) ⟩D⟩ ε_mor (F.onObjects Y)
+            : congr_arg (λ k, F.onMorphisms (G.onMorphisms (F.onMorphisms f)) ⟩D⟩ k) (full.witness (ε_mor (F.onObjects Y)))
+        ... = ε_mor (F.onObjects X) ⟩D⟩ F.onMorphisms f
             : ε.morphism.naturality (F.onMorphisms f)
-        ... = F.onMorphisms (full.preimage (ε_mor (F X))) ⟩D⟩ F.onMorphisms f
-            : eq.symm $ congr_arg (λ k, k ⟩D⟩ F.onMorphisms f) $ full.witness (ε_mor (F X))
+        ... = F.onMorphisms (full.preimage (ε_mor (F.onObjects X))) ⟩D⟩ F.onMorphisms f
+            : eq.symm $ congr_arg (λ k, k ⟩D⟩ F.onMorphisms f) $ full.witness (ε_mor (F.onObjects X))
             --: by erewrite full.witness (ε_mor (F X))
         ... = F.onMorphisms ((η_comp X).morphism ⟩C⟩ f)
             : eq.symm (F.functoriality _ _)

@@ -16,7 +16,7 @@ namespace tqft.categories.universal
 
 structure Cone { J C : Category } ( F : Functor J C ) :=
   ( limit : C.Obj )
-  ( maps  : Π j : J.Obj, C.Hom limit (F j) )
+  ( maps  : Π j : J.Obj, C.Hom limit (F.onObjects j) )
   ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (maps j) (F.onMorphisms f) = maps k )
 
 attribute [simp,ematch] Cone.commutativity
@@ -50,7 +50,7 @@ definition Cones { J C : Category } ( F : Functor J C ) : Category :=
 
 structure Cocone { J C : Category } ( F : Functor J C ) :=
   ( colimit : C.Obj )
-  ( maps  : Π j : J.Obj, C.Hom (F j) colimit )
+  ( maps  : Π j : J.Obj, C.Hom (F.onObjects j) colimit )
   ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (F.onMorphisms f) (maps k) = maps j )
 
 local attribute [simp,ematch] Cocone.commutativity

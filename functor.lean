@@ -45,7 +45,7 @@ definition {u1 v1} IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
 
 definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
 {
-  onObjects     := λ X, G (F X),
+  onObjects     := λ X, G.onObjects (F.onObjects X),
   onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f),
   identities    := ♯,
   functoriality := ♮
@@ -110,7 +110,7 @@ definition {u1 v1 u2 v2} Functor_onIsomorphisms
   {X Y : C.Obj}
   (F : Functor C D)
   (g : Isomorphism C X Y) :
-  Isomorphism D (F X) (F Y) :=
+  Isomorphism D (F.onObjects X) (F.onObjects Y) :=
   {
     morphism := F.onMorphisms g.morphism,
     inverse := F.onMorphisms g.inverse,

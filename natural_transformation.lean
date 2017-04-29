@@ -12,7 +12,7 @@ open tqft.categories.functor
 namespace tqft.categories.natural_transformation
 
 structure {u1 v1 u2 v2} NaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) :=
-  (components: Π X : C.Obj, D.Hom (F X) (G X))
+  (components: Π X : C.Obj, D.Hom (F.onObjects X) (G.onObjects X))
   (naturality: ∀ { X Y : C.Obj } (f : C.Hom X Y),
      D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f))
 
@@ -29,7 +29,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α β : NaturalTransformation F G )
-  ( w : ∀ X : C.Obj, α X = β X ) : α = β :=
+  ( w : ∀ X : C.Obj, α.components X = β.components X ) : α = β :=
   begin
     induction α with α_components α_naturality,
     induction β with β_components β_naturality,
@@ -41,7 +41,7 @@ set_option pp.all true
 
 definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
   {
-    components := λ X, D.identity (F X),
+    components := λ X, D.identity (F.onObjects X),
     naturality := ♮
   }
 
@@ -51,7 +51,7 @@ definition {u1 v1 u2 v2} vertical_composition_of_NaturalTransformations
   ( α : NaturalTransformation F G )
   ( β : NaturalTransformation G H ) : NaturalTransformation F H :=
   {
-    components := λ X, D.compose (α X) (β X),
+    components := λ X, D.compose (α.components X) (β.components X),
     naturality := ♮
   }
 
@@ -74,7 +74,7 @@ definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
   ( α : NaturalTransformation F G )
   ( β : NaturalTransformation H I ) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
   {
-    components := λ X : C.Obj, E.compose (β (F X)) (I.onMorphisms (α X)),
+    components := λ X : C.Obj, E.compose (β.components (F.onObjects X)) (I.onMorphisms (α.components X)),
     naturality := ♯
   }
 
@@ -154,14 +154,14 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
   ( X : C.Obj )
-   : D.compose (α.morphism.components X) (α.inverse.components X) = D.identity (F X)
+   : D.compose (α.morphism.components X) (α.inverse.components X) = D.identity (F.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.componentwise_witness_2
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
   ( X : C.Obj )
-   : D.compose (α.inverse.components X) (α.morphism.components X) = D.identity (G X)
+   : D.compose (α.inverse.components X) (α.morphism.components X) = D.identity (G.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_2
 
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_1 
@@ -197,7 +197,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
 definition NaturalIsomorphism.from_components
   { C D : Category }
   { F G : Functor C D }
-  ( components : ∀ X : C.Obj, Isomorphism D (F X) (G X) )
+  ( components : ∀ X : C.Obj, Isomorphism D (F.onObjects X) (G.onObjects X) )
   ( naturality : ∀ { X Y : C.Obj } ( f : C.Hom X Y ), D.compose (F.onMorphisms f) (components Y).morphism = D.compose (components X).morphism (G.onMorphisms f) ) : NaturalIsomorphism F G :=
   {
     morphism  := {
@@ -207,7 +207,7 @@ definition NaturalIsomorphism.from_components
     inverse   := {
       components := λ X, (components X).inverse,
       naturality := λ X Y f, begin
-                               pose p := congr_arg (λ f : D.Hom (F X) (G Y), D.compose (components X).inverse (D.compose f (components Y).inverse)) (eq.symm (naturality f)),
+                               pose p := congr_arg (λ f : D.Hom (F.onObjects X) (G.onObjects Y), D.compose (components X).inverse (D.compose f (components Y).inverse)) (eq.symm (naturality f)),
                                simp at p,
                                rewrite D.associativity at p,
                                rewrite D.associativity at p,
@@ -254,7 +254,7 @@ definition {u1 v1 u2 v2} is_NaturalIsomorphism { C : Category.{u1 v1} } { D : Ca
   ( α : NaturalTransformation F G )
   ( w : is_NaturalIsomorphism α )
   ( X : C.Obj )
-   : D.compose (α.components X) (w.inverse.components X) = D.identity (F X)
+   : D.compose (α.components X) (w.inverse.components X) = D.identity (F.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_1
 @[ematch] lemma {u1 v1 u2 v2} is_NaturalIsomorphism_componentwise_witness_2
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
@@ -262,7 +262,7 @@ definition {u1 v1 u2 v2} is_NaturalIsomorphism { C : Category.{u1 v1} } { D : Ca
   ( α : NaturalTransformation F G )
   ( w : is_NaturalIsomorphism α )
   ( X : C.Obj )
-   : D.compose (w.inverse.components X) (α.components X) = D.identity (G X)
+   : D.compose (w.inverse.components X) (α.components X) = D.identity (G.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_2
 
 
@@ -273,7 +273,7 @@ lemma {u1 v1 u2 v2} IdentityNaturalTransformation_is_NaturalIsomorphism { C : Ca
   }
 
 definition NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( α : NaturalIsomorphism F G ) ( X : C.Obj ) :
- Isomorphism D (F X) (G X) :=
+ Isomorphism D (F.onObjects X) (G.onObjects X) :=
   {
     morphism := α.morphism.components X,
     inverse := α.inverse.components X,

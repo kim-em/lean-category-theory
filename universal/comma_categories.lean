@@ -46,7 +46,7 @@ definition CommaCategory
   { A B C : Category }
   ( S : Functor A C ) ( T : Functor B C ) : Category :=
 {
-  Obj      := Σ a : A.Obj, Σ b : B.Obj, C.Hom (S a) (T b),
+  Obj      := Σ a : A.Obj, Σ b : B.Obj, C.Hom (S.onObjects a) (T.onObjects b),
   Hom      := λ p q, { gh : (A.Hom p.1 q.1) × (B.Hom p.2.1 q.2.1) // C.compose (S.onMorphisms gh.1) q.2.2 = C.compose p.2.2 (T.onMorphisms gh.2) },
   identity := λ p, ⟨ (A.identity p.1, B.identity p.2.1), ♮ ⟩,
   compose  := λ p q r f g, ⟨ (A.compose (val f).1 (val g).1, B.compose (val f).2 (val g).2), ♮ ⟩,
@@ -113,9 +113,9 @@ definition ParallelPair_homomorphism { C : Category } { α β : C.Obj } ( f g : 
                          end
 }
 
-definition Product { C : Category } ( α β : C.Obj ) := Limit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
-definition Coproduct { C : Category } ( α β : C.Obj ) := Colimit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
-definition Equalizer { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Limit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
+definition Product     { C : Category } ( α β : C.Obj )                     := Limit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
+definition Coproduct   { C : Category } ( α β : C.Obj )                     := Colimit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
+definition Equalizer   { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Limit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
 definition Coequalizer { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Colimit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
 
 end tqft.categories.comma
