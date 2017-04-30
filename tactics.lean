@@ -230,20 +230,17 @@ attribute [pointwise] prod.mk
 attribute [pointwise] pprod.mk
 attribute [pointwise] subtype.mk
 
--- open tactic.interactive
--- meta def blast  : tactic unit := intros >> try ( pointwise_and_then blast ) >> try ( unfold_unfoldable ) >> try smt_eblast >> try ( pointwise_and_then blast ) -- >> split_goals_and_then blast
-
 meta def done : tactic unit :=
   do goals ← get_goals,
      guard (goals = []),
     --  trace "no goals",
      skip
 
-meta def monitor_progress { α : Type } ( t : tactic α ) : tactic (bool × α) :=
-do goals ← get_goals,
-   result ← t,
-   goals' ← get_goals,
-   return (goals ≠ goals', result)
+-- meta def monitor_progress { α : Type } ( t : tactic α ) : tactic (bool × α) :=
+-- do goals ← get_goals,
+--    result ← t,
+--    goals' ← get_goals,
+--    return (goals ≠ goals', result)
 
 open nat
 
