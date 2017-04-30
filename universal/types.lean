@@ -70,7 +70,7 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
     inclusion     := λ x, x.val,
     witness       := ♯,
     map           := begin
-                       blast,
+                       tidy,
                        {
                          exact k a
                        },

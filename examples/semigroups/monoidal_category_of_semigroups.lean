@@ -36,8 +36,7 @@ open tqft.categories.monoidal_category
       abstract {
         intros,
         unfold mul has_mul.mul,
-        dsimp,
-        simp
+        tidy
       }
     end
 }

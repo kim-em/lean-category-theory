@@ -63,6 +63,7 @@ definition {u v} DrinfeldCentre { C : Category.{u v} } ( m : MonoidalStructure C
     morphism := C.compose f.morphism g.morphism,
     witness  := 
       begin
+        -- PROJECT improve automation. This is also affected by https://github.com/leanprover/lean/issues/1552
         intros, 
         dsimp,
         rewrite m.interchange_right_identity,
@@ -70,9 +71,10 @@ definition {u v} DrinfeldCentre { C : Category.{u v} } ( m : MonoidalStructure C
         rewrite - C.associativity,
         rewrite f.witness,
         rewrite C.associativity,
-        -- blast, -- PROJECT improve automation
+        tidy,
         rewrite g.witness,
-        blast
+        tidy,
+        smt_eblast
       end
   },
   left_identity  := ♯,

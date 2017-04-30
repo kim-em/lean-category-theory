@@ -41,11 +41,11 @@ begin
         witness_2 := _
     },
     intros,
-    induction_on_pairs,
-    induction_on_pairs,
+    automatic_induction,
+    automatic_induction,
     split,
     split,
-    all_goals { try { apply funext, intros, induction_on_pairs, induction_on_pairs } },
+    all_goals { try { apply funext, intros, automatic_induction, automatic_induction } },
     all_goals { try { simp } }
 end
 

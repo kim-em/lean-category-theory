@@ -16,12 +16,9 @@ meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
 
-meta def pointwise_and_then (and_then : tactic unit) : tactic unit :=
+meta def pointwise : tactic unit :=
 do cs ← attribute.get_instances `pointwise,
-   seq (any_apply cs) and_then
-
-meta def force_pointwise : tactic unit := pointwise_and_then skip
-meta def pointwise : tactic unit := try ( force_pointwise )
+   any_apply cs
 
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b has_coe_to_fun.coe
@@ -80,7 +77,7 @@ do num_reverted ← revert h,
    intron num_reverted
 
 -- Applies a list of tactics in turn, always succeeding.
-meta def list_try_seq : list (tactic unit) → tactic unit
+meta def list_try_seq : list (tactic unit) → tactic unit 
 | list.nil  := skip
 | (t :: ts) := seq (try t) (list_try_seq ts)
 
@@ -89,28 +86,54 @@ meta def at_least_one : list (tactic unit) → tactic unit
 | list.nil  := fail "at_least_one tactic failed, no more tactics"
 | (t :: ts) := (seq t (list_try_seq ts)) <|> (at_least_one ts)
 
-meta def unfold_projections_all_hypotheses : tactic unit :=
+meta def unfold_projections_hypotheses : tactic unit :=
 do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, unfold_projections_at h))
 
-meta def unfold_all_hypotheses : tactic unit :=
+meta def unfold_hypotheses : tactic unit :=
 do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, dunfold_and_simp_at s h))
 
-meta def dsimp_all_hypotheses : tactic unit :=
+-- meta def dsimp_hypotheses : tactic unit :=
+-- do l ← local_context,
+--    at_least_one (l.reverse.for (λ h, dsimp_at h))
+
+-- FIXME this repeatedly resimplifies hypotheses, if they can't be cleared. :-(
+meta def simp_hypotheses : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.for (λ h, dsimp_at h))
+   at_least_one (l.reverse.for (λ h, simp_at h))
+
+meta def new_names ( e : expr ) : tactic (list name) :=
+  do 
+    n1 ← get_unused_name e.local_pp_name (some 1), 
+    n2 ← get_unused_name e.local_pp_name (some 2),
+    pure [ n1, n2 ] 
+
+-- meta def induction_on_pairs : tactic unit :=
+--  do l ← local_context,
+--    at_least_one (
+--    l.reverse.for (λ h, do
+--      t ← infer_type h >>= whnf,
+--      match t with
+--      | ```(prod _ _) := do names ← new_names h,
+--                            induction h names >> skip
+--      | _             := fail "hypothesis is not a pair"
+--      end)) <|> fail "no hypotheses are pairs"
 
 meta def automatic_induction' (h : expr) (t : expr) : tactic unit :=
 match t with
-| ```(unit)    := induction h >>= λ x, skip
-| ```(punit)   := induction h >>= λ x, skip
-| ```(empty)   := induction h >>= λ x, skip
-| ```(ulift _) := induction h >>= λ x, skip
-| ```(plift _) := induction h >>= λ x, skip
-| _            := failed
+| ```(unit)      := induction h >>= λ x, skip
+| ```(punit)     := induction h >>= λ x, skip
+| ```(empty)     := induction h >>= λ x, skip
+| ```(ulift _)   := induction h >>= λ x, skip
+| ```(plift _)   := induction h >>= λ x, skip
+| ```(prod _ _)  := do names ← new_names h,
+                      induction h names >> skip
+| ```(sigma _)   := do names ← new_names h,
+                      induction h names >> skip
+| _              := failed
 end
 
 meta def automatic_induction_at (h : expr) : tactic unit :=
@@ -125,23 +148,6 @@ open lean.parser
 open interactive
 
 meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
-
-meta def new_names ( e : expr ) : tactic (list name) :=
-  do 
-    n1 ← get_unused_name e.local_pp_name (some 1), 
-    n2 ← get_unused_name e.local_pp_name (some 2),
-    pure [ n1, n2 ] 
-
-meta def induction_on_pairs : tactic unit :=
- do l ← local_context,
-   at_least_one (
-   l.reverse.for (λ h, do
-     t ← infer_type h >>= whnf,
-     match t with
-     | ```(prod _ _) := do names ← new_names h,
-                           induction h names >> skip
-     | _             := fail "hypothesis is not a pair"
-     end)) <|> fail "no hypotheses are pairs"
 
 meta def fsplit : tactic unit :=
 do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, target is not an inductive datatype with only one constructor",
@@ -247,7 +253,7 @@ open nat
 private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
 | 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
 | _        []        := done <|> /-trace "We've tried all tactics in the chain, but there are still unsolved goals." >>-/ skip -- We've run out of tactics to apply!
-| (succ n) (t :: ts) := done <|> /-trace (list.length ts) >>-/ (seq t (chain' n tactics)) <|> chain' (succ n) ts
+| (succ n) (t :: ts) := done <|> /-trace (list.length ts) >>-/ (seq (all_goals t) (chain' n tactics)) <|> chain' (succ n) ts
 
 meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 50 tactics
 
@@ -255,43 +261,29 @@ meta def unfold_unfoldable : tactic unit :=
    chain [
       force ( dsimp ),
       simp,
-      unfold_projections_all_hypotheses,
+      unfold_projections_hypotheses,
       unfold_projections,
       dunfold_everything
   ]
 
 meta def tidy : tactic unit := 
    chain [
+      tactic.triv,
       force ( reflexivity ),
+      assumption,
       force ( dsimp ),
       simp,
-      unfold_projections_all_hypotheses,
+      -- simp_hypotheses,
       unfold_projections,
+      unfold_projections_hypotheses,
       force ( intros >> skip ),
       automatic_induction,
-      induction_on_pairs,
       -- tactic.interactive.congr_struct,
-      force_pointwise
+      pointwise
   ]
 
 
-meta def blast : tactic unit :=
-  -- trace "starting blast" >>
-  chain [
-    force ( reflexivity ),
-
-    force ( dsimp ),
-    simp,
-    unfold_projections_all_hypotheses,
-    unfold_projections,
-
-    force ( intros >> skip ),
-    automatic_induction,
-    -- tactic.interactive.congr_struct,
-    force_pointwise,
-    -- dunfold_everything,
-    smt_eblast >> done
-  ]
+meta def blast : tactic unit := tidy >> all_goals (try smt_eblast)
 
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }
@@ -300,25 +292,20 @@ set_option formatter.hide_full_terms false
 
 @[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b).fst = a := ♮
 @[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b).snd = b := ♮
-@[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X.fst, X.snd) = X :=
-begin
-  induction X,
-  blast,
-end
-@[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X.fst ) { B : β } ( p : B = X.snd ) : (A, B) = X := begin induction X, blast end
-@[pointwise] lemma {u v} pair_equality_4 {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := begin induction X, blast end
-@[pointwise] lemma {u v} dependent_pair_equality {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := begin induction X, induction Y, blast end
-@[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := begin induction X, induction Y, blast end
-@[pointwise] lemma {u} plift_equality { α : Sort u } ( X Y : plift α ) ( p : X.down = Y.down ) : X = Y := begin induction X, induction Y, blast end
-@[pointwise] lemma {u v} ulift_equality { α : Type v } ( X Y : ulift.{u v} α ) ( p : X.down = Y.down ) : X = Y := begin induction X, induction Y, blast end
+@[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X.fst, X.snd) = X := ♯
+@[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X.fst ) { B : β } ( p : B = X.snd ) : (A, B) = X := ♯
+@[pointwise] lemma {u v} pair_equality_4 {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := ♯
+@[pointwise] lemma {u v} dependent_pair_equality {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := ♯
+@[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := ♯
+@[pointwise] lemma {u} plift_equality { α : Sort u } ( X Y : plift α ) ( p : X.down = Y.down ) : X = Y := ♯
+@[pointwise] lemma {u v} ulift_equality { α : Type v } ( X Y : ulift.{u v} α ) ( p : X.down = Y.down ) : X = Y := ♯
 attribute [pointwise] subtype.eq
 
 @[reducible] def {u} auto_cast {α β : Sort u} {h : α = β} (a : α) := cast h a
 @[simp] lemma {u} auto_cast_identity {α : Sort u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮
 notation `⟦` p `⟧` := @auto_cast _ _ (by smt_ematch) p
 
-definition {u v} transport {A : Type u} { P : A → Type v} {x y : A} (p : x = y)
-(u : P x) : P y :=
+definition {u v} transport {A : Type u} { P : A → Type v} {x y : A} (u : P x) (p : x = y) : P y :=
 by induction p; exact u
 
 -- TODO this is destined for the standard library?

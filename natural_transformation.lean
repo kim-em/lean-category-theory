@@ -73,7 +73,7 @@ definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
     naturality := ♯
   }
 
--- FIXME Visual Studio Code can't seem to display the subscript h?
+-- FIXME Visual Studio Code can't seem to display the subscript h? ₕ
 notation α `∘ᵤ` β := horizontal_composition_of_NaturalTransformations α β
 
 definition {u1 v1 u2 v2 u3 v3} whisker_on_left

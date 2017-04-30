@@ -3,6 +3,7 @@
 -- Authors: Stephen Morgan, Scott Morrison
 import ...monoidal_categories.monoidal_category
 import ...discrete_category
+import ...universal.categories
 
 open tqft.categories
 open tqft.categories.functor
@@ -44,26 +45,7 @@ definition CategoryLeftUnitor : @LeftUnitor CategoryOfCategoriesAndFunctors.{u v
     components := λ t, LeftInjectionAt punit.star t,
     naturality := ♮
   },
-  witness_1 := begin
-                apply NaturalTransformations_componentwise_equal,
-                intros C,
-                unfold_unfoldable,
-                fapply Functors_pointwise_equal,
-                {
-                  -- First show identity on objects:
-                  blast
-                },
-                {
-                  -- Now show identity on morphisms:
-                  blast,                  
-                  induction f with f_1 f_2,
-                  induction X with X_1 X_2,
-                  induction X_1,
-                  induction Y with Y_1 Y_2,
-                  induction Y_1,
-                  simp
-                }               
-               end,
+  witness_1 := ♯,
   witness_2 := ♯
 }
 
@@ -76,26 +58,7 @@ definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u
     components := λ t, RightInjectionAt punit.star t,
     naturality := ♮
   },
-  witness_1 := begin
-  apply NaturalTransformations_componentwise_equal,
-                intros C,
-                unfold_unfoldable,
-                fapply Functors_pointwise_equal,
-                {
-                  -- First show identity on objects:
-                  blast
-                },
-                {
-                  -- Now show identity on morphisms:
-                  blast, -- PROJECT automate the inevitable inductions                  
-                  induction f with f_1 f_2,
-                  induction X with X_1 X_2,
-                  induction X_2,
-                  induction Y with Y_1 Y_2,
-                  induction Y_2,
-                  simp
-                }
-               end,
+  witness_1 := ♯,
   witness_2 := ♯
 }
 

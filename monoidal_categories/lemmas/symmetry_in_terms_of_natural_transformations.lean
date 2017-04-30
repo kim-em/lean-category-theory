@@ -23,10 +23,6 @@ namespace tqft.categories.braided_monoidal_category
 
 lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
   begin
-    -- tidy, -- FIXME why does this hit the iteration limit?
-    apply NaturalTransformations_componentwise_equal,
-    intros, 
-    induction X with X_1 X_2,
     tidy
   end
 

@@ -52,80 +52,78 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 
 private lemma {u v w} composition {α : Sort u} {β : Sort v} {γ : Sort w} {f : α → β} {g : β → γ} (a : α) : (g ∘ f) a = g (f a) := ♯
 
--- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
--- begin
---   unfold NaturalIsomorphism,
---   fsplit,
---   {
---     unfold FunctorCategory,
---     dsimp,
---     fsplit,
---     {
---       intros,
---       dsimp at X,
---       unfold CategoryOfTypes,
---       dsimp,
---       intros,
---       unfold Evaluation,
---       dsimp,
---       simp at a,
---       dunfold_and_simp_all_hypotheses,
---       exact ((a.components X.2) (C.identity X.2))
---     },
---     {
---       intros,
---       blast,
---       pose p := x.naturality f.2,
---       unfold_projections at p,
---       simp at p,
---       pose q := congr_fun p (C.identity X.2),
---       rewrite composition at q,
---       simp at q,
---       admit
---     },
---     {
-      
---     }
---   }
--- end
+theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+begin
+  unfold NaturalIsomorphism,
+  fsplit,
+  {
+    unfold FunctorCategory,
+    dsimp,
+    fsplit,
+    {
+      tidy,
+      exact ((a.components X_2) (C.identity X_2))
+    },
+    {
+      tidy,
+      pose p := x.naturality f_2,
+      unfold_projections at p,
+      simp at p,
+      pose q := congr_fun p (C.identity X_2),
+      rewrite composition at q,
+      simp at q,
+      tidy,
+      rewrite q
+    }
+  },
+  {
+    tidy,
+    admit
+  },
+  {
+    tidy,
+    admit
+  },
+  {
+    tidy,
+    admit
+  }
+end
 
 
--- FIXME waiting on the restoration of unfold_projections
--- theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
--- begin
---   blast,
---   {
---     -- Show it is full
---     fsplit,
---     {
---         intros,
---         exact (f.components X) (C.identity X)
---     },
---     {
---         blast,
---         pose p := f.naturality x,
---         simp at p,
---         unfold CategoryOfTypes at p,
---         simp at p,
---         pose q := congr_fun p (C.identity X),
---         rewrite composition at q,
---         rewrite C.right_identity at q,
---         exact (eq.symm q)
---     }
---   },
---   {
---     -- Show it is faithful
---     fsplit,
---     unfold_unfoldable,
---     intros,
---     pose q := congr_arg NaturalTransformation.components p,
---     simp at q,
---     pose q' := congr_fun q X,
---     simp at q',
---     pose q'' := congr_fun q' (C.identity X),
---     simp at q'',
---     exact q''
---   }
--- end
+theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
+begin
+  tidy,
+  {
+    -- Show it is full
+    fsplit,
+    {
+        intros,
+        exact (f.components X) (C.identity X)
+    },
+    {
+        tidy,
+        pose p := f.naturality x,
+        tidy,
+        simp at p,
+        pose q := congr_fun p (C.identity X),
+        rewrite composition at q,
+        rewrite C.right_identity at q,
+        exact (eq.symm q)
+    }
+  },
+  {
+    -- Show it is faithful
+    fsplit,
+    tidy,
+    pose q := congr_arg NaturalTransformation.components p,
+    simp at q,
+    pose q' := congr_fun q X,
+    simp at q',
+    pose q'' := congr_fun q' (C.identity X),
+    simp at q'',
+    exact q''
+  }
+end
 
 end tqft.categories.yoneda
