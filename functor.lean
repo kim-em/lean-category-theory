@@ -76,33 +76,6 @@ begin
   subst h_morphisms
 end
 
-open tactic.interactive
-
-@[ematch] lemma {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition.associativity
-  { B : Category.{u1 v1} }
-  { C : Category.{u2 v2} }
-  { D : Category.{u3 v3} }
-  { E : Category.{u4 v4} }
-  ( F : Functor B C )
-  ( G : Functor C D )
-  ( H : Functor D E )
-   : FunctorComposition (FunctorComposition F G) H = FunctorComposition F (FunctorComposition G H) := ♮
-
-@[simp,ematch] lemma {u1 v1 u2 v2} FunctorComposition.left_identity
-  ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) ( F : Functor C D ) : FunctorComposition (IdentityFunctor C) F = F := ♯
-@[simp,ematch] lemma {u1 v1 u2 v2} FunctorComposition.right_identity ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) ( F : Functor C D ) : FunctorComposition F (IdentityFunctor D) = F := ♯
-
--- Note that this definition fixes the universe level of all the categories involved, so the witness fields are not useful as lemmas.
-definition {u v} CategoryOfCategoriesAndFunctors : Category := {
-  Obj := Category.{u v},
-  Hom := λ C D, Functor C D,
-  identity := λ C, IdentityFunctor C,
-  compose  := λ _ _ _ F G, FunctorComposition F G,
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
-}
-
 -- Functors preserve isomorphisms
 definition {u1 v1 u2 v2} Functor_onIsomorphisms
   { C : Category.{u1 v1} }

@@ -21,46 +21,20 @@ namespace tqft.categories.braided_monoidal_category
            ∘̬ (FunctorComposition_left_unitor m.tensor).morphism)
   end 
 
-
--- FIXME We need this lemma for now, because we can't unfold ProductCategory without messing up implicit arguments.
-@[simp] lemma {u1 u2 u3 u4} product_identities_1 { C : Category.{u1 u2} } { D : Category.{u3 u4} } { X : C.Obj } { Y : D.Obj } : ((C × D).identity (X, Y)).1 = C.identity X := ♯
-@[simp] lemma {u1 u2 u3 u4} product_identities_2 { C : Category.{u1 u2} } { D : Category.{u3 u4} } { X : C.Obj } { Y : D.Obj } : ((C × D).identity (X, Y)).2 = D.identity Y := ♯
-
 lemma {u v} symmetry_in_terms_of_natural_transformations { C : Category.{u v} } { m : MonoidalStructure C } ( β : Symmetry m ) : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor := 
   begin
+    -- tidy, -- FIXME why does this hit the iteration limit?
     apply NaturalTransformations_componentwise_equal,
     intros, 
     induction X with X_1 X_2,
-    blast
+    tidy
   end
 
 lemma {u v} symmetric_in_terms_of_components { C : Category.{u v} } { m : MonoidalStructure C } ( β : Braiding m ) ( e : squared_Braiding (β.braiding) = IdentityNaturalTransformation m.tensor ) : Symmetry m := {
   β with 
     symmetry := λ X Y : C.Obj, begin
                                  refine ( cast _ (congr_fun (congr_arg NaturalTransformation.components e) (X, Y)) ),
-                                 
-                                 -- FIXME lame!
-                                 unfold squared_Braiding,
-                                 unfold IdentityNaturalTransformation,
-                                 unfold vertical_composition_of_NaturalTransformations,
-                                 dsimp,
-                                 unfold whisker_on_left,
-                                 unfold whisker_on_right,
-                                 unfold horizontal_composition_of_NaturalTransformations,
-                                 unfold IdentityNaturalTransformation,
-                                 dsimp,
-                                 unfold FunctorComposition,
-                                 unfold SwitchSymmetry,
-                                 unfold FunctorComposition_associator,
-                                 unfold FunctorComposition_left_unitor,
-                                 unfold FunctorComposition_associator._aux_1,
-                                 unfold SwitchSymmetry._aux_1,
-                                 unfold FunctorComposition_left_unitor._aux_1,
-                                 dsimp,
-                                 unfold SwitchProductCategory,
-                                 unfold FunctorComposition,
-                                 dsimp,
-                                 simp
+                                 blast -- TODO rewrite an 'inexact' or 'its' tactic
                                end
 }
 

@@ -134,7 +134,7 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_right_functor
     functoriality := ♯
   }
 
-definition {u1 v1 u2 v2} NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
+@[reducible] definition {u1 v1 u2 v2} NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
 
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.

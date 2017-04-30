@@ -15,10 +15,25 @@ namespace tqft.categories.natural_transformation
 
 -- PROJECT show Fun(C → Fun(D → E)) is equivalent to Fun(C × D → E)
 
+@[simp] lemma {u v w} foo { α : Type u } { β : Type v } { Z : α × β → Type w } ( f : Π (a : α) (b : β),  Z (a, b) ) ( x : α ) ( y : β ): (@prod.rec α β Z (λ (a : α) (b : β), f a b) (x, y)) = f x y :=
+begin
+  simp
+end
+@[simp] lemma {u v w} bar { α : Type u } { β : Type v } { Z : α × β → Type w } ( f : Π (a : α) (b : β),  Z (a, b) ) ( x : α ) ( y : β ): (@prod.rec α β Z (λ (a : α), f a) (x, y)) = f x y :=
+begin
+  simp
+end
+
+-- set_option pp.all true
+
 -- theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
 --   ( C : Category.{u1 v1} )
 --   ( D : Category.{u2 v2} )
 --   ( E : Category.{u3 v3} ) :
+-- theorem {u} Currying_for_functors
+--   ( C : Category.{u u} )
+--   ( D : Category.{u u} )
+--   ( E : Category.{u u} ) :
 --   Equivalence (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) :=
 --   begin
 --     fsplit,
@@ -36,9 +51,16 @@ namespace tqft.categories.natural_transformation
 --       },
 --       {
 --         intros,
+--         induction X with X_1 X_2,
+--         induction Y with Y_1 Y_2,
 --         induction a with f g,
+--         simp at f,
+--         simp at g,
 --         pose p := (F.onMorphisms f),
---         dsimp at p, -- FIXME match failed on dsimp, again :-(   
+--         unfold_projections at p,   
+--         unfold_projections, -- FIXME we're stuck here on prod.rec
+--         simp,
+--         admit
 --       }
 --     }
 --   end

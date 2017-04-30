@@ -2,16 +2,17 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ...monoidal_categories.monoidal_category
-import ...monoidal_categories.braided_monoidal_category
+-- import ...monoidal_categories.monoidal_category
+-- import ...monoidal_categories.braided_monoidal_category
+import ...isomorphism
 import .types
 
 namespace tqft.categories.examples.types
 
 open tqft.categories
 open tqft.categories.isomorphism
-open tqft.categories.monoidal_category
-open tqft.categories.braided_monoidal_category
+-- open tqft.categories.monoidal_category
+-- open tqft.categories.braided_monoidal_category
 
 -- definition TensorProductOfTypes : TensorProduct CategoryOfTypes :=
 -- {
@@ -39,12 +40,13 @@ begin
         witness_1 := _,
         witness_2 := _
     },
-    intros_and_inductions,
+    intros,
+    induction_on_pairs,
+    induction_on_pairs,
     split,
     split,
-    all_goals { try { apply funext, intros_and_inductions } },
-    all_goals { try { simp } },
-    all_goals { try { dsimp } }
+    all_goals { try { apply funext, intros, induction_on_pairs, induction_on_pairs } },
+    all_goals { try { simp } }
 end
 
 -- FIXME dsimp here causes a tactic.change error, as in https://github.com/leanprover/lean/issues/1503
@@ -57,11 +59,13 @@ end
 --         witness_2 := _
 --     },
 --     unfold_unfoldable,
---     intros_and_inductions,
+--     intros,
+--     induction_on_pairs,
+--     induction_on_pairs,
 --     all_goals { unfold CategoryOfTypes },
 --     split,
 --     split,
---     all_goals { try { apply funext, intros_and_inductions } },
+--     all_goals { try { apply funext, intros, induction_on_pairs, induction_on_pairs } },
 --     all_goals { try { simp } },
 --     all_goals { try { dsimp } },
 --     apply pair_equality_3,

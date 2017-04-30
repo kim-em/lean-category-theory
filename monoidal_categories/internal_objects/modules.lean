@@ -16,18 +16,18 @@ attribute [simp,ematch] ModuleObject.identity
 
 structure ModuleMorphism { C : Category } { m : MonoidalStructure C } { A : MonoidObject m } ( X Y : ModuleObject A ) extends SemigroupModuleMorphism X.to_SemigroupModuleObject Y.to_SemigroupModuleObject
 
--- @[pointwise] lemma ModuleMorphism_pointwisewise_equal
---   { C : Category }
---   { m : MonoidalStructure C }
---   { A : MonoidObject m }
---   { X Y : ModuleObject A }
---   ( f g : ModuleMorphism X Y )
---   ( w : f.map = g.map ) : f = g :=
---   begin
---     induction f,
---     induction g,
---     admit -- FIXME something weird is going on with structures here.
---   end
+@[pointwise] lemma ModuleMorphism_pointwisewise_equal
+  { C : Category }
+  { m : MonoidalStructure C }
+  { A : MonoidObject m }
+  { X Y : ModuleObject A }
+  ( f g : ModuleMorphism X Y )
+  ( w : f.map = g.map ) : f = g :=
+  begin
+    induction f,
+    induction g,
+    admit -- FIXME something weird is going on with structures here.
+  end
 
 -- definition CategoryOfModules { C : Category } { m : MonoidalStructure C } ( A : MonoidObject m ) : Category :=
 -- {

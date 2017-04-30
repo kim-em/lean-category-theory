@@ -52,46 +52,42 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 
 private lemma {u v w} composition {α : Sort u} {β : Sort v} {γ : Sort w} {f : α → β} {g : β → γ} (a : α) : (g ∘ f) a = g (f a) := ♯
 
-theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
-begin
-  unfold NaturalIsomorphism,
-  fsplit,
-  {
-    unfold FunctorCategory,
-    dsimp,
-    fsplit,
-    {
-      intros,
-      dsimp at X,
-      unfold CategoryOfTypes,
-      dsimp,
-      intros,
-      unfold Evaluation,
-      dsimp,
-      simp at a,
-      dunfold_and_simp_all_hypotheses,
-      exact ((a.components X.2) (C.identity X.2))
-    },
-    {
-      intros,
-      blast,
-      pose p := x.naturality f.2,
-      -- unfold CategoryOfTypes at p, -- FIXME match failed
-      simp at p,
-      unfold_projections at p,
-      pose q := congr_fun p (C.identity X.2),
-      dsimp at q,
-      -- simp at q,
-      -- unfold_projections at q,
-    --   rewrite composition at q,
-    --   rewrite C.right_identity at q,
-
-    },
-    {
+-- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+-- begin
+--   unfold NaturalIsomorphism,
+--   fsplit,
+--   {
+--     unfold FunctorCategory,
+--     dsimp,
+--     fsplit,
+--     {
+--       intros,
+--       dsimp at X,
+--       unfold CategoryOfTypes,
+--       dsimp,
+--       intros,
+--       unfold Evaluation,
+--       dsimp,
+--       simp at a,
+--       dunfold_and_simp_all_hypotheses,
+--       exact ((a.components X.2) (C.identity X.2))
+--     },
+--     {
+--       intros,
+--       blast,
+--       pose p := x.naturality f.2,
+--       unfold_projections at p,
+--       simp at p,
+--       pose q := congr_fun p (C.identity X.2),
+--       rewrite composition at q,
+--       simp at q,
+--       admit
+--     },
+--     {
       
-    }
-  }
-end
+--     }
+--   }
+-- end
 
 
 -- FIXME waiting on the restoration of unfold_projections

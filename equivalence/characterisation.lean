@@ -63,17 +63,6 @@ section FullyFaithfulPreimage
 
 end FullyFaithfulPreimage
 
--- These is an annoying hack, because I can't simplify hypotheses automatically; see `dsimp at p` below. FIXME
-lemma {u1 v1 u2 v2 u3 v3} FunctorComposition_is_composition 
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  { F : Functor C D }
-  { G : Functor D E }
-  { X Y : C.Obj }
-  { f : C.Hom X Y } :
-  (FunctorComposition F G).onMorphisms f = G.onMorphisms (F.onMorphisms f) := ♯
-
 private definition {u1 v1 u2 v2} preimage
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( e : Equivalence C D )
@@ -109,16 +98,13 @@ lemma {u1 v1 u2 v2} Equivalences_are_Faithful { C : Category.{u1 v1} } { D : Cat
 
 private lemma {u1 v1 u2 v2} preimage_lemma { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor.onObjects X) (e.functor.onObjects Y) ) : (e.inverse).onMorphisms ((e.functor).onMorphisms (preimage e X Y h)) = (e.inverse).onMorphisms h :=
 begin
-  pose p := e.isomorphism_1.naturality_2 (preimage e X Y h),
-  -- dsimp at p, FIXME fails with 'match failed'
-  rewrite FunctorComposition_is_composition at p,
-  rewrite (eq.symm p),
+  erewrite - e.isomorphism_1.naturality_2 (preimage e X Y h),
   repeat { erewrite - C.associativity },
   erewrite e.isomorphism_1.componentwise_witness_1,
   repeat { rewrite C.associativity },
   erewrite e.isomorphism_1.componentwise_witness_1,
   erewrite C.right_identity,
-  erewrite C.left_identity
+  rewrite C.left_identity
 end
 
 lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Full (e.functor) :=
