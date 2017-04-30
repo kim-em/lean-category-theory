@@ -7,3 +7,8 @@ lemma {u v} symm_congr_fun {α : Sort u} {β : α → Sort v} {f g : Π x, β x}
 begin
   reflexivity,
 end
+
+lemma hfunext {α₁ : Type} {β₁ : Type} {α₂ : Type} {β₂ : Type} { f₁ : α₁ → β₁ } { f₂ : α₂ → β₂ } (hα : α₁ = α₂) : f₁ == f₂ :=
+begin
+  rewrite hα,
+end

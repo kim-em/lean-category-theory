@@ -12,17 +12,26 @@ open tqft.categories.universal
 
 namespace tqft.categories.monoidal_category
 
+-- FIXME where do these lost meta-variables come from?
+definition LeftUnitor_for_Products ( C : Category ) [ has_FiniteProducts C ] : LeftUnitor terminal_object (TensorProduct_from_Products C) :=
+begin
+  tidy, 
+end
+
+-- definition RightUnitor_for_Products ( C : Category ) [ has_FiniteProducts C ] : RightUnitor terminal_object (TensorProduct_from_Products C) :=
+-- begin
+--   tidy, 
+-- end
+
 -- definition MonoidalStructure_from_Products { C : Category } [ has_FiniteProducts C ] : MonoidalStructure C :=
 -- {
---     tensor := TensorProduct_from_Products,
+--     tensor := TensorProduct_from_Products C,
 --     tensor_unit := terminal_object,
---     associator_transformation := Associator_for_Products,
---     left_unitor               := LeftUnitor_for_Products,
---     right_unitor              := RightUnitor_for_Products,
---     pentagon := sorry,
---     triangle := begin
---       dunfold_everything'
---      end
+--     associator_transformation := Associator_for_Products C,
+--     left_unitor               := LeftUnitor_for_Products C,
+--     right_unitor              := RightUnitor_for_Products C,
+--     pentagon := ♯,
+--     triangle := sorry
 -- }
 
 -- PROJECT show that this monoidal structure is uniquely braided

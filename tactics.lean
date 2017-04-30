@@ -64,28 +64,16 @@ end tactic.interactive
 
 meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
 let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
-  -- guard (e.is_app), -- Nope, sometimes we nee to do this, too!
   new_e ← dunfold_expr_core m e,
-  return (changed ∨ (new_e ≠ e), new_e, ff)
-in do (c, new_e) ← dsimplify_core ff max_steps tt (λ c e, failed) unfold e,
-      guard (c = tt), -- make sure something actually changed
-      return new_e
-
-meta def dunfold_and_simp (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
-do s ← simp_lemmas.mk_default,
-let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
-  guard (e.is_app),
-  new_e ← dunfold_expr_core m e,
-  new_e_simp ← s.dsimplify new_e,
-  return (u, new_e_simp, tt)
-in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
+  return (tt, new_e, ff)
+in do (tt, new_e) ← dsimplify_core ff max_steps tt (λ c e, failed) unfold e | fail "nothing to unfold",
       return new_e
 
 -- This tactic is a combination of dunfold_at and dsimp_at_core
 meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
 do num_reverted ← revert h,
    (expr.pi n bi d b : expr) ← target,
-   new_d ← dunfold_core' reducible default_max_steps d, -- FIXME should this be semireducible??
+   new_d ← dunfold_core' semireducible default_max_steps d,
    new_d_simp ← s.dsimplify new_d,
    guard (new_d_simp ≠ d),
    change $ expr.pi n bi new_d_simp b,
@@ -106,7 +94,7 @@ do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, unfold_projections_at h))
 
-meta def dunfold_and_simp_all_hypotheses : tactic unit :=
+meta def unfold_all_hypotheses : tactic unit :=
 do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, dunfold_and_simp_at s h))
@@ -138,18 +126,22 @@ open interactive
 
 meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
 
--- TODO try using get_unused_name
-meta def new_names ( e : expr ) : list name :=
-  [ 
-    name.append (e.local_pp_name) (mk_simple_name "_1"), 
-    name.append (e.local_pp_name) (mk_simple_name "_2")
-  ]
+meta def new_names ( e : expr ) : tactic (list name) :=
+  do 
+    n1 ← get_unused_name e.local_pp_name (some 1), 
+    n2 ← get_unused_name e.local_pp_name (some 2),
+    pure [ n1, n2 ] 
 
 meta def induction_on_pairs : tactic unit :=
  do l ← local_context,
-   l.reverse.mfor' $ λ h, do
-     ```(prod _ _) ← infer_type h >>= whnf | skip,
-     induction h (new_names h) >> skip 
+   at_least_one (
+   l.reverse.for (λ h, do
+     t ← infer_type h >>= whnf,
+     match t with
+     | ```(prod _ _) := do names ← new_names h,
+                           induction h names >> skip
+     | _             := fail "hypothesis is not a pair"
+     end)) <|> fail "no hypotheses are pairs"
 
 meta def fsplit : tactic unit :=
 do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, target is not an inductive datatype with only one constructor",
@@ -260,7 +252,7 @@ private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic 
 | _        []        := done <|> /-trace "We've tried all tactics in the chain, but there are still unsolved goals." >>-/ skip -- We've run out of tactics to apply!
 | (succ n) (t :: ts) := done <|> /-trace (list.length ts) >>-/ (seq t (chain' n tactics)) <|> chain' (succ n) ts
 
-meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 20 tactics
+meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 50 tactics
 
 meta def unfold_unfoldable : tactic unit := 
    chain [
@@ -280,6 +272,7 @@ meta def tidy : tactic unit :=
       unfold_projections,
       force ( intros >> skip ),
       automatic_induction,
+      induction_on_pairs,
       -- tactic.interactive.congr_struct,
       force_pointwise
   ]

@@ -170,7 +170,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
      rewrite - α.inverse.naturality,
      rewrite D.associativity,
      rewrite α.componentwise_witness_2,
-     blast
+     simp
    end
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
@@ -178,8 +178,8 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
   ( α : NaturalIsomorphism F G )
   { X Y : C.Obj }
   ( f : C.Hom X Y )
-   : D.compose (D.compose (α.morphism.components X) (G.onMorphisms f)) (α.inverse.components Y) = F.onMorphisms f :=    begin
-    --  blast, -- FIXME ahh, I see; unfold_unfoldable is acting in the implicit arguments, making a mess.
+   : D.compose (D.compose (α.morphism.components X) (G.onMorphisms f)) (α.inverse.components Y) = F.onMorphisms f := 
+   begin
      dsimp,
      rewrite - α.morphism.naturality,
      rewrite D.associativity,
