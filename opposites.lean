@@ -40,4 +40,6 @@ definition { u v } HomPairing ( C : Category.{u v} ) : Functor ((Opposite C) × 
   functoriality := ♯
 }
 
+-- PROJECT opposites preserve products, functors, slices.
+
 end tqft.categories
