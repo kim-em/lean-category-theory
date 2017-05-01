@@ -220,8 +220,6 @@ namespace tactic.interactive
      congr_args
 end tactic.interactive
 
--- FIXME  reply to https://groups.google.com/d/msg/lean-user/jaaNLIXu0iU/9HmW4qr9BAAJ
-
 meta def trace_goal_type : tactic unit :=
 do g ← target,
    trace g,
