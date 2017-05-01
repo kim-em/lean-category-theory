@@ -96,12 +96,12 @@ do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, dunfold_and_simp_at s h))
 
--- PROJECT this needs to fail when it does nothing; dsimp_at always succeeds.
+-- FIXME this needs to fail when it does nothing; dsimp_at always succeeds.
 -- meta def dsimp_hypotheses : tactic unit :=
 -- do l ← local_context,
 --    at_least_one (l.reverse.for (λ h, dsimp_at h))
 
--- PROJECT let's try this
+-- FIXME let's try this
 meta def simp_at_via_rewrite (h : expr) (extra_lemmas : list expr := []) (cfg : simp_config := {}) : tactic unit :=
 do when (expr.is_local_constant h = ff) (fail "tactic simp_at failed, the given expression is not a hypothesis"),
    htype ← infer_type h,
@@ -178,11 +178,11 @@ namespace tactic
      env ← get_env,
      fields ← env.structure_fields n <|> fail "not a structure",
      [ctor] ← pure $ env.constructors_of n,
-     let proof_ty := pi `_x binder_info.default ty $ app (const ``eq [])
-       (expr.mk_app (const ctor []) $ fields.map $ λ f, (pexpr.mk_field_macro (pexpr.of_raw_expr $ var 0) f).to_raw_expr)
-       (var 0),
-     proof_ty ← to_expr (pexpr.of_raw_expr proof_ty),
-     prod.snd <$> solve_aux proof_ty (do x ← intro `_, cases x, reflexivity)
+     let ctor := (const ctor ls).mk_app ty.get_app_args,
+     x ← mk_local_def `x ty,
+     fields ← fields.mmap $ λ f, to_expr (pexpr.mk_field_macro (pexpr.of_expr x) f),
+     proof_ty ← mk_app ``eq [ctor.mk_app fields, x],
+     prod.snd <$> solve_aux (pis [x] proof_ty) (do x ← intro `_, cases x, reflexivity)
 end tactic
 
 namespace tactic.interactive
@@ -219,6 +219,15 @@ namespace tactic.interactive
      apply ``(@eq.rec _ _ (λ rhs, %%new_lhs = rhs) _ _ %%(app eta rhs)),
      congr_args
 end tactic.interactive
+
+-- FIXME try this on 
+structure X { a : Type } ( b : a × a ) := ( c : nat ) 
+
+def foo ( x y : X (1, 1) ) : x = y :=
+begin
+  congr_struct
+end
+-- and reply to https://groups.google.com/d/msg/lean-user/jaaNLIXu0iU/9HmW4qr9BAAJ
 
 meta def trace_goal_type : tactic unit :=
 do g ← target,
