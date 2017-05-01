@@ -96,9 +96,19 @@ do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, dunfold_and_simp_at s h))
 
+-- PROJECT this needs to fail when it does nothing; dsimp_at always succeeds.
 -- meta def dsimp_hypotheses : tactic unit :=
 -- do l ← local_context,
 --    at_least_one (l.reverse.for (λ h, dsimp_at h))
+
+-- PROJECT let's try this
+meta def simp_at_via_rewrite (h : expr) (extra_lemmas : list expr := []) (cfg : simp_config := {}) : tactic unit :=
+do when (expr.is_local_constant h = ff) (fail "tactic simp_at failed, the given expression is not a hypothesis"),
+   htype ← infer_type h,
+   S     ← simp_lemmas.mk_default,
+   S     ← S.append extra_lemmas,
+   (new_htype, heq) ← simplify S htype cfg,
+   rewrite_at_core reducible tt tt occurrences.all ff heq h
 
 -- FIXME this repeatedly resimplifies hypotheses, if they can't be cleared. :-(
 meta def simp_hypotheses : tactic unit :=
