@@ -25,17 +25,17 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   coe := NaturalTransformation.components }
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
-@[pointwise] lemma {u1 v1 u2 v2} NaturalTransformations_componentwise_equal
-  { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
-  { F G : Functor C D }
-  ( α β : NaturalTransformation F G )
-  ( w : ∀ X : C.Obj, α.components X = β.components X ) : α = β :=
-  begin
-    induction α with α_components α_naturality,
-    induction β with β_components β_naturality,
-    have hc : α_components = β_components, from funext w,
-    by subst hc
-  end
+-- @[pointwise] lemma {u1 v1 u2 v2} NaturalTransformations_componentwise_equal
+--   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
+--   { F G : Functor C D }
+--   ( α β : NaturalTransformation F G )
+--   ( w : ∀ X : C.Obj, α.components X = β.components X ) : α = β :=
+--   begin
+--     induction α with α_components α_naturality,
+--     induction β with β_components β_naturality,
+--     have hc : α_components = β_components, from funext w,
+--     by subst hc
+--   end
 
 definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
   {
@@ -96,6 +96,21 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_right
 -- It's then a lemma that each component is an isomorphism, and vice versa.
 
 open tactic.interactive
+
+@[pointwise] lemma heq_prop { α β : Prop } { a : α } { b : β } ( h : α = β ) : a == b :=
+begin
+  induction h, reflexivity
+end
+
+@[pointwise] theorem {u v w z} funext_prop_001 { α : Type u } { β : Type v } { Z : α → β → Type w } { X : Π ( a : α ) ( b : β ) ( g : Z a b ), Type z }
+                          { p q r s : Π ( a : α ) ( b : β ) ( g : Z a b ), X a b g }
+                          ( h1 : p = r ) ( h2 : q = s )
+                       : (∀ ( a : α ) ( b : β ) ( g : Z a b ), p a b g = q a b g ) = (∀ ( a : α ) ( b : β ) ( g : Z a b), r a b g = s a b g ) :=
+begin
+  induction h1,
+  induction h2,
+  reflexivity
+end
 
 definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
 {

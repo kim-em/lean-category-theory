@@ -220,14 +220,7 @@ namespace tactic.interactive
      congr_args
 end tactic.interactive
 
--- FIXME try this on 
-structure X { a : Type } ( b : a × a ) := ( c : nat ) 
-
-def foo ( x y : X (1, 1) ) : x = y :=
-begin
-  congr_struct
-end
--- and reply to https://groups.google.com/d/msg/lean-user/jaaNLIXu0iU/9HmW4qr9BAAJ
+-- FIXME  reply to https://groups.google.com/d/msg/lean-user/jaaNLIXu0iU/9HmW4qr9BAAJ
 
 meta def trace_goal_type : tactic unit :=
 do g ← target,
@@ -297,8 +290,8 @@ meta def tidy : tactic unit :=
       unfold_projections_hypotheses,
       force ( intros >> skip ),
       automatic_induction,
-      -- tactic.interactive.congr_struct,
-      pointwise
+      pointwise,
+      tactic.interactive.congr_struct
   ]
 
 
