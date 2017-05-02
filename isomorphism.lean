@@ -15,7 +15,6 @@ structure Isomorphism ( C: Category ) ( X Y : C.Obj ) :=
   (witness_2 : C.compose inverse morphism = C.identity Y)
 
 attribute [simp,ematch] Isomorphism.witness_1 Isomorphism.witness_2
-attribute [pointwise] Isomorphism.mk
 
 instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } : has_coe (Isomorphism C X Y) (C.Hom X Y) :=
   { coe := Isomorphism.morphism }

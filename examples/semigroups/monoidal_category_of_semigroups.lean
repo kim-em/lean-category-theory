@@ -55,6 +55,7 @@ definition TensorProduct_for_Semigroups : TensorProduct CategoryOfSemigroups := 
     functoriality := ♮
   }
 
+-- FIXME (on edulis) chain is running off the end here
 definition Associator_for_Semigroups : Associator TensorProduct_for_Semigroups := {
     morphism := {
       components := λ _, {

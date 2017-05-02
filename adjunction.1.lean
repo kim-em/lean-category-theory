@@ -49,8 +49,6 @@ namespace tqft.categories.adjunction
 --   triangle_2 := sorry
 -- }
 
--- local attribute [pointwise] funext
-
 -- definition Adjunctions_agree { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :
 --   Isomorphism CategoryOfTypes (Adjunction L R) (HomAdjunction L R) := 
 -- {

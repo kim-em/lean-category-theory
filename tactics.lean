@@ -266,17 +266,6 @@ meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> unfold_c
 meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
 end
 
-
-attribute [pointwise] and.intro
-attribute [pointwise] nonempty.intro
-attribute [pointwise] unit.star
-attribute [pointwise] punit.star
-attribute [pointwise] plift.up
-attribute [pointwise] ulift.up
-attribute [pointwise] prod.mk
-attribute [pointwise] pprod.mk
-attribute [pointwise] subtype.mk
-
 meta def done : tactic unit :=
   do goals ← get_goals,
      guard (goals = []),

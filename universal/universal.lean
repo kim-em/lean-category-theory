@@ -21,15 +21,6 @@ structure Cone { J C : Category } ( F : Functor J C ) :=
 
 attribute [simp,ematch] Cone.commutativity
 
--- @[pointwise] lemma {u1 v1 u2 v2} Cones_componentwise_equal
---   { J C : Category } { F : Functor J C } 
---   ( c1 c2 : Cone F )
---   ( w : c1.limit = c2.limit ) ( v : ∀ j : J.Obj, c1.maps j = c2.maps j ): c1 = c2 :=
---   begin
---     induction c1, 
---     induction c2, 
---   end
-
 structure ConeMorphism { J C : Category } { F : Functor J C } ( X Y : Cone F ) :=
   ( morphism : C.Hom X.limit Y.limit )
   ( commutativity : Π j : J.Obj, C.compose morphism (Y.maps j) = (X.maps j) )
