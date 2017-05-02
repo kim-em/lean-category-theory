@@ -55,7 +55,7 @@ definition CategoryRightUnitor : @RightUnitor CategoryOfCategoriesAndFunctors.{u
     naturality := ♮
   },
   inverse := {
-    components := λ t, RightInjectionAt punit.star t,
+    components := λ t, RightInjectionAt t punit.star,
     naturality := ♮
   },
   witness_1 := ♯,
