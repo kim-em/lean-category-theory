@@ -119,57 +119,57 @@ definition Cones_to_comma_Cones { J C : Category } ( F : Functor J C ) : Functor
     functoriality := ♯
   }
 
-definition ConesAgree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
+definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
   functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F,
   isomorphism_1 := begin
-                     dsimp,
-                     pointwise,
-                     unfold_projections,
-                     pointwise,
-                     {
-                      --  intros,
-                      --  unfold_projections_hypotheses,
-                      --  induction X,
-                      --  induction snd,
-                      --  induction fst_1,
-                      --  dsimp_hypotheses,
-                      --  unfold_projections,
-                      --  pointwise,
-                      --  {
-                      --    tidy,
+                    --  dsimp,
+                    --  pointwise,
+                    --  unfold_projections,
+                    --  pointwise,
+                    --  {
+                    --   --  intros,
+                    --   --  unfold_projections_hypotheses,
+                    --   --  induction X,
+                    --   --  induction snd,
+                    --   --  induction fst_1,
+                    --   --  dsimp_hypotheses,
+                    --   --  unfold_projections,
+                    --   --  pointwise,
+                    --   --  {
+                    --   --    tidy,
                          
-                      --  },
-                       tidy
-                     },
-                     {
-                      --  intros,
-                      --  unfold_projections_hypotheses,
-                      --  induction X with X1 X2,
-                      --  induction X2 with X2 X3,
-                      --  induction X2,
-                      --  induction Y with Y1 Y2,
-                      --  induction Y2 with Y2 Y3,
-                      --  induction Y2,
-                      --  induction f,
-                      --  unfold_projections_hypotheses,
-                      --  dsimp_hypotheses,
-                      --  induction val,
-                      --  induction snd,
-                      --  induction down,
-                       tidy,
+                    --   --  },
+                    --    tidy
+                    --  },
+                    --  {
+                    --   --  intros,
+                    --   --  unfold_projections_hypotheses,
+                    --   --  induction X with X1 X2,
+                    --   --  induction X2 with X2 X3,
+                    --   --  induction X2,
+                    --   --  induction Y with Y1 Y2,
+                    --   --  induction Y2 with Y2 Y3,
+                    --   --  induction Y2,
+                    --   --  induction f,
+                    --   --  unfold_projections_hypotheses,
+                    --   --  dsimp_hypotheses,
+                    --   --  induction val,
+                    --   --  induction snd,
+                    --   --  induction down,
+                    --    tidy,
                        
-                     },
-                     {
-                       tidy,
-                     },
-                     {
-                       tidy,
-                     },
-                     {
-                       tidy,
-                     }
--- tidy 200, -- FIXME focussing speeds things up a lot! we better focus automatically.
+                    --  },
+                    --  {
+                    --    tidy,
+                    --  },
+                    --  {
+                    --    tidy,
+                    --  },
+                    --  {
+                    --    tidy,
+                    --  }
+tidy 200, -- FIXME focussing speeds things up a lot! we better focus automatically.
                    end,
   isomorphism_2 := sorry
 }
