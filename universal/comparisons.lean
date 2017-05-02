@@ -88,7 +88,7 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
                                   tidy,
                                   induction f with T p,
                                   pose q := congr_arg (λ t : NaturalTransformation _ _, t.components j) p,
-                                  tidy
+                                  blast
                                 end
 }
 
