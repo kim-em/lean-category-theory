@@ -169,7 +169,7 @@ definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (com
                     --  {
                     --    tidy,
                     --  }
-tidy 200, -- FIXME focussing speeds things up a lot! we better focus automatically.
+tidy 500, -- FIXME focussing speeds things up a lot! we better focus automatically.
                    end,
   isomorphism_2 := sorry
 }
