@@ -130,15 +130,14 @@ do when (expr.is_local_constant h = ff) (fail "tactic simp_at failed, the given 
    S     ← simp_lemmas.mk_default,
    S     ← S.append extra_lemmas,
    (new_htype, heq) ← simplify S htype cfg,
-   guard (new_htype \ne )
+   guard (new_htype ≠ htype) <|> fail "simp_at didn't do anything",
    assert (expr.local_pp_name h) new_htype,
    mk_eq_mp heq h >>= exact,
-   clear h
-
+   clear h <|> fail "simp_at' could not clear the original hypothesis"
 
 meta def simp_hypotheses : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.for (λ h, simp_at h))
+   at_least_one (l.reverse.for (λ h, simp_at' h)) <|> fail "simp_hypothesis did not simplify anything"
 
 meta def new_names ( e : expr ) : tactic (list name) :=
   do 
@@ -301,39 +300,52 @@ meta def done : tactic unit :=
 
 open nat
 
+private meta def if_then_else ( i t e : tactic unit ) : tactic unit :=
+do r ← (i >> pure tt) <|> pure ff,
+   if r then do t else do e
+private meta def if_dthen_else { α β : Type } ( i : tactic α ) ( t : α → tactic β ) ( e : tactic β ) : tactic β :=
+do r ← tactic.try_core i,
+   match r with
+   | some a := t a
+   | none   := e
+   end
+
 private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
 | 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
 | _        []        := done <|> /-trace "We've tried all tactics in the chain, but there are still unsolved goals." >>-/ skip -- We've run out of tactics to apply!
-| (succ n) (t :: ts) := done <|> /-trace (list.length ts) >>-/ (seq (all_goals t) (chain' n tactics)) <|> chain' (succ n) ts
+| (succ n) (t :: ts) := done <|> if_then_else t (chain' n tactics) (chain' (succ n) ts)
 
-meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 50 tactics
+private def chain_default_max_steps := 100
 
-meta def unfold_unfoldable : tactic unit := 
+meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps tactics
+
+meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [
       dsimp_hypotheses,
       force ( dsimp ),
-      simp,
       unfold_projections_hypotheses,
       unfold_projections,
+      simp_hypotheses,
+      simp,
       dunfold_everything
-  ]
+  ] max_steps
 
-meta def tidy : tactic unit := 
+meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [
       tactic.triv,
       force ( reflexivity ),
-      assumption,
+      -- assumption, -- FIXME this is dangerous; really should only be applied when there are no dependent goals!
       dsimp_hypotheses,
       force ( dsimp ),
-      -- simp_hypotheses,
+      automatic_induction,
+      simp_hypotheses,
       simp,
       unfold_projections_hypotheses,
       unfold_projections,
       force ( intros >> skip ),
-      automatic_induction,
       pointwise
       -- tactic.interactive.congr_struct
-  ]
+  ] max_steps
 
 
 meta def blast : tactic unit := tidy >> all_goals (try smt_eblast)
