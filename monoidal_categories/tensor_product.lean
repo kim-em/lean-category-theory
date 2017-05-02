@@ -27,7 +27,7 @@ definition right_associated_triple_tensor { C : Category.{ u v } } ( tensor : Te
 
 @[reducible] definition RightUnitor { C : Category } ( I : C.Obj ) ( tensor : TensorProduct C ) :=
   NaturalIsomorphism
-    (FunctorComposition (RightInjectionAt I C) tensor)
+    (FunctorComposition (RightInjectionAt C I) tensor)
     (IdentityFunctor C)
 
 @[reducible] definition LeftUnitor { C : Category } ( I : C.Obj ) ( tensor : TensorProduct C ) :=
