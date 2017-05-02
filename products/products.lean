@@ -77,7 +77,7 @@ definition ProductNaturalTransformation
     NaturalTransformation (F × H) (G × I) :=
 {
   components := λ X, (α.components X.fst, β.components X.snd),
-  naturality := ♯
+  naturality := ♮
 }
 
 namespace ProductNaturalTransformation

@@ -74,8 +74,6 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
     blast
   end
 
--- set_option pp.all true
-
 definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
   NaturalIsomorphism
     (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
