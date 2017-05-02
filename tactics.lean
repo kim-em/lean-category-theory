@@ -289,7 +289,6 @@ attribute [pointwise] subtype.mk
 meta def done : tactic unit :=
   do goals ← get_goals,
      guard (goals = []),
-    --  trace "no goals",
      skip
 
 -- meta def monitor_progress { α : Type } ( t : tactic α ) : tactic (bool × α) :=
@@ -300,7 +299,7 @@ meta def done : tactic unit :=
 
 open nat
 
-private meta def if_then_else ( i t e : tactic unit ) : tactic unit :=
+private meta def if_then_else { α : Type } ( i : tactic unit ) ( t e : tactic α ) : tactic α :=
 do r ← (i >> pure tt) <|> pure ff,
    if r then do t else do e
 private meta def if_dthen_else { α β : Type } ( i : tactic α ) ( t : α → tactic β ) ( e : tactic β ) : tactic β :=
@@ -310,23 +309,61 @@ do r ← tactic.try_core i,
    | none   := e
    end
 
-private meta def chain' ( tactics : list (tactic unit) ) : nat → list (tactic unit) → tactic unit
-| 0        _         := trace "... 'chain' tactic exceeded iteration limit" >> failed   
-| _        []        := done <|> /-trace "We've tried all tactics in the chain, but there are still unsolved goals." >>-/ skip -- We've run out of tactics to apply!
-| (succ n) (t :: ts) := done <|> if_then_else t (chain' n tactics) (chain' (succ n) ts)
+/- Applies the tactic to each goal separately, and then, if any goals remain, applies the tactic to all goals together.
+   Succeeds if any one application of the tactic succeeds. -/
+meta def separately_then_together ( t : tactic unit ) : tactic unit :=
+do succeeded ← try_core (any_goals t),
+   t <|> guard succeeded.is_some
+
+private meta def stateful_any_goals_core { α : Type } ( t : α → tactic α ) : α → list expr → list expr → bool → tactic α
+| a []        ac progress := guard progress >> set_goals ac >> pure a
+| a (g :: gs) ac progress :=
+  do set_goals [g],
+     succeeded ← try_core (t a),
+     new_gs    ← get_goals,
+     stateful_any_goals_core (succeeded.get_or_else a) gs (ac ++ new_gs) (succeeded.is_some || progress)
+
+/- As `any_goals`, but passing around state encode in α. -/
+meta def stateful_any_goals { α : Type } ( t : α → tactic α ) ( a : α ) : tactic α :=
+do gs ← get_goals,
+   stateful_any_goals_core t a gs [] ff
+
+/- As `separately_then_together`, but passing around state encode in α. -/
+meta def stateful_separately_then_together { α : Type } ( t : α → tactic α ) ( a : α ) : tactic α :=
+do succeeded ← try_core (stateful_any_goals t a),
+   t (succeeded.get_or_else a) <|> do a ← succeeded | fail "no tactics succeeded", pure a
+
+private meta def focus_chain' ( tactics : list (tactic unit) ) : nat → bool → list (tactic unit) → tactic nat
+| 0        progress _         := trace "... chain tactic exceeded iteration limit" >> failed   
+| n        progress []        := (guard progress <|> fail "chain tactic made no progress") >> pure n
+| (succ n) progress (t :: ts) := 
+   do goals ← get_goals,
+      match goals with 
+      | []    := guard progress >> pure n
+      | [ g ] := (if_then_else t (focus_chain' n tt tactics) (focus_chain' (succ n) progress ts))
+      | _     := stateful_separately_then_together (λ m, focus_chain' m progress tactics) n
+      end
+
+private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list (tactic unit) → tactic unit
+| 0        progress _         := trace "... chain tactic exceeded iteration limit" >> failed   
+| _        progress []        := guard progress <|> fail "chain tactic made no progress"
+| (succ n) progress (t :: ts) := if_then_else done (guard progress) (if_then_else t (chain' n tt tactics) (chain' (succ n) progress ts))
 
 private def chain_default_max_steps := 100
 
-meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps tactics
+-- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
+meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tactics >> skip
 
 meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [
       dsimp_hypotheses,
-      force ( dsimp ),
-      unfold_projections_hypotheses,
-      unfold_projections,
       simp_hypotheses,
+      unfold_projections_hypotheses,
+
+      force ( dsimp ),
       simp,
+      unfold_projections,
+
       dunfold_everything
   ] max_steps
 
@@ -335,20 +372,23 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
       tactic.triv,
       force ( reflexivity ),
       -- assumption, -- FIXME this is dangerous; really should only be applied when there are no dependent goals!
+
       dsimp_hypotheses,
-      force ( dsimp ),
       automatic_induction,
       simp_hypotheses,
-      simp,
       unfold_projections_hypotheses,
+
+      force ( dsimp ),
+      simp,
       unfold_projections,
+
       force ( intros >> skip ),
       pointwise
       -- tactic.interactive.congr_struct
   ] max_steps
 
 
-meta def blast : tactic unit := tidy >> all_goals (try smt_eblast)
+meta def blast : tactic unit := at_least_one [ tidy, any_goals (force smt_eblast) ]
 
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }
