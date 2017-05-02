@@ -123,7 +123,7 @@ do l ← local_context,
 
 -- @[pointwise] lemma {u v} dependent_pair_equality' {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := begin induction X, induction Y, simp at p1, end
 
--- We make a local version of simp_at, which only succeeds if it changes something, and successfully clears the old hypothesis.
+-- We make a local version of simp_at, which only succeeds if it changes something, *and* successfully clears the old hypothesis.
 meta def simp_at' (h : expr) (extra_lemmas : list expr := []) (cfg : simp_config := {}) : tactic unit :=
 do when (expr.is_local_constant h = ff) (fail "tactic simp_at failed, the given expression is not a hypothesis"),
    htype ← infer_type h,
@@ -145,17 +145,6 @@ meta def new_names ( e : expr ) : tactic (list name) :=
     n2 ← get_unused_name e.local_pp_name (some 2),
     pure [ n1, n2 ] 
 
--- meta def induction_on_pairs : tactic unit :=
---  do l ← local_context,
---    at_least_one (
---    l.reverse.for (λ h, do
---      t ← infer_type h >>= whnf,
---      match t with
---      | ```(prod _ _) := do names ← new_names h,
---                            induction h names >> skip
---      | _             := fail "hypothesis is not a pair"
---      end)) <|> fail "no hypotheses are pairs"
-
 meta def automatic_induction' (h : expr) (t : expr) : tactic unit :=
 match t with
 | ```(unit)      := induction h >>= λ x, skip
@@ -166,6 +155,8 @@ match t with
 | ```(prod _ _)  := do names ← new_names h,
                       induction h names >> skip
 | ```(sigma _)   := do names ← new_names h,
+                      induction h names >> skip
+| ```(subtype _) := do names ← new_names h,
                       induction h names >> skip
 | _              := failed
 end
@@ -302,7 +293,7 @@ open nat
 private meta def if_then_else { α : Type } ( i : tactic unit ) ( t e : tactic α ) : tactic α :=
 do r ← (i >> pure tt) <|> pure ff,
    if r then do t else do e
-private meta def if_dthen_else { α β : Type } ( i : tactic α ) ( t : α → tactic β ) ( e : tactic β ) : tactic β :=
+private meta def dependent_if_then_else { α β : Type } ( i : tactic α ) ( t : α → tactic β ) ( e : tactic β ) : tactic β :=
 do r ← tactic.try_core i,
    match r with
    | some a := t a
@@ -349,20 +340,20 @@ private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list
 | _        progress []        := guard progress <|> fail "chain tactic made no progress"
 | (succ n) progress (t :: ts) := if_then_else done (guard progress) (if_then_else t (chain' n tt tactics) (chain' (succ n) progress ts))
 
-private def chain_default_max_steps := 100
+private def chain_default_max_steps := 500
 
 -- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
 meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tactics >> skip
 
 meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [
-      dsimp_hypotheses,
-      simp_hypotheses,
-      unfold_projections_hypotheses,
-
       force ( dsimp ),
       simp,
       unfold_projections,
+
+      dsimp_hypotheses,
+      simp_hypotheses,
+      unfold_projections_hypotheses,
 
       dunfold_everything
   ] max_steps
@@ -373,33 +364,33 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
       force ( reflexivity ),
       -- assumption, -- FIXME this is dangerous; really should only be applied when there are no dependent goals!
 
+      force ( dsimp ),
+      simp,
+      unfold_projections,
+
       dsimp_hypotheses,
       automatic_induction,
       simp_hypotheses,
       unfold_projections_hypotheses,
 
-      force ( dsimp ),
-      simp,
-      unfold_projections,
-
       force ( intros >> skip ),
-      pointwise
+      pointwise,
+      force ( fsplit )
       -- tactic.interactive.congr_struct
   ] max_steps
 
 
-meta def blast : tactic unit := at_least_one [ tidy, any_goals (force smt_eblast) ]
+meta def blast : tactic unit := tidy >> (done <|> any_goals (force smt_eblast))
 
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }
 
 set_option formatter.hide_full_terms false
 
-@[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b).fst = a := ♮
-@[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a: α } { b : β } : (a, b).snd = b := ♮
-@[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X: α × β }: (X.fst, X.snd) = X := ♯
-@[pointwise] lemma {u v} pair_equality_3 {α : Type u} {β : Type v} { X: α × β } { A : α } ( p : A = X.fst ) { B : β } ( p : B = X.snd ) : (A, B) = X := ♯
-@[pointwise] lemma {u v} pair_equality_4 {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := ♯
+@[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a : α } { b : β } : (a, b).1 = a := ♮
+@[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a : α } { b : β } : (a, b).2 = b := ♮
+@[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X : α × β } : (X.1, X.2) = X := ♯
+@[pointwise] lemma {u v} pairs_componentwise_equal {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := ♯
 @[pointwise] lemma {u v} dependent_pair_equality {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := ♯
 @[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := ♯
 @[pointwise] lemma {u} plift_equality { α : Sort u } ( X Y : plift α ) ( p : X.down = Y.down ) : X = Y := ♯
@@ -423,37 +414,37 @@ do m ← mk_meta_var A,
    set_goals gs,
    return r
 
-namespace tactic
-meta def apply_and_mk_decl (n : name) (tac : tactic unit) : tactic unit := do
- t ← target,
- val ← mk_inhabitant_using t  tac,
- add_aux_decl n t val tt,
- apply val
+-- namespace tactic
+-- meta def apply_and_mk_decl (n : name) (tac : tactic unit) : tactic unit := do
+--  t ← target,
+--  val ← mk_inhabitant_using t  tac,
+--  add_aux_decl n t val tt,
+--  apply val
 
-meta def tag_as_simp (n: name) : tactic unit := set_basic_attribute `simp n 
--- TODO this doesn't work:
-meta def tag_as_ematch (n: name) : tactic unit := set_basic_attribute `ematch n 
+-- meta def tag_as_simp (n: name) : tactic unit := set_basic_attribute `simp n 
+-- -- TODO this doesn't work:
+-- meta def tag_as_ematch (n: name) : tactic unit := set_basic_attribute `ematch n 
 
-namespace interactive
-open lean.parser
-open interactive
+-- namespace interactive
+-- open lean.parser
+-- open interactive
 
-meta def apply_and_mk_decl (n : parse ident) (tac : itactic) : tactic unit :=
-tactic.apply_and_mk_decl n tac
+-- meta def apply_and_mk_decl (n : parse ident) (tac : itactic) : tactic unit :=
+-- tactic.apply_and_mk_decl n tac
 
--- TODO restore tag_as_ematch when it works
-meta def apply_and_mk_simp_decl (n : parse ident) (tac : itactic) : tactic unit :=
-tactic.apply_and_mk_decl n tac >> tag_as_simp n -- >> tag_as_ematch n
+-- -- TODO restore tag_as_ematch when it works
+-- meta def apply_and_mk_simp_decl (n : parse ident) (tac : itactic) : tactic unit :=
+-- tactic.apply_and_mk_decl n tac >> tag_as_simp n -- >> tag_as_ematch n
 
-meta def apply_and_mk_ematch_decl (n : parse ident) (tac : itactic) : tactic unit :=
-tactic.apply_and_mk_decl n tac >> tag_as_ematch n
+-- meta def apply_and_mk_ematch_decl (n : parse ident) (tac : itactic) : tactic unit :=
+-- tactic.apply_and_mk_decl n tac >> tag_as_ematch n
 
-meta def blast_as_simp (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_simp_decl n blast
-meta def blast_as_ematch (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_ematch_decl n blast
-meta def blast_as (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_decl n blast
+-- meta def blast_as_simp (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_simp_decl n blast
+-- meta def blast_as_ematch (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_ematch_decl n blast
+-- meta def blast_as (n : parse ident) : tactic unit := tactic.interactive.apply_and_mk_decl n blast
 
-meta def blast_simp : tactic unit := mk_fresh_name >>= blast_as_simp
-meta def blast_ematch : tactic unit := mk_fresh_name >>= blast_as_ematch
+-- meta def blast_simp : tactic unit := mk_fresh_name >>= blast_as_simp
+-- meta def blast_ematch : tactic unit := mk_fresh_name >>= blast_as_ematch
 
-end interactive
-end tactic
+-- end interactive
+-- end tactic

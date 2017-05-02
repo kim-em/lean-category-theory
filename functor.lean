@@ -87,8 +87,8 @@ definition {u1 v1 u2 v2} Functor_onIsomorphisms
   {
     morphism := F.onMorphisms g.morphism,
     inverse := F.onMorphisms g.inverse,
-    witness_1 := ♯,
-    witness_2 := ♯
+    witness_1 := ♮,
+    witness_2 := ♮
   }
 
 end tqft.categories.functor

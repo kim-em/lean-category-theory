@@ -24,8 +24,8 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
 {
   morphism := C.compose α.morphism β.morphism,
   inverse := C.compose β.inverse α.inverse,
-  witness_1 := ♯,
-  witness_2 := ♯
+  witness_1 := ♮,
+  witness_2 := ♮
 }
 
 @[pointwise] lemma {u1 v1} Isomorphism_pointwise_equal
@@ -47,7 +47,7 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
         rewrite wβ1,
         simp
       end,
-    blast,
+    smt_eblast
   end
 
 definition Isomorphism.reverse { C : Category } { X Y : C.Obj } ( I : Isomorphism C X Y ) : Isomorphism C Y X :=

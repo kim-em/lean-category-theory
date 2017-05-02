@@ -64,12 +64,13 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
   onMorphisms   := λ _ _ f, path_to_morphism H f,
   identities    := ♮,
   functoriality := begin
+                     -- TODO automation
                      blast,
                      induction f,
                      {
-                        blast,
-                        dunfold_everything, -- TODO investigate why we need this.
-                        simp
+                       unfold concatenate_paths,
+                       unfold path_to_morphism,
+                       simp
                      },
                      {
                       pose p := ih_1 g,

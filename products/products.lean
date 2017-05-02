@@ -28,8 +28,7 @@ namespace ProductCategory
   notation C `×` D := ProductCategory C D
 end ProductCategory
 
--- TODO change the order of arguments here?
-definition RightInjectionAt { D : Category } ( Z : D.Obj ) ( C : Category ) : Functor C (C × D) :=
+definition RightInjectionAt { D : Category } ( C : Category ) ( Z : D.Obj ) : Functor C (C × D) :=
 { onObjects     := λ X, (X, Z),
   onMorphisms   := λ X Y f, (f, D.identity Z),
   identities    := ♮,
