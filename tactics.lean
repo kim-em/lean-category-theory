@@ -89,28 +89,53 @@ meta def at_least_one : list (tactic unit) → tactic unit
 meta def unfold_projections_hypotheses : tactic unit :=
 do l ← local_context,
    s ← simp_lemmas.mk_default,
-   at_least_one (l.reverse.for (λ h, unfold_projections_at h))
+   at_least_one (l.reverse.for (λ h, unfold_projections_at h)) <|> fail "fail no projections to unfold in hypotheses"
 
-meta def unfold_hypotheses : tactic unit :=
-do l ← local_context,
-   s ← simp_lemmas.mk_default,
-   at_least_one (l.reverse.for (λ h, dunfold_and_simp_at s h))
-
--- FIXME this needs to fail when it does nothing; dsimp_at always succeeds.
--- meta def dsimp_hypotheses : tactic unit :=
+-- meta def unfold_hypotheses : tactic unit :=
 -- do l ← local_context,
---    at_least_one (l.reverse.for (λ h, dsimp_at h))
+--    s ← simp_lemmas.mk_default,
+--    at_least_one (l.reverse.for (λ h, dunfold_and_simp_at s h))
+
+-- We need our own version of dsimp_at_core, which fails when it can't do anything.
+meta def dsimp_at_core' (s : simp_lemmas) (h : expr) : tactic unit :=
+do num_reverted : ℕ ← revert h,
+   expr.pi n bi d b ← target,
+   h_simp ← s.dsimplify d,
+   guard (h_simp ≠ d) <|> fail "dsimp tactic did not simplify",
+   change $ expr.pi n bi h_simp b,
+   intron num_reverted
+
+meta def dsimp_at' (h : expr) : tactic unit :=
+do s ← simp_lemmas.mk_default, dsimp_at_core' s h
+
+meta def dsimp_hypotheses : tactic unit :=
+do l ← local_context,
+   at_least_one (l.reverse.for (λ h, dsimp_at' h)) <|> fail "dsimp could not simplify any hypothesis"
 
 -- FIXME let's try this
-meta def simp_at_via_rewrite (h : expr) (extra_lemmas : list expr := []) (cfg : simp_config := {}) : tactic unit :=
+-- meta def simp_at_via_rewrite (h : expr) (extra_lemmas : list expr := []) (cfg : simp_config := {}) : tactic unit :=
+-- do when (expr.is_local_constant h = ff) (fail "tactic simp_at failed, the given expression is not a hypothesis"),
+--    htype ← infer_type h,
+--    S     ← simp_lemmas.mk_default,
+--    S     ← S.append extra_lemmas,
+--    (new_htype, heq) ← simplify S htype cfg,
+--    rewrite_at_core reducible tt tt occurrences.all ff heq h
+
+-- @[pointwise] lemma {u v} dependent_pair_equality' {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := begin induction X, induction Y, simp at p1, end
+
+-- We make a local version of simp_at, which only succeeds if it changes something, and successfully clears the old hypothesis.
+meta def simp_at' (h : expr) (extra_lemmas : list expr := []) (cfg : simp_config := {}) : tactic unit :=
 do when (expr.is_local_constant h = ff) (fail "tactic simp_at failed, the given expression is not a hypothesis"),
    htype ← infer_type h,
    S     ← simp_lemmas.mk_default,
    S     ← S.append extra_lemmas,
    (new_htype, heq) ← simplify S htype cfg,
-   rewrite_at_core reducible tt tt occurrences.all ff heq h
+   guard (new_htype \ne )
+   assert (expr.local_pp_name h) new_htype,
+   mk_eq_mp heq h >>= exact,
+   clear h
 
--- FIXME this repeatedly resimplifies hypotheses, if they can't be cleared. :-(
+
 meta def simp_hypotheses : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.for (λ h, simp_at h))
@@ -220,6 +245,22 @@ namespace tactic.interactive
      congr_args
 end tactic.interactive
 
+-- congr_struct needs various helper lemmas.
+@[pointwise] lemma heq_prop { α β : Prop } { a : α } { b : β } ( h : α = β ) : a == b :=
+begin
+  induction h, reflexivity
+end
+
+@[pointwise] theorem {u v w z} funext_prop_001 { α : Type u } { β : Type v } { Z : α → β → Type w } { X : Π ( a : α ) ( b : β ) ( g : Z a b ), Type z }
+                          { p q r s : Π ( a : α ) ( b : β ) ( g : Z a b ), X a b g }
+                          ( h1 : p = r ) ( h2 : q = s )
+                       : (∀ ( a : α ) ( b : β ) ( g : Z a b ), p a b g = q a b g ) = (∀ ( a : α ) ( b : β ) ( g : Z a b), r a b g = s a b g ) :=
+begin
+  induction h1,
+  induction h2,
+  reflexivity
+end
+
 meta def trace_goal_type : tactic unit :=
 do g ← target,
    trace g,
@@ -269,6 +310,7 @@ meta def chain ( tactics : list (tactic unit) ) : tactic unit := chain' tactics 
 
 meta def unfold_unfoldable : tactic unit := 
    chain [
+      dsimp_hypotheses,
       force ( dsimp ),
       simp,
       unfold_projections_hypotheses,
@@ -281,15 +323,16 @@ meta def tidy : tactic unit :=
       tactic.triv,
       force ( reflexivity ),
       assumption,
+      dsimp_hypotheses,
       force ( dsimp ),
-      simp,
       -- simp_hypotheses,
-      unfold_projections,
+      simp,
       unfold_projections_hypotheses,
+      unfold_projections,
       force ( intros >> skip ),
       automatic_induction,
-      pointwise,
-      tactic.interactive.congr_struct
+      pointwise
+      -- tactic.interactive.congr_struct
   ]
 
 

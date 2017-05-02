@@ -93,14 +93,11 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
                                   induction T with T_1,
                                   dsimp,  
                                   pose q := congr_arg (λ t : NaturalTransformation _ _, t.components j) p,
+                                  tidy,
                                   simp at q,
-                                  dsimp at q,
-                                  dunfold_and_simp_all_hypotheses,                                  
-                                  dunfold_and_simp_all_hypotheses,
-                                  unfold_projections,
-                                  simp,                              
-                                  rewrite q,
-                                  blast
+                                  tidy,
+                                  simp at q,
+                                  tidy
                                 end
 }
 
