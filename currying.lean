@@ -30,11 +30,11 @@ end
 --   ( C : Category.{u1 v1} )
 --   ( D : Category.{u2 v2} )
 --   ( E : Category.{u3 v3} ) :
--- theorem {u} Currying_for_functors
---   ( C : Category.{u u} )
---   ( D : Category.{u u} )
---   ( E : Category.{u u} ) :
---   Equivalence (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) :=
+theorem {u} Currying_for_functors
+  ( C : Category.{u u} )
+  ( D : Category.{u u} )
+  ( E : Category.{u u} ) :
+  Equivalence (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) :=
 --   begin
 --     fsplit,
 --     fsplit,
@@ -65,21 +65,24 @@ end
 --     }
 --   end
 
-  -- {
-  --   functor := {
-  --     onObjects     := λ F, {
-  --       onObjects     := λ p, (F.onObjects p.1).onObjects p.2,
-  --       onMorphisms   := sorry,
-  --       identities    := sorry,
-  --       functoriality := sorry
-  --     },
-  --     onMorphisms   := sorry,
-  --     identities    := sorry,
-  --     functoriality := sorry
-  --   },
-  --   inverse := sorry,
-  --   isomorphism_1 := sorry,
-  --   isomorphism_2 := sorry
-  -- }
+  {
+    functor := {
+      onObjects     := λ F, {
+        onObjects     := λ X, (F.onObjects X.1).onObjects X.2,
+        onMorphisms   := λ X Y f, sorry,
+        identities    := sorry,
+        functoriality := sorry
+      },
+      onMorphisms   := λ F G T, {
+        components := sorry,       -- PROJECT really we should only have to specify this; everything else is determined
+        naturality := sorry
+      },
+      identities    := sorry,
+      functoriality := sorry
+    },
+    inverse := sorry,
+    isomorphism_1 := sorry,
+    isomorphism_2 := sorry
+  }
 
 end tqft.categories.natural_transformation

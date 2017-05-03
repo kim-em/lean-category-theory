@@ -2,12 +2,12 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ..isomorphism
-import ..natural_transformation
-import ..examples.types.types
-import ..equivalence
-import .comma_categories
-import .universal
+import ...isomorphism
+import ...natural_transformation
+import ...examples.types.types
+import ...equivalence
+import ..comma_categories
+import ..universal
 
 open tqft.categories
 open tqft.categories.functor

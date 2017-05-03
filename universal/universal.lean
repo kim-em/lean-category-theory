@@ -138,7 +138,7 @@ attribute [simp,ematch] Coproduct.left_factorisation Coproduct.right_factorisati
 attribute [pointwise] Coproduct.left_inclusion Coproduct.right_inclusion Coproduct.map
 attribute [pointwise] Coproduct.uniqueness
 
-definition {u} unique_up_to_isomorphism ( α : Type u ) { C : Category } ( f : α → C.Obj ) := Π X Y : α, Isomorphism C (f X) (f Y)
+@[reducible] definition {u} unique_up_to_isomorphism ( α : Type u ) { C : Category } ( f : α → C.Obj ) := Π X Y : α, Isomorphism C (f X) (f Y)
 
 class has_TerminalObject ( C : Category ) :=
   ( terminal_object : TerminalObject C )
