@@ -43,10 +43,14 @@ definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (Idempot
 
 @[simp] lemma subtype.first { α : Type } { P : α → Prop } { X Y : α } { hX : P X} { hY : P Y } : (subtype.mk X hX  = subtype.mk Y hY) ↔ (X = Y) := begin
   split,
-  intros,
-  exact congr_arg subtype.val a,
-  intros,
-  blast
+  {
+    intros,
+    exact congr_arg subtype.val a,
+  },
+  {
+    intros,
+    blast
+  }
 end
 
 -- PROJECT show the embedding really was full and faithful

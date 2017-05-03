@@ -86,10 +86,42 @@ meta def at_least_one : list (tactic unit) → tactic unit
 | list.nil  := fail "at_least_one tactic failed, no more tactics"
 | (t :: ts) := (seq t (list_try_seq ts)) <|> (at_least_one ts)
 
+private meta def unfold_projections_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
+let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
+  new_e ← unfold_projection_core m e,
+  return (tt, new_e, tt)
+in do (tt, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unfold e | fail "no projections to unfold",
+      return new_e
+
+meta def unfold_projections : tactic unit :=
+target >>= unfold_projections_core' semireducible default_max_steps >>= change
+
+meta def unfold_projections_at' (h : expr) : tactic unit :=
+do num_reverted ← revert h,
+   (expr.pi n bi d b : expr) ← target,
+   new_d ← unfold_projections_core' semireducible default_max_steps d,
+   change $ expr.pi n bi new_d b,
+   intron num_reverted
+
 meta def unfold_projections_hypotheses : tactic unit :=
 do l ← local_context,
    s ← simp_lemmas.mk_default,
-   at_least_one (l.reverse.for (λ h, unfold_projections_at h)) <|> fail "fail no projections to unfold in hypotheses"
+   at_least_one (l.reverse.for (λ h, unfold_projections_at' h)) <|> fail "fail no projections to unfold in hypotheses"   
+
+namespace tactic.interactive
+open tactic
+open interactive.types
+private meta def unfold_projections_hyps : list name → tactic unit
+| []      := skip
+| (h::hs) := get_local h >>= unfold_projections_at' >> unfold_projections_hyps hs
+ 
+/--
+This tactic unfolds all structure projections.
+-/
+meta def unfold_projections' : parse location → tactic unit
+| [] := unfold_projections
+| hs := unfold_projections_hyps hs
+end tactic.interactive
 
 -- meta def unfold_hypotheses : tactic unit :=
 -- do l ← local_context,
@@ -313,11 +345,13 @@ meta def stateful_separately_then_together { α : Type } ( t : α → tactic α 
 do succeeded ← try_core (stateful_any_goals t a),
    t (succeeded.get_or_else a) <|> do a ← succeeded | fail "no tactics succeeded", pure a
 
+-- FIXME this is looping
 private meta def focus_chain' ( tactics : list (tactic unit) ) : nat → bool → list (tactic unit) → tactic nat
 | 0        progress _         := trace "... chain tactic exceeded iteration limit" >> failed   
 | n        progress []        := (guard progress <|> fail "chain tactic made no progress") >> pure n
 | (succ n) progress (t :: ts) := 
-   do goals ← get_goals,
+   do trace (n, list.length ts),
+      goals ← get_goals,
       match goals with 
       | []    := guard progress >> pure n
       | [ g ] := (if_then_else t (focus_chain' n tt tactics) (focus_chain' (succ n) progress ts))
@@ -331,8 +365,8 @@ private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list
 
 private def chain_default_max_steps := 500
 
--- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
-meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tactics >> skip
+meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
+-- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tactics >> skip
 
 meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [
@@ -393,14 +427,14 @@ definition {u v} transport {A : Type u} { P : A → Type v} {x y : A} (u : P x) 
 by induction p; exact u
 
 -- TODO this is destined for the standard library?
-meta def mk_inhabitant_using (A : expr) (t : tactic unit) : tactic expr :=
-do m ← mk_meta_var A,
-   gs ← get_goals,
-   set_goals [m],
-   t,
-   r ← instantiate_mvars m,
-   set_goals gs,
-   return r
+-- meta def mk_inhabitant_using (A : expr) (t : tactic unit) : tactic expr :=
+-- do m ← mk_meta_var A,
+--    gs ← get_goals,
+--    set_goals [m],
+--    t,
+--    r ← instantiate_mvars m,
+--    set_goals gs,
+--    return r
 
 -- namespace tactic
 -- meta def apply_and_mk_decl (n : name) (tac : tactic unit) : tactic unit := do
