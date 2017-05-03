@@ -388,8 +388,8 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
       -- assumption, -- FIXME this is dangerous; really should only be applied when there are no dependent goals!
 
       force ( dsimp ),
-      simp,
       unfold_projections,
+      simp,
 
       force ( intros >> skip ),
       pointwise,
@@ -398,8 +398,8 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
 
       dsimp_hypotheses,
       automatic_induction,
-      simp_hypotheses,
-      unfold_projections_hypotheses
+      unfold_projections_hypotheses,
+      simp_hypotheses
   ] max_steps
 
 meta def blast : tactic unit := tidy >> (done <|> any_goals (force smt_eblast))
