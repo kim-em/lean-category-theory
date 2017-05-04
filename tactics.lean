@@ -298,11 +298,6 @@ meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> unfold_c
 meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
 end
 
-meta def done : tactic unit :=
-  do goals ← get_goals,
-     guard (goals = []),
-     skip
-
 -- meta def monitor_progress { α : Type } ( t : tactic α ) : tactic (bool × α) :=
 -- do goals ← get_goals,
 --    result ← t,
@@ -346,16 +341,22 @@ do succeeded ← try_core (stateful_any_goals t a),
    t (succeeded.get_or_else a) <|> do a ← succeeded | fail "no tactics succeeded", pure a
 
 -- FIXME this is looping
-private meta def focus_chain' ( tactics : list (tactic unit) ) : nat → bool → list (tactic unit) → tactic nat
-| 0        progress _         := trace "... chain tactic exceeded iteration limit" >> failed   
-| n        progress []        := (guard progress <|> fail "chain tactic made no progress") >> pure n
-| (succ n) progress (t :: ts) := 
+-- arguments are:
+-- * remaining steps allowed
+-- * have we made progress?
+-- * should we apply separately_then_together when there are multiple goals
+-- * remaining tactics to try.
+private meta def focus_chain' ( tactics : list (tactic unit) ) : nat → bool → bool → list (tactic unit) → tactic nat
+| 0        progress _ _         := trace "... chain tactic exceeded iteration limit" >> failed   
+| n        progress _ []        := (guard progress <|> fail "chain tactic made no progress") >> pure n
+| (succ n) progress separately (t :: ts) := 
    do trace (n, list.length ts),
-      goals ← get_goals,
-      match goals with 
-      | []    := guard progress >> pure n
-      | [ g ] := (if_then_else t (focus_chain' n tt tactics) (focus_chain' (succ n) progress ts))
-      | _     := stateful_separately_then_together (λ m, focus_chain' m progress tactics) n
+      ng ← num_goals,
+      match ng, separately with 
+      | 0, _  := guard progress >> pure n
+      | 1, _  := (if_then_else t (focus_chain' n tt tt tactics) (focus_chain' (succ n) progress tt ts))
+      | _, ff := (if_then_else t (focus_chain' n tt ff tactics) (focus_chain' (succ n) progress ff ts))
+      | _, tt := stateful_separately_then_together (λ m, focus_chain' m progress ff tactics) n
       end
 
 private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list (tactic unit) → tactic unit
@@ -365,8 +366,8 @@ private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list
 
 private def chain_default_max_steps := 500
 
-meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
--- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tactics >> skip
+-- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
+meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tt tactics >> skip
 
 meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [
