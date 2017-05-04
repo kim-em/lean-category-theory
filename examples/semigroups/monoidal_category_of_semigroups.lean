@@ -9,22 +9,22 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.examples.semigroups
 
-universe variables u
-
 open tqft.categories.monoidal_category
 
-@[reducible] definition semigroup_product { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) : semigroup (α × β) := {
+definition {u} semigroup_product { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) : semigroup (α × β) := {
   mul := λ p q, (p.fst * q.fst, p.snd * q.snd),
   -- From https://groups.google.com/d/msg/lean-user/bVs5FdjClp4/cbDZOqq_BAAJ
   mul_assoc := begin 
                 abstract {
                   intros,
-                  simp [@mul.equations._eqn_1 (α × β)]
+                  admit,
                 }
               end
 }
 
-@[reducible] definition semigroup_morphism_product
+set_option pp.all true
+
+definition {u} semigroup_morphism_product
   { α β γ δ : Type u }
   { s_f : semigroup α } { s_g: semigroup β } { t_f : semigroup γ } { t_g: semigroup δ }
   ( f : semigroup_morphism s_f t_f ) ( g : semigroup_morphism s_g t_g )
@@ -34,99 +34,96 @@ open tqft.categories.monoidal_category
     begin
       -- cf https://groups.google.com/d/msg/lean-user/bVs5FdjClp4/tfHiVjLIBAAJ
       abstract {
-        intros,
-        unfold mul has_mul.mul,
-        tidy
+        tidy,
+        admit,
+        admit
       }
     end
 }
 
 -- PROJECT really this should be a special case of the (uniquely braided, symmetric) monoidal structure coming from a product.
 
-open tqft.categories.products
+-- open tqft.categories.products
 
--- set_option trace.dsimplify true
--- set_option trace.debug.dsimplify true
+-- definition TensorProduct_for_Semigroups : TensorProduct CategoryOfSemigroups := {
+--     onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
+--     onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
+--     identities    := ♯,
+--     functoriality := ♮
+--   }
 
-definition TensorProduct_for_Semigroups : TensorProduct CategoryOfSemigroups := {
-    onObjects     := λ p, ⟨ p.1.1 × p.2.1, semigroup_product p.1.2 p.2.2 ⟩,
-    onMorphisms   := λ s t f, semigroup_morphism_product f.1 f.2,
-    identities    := ♯,
-    functoriality := ♮
-  }
+-- -- FIXME (on edulis) chain is running off the end here
+-- definition Associator_for_Semigroups : Associator TensorProduct_for_Semigroups := {
+--     morphism := {
+--       components := λ _, {
+--         map := λ t, (t.1.1, (t.1.2, t.2)),
+--         multiplicative := ♮
+--       },
+--       naturality := ♮ 
+--     },
+--     inverse := {
+--       components := λ _, {
+--         map := λ t, ((t.1, t.2.1), t.2.2),
+--         multiplicative := ♮
+--       },
+--       naturality := ♮  
+--     },
+--     witness_1 := ♯,
+--     witness_2 := ♯
+--   }
 
--- FIXME (on edulis) chain is running off the end here
-definition Associator_for_Semigroups : Associator TensorProduct_for_Semigroups := {
-    morphism := {
-      components := λ _, {
-        map := λ t, (t.1.1, (t.1.2, t.2)),
-        multiplicative := ♮
-      },
-      naturality := ♮ 
-    },
-    inverse := {
-      components := λ _, {
-        map := λ t, ((t.1, t.2.1), t.2.2),
-        multiplicative := ♮
-      },
-      naturality := ♮  
-    },
-    witness_1 := ♯,
-    witness_2 := ♯
-  }
+-- definition TensorUnit_for_Semigroups : CategoryOfSemigroups.Obj := ⟨ punit, trivial_semigroup ⟩  -- punit is just a universe-parameterized version of unit
 
-definition TensorUnit_for_Semigroups : CategoryOfSemigroups.Obj := ⟨ punit, trivial_semigroup ⟩  -- punit is just a universe-parameterized version of unit
+-- definition LeftUnitor_for_Semigroups : @LeftUnitor CategoryOfSemigroups TensorUnit_for_Semigroups TensorProduct_for_Semigroups := {
+--     morphism := {
+--       components := λ _, {
+--         map := λ t, t.2,
+--         multiplicative := ♮
+--       },
+--       naturality := ♮ 
+--     },
+--     inverse := {
+--       components := λ _, {
+--         map := λ t, (punit.star, t),
+--         multiplicative := ♮
+--       },
+--       naturality := ♮ 
+--     },
+--     witness_1 := ♯,
+--     witness_2 := ♮
+--   }
 
-definition LeftUnitor_for_Semigroups : @LeftUnitor CategoryOfSemigroups TensorUnit_for_Semigroups TensorProduct_for_Semigroups := {
-    morphism := {
-      components := λ _, {
-        map := λ t, t.2,
-        multiplicative := ♮
-      },
-      naturality := ♮ 
-    },
-    inverse := {
-      components := λ _, {
-        map := λ t, (punit.star, t),
-        multiplicative := ♮
-      },
-      naturality := ♮ 
-    },
-    witness_1 := ♯,
-    witness_2 := ♮
-  }
+-- definition RightUnitor_for_Semigroups : @RightUnitor CategoryOfSemigroups TensorUnit_for_Semigroups TensorProduct_for_Semigroups := {
+--     morphism := {
+--       components := λ _, {
+--         map := λ t, t.1,
+--         multiplicative := ♮
+--       },
+--       naturality := ♮ 
+--     },
+--     inverse := {
+--       components := λ _, {
+--         map := λ t, (t, punit.star),
+--         multiplicative := ♮
+--       },
+--       naturality := ♮ 
+--     },
+--     witness_1 := ♯,
+--     witness_2 := ♮
+--   }
 
-definition RightUnitor_for_Semigroups : @RightUnitor CategoryOfSemigroups TensorUnit_for_Semigroups TensorProduct_for_Semigroups := {
-    morphism := {
-      components := λ _, {
-        map := λ t, t.1,
-        multiplicative := ♮
-      },
-      naturality := ♮ 
-    },
-    inverse := {
-      components := λ _, {
-        map := λ t, (t, punit.star),
-        multiplicative := ♮
-      },
-      naturality := ♮ 
-    },
-    witness_1 := ♯,
-    witness_2 := ♮
-  }
+-- definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
+--   tensor := TensorProduct_for_Semigroups,
+--   tensor_unit := TensorUnit_for_Semigroups,
+--   associator_transformation := Associator_for_Semigroups,
+--   left_unitor := LeftUnitor_for_Semigroups,
+--   right_unitor := RightUnitor_for_Semigroups,
+--   pentagon := ♯,
+--   triangle := ♯
+-- }
 
-definition MonoidalStructureOnCategoryOfSemigroups : MonoidalStructure CategoryOfSemigroups := {
-  tensor := TensorProduct_for_Semigroups,
-  tensor_unit := TensorUnit_for_Semigroups,
-  associator_transformation := Associator_for_Semigroups,
-  left_unitor := LeftUnitor_for_Semigroups,
-  right_unitor := RightUnitor_for_Semigroups,
-  pentagon := ♯,
-  triangle := ♯
-}
-
-open tqft.categories.natural_transformation
-open tqft.categories.braided_monoidal_category
+-- open tqft.categories.natural_transformation
+-- open tqft.categories.braided_monoidal_category
 
 -- Commented out while I work on an alternative.
 -- definition SymmetryOnCategoryOfSemigroups : Symmetry MonoidalStructureOnCategoryOfSemigroups := {

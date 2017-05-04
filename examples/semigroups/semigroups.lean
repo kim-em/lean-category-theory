@@ -5,25 +5,23 @@ import ...monoidal_categories.braided_monoidal_category
 
 namespace tqft.categories.examples.semigroups
 
-universe variables u
-
 open tqft.categories
 
-set_option pp.universes true
-
-structure semigroup_morphism { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) :=
+structure {u} semigroup_morphism { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) :=
   (map: α → β)
-  (multiplicative : ∀ x y : α, map(x * y) = map(x) * map(y))
+  (multiplicative : ∀ x y : α, map (x * y) = (map x) * (map y))
 
-attribute [simp] semigroup_morphism.multiplicative
+attribute [simp,ematch] semigroup_morphism.multiplicative
 
-instance monoid_semigroup_to_map { α β : Type u } { s : semigroup α } { t: semigroup β } : has_coe_to_fun (semigroup_morphism s t) :=
+definition {u} monoid_semigroup_to_map { α β : Type u } { s : semigroup α } { t: semigroup β } : has_coe_to_fun (semigroup_morphism s t) :=
 { F   := λ f, Π x : α, β,
   coe := semigroup_morphism.map }
 
-@[reducible] definition semigroup_identity { α : Type u } ( s: semigroup α ) : semigroup_morphism s s := ⟨ id, ♮ ⟩
+attribute [instance] monoid_semigroup_to_map
 
-@[reducible] definition semigroup_morphism_composition
+definition {u} semigroup_identity { α : Type u } ( s: semigroup α ) : semigroup_morphism s s := ⟨ id, ♮ ⟩
+
+definition {u} semigroup_morphism_composition
   { α β γ : Type u } { s: semigroup α } { t: semigroup β } { u: semigroup γ}
   ( f: semigroup_morphism s t ) ( g: semigroup_morphism t u ) : semigroup_morphism s u :=
 {
@@ -31,7 +29,7 @@ instance monoid_semigroup_to_map { α β : Type u } { s : semigroup α } { t: se
   multiplicative := ♮
 }
 
-@[pointwise] lemma semigroup_morphism_pointwise_equality
+@[pointwise] lemma {u} semigroup_morphism_pointwise_equality
   { α β : Type u } { s : semigroup α } { t: semigroup β }
   ( f g : semigroup_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=
@@ -42,7 +40,7 @@ begin
     by subst hc
 end
 
-@[reducible] definition CategoryOfSemigroups : Category := 
+definition {u} CategoryOfSemigroups : Category := 
 {
     Obj := Σ α : Type u, semigroup α,
     Hom := λ s t, semigroup_morphism s.2 t.2,

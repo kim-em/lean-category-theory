@@ -12,23 +12,23 @@ open tqft.categories
 
 set_option pp.universes true
 
-structure monoid_morphism { α β : Type } ( s : monoid α ) ( t: monoid β ) :=
+structure monoid_morphism { α β : Type } ( s : monoid α ) ( t : monoid β ) :=
   (map: α → β)
   (multiplicative : ∀ x y : α, map(x * y) = map(x) * map(y))
-  (unital : map(one) = one)
+  (unital : map(s.one) = t.one)
 
 attribute [simp] monoid_morphism.multiplicative
 attribute [simp] monoid_morphism.unital
 
 -- This defines a coercion so we can write `f x` for `map f x`.
-instance monoid_morphism_to_map { α β : Type } { s : monoid α } { t: monoid β } : has_coe_to_fun (monoid_morphism s t) :=
+instance monoid_morphism_to_map { α β : Type } { s : monoid α } { t : monoid β } : has_coe_to_fun (monoid_morphism s t) :=
 { F   := λ f, Π x : α, β,
   coe := monoid_morphism.map }
 
-definition monoid_identity { α : Type } ( s: monoid α ) : monoid_morphism s s := ⟨ id, ♮, ♮ ⟩
+definition monoid_identity { α : Type } ( s : monoid α ) : monoid_morphism s s := ⟨ id, ♮, ♮ ⟩
 
 definition monoid_morphism_composition
-  { α β γ : Type } { s: monoid α } { t: monoid β } { u: monoid γ}
+  { α β γ : Type } { s : monoid α } { t : monoid β } { u : monoid γ}
   ( f: monoid_morphism s t ) ( g: monoid_morphism t u ) : monoid_morphism s u :=
 {
   map := λ x, g (f x),
@@ -37,7 +37,7 @@ definition monoid_morphism_composition
 }
 
 @[pointwise] lemma monoid_morphism_pointwise_equality
-  { α β : Type } { s : monoid α } { t: monoid β }
+  { α β : Type } { s : monoid α } { t : monoid β }
   ( f g : monoid_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=
 begin
@@ -63,7 +63,7 @@ definition CategoryOfMonoids : Category :=
 open tqft.categories.functor
 open tqft.categories.examples.semigroups
 
-definition cast_monoid_to_semigroup {α: Type} (s: monoid α) : semigroup α := @monoid.to_semigroup α s
+definition cast_monoid_to_semigroup { α : Type } ( s : monoid α ) : semigroup α := @monoid.to_semigroup α s
 
 definition ForgetfulFunctor_Monoids_to_Semigroups : Functor CategoryOfMonoids CategoryOfSemigroups :=
 {
@@ -73,7 +73,6 @@ definition ForgetfulFunctor_Monoids_to_Semigroups : Functor CategoryOfMonoids Ca
                     map            := f.map,
                     multiplicative := f.multiplicative
                   },
-
   identities    := ♮,
   functoriality := ♮
 }

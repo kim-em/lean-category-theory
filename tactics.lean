@@ -350,7 +350,7 @@ private meta def focus_chain' ( tactics : list (tactic unit) ) : nat → bool �
 | 0        progress _ _         := trace "... chain tactic exceeded iteration limit" >> failed   
 | n        progress _ []        := (guard progress <|> fail "chain tactic made no progress") >> pure n
 | (succ n) progress separately (t :: ts) := 
-   do trace (n, list.length ts),
+   do --trace (n, list.length ts),
       ng ← num_goals,
       match ng, separately with 
       | 0, _  := guard progress >> pure n
@@ -366,8 +366,8 @@ private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list
 
 private def chain_default_max_steps := 500
 
--- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
-meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tt tactics >> skip
+meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
+-- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tt tactics >> skip
 
 meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [

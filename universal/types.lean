@@ -3,7 +3,7 @@ import .universal
 
 open tqft.categories.universal
 open tqft.categories.isomorphism
-open tqft.categories.examples.types
+namespace tqft.categories.examples.types
 
 definition {u} Types_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfTypes.{u} :=
 {
@@ -24,12 +24,12 @@ definition {u} Types_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfTypes
                     blast,                    
                     induction x,
                     {
-                      pose p := (congr_fun left_witness a), -- TODO it's a pity this simp is needed.
+                      note p := (congr_fun left_witness a), -- TODO it's a pity this simp is needed.
                       simp at p,
                       exact p
                     },
                     {
-                      pose p := (congr_fun right_witness a),
+                      note p := (congr_fun right_witness a),
                       simp at p,
                       exact p
                     }
@@ -75,8 +75,8 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
                          exact k a
                        },
                        {
-                         pose p := congr_fun w a,
-                         simp at p,
+                         tidy,
+                         note p := congr_fun w a, -- FIXME weird that I can use `note` then `exact`, but can't just use `exact` in one step.
                          exact p
                        }
                     end,
@@ -87,3 +87,4 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
 attribute [instance] Types_has_Equalizers
 
 -- Types doesn't have coequalizers; quotients are hard.
+end tqft.categories.examples.types
