@@ -11,35 +11,35 @@ namespace tqft.categories.examples.semigroups
 
 open tqft.categories.monoidal_category
 
-definition {u} semigroup_product { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) : semigroup (α × β) := {
-  mul := λ p q, (p.fst * q.fst, p.snd * q.snd),
-  -- From https://groups.google.com/d/msg/lean-user/bVs5FdjClp4/cbDZOqq_BAAJ
-  mul_assoc := begin 
-                abstract {
-                  intros,
-                  admit,
-                }
-              end
-}
+-- definition {u} semigroup_product { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) : semigroup (α × β) := {
+--   mul := λ p q, (p.fst * q.fst, p.snd * q.snd),
+--   -- From https://groups.google.com/d/msg/lean-user/bVs5FdjClp4/cbDZOqq_BAAJ
+--   mul_assoc := begin 
+--                 abstract {
+--                   intros,
+--                   admit,
+--                 }
+--               end
+-- }
 
 set_option pp.all true
 
-definition {u} semigroup_morphism_product
-  { α β γ δ : Type u }
-  { s_f : semigroup α } { s_g: semigroup β } { t_f : semigroup γ } { t_g: semigroup δ }
-  ( f : semigroup_morphism s_f t_f ) ( g : semigroup_morphism s_g t_g )
-  : semigroup_morphism (semigroup_product s_f s_g) (semigroup_product t_f t_g) := {
-  map := λ p, (f p.1, g p.2),
-  multiplicative :=
-    begin
-      -- cf https://groups.google.com/d/msg/lean-user/bVs5FdjClp4/tfHiVjLIBAAJ
-      abstract {
-        tidy,
-        admit,
-        admit
-      }
-    end
-}
+-- definition {u} semigroup_morphism_product
+--   { α β γ δ : Type u }
+--   { s_f : semigroup α } { s_g: semigroup β } { t_f : semigroup γ } { t_g: semigroup δ }
+--   ( f : semigroup_morphism s_f t_f ) ( g : semigroup_morphism s_g t_g )
+--   : semigroup_morphism (semigroup_product s_f s_g) (semigroup_product t_f t_g) := {
+--   map := λ p, (f p.1, g p.2),
+--   multiplicative :=
+--     begin
+--       -- cf https://groups.google.com/d/msg/lean-user/bVs5FdjClp4/tfHiVjLIBAAJ
+--       abstract {
+--         tidy,
+--         admit,
+--         admit
+--       }
+--     end
+-- }
 
 -- PROJECT really this should be a special case of the (uniquely braided, symmetric) monoidal structure coming from a product.
 
