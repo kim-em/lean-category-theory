@@ -4,7 +4,6 @@
 
 import .functor
 import .graph
-import .examples.types.types
 
 open tqft.categories
 

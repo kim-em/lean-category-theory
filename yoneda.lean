@@ -8,14 +8,14 @@ import .opposites
 import .equivalence
 import .products.products
 import .products.switch
-import .examples.types.types
+import .types
 
 open tqft.categories
 open tqft.categories.functor
 open tqft.categories.natural_transformation
 open tqft.categories.isomorphism
 open tqft.categories.equivalence
-open tqft.categories.examples.types
+open tqft.categories.types
 open tqft.categories.products
 
 namespace tqft.categories.yoneda
@@ -48,7 +48,7 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
       (HomPairing (FunctorCategory (Opposite C) CategoryOfTypes.{v})) 
 
 -- PROJECT finish this
-theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := sorry
+-- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := sorry
 -- begin
 --   unfold NaturalIsomorphism,
 --   fsplit,

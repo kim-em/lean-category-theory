@@ -1,9 +1,9 @@
-import ..examples.types.types
+import ..types
 import .universal
 
 open tqft.categories.universal
 open tqft.categories.isomorphism
-namespace tqft.categories.examples.types
+namespace tqft.categories.types
 
 definition {u} Types_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfTypes.{u} :=
 {
@@ -87,4 +87,4 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
 attribute [instance] Types_has_Equalizers
 
 -- Types doesn't have coequalizers; quotients are hard.
-end tqft.categories.examples.types
+end tqft.categories.types

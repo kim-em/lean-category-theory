@@ -9,7 +9,7 @@ open tqft.categories.functor
 open tqft.categories.natural_transformation
 open tqft.categories.products
 open tqft.categories.isomorphism
-open tqft.categories.examples.types
+open tqft.categories.types
 
 namespace tqft.categories.adjunction
 

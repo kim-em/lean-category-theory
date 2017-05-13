@@ -4,7 +4,6 @@
 
 import ...isomorphism
 import ...natural_transformation
-import ...examples.types.types
 import ...equivalence
 import ..comma_categories
 import ..universal
@@ -14,7 +13,6 @@ open tqft.categories.functor
 open tqft.categories.natural_transformation
 open tqft.categories.isomorphism
 open tqft.categories.equivalence
-open tqft.categories.examples.types
 open tqft.categories.universal
 
 namespace tqft.categories.universal

@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .natural_transformation
+import natural_transformation
 
 open tqft.categories
 open tqft.categories.functor

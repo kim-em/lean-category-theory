@@ -4,7 +4,6 @@
 
 import ...isomorphism
 import ...natural_transformation
-import ...examples.types.types
 import ...equivalence
 import ..comma_categories
 import ..universal
@@ -14,7 +13,6 @@ open tqft.categories.functor
 open tqft.categories.natural_transformation
 open tqft.categories.isomorphism
 open tqft.categories.equivalence
-open tqft.categories.examples.types
 open tqft.categories.universal
 
 namespace tqft.categories.universal
@@ -70,28 +68,12 @@ definition Cones_to_comma_Cones { J C : Category } ( F : Functor J C ) : Functor
     functoriality := ♯
   }
 
-definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
-  functor := comma_Cones_to_Cones F,
-  inverse := Cones_to_comma_Cones F,
-  isomorphism_1 := ♯,
-  isomorphism_2 := ♯
-}
-
--- lemma Equalizers_agree { C : Category } { α β : C.Obj } ( f g : C.Hom α β )
---  : @Isomorphism CategoryOfTypes (comma.Equalizer f g) (Equalizer f g) :=
---  {
---   morphism := sorry,  
---   inverse  := sorry,
---   witness_1 := sorry,
---   witness_2 := sorry
+-- TODO this is really slow
+-- definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
+--   functor := comma_Cones_to_Cones F,
+--   inverse := Cones_to_comma_Cones F,
+--   isomorphism_1 := ♯,
+--   isomorphism_2 := ♯
 -- }
-
--- lemma Equalizers_are_unique
---   { C : Category }  
---   { X Y : C.Obj } 
---   ( f g : C.Hom X Y )
---    : unique_up_to_isomorphism (Equalizer f g) Equalizer.equalizer
---    := λ (E1 E2 : Equalizer f g), 
---        comma.InitialObjects_are_unique (Isomorphism.inverse (Equalizers_agree f g) E1) ((Equalizers_agree f g).inverse E2)
 
 end tqft.categories.universal

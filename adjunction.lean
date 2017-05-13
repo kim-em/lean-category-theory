@@ -6,14 +6,14 @@ import .natural_transformation
 import .opposites
 import .products.products
 import .isomorphism
-import .examples.types.types
+import .types
 
 open tqft.categories
 open tqft.categories.functor
 open tqft.categories.natural_transformation
 open tqft.categories.products
 open tqft.categories.isomorphism
-open tqft.categories.examples.types
+open tqft.categories.types
 
 namespace tqft.categories.adjunction
 

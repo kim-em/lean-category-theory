@@ -4,12 +4,12 @@
 
 import .functor
 import .products.products
-import .examples.types.types
+import .types
 
 open tqft.categories
 open tqft.categories.functor
 open tqft.categories.products
-open tqft.categories.examples.types
+open tqft.categories.types
 
 namespace tqft.categories
 
