@@ -1,5 +1,5 @@
 [package]
-name = "category-theory"
+name = "lean-category-theory"
 version = "0.1"
 
 [dependencies]
