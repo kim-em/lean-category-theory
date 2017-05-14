@@ -47,7 +47,7 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
         (SwitchProductCategory _ _))
       (HomPairing (FunctorCategory (Opposite C) CategoryOfTypes.{v})) 
 
-private lemma YonedaLemma_aux_1
+@[simp] private lemma YonedaLemma_aux_1
    { C : Category }
    { X Y : C.Obj }
    ( f : C.Hom X Y )
@@ -57,19 +57,20 @@ private lemma YonedaLemma_aux_1
      G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
 
-private lemma YonedaLemma_aux_2
-   { C : Category }
-   { X Y : C.Obj }
-   ( f : C.Hom X Y )
-   { F : Functor (Opposite C) CategoryOfTypes }
-   ( τ : NaturalTransformation (Yoneda C Y) F ) :
-     F.onMorphisms f (τ.components Y (C.identity Y)) = τ.components X f :=
-begin
- note p := eq.symm (congr_fun (τ.naturality f) (C.identity Y)),
- tidy,
- exact p
-end
+-- @[simp] private lemma YonedaLemma_aux_2
+--    { C : Category }
+--    { X Y : C.Obj }
+--    ( f : C.Hom X Y )
+--    { F : Functor (Opposite C) CategoryOfTypes }
+--    ( τ : NaturalTransformation (Yoneda C Y) F ) :
+--      F.onMorphisms f (τ.components Y (C.identity Y)) = τ.components X f :=
+-- begin
+-- --  note p := eq.symm (congr_fun (τ.naturality f) (C.identity Y)),
+--  tidy,
+-- --  exact p
+-- end
 
+-- set_option pp.all true
 
 -- PROJECT think about how to write a saner proof.
 theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := --sorry
@@ -86,38 +87,17 @@ begin
     },
     {
       tidy,
-      note q := congr_fun (x.naturality snd_2) (C.identity snd_1),
-      tidy,
-      rewrite q,
     }
   },
   {
     unfold FunctorCategory,
     dsimp,
     fsplit,
-    {
-      tidy,
-      exact ((fst.onMorphisms a_1) a),
-      tidy,
-      erewrite Functor.functoriality, -- FIXME why does this require erewrite?
-      tidy,
-    },
-    {
-      tidy,
-      erewrite Functor.functoriality, -- FIXME why does this require erewrite?
-      tidy,
-      rewrite YonedaLemma_aux_1,      
-    }
+    tidy,
+    exact ((fst.onMorphisms a_1) a),
+    tidy,
   },
-  {
-    tidy,
-    rewrite YonedaLemma_aux_2,      
-  },
-  {
-    tidy,
-    erewrite Functor.identities, -- FIXME why does this require erewrite?
-    tidy,
-  }
+  tidy
 end
 
 
