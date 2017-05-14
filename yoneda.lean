@@ -47,44 +47,78 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
         (SwitchProductCategory _ _))
       (HomPairing (FunctorCategory (Opposite C) CategoryOfTypes.{v})) 
 
--- PROJECT finish this
--- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := sorry
--- begin
---   unfold NaturalIsomorphism,
---   fsplit,
---   {
---     unfold FunctorCategory,
---     dsimp,
---     fsplit,
---     {
---       tidy,
---       exact ((a.components X_2) (C.identity X_2))
---     },
---     {
---       tidy,
---       pose p := x.naturality f_2,
---       unfold_projections at p,
---       simp at p,
---       pose q := congr_fun p (C.identity X_2),
---       rewrite composition at q,
---       simp at q,
---       tidy,
---       rewrite q
---     }
---   },
---   {
---     tidy,
---     admit
---   },
---   {
---     tidy,
---     admit
---   },
---   {
---     tidy,
---     admit
---   }
--- end
+private lemma YonedaLemma_aux_1
+   { C : Category }
+   { X Y : C.Obj }
+   ( f : C.Hom X Y )
+   { F G : Functor (Opposite C) CategoryOfTypes }
+   ( τ : NaturalTransformation F G )
+   ( Z : F.onObjects Y ) :
+     G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
+
+
+private lemma YonedaLemma_aux_2
+   { C : Category }
+   { X Y : C.Obj }
+   ( f : C.Hom X Y )
+   { F : Functor (Opposite C) CategoryOfTypes }
+   ( τ : NaturalTransformation (Yoneda C Y) F ) :
+     F.onMorphisms f (τ.components Y (C.identity Y)) = τ.components X f :=
+begin
+ note p := eq.symm (congr_fun (τ.naturality f) (C.identity Y)),
+ tidy,
+ exact p
+end
+
+
+-- PROJECT think about how to write a saner proof.
+theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := --sorry
+begin
+  unfold NaturalIsomorphism,
+  fsplit,
+  {
+    unfold FunctorCategory,
+    dsimp,
+    fsplit,
+    {
+      tidy,
+      exact ((a.components _) (C.identity _))
+    },
+    {
+      tidy,
+      note q := congr_fun (x.naturality snd_2) (C.identity snd_1),
+      tidy,
+      rewrite q,
+    }
+  },
+  {
+    unfold FunctorCategory,
+    dsimp,
+    fsplit,
+    {
+      tidy,
+      exact ((fst.onMorphisms a_1) a),
+      tidy,
+      erewrite Functor.functoriality, -- FIXME why does this require erewrite?
+      tidy,
+    },
+    {
+      tidy,
+      erewrite Functor.functoriality, -- FIXME why does this require erewrite?
+      tidy,
+      rewrite YonedaLemma_aux_1,      
+    }
+  },
+  {
+    tidy,
+    rewrite YonedaLemma_aux_2,      
+  },
+  {
+    tidy,
+    erewrite Functor.identities, -- FIXME why does this require erewrite?
+    tidy,
+  }
+end
 
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=

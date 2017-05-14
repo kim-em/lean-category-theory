@@ -185,9 +185,9 @@ match t with
 | ```(ulift _)   := induction h >>= λ x, skip
 | ```(plift _)   := induction h >>= λ x, skip
 | ```(prod _ _)  := do names ← new_names h,
-                      induction h names >> skip
+                      induction h >> skip
 | ```(sigma _)   := do names ← new_names h,
-                      induction h names >> skip
+                      induction h >> skip
 | ```(subtype _) := do names ← new_names h,
                       induction h names >> skip
 | _              := failed
