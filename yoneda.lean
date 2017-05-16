@@ -56,47 +56,13 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
    ( Z : F.onObjects Y ) :
      G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
-
--- @[simp] private lemma YonedaLemma_aux_2
---    { C : Category }
---    { X Y : C.Obj }
---    ( f : C.Hom X Y )
---    { F : Functor (Opposite C) CategoryOfTypes }
---    ( τ : NaturalTransformation (Yoneda C Y) F ) :
---      F.onMorphisms f (τ.components Y (C.identity Y)) = τ.components X f :=
--- begin
--- --  note p := eq.symm (congr_fun (τ.naturality f) (C.identity Y)),
---  tidy,
--- --  exact p
--- end
-
--- set_option pp.all true
-
 -- PROJECT think about how to write a saner proof.
-theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := --sorry
+theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
-  unfold NaturalIsomorphism,
-  fsplit,
-  {
-    unfold FunctorCategory,
-    dsimp,
-    fsplit,
-    {
-      tidy,
-      exact ((a.components _) (C.identity _))
-    },
-    {
-      tidy,
-    }
-  },
-  {
-    unfold FunctorCategory,
-    dsimp,
-    fsplit,
-    tidy,
-    exact ((fst.onMorphisms a_1) a),
-    tidy,
-  },
+  tidy,
+  exact ((a.components _) (C.identity _)),
+  tidy,
+  exact ((fst.onMorphisms a_1) a),
   tidy
 end
 
@@ -114,20 +80,19 @@ begin
     },
     {
         tidy,
-        note p := f.naturality x,
+        note q := congr_fun (f.naturality x) (C.identity X),
         tidy,
-        note q := congr_fun p (C.identity X),
-        blast
+        exact eq.symm q,
     }
   },
   {
     -- Show it is faithful
-    fsplit,
     tidy,
     note q := congr_arg NaturalTransformation.components p,
     note q' := congr_fun q X,
     note q'' := congr_fun q' (C.identity X),
-    blast
+    tidy,
+    exact q'',
   }
 end
 
