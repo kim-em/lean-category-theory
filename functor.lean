@@ -58,7 +58,7 @@ definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D :
 --   for `morphismWitness`, leaving the `objectWitness` goal somehow "implicit" and likely unprovable.
 --   See https://groups.google.com/d/msg/lean-user/bhStu87PjiI/vqsyr9ZABAAJ for details.
 -- If you run into this problem, use `fapply Functors_pointwise_equal` instead.
-@[pointwise] lemma {u1 v1 u2 v2} Functors_pointwise_equal
+lemma {u1 v1 u2 v2} Functors_pointwise_equal
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} } 
   { F G : Functor C D } 

@@ -41,6 +41,8 @@ structure StrictTwoCategory :=
 attribute [simp] StrictTwoCategory.left_identity StrictTwoCategory.right_identity StrictTwoCategory.up_identity StrictTwoCategory.down_identity
 attribute [ematch] StrictTwoCategory.associativity_1 StrictTwoCategory.associativity_2_vertical StrictTwoCategory.associativity_2_horizontal StrictTwoCategory.interchange
 
+local attribute [pointwise] Functors_pointwise_equal -- evil
+
 definition CAT : StrictTwoCategory :=
 {
     Hom_0 := Category,

@@ -8,7 +8,9 @@ open tqft.categories.functor
 open tqft.categories.products
 open tqft.categories.isomorphism
 
--- These definition are *dangerous* --- identities between functors tend to cause horrible problems for transport later.
+local attribute [pointwise] Functors_pointwise_equal
+
+-- These definition are *evil* --- identities between functors tend to cause horrible problems for transport later.
 -- It's much better to use the natural isomorphisms defined later.
 @[ematch] private lemma {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition.associativity
   { B : Category.{u1 v1} }
