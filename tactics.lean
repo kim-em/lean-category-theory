@@ -388,12 +388,13 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
       force ( reflexivity ),
       -- assumption, -- FIXME this is dangerous; really should only be applied when there are no dependent goals!
 
+      pointwise,
+
       force ( dsimp ),
       unfold_projections,
       simp,
 
       force ( intros >> skip ),
-      pointwise,
       force ( fsplit ),
       -- tactic.interactive.congr_struct
 

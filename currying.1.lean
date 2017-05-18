@@ -19,8 +19,22 @@ namespace tqft.categories.natural_transformation
 --   {
 --     functor := Uncurry_Functors C D E,
 --     inverse := Curry_Functors C D E,
---     isomorphism_1 := begin tidy, admit end,
---     isomorphism_2 := begin tidy, admit end
+--     isomorphism_1 := {
+--      morphism  := {
+--          components := λ F, {
+--              components := λ X, {
+--                  components := λ Y, E.identity ((F.onObjects X).onObjects Y),
+--                  naturality := ♯ 
+--              },
+--              naturality := ♯
+--          },
+--          naturality := sorry
+--      },
+--      inverse   := sorry,
+--      witness_1 := sorry,
+--      witness_2 := sorry   
+--     },
+--     isomorphism_2 := sorry
 --   }
 
 end tqft.categories.natural_transformation
