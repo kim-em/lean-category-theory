@@ -62,9 +62,9 @@ definition {u v} compose_path
 
 
 -- FIXME this is a bit lame.
-meta def rewrite_once : tactic unit :=
-do r ← tactic.to_expr `(n_ary_Category.compose_length_one_path C f),
-   tactic.rewrite_core reducible tt tt (occurrences.pos [2]) tt r
+-- meta def rewrite_once : tactic unit :=
+-- do r ← tactic.to_expr `(n_ary_Category.compose_length_one_path C f),
+--    tactic.rewrite_core reducible tt tt (occurrences.pos [2]) tt r
 
 
 -- definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Category :=

@@ -179,16 +179,16 @@ meta def new_names ( e : expr ) : tactic (list name) :=
 
 meta def automatic_induction' (h : expr) (t : expr) : tactic unit :=
 match t with
-| ```(unit)      := induction h >>= λ x, skip
-| ```(punit)     := induction h >>= λ x, skip
-| ```(empty)     := induction h >>= λ x, skip
-| ```(ulift _)   := induction h >>= λ x, skip
-| ```(plift _)   := induction h >>= λ x, skip
-| ```(prod _ _)  := do names ← new_names h,
+| `(unit)      := induction h >>= λ x, skip
+| `(punit)     := induction h >>= λ x, skip
+| `(empty)     := induction h >>= λ x, skip
+| `(ulift _)   := induction h >>= λ x, skip
+| `(plift _)   := induction h >>= λ x, skip
+| `(prod _ _)  := do names ← new_names h,
                       induction h >> skip
-| ```(sigma _)   := do names ← new_names h,
+| `(sigma _)   := do names ← new_names h,
                       induction h >> skip
-| ```(subtype _) := do names ← new_names h,
+| `(subtype _) := do names ← new_names h,
                       induction h names >> skip
 | _              := failed
 end
@@ -246,8 +246,8 @@ namespace tactic.interactive
   meta def congr_args : tactic unit :=
   do tgt ← target,
      (lhs, rhs) ← match tgt with
-     | ```(%%lhs = %%rhs) := pure (lhs, rhs)
-     | ```(%%lhs == %%rhs) := pure (lhs, rhs)
+     | `(%%lhs = %%rhs) := pure (lhs, rhs)
+     | `(%%lhs == %%rhs) := pure (lhs, rhs)
      | _ := fail "goal is not an equality"
      end,
      pre ← common_app_prefix lhs rhs,
@@ -258,11 +258,11 @@ namespace tactic.interactive
   /-- Given a goal that equates two structure values, this tactic breaks it down to subgoals equating each
       pair of fields. -/
   meta def congr_struct : tactic unit :=
-  do ```(%%lhs = %%rhs) ← target | fail "goal is not an equality",
+  do `(%%lhs = %%rhs) ← target | fail "goal is not an equality",
      ty ← infer_type lhs,
      eta ← mk_struct_eta ty,
      apply ``(@eq.rec _ _ (λ lhs, lhs = %%rhs) _ _ %%(app eta lhs)),
-     ```(%%new_lhs = %%rhs) ← target,
+     `(%%new_lhs = %%rhs) ← target,
      apply ``(@eq.rec _ _ (λ rhs, %%new_lhs = rhs) _ _ %%(app eta rhs)),
      congr_args
 end tactic.interactive
