@@ -1,5 +1,6 @@
 [package]
 name = "lean-category-theory"
 version = "0.1"
+path = "src"
 
 [dependencies]
