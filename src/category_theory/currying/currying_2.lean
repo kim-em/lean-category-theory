@@ -94,10 +94,10 @@ end
 begin
   refl
 end
--- @[simp] lemma { u v } mpr_refl { α : Type u } ( a : α ) : eq.mpr (eq.refl α) a = a :=
--- begin
---   refl
--- end
+@[simp] lemma { u v } mpr_refl { α : Type u } ( h : α = α ) ( a : α ) : eq.mpr h a = a :=
+begin
+  refl
+end
 
 
 definition {u1 v1 u2 v2 u3 v3} Uncurry_Curry_to_identity
@@ -192,7 +192,7 @@ definition {u1 v1 u2 v2 u3 v3} identity_to_Uncurry_Curry
                          dsimp,
                          repeat { rewrite congr_arg_refl },
                          repeat { rewrite congr_refl_refl },
-                         repeat { rewrite mpr_refl },
+                         dsimp [eq.mpr],
                          simp,
                        end
      }
