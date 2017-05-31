@@ -318,46 +318,46 @@ do r ← tactic.try_core i,
 
 /- Applies the tactic to each goal separately, and then, if any goals remain, applies the tactic to all goals together.
    Succeeds if any one application of the tactic succeeds. -/
-meta def separately_then_together ( t : tactic unit ) : tactic unit :=
-do succeeded ← try_core (any_goals t),
-   t <|> guard succeeded.is_some
+-- meta def separately_then_together ( t : tactic unit ) : tactic unit :=
+-- do succeeded ← try_core (any_goals t),
+--    t <|> guard succeeded.is_some
 
-private meta def stateful_any_goals_core { α : Type } ( t : α → tactic α ) : α → list expr → list expr → bool → tactic α
-| a []        ac progress := guard progress >> set_goals ac >> pure a
-| a (g :: gs) ac progress :=
-  do set_goals [g],
-     succeeded ← try_core (t a),
-     new_gs    ← get_goals,
-     stateful_any_goals_core (succeeded.get_or_else a) gs (ac ++ new_gs) (succeeded.is_some || progress)
+-- private meta def stateful_any_goals_core { α : Type } ( t : α → tactic α ) : α → list expr → list expr → bool → tactic α
+-- | a []        ac progress := guard progress >> set_goals ac >> pure a
+-- | a (g :: gs) ac progress :=
+--   do set_goals [g],
+--      succeeded ← try_core (t a),
+--      new_gs    ← get_goals,
+--      stateful_any_goals_core (succeeded.get_or_else a) gs (ac ++ new_gs) (succeeded.is_some || progress)
 
-/- As `any_goals`, but passing around state encode in α. -/
-meta def stateful_any_goals { α : Type } ( t : α → tactic α ) ( a : α ) : tactic α :=
-do gs ← get_goals,
-   stateful_any_goals_core t a gs [] ff
+-- /- As `any_goals`, but passing around state encode in α. -/
+-- meta def stateful_any_goals { α : Type } ( t : α → tactic α ) ( a : α ) : tactic α :=
+-- do gs ← get_goals,
+--    stateful_any_goals_core t a gs [] ff
 
-/- As `separately_then_together`, but passing around state encode in α. -/
-meta def stateful_separately_then_together { α : Type } ( t : α → tactic α ) ( a : α ) : tactic α :=
-do succeeded ← try_core (stateful_any_goals t a),
-   t (succeeded.get_or_else a) <|> do a ← succeeded | fail "no tactics succeeded", pure a
+-- /- As `separately_then_together`, but passing around state encode in α. -/
+-- meta def stateful_separately_then_together { α : Type } ( t : α → tactic α ) ( a : α ) : tactic α :=
+-- do succeeded ← try_core (stateful_any_goals t a),
+--    t (succeeded.get_or_else a) <|> do a ← succeeded | fail "no tactics succeeded", pure a
 
--- FIXME this is looping
--- arguments are:
--- * remaining steps allowed
--- * have we made progress?
--- * should we apply separately_then_together when there are multiple goals
--- * remaining tactics to try.
-private meta def focus_chain' ( tactics : list (tactic unit) ) : nat → bool → bool → list (tactic unit) → tactic nat
-| 0        progress _ _         := trace "... chain tactic exceeded iteration limit" >> failed   
-| n        progress _ []        := (guard progress <|> fail "chain tactic made no progress") >> pure n
-| (succ n) progress separately (t :: ts) := 
-   do --trace (n, list.length ts),
-      ng ← num_goals,
-      match ng, separately with 
-      | 0, _  := guard progress >> pure n
-      | 1, _  := (if_then_else t (focus_chain' n tt tt tactics) (focus_chain' (succ n) progress tt ts))
-      | _, ff := (if_then_else t (focus_chain' n tt ff tactics) (focus_chain' (succ n) progress ff ts))
-      | _, tt := stateful_separately_then_together (λ m, focus_chain' m progress ff tactics) n
-      end
+-- -- FIXME this is looping
+-- -- arguments are:
+-- -- * remaining steps allowed
+-- -- * have we made progress?
+-- -- * should we apply separately_then_together when there are multiple goals
+-- -- * remaining tactics to try.
+-- private meta def focus_chain' ( tactics : list (tactic unit) ) : nat → bool → bool → list (tactic unit) → tactic nat
+-- | 0        progress _ _         := trace "... chain tactic exceeded iteration limit" >> failed   
+-- | n        progress _ []        := (guard progress <|> fail "chain tactic made no progress") >> pure n
+-- | (succ n) progress separately (t :: ts) := 
+--    do --trace (n, list.length ts),
+--       ng ← num_goals,
+--       match ng, separately with 
+--       | 0, _  := guard progress >> pure n
+--       | 1, _  := (if_then_else t (focus_chain' n tt tt tactics) (focus_chain' (succ n) progress tt ts))
+--       | _, ff := (if_then_else t (focus_chain' n tt ff tactics) (focus_chain' (succ n) progress ff ts))
+--       | _, tt := stateful_separately_then_together (λ m, focus_chain' m progress ff tactics) n
+--       end
 
 private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list (tactic unit) → tactic unit
 | 0        progress _         := trace "... chain tactic exceeded iteration limit" >> failed   

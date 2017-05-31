@@ -2,9 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .natural_transformation
-import .equivalence
-import .products.bifunctors
+import ..natural_transformation
+import ..equivalence
+import ..products.bifunctors
 
 open tqft.categories
 open tqft.categories.isomorphism
@@ -52,7 +52,7 @@ definition {u1 v1 u2 v2 u3 v3} Curry_Functors
 {
       onObjects     := λ F: Functor (C × D) E, {
         onObjects     := λ X, {
-          onObjects     := λ Y, F (X, Y),
+          onObjects     := λ Y, F.onObjects (X, Y),
           onMorphisms   := λ Y Y' g, F.onMorphisms (C.identity X, g),
           identities    := ♯,
           functoriality := ♯

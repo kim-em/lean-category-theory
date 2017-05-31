@@ -19,8 +19,8 @@ definition ProductCategory (C D : Category) :
     identity := λ X, ⟨ C.identity (X.fst), D.identity (X.snd) ⟩,
     compose  := λ _ _ _ f g, (C.compose (f.fst) (g.fst), D.compose (f.snd) (g.snd)),
 
-    left_identity  := ♮,
-    right_identity := ♮,
+    left_identity  := begin intros, simp, end,
+    right_identity := begin intros, simp, end,
     associativity  := ♮
   }
 
