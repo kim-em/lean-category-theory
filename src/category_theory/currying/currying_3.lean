@@ -47,7 +47,7 @@ theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
                     dsimp,
                     repeat { rewrite congr_arg_refl },
                     repeat { rewrite congr_refl_refl },
-                    repeat { rewrite mpr_refl },
+                    dsimp [eq.mpr],
                     simp
                   end,
      witness_2 := begin
@@ -63,7 +63,7 @@ theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
                     dsimp,
                     repeat { rewrite congr_arg_refl },
                     repeat { rewrite congr_refl_refl },
-                    repeat { rewrite mpr_refl },
+                    dsimp [eq.mpr],
                     simp
                   end   
     },
