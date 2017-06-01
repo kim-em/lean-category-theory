@@ -139,11 +139,6 @@ definition {u1 v1 u2 v2 u3 v3} Uncurry_Curry_to_identity
                          simp,
                          dsimp,
                          induction X with X_1 X_2,
-                         dsimp,
-                         unfold pair_equality,
-                         dsimp,
-                         repeat { rewrite congr_arg_refl },
-                         repeat { rewrite congr_refl_refl },
                          dsimp [eq.mpr],
                          simp,
                        end
@@ -187,11 +182,6 @@ definition {u1 v1 u2 v2 u3 v3} identity_to_Uncurry_Curry
                          simp,
                          dsimp,
                          induction X with X_1 X_2,
-                         dsimp,
-                         unfold pair_equality,
-                         dsimp,
-                         repeat { rewrite congr_arg_refl },
-                         repeat { rewrite congr_refl_refl },
                          dsimp [eq.mpr],
                          simp,
                        end

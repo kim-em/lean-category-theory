@@ -42,11 +42,7 @@ theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
                     unfold Uncurry_Curry_to_identity._proof_2,
                     unfold identity_to_Uncurry_Curry._proof_1,
                     unfold identity_to_Uncurry_Curry._proof_2,
-                    unfold pair_equality,
                     unfold_projections,
-                    dsimp,
-                    repeat { rewrite congr_arg_refl },
-                    repeat { rewrite congr_refl_refl },
                     dsimp [eq.mpr],
                     simp
                   end,
@@ -58,11 +54,7 @@ theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
                     unfold Uncurry_Curry_to_identity._proof_2,
                     unfold identity_to_Uncurry_Curry._proof_1,
                     unfold identity_to_Uncurry_Curry._proof_2,
-                    unfold pair_equality,
                     unfold_projections,
-                    dsimp,
-                    repeat { rewrite congr_arg_refl },
-                    repeat { rewrite congr_refl_refl },
                     dsimp [eq.mpr],
                     simp
                   end   
