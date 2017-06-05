@@ -108,26 +108,6 @@ do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, unfold_projections_at' h)) <|> fail "fail no projections to unfold in hypotheses"   
 
-namespace tactic.interactive
-open tactic
-open interactive.types
-private meta def unfold_projections_hyps : list name → tactic unit
-| []      := skip
-| (h::hs) := get_local h >>= unfold_projections_at' >> unfold_projections_hyps hs
- 
-/--
-This tactic unfolds all structure projections.
--/
-meta def unfold_projections' : parse location → tactic unit
-| [] := unfold_projections
-| hs := unfold_projections_hyps hs
-end tactic.interactive
-
--- meta def unfold_hypotheses : tactic unit :=
--- do l ← local_context,
---    s ← simp_lemmas.mk_default,
---    at_least_one (l.reverse.for (λ h, dunfold_and_simp_at s h))
-
 -- We need our own version of dsimp_at_core, which fails when it can't do anything.
 meta def dsimp_at_core' (s : simp_lemmas) (h : expr) : tactic unit :=
 do num_reverted : ℕ ← revert h,
