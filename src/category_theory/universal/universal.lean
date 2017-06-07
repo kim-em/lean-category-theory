@@ -82,6 +82,9 @@ definition Cocones { J C : Category } ( F : Functor J C ) : Category :=
   associativity  := ♯
 }
 
+definition Limit   { J C : Category } ( F : Functor J C ) := TerminalObject (Cones F)
+definition Colimit { J C : Category } ( F : Functor J C ) := InitialObject (Cocones F)
+
 structure Equalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( equalizer : C.Obj )
   ( inclusion : C.Hom equalizer X )
