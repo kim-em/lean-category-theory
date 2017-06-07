@@ -32,8 +32,8 @@ namespace tqft.categories.universal
 --       limitFunctor := {
 --           object     := {
 --               limit         := {
---                   onObjects     := sorry,
---                   onMorphisms   := sorry,
+--                   onObjects     := λ k : K.Obj, sorry,
+--                   onMorphisms   := λ _ _ f, sorry,
 --                   identities    := sorry,
 --                   functoriality := sorry
 --               },
