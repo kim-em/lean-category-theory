@@ -30,15 +30,6 @@ open tactic
 open lean.parser
 open interactive
 
--- meta def force { α : Type } (t : tactic α) : tactic α :=
---   do 
---      hypotheses ← local_context,
---      goals ← get_goals,
---      result ← t,
---      hypotheses' ← local_context,
---      goals' ← get_goals,
---      guard ((goals ≠ goals') || (hypotheses ≠ hypotheses')) <|> fail "force tactic failed",
---      return result
 meta def force { α : Type } (t : tactic α) : tactic α :=
   do 
      goals ← get_goals,
@@ -50,14 +41,6 @@ meta def force { α : Type } (t : tactic α) : tactic α :=
 namespace tactic.interactive
   meta def force (t : itactic) : tactic unit := _root_.force t
 end tactic.interactive
-
--- meta def dunfold_core (m : transparency) (max_steps : nat) (cs : list name) (e : expr) : tactic expr :=
--- let unfold (u : unit) (e : expr) : tactic (unit × expr × bool) := do
---   guard (cs.any e.is_app_of),
---   new_e ← dunfold_expr_core m e,
---   return (u, new_e, tt)
--- in do (c, new_e) ← dsimplify_core () max_steps tt (λ c e, failed) unfold e,
---       return new_e
 
 meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
 let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
@@ -124,17 +107,6 @@ meta def dsimp_hypotheses : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.for (λ h, dsimp_at' h)) <|> fail "dsimp could not simplify any hypothesis"
 
--- FIXME let's try this
--- meta def simp_at_via_rewrite (h : expr) (extra_lemmas : list expr := []) (cfg : simp_config := {}) : tactic unit :=
--- do when (expr.is_local_constant h = ff) (fail "tactic simp_at failed, the given expression is not a hypothesis"),
---    htype ← infer_type h,
---    S     ← simp_lemmas.mk_default,
---    S     ← S.append extra_lemmas,
---    (new_htype, heq) ← simplify S htype cfg,
---    rewrite_at_core reducible tt tt occurrences.all ff heq h
-
--- @[pointwise] lemma {u v} dependent_pair_equality' {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := begin induction X, induction Y, simp at p1, end
-
 -- We make a local version of simp_at, which only succeeds if it changes something, *and* successfully clears the old hypothesis.
 meta def simp_at' (h : expr) (extra_lemmas : list expr := []) (cfg : simp_config := {}) : tactic unit :=
 do when (expr.is_local_constant h = ff) (fail "tactic simp_at failed, the given expression is not a hypothesis"),
@@ -157,7 +129,8 @@ meta def new_names ( e : expr ) : tactic (list name) :=
     n2 ← get_unused_name e.local_pp_name (some 2),
     pure [ n1, n2 ] 
 
-meta def automatic_induction' (h : expr) (t : expr) : tactic unit :=
+meta def automatic_induction_at (h : expr) : tactic unit :=
+do t ← infer_type h,
 match t with
 | `(unit)      := induction h >>= λ x, skip
 | `(punit)     := induction h >>= λ x, skip
@@ -172,10 +145,6 @@ match t with
                       induction h names >> skip
 | _              := failed
 end
-
-meta def automatic_induction_at (h : expr) : tactic unit :=
-do t ← infer_type h,
-   automatic_induction' h t
 
 meta def automatic_induction : tactic unit :=
 do l ← local_context,
@@ -278,12 +247,6 @@ meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> unfold_c
 meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
 end
 
--- meta def monitor_progress { α : Type } ( t : tactic α ) : tactic (bool × α) :=
--- do goals ← get_goals,
---    result ← t,
---    goals' ← get_goals,
---    return (goals ≠ goals', result)
-
 open nat
 
 private meta def if_then_else { α : Type } ( i : tactic unit ) ( t e : tactic α ) : tactic α :=
@@ -296,49 +259,6 @@ do r ← tactic.try_core i,
    | none   := e
    end
 
-/- Applies the tactic to each goal separately, and then, if any goals remain, applies the tactic to all goals together.
-   Succeeds if any one application of the tactic succeeds. -/
--- meta def separately_then_together ( t : tactic unit ) : tactic unit :=
--- do succeeded ← try_core (any_goals t),
---    t <|> guard succeeded.is_some
-
--- private meta def stateful_any_goals_core { α : Type } ( t : α → tactic α ) : α → list expr → list expr → bool → tactic α
--- | a []        ac progress := guard progress >> set_goals ac >> pure a
--- | a (g :: gs) ac progress :=
---   do set_goals [g],
---      succeeded ← try_core (t a),
---      new_gs    ← get_goals,
---      stateful_any_goals_core (succeeded.get_or_else a) gs (ac ++ new_gs) (succeeded.is_some || progress)
-
--- /- As `any_goals`, but passing around state encode in α. -/
--- meta def stateful_any_goals { α : Type } ( t : α → tactic α ) ( a : α ) : tactic α :=
--- do gs ← get_goals,
---    stateful_any_goals_core t a gs [] ff
-
--- /- As `separately_then_together`, but passing around state encode in α. -/
--- meta def stateful_separately_then_together { α : Type } ( t : α → tactic α ) ( a : α ) : tactic α :=
--- do succeeded ← try_core (stateful_any_goals t a),
---    t (succeeded.get_or_else a) <|> do a ← succeeded | fail "no tactics succeeded", pure a
-
--- -- FIXME this is looping
--- -- arguments are:
--- -- * remaining steps allowed
--- -- * have we made progress?
--- -- * should we apply separately_then_together when there are multiple goals
--- -- * remaining tactics to try.
--- private meta def focus_chain' ( tactics : list (tactic unit) ) : nat → bool → bool → list (tactic unit) → tactic nat
--- | 0        progress _ _         := trace "... chain tactic exceeded iteration limit" >> failed   
--- | n        progress _ []        := (guard progress <|> fail "chain tactic made no progress") >> pure n
--- | (succ n) progress separately (t :: ts) := 
---    do --trace (n, list.length ts),
---       ng ← num_goals,
---       match ng, separately with 
---       | 0, _  := guard progress >> pure n
---       | 1, _  := (if_then_else t (focus_chain' n tt tt tactics) (focus_chain' (succ n) progress tt ts))
---       | _, ff := (if_then_else t (focus_chain' n tt ff tactics) (focus_chain' (succ n) progress ff ts))
---       | _, tt := stateful_separately_then_together (λ m, focus_chain' m progress ff tactics) n
---       end
-
 private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list (tactic unit) → tactic unit
 | 0        progress _         := trace "... chain tactic exceeded iteration limit" >> failed   
 | _        progress []        := guard progress <|> fail "chain tactic made no progress"
@@ -347,20 +267,19 @@ private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list
 private def chain_default_max_steps := 500
 
 meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
--- meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := focus_chain' tactics max_steps ff tt tactics >> skip
 
-meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
-   chain [
-      force ( dsimp ),
-      simp,
-      unfold_projections,
+-- meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
+--    chain [
+--       force ( dsimp ),
+--       simp,
+--       unfold_projections,
 
-      dsimp_hypotheses,
-      simp_hypotheses,
-      unfold_projections_hypotheses,
+--       dsimp_hypotheses,
+--       simp_hypotheses,
+--       unfold_projections_hypotheses,
 
-      dunfold_everything
-  ] max_steps
+--       dunfold_everything
+--   ] max_steps
 
 meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [
