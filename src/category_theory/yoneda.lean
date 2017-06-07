@@ -56,7 +56,6 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
    ( Z : F.onObjects Y ) :
      G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
--- PROJECT think about how to write a saner proof.
 theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
   tidy,
@@ -65,7 +64,6 @@ begin
   exact ((fst.onMorphisms a_1) a),
   tidy
 end
-
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
 begin

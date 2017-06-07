@@ -86,12 +86,9 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
         -- We need to construct the map from D.Hom (L P.1) P.2 to D.Hom P.1 (R P.2)
         λ f, C.compose (A.unit.components P.1) (R.onMorphisms f),
       naturality := begin
-                      intros,
-                      pointwise,
-                      intros,
-                      unfold_unfoldable, -- TODO investigate unfolding less here
+                      tidy,
                       repeat { rewrite - C.associativity },
-                      erewrite A.unit_naturality
+                      rewrite A.unit_naturality
                     end
     },
     inverse   := 
@@ -100,36 +97,25 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
         -- We need to construct the map back to D.Hom (L P.1) P.2 from D.Hom P.1 (R P.2)
         λ f, D.compose (L.onMorphisms f) (A.counit.components P.2),
       naturality := begin
-                      intros,
-                      pointwise,
-                      intros,
-                      unfold_unfoldable,
+                      tidy,
                       repeat { rewrite D.associativity },
-                      erewrite - A.counit_naturality
+                      rewrite - A.counit_naturality
                     end
     },
     witness_1 := begin
-                   pointwise,
-                   intros,
-                   pointwise,
-                   intros,
-                   unfold_unfoldable,
-                   erewrite D.associativity,
-                   erewrite A.counit_naturality,
-                   erewrite - D.associativity,
-                   erewrite A.triangle_2,
+                   tidy,
+                   rewrite D.associativity,
+                   rewrite A.counit_naturality,
+                   rewrite - D.associativity,
+                   rewrite A.triangle_2,
                    simp
                  end,
     witness_2 := begin
-                   pointwise,
-                   intros,
-                   pointwise,
-                   intros,
-                   unfold_unfoldable,
-                   erewrite - C.associativity,
-                   erewrite - A.unit_naturality,
-                   erewrite C.associativity,
-                   erewrite A.triangle_1,
+                   tidy,
+                   rewrite - C.associativity,
+                   rewrite - A.unit_naturality,
+                   rewrite C.associativity,
+                   rewrite A.triangle_1,
                    simp
                  end
   }
