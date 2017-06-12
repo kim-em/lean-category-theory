@@ -116,7 +116,7 @@ attribute [simp,ematch] BinaryProduct.left_factorisation BinaryProduct.right_fac
 attribute [pointwise] BinaryProduct.left_projection BinaryProduct.right_projection BinaryProduct.map
 attribute [pointwise] BinaryProduct.uniqueness
 
--- PROJECT: hmm, hlist.indexed_map isn't usable?
+-- PROJECT: hmm, hlist.indexed_map isn't really usable?
 -- structure FiniteProduct { C : Category } ( X : list C.Obj ) :=
 --   ( product       : C.Obj )
 --   ( projection    : hlist (X.map (λ x, C.Hom product x) ) )
@@ -130,6 +130,10 @@ structure Product { C : Category } { I : Type } ( X : I → C.Obj ) :=
   ( map           : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom Z (X i) ), C.Hom Z product )
   ( factorisation : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom Z (X i) ) ( i : I ), C.compose (map f) (projection i) = f i )
   ( uniqueness    : ∀ { Z : C.Obj } ( f g : C.Hom Z product ) ( witness : ∀ i : I, C.compose f (projection i) = C.compose g (projection i)), f = g )
+
+attribute [simp,ematch] Product.factorisation
+attribute [pointwise] Product.projection Product.map
+attribute [pointwise] Product.uniqueness
 
 structure Coequalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( coequalizer   : C.Obj )
@@ -326,15 +330,46 @@ open Two
 --         limit         := equalizer.equalizer,
 --         maps          := λ j : J.Obj, C.compose equalizer.inclusion (product_over_objects.projection j),
 --         commutativity := λ j k f, begin
+--                                    -- PROJECT learn how to use have, show, and calc!
+--                                    note r : C.compose source (product_over_morphisms.projection ⟨j, ⟨k, f⟩⟩) = C.compose (product_over_objects.projection j) (F.onMorphisms f) := ♯,
+--                                    note s : C.compose target (product_over_morphisms.projection ⟨j, ⟨k, f⟩⟩) = product_over_objects.projection k := ♯,
 --                                    note p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,
 --                                    simp at p,
---                                    tidy,
---                                   --  exact p
---                                    admit
+--                                    repeat { rewrite C.associativity at p },
+--                                    rewrite [ r, s ] at p,
+--                                    rewrite - C.associativity at p,
+--                                    exact p,
 --                                   end
 --       },
---       morphisms  := sorry,
---       uniqueness := λ Y f g, sorry
+--       morphisms  := λ cone : Cone F, {
+--         morphism      := /- we need a morphism from the tip of f to the equalizer -/
+--                          equalizer.map
+--                            (product_over_objects.map cone.maps)
+--                            /- we need to provide the evidence that that map composes correctly with source and target -/
+--                            begin
+--                              revert source, revert target,
+--                              simp,
+--                              note p := cone.commutativity,
+--                              admit -- FIXME almost there!
+--                            end,
+--         commutativity := /- we need to show that that map commutes with everything -/
+--           begin
+--             intros,
+--             rewrite - C.associativity,
+--             simp,
+--           end
+--       },
+--       uniqueness := λ cone f g, begin
+--                                   pointwise,
+--                                   pointwise,
+--                                   pointwise,
+--                                   intros,
+--                                   note u := f.commutativity i,
+--                                   note v := g.commutativity i,
+--                                   unfold_projections_hypotheses,
+--                                   repeat { rewrite C.associativity },
+--                                   rewrite [ u, v ],
+--                                 end
 --     }
 -- }
 
