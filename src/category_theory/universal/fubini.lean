@@ -16,12 +16,12 @@ open tqft.categories.natural_transformation
 
 namespace tqft.categories.universal
 
--- structure iterated_limit_for_bifunctor 
---   { J K : Category }
---   { C : Category }
---   ( F : Functor (J × K) C ) :=
---   ( limitFunctor : Limit (Curry_Functors J K C F) )
---   ( limitObject  : Limit (limitFunctor.object.limit) )
+structure iterated_limit_for_bifunctor 
+  { J K : Category }
+  { C : Category }
+  ( F : Functor (J × K) C ) :=
+  ( limitFunctor : Limit (Curry_Functors J K C F) )
+  ( limitObject  : Limit (limitFunctor.object.limit) )
 
 -- -- The dependent sorries here cause a problem described at https://github.com/leanprover/lean/issues/1650
 -- definition Fubini_for_Limits

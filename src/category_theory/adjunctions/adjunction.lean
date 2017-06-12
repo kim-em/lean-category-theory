@@ -2,11 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .natural_transformation
-import .opposites
-import .products.products
-import .isomorphism
-import .types
+import ..natural_transformation
+import ..opposites
+import ..products.products
+import ..isomorphism
+import ..types
 
 open tqft.categories
 open tqft.categories.functor
@@ -74,55 +74,10 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
     blast
   end
 
-definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
-  NaturalIsomorphism
-    (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
-    (FunctorComposition (IdentityFunctor (Opposite C) × R) (HomPairing C))
-
-definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : Adjunction L R ) : HomAdjunction L R := 
-{
-    morphism  := {
-      components := λ P, 
-        -- We need to construct the map from D.Hom (L P.1) P.2 to D.Hom P.1 (R P.2)
-        λ f, C.compose (A.unit.components P.1) (R.onMorphisms f),
-      naturality := begin
-                      tidy,
-                      repeat { rewrite - C.associativity },
-                      rewrite A.unit_naturality
-                    end
-    },
-    inverse   := 
-    {
-      components := λ P, 
-        -- We need to construct the map back to D.Hom (L P.1) P.2 from D.Hom P.1 (R P.2)
-        λ f, D.compose (L.onMorphisms f) (A.counit.components P.2),
-      naturality := begin
-                      tidy,
-                      repeat { rewrite D.associativity },
-                      rewrite - A.counit_naturality
-                    end
-    },
-    witness_1 := begin
-                   tidy,
-                   rewrite D.associativity,
-                   rewrite A.counit_naturality,
-                   rewrite - D.associativity,
-                   rewrite A.triangle_2,
-                   simp
-                 end,
-    witness_2 := begin
-                   tidy,
-                   rewrite - C.associativity,
-                   rewrite - A.unit_naturality,
-                   rewrite C.associativity,
-                   rewrite A.triangle_1,
-                   simp
-                 end
-  }
-
-
-
 -- PROJECT examples
+-- PROJECT left adjoints preserve limits
+-- PROJECT existence in terms of initial objects in comma categories
+-- PROJECT adjoints for functors between functor categories
 -- PROJECT adjoints are unique
 -- PROJECT equivalences can be lifted to adjoint equivalences
 -- PROJECT universal properties of adjunctions
