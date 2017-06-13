@@ -2,7 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ..universal.universal
+import ..monic
+import ..universal.monic
 
 open tqft.categories
 open tqft.categories.initial
@@ -13,7 +14,7 @@ namespace tqft.categories.abelian
 
 -- This is the definition of abelian from Etingof's "Tensor categories"
 
-structure KernelImageCokernelSequence { C : Category } [ ZeroObject C ] { X Y : C.Obj } ( f : C.Hom X Y ) :=
+structure KernelImageCokernelDecomposition { C : Category } [ ZeroObject C ] { X Y : C.Obj } ( f : C.Hom X Y ) :=
   ( kernel                  : Kernel f   )
   ( cokernel                : Cokernel f )
   ( cokernel_of_kernel      : Cokernel (kernel.inclusion)  )
@@ -22,6 +23,18 @@ structure KernelImageCokernelSequence { C : Category } [ ZeroObject C ] { X Y : 
   ( composition_is_morphism : C.compose (C.compose cokernel_of_kernel.projection image_well_defined.morphism) kernel_of_cokernel.inclusion = f )
 
 structure Abelian ( C : Category ) [ ZeroObject C ] := 
-  ( decomposition : ∀ { X Y : C.Obj } ( f : C.Hom X Y ), KernelImageCokernelSequence f )
+  ( decomposition : ∀ { X Y : C.Obj } ( f : C.Hom X Y ), KernelImageCokernelDecomposition f )
+
+-- This is the usual definition
+
+structure Abelian' ( C : Category ) [ ZeroObject C ] :=
+  ( kernel   : ∀ { X Y : C.Obj } ( f : C.Hom X Y ), Kernel f   )
+  ( cokernel : ∀ { X Y : C.Obj } ( f : C.Hom X Y ), Cokernel f )
+  ( monics_are_regular : ∀ { X Y : C.Obj } { f : C.Hom X Y } ( m : Monic f ), RegularMonic f )
+  ( epics_are_regular  : ∀ { X Y : C.Obj } { f : C.Hom X Y } ( m : Epic f  ), RegularEpic f  )
+  
+-- PROJECT show these definitions are equivalent
+
+-- PROJECT define short and long exact sequences, cohomology?
 
 end tqft.categories.abelian
