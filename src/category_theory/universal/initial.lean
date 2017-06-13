@@ -49,4 +49,11 @@ attribute [pointwise,ematch] is_terminal.uniqueness
 
 lemma TerminalObjects_are_unique { C : Category } ( X Y : TerminalObject C ) : Isomorphism C X Y := ♯
 
+class ZeroObject ( C : Category ) :=
+  (object   : C.Obj)
+  (initial  : is_initial  object)
+  (terminal : is_terminal object)
+
+definition ZeroObject.zero_morphism { C : Category } ( Z : ZeroObject C ) ( X Y : C.Obj ) : C.Hom X Y := C.compose (Z.terminal.morphism X) (Z.initial.morphism Y) 
+
 end tqft.categories.initial

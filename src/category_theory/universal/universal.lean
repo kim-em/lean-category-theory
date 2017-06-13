@@ -97,6 +97,9 @@ structure Equalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( factorisation : ∀ { Z : C.Obj } ( k : C.Hom Z X ) ( w : C.compose k f = C.compose k g ), C.compose (map k w) inclusion = k )
   ( uniqueness    : ∀ { Z : C.Obj } ( a b : C.Hom Z equalizer ) ( witness : C.compose a inclusion = C.compose b inclusion ), a = b )
 
+-- Or should we write out yet another structure, and prove it agrees with the equalizer?
+definition Kernel { C : Category } [ Z : ZeroObject C ] { X Y : C.Obj } ( f : C.Hom X Y ) := Equalizer f ( Z.zero_morphism X Y )
+
 attribute [simp,ematch] Equalizer.factorisation
 attribute [pointwise] Equalizer.inclusion Equalizer.map
 attribute [pointwise] Equalizer.uniqueness
@@ -146,6 +149,8 @@ structure Coequalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
 attribute [simp,ematch] Coequalizer.factorisation
 attribute [pointwise] Coequalizer.projection Coequalizer.map
 attribute [pointwise] Coequalizer.uniqueness
+
+definition Cokernel { C : Category } [ Z : ZeroObject C ] { X Y : C.Obj } ( f : C.Hom X Y ) := Coequalizer f ( Z.zero_morphism X Y )
 
 structure BinaryCoproduct { C : Category } ( X Y : C.Obj ) :=
   ( coproduct           : C.Obj )
