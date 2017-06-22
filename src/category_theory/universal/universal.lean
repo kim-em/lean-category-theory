@@ -180,9 +180,6 @@ class Finite ( α : Type ) :=
   ( n : nat )
   ( bijection : Isomorphism CategoryOfTypes α (fin n) )
 
-lemma nat.not_lt_zero : ∀ (n : ℕ), n < 0 → false
-.
-
 instance empty_is_Finite : Finite empty := {
   n := 0,
   bijection := begin
@@ -193,16 +190,14 @@ instance empty_is_Finite : Finite empty := {
                  unfold_projections, 
                  intros, 
                  induction a, 
-                 note p := nat.not_lt_zero val is_lt, -- These two steps are ridiculous; ask how to do this.
-                 induction p,
+                 exfalso, cases is_lt,
                  apply funext,
                  intros,
                  induction x,
                  apply funext,
                  intros,
                  induction x,
-                 note p := nat.not_lt_zero val is_lt, -- These two steps are ridiculous; ask how to do this.
-                 induction p,
+                 exfalso, cases is_lt,
               end
 }
 
@@ -280,6 +275,7 @@ inductive Two : Type
 | _1 : Two
 
 open Two
+
 
 -- FIXME learn how to do this
 -- instance Two_is_Finite : Finite Two := {
