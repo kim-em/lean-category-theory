@@ -33,9 +33,9 @@ definition {u1 v1 u2 v2 u3 v3} Uncurry_Functors
                         rewrite (T.components fst).naturality snd_2,
                         rewrite - E.associativity,
                         rewrite - E.associativity,
-                        note p := T.naturality fst_2,
-                        note p' := congr_arg NaturalTransformation.components p,
-                        note r' := congr_fun p' snd_1,
+                        have p := T.naturality fst_2,
+                        have p' := congr_arg NaturalTransformation.components p,
+                        have r' := congr_fun p' snd_1,
                         tidy,
                         rewrite r',
                       end

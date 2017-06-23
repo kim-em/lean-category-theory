@@ -36,7 +36,7 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
    -- PROJECT improve automation further?
                                   tidy,
                                   -- induction f with T p,
-                                  pose q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f_2,
+                                  let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f_2,
                                   blast
                                 end
 }

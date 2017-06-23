@@ -19,7 +19,7 @@ structure SplitMonic { C : Category } { Y Z : C.Obj } ( f : C.Hom Y Z ) :=
 
 lemma SplitMonic_implies_Monic { C : Category } { Y Z : C.Obj } { f : C.Hom Y Z } ( m : SplitMonic f ) : Monic f := {
     witness := λ _ a b p, begin
-                            note e := congr_arg (λ g, C.compose g m.right_inverse) p,
+                            have e := congr_arg (λ g, C.compose g m.right_inverse) p,
                             simp at e,
                             repeat { rewrite C.associativity at e },
                             repeat { rewrite m.evidence at e },

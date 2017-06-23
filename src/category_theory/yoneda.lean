@@ -78,7 +78,7 @@ begin
     },
     {
         tidy,
-        note q := congr_fun (f.naturality x) (C.identity X),
+        have q := congr_fun (f.naturality x) (C.identity X),
         tidy,
         exact eq.symm q,
     }
@@ -86,9 +86,9 @@ begin
   {
     -- Show it is faithful
     tidy,
-    note q := congr_arg NaturalTransformation.components p,
-    note q' := congr_fun q X,
-    note q'' := congr_fun q' (C.identity X),
+    have q := congr_arg NaturalTransformation.components p,
+    have q' := congr_fun q X,
+    have q'' := congr_fun q' (C.identity X),
     tidy,
     exact q'',
   }

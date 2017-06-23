@@ -72,7 +72,7 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
                        simp
                      },
                      {
-                      pose p := ih_1 g,
+                      let p := ih_1 g,
                       unfold concatenate_paths,
                       unfold path_to_morphism,
                       rewrite p,

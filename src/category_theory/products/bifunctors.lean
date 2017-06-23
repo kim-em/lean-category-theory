@@ -31,7 +31,7 @@ namespace tqft.categories.products
   : @Functor.onMorphisms _ _ F (W, X) (W, Z) (C.identity W, D.compose f g) =
       E.compose (@Functor.onMorphisms _ _ F (W, X) (W, Y) (C.identity W, f)) (@Functor.onMorphisms _ _ F (W, Y) (W, Z) (C.identity W, g)) :=
 begin
-  note p := @Functor.functoriality _ _ F (W, X) (W, Y) (W, Z) (C.identity W, f) (C.identity W, g),
+  have p := @Functor.functoriality _ _ F (W, X) (W, Y) (W, Z) (C.identity W, f) (C.identity W, g),
   tidy,
   exact p
 end
@@ -48,7 +48,7 @@ end
   : @Functor.onMorphisms _ _ F (X, W) (Z, W) (C.compose f g, D.identity W) =
       E.compose (@Functor.onMorphisms _ _ F (X, W) (Y, W) (f, D.identity W)) (@Functor.onMorphisms _ _ F (Y, W) (Z, W) (g, D.identity W)) :=
 begin
-  note p := @Functor.functoriality _ _ F (X, W) (Y, W) (Z, W) (f, D.identity W) (g, D.identity W),
+  have p := @Functor.functoriality _ _ F (X, W) (Y, W) (Z, W) (f, D.identity W) (g, D.identity W),
   tidy,
   exact p
 end
@@ -65,7 +65,7 @@ end
   : E.compose (@Functor.onMorphisms _ _ F (X, Y) (X, Y') (C.identity X, g)) (@Functor.onMorphisms _ _ F (X, Y') (X', Y') (f, D.identity Y')) =
    @Functor.onMorphisms _ _ F (X, Y) (X', Y') (f, g) :=
 begin
-  note p := eq.symm (@Functor.functoriality _ _ F (X, Y) (X, Y') (X', Y') (C.identity X, g) (f, D.identity Y')),
+  have p := eq.symm (@Functor.functoriality _ _ F (X, Y) (X, Y') (X', Y') (C.identity X, g) (f, D.identity Y')),
   tidy,
   exact p
 end
@@ -82,7 +82,7 @@ end
   : E.compose (@Functor.onMorphisms _ _ F (X, Y) (X', Y) (f, D.identity Y)) (@Functor.onMorphisms _ _ F (X', Y) (X', Y') (C.identity X', g)) =
    @Functor.onMorphisms _ _ F (X, Y) (X', Y') (f, g) :=
 begin
-  note p := eq.symm (@Functor.functoriality _ _ F (X, Y) (X', Y) (X', Y') (f, D.identity Y) (C.identity X', g)),
+  have p := eq.symm (@Functor.functoriality _ _ F (X, Y) (X', Y) (X', Y') (f, D.identity Y) (C.identity X', g)),
   tidy,
   exact p
 end

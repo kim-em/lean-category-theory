@@ -36,7 +36,7 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
     induction α with f g wα1 wα2,
     induction β with h k wβ1 wβ2,
     simp at w,    
-    assert p : g = k,
+    have p : g = k,
       begin
         -- PROJECT why can't we automate this?
         rewrite - C.left_identity k,

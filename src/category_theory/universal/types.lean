@@ -13,8 +13,8 @@ definition {u} Types_has_Products : has_Products CategoryOfTypes.{u} := {
     factorisation := ♯,
     uniqueness    := begin
                        tidy,
-                       note p := witness x_1,
-                       note q := congr_fun p x,
+                       have p := witness x_1,
+                       have q := congr_fun p x,
                        dsimp at q,
                        exact q
                      end
@@ -29,8 +29,8 @@ definition {u} Types_has_Coproducts : has_Coproducts CategoryOfTypes.{u} := {
     factorisation := ♯,
     uniqueness    := begin
                        tidy,
-                       note p := witness fst,
-                       note q := congr_fun p snd,
+                       have p := witness fst,
+                       have q := congr_fun p snd,
                        dsimp at q,
                        exact q
                      end
@@ -52,7 +52,7 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
                        },
                        {
                          tidy,
-                         note p := congr_fun w a, -- FIXME weird that I can use `note` then `exact`, but can't just use `exact` in one step.
+                         have p := congr_fun w a, -- FIXME weird that I can use `have` then `exact`, but can't just use `exact` in one step.
                          exact p
                        }
                     end,

@@ -76,7 +76,7 @@ let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
 in do (tt, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unfold e | fail "no projections to unfold",
       return new_e
 
-meta def unfold_projections : tactic unit :=
+meta def unfold_projections' : tactic unit :=
 target >>= unfold_projections_core' semireducible default_max_steps >>= change
 
 meta def unfold_projections_at' (h : expr) : tactic unit :=
@@ -290,7 +290,7 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
       pointwise,
 
       force ( dsimp ),
-      unfold_projections,
+      unfold_projections',
       simp,
 
       force ( intros >> skip ),

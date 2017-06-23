@@ -32,8 +32,8 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   begin
     induction α with α_components α_naturality,
     induction β with β_components β_naturality,
-    have hc : α_components = β_components, from funext w,
-    by subst hc
+    have hc : α_components = β_components := funext w,
+    subst hc
   end
 
 definition {u1 v1 u2 v2} IdentityNaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } (F : Functor C D) : NaturalTransformation F F :=
@@ -197,7 +197,7 @@ definition NaturalIsomorphism.from_components
     inverse   := {
       components := λ X, (components X).inverse,
       naturality := λ X Y f, begin
-                               pose p := congr_arg (λ f : D.Hom (F.onObjects X) (G.onObjects Y), D.compose (components X).inverse (D.compose f (components Y).inverse)) (eq.symm (naturality f)),
+                               let p := congr_arg (λ f : D.Hom (F.onObjects X) (G.onObjects Y), D.compose (components X).inverse (D.compose f (components Y).inverse)) (eq.symm (naturality f)),
                                simp at p,
                                rewrite D.associativity at p,
                                rewrite D.associativity at p,

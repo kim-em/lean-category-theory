@@ -67,9 +67,9 @@ lemma {u1 v1 u2 v2} Functors_pointwise_equal
 begin
   induction F with F_onObjects F_onMorphisms,
   induction G with G_onObjects G_onMorphisms,
-  assert h_objects : F_onObjects = G_onObjects, exact funext objectWitness,
+  have h_objects : F_onObjects = G_onObjects, exact funext objectWitness,
   subst h_objects,
-  assert h_morphisms : @F_onMorphisms = @G_onMorphisms, 
+  have h_morphisms : @F_onMorphisms = @G_onMorphisms, 
   apply funext, intro X, apply funext, intro Y, apply funext, intro f,
   exact morphismWitness X Y f,
   subst h_morphisms

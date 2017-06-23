@@ -333,7 +333,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
         maps          := λ j : J.Obj, C.compose equalizer.inclusion (product_over_objects.projection j),
         commutativity := λ j k f, begin
                                    -- PROJECT learn how to use have, show, and calc!
-                                   note p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,
+                                   have p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,
                                    simp at p,
                                    repeat { rewrite C.associativity at p },
                                    rewrite [ source_projection_lemma, target_projection_lemma ] at p,
@@ -367,8 +367,8 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
                                   pointwise,
                                   pointwise,
                                   intros,
-                                  note u := f.commutativity i,
-                                  note v := g.commutativity i,
+                                  have u := f.commutativity i,
+                                  have v := g.commutativity i,
                                   unfold_projections_hypotheses,
                                   repeat { rewrite C.associativity },
                                   rewrite [ u, v ],
