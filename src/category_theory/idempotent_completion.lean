@@ -61,25 +61,24 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
   FunctorComposition (functor_to_IdempotentCompletion C) F
 
 -- PROJECT prove these lemmas about idempotent completion
-
-lemma IdempotentCompletion_idempotent ( C : Category ) :
-  Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
-{
-  functor := {
-    onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin tidy, induction X, tidy, exact congr_arg subtype.val witness, end ⟩,
-    onMorphisms   := λ X Y f, ⟨ f.val.val, begin tidy, exact congr_arg subtype.val f_2.right, unfold_projections at f, have p := f.property.right, tidy, exact congr_arg subtype.val p, end ⟩,
-    identities    := ♮,
-    functoriality := ♮
-  },
-  inverse := {
-    onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
-    onMorphisms   := λ X Y f, ⟨ f, begin tidy, end ⟩,
-    identities    := ♮,
-    functoriality := ♮
-  },
-  isomorphism_1 := sorry,
-  isomorphism_2 := sorry
-}
+-- lemma IdempotentCompletion_idempotent ( C : Category ) :
+--   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
+-- {
+--   functor := {
+--     onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin tidy, induction X, tidy, exact congr_arg subtype.val witness, end ⟩,
+--     onMorphisms   := λ X Y f, ⟨ f.val.val, begin tidy, exact congr_arg subtype.val f_2.right, unfold_projections at f, have p := f.property.right, tidy, exact congr_arg subtype.val p, end ⟩,
+--     identities    := ♮,
+--     functoriality := ♮
+--   },
+--   inverse := {
+--     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
+--     onMorphisms   := λ X Y f, ⟨ f, begin tidy, admit, admit, end ⟩,
+--     identities    := ♮,
+--     functoriality := ♮
+--   },
+--   isomorphism_1 := sorry,
+--   isomorphism_2 := sorry
+-- }
 
 -- definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
 --   Functor (IdempotentCompletion C) (IdempotentCompletion D) := 
