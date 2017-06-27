@@ -113,9 +113,11 @@ definition ParallelPair_homomorphism { C : Category } { α β : C.Obj } ( f g : 
                          end
 }
 
-definition BinaryProduct   { C : Category } ( α β : C.Obj )                     := Limit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
+definition BinaryProduct   { C : Category } ( α β : C.Obj )                     := Limit   (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
 definition BinaryCoproduct { C : Category } ( α β : C.Obj )                     := Colimit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
-definition Equalizer       { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Limit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
+definition {u} Product     { C : Category } { I : Type u } ( X : I → C.Obj )   := Limit   (Functor.fromFunction X)
+definition {u} Coproduct   { C : Category } { I : Type u } ( X : I → C.Obj )   := Colimit (Functor.fromFunction X)
+definition Equalizer       { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Limit   (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
 definition Coequalizer     { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Colimit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
 
 end tqft.categories.comma

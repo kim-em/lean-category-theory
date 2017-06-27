@@ -90,7 +90,6 @@ begin
     have q' := congr_fun q X,
     have q'' := congr_fun q' (C.identity X),
     tidy,
-    exact q'',
   }
 end
 

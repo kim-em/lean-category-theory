@@ -18,7 +18,7 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
 {
     morphism  := {
       components := λ P, 
-        -- We need to construct the map from D.Hom (L P.1) P.2 to D.Hom P.1 (R P.2)
+        -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
         λ f, C.compose (A.unit.components P.1) (R.onMorphisms f),
       naturality := begin
                       tidy,
@@ -29,7 +29,7 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
     inverse   := 
     {
       components := λ P, 
-        -- We need to construct the map back to D.Hom (L P.1) P.2 from D.Hom P.1 (R P.2)
+        -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
         λ f, D.compose (L.onMorphisms f) (A.counit.components P.2),
       naturality := begin
                       tidy,

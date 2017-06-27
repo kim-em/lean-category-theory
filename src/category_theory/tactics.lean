@@ -137,6 +137,7 @@ match t with
 | `(empty)     := induction h >>= λ x, skip
 | `(ulift _)   := induction h >>= λ x, skip
 | `(plift _)   := induction h >>= λ x, skip
+| `(eq _ _)    := induction h >>= λ x, skip
 | `(prod _ _)  := do names ← new_names h,
                       induction h >> skip
 | `(sigma _)   := do names ← new_names h,
