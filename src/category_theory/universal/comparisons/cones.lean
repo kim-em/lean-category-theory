@@ -33,9 +33,8 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
 {
   morphism      := f.val.1,
   commutativity := λ j : J.Obj, begin
-   -- PROJECT improve automation further?
-                                  tidy,
-                                  -- induction f with T p,
+   -- PROJECT improve automation?
+                                  tidy,                                  
                                   let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f_2,
                                   blast
                                 end
@@ -68,12 +67,12 @@ definition Cones_to_comma_Cones { J C : Category } ( F : Functor J C ) : Functor
     functoriality := ♯
   }
 
--- TODO this is really slow
--- definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
---   functor := comma_Cones_to_Cones F,
---   inverse := Cones_to_comma_Cones F,
---   isomorphism_1 := ♯,
---   isomorphism_2 := ♯
--- }
+-- PROJECT speed this up
+definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
+  functor := comma_Cones_to_Cones F,
+  inverse := Cones_to_comma_Cones F,
+  isomorphism_1 := ♯,
+  isomorphism_2 := ♯
+}
 
 end tqft.categories.universal

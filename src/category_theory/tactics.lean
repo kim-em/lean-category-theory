@@ -285,7 +285,6 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
    chain [
       tactic.triv,
       force ( reflexivity ),
-      -- assumption, -- FIXME this is dangerous; really should only be applied when there are no dependent goals!
 
       pointwise,
 
