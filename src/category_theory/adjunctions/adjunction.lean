@@ -18,10 +18,10 @@ open tqft.categories.types
 namespace tqft.categories.adjunction
 
 structure Adjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
-  ( unit          : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
-  ( counit        : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) )
-  ( triangle_1   : ∀ X : D.Obj, C.compose (unit.components (R.onObjects X)) (R.onMorphisms (counit.components X)) = C.identity (R.onObjects X) )
-  ( triangle_2   : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L.onObjects X)) = D.identity (L.onObjects X) )
+  ( unit       : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
+  ( counit     : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) )
+  ( triangle_1 : ∀ X : D.Obj, C.compose (unit.components (R.onObjects X)) (R.onMorphisms (counit.components X)) = C.identity (R.onObjects X) )
+  ( triangle_2 : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L.onObjects X)) = D.identity (L.onObjects X) )
 
 attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
@@ -34,7 +34,6 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
     induction B,
     blast
   end
-
 
 -- PROJECT: from an adjunction construct the triangles as equations between natural transformations.
 -- definition Triangle_1
