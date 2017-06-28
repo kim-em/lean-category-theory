@@ -14,15 +14,28 @@ open tqft.categories.util
 
 namespace tqft.categories.universal
 
-class Complete ( C : Category ) := 
-  ( limit : Π { J : Category } ( F : Functor J C ), Limit F )
+class {u v} Complete ( C : Category.{u v} ) := 
+  ( limitCone : Π { J : Category.{u v} } ( F : Functor J C ), LimitCone F )
 
--- FIXME why on earth doesn't this work?
--- definition limit { C : Category } [ Complete C ] { J : Category } ( F : Functor J C ) := Complete.limit F
+definition {u v} limitCone { C : Category.{u v} } [ Complete.{u v} C ] { J : Category.{u v} } ( F : Functor J C ) := Complete.limitCone F
+definition {u v} limit     { C : Category.{u v} } [ Complete.{u v} C ] { J : Category.{u v} } ( F : Functor J C ) := (Complete.limitCone F).object.limit
 
 -- TODO might be easiest to first do Product and comma.Product comparison
 -- instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C := {
 --     product := 
+-- }
+
+-- definition {u v} Limit { J C : Category.{u v} } [ cmp : Complete C ] : Functor (FunctorCategory J C) C := {
+--   onObjects     := λ F, (limitCone F).object.limit,
+--   onMorphisms   := λ F G τ, let lim_F := (limitCone F) in
+--                             let lim_G := (limitCone G) in
+--                               (lim_G.morphisms {
+--                                 limit := _,
+--                                 maps  := (λ j, C.compose (lim_F.object.maps j) (τ.components j)),
+--                                 commutativity := ♯ 
+--                               }).morphism,
+--   identities    := begin tidy, simp [C.right_identity], end,
+--   functoriality := sorry
 -- }
 
 private definition evaluate_Functor_to_FunctorCategory { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c : C.Obj ) : Functor J D := {
@@ -40,12 +53,11 @@ private definition evaluate_Functor_to_FunctorCategory_on_Morphism { J C D : Cat
 
 -- PROJECT
 -- instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Complete (FunctorCategory C D) := {
---   limit := λ J F, {
+--   limitCone := λ J F, {
 --     object     := {
 --       -- TODO the whole definition of limit should come down to the fact that limits are functorial
 --       limit         := {
---         -- See the FIXME above: why all the boilerplate here?
---         onObjects     := λ c, (@Complete.limit D cmp J (evaluate_Functor_to_FunctorCategory F c)).object.limit,
+--         onObjects     := λ c, limit (evaluate_Functor_to_FunctorCategory F c),
 --         onMorphisms   := λ c c' f, sorry,
 --         identities    := sorry,
 --         functoriality := sorry
@@ -59,7 +71,7 @@ private definition evaluate_Functor_to_FunctorCategory_on_Morphism { J C D : Cat
 -- }
 
 instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ] [ has_Equalizers C ] : Complete C := {
-  limit := λ J F,
+  limitCone := λ J F,
     let product_over_objects   := product (F.onObjects) in
     let product_over_morphisms := product (λ f : ( Σ s : J.Obj, Σ t : J.Obj, J.Hom s t ), F.onObjects f.2.1) in
     let source    := product_over_morphisms.map (λ f, C.compose (product_over_objects.projection f.1) (F.onMorphisms f.2.2) )  in
