@@ -6,6 +6,7 @@ import .universal
 
 open tqft.categories
 open tqft.categories.functor
+open tqft.categories.natural_transformation
 open tqft.categories.isomorphism
 open tqft.categories.initial
 open tqft.categories.types
@@ -16,9 +17,46 @@ namespace tqft.categories.universal
 class Complete ( C : Category ) := 
   ( limit : Π { J : Category } ( F : Functor J C ), Limit F )
 
-instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C := {
-    product := 
+-- FIXME why on earth doesn't this work?
+-- definition limit { C : Category } [ Complete C ] { J : Category } ( F : Functor J C ) := Complete.limit F
+
+-- TODO might be easiest to first do Product and comma.Product comparison
+-- instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C := {
+--     product := 
+-- }
+
+private definition evaluate_Functor_to_FunctorCategory { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c : C.Obj ) : Functor J D := {
+  onObjects     := λ j, (F.onObjects j).onObjects c,
+  onMorphisms   := λ _ _ f, (F.onMorphisms f).components c,
+  identities    := ♯,
+  functoriality := ♯ 
 }
+
+private definition evaluate_Functor_to_FunctorCategory_on_Morphism { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c c' : C.Obj ) ( f : C.Hom c c' )
+  : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
+    components := λ j, (F.onObjects j).onMorphisms f,
+    naturality := ♯ 
+  }
+
+-- PROJECT
+-- instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Complete (FunctorCategory C D) := {
+--   limit := λ J F, {
+--     object     := {
+--       -- TODO the whole definition of limit should come down to the fact that limits are functorial
+--       limit         := {
+--         -- See the FIXME above: why all the boilerplate here?
+--         onObjects     := λ c, (@Complete.limit D cmp J (evaluate_Functor_to_FunctorCategory F c)).object.limit,
+--         onMorphisms   := λ c c' f, sorry,
+--         identities    := sorry,
+--         functoriality := sorry
+--       },
+--       maps          := sorry,
+--       commutativity := sorry
+--     },
+--     morphisms  := sorry,
+--     uniqueness := sorry
+--   }
+-- }
 
 instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ] [ has_Equalizers C ] : Complete C := {
   limit := λ J F,

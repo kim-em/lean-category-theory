@@ -226,9 +226,6 @@ class has_Equalizers ( C : Category ) :=
 class has_Coequalizers ( C : Category ) :=
   ( coequalizer : Π { X Y : C.Obj } ( f g : C.Hom X Y ), Coequalizer f g )
 
-def {u} empty_function           { α : Sort u } : empty → α := ♯
-def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i := ♯
-
 definition initial_object { C : Category } [ has_InitialObject C ] : C.Obj := has_InitialObject.initial_object C
 definition terminal_object { C : Category } [ has_TerminalObject C ] : C.Obj := has_TerminalObject.terminal_object C
 
@@ -242,6 +239,9 @@ definition coproduct { C : Category } [ has_Coproducts C ] { I : Type } ( f : I 
 
 definition equalizer { C : Category } [ has_Equalizers C ] { X Y : C.Obj } ( f g : C.Hom X Y ) := has_Equalizers.equalizer f g
 definition coequalizer { C : Category } [ has_Coequalizers C ] { X Y : C.Obj } ( f g : C.Hom X Y ) := has_Coequalizers.coequalizer f g
+
+def {u} empty_function           { α : Sort u } : empty → α := ♯
+def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i := ♯
 
 instance FiniteProducts_give_a_TerminalObject ( C : Category ) [ has_FiniteProducts C ] : has_TerminalObject C := {
   terminal_object :=
