@@ -12,48 +12,48 @@ open tqft.categories.isomorphism
 namespace tqft.categories.initial
 
 structure InitialObject ( C : Category ) :=
-  (object : C.Obj)
-  (morphisms : ∀ Y : C.Obj, C.Hom object Y)
-  (uniqueness : ∀ Y : C.Obj, ∀ f g : C.Hom object Y, f = g)
+  (initial_object                              : C.Obj)
+  (morphism_from_initial_object_to             : ∀ Y : C.Obj, C.Hom initial_object Y)
+  (uniqueness_of_morphisms_from_initial_object : ∀ Y : C.Obj, ∀ f g : C.Hom initial_object Y, f = g)
 
-attribute [pointwise] InitialObject.morphisms
-attribute [pointwise,ematch] InitialObject.uniqueness
+attribute [pointwise] InitialObject.morphism_from_initial_object_to
+attribute [pointwise,ematch] InitialObject.uniqueness_of_morphisms_from_initial_object
 
 instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObject C) (C.Obj) :=
-  { coe := InitialObject.object }
+  { coe := InitialObject.initial_object }
 
 structure is_initial { C : Category } ( X : C.Obj ) :=
-  (morphism : ∀ Y : C.Obj, C.Hom X Y)
-  (uniqueness :  ∀ Y : C.Obj, ∀ f : C.Hom X Y, f = morphism Y)
+  (morphism_from_initial_object_to           : ∀ Y : C.Obj, C.Hom X Y)
+  (uniqueness_of_morphisms_from_initial_object : ∀ Y : C.Obj, ∀ f : C.Hom X Y, f = morphism_from_initial_object_to Y)
 
-attribute [pointwise,ematch] is_initial.uniqueness
+attribute [pointwise,ematch] is_initial.uniqueness_of_morphisms_from_initial_object
 
 lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Isomorphism C X Y := ♯
 
 structure TerminalObject ( C : Category ) :=
-  (object : C.Obj)
-  (morphisms : ∀ Y : C.Obj, C.Hom Y object)
-  (uniqueness : ∀ Y : C.Obj, ∀ f g : C.Hom Y object, f = g)
+  (terminal_object                            : C.Obj)
+  (morphism_to_terminal_object_from           : ∀ Y : C.Obj, C.Hom Y terminal_object)
+  (uniqueness_of_morphisms_to_terminal_object : ∀ Y : C.Obj, ∀ f g : C.Hom Y terminal_object, f = g)
 
-attribute [pointwise] TerminalObject.morphisms
-attribute [pointwise,ematch] TerminalObject.uniqueness
+attribute [pointwise] TerminalObject.morphism_to_terminal_object_from
+attribute [pointwise,ematch] TerminalObject.uniqueness_of_morphisms_to_terminal_object
 
 instance TerminalObject_coercion_to_object { C : Category } : has_coe (TerminalObject C) (C.Obj) :=
-  { coe := TerminalObject.object }
+  { coe := TerminalObject.terminal_object }
 
 structure is_terminal { C : Category } ( X : C.Obj ) :=
-  (morphism : ∀ Y : C.Obj, C.Hom Y X)
-  (uniqueness :  ∀ Y : C.Obj, ∀ f : C.Hom Y X, f = morphism Y)
+  (morphism_to_terminal_object_from : ∀ Y : C.Obj, C.Hom Y X)
+  (uniqueness_of_morphisms_to_terminal_object :  ∀ Y : C.Obj, ∀ f : C.Hom Y X, f = morphism_to_terminal_object_from Y)
 
-attribute [pointwise,ematch] is_terminal.uniqueness
+attribute [pointwise,ematch] is_terminal.uniqueness_of_morphisms_to_terminal_object
 
 lemma TerminalObjects_are_unique { C : Category } ( X Y : TerminalObject C ) : Isomorphism C X Y := ♯
 
 class ZeroObject ( C : Category ) :=
-  (object   : C.Obj)
-  (initial  : is_initial  object)
-  (terminal : is_terminal object)
+  (zero_object : C.Obj)
+  (is_initial  : is_initial  zero_object)
+  (is_terminal : is_terminal zero_object)
 
-definition ZeroObject.zero_morphism { C : Category } ( Z : ZeroObject C ) ( X Y : C.Obj ) : C.Hom X Y := C.compose (Z.terminal.morphism X) (Z.initial.morphism Y) 
+definition ZeroObject.zero_morphism { C : Category } ( Z : ZeroObject C ) ( X Y : C.Obj ) : C.Hom X Y := C.compose (Z.is_terminal.morphism_to_terminal_object_from X) (Z.is_initial.morphism_from_initial_object_to Y) 
 
 end tqft.categories.initial

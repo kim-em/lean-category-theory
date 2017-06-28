@@ -19,15 +19,15 @@ open tqft.categories.util
 namespace tqft.categories.universal
 
 structure Cone { J C : Category } ( F : Functor J C ) :=
-  ( limit : C.Obj )
-  ( maps  : Π j : J.Obj, C.Hom limit (F.onObjects j) )
-  ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (maps j) (F.onMorphisms f) = maps k )
+  ( cone_point    : C.Obj )
+  ( cone_maps     : Π j : J.Obj, C.Hom cone_point (F.onObjects j) )
+  ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (cone_maps j) (F.onMorphisms f) = cone_maps k )
 
 attribute [simp,ematch] Cone.commutativity
 
 structure ConeMorphism { J C : Category } { F : Functor J C } ( X Y : Cone F ) :=
-  ( morphism : C.Hom X.limit Y.limit )
-  ( commutativity : Π j : J.Obj, C.compose morphism (Y.maps j) = (X.maps j) )
+  ( morphism      : C.Hom X.cone_point Y.cone_point )
+  ( commutativity : Π j : J.Obj, C.compose morphism (Y.cone_maps j) = (X.cone_maps j) )
 
 attribute [simp,ematch] ConeMorphism.commutativity
 
@@ -46,22 +46,22 @@ definition Cones { J C : Category } ( F : Functor J C ) : Category :=
   Obj            := Cone F,
   Hom            := λ X Y, ConeMorphism X Y,
   compose        := λ X Y Z f g, ⟨ C.compose f.morphism g.morphism, ♮ ⟩,
-  identity       := λ X, ⟨ C.identity X.limit, ♮ ⟩,
+  identity       := λ X, ⟨ C.identity X.cone_point, ♮ ⟩,
   left_identity  := ♯,
   right_identity := ♯,
   associativity  := ♯
 }
 
 structure Cocone { J C : Category } ( F : Functor J C ) :=
-  ( colimit : C.Obj )
-  ( maps  : Π j : J.Obj, C.Hom (F.onObjects j) colimit )
-  ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (F.onMorphisms f) (maps k) = maps j )
+  ( cocone_point  : C.Obj )
+  ( cocone_maps   : Π j : J.Obj, C.Hom (F.onObjects j) cocone_point )
+  ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (F.onMorphisms f) (cocone_maps k) = cocone_maps j )
 
 local attribute [simp,ematch] Cocone.commutativity
 
 structure CoconeMorphism { J C : Category } { F : Functor J C } ( X Y : Cocone F ) :=
-  ( morphism : C.Hom X.colimit Y.colimit )
-  ( commutativity : Π j : J.Obj, C.compose (X.maps j) morphism = (Y.maps j) )
+  ( morphism      : C.Hom X.cocone_point Y.cocone_point )
+  ( commutativity : Π j : J.Obj, C.compose (X.cocone_maps j) morphism = (Y.cocone_maps j) )
 
 local attribute [simp,ematch] CoconeMorphism.commutativity
 
@@ -80,14 +80,14 @@ definition Cocones { J C : Category } ( F : Functor J C ) : Category :=
   Obj            := Cocone F,
   Hom            := λ X Y, CoconeMorphism X Y,
   compose        := λ X Y Z f g, ⟨ C.compose f.morphism g.morphism, ♮ ⟩,
-  identity       := λ X, ⟨ C.identity X.colimit, ♮ ⟩,
+  identity       := λ X, ⟨ C.identity X.cocone_point, ♮ ⟩,
   left_identity  := ♯,
   right_identity := ♯,
   associativity  := ♯
 }
 
-definition Limit   { J C : Category } ( F : Functor J C ) := TerminalObject (Cones F)
-definition Colimit { J C : Category } ( F : Functor J C ) := InitialObject (Cocones F)
+definition LimitCone   { J C : Category } ( F : Functor J C ) := TerminalObject (Cones F)
+definition ColimitCone { J C : Category } ( F : Functor J C ) := InitialObject (Cocones F)
 
 structure Equalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( equalizer     : C.Obj )
@@ -127,11 +127,11 @@ attribute [pointwise] BinaryProduct.uniqueness
 --   ( factorisation : ∀ { Z : C.Obj } ( f : hlist (X.map (λ x, C.Hom Z x) ) ), sorry )
 --   ( uniqueness    : ∀ { Z : C.Obj } ( f g : C.Hom Z product ) ( witness : hlist.indexed_map (λ x p, C.compose f p = C.compose g p) X projection  ), f = g )
 
-structure Product { C : Category } { I : Type } ( X : I → C.Obj ) :=
+structure Product { C : Category } { I : Type } ( F : I → C.Obj ) :=
   ( product       : C.Obj )
-  ( projection    : Π i : I, C.Hom product (X i) )
-  ( map           : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom Z (X i) ), C.Hom Z product )
-  ( factorisation : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom Z (X i) ) ( i : I ), C.compose (map f) (projection i) = f i )
+  ( projection    : Π i : I, C.Hom product (F i) )
+  ( map           : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom Z (F i) ), C.Hom Z product )
+  ( factorisation : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom Z (F i) ) ( i : I ), C.compose (map f) (projection i) = f i )
   ( uniqueness    : ∀ { Z : C.Obj } ( f g : C.Hom Z product ) ( witness : ∀ i : I, C.compose f (projection i) = C.compose g (projection i)), f = g )
 
 attribute [simp,ematch] Product.factorisation
@@ -201,8 +201,8 @@ instance empty_is_Finite : Finite empty := {
               end
 }
 
-class has_TerminalObject ( C : Category ) :=
-  ( terminal_object : TerminalObject C )
+class has_InitialObject ( C : Category ) :=
+  ( initial_object : InitialObject C )
 
 class has_BinaryProducts ( C : Category ) :=
   ( binary_product : Π X Y : C.Obj, BinaryProduct X Y )
@@ -211,8 +211,8 @@ class has_FiniteProducts ( C : Category ) :=
 class has_Products ( C : Category ) :=
   ( product : Π { I : Type } ( f : I → C.Obj ), Product f )
 
-class has_InitialObject ( C : Category ) :=
-  ( initial_object : InitialObject C )
+class has_TerminalObject ( C : Category ) :=
+  ( terminal_object : TerminalObject C )
 
 class has_BinaryCoproducts ( C : Category ) :=
   ( binary_coproduct : Π X Y : C.Obj, BinaryCoproduct X Y )
@@ -231,11 +231,11 @@ definition terminal_object { C : Category } [ has_TerminalObject C ] : C.Obj := 
 
 definition binary_product { C : Category } [ has_BinaryProducts C ] ( X Y : C.Obj ) := has_BinaryProducts.binary_product X Y
 definition finite_product { C : Category } [ has_FiniteProducts C ] { I : Type } [ fin : Finite I ] ( f : I → C.Obj ) := @has_FiniteProducts.product C _ I fin f
-definition product { C : Category } [ has_Products C ] { I : Type } ( f : I → C.Obj ) := has_Products.product f
+definition product { C : Category } [ has_Products C ] { I : Type } ( F : I → C.Obj ) := has_Products.product F
 
 definition binary_coproduct { C : Category } [ has_BinaryCoproducts C ] ( X Y : C.Obj ) := has_BinaryCoproducts.binary_coproduct X Y
 definition finite_coproduct { C : Category } [ has_FiniteCoproducts C ] { I : Type } [ fin : Finite I ] ( f : I → C.Obj ) := @has_FiniteCoproducts.coproduct C _ I fin f
-definition coproduct { C : Category } [ has_Coproducts C ] { I : Type } ( f : I → C.Obj ) := has_Coproducts.coproduct f
+definition coproduct { C : Category } [ has_Coproducts C ] { I : Type } ( F : I → C.Obj ) := has_Coproducts.coproduct F
 
 definition equalizer { C : Category } [ has_Equalizers C ] { X Y : C.Obj } ( f g : C.Hom X Y ) := has_Equalizers.equalizer f g
 definition coequalizer { C : Category } [ has_Coequalizers C ] { X Y : C.Obj } ( f g : C.Hom X Y ) := has_Coequalizers.coequalizer f g
@@ -246,9 +246,9 @@ def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i :=
 instance FiniteProducts_give_a_TerminalObject ( C : Category ) [ has_FiniteProducts C ] : has_TerminalObject C := {
   terminal_object :=
   let empty_product := @has_FiniteProducts.product C _ empty _ empty_function in {
-    object     := empty_product.product,
-    morphisms  := λ X, empty_product.map empty_dependent_function,
-    uniqueness := λ X f g, empty_product.uniqueness f g empty_dependent_function
+    terminal_object                            := empty_product.product,
+    morphism_to_terminal_object_from           := λ X, empty_product.map empty_dependent_function,
+    uniqueness_of_morphisms_to_terminal_object := λ X f g, empty_product.uniqueness f g empty_dependent_function
   }
 }
 instance FiniteProducts_from_Products ( C : Category ) [ has_Products C ] : has_FiniteProducts C := {
@@ -257,15 +257,14 @@ instance FiniteProducts_from_Products ( C : Category ) [ has_Products C ] : has_
 instance FiniteCoproducts_give_an_InitialObject ( C : Category ) [ has_FiniteCoproducts C ] : has_InitialObject C := {
   initial_object :=
   let empty_coproduct := @has_FiniteCoproducts.coproduct C _ empty _ empty_function in {
-    object     := empty_coproduct.coproduct,
-    morphisms  := λ X, empty_coproduct.map empty_dependent_function,
-    uniqueness := λ X f g, empty_coproduct.uniqueness f g empty_dependent_function
+    initial_object                              := empty_coproduct.coproduct,
+    morphism_from_initial_object_to             := λ X, empty_coproduct.map empty_dependent_function,
+    uniqueness_of_morphisms_from_initial_object := λ X f g, empty_coproduct.uniqueness f g empty_dependent_function
   }
 }
 instance FiniteCoproducts_from_Coproducts ( C : Category ) [ has_Coproducts C ] : has_FiniteCoproducts C := {
   coproduct := λ _ _ f, has_Coproducts.coproduct f
 }
-
 
 inductive Two : Type
 | _0 : Two

@@ -39,17 +39,17 @@ definition {u v} CategoryOfCategoriesAndFunctors : Category := {
 definition {u v} Categories_has_TerminalObject : has_TerminalObject CategoryOfCategoriesAndFunctors.{u v} :=
 {
   terminal_object := {
-    object     := DiscreteCategory punit,
-    morphisms  := ♯,
-    uniqueness := ♯
+    terminal_object                            := DiscreteCategory punit,
+    morphism_to_terminal_object_from           := ♯,
+    uniqueness_of_morphisms_to_terminal_object := ♯
   }
 }
 definition {u v} Categories_has_InitialObject : has_InitialObject CategoryOfCategoriesAndFunctors.{u v} :=
 {
   initial_object := {
-    object     := DiscreteCategory.{u v} (ulift empty),
-    morphisms  := ♯,
-    uniqueness := ♯
+    initial_object                              := DiscreteCategory.{u v} (ulift empty),
+    morphism_from_initial_object_to             := ♯,
+    uniqueness_of_morphisms_from_initial_object := ♯
   }
 }
 

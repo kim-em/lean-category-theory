@@ -19,8 +19,8 @@ namespace tqft.categories.universal
 
 definition comma_Cone_to_Cone { J C : Category } { F : Functor J C } ( cone : (comma.Cones F).Obj ) : Cone F := 
 {
-  limit         := cone.1,
-  maps          := λ j : J.Obj, (cone.2.2).components j,
+  cone_point    := cone.1,
+  cone_maps     := λ j : J.Obj, (cone.2.2).components j,
   commutativity := λ ( j k : J.Obj ) ( f : J.Hom j k ),
                       begin
                           -- PROJECT write an `its` tactic
@@ -41,8 +41,8 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
 }
 
 definition Cone_to_comma_Cone { J C : Category } { F : Functor J C } ( cone : Cone F ) : (comma.Cones F).Obj := 
-⟨ cone.limit, ♯, {
-    components := λ j, cone.maps j,
+⟨ cone.cone_point, ♯, {
+    components := λ j, cone.cone_maps j,
     naturality := λ _ _ f, begin
     -- PROJECT write an `its` tactic
                             refine ( cast _ (eq.symm (cone.commutativity f)) ), 

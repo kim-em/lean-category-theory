@@ -20,28 +20,27 @@ structure iterated_limit_for_bifunctor
   { J K : Category }
   { C : Category }
   ( F : Functor (J × K) C ) :=
-  ( limitFunctor : Limit (Curry_Functors J K C F) )
-  ( limitObject  : Limit (limitFunctor.object.limit) )
+  ( limitFunctor : LimitCone ( Curry_Functors J K C F ) )
+  ( limitObject  : LimitCone ( limitFunctor.terminal_object.cone_point ) )
 
--- -- The dependent sorries here cause a problem described at https://github.com/leanprover/lean/issues/1650
 -- definition Fubini_for_Limits
 --   { J K : Category }
 --   { C : Category }
 --   { F : Functor (J × K) C }
---   ( lim : Limit F ) : iterated_limit_for_bifunctor F := {
+--   ( lim : LimitCone F ) : iterated_limit_for_bifunctor F := {
 --       limitFunctor := {
---           object     := {
---               limit         := {
+--           terminal_object := {
+--               cone_point    := {
 --                   onObjects     := λ k : K.Obj, sorry,
 --                   onMorphisms   := λ _ _ f, sorry,
 --                   identities    := sorry,
 --                   functoriality := sorry
 --               },
---               maps          := sorry,
+--               cone_maps     := sorry,
 --               commutativity := sorry
 --           },
---           morphisms  := sorry,
---           uniqueness := sorry
+--           morphism_to_terminal_object_from  := sorry,
+--           uniqueness_of_morphisms_to_terminal_object := sorry
 --       },
 --       limitObject  := sorry
 --   }
