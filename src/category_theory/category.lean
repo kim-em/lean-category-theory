@@ -5,9 +5,9 @@
 import .tactics
 import .graph
 
-open tqft.categories.graph
+open categories.graph
 
-namespace tqft.categories
+namespace categories
 
 structure {u v} Category :=
   ( Obj : Type u )
@@ -58,4 +58,4 @@ definition {u v} Category.compose_path ( C : Category.{u v} ) : Π { X Y : C.Obj
 | X ._  (morphism_path.nil ._)                := C.identity X
 | _ _   (@morphism_path.cons ._ ._ _ ._ e p)  := C.compose e (Category.compose_path p)
 
-end tqft.categories
+end categories

@@ -8,14 +8,14 @@ import ...equivalence
 import ..comma_categories
 import ..universal
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
-open tqft.categories.isomorphism
-open tqft.categories.equivalence
-open tqft.categories.universal
+open categories
+open categories.functor
+open categories.natural_transformation
+open categories.isomorphism
+open categories.equivalence
+open categories.universal
 
-namespace tqft.categories.universal
+namespace categories.universal
 
 definition comma_Cone_to_Cone { J C : Category } { F : Functor J C } ( cone : (comma.Cones F).Obj ) : Cone F := 
 {
@@ -75,4 +75,4 @@ definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (com
   isomorphism_2 := ♯
 }
 
-end tqft.categories.universal
+end categories.universal

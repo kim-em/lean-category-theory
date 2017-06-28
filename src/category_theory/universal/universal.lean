@@ -9,14 +9,14 @@ import ..graph
 import ..types
 import ..util.hlist
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.isomorphism
-open tqft.categories.initial
-open tqft.categories.types
-open tqft.categories.util
+open categories
+open categories.functor
+open categories.isomorphism
+open categories.initial
+open categories.types
+open categories.util
 
-namespace tqft.categories.universal
+namespace categories.universal
 
 structure Cone { J C : Category } ( F : Functor J C ) :=
   ( cone_point    : C.Obj )
@@ -314,5 +314,5 @@ open Two
 --   product := Π { I : Type } [ fin : Finite I ] ( f : I → C.Obj ), 
 -- }
 
-end tqft.categories.universal
+end categories.universal
 

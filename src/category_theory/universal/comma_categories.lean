@@ -7,14 +7,14 @@ import ..graph
 import ..path_category
 import .initial
 
-open tqft.categories
-open tqft.categories.isomorphism
-open tqft.categories.graph
-open tqft.categories.functor
-open tqft.categories.natural_transformation
-open tqft.categories.initial
+open categories
+open categories.isomorphism
+open categories.graph
+open categories.functor
+open categories.natural_transformation
+open categories.initial
 
-namespace tqft.categories.comma
+namespace categories.comma
 
 -- The diagonal functor sends X to the constant functor that sends everything to X.
 definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) :=
@@ -120,5 +120,5 @@ definition {u} Coproduct   { C : Category } { I : Type u } ( X : I → C.Obj )  
 definition Equalizer       { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Limit   (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
 definition Coequalizer     { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Colimit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
 
-end tqft.categories.comma
+end categories.comma
 

@@ -8,14 +8,14 @@ import ...equivalence
 import ..comma_categories
 import ..universal
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
-open tqft.categories.isomorphism
-open tqft.categories.equivalence
-open tqft.categories.universal
+open categories
+open categories.functor
+open categories.natural_transformation
+open categories.isomorphism
+open categories.equivalence
+open categories.universal
 
-namespace tqft.categories.universal
+namespace categories.universal
 
 -- definition comma_Equalizer_to_Equalizer { C : Category } { X Y : C.Obj } { f g : C.Hom X Y } ( equalizer : comma.Equalizer f g ) : Equalizer f g := sorry
 
@@ -25,4 +25,4 @@ namespace tqft.categories.universal
 
 -- PROJECT prove equalizers are unique
 
-end tqft.categories.universal
+end categories.universal

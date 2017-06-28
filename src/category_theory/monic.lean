@@ -4,9 +4,9 @@
 
 import .category
 
-open tqft.categories
+open categories
 
-namespace tqft.categories
+namespace categories
 
 structure Monic { C : Category } { Y Z : C.Obj } ( f : C.Hom Y Z ) :=
   ( witness : ∀ { X : C.Obj } { a b : C.Hom X Y } ( p : C.compose a f = C.compose b f ), a = b )
@@ -28,4 +28,4 @@ lemma SplitMonic_implies_Monic { C : Category } { Y Z : C.Obj } { f : C.Hom Y Z 
                           end
 } 
 
-end tqft.categories
+end categories

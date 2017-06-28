@@ -5,10 +5,10 @@
 import .category
 import .isomorphism
 
-open tqft.categories
-open tqft.categories.isomorphism
+open categories
+open categories.isomorphism
 
-namespace tqft.categories.functor
+namespace categories.functor
 
 structure {u1 v1 u2 v2} Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }) :=
   (onObjects   : C.Obj → D.Obj)
@@ -90,4 +90,4 @@ definition {u1 v1 u2 v2} Functor_onIsomorphisms
     witness_2 := ♮
   }
 
-end tqft.categories.functor
+end categories.functor

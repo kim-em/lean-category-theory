@@ -4,12 +4,12 @@
 
 import .currying_2
 
-open tqft.categories
-open tqft.categories.isomorphism
-open tqft.categories.functor
-open tqft.categories.equivalence
+open categories
+open categories.isomorphism
+open categories.functor
+open categories.equivalence
 
-namespace tqft.categories.natural_transformation
+namespace categories.natural_transformation
 
 theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
   ( C : Category.{u1 v1} )
@@ -61,4 +61,4 @@ theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
     },
   }
 
-end tqft.categories.natural_transformation
+end categories.natural_transformation

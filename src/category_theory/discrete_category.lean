@@ -5,9 +5,9 @@
 import .category
 import .functor
 
-namespace tqft.categories
+namespace categories
 
-open tqft.categories.functor
+open categories.functor
 open plift -- we first plift propositional equality to Type 0,
 open ulift -- then ulift up to Type v
 
@@ -48,4 +48,4 @@ definition {u1 v1 u2 v2} Functor.fromFunction { C : Category.{u1 v1} } { I : Typ
   functoriality := ♯  
 }
 
-end tqft.categories
+end categories

@@ -6,10 +6,10 @@ import ..isomorphism
 import ..natural_transformation
 import ..opposites
 
-open tqft.categories
-open tqft.categories.isomorphism
+open categories
+open categories.isomorphism
 
-namespace tqft.categories.initial
+namespace categories.initial
 
 structure InitialObject ( C : Category ) :=
   (initial_object                              : C.Obj)
@@ -56,4 +56,4 @@ class ZeroObject ( C : Category ) :=
 
 definition ZeroObject.zero_morphism { C : Category } ( Z : ZeroObject C ) ( X Y : C.Obj ) : C.Hom X Y := C.compose (Z.is_terminal.morphism_to_terminal_object_from X) (Z.is_initial.morphism_from_initial_object_to Y) 
 
-end tqft.categories.initial
+end categories.initial

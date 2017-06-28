@@ -4,9 +4,9 @@
 
 import .category
 
-open tqft.categories
+open categories
 
-namespace tqft.categories.isomorphism
+namespace categories.isomorphism
 
 structure Isomorphism ( C: Category ) ( X Y : C.Obj ) :=
   (morphism : C.Hom X Y)
@@ -70,4 +70,4 @@ instance is_Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } ( 
 definition Epimorphism { C : Category } { X Y : C.Obj } ( f : C.Hom X Y ) := Π { Z : C.Obj } ( g h : C.Hom Y Z ) ( w : C.compose f g = C.compose f h), g = h
 definition Monomorphism { C : Category } { X Y : C.Obj } ( f : C.Hom X Y ) := Π { Z : C.Obj } ( g h : C.Hom Z X ) ( w : C.compose g f = C.compose h f), g = h
 
-end tqft.categories.isomorphism
+end categories.isomorphism

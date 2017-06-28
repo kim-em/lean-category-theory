@@ -3,11 +3,11 @@
 -- Authors: Stephen Morgan, Scott Morrison
 import .products
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
+open categories
+open categories.functor
+open categories.natural_transformation
 
-namespace tqft.categories.products
+namespace categories.products
 
 definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
@@ -19,4 +19,4 @@ definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) 
 
 definition SwitchSymmetry ( C D : Category ) : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) := ♯
 
-end tqft.categories.products
+end categories.products

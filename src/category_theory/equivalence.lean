@@ -5,12 +5,12 @@
 import .natural_transformation
 import .isomorphism
 
-open tqft.categories
-open tqft.categories.isomorphism
-open tqft.categories.functor
-open tqft.categories.natural_transformation
+open categories
+open categories.isomorphism
+open categories.functor
+open categories.natural_transformation
 
-namespace tqft.categories.equivalence
+namespace categories.equivalence
 
 structure {u1 v1 u2 v2} Equivalence ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) :=
   ( functor : Functor C D )
@@ -77,4 +77,4 @@ definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v
 
 definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F.onObjects c) d
 
-end tqft.categories.equivalence
+end categories.equivalence

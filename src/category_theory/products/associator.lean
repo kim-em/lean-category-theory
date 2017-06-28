@@ -3,11 +3,11 @@
 -- Authors: Stephen Morgan, Scott Morrison
 import .products
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
+open categories
+open categories.functor
+open categories.natural_transformation
 
-namespace tqft.categories.products
+namespace categories.products
 
 definition ProductCategoryAssociator
   ( C D E: Category )
@@ -29,4 +29,4 @@ definition ProductCategoryInverseAssociator
   functoriality := ♮
 }
 
-end tqft.categories.products
+end categories.products

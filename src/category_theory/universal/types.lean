@@ -1,9 +1,9 @@
 import ..types
 import .universal
 
-open tqft.categories.universal
-open tqft.categories.isomorphism
-namespace tqft.categories.types
+open categories.universal
+open categories.isomorphism
+namespace categories.types
 
 definition {u} Types_has_Products : has_Products CategoryOfTypes.{u} := {
   product := λ I φ, {
@@ -63,4 +63,4 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
 attribute [instance] Types_has_Equalizers
 
 -- Types doesn't have coequalizers; quotients are hard.
-end tqft.categories.types
+end categories.types

@@ -2,11 +2,11 @@ import .universal
 import ..products.products
 import ..discrete_category
 
-open tqft.categories
-open tqft.categories.universal
-open tqft.categories.functor
-open tqft.categories.products
-open tqft.categories.isomorphism
+open categories
+open categories.universal
+open categories.functor
+open categories.products
+open categories.isomorphism
 
 local attribute [pointwise] Functors_pointwise_equal
 

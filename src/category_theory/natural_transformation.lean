@@ -5,11 +5,11 @@
 import .isomorphism
 import .functor
 
-open tqft.categories
-open tqft.categories.isomorphism
-open tqft.categories.functor
+open categories
+open categories.isomorphism
+open categories.functor
 
-namespace tqft.categories.natural_transformation
+namespace categories.natural_transformation
 
 structure {u1 v1 u2 v2} NaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) :=
   (components: Π X : C.Obj, D.Hom (F.onObjects X) (G.onObjects X))
@@ -54,7 +54,7 @@ definition {u1 v1 u2 v2} vertical_composition_of_NaturalTransformations
 
 notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
 
-open tqft.categories.functor
+open categories.functor
 
 @[simp] lemma {u1 v1 u2 v2 u3 v3} FunctorComposition.onObjects { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   { F : Functor C D }
@@ -288,4 +288,4 @@ definition {u1 v1 u2 v2} FunctorComposition_right_unitor
   ( F : Functor C D )
 : NaturalIsomorphism (FunctorComposition F (IdentityFunctor D) ) F := ♯
 
-end tqft.categories.natural_transformation
+end categories.natural_transformation

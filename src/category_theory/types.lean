@@ -4,9 +4,9 @@
 
 import .category
 
-namespace tqft.categories.types
+namespace categories.types
 
-open tqft.categories
+open categories
 
 definition {u} CategoryOfTypes : Category :=
 {
@@ -21,4 +21,4 @@ definition {u} CategoryOfTypes : Category :=
     associativity  := ♮
 }
 
-end tqft.categories.types
+end categories.types

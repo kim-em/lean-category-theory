@@ -8,13 +8,13 @@ import ..natural_transformation
 import ..graph
 import ..currying.currying_1
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.isomorphism
-open tqft.categories.initial
-open tqft.categories.natural_transformation
+open categories
+open categories.functor
+open categories.isomorphism
+open categories.initial
+open categories.natural_transformation
 
-namespace tqft.categories.universal
+namespace categories.universal
 
 structure iterated_limit_for_bifunctor 
   { J K : Category }
@@ -63,4 +63,4 @@ structure iterated_limit_for_bifunctor
 --   { F : Functor (J × K) C }
 --   ( lim : iterated_limit_for_bifunctor F ) : Isomorphism C lim.limitObject.object.limit (Fubini_for_Limits_inverse lim).object.limit := sorry
 
-end tqft.categories.universal
+end categories.universal

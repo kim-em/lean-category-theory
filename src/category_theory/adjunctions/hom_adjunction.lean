@@ -8,14 +8,14 @@ import ..products.products
 import ..isomorphism
 import ..types
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
-open tqft.categories.products
-open tqft.categories.isomorphism
-open tqft.categories.types
+open categories
+open categories.functor
+open categories.natural_transformation
+open categories.products
+open categories.isomorphism
+open categories.types
 
-namespace tqft.categories.adjunction
+namespace categories.adjunction
 
 definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
   NaturalIsomorphism
@@ -30,4 +30,4 @@ definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D 
 -- PROJECT show these are a special case of a duality in a 2-category.
 -- PROJECT adjoints of monoidal functors are (op)lax
 
-end tqft.categories.adjunction
+end categories.adjunction

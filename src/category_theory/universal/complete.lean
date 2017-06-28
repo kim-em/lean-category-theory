@@ -5,15 +5,15 @@
 import .universal
 import ..discrete_category
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
-open tqft.categories.isomorphism
-open tqft.categories.initial
-open tqft.categories.types
-open tqft.categories.util
+open categories
+open categories.functor
+open categories.natural_transformation
+open categories.isomorphism
+open categories.initial
+open categories.types
+open categories.util
 
-namespace tqft.categories.universal
+namespace categories.universal
 
 class {u v} Complete ( C : Category.{u v} ) := 
   ( limitCone : Π { J : Category.{u v} } ( F : Functor J C ), LimitCone F )
@@ -171,4 +171,4 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
     }
 }
 
-end tqft.categories.universal
+end categories.universal

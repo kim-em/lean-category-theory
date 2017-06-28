@@ -8,14 +8,14 @@ import ...equivalence
 import ..comma_categories
 import ..universal
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
-open tqft.categories.isomorphism
-open tqft.categories.equivalence
-open tqft.categories.universal
+open categories
+open categories.functor
+open categories.natural_transformation
+open categories.isomorphism
+open categories.equivalence
+open categories.universal
 
-namespace tqft.categories.universal
+namespace categories.universal
 
 -- definition comma_Product_to_Product { C : Category } { I : Type } ( F : I → C.Obj ) ( product : comma.Product F ) : Product F := {
 --     product       := product.object.1,
@@ -32,4 +32,4 @@ namespace tqft.categories.universal
 
 -- PROJECT prove products are unique
 
-end tqft.categories.universal
+end categories.universal

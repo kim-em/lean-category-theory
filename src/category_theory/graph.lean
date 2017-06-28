@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan and Scott Morrison
 
-namespace tqft.categories.graph
+namespace categories.graph
 
 structure {u v} Graph :=
   ( Obj : Type u )
@@ -37,4 +37,4 @@ definition concatenate_path_of_paths
 | ._ ._ (path_of_paths.nil X) := path.nil X
 | ._ ._ (@path_of_paths.cons ._ _ _ _ e p') := concatenate_paths e (concatenate_path_of_paths p')
 
-end tqft.categories.graph
+end categories.graph

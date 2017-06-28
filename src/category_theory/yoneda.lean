@@ -10,15 +10,15 @@ import .products.products
 import .products.switch
 import .types
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
-open tqft.categories.isomorphism
-open tqft.categories.equivalence
-open tqft.categories.types
-open tqft.categories.products
+open categories
+open categories.functor
+open categories.natural_transformation
+open categories.isomorphism
+open categories.equivalence
+open categories.types
+open categories.products
 
-namespace tqft.categories.yoneda
+namespace categories.yoneda
 
 definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opposite C) CategoryOfTypes.{v}) :=
 {
@@ -93,4 +93,4 @@ begin
   }
 end
 
-end tqft.categories.yoneda
+end categories.yoneda

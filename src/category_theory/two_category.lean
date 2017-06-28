@@ -4,11 +4,11 @@
 
 import .natural_transformation
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
+open categories
+open categories.functor
+open categories.natural_transformation
 
-namespace tqft.categories.two_category
+namespace categories.two_category
 
 universe variables u v w
 
@@ -84,4 +84,4 @@ structure DualMorphisms { C : StrictTwoCategory } { X Y : C.Hom_0 } ( f : C.Hom_
   -- ( zigzag_right : C.compose_2_vertically (C.compose_2_horizontally (C.identity_1 f) counit) (C.compose_2_horizontally unit (C.identity_1 f)) = C.identity_1 f)
   -- TODO the other zigzag
 
-end tqft.categories.two_category
+end categories.two_category

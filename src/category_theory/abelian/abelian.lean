@@ -5,12 +5,12 @@
 import ..monic
 import ..universal.monic
 
-open tqft.categories
-open tqft.categories.initial
-open tqft.categories.universal
-open tqft.categories.isomorphism
+open categories
+open categories.initial
+open categories.universal
+open categories.isomorphism
 
-namespace tqft.categories.abelian
+namespace categories.abelian
 
 -- This is the definition of abelian from Etingof's "Tensor categories"
 
@@ -37,4 +37,4 @@ structure Abelian' ( C : Category ) [ ZeroObject C ] :=
 
 -- PROJECT define short and long exact sequences, cohomology?
 
-end tqft.categories.abelian
+end categories.abelian

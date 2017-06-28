@@ -5,11 +5,11 @@
 import .functor
 import .graph
 
-open tqft.categories
+open categories
 
 universe variables u v
 
-namespace tqft.categories.graph
+namespace categories.graph
 
 definition PathCategory ( G : Graph ) : Category :=
 {
@@ -45,7 +45,7 @@ structure GraphHomomorphism ( G H : Graph ) :=
   ( onObjects   : G.Obj → H.Obj )
   ( onMorphisms : ∀ { X Y : G.Obj }, G.Hom X Y → H.Hom (onObjects X) (onObjects Y) )
 
-open tqft.categories.functor
+open categories.functor
 
 definition path_to_morphism
   { G : Graph }
@@ -84,4 +84,4 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
 instance GraphHomomorphism_to_Functor_coercion { G : Graph } { C : Category }: has_coe (GraphHomomorphism G C.graph) (Functor (PathCategory G) C) :=
   { coe := Functor.from_GraphHomomorphism }
 
-end tqft.categories.graph
+end categories.graph

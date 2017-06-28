@@ -6,12 +6,12 @@ import .functor
 import .products.products
 import .types
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.products
-open tqft.categories.types
+open categories
+open categories.functor
+open categories.products
+open categories.types
 
-namespace tqft.categories
+namespace categories
 
 definition Opposite ( C : Category ) : Category :=
 {
@@ -58,4 +58,4 @@ definition { u v } HomPairing ( C : Category.{u v} ) : Functor ((Opposite C) × 
   { X : C.Obj } :
     F.onMorphisms (C.identity X) = D.identity (F.onObjects X) := begin erewrite F.identities end
 
-end tqft.categories
+end categories

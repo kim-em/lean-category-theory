@@ -5,11 +5,11 @@ import ..natural_transformation
 
 -- set_option pp.universes true
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
+open categories
+open categories.functor
+open categories.natural_transformation
 
-namespace tqft.categories.products
+namespace categories.products
 
 definition ProductCategory (C D : Category) :
   Category :=
@@ -91,4 +91,4 @@ definition {u1 v1 u2 v2} Evaluation ( C : Category.{u1 v1} ) ( D : Category.{u2 
   functoriality := ♯
 }
 
-end tqft.categories.products
+end categories.products

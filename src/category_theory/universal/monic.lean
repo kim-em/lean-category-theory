@@ -5,11 +5,11 @@
 import .universal
 import ..monic
 
-open tqft.categories
-open tqft.categories.universal
-open tqft.categories.isomorphism
+open categories
+open categories.universal
+open categories.isomorphism
 
-namespace tqft.categories
+namespace categories
 
 structure RegularMonic { C : Category } { X Y : C.Obj } ( f : C.Hom X Y ) :=
   ( Z : C.Obj )
@@ -37,4 +37,4 @@ structure RegularEpic { C : Category } { Y Z : C.Obj } ( f : C.Hom Y Z ) :=
   ( i : Isomorphism C c.coequalizer Z )
   ( w : c.projection = C.compose f i.inverse )
 
-end tqft.categories
+end categories

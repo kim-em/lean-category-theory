@@ -5,14 +5,14 @@
 import .adjunction
 import .hom_adjunction
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
-open tqft.categories.products
-open tqft.categories.isomorphism
-open tqft.categories.types
+open categories
+open categories.functor
+open categories.natural_transformation
+open categories.products
+open categories.isomorphism
+open categories.types
 
-namespace tqft.categories.adjunction
+namespace categories.adjunction
 
 definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : Adjunction L R ) : HomAdjunction L R := 
 {
@@ -119,4 +119,4 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
 --                end
 -- }
 
-end tqft.categories.adjunction
+end categories.adjunction

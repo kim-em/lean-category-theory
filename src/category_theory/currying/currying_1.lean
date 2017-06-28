@@ -6,12 +6,12 @@ import ..natural_transformation
 import ..equivalence
 import ..products.bifunctors
 
-open tqft.categories
-open tqft.categories.isomorphism
-open tqft.categories.functor
-open tqft.categories.equivalence
+open categories
+open categories.isomorphism
+open categories.functor
+open categories.equivalence
 
-namespace tqft.categories.natural_transformation
+namespace categories.natural_transformation
 
 definition {u1 v1 u2 v2 u3 v3} Uncurry_Functors
   ( C : Category.{u1 v1} )
@@ -75,4 +75,4 @@ definition {u1 v1 u2 v2 u3 v3} Curry_Functors
       functoriality := ♯
     }
 
-end tqft.categories.natural_transformation
+end categories.natural_transformation

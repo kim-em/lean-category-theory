@@ -7,9 +7,9 @@ import .tactics
 import .graph
 import .category
 
-open tqft.categories.graph
+open categories.graph
 
-namespace tqft.categories.n_ary
+namespace categories.n_ary
 
 @[reducible] definition {u v} compose_each_path
   { G : Graph.{u v} }
@@ -50,7 +50,7 @@ attribute [simp,ematch] n_ary_Category.associativity
 --       apply n_ary_Category.associativity'
 --     end
 
-open tqft.categories
+open categories
 
 definition {u v} compose_path
   { G : Graph.{u v} }
@@ -118,4 +118,4 @@ definition {u v} compose_path
 --                         end
 -- }
 
-end tqft.categories.n_ary
+end categories.n_ary

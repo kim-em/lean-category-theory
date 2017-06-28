@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-namespace tqft.categories.util
+namespace categories.util
 
 inductive {u} hlist : list (Type u) → Type (u+1)
 | nil  : hlist []
@@ -20,4 +20,4 @@ definition hlist.indexed_map { α : Type } { Z W : α → Type } ( f : Π { a : 
 -- | _ list.nil _ hlist.nil := hlist.nil
 -- | list.nil _ hlist.nil _ := hlist.nil
 
-end tqft.categories.util
+end categories.util

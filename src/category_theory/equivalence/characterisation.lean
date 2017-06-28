@@ -4,12 +4,12 @@
 
 import ..equivalence
 
-open tqft.categories
-open tqft.categories.isomorphism
-open tqft.categories.functor
-open tqft.categories.natural_transformation
+open categories
+open categories.isomorphism
+open categories.functor
+open categories.natural_transformation
 
-namespace tqft.categories.equivalence
+namespace categories.equivalence
 
 lemma Equivalences_are_EssentiallySurjective { C D : Category } ( e : Equivalence C D ) : EssentiallySurjective (e.functor) :=
   λ Y : D.Obj, ⟨ e.inverse.onObjects Y, e.isomorphism_2.components Y ⟩
@@ -221,4 +221,4 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
 
 end FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
 
-end tqft.categories.equivalence
+end categories.equivalence

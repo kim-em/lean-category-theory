@@ -6,11 +6,11 @@ import .category
 import .equivalence
 import .functor
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
+open categories
+open categories.functor
+open categories.natural_transformation
 
-namespace tqft.categories.idempotent_completion
+namespace categories.idempotent_completion
 
 structure Idempotent ( C : Category ) :=
    ( object : C.Obj )
@@ -39,7 +39,7 @@ definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (Idempot
   functoriality := ♮
 }
 
-open tqft.categories.equivalence
+open categories.equivalence
 
 -- PROJECT show the embedding really was full and faithful
 lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
@@ -91,4 +91,4 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
 
 -- PROJECT idempotent completion left adjoint to the forgetful functor from categories to semicategories?
 
-end tqft.categories.idempotent_completion
+end categories.idempotent_completion

@@ -3,11 +3,11 @@
 -- Authors: Stephen Morgan, Scott Morrison
 import .products
 
-open tqft.categories
-open tqft.categories.functor
-open tqft.categories.natural_transformation
+open categories
+open categories.functor
+open categories.natural_transformation
 
-namespace tqft.categories.products
+namespace categories.products
 
 @[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_identities
   { C : Category.{u1 v1} }
@@ -87,4 +87,4 @@ begin
   exact p
 end
 
-end tqft.categories.products
+end categories.products
