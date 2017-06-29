@@ -52,7 +52,7 @@ begin
     tidy,
   end,
   begin
-    tidy, -- FIXME This next step seems easily automatable.
+    tidy, -- PROJECT This next step seems easily automatable.
     exact congr_arg subtype.val p
   end
 end

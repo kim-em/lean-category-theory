@@ -72,8 +72,7 @@ definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
     naturality := ♯
   }
 
--- FIXME Visual Studio Code can't seem to display the subscript h? ₕ
-notation α `∘ᵤ` β := horizontal_composition_of_NaturalTransformations α β
+notation α `∘ₕ` β := horizontal_composition_of_NaturalTransformations α β
 
 definition {u1 v1 u2 v2 u3 v3} whisker_on_left
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
@@ -81,7 +80,7 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_left
   { G H : Functor D E }
   ( α : NaturalTransformation G H ) :
   NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
-  horizontal_composition_of_NaturalTransformations (IdentityNaturalTransformation F) α
+  (IdentityNaturalTransformation F) ∘ₕ α
 
 definition {u1 v1 u2 v2 u3 v3} whisker_on_right
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} }
@@ -89,7 +88,7 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_right
   ( α : NaturalTransformation F G )
   ( H : Functor D E ) :
   NaturalTransformation (FunctorComposition F H) (FunctorComposition G H) :=
-  horizontal_composition_of_NaturalTransformations α (IdentityNaturalTransformation H)
+  α ∘ₕ (IdentityNaturalTransformation H)
 
 -- To define a natural isomorphism, we'll define the functor category, and ask for an isomorphism there.
 -- It's then a lemma that each component is an isomorphism, and vice versa.

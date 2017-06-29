@@ -51,8 +51,8 @@ definition CAT : StrictTwoCategory :=
     identity_0 := λ C, IdentityFunctor C,
     identity_1 := λ _ _ F, IdentityNaturalTransformation F,
     compose_1  := λ _ _ _ F G, FunctorComposition F G,
-    compose_2_vertically := λ _ _ _ _ _ α β, vertical_composition_of_NaturalTransformations α β,
-    compose_2_horizontally := λ _ _ _ _ _ _ _ α β, horizontal_composition_of_NaturalTransformations α β,
+    compose_2_vertically := λ _ _ _ _ _ α β, α ∘̬ β,
+    compose_2_horizontally := λ _ _ _ _ _ _ _ α β, α ∘ₕ β,
 
     left_identity   := ♯,
     right_identity  := ♯,
