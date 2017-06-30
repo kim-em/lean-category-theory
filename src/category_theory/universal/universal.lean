@@ -275,6 +275,7 @@ open Two
 local attribute [pointwise] nat.lt_succ_of_le
 local attribute [simp]      nat.le_iff_lt_or_eq
 
+-- This is really lame!
 instance Two_is_Finite : Finite Two := {
   n := 2,
   bijection := {

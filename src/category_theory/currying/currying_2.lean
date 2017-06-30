@@ -17,24 +17,15 @@ definition {u1 v1 u2 v2 u3 v3} Curry_Uncurry_to_identity
   ( E : Category.{u3 v3} )  : NaturalTransformation (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) (IdentityFunctor _) :=
       {
          components := λ F, {
-             components := λ X, {
-                 components := λ Y, E.identity ((F.onObjects X).onObjects Y),
-                 naturality := ♯
-             },
-             naturality := begin
-                             intros, 
-                             pointwise, 
-                             intros, 
-                             unfold_projections, 
-                             simp, 
-                             unfold_projections, 
-                             simp, 
-                             dsimp, 
-                             erewrite Category.left_identity,  -- PROJECT why are these necessary? PROJECT automation
-                             erewrite Category.right_identity,
-                           end
+             components := --by tidy, -- PROJECT seems to cause problems below
+                            λ X, {
+                                components := by tidy, --λ Y, E.identity ((F.onObjects X).onObjects Y),
+                                naturality := ♯
+                            },
+             naturality := ♯
          },
-         naturality := begin
+         naturality := --♯ -- PROJECT this seems to run forever?
+                       begin
                          intros, 
                          pointwise, 
                          intros, 
@@ -48,6 +39,7 @@ definition {u1 v1 u2 v2 u3 v3} Curry_Uncurry_to_identity
                          erewrite Category.right_identity,
                        end
      }
+
 definition {u1 v1 u2 v2 u3 v3} identity_to_Curry_Uncurry
   ( C : Category.{u1 v1} )
   ( D : Category.{u2 v2} )
@@ -55,21 +47,10 @@ definition {u1 v1 u2 v2 u3 v3} identity_to_Curry_Uncurry
       {
          components := λ F, {
              components := λ X, {
-                 components := λ Y, E.identity ((F.onObjects X).onObjects Y),
+                 components := by tidy, --λ Y, E.identity ((F.onObjects X).onObjects Y),
                  naturality := ♯
              },
-             naturality := begin
-                             intros, 
-                             pointwise, 
-                             intros, 
-                             unfold_projections, 
-                             simp, 
-                             unfold_projections, 
-                             simp, 
-                             dsimp, 
-                             erewrite Category.left_identity,  -- PROJECT why are these necessary? PROJECT automation
-                             erewrite Category.right_identity,
-                           end
+             naturality := ♯
          },
          naturality := begin
                          intros, 
@@ -86,105 +67,29 @@ definition {u1 v1 u2 v2 u3 v3} identity_to_Curry_Uncurry
                        end
      }
 
-@[simp] lemma { u v } congr_arg_refl { α : Type u } { β : Type v } ( f : α → β ) ( a : α ) : congr_arg f (eq.refl a) = eq.refl (f a) :=
-begin
-  refl
-end
-@[simp] lemma { u v } congr_refl_refl { α : Type u } { β : Type v } ( f : α → β ) ( a : α ) : congr (eq.refl f) (eq.refl a) = eq.refl (f a) :=
-begin
-  refl
-end
-@[simp] lemma { u v } mpr_refl { α : Type u } ( h : α = α ) ( a : α ) : eq.mpr h a = a :=
-begin
-  refl
-end
-
-
 definition {u1 v1 u2 v2 u3 v3} Uncurry_Curry_to_identity
   ( C : Category.{u1 v1} )
   ( D : Category.{u2 v2} )
-  ( E : Category.{u3 v3} )  : NaturalTransformation (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) (IdentityFunctor _) :=
+  ( E : Category.{u3 v3} )  : NaturalTransformation (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) (IdentityFunctor _) := 
+  -- PROJECT why can't tidy just do all this itself?
       {
          components := λ (F: Functor (C × D) E), {
-             components := λ X, begin
-                                  unfold_projections,
-                                  simp,
-                                  unfold_projections,
-                                  simp,
-                                  exact (E.identity (F.onObjects X))
-                                end,
-             naturality := begin
-                             intros, 
-                             unfold_projections, 
-                             simp, 
-                             unfold_projections, 
-                             simp, 
-                             dsimp, 
-                             induction f with f_1 f_2,
-                             induction X with X_1 X_2,
-                             induction Y with Y_1 Y_2,
-                             dsimp,
-                             erewrite E.left_identity,
-                             erewrite E.right_identity,
-                           end
+             components := by tidy, -- can't write ♯ here because abstract things can't be unfolded
+             naturality := ♯ 
          },
-         naturality := begin 
-                         intros F G τ,
-                         pointwise,
-                         intros X,
-                         unfold_projections,
-                         simp,
-                         dsimp,
-                         unfold_projections,
-                         simp,
-                         dsimp,
-                         induction X with X_1 X_2,
-                         dsimp [eq.mpr],
-                         simp,
-                       end
+         naturality := ♯
      }
+     
 definition {u1 v1 u2 v2 u3 v3} identity_to_Uncurry_Curry
   ( C : Category.{u1 v1} )
   ( D : Category.{u2 v2} )
   ( E : Category.{u3 v3} )  : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) :=
       {
          components := λ (F: Functor (C × D) E), {
-             components := λ X, begin
-                                  unfold_projections,
-                                  simp,
-                                  unfold_projections,
-                                  simp,
-                                  exact (E.identity (F.onObjects X))
-                                end,
-             naturality := begin
-                             intros, 
-                             unfold_projections, 
-                             simp, 
-                             unfold_projections, 
-                             simp, 
-                             dsimp, 
-                             induction f with f_1 f_2,
-                             induction X with X_1 X_2,
-                             induction Y with Y_1 Y_2,
-                             dsimp,
-                             erewrite E.left_identity,
-                             erewrite E.right_identity,
-                           end
+             components := by tidy, -- can't write ♯ here because abstract things can't be unfolded
+             naturality := ♯
          },
-         naturality := begin 
-                         intros F G τ,
-                         pointwise,
-                         intros X,
-                         unfold_projections,
-                         simp,
-                         dsimp,
-                         unfold_projections,
-                         simp,
-                         dsimp,
-                         induction X with X_1 X_2,
-                         dsimp [eq.mpr],
-                         simp,
-                       end
+         naturality := ♯
      }
 
 end categories.natural_transformation

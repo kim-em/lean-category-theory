@@ -282,6 +282,8 @@ meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_defau
 --       dunfold_everything
 --   ] max_steps
 
+private meta def dsimp_eq_mpr : tactic unit := `[dsimp [eq.mpr]]
+
 meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
    chain [
       tactic.triv,
@@ -289,7 +291,7 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
 
       pointwise,
 
-      force ( dsimp ),
+      force ( dsimp_eq_mpr ),
       unfold_projections',
       simp,
 
@@ -303,7 +305,7 @@ meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit :=
       simp_hypotheses
   ] max_steps
 
-meta def blast : tactic unit := tidy >> (done <|> any_goals (force smt_eblast))
+meta def blast : tactic unit := at_least_one [ tidy, done <|> any_goals (force smt_eblast) ]
 
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }

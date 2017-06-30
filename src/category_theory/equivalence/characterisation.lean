@@ -38,9 +38,9 @@ section FullyFaithfulPreimage
         F.onMorphisms (C.compose (full.preimage f) (full.preimage g))
             = D.compose (F.onMorphisms (full.preimage f)) (F.onMorphisms (full.preimage g)) : ♮
         ... = D.compose f g
-            : by erewrite [full.witness f, full.witness g]
+            : by rewrite [full.witness f, full.witness g]
         ... = F.onMorphisms (full.preimage (D.compose f g))
-            : by erewrite full.witness (D.compose f g)
+            : by rewrite full.witness (D.compose f g)
 
   lemma preimage_composition_identity
     { X Y : C.Obj }
@@ -168,10 +168,10 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
                 = fg' : full.witness fg'
             ... = (ε_mor X ⟩D⟩ f) ⟩D⟩ D.identity Y ⟩D⟩ (g ⟩D⟩ ε_inv Z) : ♮
             ... = (ε_mor X ⟩D⟩ f) ⟩D⟩ (ε_inv Y ⟩D⟩ ε_mor Y) ⟩D⟩ (g ⟩D⟩ ε_inv Z)
-                : by erewrite (ess_surj Y).2.witness_2
+                : by rewrite (ess_surj Y).2.witness_2
             ... = f' ⟩D⟩ g' : by repeat { rewrite - D.associativity }
             ... = F.onMorphisms (full.preimage f') ⟩D⟩ F.onMorphisms (full.preimage g')
-                : by erewrite [full.witness f', full.witness g']
+                : by rewrite [full.witness f', full.witness g']
             ... = F.onMorphisms (full.preimage f' ⟩C⟩ full.preimage g') : ♮
   }
 
@@ -180,9 +180,9 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
     calc
       F.onMorphisms (full.preimage f') ⟩D⟩ ε_mor Y
           = f' ⟩D⟩ ε_mor Y
-          : by erewrite full.witness f'
+          : by rewrite full.witness f'
       ... = ε_mor X ⟩D⟩ f
-          : by erewrite [D.associativity, (ess_surj Y).2.witness_2, D.right_identity]
+          : by rewrite [D.associativity, (ess_surj Y).2.witness_2, D.right_identity]
 
   definition ε : NaturalIsomorphism (FunctorComposition G F) (IdentityFunctor D) :=
     NaturalIsomorphism.from_components (λ X, (ess_surj X).2) (λ {X Y : D.Obj}, ε_natural)
@@ -203,7 +203,6 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
             : ε.morphism.naturality (F.onMorphisms f)
         ... = F.onMorphisms (full.preimage (ε_mor (F.onObjects X))) ⟩D⟩ F.onMorphisms f
             : eq.symm $ congr_arg (λ k, k ⟩D⟩ F.onMorphisms f) $ full.witness (ε_mor (F.onObjects X))
-            --: by erewrite full.witness (ε_mor (F X))
         ... = F.onMorphisms ((η_comp X).morphism ⟩C⟩ f)
             : eq.symm (F.functoriality _ _)
 

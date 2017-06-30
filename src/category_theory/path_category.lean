@@ -40,11 +40,6 @@ definition PathCategory ( G : Graph ) : Category :=
                     end
 }
 
--- TODO functor should extend this?
-structure GraphHomomorphism ( G H : Graph ) := 
-  ( onObjects   : G.Obj → H.Obj )
-  ( onMorphisms : ∀ { X Y : G.Obj }, G.Hom X Y → H.Hom (onObjects X) (onObjects Y) )
-
 open categories.functor
 
 definition path_to_morphism
@@ -54,29 +49,27 @@ definition path_to_morphism
   : Π { X Y : G.Obj }, path X Y → C.Hom (H.onObjects X) (H.onObjects Y) 
 | ._ ._ (path.nil Z)              := C.identity (H.onObjects Z)
 | ._ ._ (@path.cons ._ _ _ _ e p) := C.compose (H.onMorphisms e) (path_to_morphism p)
-
--- -- PROJECT obtain this as the left adjoint to the forgetful functor.
--- -- set_option pp.implicit true
+ 
+-- PROJECT obtain this as the left adjoint to the forgetful functor.
 definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : GraphHomomorphism G C.graph ) : Functor (PathCategory G) C :=
 {
   onObjects     := H.onObjects,
   onMorphisms   := λ _ _ f, path_to_morphism H f,
   identities    := ♮,
   functoriality := begin
-                     -- TODO automation
-                     blast,
+                     -- PROJECT automation
+                     tidy,
                      induction f,
                      {
                        unfold concatenate_paths,
                        unfold path_to_morphism,
-                       simp
+                       tidy,
                      },
                      {
                       let p := ih_1 g,
                       unfold concatenate_paths,
                       unfold path_to_morphism,
-                      rewrite p,
-                      erewrite - C.associativity
+                      blast,
                      }
                    end
 }

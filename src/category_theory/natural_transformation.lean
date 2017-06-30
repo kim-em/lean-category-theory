@@ -130,7 +130,7 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_right_functor
     functoriality := ♯
   }
 
-@[reducible] definition {u1 v1 u2 v2} NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
+definition {u1 v1 u2 v2} NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) := Isomorphism (FunctorCategory C D) F G
 
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.
@@ -138,14 +138,14 @@ definition {u1 v1 u2 v2 u3 v3} whisker_on_right_functor
 instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category } ( F G : Functor C D ) : has_coe (NaturalIsomorphism F G) (NaturalTransformation F G) :=
   { coe := Isomorphism.morphism }
 
-@[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.componentwise_witness_1
+@[simp,ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.componentwise_witness_1
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
   ( X : C.Obj )
    : D.compose (α.morphism.components X) (α.inverse.components X) = D.identity (F.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
-@[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.componentwise_witness_2
+@[simp,ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.componentwise_witness_2
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
@@ -165,8 +165,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
      dsimp,
      rewrite - α.inverse.naturality,
      rewrite D.associativity,
-     rewrite α.componentwise_witness_2,
-     simp
+     tidy
    end
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
@@ -179,8 +178,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
      dsimp,
      rewrite - α.morphism.naturality,
      rewrite D.associativity,
-     rewrite α.componentwise_witness_1,
-     simp
+     tidy
    end
 
 definition NaturalIsomorphism.from_components
@@ -220,7 +218,9 @@ definition {u1 v1 u2 v2} vertical_composition_of_NaturalIsomorphisms
    : NaturalIsomorphism F H :=
   IsomorphismComposition α β
 
--- Newtype for isomorphisms in functor categories. This specialisation helps type inference.
+attribute [reducible] NaturalIsomorphism
+
+-- New type for isomorphisms in functor categories. This specialisation helps type inference.
 structure {u1 v1 u2 v2} NaturalIsomorphism' {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F G : Functor C D) :=
   mkNatIso :: (iso : Isomorphism (FunctorCategory C D) F G)
 

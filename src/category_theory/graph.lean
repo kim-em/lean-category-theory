@@ -10,6 +10,10 @@ structure {u v} Graph :=
 
 open Graph
 
+structure GraphHomomorphism ( G H : Graph ) := 
+  ( onObjects   : G.Obj → H.Obj )
+  ( onMorphisms : ∀ { X Y : G.Obj }, G.Hom X Y → H.Hom (onObjects X) (onObjects Y) )
+
 inductive {u v} path { G : Graph.{u v} } : Obj G → Obj G → Type (max u v)
 | nil  : Π ( h : G.Obj ), path h h
 | cons : Π { h s t : G.Obj } ( e : G.Hom h s ) ( l : path s t ), path h t
