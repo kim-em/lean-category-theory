@@ -52,7 +52,7 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
                        },
                        {
                          tidy,
-                         have p := congr_fun w a, -- FIXME weird that I can use `have` then `exact`, but can't just use `exact` in one step.
+                         have p := congr_fun w a, -- PROJECT; an 'inexact' tactic would help here.
                          exact p
                        }
                     end,

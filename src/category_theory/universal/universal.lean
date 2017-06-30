@@ -272,42 +272,72 @@ inductive Two : Type
 
 open Two
 
+local attribute [pointwise] nat.lt_succ_of_le
+local attribute [simp]      nat.le_iff_lt_or_eq
 
--- FIXME learn how to do this
--- instance Two_is_Finite : Finite Two := {
---   n := 2,
---   bijection := {
---     morphism := λ n, match n with | _0 := ⟨ 0, sorry ⟩ | _1 := ⟨ 1, sorry ⟩ end,
---     inverse  := λ n, sorry,
---     witness_1 := sorry,
---     witness_2 := sorry
---   }
--- }
+instance Two_is_Finite : Finite Two := {
+  n := 2,
+  bijection := {
+    -- FIXME why does tidy get stuck here?
+    morphism := λ n, match n with
+                       | _0 := ⟨ 0, begin pointwise, simp, pointwise, simp, end ⟩
+                       | _1 := ⟨ 1, begin pointwise, simp end ⟩
+                     end,
+    inverse  := λ n, match n with
+                       | ⟨ 0, _ ⟩ := _0
+                       | ⟨ 1, _ ⟩ := _1 
+                       | _        := _0 -- TODO we shouldn't have to do this!                   
+                     end,
+    witness_1 := begin
+                   apply funext,
+                   intros,
+                   induction x, -- TODO We need to be able to specify that induction on a new type (e.g. Two) should be allowed in tidy.
+                   tidy,
+                 end,
+    witness_2 := begin
+                   apply funext,
+                   intros,
+                   induction x,
+                   cases is_lt,
+                   unfold_projections,
+                   dsimp,
+                   unfold Two_is_Finite._match_2, -- TODO auxiliary definitions created just a moment ago should get unfolded...
+                   unfold Two_is_Finite._match_1,
+                   trivial,
+                   cases a,
+                   unfold_projections,
+                   dsimp,
+                   unfold Two_is_Finite._match_2,
+                   unfold Two_is_Finite._match_1,
+                   trivial,
+                   cases a_2
+                 end
+    }
+  }
 
--- This stuff works; it's commented out just because we don't have Two_is_Finite yet.
--- private definition {u} choice { α : Sort u } ( a b : α ) : Two → α 
--- | _0 := a
--- | _1 := b
--- private definition {v} split_choice { Z : Two → Sort v } ( f : Z _0 ) ( g : Z _1 ) : Π i : Two, Z i
--- | _0 := f
--- | _1 := g
--- private definition {u v} dependent_choice { α : Sort u } { Z : α → Sort v } { a b : α } ( f : Z a ) ( g : Z b ) : Π i : Two, Z (choice a b i) 
--- | _0 := f
--- | _1 := g
+private definition {u} choice { α : Sort u } ( a b : α ) : Two → α 
+| _0 := a
+| _1 := b
+private definition {v} split_choice { Z : Two → Sort v } ( f : Z _0 ) ( g : Z _1 ) : Π i : Two, Z i
+| _0 := f
+| _1 := g
+private definition {u v} dependent_choice { α : Sort u } { Z : α → Sort v } { a b : α } ( f : Z a ) ( g : Z b ) : Π i : Two, Z (choice a b i) 
+| _0 := f
+| _1 := g
 
--- instance BinaryProducts_from_FiniteProducts ( C : Category ) [ has_FiniteProducts C ] : has_BinaryProducts C := {
---   binary_product := λ X Y : C.Obj,
---     let F := choice X Y in
---     let p := finite_product F in {
---       product             := p.product,
---       left_projection     := p.projection _0,
---       right_projection    := p.projection _1,
---       map                 := λ _ f g, p.map (dependent_choice f g),
---       left_factorisation  := λ _ f g, p.factorisation (dependent_choice f g) _0,
---       right_factorisation := λ _ f g, p.factorisation (dependent_choice f g) _1,
---       uniqueness          := λ _ f g u v, p.uniqueness f g (split_choice u v)
---     }
--- }
+instance BinaryProducts_from_FiniteProducts ( C : Category ) [ has_FiniteProducts C ] : has_BinaryProducts C := {
+  binary_product := λ X Y : C.Obj,
+    let F := choice X Y in
+    let p := finite_product F in {
+      product             := p.product,
+      left_projection     := p.projection _0,
+      right_projection    := p.projection _1,
+      map                 := λ _ f g, p.map (dependent_choice f g),
+      left_factorisation  := λ _ f g, p.factorisation (dependent_choice f g) _0,
+      right_factorisation := λ _ f g, p.factorisation (dependent_choice f g) _1,
+      uniqueness          := λ _ f g u v, p.uniqueness f g (split_choice u v)
+    }
+}
 
 -- PROJECT:
 -- instance FiniteProducts_from_BinaryProducts ( C : Category ) [ has_BinaryProducts C ] : has_FiniteProducts C := {

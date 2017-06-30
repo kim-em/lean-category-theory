@@ -61,7 +61,7 @@ definition {u v} compose_path
 | ._ ._ (@path.cons ._ _ _ _ e p) := composition e (compose_path p)
 
 
--- FIXME this is a bit lame.
+-- TODO this is a bit lame.
 -- meta def rewrite_once : tactic unit :=
 -- do r ← tactic.to_expr `(n_ary_Category.compose_length_one_path C f),
 --    tactic.rewrite_core reducible tt tt (occurrences.pos [2]) tt r
