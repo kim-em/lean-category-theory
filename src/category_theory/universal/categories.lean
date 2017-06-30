@@ -1,4 +1,4 @@
-import .universal
+import .instances
 import ..products.products
 import ..discrete_category
 

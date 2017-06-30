@@ -250,6 +250,24 @@ end
 
 open nat
 
+-- PROJECT make this less lame
+meta def nat_inequality : tactic unit :=
+do tgt ← target,
+match tgt with
+| `(%%lhs < %%rhs) := `[apply nat.lt_succ_of_le]     -- TODO how to check lhs and rhs are actually nat's?
+| `(%%lhs ≤ %%rhs) := `[rewrite nat.le_iff_lt_or_eq, simp]
+| _                := failed
+end
+
+lemma f : 0 < 2 :=
+begin
+ nat_inequality,
+ nat_inequality,
+ nat_inequality,
+ nat_inequality,
+end
+
+
 private meta def if_then_else { α : Type } ( i : tactic unit ) ( t e : tactic α ) : tactic α :=
 do r ← (i >> pure tt) <|> pure ff,
    if r then do t else do e
@@ -260,14 +278,32 @@ do r ← tactic.try_core i,
    | none   := e
    end
 
-private meta def chain' ( tactics : list (tactic unit) ) : nat → bool → list (tactic unit) → tactic unit
-| 0        progress _         := trace "... chain tactic exceeded iteration limit" >> failed   
-| _        progress []        := guard progress <|> fail "chain tactic made no progress"
-| (succ n) progress (t :: ts) := if_then_else done (guard progress) (if_then_else t (chain' n tt tactics) (chain' (succ n) progress ts))
+private meta structure chain_progress :=
+  ( iteration_limit   : nat )
+  ( results           : list string )
+  ( remaining_tactics : list (tactic string) )
+
+private meta def chain' ( tactics : list (tactic string) ) : chain_progress → tactic (list string)
+| ⟨ 0,      results, _ ⟩       := trace "... chain tactic exceeded iteration limit" >>
+                                   trace results.reverse.to_string >> 
+                                   failed   
+| ⟨ _,      results, [] ⟩      := (pure results)
+| ⟨ succ n, results, t :: ts ⟩ := if_then_else done
+                                    (pure results)
+                                    (dependent_if_then_else t 
+                                      (λ result, (chain' ⟨ n, result :: results, tactics ⟩ ))
+                                      (chain' ⟨ succ n, results, ts ⟩)
+                                    )
 
 private def chain_default_max_steps := 500
 
-meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_default_max_steps ) : tactic unit := chain' tactics max_steps ff tactics 
+meta def chain
+  ( tactics        : list (tactic string) )
+  ( max_steps      : nat  := chain_default_max_steps )
+    : tactic (list string) :=
+do sequence ← chain' tactics ⟨ max_steps, [], tactics ⟩,
+   guard (sequence.length ≠ 0) <|> fail "...chain tactic made no progress",
+   pure sequence.reverse
 
 -- meta def unfold_unfoldable ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
 --    chain [
@@ -284,26 +320,34 @@ meta def chain ( tactics : list (tactic unit) ) ( max_steps : nat := chain_defau
 
 private meta def dsimp_eq_mpr : tactic unit := `[dsimp [eq.mpr]]
 
-meta def tidy ( max_steps : nat := chain_default_max_steps ) : tactic unit := 
-   chain [
-      tactic.triv,
-      force ( reflexivity ),
+meta def tidy_tactics : list (tactic string) :=
+[
+  ( tactic.triv,                   "triv" ),
+  ( force (reflexivity),           "refl" ),
+  ( nat_inequality,                "nat_inequality" ),
+  ( pointwise,                     "pointwise" ),
+  ( force (dsimp_eq_mpr),          "dsimp [eq.mpr]" ),
+  ( unfold_projections',           "unfold_projections'" ),
+  ( simp,                          "simp" ),
+  ( force (intros >> skip),        "intros" ),
+  ( force (fsplit),                "fsplit" ),
+  ( dsimp_hypotheses,              "dsimp_hypotheses" ),
+  ( automatic_induction,           "automatic_induction" ),
+  ( unfold_projections_hypotheses, "unfold_projections_hypotheses" ),
+  ( simp_hypotheses,               "simp_hypotheses" )
+].map $ λ p, p.1 >> (pure p.2)
 
-      pointwise,
+def {u v} option.map {α : Type u} {β : Type v} : option α → (α → β) → option β
+| (some x) f := some (f x)
+| none     _ := none
+.
 
-      force ( dsimp_eq_mpr ),
-      unfold_projections',
-      simp,
-
-      force ( intros >> skip ),
-      force ( fsplit ),
-      -- tactic.interactive.congr_struct
-
-      dsimp_hypotheses,
-      automatic_induction,
-      unfold_projections_hypotheses,
-      simp_hypotheses
-  ] max_steps
+meta def tidy ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit :=
+do results ← chain tidy_tactics max_steps,
+   if trace_progress then
+     trace ("... chain tactic used: " ++ results.to_string)
+   else
+     skip
 
 meta def blast : tactic unit := at_least_one [ tidy, done <|> any_goals (force smt_eblast) ]
 
