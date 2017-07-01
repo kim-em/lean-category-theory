@@ -57,10 +57,14 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
                        }
                     end,
     factorisation := ♯,
-    uniqueness    := begin blast, exact congr_fun witness x end
+    uniqueness    := begin tidy, exact congr_fun witness x end
   }
 }
 attribute [instance] Types_has_Equalizers
 
--- Types doesn't have coequalizers; quotients are hard.
+
+-- Does Types have coequalizers? Quotients are hard.
+-- definition {u} relation_from_functions { α β : Type u } ( f g : α → β ) : β → β → Prop :=
+--   λ b0 bn : β, ∃ l : list α, 
+
 end categories.types

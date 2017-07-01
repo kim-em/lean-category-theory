@@ -42,10 +42,6 @@ instance empty_is_Finite : Finite empty := {
               end
 }
 
-inductive Two : Type
-| _0 : Two
-| _1 : Two
-
 open Two
 
 -- This is really lame!

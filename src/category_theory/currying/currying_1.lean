@@ -28,14 +28,15 @@ definition {u1 v1 u2 v2 u3 v3} Uncurry_Functors
       onMorphisms   := λ F G (T : NaturalTransformation F G), {
         components := λ X, (T.components _).components _,       -- PROJECT really we should only have to specify this; everything else is determined
         naturality := begin
+                        -- PROJECT This proof is quite fragile, depending on some introduced names.
                         tidy,
-                        rewrite E.associativity,
-                        rewrite (T.components fst).naturality snd_2,
+                        rewrite E.associativity,                        
+                        rewrite (T.components fst_1).naturality snd_2,
                         rewrite - E.associativity,
                         rewrite - E.associativity,
                         have p := T.naturality fst_2,
                         have p' := congr_arg NaturalTransformation.components p,
-                        have r' := congr_fun p' snd_1,
+                        have r' := congr_fun p' snd,
                         tidy,
                         rewrite r',
                       end

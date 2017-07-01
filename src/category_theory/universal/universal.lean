@@ -46,14 +46,6 @@ attribute [simp,ematch] BinaryProduct.left_factorisation BinaryProduct.right_fac
 attribute [pointwise] BinaryProduct.left_projection BinaryProduct.right_projection BinaryProduct.map
 attribute [pointwise] BinaryProduct.uniqueness
 
--- PROJECT: hmm, hlist.indexed_map isn't really usable?
--- structure FiniteProduct { C : Category } ( X : list C.Obj ) :=
---   ( product       : C.Obj )
---   ( projection    : hlist (X.map (λ x, C.Hom product x) ) )
---   ( map           : ∀ { Z : C.Obj } ( f : hlist (X.map (λ x, C.Hom Z x) ) ), C.Hom Z product )
---   ( factorisation : ∀ { Z : C.Obj } ( f : hlist (X.map (λ x, C.Hom Z x) ) ), sorry )
---   ( uniqueness    : ∀ { Z : C.Obj } ( f g : C.Hom Z product ) ( witness : hlist.indexed_map (λ x p, C.compose f p = C.compose g p) X projection  ), f = g )
-
 structure Product { C : Category } { I : Type } ( F : I → C.Obj ) :=
   ( product       : C.Obj )
   ( projection    : Π i : I, C.Hom product (F i) )

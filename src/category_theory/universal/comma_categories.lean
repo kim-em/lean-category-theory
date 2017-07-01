@@ -2,9 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ..discrete_category
-import ..graph
-import ..path_category
+import ..walking
 import .initial
 
 open categories
@@ -13,6 +11,7 @@ open categories.graph
 open categories.functor
 open categories.natural_transformation
 open categories.initial
+open categories.walking
 
 namespace categories.comma
 
@@ -76,49 +75,12 @@ definition Cocones { J C : Category } ( F : Functor J C ) := CommaCategory (@Obj
 definition Limit   { J C : Category } ( F: Functor J C ) := TerminalObject (Cones   F)
 definition Colimit { J C : Category } ( F: Functor J C ) := InitialObject  (Cocones F)
 
-inductive Two : Type
-| _0 : Two
-| _1 : Two
-
-open Two
-
-definition WalkingPair : Graph := {
-  Obj := Two,
-  Hom := λ X Y, empty
-}
-definition WalkingParallelPair : Graph := {
-  Obj := Two,
-  Hom := λ X Y, match X, Y with 
-                  | _0, _1 := Two
-                  | _,  _  := empty
-                end
-}
-
-definition Pair_homomorphism { C : Category } ( α β : C.Obj ) : GraphHomomorphism WalkingPair C.graph := {
-  onObjects   := λ X, match X with
-                       | _0 := α
-                       | _1 := β
-                      end,
-  onMorphisms := λ X Y e, match X, Y, e with end
-}
-
-definition ParallelPair_homomorphism { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : GraphHomomorphism WalkingParallelPair C.graph := {
-  onObjects   := λ X, match X with
-                       | _0 := α
-                       | _1 := β
-                     end,
-  onMorphisms := λ X Y e, match X, Y, e with
-                           | _0, _1, _0 := f
-                           | _0, _1, _1 := g
-                         end
-}
-
-definition BinaryProduct   { C : Category } ( α β : C.Obj )                     := Limit   (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
-definition BinaryCoproduct { C : Category } ( α β : C.Obj )                     := Colimit (Functor.from_GraphHomomorphism (Pair_homomorphism α β))
+definition BinaryProduct   { C : Category } ( α β : C.Obj )                     := Limit   (Pair_functor α β)
+definition BinaryCoproduct { C : Category } ( α β : C.Obj )                     := Colimit (Pair_functor α β)
 definition {u} Product     { C : Category } { I : Type u } ( X : I → C.Obj )   := Limit   (Functor.fromFunction X)
 definition {u} Coproduct   { C : Category } { I : Type u } ( X : I → C.Obj )   := Colimit (Functor.fromFunction X)
-definition Equalizer       { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Limit   (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
-definition Coequalizer     { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Colimit (Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g))
+definition Equalizer       { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Limit   (ParallelPair_functor f g)
+definition Coequalizer     { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Colimit (ParallelPair_functor f g)
 
 end categories.comma
 

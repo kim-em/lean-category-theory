@@ -2,6 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
+-- FIXME this should not be here, but I don't know how to make 'automatic_inductions', below, updateable. Use attributes?
+inductive Two : Type
+| _0 : Two
+| _1 : Two
+
 open tactic
 
 def pointwise_attribute : user_attribute := {
@@ -91,6 +96,8 @@ do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, unfold_projections_at' h)) <|> fail "fail no projections to unfold in hypotheses"   
 
+meta def unfold_projections_hypotheses' : tactic unit := `[unfold_projections at *] -- BUG see the problem in discrete_category.lean
+
 -- We need our own version of dsimp_at_core, which fails when it can't do anything.
 meta def dsimp_at_core' (s : simp_lemmas) (h : expr) : tactic unit :=
 do num_reverted : ℕ ← revert h,
@@ -123,6 +130,8 @@ meta def simp_hypotheses : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.for (λ h, simp_at' h)) <|> fail "simp_hypothesis did not simplify anything"
 
+meta def simp_hypotheses' : tactic unit := `[simp at *] -- FIXME useless at the moment, since this always succeeds
+
 meta def new_names ( e : expr ) : tactic (list name) :=
   do 
     n1 ← get_unused_name e.local_pp_name (some 1), 
@@ -136,6 +145,7 @@ match t with
 | `(punit)     := induction h >>= λ x, skip
 | `(empty)     := induction h >>= λ x, skip
 | `(fin nat.zero) := induction h >>= λ x, `[cases is_lt]
+| `(Two)       := induction h >>= λ x, skip
 | `(ulift _)   := induction h >>= λ x, skip
 | `(plift _)   := induction h >>= λ x, skip
 | `(eq _ _)    := induction h >>= λ x, skip
@@ -242,13 +252,6 @@ do g ← target,
 
 meta def unfold_coe : tactic unit := tactic.dunfold [ ``has_coe_to_fun.coe ]
 
-section
-open smt_tactic
-meta def smt_simp   : tactic unit := using_smt $ intros >> try dsimp >> try simp
-meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> unfold_coe >> try simp >> try eblast
-meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
-end
-
 open nat
 
 -- PROJECT make this less lame
@@ -321,6 +324,14 @@ do sequence ← chain' tactics ⟨ max_steps, [], tactics ⟩,
 
 private meta def dsimp_eq_mpr : tactic unit := `[dsimp [eq.mpr]]
 
+
+section
+open smt_tactic
+meta def smt_simp   : tactic unit := using_smt $ intros >> try dsimp >> try simp
+meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> unfold_coe >> try simp >> eblast
+meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch
+end
+
 meta def tidy_tactics : list (tactic string) :=
 [
   ( tactic.triv,                   "triv" ),
@@ -338,11 +349,6 @@ meta def tidy_tactics : list (tactic string) :=
   ( simp_hypotheses,               "simp_hypotheses" )
 ].map $ λ p, p.1 >> (pure p.2)
 
-def {u v} option.map {α : Type u} {β : Type v} : option α → (α → β) → option β
-| (some x) f := some (f x)
-| none     _ := none
-.
-
 meta def tidy ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit :=
 do results ← chain tidy_tactics max_steps,
    if trace_progress then
@@ -351,14 +357,11 @@ do results ← chain tidy_tactics max_steps,
      skip
 
 meta def blast ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit := 
-do results ← chain (tidy_tactics ++ [ (force smt_eblast) >> pure "smt_eblast" ]) max_steps,
+do results ← chain (tidy_tactics ++ [ smt_eblast >> done >> pure "smt_eblast" ]) max_steps,
    if trace_progress then
      trace ("... chain tactic used: " ++ results.to_string)
    else
      skip
-
-
--- at_least_one [ tidy, done <|> ((any_goals (force smt_eblast)) >> (blast <|> skip)) ]
 
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }
