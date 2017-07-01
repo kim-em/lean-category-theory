@@ -72,12 +72,21 @@ set_option trace.check true
   { X : Cone F }
   { g : C.Hom X.cone_point L.terminal_object.cone_point }
   ( w : ∀ j : J.Obj, C.compose g ((L.terminal_object).cone_maps j) = X.cone_maps j )
-    : (L.morphism_to_terminal_object_from X).morphism = g  :=
+    : (L.morphism_to_terminal_object_from X).morphism = g :=
   begin
     let G : (Cones F).Hom X L.terminal_object := ⟨ g, w ⟩,
     have q := L.uniqueness_of_morphisms_to_terminal_object _ (L.morphism_to_terminal_object_from X) G,
     exact congr_arg ConeMorphism.morphism q,
   end
+
+@[simp,ematch] lemma {u v} morphism_to_terminal_object_composed_with_cone_map
+  { J C : Category.{u v} }
+  { F : Functor J C }
+  { L : LimitCone F }
+  { X : Cone F }
+  { j : J.Obj }
+    : C.compose (L.morphism_to_terminal_object_from X).morphism (L.terminal_object.cone_maps j) = X.cone_maps j :=
+  (L.morphism_to_terminal_object_from X).commutativity j
 
 definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (FunctorCategory J C) C := {
   onObjects     := λ F, (limitCone F).terminal_object.cone_point,
@@ -89,7 +98,13 @@ definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (Functo
                                 commutativity := ♯ 
                               }).morphism,
   identities    := ♯,
-  functoriality := begin tidy 50 tt, end
+  functoriality := begin
+                     tidy,
+                     rewrite C.associativity,
+                     simp,
+                     rewrite - C.associativity,
+                     blast,
+                   end
 }
 
 private definition evaluate_Functor_to_FunctorCategory { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c : C.Obj ) : Functor J D := {
