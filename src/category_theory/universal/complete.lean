@@ -65,22 +65,32 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
 
 set_option trace.check true
 
--- definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (FunctorCategory J C) C := {
---   onObjects     := λ F, (limitCone F).terminal_object.cone_point,
---   onMorphisms   := λ F G τ, let lim_F := (limitCone F) in
---                             let lim_G := (limitCone G) in
---                               (lim_G.morphism_to_terminal_object_from {
---                                 cone_point    := _,
---                                 cone_maps     := (λ j, C.compose (lim_F.terminal_object.cone_maps j) (τ.components j)),
---                                 commutativity := ♯ 
---                               }).morphism,
---   identities    := λ F, begin
---                           tidy,
---                           have p := (limitCone F).uniqueness_of_morphisms_to_terminal_object,
-                          
---                         end,
---   functoriality := sorry
--- }
+@[pointwise] lemma {u v} uniqueness_of_morphism_to_limit
+  { J C : Category.{u v} }
+  { F : Functor J C }
+  { L : LimitCone F }
+  { X : Cone F }
+  { g : C.Hom X.cone_point L.terminal_object.cone_point }
+  ( w : ∀ j : J.Obj, C.compose g ((L.terminal_object).cone_maps j) = X.cone_maps j )
+    : (L.morphism_to_terminal_object_from X).morphism = g  :=
+  begin
+    let G : (Cones F).Hom X L.terminal_object := ⟨ g, w ⟩,
+    have q := L.uniqueness_of_morphisms_to_terminal_object _ (L.morphism_to_terminal_object_from X) G,
+    exact congr_arg ConeMorphism.morphism q,
+  end
+
+definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (FunctorCategory J C) C := {
+  onObjects     := λ F, (limitCone F).terminal_object.cone_point,
+  onMorphisms   := λ F G τ, let lim_F := (limitCone F) in
+                            let lim_G := (limitCone G) in
+                              (lim_G.morphism_to_terminal_object_from {
+                                cone_point    := _,
+                                cone_maps     := (λ j, C.compose (lim_F.terminal_object.cone_maps j) (τ.components j)),
+                                commutativity := ♯ 
+                              }).morphism,
+  identities    := ♯,
+  functoriality := begin tidy 50 tt, end
+}
 
 private definition evaluate_Functor_to_FunctorCategory { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c : C.Obj ) : Functor J D := {
   onObjects     := λ j, (F.onObjects j).onObjects c,

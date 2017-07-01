@@ -76,8 +76,8 @@ let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
 in do (tt, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unfold e | fail "no projections to unfold",
       return new_e
 
-meta def unfold_projections' : tactic unit :=
-target >>= unfold_projections_core' semireducible default_max_steps >>= change
+-- meta def unfold_projections' : tactic unit :=
+-- target >>= unfold_projections_core' semireducible default_max_steps >>= change
 
 meta def unfold_projections_at' (h : expr) : tactic unit :=
 do num_reverted ← revert h,
@@ -329,7 +329,7 @@ meta def tidy_tactics : list (tactic string) :=
   ( pointwise,                     "pointwise" ),
   ( force (intros >> skip),        "intros" ),
   ( force (dsimp_eq_mpr),          "dsimp [eq.mpr]" ),
-  ( unfold_projections',           "unfold_projections'" ),
+  ( unfold_projections,            "unfold_projections" ),
   ( simp,                          "simp" ),
   ( force (fsplit),                "fsplit" ),
   ( dsimp_hypotheses,              "dsimp_hypotheses" ),
@@ -350,7 +350,15 @@ do results ← chain tidy_tactics max_steps,
    else
      skip
 
-meta def blast : tactic unit := at_least_one [ tidy, done <|> any_goals (force smt_eblast) ]
+meta def blast ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit := 
+do results ← chain (tidy_tactics ++ [ (force smt_eblast) >> pure "smt_eblast" ]) max_steps,
+   if trace_progress then
+     trace ("... chain tactic used: " ++ results.to_string)
+   else
+     skip
+
+
+-- at_least_one [ tidy, done <|> ((any_goals (force smt_eblast)) >> (blast <|> skip)) ]
 
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }
