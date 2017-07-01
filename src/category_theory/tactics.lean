@@ -135,6 +135,7 @@ match t with
 | `(unit)      := induction h >>= λ x, skip
 | `(punit)     := induction h >>= λ x, skip
 | `(empty)     := induction h >>= λ x, skip
+| `(fin nat.zero) := induction h >>= λ x, `[cases is_lt]
 | `(ulift _)   := induction h >>= λ x, skip
 | `(plift _)   := induction h >>= λ x, skip
 | `(eq _ _)    := induction h >>= λ x, skip
@@ -326,10 +327,10 @@ meta def tidy_tactics : list (tactic string) :=
   ( force (reflexivity),           "refl" ),
   ( nat_inequality,                "nat_inequality" ),
   ( pointwise,                     "pointwise" ),
+  ( force (intros >> skip),        "intros" ),
   ( force (dsimp_eq_mpr),          "dsimp [eq.mpr]" ),
   ( unfold_projections',           "unfold_projections'" ),
   ( simp,                          "simp" ),
-  ( force (intros >> skip),        "intros" ),
   ( force (fsplit),                "fsplit" ),
   ( dsimp_hypotheses,              "dsimp_hypotheses" ),
   ( automatic_induction,           "automatic_induction" ),

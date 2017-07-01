@@ -17,25 +17,28 @@ class Finite ( α : Type ) :=
 def {u} empty_function           { α : Sort u } : empty → α := ♯
 def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i := ♯
 
--- TODO improve automation here
+-- FIXME why doesn't the VM have code for this?
+@[pointwise] lemma empty_exfalso (x : false) : empty := begin exfalso, trivial end
+
+-- TODO improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
 instance empty_is_Finite : Finite empty := {
   n := 0,
   bijection := begin
                  fsplit, 
                  unfold_projections, 
                  intros, 
-                 induction a, 
+                 automatic_induction, 
                  unfold_projections, 
                  intros, 
-                 induction a, 
-                 exfalso, cases is_lt,
+                 pointwise,
+                 automatic_induction,
                  apply funext,
                  intros,
-                 induction x,
+                 automatic_induction,
                  apply funext,
                  intros,
-                 induction x,
-                 exfalso, cases is_lt,
+                 unfold_projections_hypotheses,
+                 automatic_induction,
               end
 }
 
@@ -45,7 +48,6 @@ inductive Two : Type
 
 open Two
 
-set_option pp.all true
 -- This is really lame!
 instance Two_is_Finite : Finite Two := {
   n := 2,
