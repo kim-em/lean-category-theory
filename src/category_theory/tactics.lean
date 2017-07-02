@@ -276,13 +276,13 @@ match tgt with
 | _                := failed
 end
 
-lemma f : 0 < 2 :=
-begin
- nat_inequality,
- nat_inequality,
- nat_inequality,
- nat_inequality,
-end
+-- lemma f : 0 < 2 :=
+-- begin
+--  nat_inequality,
+--  nat_inequality,
+--  nat_inequality,
+--  nat_inequality,
+-- end
 
 
 private meta def if_then_else { α : Type } ( i : tactic unit ) ( t e : tactic α ) : tactic α :=
