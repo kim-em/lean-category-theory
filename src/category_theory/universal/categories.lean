@@ -1,5 +1,5 @@
 import .instances
-import ..products.products
+import ..products
 import ..discrete_category
 
 open categories

@@ -3,8 +3,6 @@
 -- Authors: Stephen Morgan, Scott Morrison
 import ..natural_transformation
 
--- set_option pp.universes true
-
 open categories
 open categories.functor
 open categories.natural_transformation

@@ -3,7 +3,7 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .functor
-import .products.products
+import .products
 import .types
 
 open categories

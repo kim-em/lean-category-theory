@@ -1,5 +1,5 @@
-import ..types
-import .instances
+import ...types
+import ..instances
 
 open categories.universal
 open categories.isomorphism

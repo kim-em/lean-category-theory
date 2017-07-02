@@ -4,7 +4,7 @@
 
 import ..natural_isomorphism
 import ..opposites
-import ..products.products
+import ..products
 import ..isomorphism
 import ..types
 
@@ -15,7 +15,7 @@ open categories.products
 open categories.isomorphism
 open categories.types
 
-namespace categories.adjunction
+namespace categories.adjunctions
 
 definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
   NaturalIsomorphism
@@ -30,4 +30,4 @@ definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D 
 -- PROJECT show these are a special case of a duality in a 2-category.
 -- PROJECT adjoints of monoidal functors are (op)lax
 
-end categories.adjunction
+end categories.adjunctions

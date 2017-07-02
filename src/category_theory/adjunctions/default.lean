@@ -4,18 +4,14 @@
 
 import ..natural_transformation
 import ..opposites
-import ..products.products
-import ..isomorphism
 import ..types
 
 open categories
 open categories.functor
 open categories.natural_transformation
-open categories.products
-open categories.isomorphism
 open categories.types
 
-namespace categories.adjunction
+namespace categories.adjunctions
 
 structure Adjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
   ( unit       : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
@@ -83,4 +79,4 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
 -- PROJECT show these are a special case of a duality in a 2-category.
 -- PROJECT adjoints of monoidal functors are (op)lax
 
-end categories.adjunction
+end categories.adjunctions

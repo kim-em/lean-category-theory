@@ -2,9 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .category
-import .full_subcategory
-import .isomorphism
+import ..category
+import ..full_subcategory
+import ..isomorphism
 
 namespace categories.types
 

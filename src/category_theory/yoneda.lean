@@ -6,7 +6,6 @@ import .natural_transformation
 import .isomorphism
 import .opposites
 import .equivalence
-import .products.products
 import .products.switch
 import .types
 

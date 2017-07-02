@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .adjunction
+import ..adjunctions
 import .hom_adjunction
 
 open categories
@@ -12,7 +12,7 @@ open categories.products
 open categories.isomorphism
 open categories.types
 
-namespace categories.adjunction
+namespace categories.adjunctions
 
 definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : Adjunction L R ) : HomAdjunction L R := 
 {
@@ -119,4 +119,4 @@ definition Adjunction_to_HomAdjunction  { C D : Category } ( L : Functor C D ) (
 --                end
 -- }
 
-end categories.adjunction
+end categories.adjunctions
