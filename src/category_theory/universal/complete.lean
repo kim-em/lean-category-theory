@@ -4,11 +4,14 @@
 
 import .instances
 import ..discrete_category
+import ..currying.currying_1
+import ..products.switch
 
 open categories
 open categories.functor
 open categories.natural_transformation
 open categories.isomorphism
+open categories.products
 open categories.initial
 open categories.types
 open categories.util
@@ -31,11 +34,11 @@ definition {u v} limit     { C : Category.{u v} } [ Complete.{u v} C ] { J : Cat
   { X : Cone F }
   { g : C.Hom X.cone_point L.terminal_object.cone_point }
   ( w : ∀ j : J.Obj, C.compose g ((L.terminal_object).cone_maps j) = X.cone_maps j )
-    : (L.morphism_to_terminal_object_from X).morphism = g :=
+    : (L.morphism_to_terminal_object_from X).cone_morphism = g :=
   begin
     let G : (Cones F).Hom X L.terminal_object := ⟨ g, w ⟩,
     have q := L.uniqueness_of_morphisms_to_terminal_object _ (L.morphism_to_terminal_object_from X) G,
-    exact congr_arg ConeMorphism.morphism q,
+    exact congr_arg ConeMorphism.cone_morphism q,
   end
 
 @[simp,ematch] private lemma {u v} morphism_to_terminal_object_composed_with_cone_map
@@ -44,8 +47,25 @@ definition {u v} limit     { C : Category.{u v} } [ Complete.{u v} C ] { J : Cat
   { L : LimitCone F }
   { X : Cone F }
   { j : J.Obj }
-    : C.compose (L.morphism_to_terminal_object_from X).morphism (L.terminal_object.cone_maps j) = X.cone_maps j :=
+    : C.compose (L.morphism_to_terminal_object_from X).cone_morphism (L.terminal_object.cone_maps j) = X.cone_maps j :=
   (L.morphism_to_terminal_object_from X).commutativity j
+
+@[pointwise] lemma morphism_to_terminal_object_cone_point 
+  { J D : Category }
+  { Z : D.Obj }
+  { G : Functor J D }
+  { L : LimitCone G }
+  ( cone_maps : Π j : J.Obj, D.Hom Z (G.onObjects j) ) 
+  ( commutativity : Π j k : J.Obj, Π f : J.Hom j k, D.compose (cone_maps j) (G.onMorphisms f) = cone_maps k )
+   : D.Hom Z L.terminal_object.cone_point :=
+begin
+  let cone : Cone G := {
+    cone_point    := Z,
+    cone_maps     := cone_maps,
+    commutativity := commutativity
+  },
+  exact (L.morphism_to_terminal_object_from cone).cone_morphism, 
+end
 
 definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (FunctorCategory J C) C := {
   onObjects     := λ F, (limitCone F).terminal_object.cone_point,
@@ -55,7 +75,7 @@ definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (Functo
                                 cone_point    := _,
                                 cone_maps     := (λ j, C.compose (lim_F.terminal_object.cone_maps j) (τ.components j)),
                                 commutativity := ♯ 
-                              }).morphism,
+                              }).cone_morphism,
   identities    := ♯,
   functoriality := begin
                      tidy,
@@ -66,36 +86,58 @@ definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (Functo
                    end
 }
 
-private definition evaluate_Functor_to_FunctorCategory { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c : C.Obj ) : Functor J D := {
+@[reducible] private definition evaluate_Functor_to_FunctorCategory { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c : C.Obj ) : Functor J D := {
   onObjects     := λ j, (F.onObjects j).onObjects c,
   onMorphisms   := λ _ _ f, (F.onMorphisms f).components c,
   identities    := ♯,
   functoriality := ♯ 
 }
 
-private definition evaluate_Functor_to_FunctorCategory_on_Morphism { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c c' : C.Obj ) ( f : C.Hom c c' )
+@[reducible] private definition evaluate_Functor_to_FunctorCategory_on_Morphism { J C D : Category } ( F : Functor J (FunctorCategory C D )) { c c' : C.Obj } ( f : C.Hom c c' )
   : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
     components := λ j, (F.onObjects j).onMorphisms f,
     naturality := ♯ 
   }
 
+-- private definition switch { J C D : Category } : Functor (FunctorCategory J (FunctorCategory C D)) (FunctorCategory C (FunctorCategory J D)) :=
+--   FunctorComposition (FunctorComposition (Uncurry_Functors J C D) (whisker_on_left_functor _ (SwitchProductCategory C J))) (Curry_Functors C J D)
+
 -- PROJECT
--- instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Complete (FunctorCategory C D) := {
---   limitCone := λ J F, {
---     object     := {
---       -- TODO the whole definition of limit should come down to the fact that limits are functorial
---       limit         := {
---         onObjects     := λ c, limit (evaluate_Functor_to_FunctorCategory F c),
---         onMorphisms   := λ c c' f, sorry,
---         identities    := sorry,
---         functoriality := sorry
---       },
---       maps          := sorry,
---       commutativity := sorry
---     },
---     morphisms  := sorry,
---     uniqueness := sorry
---   }
--- }
+instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Complete (FunctorCategory C D) := {
+  limitCone := λ J F, {
+    terminal_object     := {      
+      cone_point    := -- FunctorComposition (switch.onObjects F) Limit, -- this is a fancy alternative, but I get stuck following through.
+      {
+        onObjects     := λ c, Limit.onObjects (evaluate_Functor_to_FunctorCategory F c),
+        onMorphisms   := λ _ _ f, Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
+        identities    := ♯,
+        functoriality := begin tidy, rewrite D.associativity, simp, rewrite - D.associativity, simp, rewrite D.associativity end
+      },
+      cone_maps     := λ j, {
+        components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,
+        naturality := ♯ 
+      },
+      commutativity := ♯ 
+    },
+    morphism_to_terminal_object_from           := λ Y, {
+      cone_morphism := {
+        components := begin
+                         tidy,  -- this will use morphism_to_terminal_object_cone_point
+                         exact (Y.cone_maps j).components X, 
+                         tidy, 
+                         exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,                       
+                       end,
+        naturality := begin 
+                        tidy,
+                        unfold morphism_to_terminal_object_cone_point,
+                        tidy,
+                        admit
+                      end
+      },
+      commutativity := begin tidy, admit end
+    },
+    uniqueness_of_morphisms_to_terminal_object := begin tidy, admit end
+  }
+}
 
 end categories.universal
