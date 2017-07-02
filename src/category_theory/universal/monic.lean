@@ -18,17 +18,19 @@ structure RegularMonic { C : Category } { X Y : C.Obj } ( f : C.Hom X Y ) :=
   ( i : Isomorphism C e.equalizer X )
   ( w : e.inclusion = C.compose i.morphism f )
 
+-- PROJECT
 -- lemma SplitMonic_implies_RegularMonic
 --   { C : Category } 
 --   { X Y : C.Obj } 
 --   { f : C.Hom X Y } 
 --   ( s : SplitMonic f ) : RegularMonic f := sorry
 
+-- PROJECT
 -- lemma RegularMonic_implies_Monic
 --   { C : Category } 
 --   { X Y : C.Obj } 
 --   { f : C.Hom X Y } 
---   ( s : SplitMonic f ) : RegularMonic f := sorry
+--   ( s : RegularMonic f ) : Monic f := sorry
 
 structure RegularEpic { C : Category } { Y Z : C.Obj } ( f : C.Hom Y Z ) :=
   ( X : C.Obj )

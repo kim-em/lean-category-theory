@@ -98,7 +98,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
                                    -- PROJECT learn how to use calc!
                                    have p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,
                                    simp at p,
-                                   repeat { rewrite C.associativity at p },
+                                   repeat_at_least_once { rewrite C.associativity at p },
                                    blast,                                   
                                   end
       },
@@ -111,7 +111,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
                             -- blast should work from the beginning here, but takes longer than I have patience for
                              pointwise,
                              intros,
-                             repeat { rewrite C.associativity },
+                             repeat_at_least_once { rewrite C.associativity },
                              blast,
                            end,
         commutativity := /- we need to show that that map commutes with everything -/
@@ -123,7 +123,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
       },
       uniqueness_of_morphisms_to_terminal_object := λ cone f g, begin
                                   tidy,
-                                  repeat { rewrite C.associativity }, -- unfortunately blast is too slow here
+                                  repeat_at_least_once { rewrite C.associativity }, -- unfortunately blast is too slow here
                                   tidy,
                                 end
     }

@@ -15,6 +15,9 @@ open categories.util
 
 namespace categories.universal
 
+class {u v} Complete_for ( C : Category.{u v} ) ( p : Category.{u v} → Prop ) := 
+  ( limitCone : Π { J : Category.{u v} } ( w : p J ) ( F : Functor J C ), LimitCone F )
+
 class {u v} Complete ( C : Category.{u v} ) := 
   ( limitCone : Π { J : Category.{u v} } ( F : Functor J C ), LimitCone F )
 

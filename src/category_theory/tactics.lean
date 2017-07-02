@@ -143,6 +143,7 @@ do t ← infer_type h,
 match t with
 | `(unit)      := induction h >>= λ x, skip
 | `(punit)     := induction h >>= λ x, skip
+| `(false)     := induction h >>= λ x, skip
 | `(empty)     := induction h >>= λ x, skip
 | `(fin nat.zero) := induction h >>= λ x, `[cases is_lt]
 | `(Two)       := induction h >>= λ x, skip
@@ -170,6 +171,18 @@ meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible 
 meta def fsplit : tactic unit :=
 do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, target is not an inductive datatype with only one constructor",
    mk_const c >>= fapply
+
+namespace tactic
+
+meta def repeat_at_least_once ( t : tactic unit ) : tactic unit := t >> repeat t
+
+namespace interactive
+meta def repeat_at_least_once : itactic → tactic unit :=
+tactic.repeat_at_least_once
+end interactive
+
+end tactic
+
 
 namespace tactic
   open expr
@@ -357,7 +370,7 @@ do results ← chain tidy_tactics max_steps,
      skip
 
 meta def blast ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit := 
-do results ← chain (tidy_tactics ++ [ smt_eblast >> done >> pure "smt_eblast" ]) max_steps,
+do results ← chain (tidy_tactics ++ [ any_goals ( smt_eblast >> done ) >> pure "smt_eblast" ]) max_steps,
    if trace_progress then
      trace ("... chain tactic used: " ++ results.to_string)
    else

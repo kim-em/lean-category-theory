@@ -99,9 +99,9 @@ lemma {u1 v1 u2 v2} Equivalences_are_Faithful { C : Category.{u1 v1} } { D : Cat
 private lemma {u1 v1 u2 v2} preimage_lemma { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor.onObjects X) (e.functor.onObjects Y) ) : (e.inverse).onMorphisms ((e.functor).onMorphisms (preimage e X Y h)) = (e.inverse).onMorphisms h :=
 begin
   erewrite - e.isomorphism_1.naturality_2 (preimage e X Y h),
-  repeat { erewrite - C.associativity },
+  repeat_at_least_once { erewrite - C.associativity },
   erewrite e.isomorphism_1.componentwise_witness_1,
-  repeat { rewrite C.associativity },
+  repeat_at_least_once { rewrite C.associativity },
   erewrite e.isomorphism_1.componentwise_witness_1,
   erewrite C.right_identity,
   rewrite C.left_identity
@@ -169,7 +169,7 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
             ... = (ε_mor X ⟩D⟩ f) ⟩D⟩ D.identity Y ⟩D⟩ (g ⟩D⟩ ε_inv Z) : ♮
             ... = (ε_mor X ⟩D⟩ f) ⟩D⟩ (ε_inv Y ⟩D⟩ ε_mor Y) ⟩D⟩ (g ⟩D⟩ ε_inv Z)
                 : by rewrite (ess_surj Y).2.witness_2
-            ... = f' ⟩D⟩ g' : by repeat { rewrite - D.associativity }
+            ... = f' ⟩D⟩ g' : by repeat_at_least_once { rewrite - D.associativity }
             ... = F.onMorphisms (full.preimage f') ⟩D⟩ F.onMorphisms (full.preimage g')
                 : by rewrite [full.witness f', full.witness g']
             ... = F.onMorphisms (full.preimage f' ⟩C⟩ full.preimage g') : ♮

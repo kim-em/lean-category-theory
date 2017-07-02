@@ -21,7 +21,7 @@ class has_InitialObject ( C : Category ) :=
 class has_BinaryProducts ( C : Category ) :=
   ( binary_product : Π X Y : C.Obj, BinaryProduct X Y )
 class has_FiniteProducts ( C : Category ) :=
-  ( product : Π { I : Type } [ fin : Finite I ] ( f : I → C.Obj ), Product f )
+  ( product : Π { I : Type } [ Finite I ] ( f : I → C.Obj ), Product f )
 class has_Products ( C : Category ) :=
   ( product : Π { I : Type } ( f : I → C.Obj ), Product f )
 
@@ -31,7 +31,7 @@ class has_TerminalObject ( C : Category ) :=
 class has_BinaryCoproducts ( C : Category ) :=
   ( binary_coproduct : Π X Y : C.Obj, BinaryCoproduct X Y )
 class has_FiniteCoproducts ( C : Category ) :=
-  ( coproduct : Π { I : Type } [ fin : Finite I ] ( f : I → C.Obj ), Coproduct f )
+  ( coproduct : Π { I : Type } [ Finite I ] ( f : I → C.Obj ), Coproduct f )
 class has_Coproducts ( C : Category ) :=
   ( coproduct : Π { I : Type } ( f : I → C.Obj ), Coproduct f )
 

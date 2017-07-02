@@ -12,7 +12,28 @@ namespace categories.util.finite
 
 class Finite ( α : Type ) :=
   ( n : nat )
-  ( bijection : Isomorphism CategoryOfTypes α (fin n) )
+  ( bijection : Bijection α (fin n) )
+
+definition decidable_via_isomorphism { α β : Type } [ dec : decidable_eq β ] ( iso : Bijection α β ) : decidable_eq α :=
+begin
+  tidy,
+  have x := dec (iso.morphism a) (iso.morphism b),
+  induction x with neq eq,
+  exact is_false begin
+                   intros eq,
+                   have eq' := congr_arg iso.morphism eq,
+                   tidy,
+                 end,
+  exact is_true  begin 
+                   have eq' := congr_arg iso.inverse eq,
+                   repeat_at_least_once { rewrite Bijection.witness_1 at eq' },
+                   exact eq',
+                 end
+end
+
+instance Finite_has_decidable_eq { α : Type } [ fin : Finite α ] : decidable_eq α := decidable_via_isomorphism fin.bijection
+
+-- instance Finite_product { α β : Type } [ Finite α ] [ Finite β ] : Finite (α × β) := sorry
 
 def {u} empty_function           { α : Sort u } : empty → α := ♯
 def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i := ♯
@@ -24,6 +45,7 @@ def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i :=
 instance empty_is_Finite : Finite empty := {
   n := 0,
   bijection := begin
+                 unfold Bijection,
                  fsplit, 
                  unfold_projections, 
                  intros, 

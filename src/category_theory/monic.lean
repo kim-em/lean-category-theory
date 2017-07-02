@@ -21,8 +21,8 @@ lemma SplitMonic_implies_Monic { C : Category } { Y Z : C.Obj } { f : C.Hom Y Z 
     witness := λ _ a b p, begin
                             have e := congr_arg (λ g, C.compose g m.right_inverse) p,
                             simp at e,
-                            repeat { rewrite C.associativity at e },
-                            repeat { rewrite m.evidence at e },
+                            repeat_at_least_once { rewrite C.associativity at e },
+                            repeat_at_least_once { rewrite m.evidence at e },
                             simp at e,
                             exact e
                           end

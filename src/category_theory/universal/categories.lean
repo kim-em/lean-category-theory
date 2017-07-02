@@ -116,7 +116,7 @@ definition {u v} Categories_has_InitialObject : has_InitialObject CategoryOfCate
 --                                  pose p := congr_darg (λ T, @Functor.onMorphisms Z C T X Y φ) left_witness,
 --                                  dsimp_all_hypotheses,
 --                                  dunfold_everything,
---                                 --  repeat { rewrite transport_Prop },
+--                                 --  repeat_at_least_once { rewrite transport_Prop },
 --                                 --  rewrite foo,
 --                                  exact p
 --                                },
