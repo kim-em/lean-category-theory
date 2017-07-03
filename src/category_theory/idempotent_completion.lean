@@ -39,9 +39,24 @@ definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (Idempot
   functoriality := ♮
 }
 
+-- PROJECT
+-- definition IdempotentCompletion_functorial ( C D : Category ) : Functor (FunctorCategory C D) (FunctorCategory (IdempotentCompletion C) (IdempotentCompletion D)) := {
+--   onObjects     := λ F, {
+--     onObjects     := λ X, ⟨ F.onObjects X.object, F.onMorphisms X.idempotent, ♯ ⟩ ,
+--     onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val), ♯ ⟩,
+--     identities    := ♯,
+--     functoriality := ♯
+--   },
+--   onMorphisms   := λ F G τ, {
+--     components := λ X, ⟨ τ.components X.object, begin tidy, end ⟩,
+--     naturality := ♯
+--   },
+--   identities    := ♯, -- we've made a mistake somewhere..
+--   functoriality := sorry
+-- }
+
 open categories.equivalence
 
--- PROJECT show the embedding really was full and faithful
 lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
 begin
   unfold Embedding,
@@ -72,17 +87,23 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
 --   },
 --   inverse := {
 --     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
---     onMorphisms   := λ X Y f, ⟨ f, begin tidy, admit, admit, end ⟩,
+--     onMorphisms   := λ X Y f, ⟨ f, begin tidy, exact f_2.right, tidy, exact f_2.left end ⟩,
 --     identities    := ♮,
 --     functoriality := ♮
 --   },
---   isomorphism_1 := sorry,
+--   isomorphism_1 := begin tidy, end, -- FIXME this gets stuck because we've improperly used identities automatically! -- how do we cancel attributes?
 --   isomorphism_2 := sorry
 -- }
 
--- definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
---   Functor (IdempotentCompletion C) (IdempotentCompletion D) := 
---     sorry
+-- Oh, I guess I had original intended that this should use the previous results... oh well.
+definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
+  Functor (IdempotentCompletion C) (IdempotentCompletion D) :=
+{
+  onObjects     := λ X, let FX := F.onObjects X.object in ⟨ FX.object, (F.onMorphisms X.idempotent).val, begin tidy, have p := F.functoriality X.idempotent X.idempotent, have p' := congr_arg subtype.val p, tidy, exact eq.symm p' end ⟩,
+  onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val).val, begin tidy, have p := F.functoriality X.idempotent f_1, have p' := congr_arg subtype.val p, rewrite f_2.right at p', tidy, exact eq.symm p', tidy, have p := F.functoriality f_1 Y.idempotent, have p' := congr_arg subtype.val p, rewrite f_2.left at p', tidy, exact eq.symm p', end ⟩,
+  identities    := ♯,
+  functoriality := ♯, 
+}
 
 -- lemma Functor_from_IdempotentCompletion_determined_by_restriction 
 --   { C D : Category } ( F : Functor (IdempotentCompletion C) (IdempotentCompletion D) ) :
