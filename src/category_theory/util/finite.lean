@@ -11,8 +11,8 @@ open categories.types
 namespace categories.util.finite
 
 class Finite ( α : Type ) :=
-  ( n : nat )
-  ( bijection : Bijection α (fin n) )
+  ( cardinality : nat )
+  ( bijection : Bijection α (fin cardinality) )
 
 definition decidable_via_isomorphism { α β : Type } [ dec : decidable_eq β ] ( iso : Bijection α β ) : decidable_eq α :=
 begin
@@ -43,7 +43,7 @@ def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i :=
 
 -- TODO improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
 instance empty_is_Finite : Finite empty := {
-  n := 0,
+  cardinality := 0,
   bijection := begin
                  unfold Bijection,
                  fsplit, 
@@ -68,7 +68,7 @@ open Two
 
 -- This is really lame!
 instance Two_is_Finite : Finite Two := {
-  n := 2,
+  cardinality := 2,
   bijection := {
     morphism := λ n, match n with
                        | _0 := ⟨ 0, ♯ ⟩

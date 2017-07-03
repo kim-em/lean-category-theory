@@ -36,7 +36,7 @@ private definition {u v} ConeMorphism_from_map_to_limit
   { Z : C.Obj } 
   ( f : C.Hom Z L.terminal_object.cone_point ) : ConeMorphism (Cone_from_map_to_limit f) L.terminal_object :=
 {
-  morphism      := f,
+  cone_morphism      := f,
   commutativity := ♯ 
 }
 
@@ -74,10 +74,10 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                                                 intros, 
                                                 have p := lim_F.uniqueness_of_morphisms_to_terminal_object, 
                                                 have q := p _ (ConeMorphism_from_map_to_limit f)
-                                                  { morphism := g, commutativity := begin tidy, exact eq.symm (witness j) end },
-                                                exact congr_arg ConeMorphism.morphism q, -- surely this line can be automated: if you know a = b, you know a.x = b.x
+                                                  { cone_morphism := g, commutativity := begin tidy, exact eq.symm (witness j) end },
+                                                exact congr_arg ConeMorphism.cone_morphism q, -- surely this line can be automated: if you know a = b, you know a.x = b.x
                                               end,
-                    map           := λ Z i, (lim_F.morphism_to_terminal_object_from { cone_point := Z, cone_maps := i, commutativity := ♯ }).morphism,
+                    map           := λ Z i, (lim_F.morphism_to_terminal_object_from { cone_point := Z, cone_maps := i, commutativity := ♯ }).cone_morphism,
                     factorisation := ♯ 
                   }
 }
@@ -103,7 +103,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
                                   end
       },
       morphism_to_terminal_object_from := λ cone : Cone F, {
-        morphism      := /- we need a morphism from the tip of f to the equalizer -/
+        cone_morphism      := /- we need a morphism from the tip of f to the equalizer -/
                          equalizer.map
                            (product_over_objects.map cone.cone_maps)
                            /- we need to provide the evidence that that map composes correctly with source and target -/

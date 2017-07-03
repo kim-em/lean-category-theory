@@ -47,23 +47,6 @@ namespace tactic.interactive
   meta def force (t : itactic) : tactic unit := _root_.force t
 end tactic.interactive
 
-meta def dunfold_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
-let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
-  new_e ← dunfold_expr_core m e,
-  return (tt, new_e, ff)
-in do (tt, new_e) ← dsimplify_core ff max_steps tt (λ c e, failed) unfold e | fail "nothing to unfold",
-      return new_e
-
--- This tactic is a combination of dunfold_at and dsimp_at_core
-meta def dunfold_and_simp_at (s : simp_lemmas) (h : expr) : tactic unit :=
-do num_reverted ← revert h,
-   (expr.pi n bi d b : expr) ← target,
-   new_d ← dunfold_core' semireducible default_max_steps d,
-   new_d_simp ← s.dsimplify new_d,
-   guard (new_d_simp ≠ d),
-   change $ expr.pi n bi new_d_simp b,
-   intron num_reverted
-
 -- Applies a list of tactics in turn, always succeeding.
 meta def list_try_seq : list (tactic unit) → tactic unit 
 | list.nil  := skip
@@ -165,8 +148,6 @@ do l ← local_context,
 
 open lean.parser
 open interactive
-
-meta def dunfold_everything : tactic unit := target >>= dunfold_core' reducible default_max_steps >>= change
 
 meta def fsplit : tactic unit :=
 do [c] ← target >>= get_constructors_for | tactic.fail "fsplit tactic failed, target is not an inductive datatype with only one constructor",

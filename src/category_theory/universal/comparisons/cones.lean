@@ -31,7 +31,7 @@ definition comma_Cone_to_Cone { J C : Category } { F : Functor J C } ( cone : (c
 
 definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J C } { X Y : (comma.Cones F).Obj } ( f : (comma.Cones F).Hom X Y ) : ConeMorphism (comma_Cone_to_Cone X) (comma_Cone_to_Cone Y) := 
 {
-  morphism      := f.val.1,
+  cone_morphism      := f.val.1,
   commutativity := λ j : J.Obj, begin
    -- PROJECT improve automation?
                                   tidy,                                  
@@ -51,7 +51,7 @@ definition Cone_to_comma_Cone { J C : Category } { F : Functor J C } ( cone : Co
   } ⟩
 
 definition ConeMorphism_to_comma_ConeMorphism { J C : Category } { F : Functor J C } { X Y : Cone F } ( f : ConeMorphism X Y ) : (comma.Cones F).Hom (Cone_to_comma_Cone X) (Cone_to_comma_Cone Y) := 
-  ⟨ (f.morphism, ♯), ♯ ⟩
+  ⟨ (f.cone_morphism, ♯), ♯ ⟩
 
 definition comma_Cones_to_Cones { J C : Category } ( F : Functor J C ) : Functor (comma.Cones F) (Cones F) := {
     onObjects     := comma_Cone_to_Cone,

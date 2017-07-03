@@ -92,8 +92,21 @@ instance BinaryProducts_from_FiniteProducts ( C : Category ) [ has_FiniteProduct
 }
 
 -- PROJECT:
--- instance FiniteProducts_from_BinaryProducts ( C : Category ) [ has_BinaryProducts C ] : has_FiniteProducts C := {
---   product := Π { I : Type } [ fin : Finite I ] ( f : I → C.Obj ), 
+-- open nat
+
+-- definition construct_finite_product ( C : Category ) [ has_TerminalObject C ] [ has_BinaryProducts C ]
+--   : Π n : nat, Π ( I : Type ) ( fin : Finite I ) ( p : fin.cardinality = n ) ( f : I → C.Obj ), Product f
+-- | 0        := λ { I : Type } [ fin : Finite I ] ( p : fin.cardinality = 0 ) ( f : I → C.Obj ), {
+--                 product       := terminal_object,
+--                 projection    := begin intros, admit end,
+--                 map           := sorry,
+--                 factorisation := sorry,
+--                 uniqueness    := sorry
+--               }
+-- | (succ n) := sorry
+
+-- instance FiniteProducts_from_BinaryProducts ( C : Category ) [ has_TerminalObject C ] [ has_BinaryProducts C ] : has_FiniteProducts C := {
+--   product := λ { I : Type } [ fin : Finite I ] ( f : I → C.Obj ), construct_finite_product C fin.cardinality I fin ♯ f
 -- }
 
 end categories.universal
