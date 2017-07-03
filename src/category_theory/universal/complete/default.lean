@@ -2,10 +2,10 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .instances
-import ..discrete_category
-import ..currying.currying_1
-import ..products.switch
+import ..instances
+import ...discrete_category
+import ...currying.currying_1
+import ...products.switch
 
 open categories
 open categories.functor
