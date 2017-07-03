@@ -11,85 +11,41 @@ open categories.equivalence
 
 namespace categories.natural_transformation
 
-definition {u1 v1 u2 v2 u3 v3} Curry_Uncurry_to_identity
-  ( C : Category.{u1 v1} )
-  ( D : Category.{u2 v2} )
-  ( E : Category.{u3 v3} )  : NaturalTransformation (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) (IdentityFunctor _) :=
-      {
-         components := λ F, {
-             components := --by tidy, -- PROJECT seems to cause problems below
-                            λ X, {
-                                components := by tidy, --λ Y, E.identity ((F.onObjects X).onObjects Y),
-                                naturality := ♯
-                            },
-             naturality := ♯
-         },
-         naturality := --♯ -- PROJECT this seems to run forever?
-                       begin
-                         intros, 
-                         pointwise, 
-                         intros, 
-                         unfold_projections, 
-                         pointwise, 
-                         intros, 
-                         simp, 
-                         unfold_projections, 
-                         dsimp, 
-                         erewrite Category.left_identity,  -- PROJECT why are these necessary? PROJECT automation
-                         erewrite Category.right_identity,
-                       end
-     }
+-- lemma simon_1 ( a b : ℕ ) : a + b = b + a := ♯
+-- lemma simon_2 ( a : ℕ ) : 0 * a = 0 := begin
+--                                           simp, 
+--                                        end
 
-definition {u1 v1 u2 v2 u3 v3} identity_to_Curry_Uncurry
-  ( C : Category.{u1 v1} )
-  ( D : Category.{u2 v2} )
-  ( E : Category.{u3 v3} )  : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) :=
-      {
-         components := λ F, {
-             components := λ X, {
-                 components := by tidy, --λ Y, E.identity ((F.onObjects X).onObjects Y),
-                 naturality := ♯
-             },
-             naturality := ♯
-         },
-         naturality := begin
-                         intros, 
-                         pointwise, 
-                         intros, 
-                         unfold_projections, 
-                         pointwise, 
-                         intros, 
-                         simp, 
-                         unfold_projections, 
-                         dsimp, 
-                         erewrite Category.left_identity,  -- PROJECT why are these necessary? PROJECT automation
-                         erewrite Category.right_identity,
-                       end
-     }
 
-definition {u1 v1 u2 v2 u3 v3} Uncurry_Curry_to_identity
-  ( C : Category.{u1 v1} )
-  ( D : Category.{u2 v2} )
-  ( E : Category.{u3 v3} )  : NaturalTransformation (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) (IdentityFunctor _) := 
-  -- PROJECT why can't tidy just do all this itself?
-      {
-         components := λ (F: Functor (C × D) E), {
-             components := by tidy, -- can't write ♯ here because abstract things can't be unfolded
-             naturality := ♯ 
-         },
-         naturality := ♯
-     }
+-- lemma simons_distrib ( x y z : ℤ ) : x * (y + z) = x * y + x * z := sorry
+
+-- lemma c : 2 * 3 = 6 := by tidy
+
+-- lemma simon_3 ( a b : ℤ ) : ∃ c : ℤ , 3 * a + 6 * b = 3 * c :=
+-- begin
+--   existsi a + b * 2,
+--   rewrite simons_distrib,
+--   simp,
+--   have p : 2 * 3 = 6, { tidy },
+--   tidy,
+-- end                                       
+
+universes u1 v1 u2 v2 u3 v3
+
+variable C : Category.{u1 v1}
+variable D : Category.{u2 v2}
+variable E : Category.{u3 v3}
+
+definition Curry_Uncurry_to_identity
+    : NaturalTransformation (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) (IdentityFunctor _) := ♯ 
+
+definition identity_to_Curry_Uncurry
+    : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) := ♯ 
+
+definition Uncurry_Curry_to_identity
+    : NaturalTransformation (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) (IdentityFunctor _) := ♯ 
      
-definition {u1 v1 u2 v2 u3 v3} identity_to_Uncurry_Curry
-  ( C : Category.{u1 v1} )
-  ( D : Category.{u2 v2} )
-  ( E : Category.{u3 v3} )  : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) :=
-      {
-         components := λ (F: Functor (C × D) E), {
-             components := by tidy, -- can't write ♯ here because abstract things can't be unfolded
-             naturality := ♯
-         },
-         naturality := ♯
-     }
+definition identity_to_Uncurry_Curry
+    : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) := ♯ 
 
 end categories.natural_transformation

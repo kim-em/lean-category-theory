@@ -49,86 +49,126 @@ definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } {
                    tidy,
                    rewrite - C.associativity,
                    rewrite - A.unit_naturality,
-                   rewrite C.associativity,
-                   rewrite A.triangle_1,
+                   rewrite C.associativity, -- ⊢ ∀ x : C.Hom fst (R snd), C.compose x (C.compose ((A.unit).components (R.onObjects snd)) (R.onMorphisms ((A.counit).components snd))) = x
+                   rewrite A.triangle_1,    -- ⊢ ∀ x : C.Hom fst (R snd), C.compose x (C.identity (R.onObjects snd)) = x
                    simp
                  end
   }
 
+-- ⊢ C.compose
+--       ((A.morphism).components (R.onObjects X, L.onObjects (R.onObjects X)) (D.identity (L.onObjects (R.onObjects X))))
+--       (R.onMorphisms ((A.inverse).components (R.onObjects X, X) (C.identity (R.onObjects X)))) =
+--     C.identity (R.onObjects X)
 
--- lemma triangle_1_lemma { C D : Category } ( L : Functor C D ) ( R : Functor D C ) ( A : HomAdjunction L R ) ( X : D.Obj ) :
---   C.compose ((A.morphism).components (R X, L (R X)) (D.identity (L (R X))))
---     (R.onMorphisms ((A.inverse).components (R X, X) (C.identity (R X)))) = C.identity (R X) :=
---   begin
---     pose q := @NaturalTransformation.naturality _ _ _ _ A.morphism _ _ ((Opposite C × D).identity (R X, X)),
---     pose q' := @NaturalTransformation.naturality _ _ _ _ A.inverse _ _ ((Opposite C × D).identity (R X, X)),
-    
---     pose p := congr_fun q' (C.identity (R X)),
-    
---   end
+@[simp] lemma mate_of_L
+  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
+  { X Y : C.Obj } ( f : C.Hom X Y )
+    : C.compose ((A.morphism).components (X, L.onObjects X) (D.identity (L.onObjects X)))
+      (R.onMorphisms (L.onMorphisms f))
+      = (A.morphism).components (X, L.onObjects Y) (L.onMorphisms f) :=
+begin
+  have p := @NaturalTransformation.naturality _ _ _ _ A.morphism (X, L X) (X, L Y) (C.identity X, L.onMorphisms f),
+  tidy,
+  have q := congr_fun p (L.onMorphisms (C.identity X)),
+  tidy,
+  exact eq.symm q
+end
 
-@[reducible] private definition unit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) := {
+@[simp] lemma mate_of_L'
+  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
+  { X Y : C.Obj } ( f : C.Hom X Y )
+    : C.compose f ((A.morphism).components (Y, L.onObjects Y) (D.identity (L.onObjects Y)))
+      = (A.morphism).components (X, L.onObjects Y) (L.onMorphisms f) :=
+begin
+  have p := @NaturalTransformation.naturality _ _ _ _ A.morphism (Y, L.onObjects Y) (X, L.onObjects Y) (f, D.identity (L.onObjects Y)),
+  tidy,
+  have q := congr_fun p (L.onMorphisms (C.identity Y)),
+  tidy,
+  exact eq.symm q
+end
+@[simp] lemma mate_of_R
+  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
+  { X Y : D.Obj } ( f : D.Hom X Y )
+    : D.compose (L.onMorphisms (R.onMorphisms f)) ((A.inverse).components (R.onObjects Y, Y) (C.identity (R.onObjects Y)))
+      = (A.inverse).components (R.onObjects X, Y) (R.onMorphisms f) :=
+begin
+  have p := @NaturalTransformation.naturality _ _ _ _ A.inverse (R.onObjects Y, Y) (R.onObjects X, Y) (R.onMorphisms f, D.identity Y),
+  tidy,
+  have q := congr_fun p (R.onMorphisms (D.identity Y)),
+  tidy,
+  exact eq.symm q
+end
+@[simp] lemma mate_of_R'
+  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
+  { X Y : D.Obj } ( f : D.Hom X Y )
+    : D.compose ((A.inverse).components (R.onObjects X, X) (C.identity (R.onObjects X))) f = 
+    (A.inverse).components (R.onObjects X, Y) (R.onMorphisms f) :=
+begin
+  have p := @NaturalTransformation.naturality _ _ _ _ A.inverse (R.onObjects X, X) (R.onObjects X, Y) (C.identity (R.onObjects X), f),
+  tidy,
+  have q := congr_fun p (R.onMorphisms (D.identity X)),
+  tidy,
+  exact eq.symm q
+end
+
+private definition unit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) := {
     components := λ X : C.Obj, A.morphism.components (X, L.onObjects X) (D.identity (L.onObjects X)),
-    naturality := begin
-                    tidy,
-                    have p := @NaturalTransformation.naturality _ _ _ _ A.morphism (X, L X) (X, L Y) (C.identity X, L.onMorphisms f),--((Opposite C × D).identity (X, L Y)),
-                    tidy,
-                    have q := congr_fun p (L.onMorphisms (C.identity X)), -- PROJECT extract q as a lemma about mates
-                    tidy,
-                    rewrite - q,
-                    clear p q,                   
-                    -- FIXME leaving off .onObjects in the following line causes tidy to run forever, because of 'has_coe_to_fun.coe'
-                    have p := @NaturalTransformation.naturality _ _ _ _ A.morphism (Y, L.onObjects Y) (X, L.onObjects Y) (f, D.identity (L.onObjects Y)),--((Opposite C × D).identity (X, L Y)),
-                    tidy,
-                    have q := congr_fun p (L.onMorphisms (C.identity Y)), -- PROJECT extract q as a lemma about mates
-                    tidy,
-                    rewrite - q,
-                  end
+    naturality := ♯ 
   }
-@[reducible] private definition counit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) := {
+private definition counit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) := {
     components := λ X : D.Obj, A.inverse.components (R.onObjects X, X) (C.identity (R.onObjects X)),
-    naturality := begin
-                    tidy,
-                    have p := @NaturalTransformation.naturality _ _ _ _ A.inverse (R.onObjects Y, Y) (R.onObjects X, Y) (R.onMorphisms f, D.identity Y),--((Opposite C × D).identity (X, L Y)),
-                    tidy,
-                    have q := congr_fun p (R.onMorphisms (D.identity Y)), -- PROJECT extract q as a lemma about mates
-                    tidy,
-                    rewrite - q,
-                    clear p q,                   
-                    -- FIXME leaving off .onObjects in the following line causes tidy to run forever, because of 'has_coe_to_fun.coe'
-                    have p := @NaturalTransformation.naturality _ _ _ _ A.inverse (R.onObjects X, X) (R.onObjects X, Y) (C.identity (R.onObjects X), f),--((Opposite C × D).identity (X, L Y)),
-                    tidy,
-                    have q := congr_fun p (R.onMorphisms (D.identity X)), -- PROJECT extract q as a lemma about mates
-                    tidy,
-                    rewrite - q,
-                  end
+    naturality := ♯
   }
 
-definition HomAdjunction_to_Adjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : Adjunction L R := 
-{
-  unit       := unit_from_HomAdjunction A,
-  counit     := counit_from_HomAdjunction A,
-  triangle_1 := begin
-                  intros,
-                  simp,
-                  have p := A.witness_1,
-                  have q := @NaturalTransformation.naturality _ _ _ _ A.morphism (R.onObjects X, X) (R.onObjects X, X) (C.identity (R.onObjects X), D.identity X),
-                  tidy,
-                  admit
-                end,
-  triangle_2 := sorry
-}
+-- lemma pre_triangle_1 
+-- { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
+-- ( X : C.Obj )
+-- ( Y : D.Obj )
+-- : ∀ f : C.Hom X (R.onObjects Y), C.compose f (C.compose ((unit_from_HomAdjunction A).components (R.onObjects Y)) (R.onMorphisms ((counit_from_HomAdjunction A).components Y))) = f :=
+-- begin
+--   intro f,
+--   rewrite - C.associativity,
+--   erewrite (unit_from_HomAdjunction A).naturality,
+--   rewrite C.associativity,
+--   tidy,
+--   have p1 := A.witness_2,
+--   tidy,
+--   have p2 := congr_arg NaturalTransformation.components p1,
+--   tidy,
+--   have p3 := congr_fun p2 (X, Y),
+--   tidy,
+--   have p4 := congr_fun p3 f,
+--   clear p1 p2 p3,
+--   tidy,
+-- end
 
-definition Adjunctions_agree { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :
-  Isomorphism CategoryOfTypes (Adjunction L R) (HomAdjunction L R) := 
-{
-  morphism  := Adjunction_to_HomAdjunction,
-  inverse   := HomAdjunction_to_Adjunction,
-  witness_1 := begin tidy, end,
-  witness_2 := begin
-                 tidy,
-                 -- this is just another lemma about mates; perhaps the same as the one we use above.
-               end
-}
+-- definition HomAdjunction_to_Adjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : Adjunction L R := 
+-- {
+--   unit       := unit_from_HomAdjunction A,
+--   counit     := counit_from_HomAdjunction A,
+--   triangle_1 := begin
+--                   tidy,
+--                   have p1 := A.witness_2,
+--                   have p2 := congr_arg NaturalTransformation.components p1,
+--                   have p3 := congr_fun p2 (R.onObjects X, L.onObjects(R.onObjects X)),
+--                   tidy,
+--                   have p4 := congr_fun p3 (C.identity (R.onObjects X)),
+--                   tidy,
+--                   admit
+--                 end,
+--   triangle_2 := sorry
+-- }
+
+-- definition Adjunctions_agree { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :
+--   Isomorphism CategoryOfTypes (Adjunction L R) (HomAdjunction L R) := 
+-- {
+--   morphism  := Adjunction_to_HomAdjunction,
+--   inverse   := HomAdjunction_to_Adjunction,
+--   witness_1 := begin tidy, end,
+--   witness_2 := begin
+--                  tidy,
+--                  -- this is just another lemma about mates; perhaps the same as the one we use above.
+--                end
+-- }
 
 end categories.adjunctions

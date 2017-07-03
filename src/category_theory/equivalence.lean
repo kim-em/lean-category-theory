@@ -64,13 +64,19 @@ structure {u1 v1 u2 v2} Full     { C : Category.{u1 v1} } { D : Category.{u2 v2}
   ( preimage : ∀ { X Y : C.Obj } ( f : D.Hom (F.onObjects X) (F.onObjects Y) ), C.Hom X Y )
   ( witness  : ∀ { X Y : C.Obj } ( f : D.Hom (F.onObjects X) (F.onObjects Y) ), F.onMorphisms (preimage f) = f )
 
--- attribute [pointwise] Full.preimage -- This would cause problems! It would be nice if we already had a full functor around, to be able to use it! -- PROJECT
+-- attribute [pointwise] Full.preimage 
+-- This would cause problems! 
+-- It would be nice if we already had a full functor around, to be able to use it!
+-- PROJECT we could achieve this if we could test whether apply would create new goals...
 attribute [simp,ematch] Full.witness
 
 structure {u1 v1 u2 v2} Faithful { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) :=
   ( injectivity : ∀ { X Y : C.Obj } ( f g : C.Hom X Y ) ( p : F.onMorphisms f = F.onMorphisms g ), f = g )
 
--- attribute [pointwise] Faithful.injectivity -- This would cause problems! We'd try to prove morphisms are equal by inventing faithful functors. -- If they're already around, it's a good idea! PROJECT
+-- attribute [pointwise] Faithful.injectivity
+-- This would cause problems! We'd try to prove morphisms are equal by inventing faithful functors.
+-- If they're already around, it's a good idea!
+
 
 definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := (Full F) × (Faithful F)
 

@@ -11,10 +11,13 @@ open categories.equivalence
 
 namespace categories.natural_transformation
 
-theorem {u1 v1 u2 v2 u3 v3} Currying_for_functors
-  ( C : Category.{u1 v1} )
-  ( D : Category.{u2 v2} )
-  ( E : Category.{u3 v3} ) :
+universes u1 v1 u2 v2 u3 v3
+
+variable C : Category.{u1 v1}
+variable D : Category.{u2 v2}
+variable E : Category.{u3 v3}
+
+theorem Currying_for_functors :
   Equivalence (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) := 
   {
     functor := Uncurry_Functors C D E,

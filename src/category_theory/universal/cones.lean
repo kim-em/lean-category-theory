@@ -45,6 +45,20 @@ definition Cones { J C : Category } ( F : Functor J C ) : Category :=
   associativity  := ♯
 }
 
+definition Cones_functoriality { J C D : Category } ( F : Functor J C ) ( G : Functor C D ) : Functor (Cones F) (Cones (FunctorComposition F G)) := {
+  onObjects     := λ X, {
+    cone_point    := G.onObjects X.cone_point,
+    cone_maps     := λ j, G.onMorphisms (X.cone_maps j),
+    commutativity := ♯ 
+  },
+  onMorphisms   := λ X Y f, {
+    cone_morphism := G.onMorphisms f.cone_morphism,
+    commutativity := ♯
+  },
+  identities    := ♯,
+  functoriality := ♯
+}
+
 structure Cocone { J C : Category } ( F : Functor J C ) :=
   ( cocone_point  : C.Obj )
   ( cocone_maps   : Π j : J.Obj, C.Hom (F.onObjects j) cocone_point )

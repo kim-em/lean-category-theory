@@ -70,7 +70,6 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
   end
 
 -- PROJECT examples
--- PROJECT left adjoints preserve limits
 -- PROJECT existence in terms of initial objects in comma categories
 -- PROJECT adjoints for functors between functor categories
 -- PROJECT adjoints are unique

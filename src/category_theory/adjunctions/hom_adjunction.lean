@@ -22,12 +22,4 @@ definition HomAdjunction { C D : Category } ( L : Functor C D ) ( R : Functor D 
     (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
     (FunctorComposition (IdentityFunctor (Opposite C) × R) (HomPairing C))
 
-
--- PROJECT examples
--- PROJECT adjoints are unique
--- PROJECT equivalences can be lifted to adjoint equivalences
--- PROJECT universal properties of adjunctions
--- PROJECT show these are a special case of a duality in a 2-category.
--- PROJECT adjoints of monoidal functors are (op)lax
-
 end categories.adjunctions
