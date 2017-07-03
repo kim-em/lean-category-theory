@@ -97,8 +97,8 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
         commutativity := λ j k f, begin
                                    -- PROJECT learn how to use calc!
                                    have p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,
-                                   simp at p,
-                                   repeat_at_least_once { rewrite C.associativity at p },
+                                  --  simp at p,
+                                  --  repeat_at_least_once { rewrite C.associativity at p },
                                    blast,                                   
                                   end
       },
@@ -109,21 +109,21 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
                            /- we need to provide the evidence that that map composes correctly with source and target -/
                            begin
                             -- blast should work from the beginning here, but takes longer than I have patience for
-                             pointwise,
-                             intros,
-                             repeat_at_least_once { rewrite C.associativity },
+                            --  pointwise,
+                            --  intros,
+                            --  repeat_at_least_once { rewrite C.associativity },
                              blast,
                            end,
         commutativity := /- we need to show that that map commutes with everything -/
           begin
-            intros,
+            intros, 
             rewrite - C.associativity,
             tidy,
           end
       },
       uniqueness_of_morphisms_to_terminal_object := λ cone f g, begin
-                                  tidy,
-                                  repeat_at_least_once { rewrite C.associativity }, -- unfortunately blast is too slow here
+                                  -- tidy, 
+                                  -- repeat_at_least_once { rewrite C.associativity }, -- unfortunately blast doesn't work here
                                   tidy,
                                 end
     }

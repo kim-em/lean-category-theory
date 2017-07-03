@@ -79,8 +79,8 @@ definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (Functo
   identities    := ♯,
   functoriality := begin
                      tidy,
-                     rewrite C.associativity,
-                     simp,
+                    --  rewrite C.associativity,
+                    --  simp,
                      rewrite - C.associativity,
                      blast,
                    end

@@ -25,7 +25,7 @@ definition PathCategory ( G : Graph ) : Category :=
                       dsimp,
                       trivial,
                       -- when f is cons
-                      dsimp,
+                      dsimp, 
                       exact congr_arg (λ p, path.cons e p) ih_1
                     end,
   associativity  := begin

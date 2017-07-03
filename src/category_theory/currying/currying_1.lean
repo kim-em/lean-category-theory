@@ -48,9 +48,7 @@ end
 begin
   have p := T.naturality _,
   have q := congr_arg NaturalTransformation.components p,
-  have r := congr_fun q _,
   tidy,
-  rewrite r,
 end
 
 definition Uncurry_Functors :

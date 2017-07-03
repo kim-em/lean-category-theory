@@ -77,14 +77,17 @@ definition NaturalIsomorphism.from_components
       naturality := λ X Y f, begin
                                let p := congr_arg (λ f : D.Hom (F.onObjects X) (G.onObjects Y), D.compose (components X).inverse (D.compose f (components Y).inverse)) (eq.symm (naturality f)),
                                simp at p,
-                               rewrite D.associativity at p,
-                               rewrite D.associativity at p,
-                               rewrite Isomorphism.witness_1 at p,
                                rewrite - D.associativity at p,
-                               rewrite D.right_identity at p,
-                               rewrite Isomorphism.witness_2 at p,
-                               rewrite D.left_identity at p,
-                               exact p
+                               simp at p,
+                               exact p,
+                                --  rewrite D.associativity at p,
+                                --  rewrite D.associativity at p,
+                                --  rewrite Isomorphism.witness_1 at p,
+                                --  rewrite - D.associativity at p,
+                                --  rewrite D.right_identity at p,
+                                --  rewrite Isomorphism.witness_2 at p,
+                                --  rewrite D.left_identity at p,
+                                --  exact p
                              end
     },
     witness_1 := ♯,

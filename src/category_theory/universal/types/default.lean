@@ -14,9 +14,7 @@ definition {u} Types_has_Products : has_Products CategoryOfTypes.{u} := {
     uniqueness    := begin
                        tidy,
                        have p := witness x_1,
-                       have q := congr_fun p x,
-                       dsimp at q,
-                       exact q
+                       tidy,
                      end
   }
 }
@@ -30,13 +28,10 @@ definition {u} Types_has_Coproducts : has_Coproducts CategoryOfTypes.{u} := {
     uniqueness    := begin
                        tidy,
                        have p := witness fst,
-                       have q := congr_fun p snd,
-                       dsimp at q,
-                       exact q
+                       tidy
                      end
   }
 }
-
 
 -- PROJECT better automation.
 definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
@@ -47,17 +42,11 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
     witness       := ♯,
     map           := begin
                        tidy,
-                       {
-                         exact k a
-                       },
-                       {
-                         tidy,
-                         have p := congr_fun w a, -- PROJECT; an 'inexact' tactic would help here.
-                         exact p
-                       }
+                       exact k a,
+                       tidy,
                     end,
     factorisation := ♯,
-    uniqueness    := begin tidy, exact congr_fun witness x end
+    uniqueness    := ♯ 
   }
 }
 attribute [instance] Types_has_Equalizers

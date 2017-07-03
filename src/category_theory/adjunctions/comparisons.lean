@@ -33,13 +33,13 @@ definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } {
         λ f, D.compose (L.onMorphisms f) (A.counit.components P.2),
       naturality := begin
                       tidy,
-                      repeat_at_least_once { rewrite D.associativity },
+                      -- repeat_at_least_once { rewrite D.associativity },
                       rewrite - A.counit_naturality
                     end
     },
     witness_1 := begin
                    tidy,
-                   rewrite D.associativity,
+                  --  rewrite D.associativity,
                    rewrite A.counit_naturality,
                    rewrite - D.associativity,
                    rewrite A.triangle_2,

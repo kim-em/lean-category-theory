@@ -220,7 +220,9 @@ namespace tactic.interactive
      `(%%new_lhs = %%rhs) ← target,
      apply ``(@eq.rec _ _ (λ rhs, %%new_lhs = rhs) _ _ %%(app eta rhs)),
      congr_args
+
 end tactic.interactive
+
 
 -- congr_struct needs various helper lemmas.
 @[pointwise] lemma heq_prop { α β : Prop } { a : α } { b : β } ( h : α = β ) : a == b :=
@@ -237,6 +239,21 @@ begin
   induction h2,
   reflexivity
 end
+
+
+namespace tactic.interactive
+
+private meta def exact_congr_fun_expr ( e f : expr ) : tactic string := 
+do -- trace ("attempting exact_congr_fun_expr with " ++ e.to_string ++ " " ++ f.to_string),
+   exact ``(congr_fun %%e %%f),
+   pure ("exact (congr_fun " ++ e.to_string ++ " " ++ f.to_string ++ ")")
+
+meta def congr_fun_assumptions : tactic string :=
+do l ← local_context,
+   result ← first(l.for(λ h1, first (l.for(λ h2, exact_congr_fun_expr h1 h2)))),
+   pure (result ++ " -- or 'congr_fun_assumptions'")
+
+end tactic.interactive
 
 meta def trace_goal_type : tactic unit :=
 do g ← target,
@@ -328,20 +345,21 @@ end
 
 meta def tidy_tactics : list (tactic string) :=
 [
-  ( tactic.triv,                   "triv" ),
-  ( force (reflexivity),           "refl" ),
-  ( nat_inequality,                "nat_inequality" ),
-  ( pointwise,                     "pointwise" ),
-  ( force (intros >> skip),        "intros" ),
-  ( force (fsplit),                "fsplit" ),
-  ( force (dsimp_eq_mpr),          "dsimp [eq.mpr]" ),
-  ( unfold_projections,            "unfold_projections" ),
-  ( simp,                          "simp" ),
-  ( dsimp_hypotheses,              "dsimp_hypotheses" ),
-  ( automatic_induction,           "automatic_induction" ),
-  ( unfold_projections_hypotheses, "unfold_projections_hypotheses" ),
-  ( simp_hypotheses,               "simp_hypotheses" )
-].map $ λ p, p.1 >> (pure p.2)
+  tactic.triv                   >> pure "triv", 
+  force (reflexivity)           >> pure "refl", 
+  nat_inequality                >> pure "nat_inequality" ,
+  pointwise                     >> pure "pointwise" ,
+  force (intros >> skip)        >> pure "intros" ,
+  force (fsplit)                >> pure "fsplit" ,
+  force (dsimp_eq_mpr)          >> pure "dsimp [eq.mpr]" ,
+  unfold_projections            >> pure "unfold_projections" ,
+  simp                          >> pure "simp" ,
+  dsimp_hypotheses              >> pure "dsimp_hypotheses" ,
+  automatic_induction           >> pure "automatic_induction" ,
+  unfold_projections_hypotheses >> pure "unfold_projections_hypotheses" ,
+  simp_hypotheses               >> pure "simp_hypotheses",
+  tactic.interactive.congr_fun_assumptions
+]
 
 meta def tidy ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit :=
 do results ← chain tidy_tactics max_steps,

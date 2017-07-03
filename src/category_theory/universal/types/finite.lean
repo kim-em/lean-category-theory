@@ -14,9 +14,7 @@ namespace categories.types
 --     uniqueness    := begin
 --                        tidy,
 --                        have p := witness x_1,
---                        have q := congr_fun p x,
---                        dsimp at q,
---                        exact q
+--                        tidy,
 --                      end
 --   }
 -- }
@@ -30,9 +28,7 @@ namespace categories.types
 --     uniqueness    := begin
 --                        tidy,
 --                        have p := witness fst,
---                        have q := congr_fun p snd,
---                        dsimp at q,
---                        exact q
+--                        tidy,
 --                      end
 --   }
 -- }
@@ -45,17 +41,11 @@ namespace categories.types
 --     witness       := ♯,
 --     map           := begin
 --                        tidy,
---                        {
---                          exact k a
---                        },
---                        {
---                          tidy,
---                          have p := congr_fun w a, -- PROJECT; an 'inexact' tactic would help here.
---                          exact p
---                        }
+--                        exact k a
+--                        tidy,
 --                     end,
 --     factorisation := ♯,
---     uniqueness    := begin tidy, exact congr_fun witness x end
+--     uniqueness    := ♯
 --   }
 -- }
 -- attribute [instance] FiniteTypes_has_Equalizers

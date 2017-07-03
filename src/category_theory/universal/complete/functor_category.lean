@@ -34,7 +34,7 @@ private definition LimitObject_in_FunctorCategory { J C D : Category } [ cmp : C
     onObjects     := λ c, Limit.onObjects (evaluate_Functor_to_FunctorCategory F c),
     onMorphisms   := λ _ _ f, Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
     identities    := ♯,
-    functoriality := begin tidy, rewrite D.associativity, simp, rewrite - D.associativity, simp, rewrite D.associativity end
+    functoriality := begin tidy, /-rewrite D.associativity, simp, -/rewrite - D.associativity, simp,/- rewrite D.associativity-/ end
   },
   cone_maps     := λ j, {
     components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,
@@ -102,7 +102,7 @@ begin
   have p' := congr_arg NaturalTransformation.components p,
   have p'' := congr_fun p' X,
   tidy,
-  rewrite D.associativity,
+  -- rewrite D.associativity,
   rewrite bifunctor_naturality,
   rewrite - D.associativity,
   rewrite p'',
@@ -132,12 +132,12 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
                         tidy, -- uses cone_in_functor_category
                         unfold morphism_to_terminal_object_cone_point,
                         tidy,
-                        rewrite D.associativity,
-                        tidy,
+                        -- rewrite D.associativity,
+                        -- tidy,
                         unfold morphism_to_terminal_object_cone_point,
                         tidy,
-                        rewrite D.associativity,
-                        tidy,
+                        -- rewrite D.associativity,
+                        -- tidy,
                         rewrite - D.associativity,
                         tidy,
                       end
@@ -163,9 +163,7 @@ lemma Y : 1 = 1 := ♯
 begin
  have p := Y.commutativity f,
  have p' := congr_arg NaturalTransformation.components p,
- have p'' := congr_fun p' X,
  tidy,
- exact p''
 end
 
 @[pointwise] lemma cone_morphism_commutativity_with_unknown_in_functor_category
