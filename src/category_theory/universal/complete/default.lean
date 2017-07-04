@@ -28,7 +28,7 @@ class {u v} Complete ( C : Category.{u v} ) :=
 definition {u v} limitCone { C : Category.{u v} } [ Complete.{u v} C ] { J : Category.{u v} } ( F : Functor J C ) := Complete.limitCone F
 definition {u v} limit     { C : Category.{u v} } [ Complete.{u v} C ] { J : Category.{u v} } ( F : Functor J C ) := (Complete.limitCone F).terminal_object.cone_point
 
-@[pointwise] private lemma {u v} uniqueness_of_morphism_to_limit
+@[applicable] private lemma {u v} uniqueness_of_morphism_to_limit
   { J C : Category.{u v} }
   { F : Functor J C }
   { L : LimitCone F }
@@ -51,7 +51,7 @@ definition {u v} limit     { C : Category.{u v} } [ Complete.{u v} C ] { J : Cat
     : C.compose (L.morphism_to_terminal_object_from X).cone_morphism (L.terminal_object.cone_maps j) = X.cone_maps j :=
   (L.morphism_to_terminal_object_from X).commutativity j
 
-@[pointwise] lemma morphism_to_terminal_object_cone_point 
+@[applicable] lemma morphism_to_terminal_object_cone_point 
   { J D : Category }
   { Z : D.Obj }
   { G : Functor J D }

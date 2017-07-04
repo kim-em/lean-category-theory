@@ -24,7 +24,7 @@ structure ConeMorphism { J C : Category } { F : Functor J C } ( X Y : Cone F ) :
 
 attribute [simp,ematch] ConeMorphism.commutativity
 
-@[pointwise] lemma ConeMorphism_componentwise_equal
+@[applicable] lemma ConeMorphism_componentwise_equal
   { J C : Category } { F : Functor J C } { X Y : Cone F }
   { f g : ConeMorphism X Y }
   ( w : f.cone_morphism = g.cone_morphism ) : f = g :=
@@ -72,7 +72,7 @@ structure CoconeMorphism { J C : Category } { F : Functor J C } ( X Y : Cocone F
 
 attribute [simp,ematch] CoconeMorphism.commutativity
 
-@[pointwise] lemma CoconeMorphism_componentwise_equal
+@[applicable] lemma CoconeMorphism_componentwise_equal
   { J C : Category } { F : Functor J C } { X Y : Cocone F }
   { f g : CoconeMorphism X Y }
   ( w : f.cocone_morphism = g.cocone_morphism ) : f = g :=

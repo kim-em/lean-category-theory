@@ -108,7 +108,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
                            /- we need to provide the evidence that that map composes correctly with source and target -/
                            begin
                             -- blast should work from the beginning here, but takes longer than I have patience for
-                            --  pointwise,
+                            --  applicable,
                             --  intros,
                             --  repeat_at_least_once { rewrite C.associativity },
                              blast,

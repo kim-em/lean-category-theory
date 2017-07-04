@@ -28,8 +28,8 @@ structure Equalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
 definition Kernel { C : Category } [ Z : ZeroObject C ] { X Y : C.Obj } ( f : C.Hom X Y ) := Equalizer f ( Z.zero_morphism X Y )
 
 attribute [simp,ematch] Equalizer.factorisation
-attribute [pointwise] Equalizer.inclusion Equalizer.map
-attribute [pointwise] Equalizer.uniqueness
+attribute [applicable] Equalizer.inclusion Equalizer.map
+attribute [applicable] Equalizer.uniqueness
 
 structure BinaryProduct { C : Category } ( X Y : C.Obj ) :=
   ( product             : C.Obj )
@@ -43,8 +43,8 @@ structure BinaryProduct { C : Category } ( X Y : C.Obj ) :=
                             ( right_witness : C.compose f right_projection = C.compose g right_projection ), f = g )
 
 attribute [simp,ematch] BinaryProduct.left_factorisation BinaryProduct.right_factorisation 
-attribute [pointwise] BinaryProduct.left_projection BinaryProduct.right_projection BinaryProduct.map
-attribute [pointwise] BinaryProduct.uniqueness
+attribute [applicable] BinaryProduct.left_projection BinaryProduct.right_projection BinaryProduct.map
+attribute [applicable] BinaryProduct.uniqueness
 
 structure Product { C : Category } { I : Type } ( F : I → C.Obj ) :=
   ( product       : C.Obj )
@@ -54,8 +54,8 @@ structure Product { C : Category } { I : Type } ( F : I → C.Obj ) :=
   ( uniqueness    : ∀ { Z : C.Obj } ( f g : C.Hom Z product ) ( witness : ∀ i : I, C.compose f (projection i) = C.compose g (projection i)), f = g )
 
 attribute [simp,ematch] Product.factorisation
-attribute [pointwise] Product.projection Product.map
-attribute [pointwise] Product.uniqueness
+attribute [applicable] Product.projection Product.map
+attribute [applicable] Product.uniqueness
 
 structure Coequalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( coequalizer   : C.Obj )
@@ -66,8 +66,8 @@ structure Coequalizer { C : Category } { X Y : C.Obj } ( f g : C.Hom X Y ) :=
   ( uniqueness    : ∀ { Z : C.Obj } ( a b : C.Hom coequalizer Z ) ( witness : C.compose projection a = C.compose projection b ), a = b )
 
 attribute [simp,ematch] Coequalizer.factorisation
-attribute [pointwise] Coequalizer.projection Coequalizer.map
-attribute [pointwise] Coequalizer.uniqueness
+attribute [applicable] Coequalizer.projection Coequalizer.map
+attribute [applicable] Coequalizer.uniqueness
 
 definition Cokernel { C : Category } [ Z : ZeroObject C ] { X Y : C.Obj } ( f : C.Hom X Y ) := Coequalizer f ( Z.zero_morphism X Y )
 
@@ -83,8 +83,8 @@ structure BinaryCoproduct { C : Category } ( X Y : C.Obj ) :=
                             ( right_witness : C.compose right_inclusion f = C.compose right_inclusion g ), f = g )
 
 attribute [simp,ematch] BinaryCoproduct.left_factorisation BinaryCoproduct.right_factorisation 
-attribute [pointwise] BinaryCoproduct.left_inclusion BinaryCoproduct.right_inclusion BinaryCoproduct.map
-attribute [pointwise] BinaryCoproduct.uniqueness
+attribute [applicable] BinaryCoproduct.left_inclusion BinaryCoproduct.right_inclusion BinaryCoproduct.map
+attribute [applicable] BinaryCoproduct.uniqueness
 
 structure Coproduct { C : Category } { I : Type } ( X : I → C.Obj ) :=
   ( coproduct     : C.Obj )

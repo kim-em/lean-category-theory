@@ -44,7 +44,7 @@ private definition LimitObject_in_FunctorCategory { J C D : Category } [ cmp : C
   commutativity := ♯ 
 }
 
-@[pointwise] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
+@[applicable] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
   { J D : Category }
   { Z : D.Obj }
   { G : Functor J D }
@@ -167,7 +167,7 @@ begin
  tidy,
 end
 
-@[pointwise] lemma cone_morphism_commutativity_with_unknown_in_FunctorCategory
+@[applicable] lemma cone_morphism_commutativity_with_unknown_in_FunctorCategory
 ( J C D  : Category )
 ( F : Functor J (FunctorCategory C D) )
 ( X : C.Obj )

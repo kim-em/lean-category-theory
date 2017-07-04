@@ -27,7 +27,7 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
   witness_2 := ♮
 }
 
-@[pointwise] lemma {u1 v1} Isomorphism_pointwise_equal
+@[applicable] lemma {u1 v1} Isomorphism_applicable_equal
   { C : Category.{u1 v1} }
   { X Y : C.Obj }
   ( α β : Isomorphism C X Y )

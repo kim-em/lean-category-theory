@@ -39,7 +39,7 @@ def {u} empty_function           { α : Sort u } : empty → α := ♯
 def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i := ♯
 
 -- FIXME why doesn't the VM have code for this?
-@[pointwise] lemma empty_exfalso (x : false) : empty := begin exfalso, trivial end
+@[applicable] lemma empty_exfalso (x : false) : empty := begin exfalso, trivial end
 
 -- PROJECT improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
 instance empty_is_Finite : Finite empty := {
@@ -52,7 +52,7 @@ instance empty_is_Finite : Finite empty := {
                  automatic_induction, 
                  unfold_projections, 
                  intros, 
-                 pointwise,
+                 applicable,
                  automatic_induction,
                  apply funext,
                  intros,

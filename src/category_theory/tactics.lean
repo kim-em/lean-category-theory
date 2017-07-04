@@ -9,26 +9,26 @@ inductive Two : Type
 
 open tactic
 
-def pointwise_attribute : user_attribute := {
-  name := `pointwise,
-  descr := "A lemma that proves things are equal using the fact they are pointwise equal."
+def applicable_attribute : user_attribute := {
+  name := `applicable,
+  descr := "A lemma that should be applied to a goal whenever possible."
 }
 
-run_cmd attribute.register `pointwise_attribute
+run_cmd attribute.register `applicable_attribute
 
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/
 meta def any_apply : list name → tactic unit
 | []      := failed
 | (c::cs) := (mk_const c >>= fapply /->> trace ("applying " ++ to_string c)-/) <|> any_apply cs
 
-meta def pointwise : tactic unit :=
-do cs ← attribute.get_instances `pointwise,
+meta def applicable : tactic unit :=
+do cs ← attribute.get_instances `applicable,
    any_apply cs
 
 attribute [reducible] cast
 attribute [reducible] lift_t coe_t coe_b has_coe_to_fun.coe
 attribute [simp] id_locked_eq
-attribute [pointwise] funext
+attribute [applicable] funext
 attribute [ematch] subtype.property
 
 open tactic
@@ -225,12 +225,12 @@ end tactic.interactive
 
 
 -- congr_struct needs various helper lemmas.
-@[pointwise] lemma heq_prop { α β : Prop } { a : α } { b : β } ( h : α = β ) : a == b :=
+@[applicable] lemma heq_prop { α β : Prop } { a : α } { b : β } ( h : α = β ) : a == b :=
 begin
   induction h, reflexivity
 end
 
-@[pointwise] theorem {u v w z} funext_prop_001 { α : Type u } { β : Type v } { Z : α → β → Type w } { X : Π ( a : α ) ( b : β ) ( g : Z a b ), Type z }
+@[applicable] theorem {u v w z} funext_prop_001 { α : Type u } { β : Type v } { Z : α → β → Type w } { X : Π ( a : α ) ( b : β ) ( g : Z a b ), Type z }
                           { p q r s : Π ( a : α ) ( b : β ) ( g : Z a b ), X a b g }
                           ( h1 : p = r ) ( h2 : q = s )
                        : (∀ ( a : α ) ( b : β ) ( g : Z a b ), p a b g = q a b g ) = (∀ ( a : α ) ( b : β ) ( g : Z a b), r a b g = s a b g ) :=
@@ -348,7 +348,7 @@ meta def tidy_tactics : list (tactic string) :=
   tactic.triv                   >> pure "triv", 
   force (reflexivity)           >> pure "refl", 
   nat_inequality                >> pure "nat_inequality" ,
-  pointwise                     >> pure "pointwise" ,
+  applicable                     >> pure "applicable" ,
   force (intros >> skip)        >> pure "intros" ,
   force (fsplit)                >> pure "fsplit" ,
   force (dsimp_eq_mpr)          >> pure "dsimp [eq.mpr]" ,
@@ -383,12 +383,12 @@ set_option formatter.hide_full_terms false
 @[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a : α } { b : β } : (a, b).1 = a := ♮
 @[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a : α } { b : β } : (a, b).2 = b := ♮
 @[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X : α × β } : (X.1, X.2) = X := ♯
-@[pointwise] lemma {u v} pairs_componentwise_equal {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := ♯
-@[pointwise] lemma {u v} dependent_pair_equality {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := ♯
-@[pointwise] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := ♯
-@[pointwise] lemma {u} plift_equality { α : Sort u } ( X Y : plift α ) ( p : X.down = Y.down ) : X = Y := ♯
-@[pointwise] lemma {u v} ulift_equality { α : Type v } ( X Y : ulift.{u v} α ) ( p : X.down = Y.down ) : X = Y := ♯
-attribute [pointwise] subtype.eq
+@[applicable] lemma {u v} pairs_componentwise_equal {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := ♯
+@[applicable] lemma {u v} dependent_pair_equality {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := ♯
+@[applicable] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := ♯
+@[applicable] lemma {u} plift_equality { α : Sort u } ( X Y : plift α ) ( p : X.down = Y.down ) : X = Y := ♯
+@[applicable] lemma {u v} ulift_equality { α : Type v } ( X Y : ulift.{u v} α ) ( p : X.down = Y.down ) : X = Y := ♯
+attribute [applicable] subtype.eq
 
 @[reducible] def {u} auto_cast {α β : Sort u} {h : α = β} (a : α) := cast h a
 @[simp] lemma {u} auto_cast_identity {α : Sort u} (a : α) : @auto_cast α α (by smt_ematch) a = a := ♮

@@ -8,7 +8,7 @@ open categories.functor
 open categories.products
 open categories.isomorphism
 
-local attribute [pointwise] Functors_pointwise_equal
+local attribute [applicable] Functors_applicable_equal
 
 -- These definition are *evil* --- identities between functors tend to cause horrible problems for transport later.
 -- It's much better to use the natural isomorphisms defined later.
@@ -92,7 +92,7 @@ definition {u v} Categories_has_InitialObject : has_InitialObject CategoryOfCate
 --     uniqueness          := --sorry -- PROJECT:
 --                            begin
 --                              intros,
---                              pointwise,
+--                              applicable,
 --                              {
 --                                intros,
 --                                apply pair_equality_4,

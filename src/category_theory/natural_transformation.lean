@@ -24,7 +24,7 @@ instance NaturalTransformation_to_components { C D : Category } { F G : Functor 
   coe := NaturalTransformation.components }
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
-@[pointwise] lemma {u1 v1 u2 v2} NaturalTransformations_componentwise_equal
+@[applicable] lemma {u1 v1 u2 v2} NaturalTransformations_componentwise_equal
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α β : NaturalTransformation F G )
