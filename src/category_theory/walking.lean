@@ -7,7 +7,7 @@ import .path_category
 import .util.finite
 
 open categories
-open categories.graph
+open categories.graphs
 open categories.functor
 open categories.util.finite
 

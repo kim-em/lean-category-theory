@@ -1,11 +1,12 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
-import ..natural_transformation
+import ..functor_categories
 
 open categories
 open categories.functor
 open categories.natural_transformation
+open categories.functor_categories
 
 namespace categories.products
 

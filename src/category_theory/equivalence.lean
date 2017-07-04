@@ -8,6 +8,7 @@ open categories
 open categories.isomorphism
 open categories.functor
 open categories.natural_transformation
+open categories.functor_categories
 
 namespace categories.equivalence
 

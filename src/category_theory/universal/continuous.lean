@@ -13,7 +13,7 @@ namespace categories.universal
 structure Continuous { C D : Category } ( F : Functor C D ) :=
   ( preserves_limit : ∀ ( J : Category ) ( G : Functor J C ) ( L : LimitCone G ), is_terminal ((Cones_functoriality G F).onObjects L.terminal_object) )
 
--- PROJECT left adjoints are continuous
+-- PROJECT right adjoints are continuous
 
 -- PROJECT creating limits
 

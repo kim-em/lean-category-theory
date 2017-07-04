@@ -4,10 +4,10 @@
 
 import .tactics
 
-import .graph
+import .graphs
 import .category
 
-open categories.graph
+open categories.graphs
 
 namespace categories.n_ary
 

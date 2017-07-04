@@ -6,7 +6,6 @@ import ..complete
 import ...walking
 
 open categories
-open categories.graph
 open categories.functor
 open categories.natural_transformation
 open categories.isomorphism

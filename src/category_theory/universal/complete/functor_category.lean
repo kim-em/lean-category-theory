@@ -7,6 +7,7 @@ import ..complete
 open categories
 open categories.functor
 open categories.natural_transformation
+open categories.functor_categories
 open categories.isomorphism
 open categories.initial
 
@@ -74,7 +75,8 @@ end
 -- IDEAS:
 -- suppress pretty printing of irrelevant properties
 -- extract a goal as a lemma
-
+-- on rename of Lean file, delete olean file
+-- warn on unused imports (even unused opens?)
 
 lemma bifunctor_naturality  
 ( J C D : Category )

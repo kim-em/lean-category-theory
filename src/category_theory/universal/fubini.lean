@@ -5,7 +5,6 @@
 import .universal
 import ..isomorphism
 import ..natural_transformation
-import ..graph
 import ..currying.currying_1
 
 open categories

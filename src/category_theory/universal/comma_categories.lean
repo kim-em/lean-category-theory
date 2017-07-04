@@ -7,9 +7,10 @@ import .initial
 
 open categories
 open categories.isomorphism
-open categories.graph
+open categories.graphs
 open categories.functor
 open categories.natural_transformation
+open categories.functor_categories
 open categories.initial
 open categories.walking
 
@@ -39,7 +40,7 @@ local attribute [ematch] subtype.property
 
 -- The elaborator has some trouble understanding what p.2.2 and q.2.2 mean below.
 -- Leo suggested the following work-around, at <https://groups.google.com/d/msg/lean-user/8jW4BIUFl24/MOtgbpfqCAAJ>.
-local attribute [elab_simple]  sigma.snd
+-- local attribute [elab_simple]  sigma.snd
 
 definition CommaCategory
   { A B C : Category }
@@ -53,6 +54,36 @@ definition CommaCategory
   right_identity := ♯,
   associativity  := ♮
 }
+
+-- cf Leinster Remark 2.3.2
+definition CommaCategory_left_projection   
+  { A B C : Category }
+  ( S : Functor A C ) ( T : Functor B C )
+    : Functor (CommaCategory S T) A := {
+      onObjects     := λ X, X.1,
+      onMorphisms   := λ _ _ f, f.val.1,
+      identities    := ♯,
+      functoriality := ♯ 
+    }
+
+definition CommaCategory_right_projection   
+  { A B C : Category }
+  ( S : Functor A C ) ( T : Functor B C )
+    : Functor (CommaCategory S T) B := {
+      onObjects     := λ X, X.2.1,
+      onMorphisms   := λ _ _ f, f.val.2,
+      identities    := ♯,
+      functoriality := ♯ 
+    }
+
+definition CommaCategory_projection_transformation
+  { A B C : Category }
+  { S : Functor A C } { T : Functor B C }
+    : NaturalTransformation (FunctorComposition (CommaCategory_left_projection S T) S) (FunctorComposition (CommaCategory_right_projection S T) T) := {
+      components := λ X, X.2.2,
+      naturality := ♯
+    }
+
 
 definition ObjectAsFunctor { C : Category } ( X : C.Obj ) : Functor (DiscreteCategory unit) C :=
 {

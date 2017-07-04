@@ -3,13 +3,13 @@
 -- Authors: Stephen Morgan and Scott Morrison
 
 import .functor
-import .graph
+import .graphs
 
 open categories
 
 universe variables u v
 
-namespace categories.graph
+namespace categories.graphs
 
 definition PathCategory ( G : Graph ) : Category :=
 {
@@ -77,4 +77,4 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
 instance GraphHomomorphism_to_Functor_coercion { G : Graph } { C : Category }: has_coe (GraphHomomorphism G C.graph) (Functor (PathCategory G) C) :=
   { coe := Functor.from_GraphHomomorphism }
 
-end categories.graph
+end categories.graphs

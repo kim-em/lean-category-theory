@@ -3,11 +3,12 @@
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
 import .isomorphism
-import .natural_transformation
+import .functor_categories
 
 open categories
 open categories.isomorphism
 open categories.functor
+open categories.functor_categories
 
 namespace categories.natural_transformation
 

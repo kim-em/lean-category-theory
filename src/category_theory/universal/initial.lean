@@ -3,7 +3,7 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import ..isomorphism
-import ..natural_transformation
+import ..functor_categories
 import ..opposites
 
 open categories
