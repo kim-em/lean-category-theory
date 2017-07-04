@@ -269,7 +269,7 @@ open nat
 meta def nat_inequality : tactic unit :=
 do tgt ← target,
 match tgt with
-| `(%%lhs < %%rhs) := `[apply nat.lt_succ_of_le]     -- TODO how to check lhs and rhs are actually nat's?
+| `(%%lhs < %%rhs) := `[apply nat.lt_succ_of_le]     -- PROJECT how to check lhs and rhs are actually nat's?
 | `(%%lhs ≤ %%rhs) := `[rewrite nat.le_iff_lt_or_eq, simp]
 | _                := failed
 end

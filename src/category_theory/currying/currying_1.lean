@@ -20,38 +20,6 @@ variable C : Category.{u1 v1}
 variable D : Category.{u2 v2}
 variable E : Category.{u3 v3}
 
-@[ematch] lemma components_naturality -- TODO this should be somewhere more central about functors to functor categories
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  { F G : Functor C (FunctorCategory D E) }
-  ( T : NaturalTransformation F G ) 
-  ( X : C.Obj )
-  { Y Z : D.Obj }
-  ( f : D.Hom Y Z )
-    : E.compose ((F.onObjects X).onMorphisms f) ((T.components X).components Z) =
-    E.compose ((T.components X).components Y) ((G.onObjects X).onMorphisms f) :=
-begin
-  exact (T.components _).naturality _
-end
-
-@[ematch] lemma naturality_components
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  { F G : Functor C (FunctorCategory D E) }
-  ( T : NaturalTransformation F G ) 
-  ( Z : D.Obj )
-  { X Y : C.Obj }
-  ( f : C.Hom X Y )
-  : E.compose ((F.onMorphisms f).components Z) ((T.components Y).components Z) =
-    E.compose ((T.components X).components Z) ((G.onMorphisms f).components Z) :=
-begin
-  have p := T.naturality _,
-  have q := congr_arg NaturalTransformation.components p,
-  tidy,
-end
-
 definition Uncurry_Functors :
   Functor (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) := 
     {

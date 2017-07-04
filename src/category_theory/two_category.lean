@@ -80,8 +80,8 @@ definition HomCategory ( C : StrictTwoCategory ) ( X Y : C.Hom_0 ) : Category :=
 structure DualMorphisms { C : StrictTwoCategory } { X Y : C.Hom_0 } ( f : C.Hom_1 X Y ) ( g : C.Hom_1 Y X ) :=
   ( unit : C.Hom_2 (C.compose_1 f g) (C.identity_0 X) )
   ( counit : C.Hom_2 (C.identity_0 Y) (C.compose_1 g f) )
-  -- TODO we need to rewrite along associativity_1
+  -- PROJECT we need to rewrite along associativity_1
   -- ( zigzag_right : C.compose_2_vertically (C.compose_2_horizontally (C.identity_1 f) counit) (C.compose_2_horizontally unit (C.identity_1 f)) = C.identity_1 f)
-  -- TODO the other zigzag
+  -- PROJECT the other zigzag
 
 end categories.two_category

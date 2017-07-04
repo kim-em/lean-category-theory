@@ -67,7 +67,6 @@ definition Cones_to_comma_Cones { J C : Category } ( F : Functor J C ) : Functor
     functoriality := ♯
   }
 
--- PROJECT speed this up
 definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
   functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F,

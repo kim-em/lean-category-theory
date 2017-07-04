@@ -61,60 +61,67 @@ definition {u v} compose_path
 | ._ ._ (@path.cons ._ _ _ _ e p) := composition e (compose_path p)
 
 
--- TODO this is a bit lame.
--- meta def rewrite_once : tactic unit :=
--- do r ← tactic.to_expr `(n_ary_Category.compose_length_one_path C f),
---    tactic.rewrite_core reducible tt tt (occurrences.pos [2]) tt r
+meta def rewrite_once : tactic unit :=
+do r ← tactic.to_expr ```(n_ary_Category.compose_length_one_path C f),
+   tactic.rewrite_core reducible tt tt (occurrences.pos [2]) tt r
 
 
--- definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Category :=
--- {
---   Obj := C.graph.vertices,
---   Hom := C.graph.edges,
---   identity := C.identity,
---   compose := λ X Y Z f g, C.compose ( p[ f, g ] ),
---   left_identity  := begin
---                       intros,
---                       rewrite - C.compose_empty_path, 
---                       rewrite - C.compose_length_one_path f,  
---                       rewrite - C.associativity,
---                       blast
---                     end,
---   right_identity := begin
---                       intros,
---                       rewrite - C.compose_empty_path, 
---                       rewrite - C.compose_length_one_path f,  
---                       rewrite - C.associativity,
---                       blast                    
---                     end,
---   associativity  := begin
---                       intros,
---                       rewrite - C.compose_length_one_path h,
---                       rewrite - C.associativity,
---                       unfold_unfoldable,
---                       rewrite_once,
---                       rewrite - C.associativity,
---                       unfold_unfoldable
---                     end
--- }
+definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Category :=
+{
+  Obj := C.graph.Obj,
+  Hom := C.graph.Hom,
+  identity := C.identity,
+  compose := λ X Y Z f g, C.compose ( p[ f, g ] ),
+  left_identity  := begin
+                      intros,
+                      rewrite - C.compose_empty_path, 
+                      rewrite - C.compose_length_one_path f,  
+                      rewrite - C.associativity,
+                      blast
+                    end,
+  right_identity := begin
+                      intros,
+                      rewrite - C.compose_empty_path, 
+                      rewrite - C.compose_length_one_path f,  
+                      rewrite - C.associativity,
+                      blast                    
+                    end,
+  associativity  := begin
+                      intros,
+                      rewrite - C.compose_length_one_path h,
+                      rewrite - C.associativity,
+                      unfold graphs.concatenate_paths,
+                      -- -- The following two lines should be able to replace rewrite_once
+                      -- have p := n_ary_Category.compose_length_one_path C f,
+                      -- rewrite - p, -- FIXME we need to be able to pass an occurencs argument
+                      rewrite_once,
+                      rewrite - C.associativity,
+                      unfold graphs.concatenate_paths,
+                      rewrite C.compose_length_one_path
+                    end
+}
 
+-- PROJECT fix this
 -- definition {u v} Category_to_n_ary_Category ( C : Category.{u v} ) : n_ary_Category :=
 -- {
---   graph := C,
+--   graph := C.graph,
 --   identity := λ X, C.identity X,
---   compose  := λ X Y f, @compose_path C (C.identity) (@Category.compose C) X Y f,
+--   compose  := λ X Y f, @compose_path C.graph (C.identity) (@Category.compose C) X Y f,
 --   compose_empty_path := ♯,
---   compose_length_one_path := ♯,
+--   compose_length_one_path := begin tidy, admit end,
 --   associativity      := begin
 --                           blast,
 --                           induction p,
---                           -- if p was nil
---                           blast,
---                           -- if p was a path
---                           unfold graph.concatenate_paths,
---                           unfold compose_path,
---                           rewrite ih_1 q,
---                           blast
+--                           { -- if p was nil
+--                             blast,
+--                             admit
+--                           },
+--                           { -- if p was a path
+--                             unfold graphs.concatenate_paths,
+--                             unfold compose_path,
+--                             rewrite ih_1 q,
+--                             blast
+--                           }
 --                         end
 -- }
 

@@ -41,7 +41,7 @@ def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i :=
 -- FIXME why doesn't the VM have code for this?
 @[pointwise] lemma empty_exfalso (x : false) : empty := begin exfalso, trivial end
 
--- TODO improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
+-- PROJECT improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
 instance empty_is_Finite : Finite empty := {
   cardinality := 0,
   bijection := begin
@@ -77,12 +77,12 @@ instance Two_is_Finite : Finite Two := {
     inverse  := λ n, match n with
                        | ⟨ 0, _ ⟩ := _0
                        | ⟨ 1, _ ⟩ := _1 
-                       | _        := _0 -- TODO we shouldn't have to do this!                   
+                       | _        := _0 -- FIXME we shouldn't have to do this!                   
                      end,
     witness_1 := begin
                    apply funext,
                    intros,
-                   induction x, -- TODO We need to be able to specify that induction on a new type (e.g. Two) should be allowed in tidy.
+                   induction x, -- FIXME We need to be able to specify that induction on a new type (e.g. Two) should be allowed in tidy.
                    tidy,
                  end,
     witness_2 := begin
@@ -92,7 +92,7 @@ instance Two_is_Finite : Finite Two := {
                    cases is_lt,
                    unfold_projections,
                    dsimp,
-                   unfold Two_is_Finite._match_2, -- TODO auxiliary definitions created just a moment ago should get unfolded...
+                   unfold Two_is_Finite._match_2, -- FIXME auxiliary definitions created just a moment ago should get unfolded...
                    unfold Two_is_Finite._match_1,
                    trivial,
                    cases a,

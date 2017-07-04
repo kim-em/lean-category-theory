@@ -153,8 +153,7 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
 
 lemma Y : 1 = 1 := ♯
 
--- TODO
-@[simp] lemma cone_commutativity_in_functor_category
+@[simp] lemma cone_commutativity_in_FunctorCategory
 ( J C D  : Category )
 ( F : Functor J (FunctorCategory C D) )
 ( X : C.Obj )
@@ -168,7 +167,7 @@ begin
  tidy,
 end
 
-@[pointwise] lemma cone_morphism_commutativity_with_unknown_in_functor_category
+@[pointwise] lemma cone_morphism_commutativity_with_unknown_in_FunctorCategory
 ( J C D  : Category )
 ( F : Functor J (FunctorCategory C D) )
 ( X : C.Obj )

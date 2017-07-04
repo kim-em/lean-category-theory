@@ -11,7 +11,9 @@ open categories.natural_transformation
 
 namespace categories.functor_categories
 
-definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
+universes u1 v1 u2 v2 u3 v3
+
+definition FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Category :=
 {
   Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,
@@ -24,7 +26,7 @@ definition {u1 v1 u2 v2} FunctorCategory ( C : Category.{u1 v1} ) ( D : Category
   associativity  := ♯
 }
 
-definition {u1 v1 u2 v2 u3 v3} whiskering_on_left
+definition whiskering_on_left
   ( C : Category.{u1 v1} )
   ( D : Category.{u2 v2} )
   ( E : Category.{u3 v3} ) :
@@ -47,14 +49,14 @@ definition {u1 v1 u2 v2 u3 v3} whiskering_on_left
   functoriality := ♯
 }
 
-definition {u1 v1 u2 v2 u3 v3} whisker_on_left_functor
+definition whisker_on_left_functor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( E : Category.{u3 v3} )
   ( F : Functor C D ) :
   Functor (FunctorCategory D E) (FunctorCategory C E) :=
   (whiskering_on_left C D E).onObjects F
 
-definition {u1 v1 u2 v2 u3 v3} whiskering_on_right
+definition whiskering_on_right
   ( C : Category.{u1 v1} )
   ( D : Category.{u2 v2} )
   ( E : Category.{u3 v3} ) :
@@ -77,11 +79,43 @@ definition {u1 v1 u2 v2 u3 v3} whiskering_on_right
   functoriality := ♯
 }
 
-definition {u1 v1 u2 v2 u3 v3} whisker_on_right_functor
+definition whisker_on_right_functor
   ( C : Category.{u1 v1} )
   { D : Category.{u2 v2} } { E : Category.{u3 v3} }
   ( H : Functor D E ) :
   Functor (FunctorCategory C D) (FunctorCategory C E) :=
 (whiskering_on_right C D E).onObjects H
+
+@[ematch] lemma NaturalTransformation_to_FunctorCategory.components_naturality
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { E : Category.{u3 v3} }
+  { F G : Functor C (FunctorCategory D E) }
+  ( T : NaturalTransformation F G ) 
+  ( X : C.Obj )
+  { Y Z : D.Obj }
+  ( f : D.Hom Y Z )
+    : E.compose ((F.onObjects X).onMorphisms f) ((T.components X).components Z) =
+    E.compose ((T.components X).components Y) ((G.onObjects X).onMorphisms f) :=
+begin
+  exact (T.components _).naturality _
+end
+
+@[ematch] lemma NaturalTransformation_to_FunctorCategory.naturality_components
+  { C : Category.{u1 v1} }
+  { D : Category.{u2 v2} }
+  { E : Category.{u3 v3} }
+  { F G : Functor C (FunctorCategory D E) }
+  ( T : NaturalTransformation F G ) 
+  ( Z : D.Obj )
+  { X Y : C.Obj }
+  ( f : C.Hom X Y )
+  : E.compose ((F.onMorphisms f).components Z) ((T.components Y).components Z) =
+    E.compose ((T.components X).components Z) ((G.onMorphisms f).components Z) :=
+begin
+  have p := T.naturality _,
+  have q := congr_arg NaturalTransformation.components p,
+  tidy,
+end
 
 end categories.functor_categories
