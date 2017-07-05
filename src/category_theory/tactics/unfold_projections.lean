@@ -6,11 +6,11 @@ import .at_least_one
 
 open tactic
 
-private meta def unfold_projections_core' (m : transparency) (max_steps : nat) (e : expr) : tactic expr :=
+private meta def unfold_projections_core' (m : transparency) (e : expr) : tactic expr :=
 let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
-  new_e ← unfold_projection_core m e,
+  new_e ← unfold_proj e m,
   return (tt, new_e, tt)
-in do (tt, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) unfold e | fail "no projections to unfold",
+in do (tt, new_e) ← dsimplify_core tt (λ c e, failed) unfold e | fail "no projections to unfold",
       return new_e
 
 -- meta def unfold_projections' : tactic unit :=
@@ -19,7 +19,7 @@ in do (tt, new_e) ← dsimplify_core ff default_max_steps tt (λ c e, failed) un
 meta def unfold_projections_at' (h : expr) : tactic unit :=
 do num_reverted ← revert h,
    (expr.pi n bi d b : expr) ← target,
-   new_d ← unfold_projections_core' semireducible default_max_steps d,
+   new_d ← unfold_projections_core' semireducible d,
    change $ expr.pi n bi new_d b,
    intron num_reverted
 
@@ -28,5 +28,5 @@ do l ← local_context,
    s ← simp_lemmas.mk_default,
    at_least_one (l.reverse.for (λ h, unfold_projections_at' h)) <|> fail "fail no projections to unfold in hypotheses"   
 
-meta def unfold_projections_hypotheses' : tactic unit := `[unfold_projections at *] -- BUG see the problem in discrete_category.lean
+meta def unfold_projections_hypotheses' : tactic unit := `[unfold_projs at *] -- BUG see the problem in discrete_category.lean
 

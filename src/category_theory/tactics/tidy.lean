@@ -2,12 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .force .applicable .congr_fun_assumptions .fsplit .simp_hypotheses .dsimp_hypotheses .automatic_induction .unfold_projections .nat_inequality
+import .force .applicable .congr_fun_assumptions .fsplit .simp_hypotheses .dsimp_hypotheses .automatic_induction .unfold_projections
 import .chain
 import .smt
 
 open tactic
-
 
 private meta def dsimp_eq_mpr : tactic unit := `[dsimp [eq.mpr]]
 
@@ -15,17 +14,17 @@ meta def tidy_tactics : list (tactic string) :=
 [
   tactic.triv                   >> pure "triv", 
   force (reflexivity)           >> pure "refl", 
-  nat_inequality                >> pure "nat_inequality" ,
+  `[exact dec_trivial]          >> pure "exact dec_trivial",
   applicable                    >> pure "applicable" ,
   force (intros >> skip)        >> pure "intros" ,
   force (fsplit)                >> pure "fsplit" ,
   force (dsimp_eq_mpr)          >> pure "dsimp [eq.mpr]" ,
-  unfold_projections            >> pure "unfold_projections" ,
-  simp                          >> pure "simp" ,
+  `[unfold_projs]               >> pure "unfold_projs" ,
+  `[simp]                       >> pure "simp" ,
   dsimp_hypotheses              >> pure "dsimp_hypotheses" ,
   automatic_induction           >> pure "automatic_induction" ,
   unfold_projections_hypotheses >> pure "unfold_projections_hypotheses" ,
-  simp_hypotheses               >> pure "simp_hypotheses",
+  `[simp *]                     >> pure "simp *",
   tactic.interactive.congr_fun_assumptions
 ]
 

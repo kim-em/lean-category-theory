@@ -7,8 +7,8 @@ open smt_tactic
 open lean.parser
 open interactive
 
-meta def unfold_coe : tactic unit := tactic.dunfold [ ``has_coe_to_fun.coe ]
+meta def unfold_coe : tactic unit := dunfold_target [ ``has_coe_to_fun.coe ]
 
-meta def smt_simp   : tactic unit := using_smt $ intros >> try dsimp >> try simp
-meta def smt_eblast : tactic unit := using_smt $ intros >> try dsimp >> unfold_coe >> try simp >> eblast
+meta def smt_simp   : tactic unit := using_smt $ intros >> try `[dsimp] >> try `[simp]
+meta def smt_eblast : tactic unit := using_smt $ intros >> try `[dsimp] >> try unfold_coe >> try `[simp] >> eblast
 meta def smt_ematch : tactic unit := using_smt $ intros >> smt_tactic.add_lemmas_from_facts >> try ematch

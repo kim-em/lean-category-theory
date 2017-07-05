@@ -63,7 +63,7 @@ lemma {u1 v1 u2 v2} Functors_applicable_equal
   { D : Category.{u2 v2} } 
   { F G : Functor C D } 
   ( objectWitness : ∀ X : C.Obj, F.onObjects X = G.onObjects X ) 
-  ( morphismWitness : ∀ X Y : C.Obj, ∀ f : C.Hom X Y, ⟦ F.onMorphisms f ⟧ = G.onMorphisms f ) : F = G :=
+  ( morphismWitness : ∀ X Y : C.Obj, ∀ f : C.Hom X Y, ⟦ F.onMorphisms f ⟧  = G.onMorphisms f ) : F = G :=
 begin
   induction F with F_onObjects F_onMorphisms,
   induction G with G_onObjects G_onMorphisms,

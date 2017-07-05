@@ -4,6 +4,8 @@
 
 import .applicable .force .at_least_one .smt .tidy
 
+import .auto_cast
+
 open tactic
 
 attribute [reducible] cast
