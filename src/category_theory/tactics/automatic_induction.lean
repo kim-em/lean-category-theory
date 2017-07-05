@@ -15,15 +15,15 @@ meta def new_names ( e : expr ) : tactic (list name) :=
 meta def automatic_induction_at (h : expr) : tactic unit :=
 do t ← infer_type h,
 match t with
-| `(unit)      := induction h >>= λ x, skip
-| `(punit)     := induction h >>= λ x, skip
-| `(false)     := induction h >>= λ x, skip
-| `(empty)     := induction h >>= λ x, skip
-| `(fin nat.zero) := induction h >>= λ x, `[cases is_lt]
-| `(Two)       := induction h >>= λ x, skip
-| `(ulift _)   := induction h >>= λ x, skip
-| `(plift _)   := induction h >>= λ x, skip
-| `(eq _ _)    := induction h >>= λ x, skip
+| `(unit)      := induction h >> skip
+| `(punit)     := induction h >> skip
+| `(false)     := induction h >> skip
+| `(empty)     := induction h >> skip
+| `(fin nat.zero) := induction h >> `[cases is_lt]
+| `(Two)       := induction h >> skip
+| `(ulift _)   := induction h >> skip
+| `(plift _)   := induction h >> skip
+| `(eq _ _)    := induction h >> skip
 | `(prod _ _)  := do names ← new_names h,
                       induction h >> skip
 | `(sigma _)   := do names ← new_names h,

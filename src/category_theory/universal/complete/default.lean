@@ -82,7 +82,7 @@ definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (Functo
                      tidy,
                     --  rewrite C.associativity,
                     --  simp,
-                     rewrite - C.associativity,
+                     rewrite ← C.associativity,
                      blast,
                    end
 }

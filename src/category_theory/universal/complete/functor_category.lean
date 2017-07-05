@@ -35,7 +35,7 @@ private definition LimitObject_in_FunctorCategory { J C D : Category } [ cmp : C
     onObjects     := λ c, Limit.onObjects (evaluate_Functor_to_FunctorCategory F c),
     onMorphisms   := λ _ _ f, Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
     identities    := ♯,
-    functoriality := begin tidy, /-rewrite D.associativity, simp, -/rewrite - D.associativity, simp,/- rewrite D.associativity-/ end
+    functoriality := begin tidy, /-rewrite D.associativity, simp, -/rewrite ← D.associativity, simp,/- rewrite D.associativity-/ end
   },
   cone_maps     := λ j, {
     components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,
@@ -106,7 +106,7 @@ begin
   tidy,
   -- rewrite D.associativity,
   rewrite bifunctor_naturality,
-  rewrite - D.associativity,
+  rewrite ← D.associativity,
   rewrite p'',
 end
 
@@ -140,7 +140,7 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
                         tidy,
                         -- rewrite D.associativity,
                         -- tidy,
-                        rewrite - D.associativity,
+                        rewrite ← D.associativity,
                         tidy,
                       end
       },

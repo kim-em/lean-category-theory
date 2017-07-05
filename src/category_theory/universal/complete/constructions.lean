@@ -116,7 +116,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
         commutativity := /- we need to show that that map commutes with everything -/
           begin
             intros, 
-            rewrite - C.associativity,
+            rewrite ← C.associativity,
             tidy,
           end
       },

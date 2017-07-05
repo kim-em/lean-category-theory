@@ -47,10 +47,10 @@ instance empty_is_Finite : Finite empty := {
   bijection := begin
                  unfold Bijection,
                  fsplit, 
-                 unfold_projections, 
+                 unfold_projs,  -- FIXME not working at the moment.
                  intros, 
                  automatic_induction, 
-                 unfold_projections, 
+                 unfold_projs, 
                  intros, 
                  applicable,
                  automatic_induction,

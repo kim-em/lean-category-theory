@@ -10,6 +10,7 @@ def applicable_attribute : user_attribute := {
   descr := "A lemma that should be applied to a goal whenever possible."
 }
 
+
 run_cmd attribute.register `applicable_attribute
 
 /- Try to apply one of the given lemas, it succeeds if one of them succeeds. -/

@@ -15,15 +15,15 @@ meta def tidy_tactics : list (tactic string) :=
   tactic.triv                   >> pure "triv", 
   force (reflexivity)           >> pure "refl", 
   `[exact dec_trivial]          >> pure "exact dec_trivial",
-  applicable                    >> pure "applicable" ,
-  force (intros >> skip)        >> pure "intros" ,
-  force (fsplit)                >> pure "fsplit" ,
-  force (dsimp_eq_mpr)          >> pure "dsimp [eq.mpr]" ,
-  `[unfold_projs]               >> pure "unfold_projs" ,
-  `[simp]                       >> pure "simp" ,
-  dsimp_hypotheses              >> pure "dsimp_hypotheses" ,
-  automatic_induction           >> pure "automatic_induction" ,
-  unfold_projections_hypotheses >> pure "unfold_projections_hypotheses" ,
+  applicable                    >> pure "applicable",
+  force (intros >> skip)        >> pure "intros",
+  force (fsplit)                >> pure "fsplit",
+  force (dsimp_eq_mpr)          >> pure "dsimp [eq.mpr]",
+  unfold_projections'               >> pure "unfold_projections", -- TODO replace with library version
+  `[simp]                       >> pure "simp",
+  dsimp_hypotheses              >> pure "dsimp_hypotheses",  -- TODO replace with library version
+  automatic_induction           >> pure "automatic_induction",
+  unfold_projections_hypotheses >> pure "unfold_projections_hypotheses",  -- TODO replace with library version
   `[simp *]                     >> pure "simp *",
   tactic.interactive.congr_fun_assumptions
 ]

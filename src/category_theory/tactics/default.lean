@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .applicable .force .at_least_one .smt .tidy
+import .applicable .force .at_least_one .repeat_at_least_once .smt .tidy
 
 import .auto_cast
 

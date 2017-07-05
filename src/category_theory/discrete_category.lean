@@ -24,11 +24,11 @@ definition {u v} DiscreteCategory ( α : Type u ) : Category.{u v} :=
 
 definition {u v} EmptyCategory := DiscreteCategory.{u v} (ulift empty)
 
-definition {u1 v1 u2 v2} EmptyFunctor ( C : Category.{u2 v2} ) : Functor EmptyCategory.{u1 v1} C := ♯ 
+definition {u1 v1 u2 v2} EmptyFunctor ( C : Category.{u2 v2} ) : Functor EmptyCategory.{u1 v1} C := --♯ 
 -- begin
 --   fsplit,
 --   intros,
---   unfold_projections at *, -- BUG 'unfold_projections at a' works here but this doesn't.
+--   unfold_projs at *, -- BUG 'unfold_projs at a' works here but this doesn't.
 -- end
 
 

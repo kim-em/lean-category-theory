@@ -39,8 +39,8 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
     have p : g = k,
       begin
         -- PROJECT why can't we automate this?
-        rewrite - C.left_identity k,
-        rewrite - wα2,
+        rewrite ← C.left_identity k,
+        rewrite ← wα2,
         rewrite C.associativity,
         rewrite w,
         rewrite wβ1,

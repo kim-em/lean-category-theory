@@ -13,8 +13,8 @@ let unfold (changed : bool) (e : expr) : tactic (bool × expr × bool) := do
 in do (tt, new_e) ← dsimplify_core tt (λ c e, failed) unfold e | fail "no projections to unfold",
       return new_e
 
--- meta def unfold_projections' : tactic unit :=
--- target >>= unfold_projections_core' semireducible default_max_steps >>= change
+meta def unfold_projections' : tactic unit :=
+target >>= unfold_projections_core' semireducible >>= change
 
 meta def unfold_projections_at' (h : expr) : tactic unit :=
 do num_reverted ← revert h,

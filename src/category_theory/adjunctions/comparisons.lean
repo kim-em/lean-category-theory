@@ -22,7 +22,7 @@ definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } {
         λ f, C.compose (A.unit.components P.1) (R.onMorphisms f),
       naturality := begin
                       tidy,
-                      repeat_at_least_once { rewrite - C.associativity },
+                      repeat_at_least_once { rewrite ← C.associativity },
                       rewrite A.unit_naturality
                     end
     },
@@ -34,21 +34,21 @@ definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } {
       naturality := begin
                       tidy,
                       -- repeat_at_least_once { rewrite D.associativity },
-                      rewrite - A.counit_naturality
+                      rewrite ← A.counit_naturality
                     end
     },
     witness_1 := begin
                    tidy,
                   --  rewrite D.associativity,
                    rewrite A.counit_naturality,
-                   rewrite - D.associativity,
+                   rewrite ← D.associativity,
                    rewrite A.triangle_2,
                    simp
                  end,
     witness_2 := begin
                    tidy,
-                   rewrite - C.associativity,
-                   rewrite - A.unit_naturality,
+                   rewrite ← C.associativity,
+                   rewrite ← A.unit_naturality,
                    rewrite C.associativity, -- ⊢ ∀ x : C.Hom fst (R snd), C.compose x (C.compose ((A.unit).components (R.onObjects snd)) (R.onMorphisms ((A.counit).components snd))) = x
                    rewrite A.triangle_1,    -- ⊢ ∀ x : C.Hom fst (R snd), C.compose x (C.identity (R.onObjects snd)) = x
                    simp
@@ -127,7 +127,7 @@ private definition counit_from_HomAdjunction { C D : Category } { L : Functor C 
 -- : ∀ f : C.Hom X (R.onObjects Y), C.compose f (C.compose ((unit_from_HomAdjunction A).components (R.onObjects Y)) (R.onMorphisms ((counit_from_HomAdjunction A).components Y))) = f :=
 -- begin
 --   intro f,
---   rewrite - C.associativity,
+--   rewrite ← C.associativity,
 --   erewrite (unit_from_HomAdjunction A).naturality,
 --   rewrite C.associativity,
 --   tidy,

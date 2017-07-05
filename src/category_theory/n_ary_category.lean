@@ -31,8 +31,8 @@ attribute [simp,ematch] n_ary_Category.associativity
 
 -- lemma n_ary_Category.associativity' { C: n_ary_Category } { X Y Z : C.Obj } ( e : C.Hom X Y ) ( p : path Y Z ) : C.compose ( e :: p ) = (C.compose p[ e, C.compose p ]) :=
 -- begin
---   rewrite - C.compose_length_one_path e,
---   rewrite - C.associativity,
+--   rewrite ← C.compose_length_one_path e,
+--   rewrite ← C.associativity,
 --   blast,
 --   admit
 -- end
@@ -45,7 +45,7 @@ attribute [simp,ematch] n_ary_Category.associativity
 --       unfold compose_each_path._main,
 --       unfold concatenate_path_of_paths,
 --       rewrite C.associativity,
---       rewrite - ih_1,
+--       rewrite ← ih_1,
 --       unfold compose_each_path._main,
 --       apply n_ary_Category.associativity'
 --     end
@@ -74,28 +74,29 @@ definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Catego
   compose := λ X Y Z f g, C.compose ( p[ f, g ] ),
   left_identity  := begin
                       intros,
-                      rewrite - C.compose_empty_path, 
-                      rewrite - C.compose_length_one_path f,  
-                      rewrite - C.associativity,
+                      rewrite ← C.compose_empty_path, 
+                      rewrite ← C.compose_length_one_path f,  
+                      rewrite ← C.associativity,
                       blast
                     end,
   right_identity := begin
                       intros,
-                      rewrite - C.compose_empty_path, 
-                      rewrite - C.compose_length_one_path f,  
-                      rewrite - C.associativity,
+                      rewrite ← C.compose_empty_path, 
+                      rewrite ← C.compose_length_one_path f,  
+                      rewrite ← C.associativity,
                       blast                    
                     end,
   associativity  := begin
                       intros,
-                      rewrite - C.compose_length_one_path h,
-                      rewrite - C.associativity,
+                      rewrite ← C.compose_length_one_path h,
+                      rewrite ← C.associativity,
                       unfold graphs.concatenate_paths,
                       -- -- The following two lines should be able to replace rewrite_once
                       -- have p := n_ary_Category.compose_length_one_path C f,
-                      -- rewrite - p, -- FIXME we need to be able to pass an occurencs argument
+                      -- rewrite ← p, -- TODO we need to be able to pass an occurences argument
+                      -- TODO see the conv environment as described at <https://github.com/leanprover/lean/blob/master/doc/changes.md>
                       rewrite_once,
-                      rewrite - C.associativity,
+                      rewrite ← C.associativity,
                       unfold graphs.concatenate_paths,
                       rewrite C.compose_length_one_path
                     end

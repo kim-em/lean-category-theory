@@ -44,9 +44,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
    : D.compose (D.compose (α.inverse.components X) (F.onMorphisms f)) (α.morphism.components Y) = G.onMorphisms f := 
    begin
      -- PROJECT automation
-     dsimp,
-     rewrite - α.inverse.naturality,
-     rewrite D.associativity,
+     rewrite ← α.inverse.naturality,
      tidy
    end
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
@@ -57,9 +55,7 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
   ( f : C.Hom X Y )
    : D.compose (D.compose (α.morphism.components X) (G.onMorphisms f)) (α.inverse.components Y) = F.onMorphisms f := 
    begin
-     dsimp,
-     rewrite - α.morphism.naturality,
-     rewrite D.associativity,
+     rewrite ← α.morphism.naturality,
      tidy
    end
 
@@ -78,13 +74,13 @@ definition NaturalIsomorphism.from_components
       naturality := λ X Y f, begin
                                let p := congr_arg (λ f : D.Hom (F.onObjects X) (G.onObjects Y), D.compose (components X).inverse (D.compose f (components Y).inverse)) (eq.symm (naturality f)),
                                simp at p,
-                               rewrite - D.associativity at p,
+                               rewrite ← D.associativity at p,
                                simp at p,
                                exact p,
                                 --  rewrite D.associativity at p,
                                 --  rewrite D.associativity at p,
                                 --  rewrite Isomorphism.witness_1 at p,
-                                --  rewrite - D.associativity at p,
+                                --  rewrite ← D.associativity at p,
                                 --  rewrite D.right_identity at p,
                                 --  rewrite Isomorphism.witness_2 at p,
                                 --  rewrite D.left_identity at p,
@@ -160,7 +156,11 @@ definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
   ( F : Functor B C )
   ( G : Functor C D )
   ( H : Functor D E )
-: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := ♯
+: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) :=
+begin
+  unfold NaturalIsomorphism, 
+  tidy
+end
 
 definition {u1 v1 u2 v2} FunctorComposition_left_unitor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
