@@ -14,8 +14,6 @@ open categories.types
 
 namespace categories.adjunctions
 
--- TODO cleanup this file
-
 private definition Adjunction_to_HomAdjunction_morphism { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R ) 
   : NaturalTransformation (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
                           (FunctorComposition (IdentityFunctor (Opposite C) × R) (HomPairing C)) := 
@@ -23,13 +21,7 @@ private definition Adjunction_to_HomAdjunction_morphism { C D : Category } { L :
   components := λ P, 
     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
     λ f, C.compose (A.unit.components P.1) (R.onMorphisms f),
-  naturality := begin
-                  tidy,
-                  -- repeat_at_least_once { rewrite ← C.associativity },
-                  -- repeat_at_least_once { rewrite R.functoriality },
-                  -- repeat_at_least_once { rewrite ← C.associativity },
-                  -- simp,
-                end
+  naturality := ♯ 
 }
 
 private definition Adjunction_to_HomAdjunction_inverse { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R ) 
@@ -39,31 +31,15 @@ private definition Adjunction_to_HomAdjunction_inverse { C D : Category } { L : 
   components := λ P, 
     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
     λ f, D.compose (L.onMorphisms f) (A.counit.components P.2),
-  naturality := begin
-                  tidy, 
-                  -- rewrite ← A.counit_naturality
-                end
+  naturality := ♯
 }
 
 definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R ) : HomAdjunction L R := 
 {
     morphism  := Adjunction_to_HomAdjunction_morphism A,
     inverse   := Adjunction_to_HomAdjunction_inverse A,
-    witness_1 := begin
-                   tidy,
-                  --  rewrite A.counit_naturality,
-                  --  rewrite ← D.associativity,
-                  --  rewrite A.triangle_2,
-                  --  simp
-                 end,
-    witness_2 := begin
-                   tidy,
-                  --  rewrite ← C.associativity,
-                  --  rewrite ← A.unit_naturality,
-                  --  rewrite C.associativity,
-                  --  rewrite A.triangle_1,   
-                  --  simp
-                 end
+    witness_1 := ♯,
+    witness_2 := ♯
   }
 
 @[simp] lemma mate_of_L
@@ -74,7 +50,6 @@ definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } {
       = (A.morphism).components (X, L.onObjects Y) (L.onMorphisms f) :=
 begin
   have p := @NaturalTransformation.naturality _ _ _ _ A.morphism (X, L X) (X, L Y) (C.identity X, L.onMorphisms f),
-  -- tidy,
   have q := congr_fun p (L.onMorphisms (C.identity X)),
   tidy,
 end
@@ -98,7 +73,6 @@ end
       = (A.inverse).components (R.onObjects X, Y) (R.onMorphisms f) :=
 begin
   have p := @NaturalTransformation.naturality _ _ _ _ A.inverse (R.onObjects Y, Y) (R.onObjects X, Y) (R.onMorphisms f, D.identity Y),
-  -- tidy,
   have q := congr_fun p (R.onMorphisms (D.identity Y)),
   tidy,
 end
@@ -110,7 +84,6 @@ end
     (A.inverse).components (R.onObjects X, Y) (R.onMorphisms f) :=
 begin
   have p := @NaturalTransformation.naturality _ _ _ _ A.inverse (R.onObjects X, X) (R.onObjects X, Y) (C.identity (R.onObjects X), f),
-  -- tidy,
   have q := congr_fun p (R.onMorphisms (D.identity X)),
   tidy,
 end

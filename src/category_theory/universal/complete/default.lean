@@ -78,13 +78,7 @@ definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (Functo
                                 commutativity := ♯ 
                               }).cone_morphism,
   identities    := ♯,
-  functoriality := begin
-                     tidy,
-                    --  rewrite C.associativity,
-                    --  simp,
-                    --  rewrite ← C.associativity,
-                    --  blast,
-                   end
+  functoriality := ♯ 
 }
 
 end categories.universal

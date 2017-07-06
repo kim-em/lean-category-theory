@@ -8,6 +8,8 @@ import ...equivalence
 import ..comma_categories
 import ..universal
 
+import ...tactics.its
+
 open categories
 open categories.functor
 open categories.natural_transformation
@@ -21,11 +23,9 @@ definition comma_Cone_to_Cone { J C : Category } { F : Functor J C } ( cone : (c
 {
   cone_point    := cone.1,
   cone_maps     := λ j : J.Obj, (cone.2.2).components j,
-  commutativity := λ ( j k : J.Obj ) ( f : J.Hom j k ),
+  commutativity := λ ( j k : J.Obj ) ( f : J.Hom j k ), 
                       begin
-                          -- PROJECT write an `its` tactic
-                        refine ( cast _ (eq.symm ((cone.2.2).naturality f)) ),
-                        tidy
+                        its eq.symm ((cone.2.2).naturality f),
                       end
 }
 
@@ -33,7 +33,6 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
 {
   cone_morphism      := f.val.1,
   commutativity := λ j : J.Obj, begin
-   -- PROJECT improve automation?
                                   tidy,                                  
                                   let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f_2,
                                   blast
@@ -44,9 +43,7 @@ definition Cone_to_comma_Cone { J C : Category } { F : Functor J C } ( cone : Co
 ⟨ cone.cone_point, ♯, {
     components := λ j, cone.cone_maps j,
     naturality := λ _ _ f, begin
-    -- PROJECT write an `its` tactic
-                            refine ( cast _ (eq.symm (cone.commutativity f)) ), 
-                            tidy
+                            its eq.symm (cone.commutativity f) 
                           end
   } ⟩
 

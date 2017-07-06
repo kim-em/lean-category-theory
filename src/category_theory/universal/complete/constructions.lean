@@ -35,7 +35,7 @@ private definition {u v} ConeMorphism_from_map_to_limit
   { Z : C.Obj } 
   ( f : C.Hom Z L.terminal_object.cone_point ) : ConeMorphism (Cone_from_map_to_limit f) L.terminal_object :=
 {
-  cone_morphism      := f,
+  cone_morphism := f,
   commutativity := ♯ 
 }
 

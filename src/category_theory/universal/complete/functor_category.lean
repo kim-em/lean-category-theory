@@ -130,8 +130,6 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
                         tidy,
                         exact D.compose ((Y.cone_maps j).components X) ((F.onObjects j).onMorphisms f),
                         tidy, 
-                        -- rewrite ← D.associativity, -- TODO automate this; it seems to happen often enough.
-                        -- tidy,
                       end
       },
       commutativity := ♯
