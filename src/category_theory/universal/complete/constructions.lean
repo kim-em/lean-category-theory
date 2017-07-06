@@ -74,7 +74,7 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                                                 have p := lim_F.uniqueness_of_morphisms_to_terminal_object, 
                                                 have q := p _ (ConeMorphism_from_map_to_limit f)
                                                   { cone_morphism := g, commutativity := begin tidy, exact eq.symm (witness j) end },
-                                                exact congr_arg ConeMorphism.cone_morphism q, -- surely this line can be automated: if you know a = b, you know a.x = b.x
+                                                exact congr_arg ConeMorphism.cone_morphism q, -- PROJECT surely this line can be automated: if you know a = b, you know a.x = b.x
                                               end,
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from { cone_point := Z, cone_maps := i, commutativity := ♯ }).cone_morphism,
                     factorisation := ♯ 

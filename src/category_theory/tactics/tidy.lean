@@ -14,24 +14,74 @@ meta def if_exactly_one_goal { α : Type } ( t : tactic α ) : tactic α :=
 do ng ← num_goals,
    if ng = 1 then t else fail "there is not exactly one goal"
 
+private meta def propositional_goals_core { α : Type } (tac : tactic α) : list expr → list expr →  (list (option α)) → bool → tactic (list (option α))
+| []        ac results progress := guard progress >> set_goals ac >> pure results
+| (g :: gs) ac results progress :=
+  do t ← infer_type g,
+     p ← is_prop t,
+     if p then do {
+        set_goals [g],
+        succeeded ← try_core tac,
+        new_gs    ← get_goals,
+        propositional_goals_core gs (ac ++ new_gs) (succeeded :: results ) (succeeded.is_some || progress)
+     } else do {
+       propositional_goals_core gs (ac ++ [ g ]) (none :: results) progress
+     }
+
+/-- Apply the given tactic to any propositional goal where it succeeds. The tactic succeeds only if
+   tac succeeds for at least one goal. -/
+meta def propositional_goals { α : Type } ( t : tactic α ) : tactic (list (option α)) :=
+do gs ← get_goals,
+   results ← propositional_goals_core t gs [] [] ff,
+   pure results.reverse
+
+/-
+-- For now:
+-- If there is just one goal, applies the tactic.
+-- Otherwise, applies the tactic to all propositional goals,
+-- Succeeds if the tactic succeeds on at least one goal.
+-- 
+-- Eventually I'd like to pick out all goals which no later goal depends on.
+-/
+meta def independent_goals { α : Type } ( t : tactic α ) : tactic (list (option α)) :=
+do ng ← num_goals,
+   if ng = 1 then
+     t >>= λ r, pure [ some r ]
+   else 
+     propositional_goals t
+
+meta def build_focus_string ( s : list ( option string ) ) : tactic string := 
+pure ("focus " ++ (s.map(λ x, option.get_or_else x "skip")).to_string)
+
+meta def if_first_goal_safe { α : Type } ( t : tactic α ) : tactic α :=
+do ng ← num_goals,
+   if ng = 1 then t else do {
+    -- ty ← target >>= infer_type,
+    -- p ← is_prop ty,
+     p ← target >>= is_prop,
+     if p then t else fail "there are multiple goals, and the first goal is not a mere proposition"
+   }
+
+
 meta def tidy_tactics : list (tactic string) :=
 [
-  tactic.triv                   >> pure "triv", 
-  force (reflexivity)           >> pure "refl", 
-  if_exactly_one_goal assumption >> pure "assumption",
-  `[exact dec_trivial]          >> pure "exact dec_trivial",
-  applicable                    >> pure "applicable",
-  force (intros >> skip)        >> pure "intros",
-  force (fsplit)                >> pure "fsplit",
-  force (dsimp_eq_mpr)          >> pure "dsimp [eq.mpr] {unfold_reducible := tt}", -- TODO split this up?
-  unfold_projections'               >> pure "unfold_projections", -- TODO replace with library version
-  `[simp]                       >> pure "simp",
-  -- dsimp_hypotheses              >> pure "dsimp_hypotheses",  -- TODO replace with library version
+  triv                                                >> pure "triv", 
+  force (reflexivity)                                 >> pure "refl", 
+  if_first_goal_safe assumption                       >> pure "assumption",
+  -- independent_goals (assumption >> pure "assumption") >>= build_focus_string,
+  `[exact dec_trivial]                                >> pure "exact dec_trivial",
+  applicable                                          >> pure "applicable",
+  force (intros >> skip)                              >> pure "intros",
+  force (fsplit)                                      >> pure "fsplit", -- TODO is fapply necessary anymore?
+  force (dsimp_eq_mpr)           >> pure "dsimp [eq.mpr] {unfold_reducible := tt}", -- TODO split this up?
+  unfold_projections'            >> pure "unfold_projections", -- TODO replace with library version
+  `[simp * {max_steps := 50}]                        >> pure "simp *",
   `[dsimp at * {unfold_reducible := tt}]              >> pure "dsimp at * {unfold_reducible := tt}",  -- TODO combine with unfolding projections in hypotheses
-  automatic_induction           >> pure "automatic_induction",
-  unfold_projections_hypotheses >> pure "unfold_projections_hypotheses",  -- TODO replace with library version
-  tactic.interactive.congr_fun_assumptions, -- TODO perhaps this should be wrapped in if_exactly_one_goal? -- TODO are there other aggresssive things we can do?
-  `[simp at *]                     >> pure "simp at *"
+  automatic_induction            >> pure "automatic_induction",
+  unfold_projections_hypotheses  >> pure "unfold_projections_hypotheses",  -- TODO replace with library version
+  -- (independent_goals congr_fun_assumptions)  >>= build_focus_string, 
+  if_first_goal_safe congr_fun_assumptions, -- TODO are there other aggresssive things we can do?
+  `[simp at * {max_steps := 50}]                     >> pure "simp at *"
 ]
 
 meta def tidy ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit :=

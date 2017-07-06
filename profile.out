@@ -1,0 +1,5 @@
+Repository at 109798ad22b1e34ca1705f033f5b1a927d00cbbe
+Compiling natural_transformation.lean              0m8.522s
+Compiling products/default.lean                    0m11.250s
+Compiling universal/default.lean                   0m0.023s
+Compiling currying/currying_3.lean                 0m20.892s

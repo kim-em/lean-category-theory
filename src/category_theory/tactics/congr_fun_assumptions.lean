@@ -4,7 +4,7 @@
 
 open tactic
 
-namespace tactic.interactive
+open tactic.interactive
 
 private meta def exact_congr_fun_expr ( e f : expr ) : tactic string := 
 do -- trace ("attempting exact_congr_fun_expr with " ++ e.to_string ++ " " ++ f.to_string),
@@ -14,6 +14,5 @@ do -- trace ("attempting exact_congr_fun_expr with " ++ e.to_string ++ " " ++ f.
 meta def congr_fun_assumptions : tactic string :=
 do l ← local_context,
    result ← first(l.for(λ h1, first (l.for(λ h2, exact_congr_fun_expr h1 h2)))),
-   pure (result ++ " -- or 'congr_fun_assumptions'")
-
-end tactic.interactive
+   pure result
+--    pure (result ++ " -- or 'congr_fun_assumptions'")

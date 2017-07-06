@@ -51,6 +51,8 @@ begin
   tidy
 end
 
+open tactic
+
 @[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_diagonal_identities_1
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} }
@@ -63,8 +65,13 @@ end
   : E.compose (@Functor.onMorphisms _ _ F (X, Y) (X, Y') (C.identity X, g)) (@Functor.onMorphisms _ _ F (X, Y') (X', Y') (f, D.identity Y')) =
    @Functor.onMorphisms _ _ F (X, Y) (X', Y') (f, g) :=
 begin
+  -- PROJECT get automation working again after https://github.com/leanprover/lean/issues/1732
   have p := eq.symm (@Functor.functoriality _ _ F (X, Y) (X, Y') (X', Y') (C.identity X, g) (f, D.identity Y')),
-  tidy
+  dsimp [eq.mpr] {unfold_reducible := tt},
+  unfold_projections_hypotheses,
+  dsimp at p,
+  simp at p,
+  exact p,
 end
 
 @[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_diagonal_identities_2
@@ -80,7 +87,11 @@ end
    @Functor.onMorphisms _ _ F (X, Y) (X', Y') (f, g) :=
 begin
   have p := eq.symm (@Functor.functoriality _ _ F (X, Y) (X', Y) (X', Y') (f, D.identity Y) (C.identity X', g)),
-  tidy
+  dsimp [eq.mpr] {unfold_reducible := tt},
+  unfold_projections_hypotheses,
+  dsimp at p,
+  simp at p,
+  exact p,
 end
 
 end categories.products

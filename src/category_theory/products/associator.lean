@@ -9,6 +9,9 @@ open categories.natural_transformation
 
 namespace categories.products
 
+-- PROJECT; by aggressively allowing "assumption" we could do this completely automatically
+-- locally tag "assumption" with @[tidy]?
+-- or define an aggressive version of tidy (perhaps "follow_your_nose"?)
 definition ProductCategoryAssociator
   ( C D E: Category )
   : Functor ((C × D) × E) (C × (D × E)) :=
