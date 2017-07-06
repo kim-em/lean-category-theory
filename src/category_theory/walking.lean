@@ -40,8 +40,8 @@ by contradiction
 @[simp] lemma Two_1_eq_0_eq_false : ¬(_1 = _0) :=
 by contradiction
 
-@[applicable] lemma decidable_true  : decidable true  := is_true  begin trivial end
-@[applicable] lemma decidable_false : decidable false := is_false ♯ 
+@[applicable] definition decidable_true  : decidable true  := is_true  begin trivial end
+@[applicable] definition decidable_false : decidable false := is_false ♯ 
 
 instance Two_decidable : decidable_eq Two := ♯
 

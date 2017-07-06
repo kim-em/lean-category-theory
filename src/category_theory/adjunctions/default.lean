@@ -21,7 +21,7 @@ structure Adjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) 
 
 attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
-@[applicable] lemma Adjunctions_applicable_equal
+@[applicable] lemma Adjunctions_pointwise_equal
   { C D : Category } ( L : Functor C D ) ( R : Functor D C )
   ( A B : Adjunction L R )
   ( w1 : A.unit = B.unit ) ( w2 : A.counit = B.counit ) : A = B :=

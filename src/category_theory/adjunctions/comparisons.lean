@@ -33,13 +33,11 @@ definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } {
         λ f, D.compose (L.onMorphisms f) (A.counit.components P.2),
       naturality := begin
                       tidy,
-                      -- repeat_at_least_once { rewrite D.associativity },
                       rewrite ← A.counit_naturality
                     end
     },
     witness_1 := begin
                    tidy,
-                  --  rewrite D.associativity,
                    rewrite A.counit_naturality,
                    rewrite ← D.associativity,
                    rewrite A.triangle_2,
@@ -49,16 +47,11 @@ definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } {
                    tidy,
                    rewrite ← C.associativity,
                    rewrite ← A.unit_naturality,
-                   rewrite C.associativity, -- ⊢ ∀ x : C.Hom fst (R snd), C.compose x (C.compose ((A.unit).components (R.onObjects snd)) (R.onMorphisms ((A.counit).components snd))) = x
-                   rewrite A.triangle_1,    -- ⊢ ∀ x : C.Hom fst (R snd), C.compose x (C.identity (R.onObjects snd)) = x
+                   rewrite C.associativity,
+                   rewrite A.triangle_1,   
                    simp
                  end
   }
-
--- ⊢ C.compose
---       ((A.morphism).components (R.onObjects X, L.onObjects (R.onObjects X)) (D.identity (L.onObjects (R.onObjects X))))
---       (R.onMorphisms ((A.inverse).components (R.onObjects X, X) (C.identity (R.onObjects X)))) =
---     C.identity (R.onObjects X)
 
 @[simp] lemma mate_of_L
   { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
@@ -70,7 +63,7 @@ begin
   have p := @NaturalTransformation.naturality _ _ _ _ A.morphism (X, L X) (X, L Y) (C.identity X, L.onMorphisms f),
   tidy,
   have q := congr_fun p (L.onMorphisms (C.identity X)),
-  tidy,
+  -- tidy,
   exact eq.symm q
 end
 

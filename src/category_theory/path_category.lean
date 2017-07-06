@@ -21,22 +21,26 @@ definition PathCategory ( G : Graph ) : Category :=
   right_identity := begin
                       tidy,
                       induction f,
-                      -- when f is nil
-                      dsimp,
-                      trivial,
-                      -- when f is cons
-                      dsimp, 
-                      exact congr_arg (λ p, path.cons e p) ih_1
+                      {
+                        -- when f is nil
+                        trivial,
+                      },
+                      {
+                        -- when f is cons
+                        exact congr_arg (λ p, path.cons e p) ih_1
+                      }
                     end,
   associativity  := begin
                       tidy,
                       induction f,
-                      -- when f is nil
-                      dsimp,
-                      trivial,
-                      -- when f is cons
-                      dsimp,
-                      exact congr_arg (λ p, path.cons e p) (ih_1 g)
+                      {
+                        -- when f is nil
+                        trivial,
+                      },
+                      {
+                        -- when f is cons
+                        exact congr_arg (λ p, path.cons e p) (ih_1 g)
+                      }
                     end
 }
 

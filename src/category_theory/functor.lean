@@ -52,13 +52,13 @@ definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D :
 
 -- We'll want to be able to prove that two functors are equal if they are equal on objects and on morphisms.
 -- Implementation warning:
--- When using `apply Functors_applicable_equal`, you might expect that Lean will create two goals,
+-- When using `apply Functors_pointwise_equal`, you might expect that Lean will create two goals,
 --   one for `objectWitness`, and one for `morphismWitness`.
 --   However, because `morphismWitness` depends on `objectWitness`, it will actually only create the goal
 --   for `morphismWitness`, leaving the `objectWitness` goal somehow "implicit" and likely unprovable.
 --   See https://groups.google.com/d/msg/lean-user/bhStu87PjiI/vqsyr9ZABAAJ for details.
--- If you run into this problem, use `fapply Functors_applicable_equal` instead.
-lemma {u1 v1 u2 v2} Functors_applicable_equal
+-- If you run into this problem, use `fapply Functors_pointwise_equal` instead.
+lemma {u1 v1 u2 v2} Functors_pointwise_equal
   { C : Category.{u1 v1} }
   { D : Category.{u2 v2} } 
   { F G : Functor C D } 

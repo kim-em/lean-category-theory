@@ -60,12 +60,6 @@ definition {u v} compose_path
 | ._ ._ (path.nil X) := identity X
 | ._ ._ (@path.cons ._ _ _ _ e p) := composition e (compose_path p)
 
-
-meta def rewrite_once : tactic unit :=
-do r ← tactic.to_expr ```(n_ary_Category.compose_length_one_path C f),
-   tactic.rewrite_core reducible tt tt (occurrences.pos [2]) tt r
-
-
 definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Category :=
 {
   Obj := C.graph.Obj,
@@ -91,11 +85,7 @@ definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Catego
                       rewrite ← C.compose_length_one_path h,
                       rewrite ← C.associativity,
                       unfold graphs.concatenate_paths,
-                      -- -- The following two lines should be able to replace rewrite_once
-                      -- have p := n_ary_Category.compose_length_one_path C f,
-                      -- rewrite ← p, -- TODO we need to be able to pass an occurences argument
-                      -- TODO see the conv environment as described at <https://github.com/leanprover/lean/blob/master/doc/changes.md>
-                      rewrite_once,
+                      conv { for (f) [2] { rewrite ← n_ary_Category.compose_length_one_path C f }},
                       rewrite ← C.associativity,
                       unfold graphs.concatenate_paths,
                       rewrite C.compose_length_one_path

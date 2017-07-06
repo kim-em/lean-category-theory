@@ -9,7 +9,7 @@ open categories.graphs
 
 namespace categories.examples.graphs
 
-@[applicable] private lemma {u1 v1 u2 v2} GraphHomomorphisms_applicable_equal
+@[applicable] private lemma {u1 v1 u2 v2} GraphHomomorphisms_pointwise_equal
   { C : Graph.{u1 v1} }
   { D : Graph.{u2 v2} } 
   { F G : GraphHomomorphism C D } 

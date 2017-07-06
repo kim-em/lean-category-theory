@@ -11,8 +11,8 @@ namespace categories.types
 open categories
 open categories.util.finite
 
-definition {u} CategoryOfDecidableTypes : Category := Full_Subcategory CategoryOfTypes decidable_eq
-definition {u} CategoryOfFiniteTypes : Category := Full_Subcategory CategoryOfTypes Finite
+definition {u} CategoryOfDecidableTypes : Category := FullSubcategory CategoryOfTypes decidable_eq
+definition {u} CategoryOfFiniteTypes : Category := FullSubcategory CategoryOfTypes Finite
 
 -- PROJECT we could construct an embedding of Finite into Decidable?
 

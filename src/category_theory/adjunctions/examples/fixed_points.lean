@@ -18,9 +18,9 @@ namespace categories.adjunctions
 -- EXERCISE
 -- cf Leinster 2.2.11
 definition left_fixed_points  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R )
-  : Category := Full_Subcategory C (λ X, is_Isomorphism (A.unit X))
+  : Category := FullSubcategory C (λ X, is_Isomorphism (A.unit X))
 definition right_fixed_points { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R )
-  : Category := Full_Subcategory D (λ X, is_Isomorphism (A.counit X))
+  : Category := FullSubcategory D (λ X, is_Isomorphism (A.counit X))
 
 -- Now we need to express the idea that functors restrict to a full subcategory with image in another full subcategory,
 -- and that these restrictions give an equivalence.

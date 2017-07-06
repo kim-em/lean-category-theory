@@ -2,17 +2,46 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ..isomorphism
-import ..types
+import ..tactics
+-- import ..isomorphism
+-- import ..types
 
-open categories.isomorphism
-open categories.types
+-- open categories.isomorphism
+-- open categories.types
 
 namespace categories.util.finite
+
+structure Bijection ( U V : Type ) :=
+  ( morphism : U → V )
+  ( inverse  : V → U )
+  ( witness_1 : ∀ u : U, inverse (morphism u) = u )
+  ( witness_2 : ∀ v : V, morphism (inverse v) = v )
 
 class Finite ( α : Type ) :=
   ( cardinality : nat )
   ( bijection : Bijection α (fin cardinality) )
+
+@[applicable] definition empty_exfalso (x : false) : empty := begin exfalso, trivial end
+
+-- PROJECT improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
+instance empty_is_Finite : Finite empty := {
+  cardinality := 0,
+  bijection := begin
+                 fsplit, 
+                 intros,
+                 induction a,
+                 intros,
+                 induction a,
+                 apply empty_exfalso,
+                 cases is_lt,
+                 intros, 
+                 induction u,
+                 intros,
+                 induction v,
+                 cases is_lt,
+              end
+}
+
 
 definition decidable_via_isomorphism { α β : Type } [ dec : decidable_eq β ] ( iso : Bijection α β ) : decidable_eq α :=
 begin
@@ -38,31 +67,6 @@ instance Finite_has_decidable_eq { α : Type } [ fin : Finite α ] : decidable_e
 def {u} empty_function           { α : Sort u } : empty → α := ♯
 def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i := ♯
 
--- FIXME why doesn't the VM have code for this?
-@[applicable] lemma empty_exfalso (x : false) : empty := begin exfalso, trivial end
-
--- PROJECT improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
-instance empty_is_Finite : Finite empty := {
-  cardinality := 0,
-  bijection := begin
-                 unfold Bijection,
-                 fsplit, 
-                 unfold_projs,  -- FIXME not working at the moment.
-                 intros, 
-                 automatic_induction, 
-                 unfold_projs, 
-                 intros, 
-                 applicable,
-                 automatic_induction,
-                 apply funext,
-                 intros,
-                 automatic_induction,
-                 apply funext,
-                 intros,
-                 unfold_projections_hypotheses,
-                 automatic_induction,
-              end
-}
 
 open Two
 
@@ -80,28 +84,22 @@ instance Two_is_Finite : Finite Two := {
                        | _        := _0 -- FIXME we shouldn't have to do this!                   
                      end,
     witness_1 := begin
-                   apply funext,
                    intros,
-                   induction x, -- FIXME We need to be able to specify that induction on a new type (e.g. Two) should be allowed in tidy.
+                   induction u, -- FIXME We need to be able to specify that induction on a new type (e.g. Two) should be allowed in tidy.
                    tidy,
                  end,
     witness_2 := begin
-                   apply funext,
-                   intros,
-                   induction x,
+                   intros, -- FIXME automation
+                   induction v,
                    cases is_lt,
-                   unfold_projections,
+                   unfold_projs {md:=semireducible},
                    dsimp,
-                   unfold Two_is_Finite._match_2, -- FIXME auxiliary definitions created just a moment ago should get unfolded...
-                   unfold Two_is_Finite._match_1,
-                   trivial,
+                   unfold Two_is_Finite._match_2,  
+                   unfold Two_is_Finite._match_1,  
                    cases a,
-                   unfold_projections,
-                   dsimp,
-                   unfold Two_is_Finite._match_2,
-                   unfold Two_is_Finite._match_1,
-                   trivial,
-                   cases a_2
+                   unfold Two_is_Finite._match_2,  
+                   unfold Two_is_Finite._match_1,  
+                   cases a_2,
                  end
     }
   }

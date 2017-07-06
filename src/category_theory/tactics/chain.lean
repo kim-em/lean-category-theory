@@ -24,7 +24,7 @@ private meta def chain' { α : Type } [ has_to_tactic_format α ] ( tactics : li
                                       (chain' ⟨ succ n, results, ts ⟩)
                                     )
 
-def chain_default_max_steps := 500
+def chain_default_max_steps := 50
 
 meta def chain { α : Type } [ has_to_tactic_format α ] 
   ( tactics        : list (tactic α) )

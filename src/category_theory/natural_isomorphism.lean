@@ -156,11 +156,7 @@ definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
   ( F : Functor B C )
   ( G : Functor C D )
   ( H : Functor D E )
-: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) :=
-begin
-  unfold NaturalIsomorphism, 
-  tidy
-end
+: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := ♯
 
 definition {u1 v1 u2 v2} FunctorComposition_left_unitor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
