@@ -70,7 +70,10 @@ def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i :=
 
 open Two
 
--- This is really lame!
+def to_as_true {c : Prop} [h₁ : decidable c] (h₂ : c) : as_true c :=
+cast (if_pos h₂).symm trivial
+
+-- This is fairly lame!
 instance Two_is_Finite : Finite Two := {
   cardinality := 2,
   bijection := {
@@ -78,10 +81,9 @@ instance Two_is_Finite : Finite Two := {
                        | _0 := ⟨ 0, ♯ ⟩
                        | _1 := ⟨ 1, ♯ ⟩
                      end,
-    inverse  := λ n, match n with
-                       | ⟨ 0, _ ⟩ := _0
-                       | ⟨ 1, _ ⟩ := _1 
-                       | _        := _0 -- FIXME we shouldn't have to do this!                   
+    inverse  := λ n, match n.1, to_as_true n.2 with
+                       | 0, _ := _0
+                       | 1, _ := _1 
                      end,
     witness_1 := begin
                    intros,

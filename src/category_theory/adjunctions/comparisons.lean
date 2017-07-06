@@ -67,6 +67,7 @@ begin
   exact eq.symm q
 end
 
+
 @[simp] lemma mate_of_L'
   { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
   { X Y : C.Obj } ( f : C.Hom X Y )
