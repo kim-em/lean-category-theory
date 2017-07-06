@@ -120,6 +120,8 @@ end
   : D.compose ((cone.cone_point).onMorphisms f) ((cone.cone_maps j).components Y) =
     D.compose ((cone.cone_maps j).components X) ((F.onObjects j).onMorphisms f) := ♯
 
+local attribute [reducible] morphism_to_terminal_object_cone_point
+
 private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] { F : Functor J (FunctorCategory C D) } ( Y : Cone F ) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
       cone_morphism := {
         components := begin
@@ -131,27 +133,13 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
         naturality := begin 
                         tidy,
                         exact D.compose ((Y.cone_maps j).components X) ((F.onObjects j).onMorphisms f),
-                        tidy, -- uses cone_in_functor_category
-                        unfold morphism_to_terminal_object_cone_point,
-                        tidy,
-                        -- rewrite D.associativity,
-                        -- tidy,
-                        unfold morphism_to_terminal_object_cone_point,
-                        tidy,
-                        -- rewrite D.associativity,
-                        -- tidy,
-                        rewrite ← D.associativity,
+                        tidy, 
+                        rewrite ← D.associativity, -- TODO automate this; it seems to happen often enough.
                         tidy,
                       end
       },
-      commutativity := begin
-                         tidy, 
-                         unfold morphism_to_terminal_object_cone_point,
-                         tidy,
-                       end
+      commutativity := ♯
     }
-
-lemma Y : 1 = 1 := ♯
 
 @[simp] lemma cone_commutativity_in_FunctorCategory
 ( J C D  : Category )

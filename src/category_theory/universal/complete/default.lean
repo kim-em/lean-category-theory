@@ -51,7 +51,7 @@ definition {u v} limit     { C : Category.{u v} } [ Complete.{u v} C ] { J : Cat
     : C.compose (L.morphism_to_terminal_object_from X).cone_morphism (L.terminal_object.cone_maps j) = X.cone_maps j :=
   (L.morphism_to_terminal_object_from X).commutativity j
 
-@[applicable] lemma morphism_to_terminal_object_cone_point 
+@[applicable] definition morphism_to_terminal_object_cone_point 
   { J D : Category }
   { Z : D.Obj }
   { G : Functor J D }
