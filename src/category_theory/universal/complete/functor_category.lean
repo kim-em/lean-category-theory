@@ -26,16 +26,12 @@ namespace categories.universal
     naturality := ♯ 
   }
 
--- private definition switch { J C D : Category } : Functor (FunctorCategory J (FunctorCategory C D)) (FunctorCategory C (FunctorCategory J D)) :=
---   FunctorComposition (FunctorComposition (Uncurry_Functors J C D) (whisker_on_left_functor _ (SwitchProductCategory C J))) (Curry_Functors C J D)
-
 private definition LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] ( F : Functor J (FunctorCategory C D) ) : Cone F := {      
-  cone_point    := 
-  {
+  cone_point    := {
     onObjects     := λ c, Limit.onObjects (evaluate_Functor_to_FunctorCategory F c),
     onMorphisms   := λ _ _ f, Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
     identities    := ♯,
-    functoriality := begin tidy, rewrite ← D.associativity, simp, end
+    functoriality := ♯
   },
   cone_maps     := λ j, {
     components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,
@@ -134,8 +130,8 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
                         tidy,
                         exact D.compose ((Y.cone_maps j).components X) ((F.onObjects j).onMorphisms f),
                         tidy, 
-                        rewrite ← D.associativity, -- TODO automate this; it seems to happen often enough.
-                        tidy,
+                        -- rewrite ← D.associativity, -- TODO automate this; it seems to happen often enough.
+                        -- tidy,
                       end
       },
       commutativity := ♯
@@ -168,10 +164,10 @@ end
 begin
   have p := φ.commutativity j,
   have p' := congr_arg NaturalTransformation.components p,
-  have p'' := congr_fun p' X,
+  -- have p'' := congr_fun p' X,
   tidy,
-  rewrite w,
-  exact p''
+  -- rewrite w,
+  -- exact p''
 end
 
 instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Complete (FunctorCategory C D) := {

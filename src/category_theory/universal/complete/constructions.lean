@@ -73,7 +73,7 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                                                 intros, 
                                                 have p := lim_F.uniqueness_of_morphisms_to_terminal_object, 
                                                 have q := p _ (ConeMorphism_from_map_to_limit f)
-                                                  { cone_morphism := g, commutativity := begin tidy, exact eq.symm (witness j) end },
+                                                  { cone_morphism := g, commutativity := ♯ },
                                                 exact congr_arg ConeMorphism.cone_morphism q, -- PROJECT surely this line can be automated: if you know a = b, you know a.x = b.x
                                               end,
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from { cone_point := Z, cone_maps := i, commutativity := ♯ }).cone_morphism,
@@ -87,44 +87,22 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
     let product_over_morphisms := product (λ f : ( Σ s : J.Obj, Σ t : J.Obj, J.Hom s t ), F.onObjects f.2.1) in
     let source    := product_over_morphisms.map (λ f, C.compose (product_over_objects.projection f.1) (F.onMorphisms f.2.2) )  in
     let target    := product_over_morphisms.map (λ f, product_over_objects.projection f.2.1 ) in
-    let source_projection_lemma : ∀ t : ( Σ s : J.Obj, Σ t : J.Obj, J.Hom s t ), C.compose source (product_over_morphisms.projection t) = C.compose (product_over_objects.projection t.1) (F.onMorphisms t.2.2) := ♯ in
-    let target_projection_lemma : ∀ t : ( Σ s : J.Obj, Σ t : J.Obj, J.Hom s t ), C.compose target (product_over_morphisms.projection t) = product_over_objects.projection t.2.1 := ♯ in
     let equalizer := equalizer source target in {
       terminal_object     := {
         cone_point    := equalizer.equalizer,
         cone_maps     := λ j : J.Obj, C.compose equalizer.inclusion (product_over_objects.projection j),
         commutativity := λ j k f, begin
-                                   -- PROJECT learn how to use calc!
-                                   have p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,
-                                  --  simp at p,
-                                  --  repeat_at_least_once { rewrite C.associativity at p },
+                                   have p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,                                
                                    blast,                                   
                                   end
       },
       morphism_to_terminal_object_from := λ cone : Cone F, {
         cone_morphism      := /- we need a morphism from the tip of f to the equalizer -/
                          equalizer.map
-                           (product_over_objects.map cone.cone_maps)
-                           /- we need to provide the evidence that that map composes correctly with source and target -/
-                           begin
-                            -- blast should work from the beginning here, but takes longer than I have patience for
-                            --  applicable,
-                            --  intros,
-                            --  repeat_at_least_once { rewrite C.associativity },
-                             blast,
-                           end,
-        commutativity := /- we need to show that that map commutes with everything -/
-          begin
-            intros, 
-            rewrite ← C.associativity,
-            tidy,
-          end
+                           (product_over_objects.map cone.cone_maps) ♯,
+        commutativity := ♯
       },
-      uniqueness_of_morphisms_to_terminal_object := λ cone f g, begin
-                                  -- tidy, 
-                                  -- repeat_at_least_once { rewrite C.associativity }, -- unfortunately blast doesn't work here
-                                  tidy,
-                                end
+      uniqueness_of_morphisms_to_terminal_object := ♯
     }
 }
 

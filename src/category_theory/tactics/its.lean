@@ -12,6 +12,8 @@ open tactic
 open interactive
 open interactive.types
 
+
+-- TODO actually make use of this!
 namespace tactic.interactive
 meta def its (q : parse texpr) : tactic unit := i_to_expr ``(%%q) >>= λ e, tactic.its e (try tidy)
 end tactic.interactive

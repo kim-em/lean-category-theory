@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .force .applicable .congr_fun_assumptions .fsplit .simp_hypotheses .dsimp_hypotheses .automatic_induction .unfold_projections
+import .force .applicable .congr_fun_assumptions .fsplit .simp_hypotheses .dsimp_hypotheses .automatic_induction .unfold_projections .tidy_tactics
 import .chain
 import .smt
 
@@ -63,7 +63,7 @@ do ng ← num_goals,
    }
 
 
-meta def tidy_tactics : list (tactic string) :=
+meta def global_tidy_tactics : list (tactic string) :=
 [
   triv                                                >> pure "triv", 
   force (reflexivity)                                 >> pure "refl", 
@@ -75,7 +75,8 @@ meta def tidy_tactics : list (tactic string) :=
   force (fsplit)                                      >> pure "fsplit", -- TODO is fapply necessary anymore?
   force (dsimp_eq_mpr)           >> pure "dsimp [eq.mpr] {unfold_reducible := tt}", -- TODO split this up?
   unfold_projections'            >> pure "unfold_projections", -- TODO replace with library version
-  `[simp * {max_steps := 50}]                        >> pure "simp *",
+  `[simp]                        >> pure "simp",
+  `[simp *]                        >> pure "simp *",
   `[dsimp at * {unfold_reducible := tt}]              >> pure "dsimp at * {unfold_reducible := tt}",  -- TODO combine with unfolding projections in hypotheses
   automatic_induction            >> pure "automatic_induction",
   unfold_projections_hypotheses  >> pure "unfold_projections_hypotheses",  -- TODO replace with library version
@@ -84,19 +85,23 @@ meta def tidy_tactics : list (tactic string) :=
   `[simp at * {max_steps := 50}]                     >> pure "simp at *"
 ]
 
-meta def tidy ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit :=
-do results ← chain tidy_tactics max_steps,
-   if trace_progress then
+meta structure tidy_cfg :=
+( max_steps : nat                      := chain_default_max_steps )
+( trace_progress : bool                := ff )
+( run_annotated_tactics : bool         := tt )
+( extra_tactics : list (tactic string) := [] )
+
+meta def tidy ( cfg : tidy_cfg := {} ) : tactic unit :=
+let tidy_tactics := global_tidy_tactics ++ (if cfg.run_annotated_tactics then [ run_tidy_tactics ] else []) ++ cfg.extra_tactics in
+   do results ← chain tidy_tactics cfg.max_steps,
+   if cfg.trace_progress then
      trace ("... chain tactic used: " ++ results.to_string)
    else
      skip
 
-meta def blast ( max_steps : nat := chain_default_max_steps ) ( trace_progress : bool := ff ) : tactic unit := 
-do results ← chain (tidy_tactics ++ [ any_goals ( smt_eblast >> done ) >> pure "smt_eblast" ]) max_steps,
-   if trace_progress then
-     trace ("... chain tactic used: " ++ results.to_string)
-   else
-     skip
+-- TODO is 'any_goals' really a good idea here?
+meta def blast ( cfg : tidy_cfg := {} ) : tactic unit := 
+tidy { cfg with extra_tactics := cfg.extra_tactics ++ [ any_goals ( smt_eblast >> done ) >> pure "smt_eblast" ] }
 
 notation `♮` := by abstract { smt_eblast }
 notation `♯` := by abstract { blast }

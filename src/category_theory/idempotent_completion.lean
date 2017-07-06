@@ -99,8 +99,30 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
 definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
   Functor (IdempotentCompletion C) (IdempotentCompletion D) :=
 {
-  onObjects     := λ X, let FX := F.onObjects X.object in ⟨ FX.object, (F.onMorphisms X.idempotent).val, begin tidy, have p := F.functoriality X.idempotent X.idempotent, have p' := congr_arg subtype.val p, tidy, exact eq.symm p' end ⟩,
-  onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val).val, begin tidy, have p := F.functoriality X.idempotent f_1, have p' := congr_arg subtype.val p, rewrite f_2.right at p', tidy, exact eq.symm p', tidy, have p := F.functoriality f_1 Y.idempotent, have p' := congr_arg subtype.val p, rewrite f_2.left at p', tidy, exact eq.symm p', end ⟩,
+  onObjects     := λ X, let FX := F.onObjects X.object in
+                         ⟨ FX.object, 
+                           (F.onMorphisms X.idempotent).val, 
+                           begin 
+                             tidy, 
+                             have p := F.functoriality X.idempotent X.idempotent, 
+                             have p' := congr_arg subtype.val p, 
+                             tidy, 
+                             exact eq.symm p'
+                           end
+                         ⟩,
+  onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val).val, 
+                              begin 
+                                tidy, 
+                                have p := F.functoriality X.idempotent f_1, 
+                                have p' := congr_arg subtype.val p, 
+                                rewrite f_2.right at p', 
+                                exact eq.symm p', 
+                                tidy, 
+                                have p := F.functoriality f_1 Y.idempotent, 
+                                have p' := congr_arg subtype.val p, 
+                                rewrite f_2.left at p', 
+                                exact eq.symm p',
+                              end ⟩,
   identities    := ♯,
   functoriality := ♯, 
 }

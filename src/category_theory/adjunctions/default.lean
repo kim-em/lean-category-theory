@@ -19,7 +19,7 @@ structure Adjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) 
   ( triangle_1 : ∀ X : D.Obj, C.compose (unit.components (R.onObjects X)) (R.onMorphisms (counit.components X)) = C.identity (R.onObjects X) )
   ( triangle_2 : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L.onObjects X)) = D.identity (L.onObjects X) )
 
-attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
+attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
 @[applicable] lemma Adjunctions_pointwise_equal
   { C D : Category } ( L : Functor C D ) ( R : Functor D C )
@@ -50,16 +50,17 @@ attribute [ematch] Adjunction.triangle_1 Adjunction.triangle_2
 --   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
 --   = IdentityNaturalTransformation L
 
-@[ematch] lemma Adjunction.unit_naturality
+@[simp,ematch] lemma Adjunction.unit_naturality
   { C D : Category } 
   { L : Functor C D } { R : Functor D C } 
   ( A : Adjunction L R ) 
-  { X Y : C.Obj } ( f : C.Hom X Y ) : C.compose f (A.unit.components Y) = C.compose (A.unit.components X) (R.onMorphisms (L.onMorphisms f)) :=
+  { X Y : C.Obj } ( f : C.Hom X Y ) : C.compose (A.unit.components X) (R.onMorphisms (L.onMorphisms f)) = C.compose f (A.unit.components Y) :=
   begin
     refine ( cast _ (A.unit.naturality f) ),
     blast
   end
-@[ematch] lemma Adjunction.counit_naturality
+
+@[simp,ematch] lemma Adjunction.counit_naturality
   { C D : Category } 
   { L : Functor C D } { R : Functor D C } 
   ( A : Adjunction L R ) 
