@@ -63,8 +63,8 @@ begin
   have p := @NaturalTransformation.naturality _ _ _ _ A.morphism (X, L X) (X, L Y) (C.identity X, L.onMorphisms f),
   tidy,
   have q := congr_fun p (L.onMorphisms (C.identity X)),
-  -- tidy,
-  exact eq.symm q
+  tidy,
+  exact eq.symm q -- TODO tidy should cope with this
 end
 
 

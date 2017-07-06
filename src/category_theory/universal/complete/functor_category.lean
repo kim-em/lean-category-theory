@@ -30,12 +30,12 @@ namespace categories.universal
 --   FunctorComposition (FunctorComposition (Uncurry_Functors J C D) (whisker_on_left_functor _ (SwitchProductCategory C J))) (Curry_Functors C J D)
 
 private definition LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] ( F : Functor J (FunctorCategory C D) ) : Cone F := {      
-  cone_point    := -- FunctorComposition (switch.onObjects F) Limit, -- this is a fancy alternative, but I get stuck following through.
+  cone_point    := 
   {
     onObjects     := λ c, Limit.onObjects (evaluate_Functor_to_FunctorCategory F c),
     onMorphisms   := λ _ _ f, Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
     identities    := ♯,
-    functoriality := begin tidy, /-rewrite D.associativity, simp, -/rewrite ← D.associativity, simp,/- rewrite D.associativity-/ end
+    functoriality := begin tidy, rewrite ← D.associativity, simp, end
   },
   cone_maps     := λ j, {
     components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,

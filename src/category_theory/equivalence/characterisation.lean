@@ -96,15 +96,16 @@ lemma {u1 v1 u2 v2} Equivalences_are_Faithful { C : Category.{u1 v1} } { D : Cat
       sections_are_injective (@Functor.onMorphisms _ _ e.functor X Y) (preimage e X Y) (preimage_is_retraction e X Y) f g
 }
 
-private lemma {u1 v1 u2 v2} preimage_lemma { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor.onObjects X) (e.functor.onObjects Y) ) : (e.inverse).onMorphisms ((e.functor).onMorphisms (preimage e X Y h)) = (e.inverse).onMorphisms h :=
+@[simp] private lemma {u1 v1 u2 v2} preimage_lemma { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) ( X Y : C.Obj ) ( h : D.Hom (e.functor.onObjects X) (e.functor.onObjects Y) ) : (e.inverse).onMorphisms ((e.functor).onMorphisms (preimage e X Y h)) = (e.inverse).onMorphisms h :=
 begin
   erewrite ← e.isomorphism_1.naturality_2 (preimage e X Y h),
   repeat_at_least_once { erewrite ← C.associativity },
-  erewrite e.isomorphism_1.componentwise_witness_1,
-  repeat_at_least_once { rewrite C.associativity },
-  erewrite e.isomorphism_1.componentwise_witness_1,
-  erewrite C.right_identity,
-  rewrite C.left_identity
+  tidy,
+  -- erewrite e.isomorphism_1.componentwise_witness_1,
+  -- repeat_at_least_once { rewrite C.associativity },
+  -- erewrite e.isomorphism_1.componentwise_witness_1,
+  -- erewrite C.right_identity,
+  -- rewrite C.left_identity
 end
 
 lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Full (e.functor) :=
@@ -114,8 +115,7 @@ lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Categor
         begin 
           intros X Y h,
           apply (Equivalences_are_Faithful e.reverse).injectivity,
-          unfold Equivalence.reverse,
-          rewrite (preimage_lemma e X Y h)
+          tidy,
         end
   }
 
