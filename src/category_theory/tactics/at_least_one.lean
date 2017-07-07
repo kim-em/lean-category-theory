@@ -5,11 +5,11 @@
 open tactic
 
 -- Applies a list of tactics in turn, always succeeding.
-meta def list_try_seq : list (tactic unit) → tactic unit 
+meta def try_list : list (tactic unit) → tactic unit 
 | list.nil  := skip
-| (t :: ts) := seq (try t) (list_try_seq ts)
+| (t :: ts) := try t >> try_list ts
 
 -- Applies a list of tactics in turn, succeeding if at least one succeeds.
 meta def at_least_one : list (tactic unit) → tactic unit
 | list.nil  := fail "at_least_one tactic failed, no more tactics"
-| (t :: ts) := (seq t (list_try_seq ts)) <|> (at_least_one ts)
+| (t :: ts) := (t >> try_list ts) <|> at_least_one ts
