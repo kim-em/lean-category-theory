@@ -2,9 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .applicable .force .at_least_one .repeat_at_least_once .smt .tidy
+import tidy.applicable tidy.force tidy.at_least_one tidy.repeat_at_least_once tidy.smt tidy.tidy
 
-import .auto_cast
+import tidy.auto_cast
 
 open tactic
 
@@ -29,7 +29,7 @@ set_option formatter.hide_full_terms false
 
 set_option pp.proofs false
 
-@[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a : α } { b : β } : (a, b).1 = a := ♮
-@[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a : α } { b : β } : (a, b).2 = b := ♮
-@[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X : α × β } : (X.1, X.2) = X := ♯
+-- @[simp] lemma {u v} pair_1 {α : Type u} {β : Type v} { a : α } { b : β } : (a, b).1 = a := ♮
+-- @[simp] lemma {u v} pair_2 {α : Type u} {β : Type v} { a : α } { b : β } : (a, b).2 = b := ♮
+-- @[simp,ematch] lemma {u v} pair_equality {α : Type u} {β : Type v} { X : α × β } : (X.1, X.2) = X := ♯
 

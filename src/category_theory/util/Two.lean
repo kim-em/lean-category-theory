@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import category_theory.tactics.at_least_one
-import category_theory.tactics.tidy_tactics
+import tidy.at_least_one
+import tidy.tidy_tactics
 
 open tactic
 

@@ -8,7 +8,7 @@ import ...equivalence
 import ..comma_categories
 import ..universal
 
-import ...tactics.its
+import tidy.its
 
 open categories
 open categories.functor
