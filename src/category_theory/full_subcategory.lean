@@ -12,7 +12,7 @@ definition {u v w} FullSubcategory ( C : Category.{u v} ) ( Z : C.Obj → Sort w
 {
   Obj := Σ X : C.Obj, plift (Z X),
   Hom := λ X Y, C.Hom X.1 Y.1,
-  identity       := by tidy, -- FIXME it would be nice if abstracts were reducible for the rest of the definition.
+  identity       := by tidy,
   compose        := λ _ _ _ f g, C.compose f g,
   left_identity  := ♯,
   right_identity := ♯,

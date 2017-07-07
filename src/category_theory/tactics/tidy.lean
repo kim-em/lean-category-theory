@@ -60,9 +60,8 @@ meta def global_tidy_tactics : list (tactic string) :=
   force (dsimp_eq_mpr)                        >> pure "dsimp [eq.mpr] {unfold_reducible := tt}",
   unfold_projs_target {md := semireducible}   >> pure "unfold_projs_target {md := semireducible}", 
   `[simp]                                     >> pure "simp",
-  -- `[simp *]                                   >> pure "simp *", -- TODO eek, are we really using both here?
   automatic_induction                         >> pure "automatic_induction",
-  `[dsimp at * {unfold_reducible := tt}]      >> pure "dsimp at * {unfold_reducible := tt}",  -- TODO combine with unfolding projections in hypotheses
+  `[dsimp at * {unfold_reducible := tt}]      >> pure "dsimp at * {unfold_reducible := tt}",
   `[unfold_projs at * {md := semireducible}]  >> pure "unfold_projs at * {md := semireducible}",
   `[simp at *]                                >> pure "simp at *"
 ]
@@ -80,9 +79,8 @@ let tidy_tactics := global_tidy_tactics ++ (if cfg.run_annotated_tactics then [ 
    else
      skip
 
--- TODO is 'any_goals' really a good idea here?
 meta def blast ( cfg : tidy_cfg := {} ) : tactic unit := 
-tidy { cfg with extra_tactics := cfg.extra_tactics ++ [ any_goals ( smt_eblast >> done ) >> pure "smt_eblast" ] }
+tidy { cfg with extra_tactics := cfg.extra_tactics ++ [ focus1 ( smt_eblast >> done ) >> pure "smt_eblast" ] }
 
 notation `♮` := by abstract { smt_eblast }
 notation `♯`  := by abstract { blast }
