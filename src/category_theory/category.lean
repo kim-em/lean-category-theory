@@ -25,12 +25,11 @@ attribute [simp] Category.right_identity
 attribute [simp,ematch] Category.associativity
 attribute [applicable] Category.identity
 
-
 @[tidy] meta def rewrite_associativity_backwards : tactic string := 
-(`[repeat_at_least_once { rewrite ← Category.associativity }]) 
-  >> tidy { run_annotated_tactics := ff } -- TODO perhaps just use 'simp' here?
+(`[repeat_at_least_once { rewrite ← Category.associativity }])   
+  >> `[simp]
   >> tactic.done
-  >> pure "repeat_at_least_once {rewrite ← Category.associativity}, tidy { run_annotated_tactics := ff }" 
+  >> pure "repeat_at_least_once {rewrite ← Category.associativity}, simp" 
 
 -- instance Category_to_Hom : has_coe_to_fun Category :=
 -- { F   := λ C, C.Obj → C.Obj → Type v,

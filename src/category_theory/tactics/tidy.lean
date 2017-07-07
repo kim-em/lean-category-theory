@@ -68,21 +68,19 @@ meta def global_tidy_tactics : list (tactic string) :=
   triv                                                >> pure "triv", 
   force (reflexivity)                                 >> pure "refl", 
   if_first_goal_safe assumption                       >> pure "assumption",
-  -- independent_goals (assumption >> pure "assumption") >>= build_focus_string,
   `[exact dec_trivial]                                >> pure "exact dec_trivial",
   applicable                                          >> pure "applicable",
   force (intros >> skip)                              >> pure "intros",
-  force (fsplit)                                      >> pure "fsplit", -- TODO is fapply necessary anymore?
+  force (fsplit)                                      >> pure "fsplit", 
   force (dsimp_eq_mpr)           >> pure "dsimp [eq.mpr] {unfold_reducible := tt}", -- TODO split this up?
   unfold_projections'            >> pure "unfold_projections", -- TODO replace with library version
   `[simp]                        >> pure "simp",
-  `[simp *]                        >> pure "simp *",
+  `[simp *]                        >> pure "simp *", -- TODO eek, are we really using both here?
   `[dsimp at * {unfold_reducible := tt}]              >> pure "dsimp at * {unfold_reducible := tt}",  -- TODO combine with unfolding projections in hypotheses
   automatic_induction            >> pure "automatic_induction",
   unfold_projections_hypotheses  >> pure "unfold_projections_hypotheses",  -- TODO replace with library version
-  -- (independent_goals congr_fun_assumptions)  >>= build_focus_string, 
   if_first_goal_safe congr_fun_assumptions, -- TODO are there other aggresssive things we can do?
-  `[simp at * {max_steps := 50}]                     >> pure "simp at *"
+  `[simp at *]                     >> pure "simp at *"
 ]
 
 meta structure tidy_cfg :=
