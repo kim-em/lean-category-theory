@@ -52,6 +52,7 @@ begin
   have p := @NaturalTransformation.naturality _ _ _ _ A.morphism (X, L X) (X, L Y) (C.identity X, L.onMorphisms f),
   have q := congr_fun p (L.onMorphisms (C.identity X)),
   tidy,
+  -- exact q.symm
 end
 
 @[simp] lemma mate_of_L'
@@ -64,6 +65,7 @@ begin
   tidy, -- very strange that this tidy is required, but it's not necessary in the other mate lemmas.
   have q := congr_fun p (L.onMorphisms (C.identity Y)),
   tidy,
+  -- exact q.symm
 end
 
 @[simp] lemma mate_of_R
@@ -75,6 +77,7 @@ begin
   have p := @NaturalTransformation.naturality _ _ _ _ A.inverse (R.onObjects Y, Y) (R.onObjects X, Y) (R.onMorphisms f, D.identity Y),
   have q := congr_fun p (R.onMorphisms (D.identity Y)),
   tidy,
+  -- exact q.symm
 end
 
 @[simp] lemma mate_of_R'
@@ -86,6 +89,7 @@ begin
   have p := @NaturalTransformation.naturality _ _ _ _ A.inverse (R.onObjects X, X) (R.onObjects X, Y) (C.identity (R.onObjects X), f),
   have q := congr_fun p (R.onMorphisms (D.identity X)),
   tidy,
+  -- exact q.symm
 end
 
 private definition unit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) := {

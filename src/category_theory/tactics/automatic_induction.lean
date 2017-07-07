@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .at_least_one .Two
+import .at_least_one 
 
 open tactic
 
@@ -20,7 +20,6 @@ match t with
 | `(false)     := induction h >> skip
 | `(empty)     := induction h >> skip
 | `(fin nat.zero) := induction h >> `[cases is_lt]
-| `(Two)       := induction h >> skip
 | `(ulift _)   := induction h >> skip
 | `(plift _)   := induction h >> skip
 | `(eq _ _)    := induction h >> skip

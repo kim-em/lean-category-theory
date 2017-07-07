@@ -52,7 +52,7 @@ instance Two_decidable : decidable_eq Two := ♯
 --   Hom := λ X Y, if X = Y then unit else empty,
 --   identity       := begin intros, induction X, any_goals { simp }, apply unit.star, apply unit.star end, -- tidy automates this, but I think I need a standalone example
 --   compose        := begin intros, induction X, any_goals { induction Y }, any_goals { induction Z }, any_goals { simp at * }, any_goals { apply unit.star }, induction a_1, induction a, induction a, induction a_1, end,
---   left_identity  := begin tidy, rewrite ff_eq_ff at f, end,  -- FIXME how am I meant to do this?
+--   left_identity  := begin intros, induction X, any_goals { induction Y }, rewrite ff_eq_ff at f, end,  -- FIXME how am I meant to do this?
 --   right_identity := sorry,
 --   associativity  := sorry,
 -- }

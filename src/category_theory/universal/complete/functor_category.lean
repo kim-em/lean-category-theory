@@ -68,12 +68,6 @@ begin
   exact congr_arg ConeMorphism.cone_morphism (L.uniqueness_of_morphisms_to_terminal_object cone cone_morphism_f cone_morphism_g), 
 end
 
--- IDEAS:
--- suppress pretty printing of irrelevant properties
--- extract a goal as a lemma
--- on rename of Lean file, delete olean file
--- warn on unused imports (even unused opens?)
-
 lemma bifunctor_naturality  
 ( J C D : Category )
 ( F : Functor J (FunctorCategory C D) )
@@ -162,10 +156,10 @@ end
 begin
   have p := φ.commutativity j,
   have p' := congr_arg NaturalTransformation.components p,
-  -- have p'' := congr_fun p' X,
+  have p'' := congr_fun p' X,
   tidy,
-  -- rewrite w,
-  -- exact p''
+  rewrite w,
+  exact p''
 end
 
 instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Complete (FunctorCategory C D) := {

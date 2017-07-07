@@ -73,7 +73,7 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                                                 intros, 
                                                 have p := lim_F.uniqueness_of_morphisms_to_terminal_object, 
                                                 have q := p _ (ConeMorphism_from_map_to_limit f)
-                                                  { cone_morphism := g, commutativity := ♯ },
+                                                  { cone_morphism := g, commutativity := begin tidy, simp *, end }, -- PROJECT think about automation here
                                                 exact congr_arg ConeMorphism.cone_morphism q, -- PROJECT surely this line can be automated: if you know a = b, you know a.x = b.x
                                               end,
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from { cone_point := Z, cone_maps := i, commutativity := ♯ }).cone_morphism,
@@ -97,7 +97,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
                                   end
       },
       morphism_to_terminal_object_from := λ cone : Cone F, {
-        cone_morphism      := /- we need a morphism from the tip of f to the equalizer -/
+        cone_morphism := /- we need a morphism from the tip of f to the equalizer -/
                          equalizer.map
                            (product_over_objects.map cone.cone_maps) ♯,
         commutativity := ♯

@@ -80,6 +80,7 @@ begin
         tidy,
         have q := congr_fun (f.naturality x) (C.identity X),
         tidy,
+        -- exact q.symm,
     }
   },
   {

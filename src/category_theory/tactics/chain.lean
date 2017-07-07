@@ -12,24 +12,28 @@ private meta structure chain_progress { α : Type } :=
   ( results           : list α )
   ( remaining_tactics : list (tactic α) )
 
-private meta def chain' { α : Type } [ has_to_tactic_format α ] ( tactics : list (tactic α) ) : chain_progress → tactic (list α)
-| ⟨ 0,      results, _ ⟩       := trace "... chain tactic exceeded iteration limit" >>
+structure chain_cfg := 
+  ( max_steps   : nat  := 500 )
+  ( trace_steps : bool := ff )
+
+private meta def chain' { α : Type } [ has_to_format α ] ( cfg : chain_cfg ) ( tactics : list (tactic α) ) : chain_progress → tactic (list α)
+| ⟨ 0,      results, _ ⟩       := trace (format!"... chain tactic exceeded iteration limit {cfg.max_steps}") >>
                                    trace results.reverse >> 
                                    failed   
 | ⟨ _,      results, [] ⟩      := (pure results)
 | ⟨ succ n, results, t :: ts ⟩ := if_then_else done
                                     (pure results)
-                                    (dependent_if_then_else t 
-                                      (λ result, (chain' ⟨ n, result :: results, tactics ⟩ ))
-                                      (chain' ⟨ succ n, results, ts ⟩)
+                                    (do if cfg.trace_steps then trace format!"trying chain tactic #{tactics.length - ts.length}" else skip,
+                                        dependent_if_then_else t 
+                                          (λ result, (if cfg.trace_steps then trace format!"succeeded with result: {result}" else skip)
+                                                       >> (chain' ⟨ n, result :: results, tactics ⟩ ))
+                                          (chain' ⟨ succ n, results, ts ⟩)
                                     )
 
-def chain_default_max_steps := 500
-
-meta def chain { α : Type } [ has_to_tactic_format α ] 
+meta def chain { α : Type } [ has_to_format α ] 
   ( tactics        : list (tactic α) )
-  ( max_steps      : nat  := chain_default_max_steps )
+  ( cfg     : chain_cfg := {} )
     : tactic (list α) :=
-do sequence ← chain' tactics ⟨ max_steps, [], tactics ⟩,
+do sequence ← chain' cfg tactics ⟨ cfg.max_steps, [], tactics ⟩,
    guard (sequence.length ≠ 0) <|> fail "...chain tactic made no progress",
    pure sequence.reverse

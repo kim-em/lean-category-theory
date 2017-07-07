@@ -6,15 +6,12 @@ import .at_least_one
 
 open tactic
 
-
 def tidy_attribute : user_attribute := {
   name := `tidy,
   descr := "A tactic that should be called by tidy."
 }
 
 run_cmd attribute.register `tidy_attribute
-
-open tactic
 
 meta def name_to_tactic ( n : name ) : tactic (tactic string) := 
 do e ← mk_const n,

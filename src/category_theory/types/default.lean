@@ -29,14 +29,12 @@ definition Bijection ( α β : Type ) := Isomorphism CategoryOfTypes α β
 definition Bijection.witness_1 { α β : Type } ( iso : Bijection α β ) ( x : α ) : iso.inverse (iso.morphism x) = x :=
 begin
   have p := iso.witness_1, 
-  congr_fun_assumptions,
-  -- exact congr_fun p x,
+  tidy,
 end
 definition Bijection.witness_2 { α β : Type } ( iso : Bijection α β ) ( x : β ) : iso.morphism (iso.inverse x) = x :=
 begin
   have p := iso.witness_2,
-  congr_fun_assumptions,
-  -- exact congr_fun p x,
+  tidy,
 end
 
 end categories.types

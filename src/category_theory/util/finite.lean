@@ -3,11 +3,7 @@
 -- Authors: Scott Morrison
 
 import ..tactics
--- import ..isomorphism
--- import ..types
-
--- open categories.isomorphism
--- open categories.types
+import .Two
 
 namespace categories.util.finite
 
@@ -61,7 +57,7 @@ begin
 end
 
 instance Finite_has_decidable_eq { α : Type } [ fin : Finite α ] : decidable_eq α := decidable_via_isomorphism fin.bijection
-
+-- PROJECT etc.
 -- instance Finite_product { α β : Type } [ Finite α ] [ Finite β ] : Finite (α × β) := sorry
 
 def {u} empty_function           { α : Sort u } : empty → α := ♯
@@ -87,8 +83,8 @@ instance Two_is_Finite : Finite Two := {
                      end,
     witness_1 := begin
                    intros,
-                   induction u, -- FIXME We need to be able to specify that induction on a new type (e.g. Two) should be allowed in tidy.
-                   tidy,
+                   induction u, -- FIXME again, we can't just tidy because it loops.
+                   tidy {max_steps:=5},
                  end,
     witness_2 := begin
                    intros, -- FIXME automation

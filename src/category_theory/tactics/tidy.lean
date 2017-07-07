@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .force .applicable .congr_fun_assumptions .fsplit .simp_hypotheses .dsimp_hypotheses .automatic_induction .tidy_tactics
+import .force .applicable .congr_assumptions .fsplit .automatic_induction .tidy_tactics
 import .chain
 import .smt
 
@@ -51,7 +51,8 @@ meta def global_tidy_tactics : list (tactic string) :=
   triv                                        >> pure "triv", 
   force (reflexivity)                         >> pure "refl", 
   if_first_goal_safe assumption               >> pure "assumption",
-  if_first_goal_safe congr_fun_assumptions,   -- TODO are there other aggresssive things we can do?
+  -- if_first_goal_safe cc                       >> pure "cc", -- TODO try this?
+  if_first_goal_safe congr_assumptions,      -- TODO are there other aggresssive things we can do?
   `[exact dec_trivial]                        >> pure "exact dec_trivial",
   applicable                                  >> pure "applicable",
   force (intros >> skip)                      >> pure "intros",
@@ -59,23 +60,22 @@ meta def global_tidy_tactics : list (tactic string) :=
   force (dsimp_eq_mpr)                        >> pure "dsimp [eq.mpr] {unfold_reducible := tt}",
   unfold_projs_target {md := semireducible}   >> pure "unfold_projs_target {md := semireducible}", 
   `[simp]                                     >> pure "simp",
-  `[simp *]                                   >> pure "simp *", -- TODO eek, are we really using both here?
+  -- `[simp *]                                   >> pure "simp *", -- TODO eek, are we really using both here?
   automatic_induction                         >> pure "automatic_induction",
   `[dsimp at * {unfold_reducible := tt}]      >> pure "dsimp at * {unfold_reducible := tt}",  -- TODO combine with unfolding projections in hypotheses
   `[unfold_projs at * {md := semireducible}]  >> pure "unfold_projs at * {md := semireducible}",
   `[simp at *]                                >> pure "simp at *"
 ]
 
-meta structure tidy_cfg :=
-( max_steps : nat                      := chain_default_max_steps )
-( trace_progress : bool                := ff )
-( run_annotated_tactics : bool         := tt )
-( extra_tactics : list (tactic string) := [] )
+meta structure tidy_cfg extends chain_cfg :=
+( trace_result          : bool                 := ff )
+( run_annotated_tactics : bool                 := tt )
+( extra_tactics         : list (tactic string) := [] )
 
 meta def tidy ( cfg : tidy_cfg := {} ) : tactic unit :=
 let tidy_tactics := global_tidy_tactics ++ (if cfg.run_annotated_tactics then [ run_tidy_tactics ] else []) ++ cfg.extra_tactics in
-   do results ← chain tidy_tactics cfg.max_steps,
-   if cfg.trace_progress then
+   do results ← chain tidy_tactics cfg.to_chain_cfg,
+   if cfg.trace_result then
      trace ("... chain tactic used: " ++ results.to_string)
    else
      skip
@@ -85,4 +85,4 @@ meta def blast ( cfg : tidy_cfg := {} ) : tactic unit :=
 tidy { cfg with extra_tactics := cfg.extra_tactics ++ [ any_goals ( smt_eblast >> done ) >> pure "smt_eblast" ] }
 
 notation `♮` := by abstract { smt_eblast }
-notation `♯` := by abstract { blast }
+notation `♯`  := by abstract { blast }
