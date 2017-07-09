@@ -5,13 +5,14 @@
 
 -- IDEAS for Lean:
 -- extract a goal as a lemma
--- on rename of Lean file, delete olean file
--- is "checking open files really working?" (e.g. can't find a trace message, even with all files open)
 
 -- VSCode bugs:
 -- "extension-output-#4" not found
 -- file /settings not found
+-- settings.json command expected
 -- projects.lean.git not found
+-- is "checking open files really working?" (e.g. can't find a trace message, even with all files open)
+-- on rename of Lean file, delete olean file
 
 -- Questions about Lean:
 -- how can we use options for new tactics?
