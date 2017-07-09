@@ -33,7 +33,7 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
 {
   cone_morphism      := f.val.1,
   commutativity := λ j : J.Obj, begin
-                                  tidy,                                  
+                                  tidy, -- (This tidy relies on the fact we allow a little bit of looping; no looping actually happens, but our mechanism for detecting looping gets confused.)
                                   let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f_2,
                                   blast
                                 end

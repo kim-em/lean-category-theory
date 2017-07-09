@@ -69,24 +69,7 @@ open Two
 def to_as_true {c : Prop} [h₁ : decidable c] (h₂ : c) : as_true c :=
 cast (if_pos h₂).symm trivial
 
--- open tactic
-
-
--- lemma f : 1 ≤ 2 :=
--- begin
---   -- tidy,
---  tactic.unfold_projs_target {md := semireducible},
---  hash_target >>= trace,
---  dsimp {unfold_reducible := tt},
---  hash_target >>= trace,
---  tactic.unfold_projs_target {md := semireducible},
---  hash_target >>= trace,
---  dsimp {unfold_reducible := tt},
---  hash_target >>= trace,
--- end
-
-
--- set_option pp.all true
+open tactic
 -- This is fairly lame!
 instance Two_is_Finite : Finite Two := {
   cardinality := 2,
@@ -100,19 +83,17 @@ instance Two_is_Finite : Finite Two := {
                        | 1, _ := _1 
                      end,
     witness_1 := begin
+                  intros,
+                  induction u,
                   tidy,
                  end,
     witness_2 := begin
-                   intros, -- FIXME automation
+                   intros, -- FIXME automation (tidy loops)
                    induction v,
                    cases is_lt,
-                   unfold_projs {md:=semireducible},
-                   dsimp,
-                   unfold Two_is_Finite._match_2,  
-                   unfold Two_is_Finite._match_1,  
+                   {tidy},
                    cases a,
-                   unfold Two_is_Finite._match_2,  
-                   unfold Two_is_Finite._match_1,  
+                   {tidy},
                    cases a_2,
                  end
     }

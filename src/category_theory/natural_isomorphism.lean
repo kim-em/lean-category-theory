@@ -151,21 +151,4 @@ definition NaturalIsomorphism.components { C D : Category } { F G : Functor C D 
     witness_2 := ♮
   }
 
-definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
-  { B : Category.{u1 v1} } { C : Category.{u2 v2} } { D : Category.{u3 v3} } { E : Category.{u4 v4} }
-  ( F : Functor B C )
-  ( G : Functor C D )
-  ( H : Functor D E )
-: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := ♯
-
-definition {u1 v1 u2 v2} FunctorComposition_left_unitor
-  { C : Category.{u1 v1} } { D : Category.{u2 v2} }
-  ( F : Functor C D )
-: NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := ♯
-
-definition {u1 v1 u2 v2} FunctorComposition_right_unitor
-  { C : Category.{u1 v1} } { D : Category.{u2 v2} }
-  ( F : Functor C D )
-: NaturalIsomorphism (FunctorComposition F (IdentityFunctor D) ) F := ♯
-
 end categories.natural_transformation
