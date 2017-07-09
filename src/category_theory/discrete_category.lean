@@ -24,7 +24,7 @@ definition {u v} DiscreteCategory ( α : Type u ) : Category.{u v} :=
 
 definition {u v} EmptyCategory := DiscreteCategory.{u v} (ulift empty)
 
-definition {u1 v1 u2 v2} EmptyFunctor ( C : Category.{u2 v2} ) : Functor EmptyCategory.{u1 v1} C := ♯ 
+definition {u1 v1 u2 v2} EmptyFunctor ( C : Category.{u2 v2} ) : Functor EmptyCategory.{u1 v1} C := ♯
 
 definition {u1 v1 u2 v2} Functor.fromFunction { C : Category.{u1 v1} } { I : Type u2 } ( F : I → C.Obj ) : Functor (DiscreteCategory.{u2 v2} I) C := {
   onObjects     := F,
