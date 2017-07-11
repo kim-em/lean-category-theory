@@ -103,11 +103,9 @@ definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Funct
                          ⟨ FX.object, 
                            (F.onMorphisms X.idempotent).val, 
                            begin 
-                             tidy, 
                              have p := F.functoriality X.idempotent X.idempotent, 
                              have p' := congr_arg subtype.val p, 
                              tidy, 
-                            --  exact eq.symm p'
                            end
                          ⟩,
   onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val).val, 

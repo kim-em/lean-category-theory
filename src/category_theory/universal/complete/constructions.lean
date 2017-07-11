@@ -76,7 +76,11 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                                                   { cone_morphism := g, commutativity := begin tidy, simp *, end }, -- PROJECT think about automation here
                                                 exact congr_arg ConeMorphism.cone_morphism q, -- PROJECT surely this line can be automated: if you know a = b, you know a.x = b.x
                                               end,
-                    map           := λ Z i, (lim_F.morphism_to_terminal_object_from { cone_point := Z, cone_maps := i, commutativity := ♯ }).cone_morphism,
+                    map           := λ Z i, (lim_F.morphism_to_terminal_object_from { 
+                                              cone_point := Z, 
+                                              cone_maps := i, 
+                                              commutativity := begin tidy, dsimp_all', unfold_projs at * {md:=semireducible}, tidy end -- FIXME why doesn't the dsimp_all' achieve the unfold_projs?
+                                            }).cone_morphism,
                     factorisation := ♯ 
                   }
 }
