@@ -79,7 +79,13 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from { 
                                               cone_point := Z, 
                                               cone_maps := i, 
-                                              commutativity := begin tidy, dsimp_all', unfold_projs at * {md:=semireducible}, tidy end -- FIXME why doesn't the dsimp_all' achieve the unfold_projs?
+                                              commutativity := begin
+                                                                 tidy, 
+                                                                -- FIXME: fails because there aren't enough binders to revert! 
+                                                                --  dsimp at * {unfold_reducible := tt, md := semireducible}, 
+                                                                 unfold_projs at * {md:=semireducible}, 
+                                                                 tidy 
+                                                               end 
                                             }).cone_morphism,
                     factorisation := ♯ 
                   }
