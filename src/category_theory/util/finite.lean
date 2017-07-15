@@ -63,7 +63,6 @@ instance Finite_has_decidable_eq { α : Type } [ fin : Finite α ] : decidable_e
 def {u} empty_function           { α : Sort u } : empty → α := ♯
 def {u} empty_dependent_function { Z : empty → Sort u } : Π i : empty, Z i := ♯
 
-
 open Two
 
 def to_as_true {c : Prop} [h₁ : decidable c] (h₂ : c) : as_true c :=
@@ -94,7 +93,7 @@ instance Two_is_Finite : Finite Two := {
                    {tidy},
                    cases a,
                    {tidy},
-                   cases a_2,
+                   cases a_1,
                  end
     }
   }

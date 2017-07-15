@@ -116,6 +116,7 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
       cone_morphism := {
         components := begin
                          tidy,  -- this will use morphism_to_terminal_object_cone_point
+                         -- PROJECT Letting tidy run on all goals causes it to finish here, leaving meta-variables.
                          exact (Y.cone_maps j).components X, 
                          tidy, 
                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,                       

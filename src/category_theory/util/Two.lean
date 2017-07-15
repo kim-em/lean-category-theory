@@ -3,7 +3,7 @@
 -- Authors: Scott Morrison
 
 import tidy.at_least_one
-import tidy.tidy_tactics
+import tidy.tidy_attributes
 
 open tactic
 
