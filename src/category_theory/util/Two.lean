@@ -14,4 +14,4 @@ inductive Two : Type
 -- TODO ideally this wouldn't require a whole separate tactic, just an attribute on Two
 @[tidy] meta def induction_Two : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.for (λ h, do t ← infer_type h, match t with | `(Two) := induction h >> skip | _ := failed end))
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(Two) := induction h >> skip | _ := failed end))
