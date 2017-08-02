@@ -95,7 +95,7 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
 --   isomorphism_2 := sorry
 -- }
 
--- Oh, I guess I had original intended that this should use the previous results... oh well.
+-- Oh, I guess I had originally intended that this should use the previous results... oh well.
 definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
   Functor (IdempotentCompletion C) (IdempotentCompletion D) :=
 {
@@ -115,7 +115,7 @@ definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Funct
                                 have p' := congr_arg subtype.val p, 
                                 rewrite f_2.right at p', 
                                 exact eq.symm p', 
-                                tidy, 
+                                -- tidy, 
                                 have p := F.functoriality f_1 Y.idempotent, 
                                 have p' := congr_arg subtype.val p, 
                                 rewrite f_2.left at p', 

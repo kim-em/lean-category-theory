@@ -19,7 +19,7 @@ definition PathCategory ( G : Graph ) : Category :=
   compose        := λ _ _ _ f g, concatenate_paths f g,
   left_identity  := ♮,
   right_identity := begin
-                      tidy {trace_result:=tt},
+                      tidy,
                       induction f,
                       {
                         -- when f is nil

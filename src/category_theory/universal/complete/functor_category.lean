@@ -110,16 +110,25 @@ end
   : D.compose ((cone.cone_point).onMorphisms f) ((cone.cone_maps j).components Y) =
     D.compose ((cone.cone_maps j).components X) ((F.onObjects j).onMorphisms f) := ♯
 
-local attribute [reducible] morphism_to_terminal_object_cone_point
+-- local attribute [reducible] morphism_to_terminal_object_cone_point
 
 private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] { F : Functor J (FunctorCategory C D) } ( Y : Cone F ) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
       cone_morphism := {
         components := begin
+                          -- PROJECT This chain of tactics (produced by tidy) claims to finish, but leaves meta-variables
+                          -- intros, 
+                          -- fapply morphism_to_terminal_object_cone_point,
+                          -- intros, 
+                          -- dsimp',
+                          -- tactic.any_goals (tactic.intros >>= λ x, tactic.skip),
+                          -- tactic.any_goals dsimp',
+                          -- exact (Y.cone_maps j).components X,
+                          -- tactic.any_goals (`[fapply initial.is_terminal.uniqueness_of_morphisms_to_terminal_object]),   
+                          -- tactic.result >>= tactic.trace
                          tidy,  -- this will use morphism_to_terminal_object_cone_point
-                         -- PROJECT Letting tidy run on all goals causes it to finish here, leaving meta-variables.
                          exact (Y.cone_maps j).components X, 
                          tidy, 
-                         exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,                       
+                         exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
                        end,
         naturality := begin 
                         tidy,
