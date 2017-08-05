@@ -94,7 +94,6 @@ begin
   have p' := congr_arg NaturalTransformation.components p,
   have p'' := congr_fun p' X,
   tidy,
-  -- rewrite D.associativity,
   rewrite bifunctor_naturality,
   rewrite ← D.associativity,
   rewrite p'',
@@ -110,35 +109,6 @@ end
   : D.compose ((cone.cone_point).onMorphisms f) ((cone.cone_maps j).components Y) =
     D.compose ((cone.cone_maps j).components X) ((F.onObjects j).onMorphisms f) := ♯
 
--- local attribute [reducible] morphism_to_terminal_object_cone_point
-
-private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] { F : Functor J (FunctorCategory C D) } ( Y : Cone F ) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
-      cone_morphism := {
-        components := begin
-                          -- PROJECT This chain of tactics (produced by tidy) claims to finish, but leaves meta-variables
-                          -- intros, 
-                          -- fapply morphism_to_terminal_object_cone_point,
-                          -- intros, 
-                          -- dsimp',
-                          -- tactic.any_goals (tactic.intros >>= λ x, tactic.skip),
-                          -- tactic.any_goals dsimp',
-                          -- exact (Y.cone_maps j).components X,
-                          -- tactic.any_goals (`[fapply initial.is_terminal.uniqueness_of_morphisms_to_terminal_object]),   
-                          -- tactic.result >>= tactic.trace
-                         tidy,  -- this will use morphism_to_terminal_object_cone_point
-                         exact (Y.cone_maps j).components X, 
-                         tidy, 
-                         exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
-                       end,
-        naturality := begin 
-                        tidy,
-                        exact D.compose ((Y.cone_maps j).components X) ((F.onObjects j).onMorphisms f),
-                        tidy, 
-                      end
-      },
-      commutativity := ♯
-    }
-
 @[simp] lemma cone_commutativity_in_FunctorCategory
 ( J C D  : Category )
 ( F : Functor J (FunctorCategory C D) )
@@ -153,34 +123,56 @@ begin
  tidy,
 end
 
-@[applicable] lemma cone_morphism_commutativity_with_unknown_in_FunctorCategory
+@[simp] lemma cone_morphism_commutativity_in_FunctorCategory
 ( J C D  : Category )
 ( F : Functor J (FunctorCategory C D) )
 ( X : C.Obj )
 ( j : J.Obj )
 ( Y Z : Cone F )
 ( φ : ConeMorphism Y Z )
-( f : D.Hom ((Z.cone_point).onObjects X) ((F.onObjects j).onObjects X) )
-( w : f = ((Z.cone_maps j).components X) )
- : D.compose ((φ.cone_morphism).components X) f = (Y.cone_maps j).components X:= 
+ : D.compose ((φ.cone_morphism).components X) ((Z.cone_maps j).components X) = (Y.cone_maps j).components X := 
 begin
   have p := φ.commutativity j,
   have p' := congr_arg NaturalTransformation.components p,
-  have p'' := congr_fun p' X,
-  tidy,
+  exact congr_fun p' X,
+end
+
+-- needed for the proof of naturality below
+local attribute [reducible] universal.morphism_to_terminal_object_cone_point
+
+private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] { F : Functor J (FunctorCategory C D) } ( Y : Cone F ) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
+      cone_morphism := {
+        components := begin
+                         tidy {show_hints:=tt},  -- this will use morphism_to_terminal_object_cone_point
+                         exact (Y.cone_maps j).components X, 
+                         exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
+                       end,
+        naturality := by tidy {hints:=[5, 4, 5, 7, 15, 12, 7, 7, 8, 7, 8, 22]} 
+      },
+      commutativity := by tidy {hints:=[5, 4, 5, 7, 8]} 
+    }
+
+-- This would be a bit dangerous, but we just use it in the next construction.
+@[applicable] private lemma cone_morphism_comparison
+( J C D  : Category )
+( F : Functor J (FunctorCategory C D) )
+( X : C.Obj )
+( j : J.Obj )
+( Y Z : Cone F )
+( φ φ' : ConeMorphism Y Z )
+( f : D.Hom ((Z.cone_point).onObjects X) ((F.onObjects j).onObjects X) )
+( w : f = ((Z.cone_maps j).components X) )
+ : D.compose ((φ.cone_morphism).components X) f = D.compose ((φ'.cone_morphism).components X) f := 
+begin
   rewrite w,
-  exact p''
+  simp,
 end
 
 instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Complete (FunctorCategory C D) := {
   limitCone := λ J F, {
     terminal_object                            := LimitObject_in_FunctorCategory F,
     morphism_to_terminal_object_from           := λ Y, morphism_to_LimitObject_in_FunctorCategory Y,
-    uniqueness_of_morphisms_to_terminal_object := begin 
-                                                    tidy, 
-                                                    exact (Y.cone_maps j).components X, 
-                                                    tidy
-                                                  end
+    uniqueness_of_morphisms_to_terminal_object := by tidy {hints:=[5, 4, 4, 5, 4, 5, 7, 10, 15, 12, 7, 7, 8, 4, 2]}
   }
 }
 

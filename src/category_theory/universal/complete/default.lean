@@ -4,8 +4,8 @@
 
 import ..instances
 import ...discrete_category
-import ...currying.currying_1
-import ...products.switch
+-- import ...currying.currying_1
+-- import ...products.switch
 
 open categories
 open categories.functor
@@ -78,7 +78,7 @@ definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (Functo
                                 commutativity := ♯ 
                               }).cone_morphism,
   identities    := ♯,
-  functoriality := ♯ 
+  functoriality := ♯
 }
 
 end categories.universal

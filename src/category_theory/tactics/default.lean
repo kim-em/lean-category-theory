@@ -14,10 +14,6 @@ attribute [simp] id_locked_eq
 attribute [ematch] subtype.property
 
 @[applicable] lemma {u v} pairs_componentwise_equal {α : Type u} {β : Type v} { X Y : α × β } ( p1 : X.1 = Y.1 ) ( p2 : X.2 = Y.2 ) : X = Y := ♯
--- @[applicable] lemma {u v} dependent_pair_equality {α : Type u} {Z : α → Type v} { X Y : Σ a : α, Z a } ( p1 : X.1 = Y.1 ) ( p2 : @eq.rec α X.1 Z X.2 Y.1 p1 = Y.2 ) : X = Y := ♯
--- @[applicable] lemma {u} punit_equality ( X Y : punit.{u} ) : X = Y := ♯
--- @[applicable] lemma {u} plift_equality { α : Sort u } ( X Y : plift α ) ( p : X.down = Y.down ) : X = Y := ♯
--- @[applicable] lemma {u v} ulift_equality { α : Type v } ( X Y : ulift.{u v} α ) ( p : X.down = Y.down ) : X = Y := ♯
 
 meta def trace_goal_type : tactic unit :=
 do g ← target,

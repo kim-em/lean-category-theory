@@ -58,11 +58,11 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 
 theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
-  tidy,
+  tidy {hints:=[7, 6, 7, 6, 5, 7, 5, 10, 9, 7, 10]}, --tidy {later_goals:=ff,show_hints:=tt},
   exact ((a.components _) (C.identity _)),
-  tidy,
+  tidy {hints:=[5, 4, 5, 7, 10, 9, 7, 8, 7, 6, 5, 7, 5, 6, 5, 7, 5, 10, 9, 7, 10]}, -- {later_goals:=ff,show_hints:=tt},
   exact ((fst.onMorphisms a_1) a),
-  tidy
+  tidy {hints:=[5, 4, 5, 7, 10, 9, 7, 8, 2, 5, 4, 5, 4, 5, 4, 5, 7, 10, 9, 7, 8, 2, 4, 5, 4, 5, 4, 5, 4, 5, 7, 10, 9, 7, 8, 4, 5, 4, 5, 7, 10, 9, 7, 8, 2]},
 end
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
@@ -80,7 +80,6 @@ begin
         tidy,
         have q := congr_fun (f.naturality x) (C.identity X),
         tidy,
-        -- exact q.symm,
     }
   },
   {
