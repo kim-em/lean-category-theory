@@ -64,6 +64,7 @@ begin
   begin 
     tidy,
     exact f_1,
+    refl, -- FIXME this really should work!
     tidy,
   end,
   begin
