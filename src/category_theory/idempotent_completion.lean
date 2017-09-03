@@ -65,7 +65,7 @@ begin
     tidy,
     exact f_1,
     refl, -- FIXME this really should work!
-    tidy,
+    -- tidy,
   end,
   begin
     tidy, -- PROJECT This next step seems easily automatable.

@@ -58,11 +58,14 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 
 theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
-  tidy {hints:=[7, 6, 7, 6, 5, 7, 5, 10, 9, 7, 10]}, --tidy {later_goals:=ff,show_hints:=tt},
+  -- tidy {show_hints:=tt},
+  tidy {hints:=[8, 7, 8, 7, 6, 8, 6, 11, 10, 8, 11, 15, 16, 15, 16, 15, 16, 15, 16, 18, 17, 16, 15, 16, 15, 16, 15, 16, 18, 16, 17, 16, 15, 16, 18, 16, 21, 20, 18, 21]},
   exact ((a.components _) (C.identity _)),
-  tidy {hints:=[5, 4, 5, 7, 10, 9, 7, 8, 7, 6, 5, 7, 5, 6, 5, 7, 5, 10, 9, 7, 10]}, -- {later_goals:=ff,show_hints:=tt},
+  -- tidy {show_hints:=tt},
+  tidy {hints:=[2, 8, 9]},
   exact ((fst.onMorphisms a_1) a),
-  tidy {hints:=[5, 4, 5, 7, 10, 9, 7, 8, 2, 5, 4, 5, 4, 5, 4, 5, 7, 10, 9, 7, 8, 2, 4, 5, 4, 5, 4, 5, 4, 5, 7, 10, 9, 7, 8, 4, 5, 4, 5, 7, 10, 9, 7, 8, 2]},
+  -- tidy {show_hints:=tt},
+  tidy {hints:=[2, 9, 3, 2, 9, 3, 2, 9, 2, 9, 3]},
 end
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=

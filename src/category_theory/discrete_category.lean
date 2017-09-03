@@ -30,7 +30,9 @@ definition {u1 v1 u2 v2} Functor.fromFunction { C : Category.{u1 v1} } { I : Typ
   onObjects     := F,
   onMorphisms   := by tidy,
   identities    := ♯,
-  functoriality := ♯  
+  functoriality := begin
+                    tidy,
+                   end  
 }
 
 end categories

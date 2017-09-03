@@ -143,13 +143,13 @@ local attribute [reducible] universal.morphism_to_terminal_object_cone_point
 private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] { F : Functor J (FunctorCategory C D) } ( Y : Cone F ) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
       cone_morphism := {
         components := begin
-                         tidy {show_hints:=tt},  -- this will use morphism_to_terminal_object_cone_point
+                         tidy /-{show_hints:=tt}-/ {hints:=[6, 5, 6, 8, 16, 18]},  -- this will use morphism_to_terminal_object_cone_point
                          exact (Y.cone_maps j).components X, 
                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
                        end,
-        naturality := by tidy {hints:=[5, 4, 5, 7, 15, 12, 7, 7, 8, 7, 8, 22]} 
+        naturality := by tidy /-{show_hints:=tt}-/ {hints:=[2, 6, 5, 6, 8, 16, 13, 2, 8, 9, 2, 8, 9, 23]} 
       },
-      commutativity := by tidy {hints:=[5, 4, 5, 7, 8]} 
+      commutativity := by tidy /-{show_hints:=tt}-/ {hints:=[2, 6, 5, 6, 8, 9]} 
     }
 
 -- This would be a bit dangerous, but we just use it in the next construction.
@@ -172,7 +172,7 @@ instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Com
   limitCone := λ J F, {
     terminal_object                            := LimitObject_in_FunctorCategory F,
     morphism_to_terminal_object_from           := λ Y, morphism_to_LimitObject_in_FunctorCategory Y,
-    uniqueness_of_morphisms_to_terminal_object := by tidy {hints:=[5, 4, 4, 5, 4, 5, 7, 10, 15, 12, 7, 7, 8, 4, 2]}
+    uniqueness_of_morphisms_to_terminal_object := by tidy /-{show_hints:=tt}-/ {hints:=[6, 5, 5, 6, 5, 6, 8, 11, 16, 13, 2, 8, 9, 2, 5, 3]}
   }
 }
 

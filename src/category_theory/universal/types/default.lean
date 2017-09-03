@@ -27,7 +27,7 @@ definition {u} Types_has_Coproducts : has_Coproducts CategoryOfTypes.{u} := {
     factorisation := ♯,
     uniqueness    := begin
                        tidy,
-                       have p := witness fst,
+                       have p := a fst,
                        tidy
                      end
   }
