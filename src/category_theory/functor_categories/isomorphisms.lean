@@ -23,14 +23,12 @@ definition {u1 v1 u2 v2} FunctorComposition_left_unitor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( F : Functor C D )
 : NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := --♯
--- by tidy {show_hints:=true}
-by tidy {hints:=[8, 7, 8, 7, 6, 5, 2, 6, 8, 9, 8, 7, 6, 5, 2, 6, 8, 9, 2, 5, 6, 8, 9, 2, 5, 6, 8, 9]}
+ by tidy {hints:=[9, 8, 9, 8, 7, 6, 2, 7, 9, 10, 9, 8, 7, 6, 2, 7, 9, 10, 2, 6, 7, 9, 10, 2, 6, 7, 9, 10]}
 
 definition {u1 v1 u2 v2} FunctorComposition_right_unitor
   { C : Category.{u1 v1} } { D : Category.{u2 v2} }
   ( F : Functor C D )
 : NaturalIsomorphism (FunctorComposition F (IdentityFunctor D) ) F := --♯
--- by tidy {show_hints:=true}
-by tidy {hints:=[8, 7, 8, 7, 6, 5, 2, 6, 8, 9, 8, 7, 6, 5, 2, 6, 8, 9, 2, 5, 6, 8, 9, 2, 5, 6, 8, 9]}
+ by tidy {hints:=[9, 8, 9, 8, 7, 6, 2, 7, 9, 10, 9, 8, 7, 6, 2, 7, 9, 10, 2, 6, 7, 9, 10, 2, 6, 7, 9, 10]}
 
 end categories.functor_categories
