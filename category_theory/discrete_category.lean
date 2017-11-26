@@ -28,11 +28,9 @@ definition {u1 v1 u2 v2} EmptyFunctor ( C : Category.{u2 v2} ) : Functor EmptyCa
 
 definition {u1 v1 u2 v2} Functor.fromFunction { C : Category.{u1 v1} } { I : Type u2 } ( F : I → C.Obj ) : Functor (DiscreteCategory.{u2 v2} I) C := {
   onObjects     := F,
-  onMorphisms   := by tidy,
+  onMorphisms   := by tidy, -- TODO why does it break functoriality below if we replace this with ♯?
   identities    := ♯,
-  functoriality := begin
-                    tidy,
-                   end  
+  functoriality := ♯
 }
 
 end categories

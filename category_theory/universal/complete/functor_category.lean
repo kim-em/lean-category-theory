@@ -147,9 +147,9 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
                          exact (Y.cone_maps j).components X, 
                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
                        end,
-        naturality := by tidy {hints:=[2, 7, 6, 7, 9, 18, 14, 2, 9, 10, 2, 9, 10, 25]} 
+        naturality := by tidy {hints:=[7, 6, 7, 9, 18, 14, 9, 10, 9, 10, 25]} 
       },
-      commutativity := by tidy {hints:=[2, 7, 6, 7, 9, 10]} 
+      commutativity := by tidy {hints:=[7, 6, 7, 9, 10]} 
     }
 
 -- This would be a bit dangerous, but we just use it in the next construction.
@@ -172,7 +172,7 @@ instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Com
   limitCone := λ J F, {
     terminal_object                            := LimitObject_in_FunctorCategory F,
     morphism_to_terminal_object_from           := λ Y, morphism_to_LimitObject_in_FunctorCategory Y,
-    uniqueness_of_morphisms_to_terminal_object := by tidy {hints:=[7, 6, 6, 7, 6, 7, 9, 12, 18, 14, 2, 9, 10, 2, 6, 3]}
+    uniqueness_of_morphisms_to_terminal_object := by tidy {hints:=[7, 6, 6, 7, 6, 7, 9, 12, 18, 14, 9, 10, 6, 3]}
   }
 }
 

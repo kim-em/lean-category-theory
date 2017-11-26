@@ -2,7 +2,7 @@
 name = "lean-category-theory"
 version = "0.1"
 lean_version = "master"
-path = "src"
+path = "."
 
 [dependencies]
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "49e34a39bfa97f8dd5c9ccbe91fd07bf91df66fd"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "8f5d2fee8237ce86eee4bc28668d796aad945b52"}
