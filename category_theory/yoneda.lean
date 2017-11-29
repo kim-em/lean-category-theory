@@ -56,14 +56,14 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
    ( Z : F.onObjects Y ) :
      G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
--- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
--- begin
-  -- tidy {hints:=[8, 7, 8, 7, 6, 8, 6, 11, 10, 8, 11, 15, 16, 15, 16, 15, 16, 15, 16, 18, 17, 16, 15, 16, 15, 16, 15, 16, 18, 16, 17, 16, 15, 16, 18, 16, 21, 20, 18, 21]},
-  -- exact ((a.components _) (C.identity _)),
-  -- tidy {hints:=[2, 8, 9]},
-  -- exact ((fst.onMorphisms a_1) a),
-  -- tidy {hints:=[2, 9, 3, 2, 9, 3, 2, 9, 2, 9, 3]},
--- end
+theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+begin
+  tidy {hints:=[8, 7, 8, 7, 6, 8, 6, 11, 10, 8, 11, 15, 16, 15, 16, 15, 16, 15, 16, 18, 17, 16, 15, 16, 15, 16, 15, 16, 18, 16, 17, 16, 15, 16, 18, 16, 21, 20, 18, 21]},
+  exact ((a.components _) (C.identity _)),
+  tidy {hints:=[2, 8, 9]},
+  exact ((fst.onMorphisms a_1) a),
+  tidy {hints:=[2, 9, 3, 2, 9, 3, 2, 9, 2, 9, 3]},
+end
 
 -- theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
 -- begin
