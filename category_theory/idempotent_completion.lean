@@ -57,21 +57,21 @@ definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (Idempot
 
 open categories.equivalence
 
-lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
-begin
-  unfold Embedding,
-  split,
-  begin 
-    tidy,
-    exact f_1,
-    refl, -- FIXME this really should work!
-    -- tidy,
-  end,
-  begin
-    tidy, -- PROJECT This next step seems easily automatable.
-    exact congr_arg subtype.val p
-  end
-end
+-- lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
+-- begin
+--   unfold Embedding,
+--   split,
+--   begin 
+--     tidy,
+--     exact f_1,
+--     refl, -- FIXME this really should work!
+--     -- tidy,
+--   end,
+--   begin
+--     tidy, -- PROJECT This next step seems easily automatable.
+--     exact congr_arg subtype.val p
+--   end
+-- end
 
 definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
   FunctorComposition (functor_to_IdempotentCompletion C) F

@@ -4,8 +4,6 @@
 
 import ..instances
 import ...discrete_category
--- import ...currying.currying_1
--- import ...products.switch
 
 open categories
 open categories.functor

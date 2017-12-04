@@ -2,50 +2,33 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .currying_1
+-- TODO this was taking forever to compile
 
-open categories
-open categories.isomorphism
-open categories.functor
-open categories.equivalence
+-- import .currying_1
 
-namespace categories.natural_transformation
+-- open categories
+-- open categories.isomorphism
+-- open categories.functor
+-- open categories.equivalence
 
--- lemma simon_1 ( a b : ℕ ) : a + b = b + a := ♯
--- lemma simon_2 ( a : ℕ ) : 0 * a = 0 := begin
---                                           simp, 
---                                        end
+-- namespace categories.natural_transformation
 
+-- universes u1 v1 u2 v2 u3 v3
 
--- lemma simons_distrib ( x y z : ℤ ) : x * (y + z) = x * y + x * z := sorry
+-- variable C : Category.{u1 v1}
+-- variable D : Category.{u2 v2}
+-- variable E : Category.{u3 v3}
 
--- lemma c : 2 * 3 = 6 := by tidy
+-- definition Curry_Uncurry_to_identity
+--     : NaturalTransformation (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) (IdentityFunctor _) := ♯ 
 
--- lemma simon_3 ( a b : ℤ ) : ∃ c : ℤ , 3 * a + 6 * b = 3 * c :=
--- begin
---   existsi a + b * 2,
---   rewrite simons_distrib,
---   simp,
---   have p : 2 * 3 = 6, { tidy },
---   tidy,
--- end                                       
+-- definition identity_to_Curry_Uncurry
+--     : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) := ♯ 
 
-universes u1 v1 u2 v2 u3 v3
-
-variable C : Category.{u1 v1}
-variable D : Category.{u2 v2}
-variable E : Category.{u3 v3}
-
-definition Curry_Uncurry_to_identity
-    : NaturalTransformation (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) (IdentityFunctor _) := ♯ 
-
-definition identity_to_Curry_Uncurry
-    : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) := ♯ 
-
-definition Uncurry_Curry_to_identity
-    : NaturalTransformation (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) (IdentityFunctor _) := ♯ 
+-- definition Uncurry_Curry_to_identity
+--     : NaturalTransformation (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) (IdentityFunctor _) := ♯ 
      
-definition identity_to_Uncurry_Curry
-    : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) := ♯ 
+-- definition identity_to_Uncurry_Curry
+--     : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) := ♯ 
 
-end categories.natural_transformation
+-- end categories.natural_transformation

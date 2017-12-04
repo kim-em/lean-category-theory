@@ -47,28 +47,29 @@ definition Cone_to_comma_Cone { J C : Category } { F : Functor J C } ( cone : Co
                           end
   } ⟩
 
-definition ConeMorphism_to_comma_ConeMorphism { J C : Category } { F : Functor J C } { X Y : Cone F } ( f : ConeMorphism X Y ) : (comma.Cones F).Hom (Cone_to_comma_Cone X) (Cone_to_comma_Cone Y) := 
-  ⟨ (f.cone_morphism, ♯), ♯ ⟩
+-- PROJECT gets stuck here.
+-- definition ConeMorphism_to_comma_ConeMorphism { J C : Category } { F : Functor J C } { X Y : Cone F } ( f : ConeMorphism X Y ) : (comma.Cones F).Hom (Cone_to_comma_Cone X) (Cone_to_comma_Cone Y) := 
+--   ⟨ (f.cone_morphism, ♯), ♯ ⟩
 
-definition comma_Cones_to_Cones { J C : Category } ( F : Functor J C ) : Functor (comma.Cones F) (Cones F) := {
-    onObjects     := comma_Cone_to_Cone,
-    onMorphisms   := λ _ _ f, comma_ConeMorphism_to_ConeMorphism f,
-    identities    := ♯,
-    functoriality := ♯
-  }
+-- definition comma_Cones_to_Cones { J C : Category } ( F : Functor J C ) : Functor (comma.Cones F) (Cones F) := {
+--     onObjects     := comma_Cone_to_Cone,
+--     onMorphisms   := λ _ _ f, comma_ConeMorphism_to_ConeMorphism f,
+--     identities    := ♯,
+--     functoriality := ♯
+--   }
 
-definition Cones_to_comma_Cones { J C : Category } ( F : Functor J C ) : Functor (Cones F) (comma.Cones F) := {
-    onObjects     := Cone_to_comma_Cone,
-    onMorphisms   := λ _ _ f, ConeMorphism_to_comma_ConeMorphism f,
-    identities    := ♯,
-    functoriality := ♯
-  }
+-- definition Cones_to_comma_Cones { J C : Category } ( F : Functor J C ) : Functor (Cones F) (comma.Cones F) := {
+--     onObjects     := Cone_to_comma_Cone,
+--     onMorphisms   := λ _ _ f, ConeMorphism_to_comma_ConeMorphism f,
+--     identities    := ♯,
+--     functoriality := ♯
+--   }
 
-definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
-  functor := comma_Cones_to_Cones F,
-  inverse := Cones_to_comma_Cones F,
-  isomorphism_1 := ♯,
-  isomorphism_2 := ♯
-}
+-- definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
+--   functor := comma_Cones_to_Cones F,
+--   inverse := Cones_to_comma_Cones F,
+--   isomorphism_1 := ♯,
+--   isomorphism_2 := ♯
+-- }
 
 end categories.universal
