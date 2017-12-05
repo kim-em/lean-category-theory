@@ -70,4 +70,36 @@ instance is_Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } ( 
 definition Epimorphism { C : Category } { X Y : C.Obj } ( f : C.Hom X Y ) := Π { Z : C.Obj } ( g h : C.Hom Y Z ) ( w : C.compose f g = C.compose f h), g = h
 definition Monomorphism { C : Category } { X Y : C.Obj } ( f : C.Hom X Y ) := Π { Z : C.Obj } ( g h : C.Hom Z X ) ( w : C.compose g f = C.compose h f), g = h
 
+local notation g ∘ f := IsomorphismComposition f g
+local attribute [simp] IsomorphismComposition
+
+variables {C : Category} { X : C.Obj} 
+
+@[simp]
+lemma IsoAssociativity (f g h : Isomorphism C X X) : h ∘ (g ∘ f) = (h ∘ g) ∘ f :=
+by simp 
+
+def Identity : Isomorphism C X X := ⟨ C.identity X, _, by simp, by simp⟩
+
+@[simp]
+lemma Identity_mul (f : Isomorphism C X X) : Identity ∘ f = f :=
+by cases f; simp [Identity]
+
+@[simp]
+lemma mul_Identity (f : Isomorphism C X X) : f ∘ Identity = f :=
+by cases f; simp [Identity]
+
+@[simp]
+lemma mul_left_inv (f : Isomorphism C X X) : Isomorphism.reverse f ∘ f = Identity :=
+by simp [Isomorphism.reverse, Identity]
+
+def automph_grp (X : C.Obj) : group (Isomorphism C X X) := 
+{mul:=(∘), 
+ mul_assoc:=by simp,
+ one:=Identity, 
+ one_mul:=Identity_mul,
+ mul_one:=mul_Identity, 
+ inv:=Isomorphism.reverse, 
+ mul_left_inv:=mul_left_inv}
+
 end categories.isomorphism
