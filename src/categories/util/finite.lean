@@ -29,12 +29,12 @@ instance empty_is_Finite : Finite empty := {
                  intros,
                  induction a,
                  apply empty_exfalso,
-                 cases is_lt,
+                 cases a_is_lt,
                  intros, 
                  induction u,
                  intros,
                  induction v,
-                 cases is_lt,
+                 cases v_is_lt,
               end
 }
 
@@ -67,7 +67,7 @@ open Two
 
 def to_as_true {c : Prop} [h₁ : decidable c] (h₂ : c) : as_true c :=
 cast (if_pos h₂).symm trivial
-
+ 
 open tactic
 -- This is fairly lame!
 instance Two_is_Finite : Finite Two := {
@@ -89,11 +89,11 @@ instance Two_is_Finite : Finite Two := {
     witness_2 := begin
                    intros, -- FIXME automation (tidy loops)
                    induction v,
-                   cases is_lt,
+                   cases v_is_lt,
                    {tidy},
-                   cases a,
+                   cases v_is_lt_a,
                    {tidy},
-                   cases a_1,
+                   cases v_is_lt_a_a,                   
                  end
     }
   }

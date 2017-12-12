@@ -27,7 +27,7 @@ definition PathCategory ( G : Graph ) : Category :=
                       },
                       {
                         -- when f is cons
-                        exact congr_arg (λ p, path.cons e p) ih_1
+                        exact congr_arg (λ p, path.cons f_e p) f_ih
                       }
                     end,
   associativity  := begin
@@ -39,7 +39,7 @@ definition PathCategory ( G : Graph ) : Category :=
                       },
                       {
                         -- when f is cons
-                        exact congr_arg (λ p, path.cons e p) (ih_1 g)
+                        exact congr_arg (λ p, path.cons f_e p) (f_ih g)
                       }
                     end
 }
@@ -70,7 +70,7 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
                        tidy,
                      },
                      {
-                      let p := ih_1 g,
+                      let p := f_ih g,
                       unfold concatenate_paths,
                       unfold path_to_morphism,
                       blast,
