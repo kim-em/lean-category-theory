@@ -23,7 +23,7 @@ structure {u v} Category :=
 attribute [simp] Category.left_identity
 attribute [simp] Category.right_identity
 attribute [simp,ematch] Category.associativity
-attribute [applicable] Category.identity
+-- attribute [applicable] Category.identity -- No, this is a terrible idea. Sometimes the identity is not the answer. -- PROJECT 'semiapplicable' lemmas that only get applied when there are no dependent goals.
 
 @[tidy] meta def rewrite_associativity_backwards : tactic string := 
 (`[repeat_at_least_once { rewrite ← Category.associativity }])   

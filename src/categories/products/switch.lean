@@ -10,6 +10,8 @@ open categories.natural_transformation
 
 namespace categories.products
 
+local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+
 definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
   onObjects     := λ X, (X.snd, X.fst),

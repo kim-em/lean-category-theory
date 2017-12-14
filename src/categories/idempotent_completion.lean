@@ -57,21 +57,21 @@ definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (Idempot
 
 open categories.equivalence
 
--- lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
--- begin
---   unfold Embedding,
---   split,
---   begin 
---     tidy,
---     exact f_1,
---     refl, -- FIXME this really should work!
---     -- tidy,
---   end,
---   begin
---     tidy, -- PROJECT This next step seems easily automatable.
---     exact congr_arg subtype.val p
---   end
--- end
+lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
+begin
+  unfold Embedding,
+  split,
+  begin 
+    tidy {trace_steps:=tt}, -- FIXME gets stuck here?
+  --   exact f_1,
+  --   refl, 
+  --   -- tidy,
+  end,
+  -- begin
+  --   tidy, -- PROJECT This next step seems easily automatable.
+  --   exact congr_arg subtype.val p
+  -- end
+end
 
 definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
   FunctorComposition (functor_to_IdempotentCompletion C) F
@@ -81,18 +81,18 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
 --   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 -- {
 --   functor := {
---     onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin tidy, induction X, tidy, exact congr_arg subtype.val witness, end ⟩,
---     onMorphisms   := λ X Y f, ⟨ f.val.val, begin tidy, exact congr_arg subtype.val f_2.right, unfold_projections at f, have p := f.property.right, tidy, exact congr_arg subtype.val p, end ⟩,
---     identities    := ♮,
---     functoriality := ♮
+--     onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin tidy, induction X, tidy, exact congr_arg subtype.val X_witness, end ⟩,
+--     onMorphisms   := λ X Y f, ⟨ f.val.val, begin tidy, exact congr_arg subtype.val f_2.left, have p := f_2.right, exact congr_arg subtype.val p, end ⟩,
+--     identities    := ♯,
+--     functoriality := ♯
 --   },
 --   inverse := {
 --     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
---     onMorphisms   := λ X Y f, ⟨ f, begin tidy, exact f_2.right, tidy, exact f_2.left end ⟩,
---     identities    := ♮,
---     functoriality := ♮
+--     onMorphisms   := λ X Y f, ⟨ f, begin tidy, exact f_2.left, exact f_2.right end ⟩, -- inducting on ∧ would automate this
+--     identities    := ♯,
+--     functoriality := ♯
 --   },
---   isomorphism_1 := begin tidy, end, -- FIXME this gets stuck because we've improperly used identities automatically! -- how do we cancel attributes?
+--   isomorphism_1 := begin tidy {hints:=[]}, end, -- FIXME tidy seems to get stuck here
 --   isomorphism_2 := sorry
 -- }
 

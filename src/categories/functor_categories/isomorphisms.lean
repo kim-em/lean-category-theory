@@ -11,6 +11,8 @@ open categories.natural_transformation
 
 namespace categories.functor_categories
 
+local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+
 definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
   { B : Category.{u1 v1} } { C : Category.{u2 v2} } { D : Category.{u3 v3} } { E : Category.{u4 v4} }
   ( F : Functor B C )

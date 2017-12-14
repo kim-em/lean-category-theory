@@ -10,6 +10,8 @@ open categories.natural_transformation
 
 namespace categories.arrows
 
+local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+
 -- Is there any point defining these separately (rather than as the functor category from the walking arrow)?
 
 definition Arrows ( C : Category ) : Category :=

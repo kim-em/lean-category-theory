@@ -11,6 +11,8 @@ open categories.functor
 open plift -- we first plift propositional equality to Type 0,
 open ulift -- then ulift up to Type v
 
+local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+
 definition {u v} DiscreteCategory ( α : Type u ) : Category.{u v} :=
 {
   Obj            := α,

@@ -69,7 +69,7 @@ def to_as_true {c : Prop} [h₁ : decidable c] (h₂ : c) : as_true c :=
 cast (if_pos h₂).symm trivial
  
 open tactic
--- This is fairly lame!
+
 instance Two_is_Finite : Finite Two := {
   cardinality := 2,
   bijection := {
@@ -81,20 +81,8 @@ instance Two_is_Finite : Finite Two := {
                        | 0, _ := _0
                        | 1, _ := _1 
                      end,
-    witness_1 := begin
-                  intros,
-                  induction u,
-                  tidy,
-                 end,
-    witness_2 := begin
-                   intros, -- FIXME automation (tidy loops)
-                   induction v,
-                   cases v_is_lt,
-                   {tidy},
-                   cases v_is_lt_a,
-                   {tidy},
-                   cases v_is_lt_a_a,                   
-                 end
+    witness_1 := ♯,
+    witness_2 := ♯
     }
   }
 

@@ -8,6 +8,8 @@ open categories.functor
 
 namespace categories
 
+local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+
 definition {u v w} FullSubcategory ( C : Category.{u v} ) ( Z : C.Obj → Sort w ) : Category.{(max u w) v} :=
 {
   Obj := Σ X : C.Obj, plift (Z X),
