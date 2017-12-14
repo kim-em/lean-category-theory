@@ -15,11 +15,6 @@ namespace categories.walking
 
 open Two
 
--- definition WalkingPair : Graph := {
---   Obj := Two,
---   Hom := λ X Y, empty
--- }
-
 @[simp] lemma Two_0_eq_1_eq_false : ¬(_0 = _1) :=
 by contradiction
 
@@ -31,27 +26,48 @@ by contradiction
 
 instance Two_decidable : decidable_eq Two := ♯
 
+instance : subsingleton empty :=
+begin
+tidy,
+end
+
+def {u} unit_or_empty_subsingleton {α : Type u} [decidable_eq α] {a b : α} : subsingleton (ite (a = b) unit empty) :=
+begin
+by_cases a = b,
+rw h,
+simp,
+apply_instance,
+rw if_neg h,
+apply_instance,
+end
+def {u} unit_or_empty_subsingleton' {α : Type u} [decidable_eq α] {a : α} {Z : Type}: subsingleton (ite (a = a) unit Z) :=
+begin
+simp,
+apply_instance,
+end
+attribute [instance] unit_or_empty_subsingleton
+attribute [instance] unit_or_empty_subsingleton'
+local attribute [applicable] subsingleton.elim
+
 -- TODO automation? allow induction on booleans?
-definition WalkingPair : Category := {
+definition WalkingPair' : Category := {
   Obj := Two,
   Hom := λ X Y, if X = Y then unit else empty,
-  identity       := begin tidy, end,
+  identity       := ♯,
   compose        := begin tidy, simp at a, induction a, tidy, simp at a_1, induction a_1, tidy, simp at a_1, induction a_1, tidy,  end,
-  left_identity  := begin intros, dsimp', tidy {trace_result:=tt}, induction f, intros, induction X, any_goals { induction Y }, any_goals { induction f }, refl, refl end,
-  right_identity := sorry,
-  associativity  := sorry,
+  left_identity  := ♯,
+  right_identity := ♯,
+  associativity  := ♯,
 }
-
--- TODO Which is more usable? WalkingPair : Graph or WalkingPair : Category?
-
--- definition WalkingParallelPair : Graph := {
---   Obj := Two,
---   Hom := λ X Y, match X, Y with 
---                   | _0, _1 := Two
---                   | _,  _  := empty
---                 end
--- }
-
+definition WalkingPair : Category := {
+  Obj := bool,
+  Hom := λ X Y, if X = Y then unit else empty,
+  identity       := ♯,
+  compose        := begin tidy, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, induction a_1,induction a,induction a, induction a_1, end,
+  left_identity  := ♯,
+  right_identity := ♯,
+  associativity  := ♯,
+}
 
 
 definition Pair_functor { C : Category } ( α β : C.Obj ) : Functor WalkingPair C :=
@@ -62,19 +78,23 @@ definition Pair_functor { C : Category } ( α β : C.Obj ) : Functor WalkingPair
   functoriality := begin tidy, induction X, any_goals {induction Y }, any_goals {induction Z}, any_goals { induction f }, any_goals { induction g }, tidy end
 }
 
+definition WalkingParallelPair : Category := {
+  Obj := Two,
+  Hom := begin intros, cases a, cases a_1, exact unit, exact bool, cases a_1, exact empty, exact unit, end,
+  identity       := ♯,
+  compose        := begin intros, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, exact a_1, exact a end,
+  left_identity  := ♯,
+  right_identity := ♯,
+  associativity  := ♯
+}
 
--- definition ParallelPair_homomorphism { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : GraphHomomorphism WalkingParallelPair C.graph := {
---   onObjects   := λ X, match X with
---                        | _0 := α
---                        | _1 := β
---                      end,
---   onMorphisms := λ X Y e, match X, Y, e with
---                            | _0, _1, _0 := f
---                            | _0, _1, _1 := g
---                          end
--- }
-
--- definition ParallelPair_functor { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) := Functor.from_GraphHomomorphism (ParallelPair_homomorphism f g)
+definition ParallelPair_functor { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : Functor WalkingParallelPair C := 
+{
+  onObjects     := begin intros, cases a, exact α, exact β end,
+  onMorphisms   := begin intros, cases X, cases Y, exact C.identity _, cases a, exact f, exact g, cases Y, cases a, cases a, exact C.identity _, end,
+  identities    := ♯,
+  functoriality := ♯
+}
 
 end categories.walking
 
