@@ -1,3 +1,7 @@
+[![Build Status]
+(https://travis-ci.org/semorrison/lean-category-theory.svg?branch=master)]
+(https://travis-ci.org/semorrison/lean-category-theory)
+
 This repository develops the basics of category theory in Lean.
 
 Please note that our goal is _not_ to produce a beautiful category theory library for Lean. Lean probably isn't ready for someone to try to write one!
