@@ -81,7 +81,7 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                                               cone_maps := i, 
                                               commutativity := begin
                                                                  tidy, 
-                                                                -- FIXME: fails because there aren't enough binders to revert! 
+                                                                -- TODO: fails because there aren't enough binders to revert! Minimised as https://github.com/leanprover/lean/issues/1889
                                                                 --  dsimp at * {unfold_reducible := tt, md := semireducible}, 
                                                                  unfold_projs at * {md:=semireducible}, 
                                                                  tidy 
