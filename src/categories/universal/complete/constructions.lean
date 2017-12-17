@@ -41,27 +41,78 @@ private definition {u v} ConeMorphism_from_map_to_limit
 
 open categories.util.finite.Two
 
--- This is a useless mess. We better make the walking parallel pair explicit, rather than a path category on the corresponding graph.
--- instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers C := {
---   equalizer := λ X Y f g, let lim := limitCone(ParallelPair_functor f g) in {
---     equalizer     := lim.terminal_object.cone_point,
---     inclusion     := lim.terminal_object.cone_maps _0,
---     witness       := let commutativity := @Cone.commutativity _ _ _ lim.terminal_object _0 _1 in 
---                      begin
---                        have fw := commutativity (@path.cons WalkingParallelPair _0 _1 _1 _0 (@path.nil WalkingParallelPair _1)),
---                        have gw := commutativity (@path.cons WalkingParallelPair _0 _1 _1 _1 (@path.nil WalkingParallelPair _1)),
---                        tidy,
---                        unfold path_to_morphism at fw, 
---                        unfold ParallelPair_functor at fw, 
---                        unfold ParallelPair_homomorphism at fw, 
---                        tidy,
---                        unfold path_to_morphism at gw, 
---                      end,
---     map           := sorry,
---     factorisation := sorry,
---     uniqueness    := sorry
---   }                       
--- }
+-- PROJECT this construction is unpleasant
+instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers C := {
+  equalizer := λ X Y f g, let lim := limitCone(ParallelPair_functor f g) in {
+    equalizer     := lim.terminal_object.cone_point,
+    inclusion     := lim.terminal_object.cone_maps Two._0,
+    witness       := let commutativity := @Cone.commutativity _ _ _ lim.terminal_object Two._0 Two._1 in 
+                     begin
+                       have fw := commutativity tt,
+                       have gw := commutativity ff,
+                       -- TODO this is suffering from https://github.com/leanprover/lean/issues/1889
+                       dsimp at fw {unfold_reducible := tt, md := semireducible},
+                       dsimp at gw {unfold_reducible := tt, md := semireducible},
+                       rw fw,
+                       rw gw,
+                     end,
+    map           := begin
+                       -- PROJECT this is really ugly! Those inductions should work better...
+                       tidy,
+                       induction j,
+                       tidy,
+                       exact k,
+                       exact C.compose k f,
+                       induction j,
+                       induction k_1,
+                       tidy,
+                       induction f_1,
+                       tidy,
+                       induction k_1,
+                       tidy,
+                       induction f_1,
+                       induction f_1,
+                       tidy,
+                     end,
+    factorisation := begin
+                       tidy,
+                       unfold universal.morphism_to_terminal_object_cone_point,
+                       tidy,
+                     end,
+    uniqueness    := begin
+                       tidy,
+                       let Z_cone : Cone (ParallelPair_functor f g) := {
+                         cone_point := Z,
+                         cone_maps := λ j : Two, C.compose a (lim.terminal_object.cone_maps j),
+                         commutativity := begin
+                                            tidy, induction j, any_goals { induction k }, any_goals { induction f_1 }, tidy,
+                                            {
+                                              have c := lim.terminal_object.commutativity,
+                                              have c₁ := @c Two._0 Two._1 ff,
+                                              dsimp at c₁ {unfold_reducible := tt, md := semireducible},
+                                              rw c₁,
+                                            },
+                                            {
+                                              have c := lim.terminal_object.commutativity,
+                                              have c₂ := @c Two._0 Two._1 tt,
+                                              dsimp at c₂ {unfold_reducible := tt, md := semireducible},
+                                              rw c₂,
+                                            },
+                                          end
+                       },
+                       have p := lim.uniqueness_of_morphisms_to_terminal_object Z_cone ⟨ a, _ ⟩ ⟨ b, _ ⟩,
+                       exact congr_arg ConeMorphism.cone_morphism p,
+                       -- finally, take care of those placeholders
+                       tidy,
+                       induction j,
+                       tidy,      
+                       have c := lim.terminal_object.commutativity,
+                       rw ← @c Two._0 Two._1 tt,
+                       repeat { rw ← C.associativity },
+                       rw witness, 
+                     end
+  }                       
+}
 
 instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C := {
     product := λ { I : Type } ( F : I → C.Obj ), 
