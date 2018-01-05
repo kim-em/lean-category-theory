@@ -70,26 +70,23 @@ open categories.equivalence
 --   split,
 --   begin 
 --     tidy {trace_result:=tt}, 
---     exact f_1,
---     refl, -- TODO Goals says 'f_1 = f_1', but is secretly still '?m_1[C, X, Y, f_1, _] = f_1',
+--     exact f_val,
+--     refl, -- TODO Goals says 'f_val = f_val', but is secretly still '?m_1[C, X, Y, f_1, _] = f_1',
 --     -- I posted a gist about this, and ask Mario about it: https://gist.github.com/semorrison/ddee284b92d64c931a21b5853cf6f1e1
---     -- admit
+--     -- admit, 
 --   end,
---   -- begin
---   --   tidy, -- PROJECT This next step seems easily automatable.
---   --   exact congr_arg subtype.val p
---   -- end
+--   begin
+--     tidy,
+--   end
 -- end
 
 definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
   FunctorComposition (functor_to_IdempotentCompletion C) F
 
--- PROJECT prove these lemmas about idempotent completion
-
 private def IdempotentCompletion_idempotent_functor ( C : Category ) : Functor (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 {
-    onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin tidy, induction X, tidy, exact congr_arg subtype.val X_witness, end ⟩,
-    onMorphisms   := λ X Y f, ⟨ f.val.val, begin tidy, exact congr_arg subtype.val f_property_left, exact congr_arg subtype.val f_property_right, end ⟩,
+    onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin tidy, induction X, tidy end ⟩,
+    onMorphisms   := λ X Y f, ⟨ f.val.val, ♯ ⟩,
     identities    := ♯,
     functoriality := ♯
 }
@@ -101,13 +98,14 @@ private def IdempotentCompletion_idempotent_inverse ( C : Category ) : Functor (
     functoriality := ♯
 }
 
+-- PROJECT prove these lemmas about idempotent completion
 
 -- lemma IdempotentCompletion_idempotent ( C : Category ) :
 --   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 -- {
 --   functor := IdempotentCompletion_idempotent_functor C,
 --   inverse := IdempotentCompletion_idempotent_inverse C,
---   isomorphism_1 := begin tidy, exact C.identity _, tidy, induction f_2, tidy, end, -- PROJECT
+--   isomorphism_1 := begin tidy, exact C.identity _, tidy, induction f_2, tidy, end, -- PROJECT very slow??
 --   isomorphism_2 := sorry
 -- }
 
