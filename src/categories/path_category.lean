@@ -7,8 +7,6 @@ import .graphs
 
 open categories
 
-universe variables u v
-
 namespace categories.graphs
 
 definition PathCategory ( G : Graph ) : Category :=
@@ -46,9 +44,9 @@ definition PathCategory ( G : Graph ) : Category :=
 
 open categories.functor
 
-definition path_to_morphism
-  { G : Graph }
-  { C : Category }
+definition {u v} path_to_morphism
+  { G : Graph.{u v} }
+  { C : Category.{u v} }
   ( H : GraphHomomorphism G C.graph )
   : Π { X Y : G.Obj }, path X Y → C.Hom (H.onObjects X) (H.onObjects Y) 
 | ._ ._ (path.nil Z)              := C.identity (H.onObjects Z)
