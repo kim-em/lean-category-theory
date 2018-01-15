@@ -18,6 +18,7 @@ definition {u} Types_has_Products : has_Products CategoryOfTypes.{u} := {
                      end
   }
 }
+attribute [instance] Types_has_Products
 
 definition {u} Types_has_Coproducts : has_Coproducts CategoryOfTypes.{u} := {
   coproduct := λ I φ, {
@@ -32,6 +33,7 @@ definition {u} Types_has_Coproducts : has_Coproducts CategoryOfTypes.{u} := {
                      end
   }
 }
+attribute [instance] Types_has_Coproducts
 
 -- PROJECT better automation.
 definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
@@ -50,7 +52,6 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
   }
 }
 attribute [instance] Types_has_Equalizers
-
 
 -- Does Types have coequalizers? Quotients are hard.
 -- definition {u} relation_from_functions { α β : Type u } ( f g : α → β ) : β → β → Prop :=

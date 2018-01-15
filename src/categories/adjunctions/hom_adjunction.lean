@@ -14,6 +14,7 @@ open categories.natural_transformation
 open categories.products
 open categories.isomorphism
 open categories.types
+open categories.opposites
 
 namespace categories.adjunctions
 

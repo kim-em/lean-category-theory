@@ -9,6 +9,7 @@ open categories
 open categories.functor
 open categories.natural_transformation
 open categories.products
+open categories.opposites
 open categories.isomorphism
 open categories.types
 

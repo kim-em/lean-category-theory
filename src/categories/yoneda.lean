@@ -17,6 +17,7 @@ open categories.isomorphism
 open categories.equivalence
 open categories.types
 open categories.products
+open categories.opposites
 
 namespace categories.yoneda
 
