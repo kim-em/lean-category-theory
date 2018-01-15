@@ -17,11 +17,7 @@ definition {u} CategoryOfTypes : Category :=
     Hom := λ a b, a → b,
 
     identity := λ a, id,
-    compose  := λ _ _ _ f g, g ∘ f,
-
-    left_identity  := ♮,
-    right_identity := ♮,
-    associativity  := ♮
+    compose  := λ _ _ _ f g, g ∘ f
 }
 
 definition Bijection ( α β : Type ) := Isomorphism CategoryOfTypes α β 

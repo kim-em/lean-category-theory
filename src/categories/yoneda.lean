@@ -25,16 +25,11 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 {
     onObjects := λ X, {
         onObjects     := λ Y, C.Hom Y X,
-        onMorphisms   := λ Y Y' f, λ g, C.compose f g,
-        identities    := ♯,
-        functoriality := ♯ 
+        onMorphisms   := λ Y Y' f, λ g, C.compose f g
     },
     onMorphisms   := λ X X' f, {
-        components := λ Y, λ g, C.compose g f,
-        naturality := ♯
-    },
-    identities    := ♯,
-    functoriality := ♯
+        components := λ Y, λ g, C.compose g f
+    }
 }
 
 @[reducible] definition {v} YonedaEvaluation ( C : Category.{v v} )
@@ -57,7 +52,7 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
    ( Z : F.onObjects Y ) :
      G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
--- TODO restore this
+-- FIXME restore this
 -- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 -- begin
 --   tidy {hints:=[8, 7, 8, 7, 6, 8, 6, 11, 10, 8, 11, 15, 16, 15, 16, 15, 16, 15, 16, 18, 17, 16, 15, 16, 15, 16, 15, 16, 18, 16, 17, 16, 15, 16, 18, 16, 21, 20, 18, 21]},

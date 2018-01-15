@@ -54,19 +54,13 @@ definition WalkingPair' : Category := {
   Obj := Two,
   Hom := λ X Y, if X = Y then unit else empty,
   identity       := ♯,
-  compose        := begin tidy, simp at a, induction a, tidy, simp at a_1, induction a_1, tidy, simp at a_1, induction a_1, tidy,  end,
-  left_identity  := ♯,
-  right_identity := ♯,
-  associativity  := ♯,
+  compose        := begin tidy, simp at a, induction a, tidy, simp at a_1, induction a_1, tidy, simp at a_1, induction a_1, tidy,  end
 }
 definition WalkingPair : Category := {
   Obj := bool,
   Hom := λ X Y, if X = Y then unit else empty,
   identity       := ♯,
-  compose        := begin tidy, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, induction a_1,induction a,induction a, induction a_1, end,
-  left_identity  := ♯,
-  right_identity := ♯,
-  associativity  := ♯,
+  compose        := begin tidy, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, induction a_1,induction a,induction a, induction a_1, end
 }
 
 
@@ -82,18 +76,13 @@ definition WalkingParallelPair : Category := {
   Obj := Two,
   Hom := begin intros, cases a, cases a_1, exact unit, exact bool, cases a_1, exact empty, exact unit, end,
   identity       := ♯,
-  compose        := begin intros, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, exact a_1, exact a end,
-  left_identity  := ♯,
-  right_identity := ♯,
-  associativity  := ♯
+  compose        := begin intros, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, exact a_1, exact a end
 }
 
 definition ParallelPair_functor { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : Functor WalkingParallelPair C := 
 {
   onObjects     := begin intros, cases a, exact α, exact β end,
-  onMorphisms   := begin intros, cases X, cases Y, exact C.identity _, cases a, exact f, exact g, cases Y, cases a, cases a, exact C.identity _, end,
-  identities    := ♯,
-  functoriality := ♯
+  onMorphisms   := begin intros, cases X, cases Y, exact C.identity _, cases a, exact f, exact g, cases Y, cases a, cases a, exact C.identity _, end
 }
 
 end categories.walking

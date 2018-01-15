@@ -7,6 +7,8 @@ import .Two
 
 namespace categories.util.finite
 
+-- TODO auto_param
+
 structure Bijection ( U V : Type ) :=
   ( morphism : U → V )
   ( inverse  : V → U )

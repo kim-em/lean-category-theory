@@ -69,10 +69,7 @@ definition HomCategory ( C : StrictTwoCategory ) ( X Y : C.Hom_0 ) : Category :=
   Obj            := C.Hom_1 X Y,
   Hom            := λ f g, C.Hom_2 f g,
   identity       := λ f, C.identity_1 f,
-  compose        := λ _ _ _ α β, C.compose_2_vertically α β,
-  left_identity  := ♮,
-  right_identity := ♮,
-  associativity  := ♮
+  compose        := λ _ _ _ α β, C.compose_2_vertically α β
 }
 
 -- PROJECT show that HomCategory C X X is (strict) monoidal?

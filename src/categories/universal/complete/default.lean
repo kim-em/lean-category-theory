@@ -72,11 +72,8 @@ definition {u v} Limit { J C : Category.{u v} } [ Complete C ] : Functor (Functo
                             let lim_G := (limitCone G) in
                               (lim_G.morphism_to_terminal_object_from {
                                 cone_point    := _,
-                                cone_maps     := (λ j, C.compose (lim_F.terminal_object.cone_maps j) (τ.components j)),
-                                commutativity := ♯ 
-                              }).cone_morphism,
-  identities    := ♯,
-  functoriality := ♯
+                                cone_maps     := (λ j, C.compose (lim_F.terminal_object.cone_maps j) (τ.components j))
+                              }).cone_morphism
 }
 
 end categories.universal

@@ -15,7 +15,6 @@ definition PathCategory ( G : Graph ) : Category :=
   Hom            := λ x y, path x y,
   identity       := λ x, path.nil x,
   compose        := λ _ _ _ f g, concatenate_paths f g,
-  left_identity  := ♮,
   right_identity := begin
                       tidy,
                       induction f,
@@ -57,7 +56,6 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
 {
   onObjects     := H.onObjects,
   onMorphisms   := λ _ _ f, path_to_morphism H f,
-  identities    := ♮,
   functoriality := begin
                      -- PROJECT automation
                      tidy,

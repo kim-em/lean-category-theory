@@ -50,11 +50,7 @@ definition CategoryOfMonoids : Category :=
     Hom := λ s t, monoid_morphism s.2 t.2,
 
     identity := λ s, monoid_identity s.2,
-    compose  := λ _ _ _ f g, monoid_morphism_composition f g,
-
-    left_identity  := ♯,
-    right_identity := ♯,
-    associativity  := ♮
+    compose  := λ _ _ _ f g, monoid_morphism_composition f g
 }
 
 open categories.functor
@@ -69,9 +65,7 @@ definition ForgetfulFunctor_Monoids_to_Semigroups : Functor CategoryOfMonoids Ca
                   {
                     map            := f.map,
                     multiplicative := f.multiplicative
-                  },
-  identities    := ♮,
-  functoriality := ♮
+                  }
 }
 
 end categories.examples.monoids

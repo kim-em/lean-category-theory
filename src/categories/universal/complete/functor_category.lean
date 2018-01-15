@@ -15,29 +15,22 @@ namespace categories.universal
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory { J C D : Category } ( F : Functor J (FunctorCategory C D )) ( c : C.Obj ) : Functor J D := {
   onObjects     := λ j, (F.onObjects j).onObjects c,
-  onMorphisms   := λ _ _ f, (F.onMorphisms f).components c,
-  identities    := ♯,
-  functoriality := ♯ 
+  onMorphisms   := λ _ _ f, (F.onMorphisms f).components c
 }
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory_on_Morphism { J C D : Category } ( F : Functor J (FunctorCategory C D )) { c c' : C.Obj } ( f : C.Hom c c' )
   : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
-    components := λ j, (F.onObjects j).onMorphisms f,
-    naturality := ♯ 
+    components := λ j, (F.onObjects j).onMorphisms f
   }
 
 private definition LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] ( F : Functor J (FunctorCategory C D) ) : Cone F := {      
   cone_point    := {
     onObjects     := λ c, Limit.onObjects (evaluate_Functor_to_FunctorCategory F c),
-    onMorphisms   := λ _ _ f, Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
-    identities    := ♯,
-    functoriality := ♯
+    onMorphisms   := λ _ _ f, Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f)
   },
   cone_maps     := λ j, {
-    components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,
-    naturality := ♯ 
-  },
-  commutativity := ♯ 
+    components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j
+  }
 }
 
 @[applicable] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 

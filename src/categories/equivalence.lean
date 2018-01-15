@@ -12,6 +12,7 @@ open categories.functor_categories
 
 namespace categories.equivalence
 
+-- TODO declare the isomorphisms can be obvious?
 structure {u1 v1 u2 v2} Equivalence ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) :=
   ( functor : Functor C D )
   ( inverse : Functor D C )

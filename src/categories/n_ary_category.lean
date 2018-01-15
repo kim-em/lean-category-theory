@@ -67,6 +67,7 @@ definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Catego
   identity := C.identity,
   compose := λ X Y Z f g, C.compose ( p[ f, g ] ),
   left_identity  := begin
+                      dsimp,
                       intros,
                       rewrite ← C.compose_empty_path, 
                       rewrite ← C.compose_length_one_path f,  
@@ -74,6 +75,7 @@ definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Catego
                       blast
                     end,
   right_identity := begin
+                      dsimp,
                       intros,
                       rewrite ← C.compose_empty_path, 
                       rewrite ← C.compose_length_one_path f,  
@@ -81,6 +83,7 @@ definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Catego
                       blast                    
                     end,
   associativity  := begin
+                      dsimp,
                       intros,
                       rewrite ← C.compose_length_one_path h,
                       rewrite ← C.associativity,

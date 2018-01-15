@@ -4,10 +4,13 @@
 
 import .tactics
 import .graphs
+import tidy.make_lemma
 
 open categories.graphs
 
 namespace categories
+
+meta def obvious : tactic unit := blast
 
 structure {u v} Category :=
   ( Obj : Type u )
@@ -15,14 +18,17 @@ structure {u v} Category :=
   ( identity : Π X : Obj, Hom X X )
   ( compose  : Π { X Y Z : Obj }, Hom X Y → Hom Y Z → Hom X Z )
 
-  ( left_identity  : ∀ { X Y : Obj } (f : Hom X Y), compose (identity X) f = f )
-  ( right_identity : ∀ { X Y : Obj } (f : Hom X Y), compose f (identity Y) = f )
+  ( left_identity  : ∀ { X Y : Obj } (f : Hom X Y), compose (identity X) f = f . obvious ) -- we supply the `obvious` here as the default tactic for filling in this field
+  ( right_identity : ∀ { X Y : Obj } (f : Hom X Y), compose f (identity Y) = f . obvious)
   ( associativity  : ∀ { W X Y Z : Obj } (f : Hom W X) (g : Hom X Y) (h : Hom Y Z),
-    compose (compose f g) h = compose f (compose g h) )
+    compose (compose f g) h = compose f (compose g h) . obvious )
 
-attribute [simp] Category.left_identity
-attribute [simp] Category.right_identity
-attribute [simp,ematch] Category.associativity
+-- because we provided default tactics for generating fields above, we need to extract separate lemmas as well.
+make_lemma Category.left_identity
+make_lemma Category.right_identity
+make_lemma Category.associativity
+attribute [ematch] Category.associativity.lemma
+
 -- attribute [applicable] Category.identity -- No, this is a terrible idea. Sometimes the identity is not the answer. -- PROJECT 'semiapplicable' lemmas that only get applied when there are no dependent goals.
 
 @[tidy] meta def rewrite_associativity_backwards : tactic string := 

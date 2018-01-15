@@ -25,16 +25,11 @@ definition Uncurry_Functors :
     {
       onObjects     := λ (F : Functor C (FunctorCategory D E)), {
         onObjects     := λ X, (F.onObjects X.1).onObjects X.2,
-        onMorphisms   := λ X Y f, E.compose ((F.onMorphisms f.1).components X.2) ((F.onObjects Y.1).onMorphisms f.2), 
-        identities    := ♯,
-        functoriality := ♯
+        onMorphisms   := λ X Y f, E.compose ((F.onMorphisms f.1).components X.2) ((F.onObjects Y.1).onMorphisms f.2)
       },
       onMorphisms   := λ F G (T : NaturalTransformation F G), {
-        components := λ X, (T.components _).components _,
-        naturality := ♯ 
-      },
-      identities    := ♯,
-      functoriality := ♯
+        components := λ X, (T.components _).components _
+      }
     }
 
 definition Curry_Functors :
@@ -43,26 +38,17 @@ definition Curry_Functors :
       onObjects     := λ F: Functor (C × D) E, {
         onObjects     := λ X, {
           onObjects     := λ Y, F.onObjects (X, Y),
-          onMorphisms   := λ Y Y' g, F.onMorphisms (C.identity X, g),
-          identities    := ♯,
-          functoriality := ♯
+          onMorphisms   := λ Y Y' g, F.onMorphisms (C.identity X, g)
         },
         onMorphisms   := λ X X' f, {
-          components := λ Y, F.onMorphisms (f, D.identity Y),
-          naturality := ♯
-        },
-        identities    := ♯,
-        functoriality := ♯
+          components := λ Y, F.onMorphisms (f, D.identity Y)
+        }
       },
       onMorphisms   := λ F G T, {
         components := λ X, {
-          components := λ Y, T.components (X, Y),
-          naturality := ♯
-        },
-        naturality := ♯
-      },
-      identities    := ♯,
-      functoriality := ♯
+          components := λ Y, T.components (X, Y)
+        }
+      }
     }
 
 end categories.natural_transformation

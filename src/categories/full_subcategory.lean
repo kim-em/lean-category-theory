@@ -15,10 +15,7 @@ definition {u v w} FullSubcategory ( C : Category.{u v} ) ( Z : C.Obj → Sort w
   Obj := Σ X : C.Obj, plift (Z X),
   Hom := λ X Y, C.Hom X.1 Y.1,
   identity       := by tidy,
-  compose        := λ _ _ _ f g, C.compose f g,
-  left_identity  := ♯,
-  right_identity := ♯,
-  associativity  := ♯
+  compose        := λ _ _ _ f g, C.compose f g
 }
 
 definition {u1 v1 u2 v2 wc wd} Functor_restricts_to_FullSubcategory 

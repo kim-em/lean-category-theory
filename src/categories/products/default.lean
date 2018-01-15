@@ -16,11 +16,7 @@ definition ProductCategory (C D : Category) :
     Obj      := C.Obj × D.Obj,
     Hom      := (λ X Y : C.Obj × D.Obj, C.Hom (X.fst) (Y.fst) × D.Hom (X.snd) (Y.snd)),
     identity := λ X, ⟨ C.identity (X.fst), D.identity (X.snd) ⟩,
-    compose  := λ _ _ _ f g, (C.compose (f.fst) (g.fst), D.compose (f.snd) (g.snd)),
-
-    left_identity  := ♯,
-    right_identity := ♯,
-    associativity  := ♮
+    compose  := λ _ _ _ f g, (C.compose (f.fst) (g.fst), D.compose (f.snd) (g.snd))
   }
 
 namespace ProductCategory
@@ -29,40 +25,30 @@ end ProductCategory
 
 definition RightInjectionAt { D : Category } ( C : Category ) ( Z : D.Obj ) : Functor C (C × D) :=
 { onObjects     := λ X, (X, Z),
-  onMorphisms   := λ X Y f, (f, D.identity Z),
-  identities    := ♮,
-  functoriality := ♯
+  onMorphisms   := λ X Y f, (f, D.identity Z)
 }
 
 definition LeftInjectionAt { C : Category } ( Z : C.Obj) ( D : Category ) : Functor D (C × D) :=
 { onObjects     := λ X, (Z, X),
-  onMorphisms   := λ X Y f, (C.identity Z, f),
-  identities    := ♮,
-  functoriality := ♯
+  onMorphisms   := λ X Y f, (C.identity Z, f)
 }
 
 definition LeftProjection ( C D : Category ) : Functor (C × D) C := 
 {
   onObjects     := λ X, X.1,
-  onMorphisms   := λ X Y f, f.1,
-  identities    := ♮,
-  functoriality := ♮
+  onMorphisms   := λ X Y f, f.1
 }
 
 definition RightProjection ( C D : Category ) : Functor (C × D) D := 
 {
   onObjects     := λ X, X.2,
-  onMorphisms   := λ X Y f, f.2,
-  identities    := ♮,
-  functoriality := ♮
+  onMorphisms   := λ X Y f, f.2
 }
 
 definition ProductFunctor { A B C D : Category } ( F : Functor A B ) ( G : Functor C D ) : Functor (A × C) (B × D) :=
 {
   onObjects     := λ X, (F.onObjects X.fst, G.onObjects X.snd),
-  onMorphisms   := λ _ _ f, (F.onMorphisms f.fst, G.onMorphisms f.snd),
-  identities    := ♯,
-  functoriality := ♯
+  onMorphisms   := λ _ _ f, (F.onMorphisms f.fst, G.onMorphisms f.snd)
 }
 
 namespace ProductFunctor
@@ -75,8 +61,7 @@ definition ProductNaturalTransformation
   (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
     NaturalTransformation (F × H) (G × I) :=
 {
-  components := λ X, (α.components X.fst, β.components X.snd),
-  naturality := ♯
+  components := λ X, (α.components X.fst, β.components X.snd)
 }
 
 namespace ProductNaturalTransformation
@@ -85,9 +70,7 @@ end ProductNaturalTransformation
 
 definition {u1 v1 u2 v2} Evaluation ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : Functor (ProductCategory (FunctorCategory C D) C) D := {
   onObjects     := λ p, p.1.onObjects p.2,
-  onMorphisms   := λ x y f, D.compose (x.1.onMorphisms f.2) (f.1.components y.2),
-  identities    := ♯,
-  functoriality := ♯
+  onMorphisms   := λ x y f, D.compose (x.1.onMorphisms f.2) (f.1.components y.2)
 }
 
 end categories.products

@@ -15,12 +15,14 @@ structure {u1 v1 u2 v2} Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }
   (onMorphisms : Π { X Y : C.Obj },
                 C.Hom X Y → D.Hom (onObjects X) (onObjects Y))
   (identities : ∀ (X : C.Obj),
-    onMorphisms (C.identity X) = D.identity (onObjects X))
+    onMorphisms (C.identity X) = D.identity (onObjects X) . obvious)
   (functoriality : ∀ { X Y Z : C.Obj } (f : C.Hom X Y) (g : C.Hom Y Z),
-    onMorphisms (C.compose f g) = D.compose (onMorphisms f) (onMorphisms g))
+    onMorphisms (C.compose f g) = D.compose (onMorphisms f) (onMorphisms g) . obvious)
 
-attribute [simp,ematch] Functor.identities
-attribute [simp,ematch] Functor.functoriality
+make_lemma Functor.identities
+make_lemma Functor.functoriality
+attribute [ematch] Functor.identities.lemma
+attribute [ematch] Functor.functoriality.lemma
 
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.
@@ -37,17 +39,13 @@ instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :
 definition {u1 v1} IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
 {
   onObjects     := id,
-  onMorphisms   := λ _ _ f, f,
-  identities    := ♮,
-  functoriality := ♮
+  onMorphisms   := λ _ _ f, f
 }
 
 definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
 {
   onObjects     := λ X, G.onObjects (F.onObjects X),
-  onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f),
-  identities    := ♯,
-  functoriality := ♮
+  onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f)
 }
 
 -- We'll want to be able to prove that two functors are equal if they are equal on objects and on morphisms.
@@ -85,9 +83,7 @@ definition {u1 v1 u2 v2} Functor_onIsomorphisms
   Isomorphism D (F.onObjects X) (F.onObjects Y) :=
   {
     morphism := F.onMorphisms g.morphism,
-    inverse := F.onMorphisms g.inverse,
-    witness_1 := ♮,
-    witness_2 := ♮
+    inverse := F.onMorphisms g.inverse
   }
 
 end categories.functor

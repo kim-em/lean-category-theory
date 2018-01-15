@@ -22,7 +22,6 @@ definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) 
 
 definition SwitchSymmetry
   ( C D : Category )
-    : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) :=
-    by tidy {hints:=[9, 8, 9, 8, 6, 7, 6, 9, 10, 9, 10, 9, 8, 6, 7, 6, 9, 10, 9, 10, 6, 7, 6, 9, 10, 9, 10, 6, 7, 6, 9, 10, 9, 10]}
-    
+    : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) := ♯
+        
 end categories.products

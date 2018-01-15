@@ -85,7 +85,7 @@ instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers
                          cone_point := Z,
                          cone_maps := λ j : Two, C.compose a (lim.terminal_object.cone_maps j),
                          commutativity := begin
-                                            tidy, induction j, any_goals { induction k }, any_goals { induction f_1 }, tidy,
+                                            tidy, any_goals { induction j }, any_goals { induction f_1 }, tidy,
                                             {
                                               have c := lim.terminal_object.commutativity,
                                               have c₁ := @c Two._0 Two._1 ff,
@@ -104,8 +104,6 @@ instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers
                        exact congr_arg ConeMorphism.cone_morphism p,
                        -- finally, take care of those placeholders
                        tidy,
-                       induction j,
-                       tidy,      
                        have c := lim.terminal_object.commutativity,
                        rw ← @c Two._0 Two._1 tt,
                        repeat { rw ← C.associativity },
@@ -130,13 +128,7 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from { 
                                               cone_point := Z, 
                                               cone_maps := i, 
-                                              commutativity := begin
-                                                                 tidy, 
-                                                                -- TODO: fails because there aren't enough binders to revert! Minimised as https://github.com/leanprover/lean/issues/1889
-                                                                --  dsimp at * {unfold_reducible := tt, md := semireducible}, 
-                                                                 unfold_projs at * {md:=semireducible}, 
-                                                                 tidy 
-                                                               end 
+                                              commutativity := by tidy
                                             }).cone_morphism,
                     factorisation := ♯ 
                   }

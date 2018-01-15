@@ -21,8 +21,7 @@ private definition Adjunction_to_HomAdjunction_morphism { C D : Category } { L :
 {
   components := λ P, 
     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
-    λ f, C.compose (A.unit.components P.1) (R.onMorphisms f),
-  naturality := ♯ 
+    λ f, C.compose (A.unit.components P.1) (R.onMorphisms f)
 }
 
 private definition Adjunction_to_HomAdjunction_inverse { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R ) 
@@ -31,16 +30,13 @@ private definition Adjunction_to_HomAdjunction_inverse { C D : Category } { L : 
 {
   components := λ P, 
     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
-    λ f, D.compose (L.onMorphisms f) (A.counit.components P.2),
-  naturality := ♯
+    λ f, D.compose (L.onMorphisms f) (A.counit.components P.2)
 }
 
 definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R ) : HomAdjunction L R := 
 {
     morphism  := Adjunction_to_HomAdjunction_morphism A,
-    inverse   := Adjunction_to_HomAdjunction_inverse A,
-    witness_1 := ♯,
-    witness_2 := ♯
+    inverse   := Adjunction_to_HomAdjunction_inverse A
   }
 
 @[simp] lemma mate_of_L
@@ -94,12 +90,10 @@ begin
 end
 
 private definition unit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) := {
-    components := λ X : C.Obj, A.morphism.components (X, L.onObjects X) (D.identity (L.onObjects X)),
-    naturality := ♯ 
+    components := λ X : C.Obj, A.morphism.components (X, L.onObjects X) (D.identity (L.onObjects X))
   }
 private definition counit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) := {
-    components := λ X : D.Obj, A.inverse.components (R.onObjects X, X) (C.identity (R.onObjects X)),
-    naturality := ♯
+    components := λ X : D.Obj, A.inverse.components (R.onObjects X, X) (C.identity (R.onObjects X))
   }
 
 -- lemma pre_triangle_1 

@@ -21,16 +21,11 @@ definition DiagonalFunctor ( J C : Category ) : Functor C (FunctorCategory J C) 
 {
   onObjects     := λ X : C.Obj, {
     onObjects     := λ _, X,
-    onMorphisms   := λ _ _ _, C.identity X,
-    identities    := ♮,
-    functoriality := ♮
+    onMorphisms   := λ _ _ _, C.identity X
   },
   onMorphisms   := λ X Y f, {
-    components := λ _, f,
-    naturality := ♮
-  },
-  identities    := ♮,
-  functoriality := ♮
+    components := λ _, f
+  }
 }
 
 -- unfortunately one can't coerce along subtype.val
@@ -49,10 +44,7 @@ definition CommaCategory
   Obj      := Σ a : A.Obj, Σ b : B.Obj, C.Hom (S.onObjects a) (T.onObjects b),
   Hom      := λ p q, { gh : (A.Hom p.1 q.1) × (B.Hom p.2.1 q.2.1) // C.compose (S.onMorphisms gh.1) q.2.2 = C.compose p.2.2 (T.onMorphisms gh.2) },
   identity := λ p, ⟨ (A.identity p.1, B.identity p.2.1), ♮ ⟩,
-  compose  := λ p q r f g, ⟨ (A.compose (val f).1 (val g).1, B.compose (val f).2 (val g).2), ♮ ⟩,
-  left_identity  := ♯,
-  right_identity := ♯,
-  associativity  := ♮
+  compose  := λ p q r f g, ⟨ (A.compose (val f).1 (val g).1, B.compose (val f).2 (val g).2), ♮ ⟩
 }
 
 -- cf Leinster Remark 2.3.2
@@ -61,9 +53,7 @@ definition CommaCategory_left_projection
   ( S : Functor A C ) ( T : Functor B C )
     : Functor (CommaCategory S T) A := {
       onObjects     := λ X, X.1,
-      onMorphisms   := λ _ _ f, f.val.1,
-      identities    := ♯,
-      functoriality := ♯ 
+      onMorphisms   := λ _ _ f, f.val.1
     }
 
 definition CommaCategory_right_projection   
@@ -71,26 +61,21 @@ definition CommaCategory_right_projection
   ( S : Functor A C ) ( T : Functor B C )
     : Functor (CommaCategory S T) B := {
       onObjects     := λ X, X.2.1,
-      onMorphisms   := λ _ _ f, f.val.2,
-      identities    := ♯,
-      functoriality := ♯ 
+      onMorphisms   := λ _ _ f, f.val.2
     }
 
 definition CommaCategory_projection_transformation
   { A B C : Category }
   { S : Functor A C } { T : Functor B C }
     : NaturalTransformation (FunctorComposition (CommaCategory_left_projection S T) S) (FunctorComposition (CommaCategory_right_projection S T) T) := {
-      components := λ X, X.2.2,
-      naturality := ♯
+      components := λ X, X.2.2
     }
 
 
 definition ObjectAsFunctor { C : Category } ( X : C.Obj ) : Functor (DiscreteCategory unit) C :=
 {
   onObjects     := λ _, X,
-  onMorphisms   := λ _ _ _, C.identity X,
-  identities    := ♮,
-  functoriality := ♮
+  onMorphisms   := λ _ _ _, C.identity X
 }
 
 definition SliceCategory   { C : Category } ( X : C.Obj ) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)

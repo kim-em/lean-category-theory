@@ -67,7 +67,6 @@ definition NaturalIsomorphism.from_components
   {
     morphism  := {
       components := λ X, (components X).morphism,
-      naturality := λ _ _ f, naturality f
     },
     inverse   := {
       components := λ X, (components X).inverse,
@@ -77,18 +76,8 @@ definition NaturalIsomorphism.from_components
                                rewrite ← D.associativity at p,
                                simp at p,
                                exact p,
-                                --  rewrite D.associativity at p,
-                                --  rewrite D.associativity at p,
-                                --  rewrite Isomorphism.witness_1 at p,
-                                --  rewrite ← D.associativity at p,
-                                --  rewrite D.right_identity at p,
-                                --  rewrite Isomorphism.witness_2 at p,
-                                --  rewrite D.left_identity at p,
-                                --  exact p
                              end
-    },
-    witness_1 := ♯,
-    witness_2 := ♯
+    }
   }
 
 definition {u1 v1 u2 v2} vertical_composition_of_NaturalIsomorphisms 
@@ -137,18 +126,15 @@ definition {u1 v1 u2 v2} is_NaturalIsomorphism { C : Category.{u1 v1} } { D : Ca
 
 
 lemma {u1 v1 u2 v2} IdentityNaturalTransformation_is_NaturalIsomorphism { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) : is_NaturalIsomorphism (IdentityNaturalTransformation F) :=
-  { inverse := IdentityNaturalTransformation F,
-    witness_1 := ♯,
-    witness_2 := ♯
+  { 
+    inverse := IdentityNaturalTransformation F
   }
 
 definition NaturalIsomorphism.components { C D : Category } { F G : Functor C D } ( α : NaturalIsomorphism F G ) ( X : C.Obj ) :
  Isomorphism D (F.onObjects X) (G.onObjects X) :=
   {
     morphism := α.morphism.components X,
-    inverse := α.inverse.components X,
-    witness_1 := ♮,
-    witness_2 := ♮
+    inverse := α.inverse.components X
   }
 
 end categories.natural_transformation

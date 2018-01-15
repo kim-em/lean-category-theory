@@ -36,10 +36,7 @@ definition CategoryOfGraphs : Category := {
     compose := λ _ _ _ f g, {
         onObjects   := λ x, g.onObjects (f.onObjects x),
         onMorphisms := λ _ _ e, g.onMorphisms (f.onMorphisms e)
-    },
-    right_identity := ♯,
-    left_identity  := ♯,
-    associativity  := ♯
+    }
 }
 
 end categories.examples.graphs

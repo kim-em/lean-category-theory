@@ -46,11 +46,7 @@ definition {u} CategoryOfSemigroups : Category :=
     Hom := λ s t, semigroup_morphism s.2 t.2,
 
     identity := λ s, semigroup_identity s.2,
-    compose  := λ _ _ _ f g, semigroup_morphism_composition f g,
-
-    left_identity  := ♯,
-    right_identity := ♯,
-    associativity  := ♮
+    compose  := λ _ _ _ f g, semigroup_morphism_composition f g
 }
 
 definition trivial_semigroup: semigroup punit := {

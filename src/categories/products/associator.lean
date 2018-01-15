@@ -17,9 +17,7 @@ definition ProductCategoryAssociator
   : Functor ((C × D) × E) (C × (D × E)) :=
 {
   onObjects     := λ X, (X.1.1, (X.1.2, X.2)),
-  onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2)),
-  identities    := ♮,
-  functoriality := ♮
+  onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2))
 }
 
 definition ProductCategoryInverseAssociator
@@ -27,9 +25,7 @@ definition ProductCategoryInverseAssociator
   : Functor (C × (D × E)) ((C × D) × E) :=
 {
   onObjects     := λ X, ((X.1, X.2.1), X.2.2),
-  onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2),
-  identities    := ♮,
-  functoriality := ♮
+  onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2)
 }
 
 end categories.products

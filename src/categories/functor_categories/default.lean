@@ -19,11 +19,7 @@ definition FunctorCategory ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) : C
   Hom := λ F G, NaturalTransformation F G,
 
   identity := λ F, IdentityNaturalTransformation F,
-  compose  := @vertical_composition_of_NaturalTransformations C D,
-
-  left_identity  := ♯,
-  right_identity := ♯,
-  associativity  := ♯
+  compose  := @vertical_composition_of_NaturalTransformations C D
 }
 
 definition whiskering_on_left
@@ -34,19 +30,13 @@ definition whiskering_on_left
 {
   onObjects     := λ F, {
     onObjects     := λ G, FunctorComposition F G,
-    onMorphisms   := λ _ _ α, whisker_on_left F α,
-    identities    := ♯,
-    functoriality := ♯
+    onMorphisms   := λ _ _ α, whisker_on_left F α
   },
   onMorphisms   := λ F G τ, {
     components := λ H, {
-      components := λ c, H.onMorphisms (τ.components c),
-      naturality := ♯
-    },
-    naturality := ♯
-  },
-  identities    := ♯,
-  functoriality := ♯
+      components := λ c, H.onMorphisms (τ.components c)
+    }
+  }
 }
 
 definition whisker_on_left_functor
@@ -65,18 +55,12 @@ definition whiskering_on_right
   onObjects     := λ H, {
     onObjects     := λ F, FunctorComposition F H,
     onMorphisms   := λ _ _ α, whisker_on_right α H,
-    identities    := ♯,
-    functoriality := ♯
   },
   onMorphisms   := λ G H τ, {
     components := λ F, {
-      components := λ c, τ.components (F.onObjects c),
-      naturality := ♯
-    },
-    naturality := ♯
-  },
-  identities    := ♯,
-  functoriality := ♯
+      components := λ c, τ.components (F.onObjects c)
+    }
+  }
 }
 
 definition whisker_on_right_functor

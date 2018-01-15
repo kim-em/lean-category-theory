@@ -11,10 +11,12 @@ namespace categories.isomorphism
 structure Isomorphism ( C: Category ) ( X Y : C.Obj ) :=
   (morphism : C.Hom X Y)
   (inverse : C.Hom Y X)
-  (witness_1 : C.compose morphism inverse = C.identity X)
-  (witness_2 : C.compose inverse morphism = C.identity Y)
+  (witness_1 : C.compose morphism inverse = C.identity X . obvious)
+  (witness_2 : C.compose inverse morphism = C.identity Y . obvious)
 
-attribute [simp,ematch] Isomorphism.witness_1 Isomorphism.witness_2
+make_lemma Isomorphism.witness_1
+make_lemma Isomorphism.witness_2
+attribute [ematch] Isomorphism.witness_1.lemma Isomorphism.witness_2.lemma
 
 instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } : has_coe (Isomorphism C X Y) (C.Hom X Y) :=
   { coe := Isomorphism.morphism }
@@ -22,9 +24,7 @@ instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } : has
 definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isomorphism C X Y ) ( β : Isomorphism C Y Z ) : Isomorphism C X Z :=
 {
   morphism := C.compose α.morphism β.morphism,
-  inverse := C.compose β.inverse α.inverse,
-  witness_1 := ♮,
-  witness_2 := ♮
+  inverse := C.compose β.inverse α.inverse
 }
 
 @[applicable] lemma {u1 v1} Isomorphism_pointwise_equal
@@ -38,6 +38,7 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
     simp at w,    
     have p : g = k,
       begin
+        dsimp at *,
         -- PROJECT why can't we automate this?
         rewrite ← C.left_identity k,
         rewrite ← wα2,
@@ -52,17 +53,17 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
 definition Isomorphism.reverse { C : Category } { X Y : C.Obj } ( I : Isomorphism C X Y ) : Isomorphism C Y X :=
   {
     morphism  := I.inverse,
-    inverse   := I.morphism,
-    witness_1 := I.witness_2,
-    witness_2 := I.witness_1
+    inverse   := I.morphism
   }
 
 structure is_Isomorphism { C : Category } { X Y : C.Obj } ( morphism : C.Hom X Y ) :=
   (inverse : C.Hom Y X)
-  (witness_1 : C.compose morphism inverse = C.identity X)
-  (witness_2 : C.compose inverse morphism = C.identity Y)
+  (witness_1 : C.compose morphism inverse = C.identity X . obvious)
+  (witness_2 : C.compose inverse morphism = C.identity Y . obvious)
 
-attribute [simp,ematch] is_Isomorphism.witness_1 is_Isomorphism.witness_2
+make_lemma is_Isomorphism.witness_1
+make_lemma is_Isomorphism.witness_2
+attribute [ematch] is_Isomorphism.witness_1.lemma is_Isomorphism.witness_2.lemma
 
 instance is_Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } ( f : C.Hom X Y ): has_coe (is_Isomorphism f) (C.Hom X Y) :=
   { coe := λ _, f }
