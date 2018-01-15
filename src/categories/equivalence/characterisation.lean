@@ -168,7 +168,7 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
                 = fg' : full.witness fg'
             ... = (ε_mor X ⟩D⟩ f) ⟩D⟩ D.identity Y ⟩D⟩ (g ⟩D⟩ ε_inv Z) : ♮
             ... = (ε_mor X ⟩D⟩ f) ⟩D⟩ (ε_inv Y ⟩D⟩ ε_mor Y) ⟩D⟩ (g ⟩D⟩ ε_inv Z)
-                : by rewrite (ess_surj Y).2.witness_2
+                : by rewrite Isomorphism.witness_2.lemma (ess_surj Y).2
             ... = f' ⟩D⟩ g' : by repeat_at_least_once { rewrite ← D.associativity }
             ... = F.onMorphisms (full.preimage f') ⟩D⟩ F.onMorphisms (full.preimage g')
                 : by rewrite [full.witness f', full.witness g']
@@ -182,7 +182,7 @@ section FullyFaithfulEssentiallySurjective_Functors_are_Equivalences
           = f' ⟩D⟩ ε_mor Y
           : by rewrite full.witness f'
       ... = ε_mor X ⟩D⟩ f
-          : by rewrite [D.associativity, (ess_surj Y).2.witness_2, D.right_identity]
+          : by rewrite [D.associativity, Isomorphism.witness_2.lemma (ess_surj Y).2, D.right_identity]
 
   definition ε : NaturalIsomorphism (FunctorComposition G F) (IdentityFunctor D) :=
     NaturalIsomorphism.from_components (λ X, (ess_surj X).2) (λ {X Y : D.Obj}, ε_natural)

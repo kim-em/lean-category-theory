@@ -87,7 +87,6 @@ begin
   have p' := congr_arg NaturalTransformation.components p,
   have p'' := congr_fun p' X,
   tidy,
-  rewrite bifunctor_naturality,
   rewrite ← D.associativity,
   rewrite p'',
 end
@@ -140,9 +139,9 @@ private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category
                          exact (Y.cone_maps j).components X, 
                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
                        end,
-        naturality := by tidy {hints:=[7, 6, 7, 9, 18, 14, 9, 10, 9, 10, 25]} 
+        naturality := by tidy {hints:=[9, 7, 6, 7, 9, 18, 14, 9, 10, 9, 10, 25]} 
       },
-      commutativity := by tidy {hints:=[7, 6, 7, 9, 10]} 
+      commutativity := by tidy {hints:=[9, 7, 6, 7, 9, 10]} 
     }
 
 -- This would be a bit dangerous, but we just use it in the next construction.
