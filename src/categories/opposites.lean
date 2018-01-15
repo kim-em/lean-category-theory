@@ -11,7 +11,7 @@ open categories.functor
 open categories.products
 open categories.types
 
-namespace categories
+namespace categories.opposites
 
 definition Opposite ( C : Category ) : Category :=
 {
@@ -60,4 +60,4 @@ local attribute [reducible] Opposite
   { X : C.Obj } :
     F.onMorphisms (C.identity X) = D.identity (F.onObjects X) := ♮
 
-end categories
+end categories.opposites
