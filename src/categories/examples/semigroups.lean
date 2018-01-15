@@ -54,4 +54,41 @@ definition trivial_semigroup: semigroup punit := {
   mul_assoc := ♮
 }
 
+-- PROJECT
+
+-- instance Semigroups_has_TerminalObject : has_TerminalObject CategoryOfSemigroups := {
+--   terminal_object := {
+--     terminal_object := ⟨ punit, trivial_semigroup ⟩,
+--     morphism_to_terminal_object_from := ♯,
+--     uniqueness_of_morphisms_to_terminal_object := begin tidy, admit end
+--   }
+-- }
+
+-- instance Semigroups_has_BinaryProducts : has_BinaryProducts CategoryOfSemigroups := {
+--   binary_product := λ s t, {
+--     product             := ⟨ s.1 × t.1, semigroup_product s.2 t.2 ⟩ ,
+--     left_projection     := {
+--       map := prod.fst,
+--       multiplicative := ♯
+--     },
+--     right_projection    := {
+--       map := prod.snd,
+--       multiplicative := ♯
+--     },
+--     map                 := λ r f g, {
+--       map := λ x, (f.map x, g.map x),
+--       multiplicative := ♯ 
+--     },
+--     left_factorisation  := ♯,
+--     right_factorisation := ♯,
+--     uniqueness          := λ r f g w₁ w₂, begin
+--       apply semigroup_morphism_pointwise_equality,
+--       intro x,
+--       apply pairs_componentwise_equal,
+--       admit,
+--       admit
+--     end
+--   }
+-- }
+
 end categories.examples.semigroups
