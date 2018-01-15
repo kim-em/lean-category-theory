@@ -53,6 +53,33 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
 }
 attribute [instance] Types_has_Equalizers
 
+-- Even though this can be automatically generated, this is a much cleaner version.
+definition {u} Types_has_BinaryProducts : has_BinaryProducts CategoryOfTypes.{u} := {
+  binary_product := λ X Y, {
+    product             := X × Y,
+    left_projection     := prod.fst,
+    right_projection    := prod.snd,
+    map                 := λ _ f g z, (f z, g z),
+    left_factorisation  := by tidy,
+    right_factorisation := by tidy,
+    uniqueness          := by tidy
+  }
+}
+attribute [instance] Types_has_BinaryProducts
+
+definition {u} Types_has_BinaryCoproducts : has_BinaryCoproducts CategoryOfTypes.{u} := {
+  binary_coproduct := λ X Y, {
+    coproduct           := X ⊕ Y,
+    left_inclusion     := sum.inl,
+    right_inclusion    := sum.inr,
+    map                 := λ _ f g z, sum.cases_on z f g,
+    left_factorisation  := by tidy,
+    right_factorisation := by tidy,
+    uniqueness          := begin tidy, induction x, tidy, end
+  }
+}
+attribute [instance] Types_has_BinaryCoproducts
+
 -- Does Types have coequalizers? Quotients are hard.
 -- definition {u} relation_from_functions { α β : Type u } ( f g : α → β ) : β → β → Prop :=
 --   λ b0 bn : β, ∃ l : list α, 
