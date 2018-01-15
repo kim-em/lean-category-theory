@@ -51,24 +51,27 @@ def Top : Category :=
 
 local attribute [applicable] set.subset.refl
 
-structure OpenSets { α } ( X : topological_space α ) := 
+structure OpenSet { α } ( X : topological_space α ) := 
  ( underlying_set : set α )
  ( is_open : X.is_open underlying_set )
 
-attribute [applicable] OpenSets.is_open
+attribute [applicable] OpenSet.is_open
 
 local attribute [applicable] topological_space.is_open_inter
 
-instance OpenSets.has_inter { α } { X : topological_space α } : has_inter (OpenSets X) := {
+instance OpenSet.has_inter { α } { X : topological_space α } : has_inter (OpenSet X) := {
   inter := λ U V, ⟨ U.underlying_set ∩ V.underlying_set, ♯ ⟩ 
 }
-instance OpenSets.has_subset { α } { X : topological_space α } : has_subset (OpenSets X) := {
+instance OpenSet.has_subset { α } { X : topological_space α } : has_subset (OpenSet X) := {
   subset := λ U V, U.underlying_set ⊆ V.underlying_set
+}
+instance OpenSet.mem { α } { X : topological_space α } : has_mem α (OpenSet X) := {
+  mem := λ a V, a ∈ V.underlying_set
 }
 
 def topological_space.to_category { α : Type } ( X : topological_space α ) : Category :=
 {
-  Obj            := OpenSets X,
+  Obj            := OpenSet X,
   Hom            := λ U V, plift (U ⊆ V),
   identity       := ♯,
   compose        := λ _ _ _ f g, begin tidy, apply set.subset.trans f g end,
@@ -77,7 +80,7 @@ def topological_space.to_category { α : Type } ( X : topological_space α ) : C
   associativity  := ♯
 }
 
-instance topological_space.to_category.has_inter { α } ( X : topological_space α )  : has_inter ((topological_space.to_category X).Obj)  := OpenSets.has_inter 
-instance topological_space.to_category.has_subset { α } ( X : topological_space α ) : has_subset ((topological_space.to_category X).Obj) := OpenSets.has_subset
+instance topological_space.to_category.has_inter { α } ( X : topological_space α )  : has_inter ((topological_space.to_category X).Obj)  := OpenSet.has_inter 
+instance topological_space.to_category.has_subset { α } ( X : topological_space α ) : has_subset ((topological_space.to_category X).Obj) := OpenSet.has_subset
 
 end categories.examples.topological_spaces
