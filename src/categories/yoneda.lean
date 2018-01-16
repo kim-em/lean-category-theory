@@ -52,41 +52,47 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
    ( Z : F.onObjects Y ) :
      G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
--- FIXME restore this
--- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
--- begin
---   tidy {hints:=[9, 8, 9, 8, 7, 9, 7, 12, 11, 9, 12, 17, 18, 17, 18, 17, 18, 17, 18, 20, 18, 17, 18, 19, 18, 20, 18, 17, 18, 17, 18, 17, 18, 19, 18, 20, 18, 17, 18, 20, 22, 20, 23, 22, 20, 23]},
---   exact ((a.components _) (C.identity _)),
---   tidy {hints:=[9, 10, 20]},
---   exact ((X_fst.onMorphisms a_1) a),
---   tidy,
--- end
+theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+begin
+  tidy {hints:=[9, 8, 9, 8, 7, 9, 7, 12, 11, 9, 12, 17, 18, 17, 18, 17, 18, 17, 18, 20, 18, 17, 18, 19, 18, 20, 18, 17, 18, 17, 18, 17, 18, 19, 18, 20, 18, 17, 18, 20, 22, 20, 23, 22, 20, 23]},
+  exact ((a.components _) (C.identity _)),
+  tidy {hints:=[9, 10, 20]},
+  exact ((X_fst.onMorphisms a_1) a),
+  -- PROJECT Can't all of this be automated? What's getting in the way?
+  have p := X_fst.functoriality_lemma x f,
+  tidy,
+  have p := f_fst.naturality_lemma x_1,
+  tidy,
+  have p := x.naturality_lemma x_1,
+  tidy,
+  have p := X_fst.identities_lemma,
+  tidy
+end
 
--- theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
--- begin
---   unfold Embedding,
---   fsplit,
---   {
---     -- Show it is full
---     fsplit,
---     {
---         tidy,
---         exact (f.components X) (C.identity X)
---     },
---     {
---         tidy,
---         have q := congr_fun (f.naturality x) (C.identity X),
---         tidy,
---     }
---   },
---   {
---     -- Show it is faithful
---     tidy,
---     have q := congr_arg NaturalTransformation.components p,
---     have q' := congr_fun q X,
---     have q'' := congr_fun q' (C.identity X),
---     tidy,
---   }
--- end
+theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
+begin
+  unfold Embedding,
+  fsplit,
+  {
+    -- Show it is full
+    fsplit,
+    {
+        tidy,
+        exact (f.components X) (C.identity X)
+    },
+    {
+        tidy,
+        have q := congr_fun (f.naturality x) (C.identity X),
+        tidy,
+    }
+  },
+  {
+    -- Show it is faithful
+    tidy,
+    have q := congr_fun p X,
+    have q' := congr_fun q (C.identity X),
+    tidy,
+  }
+end
 
 end categories.yoneda
