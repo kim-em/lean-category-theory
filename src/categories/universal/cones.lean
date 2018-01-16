@@ -17,14 +17,14 @@ structure Cone { J C : Category } ( F : Functor J C ) :=
   ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (cone_maps j) (F.onMorphisms f) = cone_maps k . obvious )
 
 make_lemma Cone.commutativity
-attribute [ematch] Cone.commutativity.lemma
+attribute [ematch] Cone.commutativity_lemma
 
 structure ConeMorphism { J C : Category } { F : Functor J C } ( X Y : Cone F ) :=
   ( cone_morphism      : C.Hom X.cone_point Y.cone_point )
   ( commutativity : Π j : J.Obj, C.compose cone_morphism (Y.cone_maps j) = (X.cone_maps j) . obvious )
 
 make_lemma ConeMorphism.commutativity
-attribute [ematch] ConeMorphism.commutativity.lemma
+attribute [ematch] ConeMorphism.commutativity_lemma
 
 @[applicable] lemma ConeMorphism_componentwise_equal
   { J C : Category } { F : Functor J C } { X Y : Cone F }
@@ -60,14 +60,14 @@ structure Cocone { J C : Category } ( F : Functor J C ) :=
   ( commutativity : Π { j k : J.Obj }, Π f : J.Hom j k, C.compose (F.onMorphisms f) (cocone_maps k) = cocone_maps j . obvious )
 
 make_lemma Cocone.commutativity
-attribute [ematch] Cocone.commutativity.lemma
+attribute [ematch] Cocone.commutativity_lemma
 
 structure CoconeMorphism { J C : Category } { F : Functor J C } ( X Y : Cocone F ) :=
   ( cocone_morphism      : C.Hom X.cocone_point Y.cocone_point )
   ( commutativity : Π j : J.Obj, C.compose (X.cocone_maps j) cocone_morphism = (Y.cocone_maps j) . obvious )
 
 make_lemma CoconeMorphism.commutativity
-attribute [ematch] CoconeMorphism.commutativity.lemma
+attribute [ematch] CoconeMorphism.commutativity_lemma
 
 @[applicable] lemma CoconeMorphism_componentwise_equal
   { J C : Category } { F : Functor J C } { X Y : Cocone F }

@@ -55,11 +55,11 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 -- FIXME restore this
 -- theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 -- begin
---   tidy {hints:=[8, 7, 8, 7, 6, 8, 6, 11, 10, 8, 11, 15, 16, 15, 16, 15, 16, 15, 16, 18, 17, 16, 15, 16, 15, 16, 15, 16, 18, 16, 17, 16, 15, 16, 18, 16, 21, 20, 18, 21]},
+--   tidy {hints:=[9, 8, 9, 8, 7, 9, 7, 12, 11, 9, 12, 17, 18, 17, 18, 17, 18, 17, 18, 20, 18, 17, 18, 19, 18, 20, 18, 17, 18, 17, 18, 17, 18, 19, 18, 20, 18, 17, 18, 20, 22, 20, 23, 22, 20, 23]},
 --   exact ((a.components _) (C.identity _)),
---   tidy {hints:=[2, 8, 9]},
---   exact ((fst.onMorphisms a_1) a),
---   tidy {hints:=[2, 9, 3, 2, 9, 3, 2, 9, 2, 9, 3]},
+--   tidy {hints:=[9, 10, 20]},
+--   exact ((X_fst.onMorphisms a_1) a),
+--   tidy,
 -- end
 
 -- theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=

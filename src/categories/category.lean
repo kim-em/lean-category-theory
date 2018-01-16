@@ -27,7 +27,7 @@ structure {u v} Category :=
 make_lemma Category.left_identity
 make_lemma Category.right_identity
 make_lemma Category.associativity
-attribute [ematch] Category.associativity.lemma
+attribute [ematch] Category.associativity_lemma
 
 -- attribute [applicable] Category.identity -- No, this is a terrible idea. Sometimes the identity is not the answer. -- PROJECT 'semiapplicable' lemmas that only get applied when there are no dependent goals.
 

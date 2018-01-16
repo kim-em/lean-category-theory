@@ -21,8 +21,8 @@ structure {u1 v1 u2 v2} Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }
 
 make_lemma Functor.identities
 make_lemma Functor.functoriality
-attribute [ematch] Functor.identities.lemma
-attribute [ematch] Functor.functoriality.lemma
+attribute [ematch] Functor.identities_lemma
+attribute [ematch] Functor.functoriality_lemma
 
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.
