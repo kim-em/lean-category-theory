@@ -27,17 +27,12 @@ definition IdempotentCompletion ( C: Category ) : Category :=
   Obj            := Idempotent C,
   Hom            := λ X Y, { f : C.Hom X.object Y.object // C.compose X.idempotent f = f ∧ C.compose f Y.idempotent = f },
   identity       := λ X, ⟨ X.idempotent, ♮ ⟩,
-  compose        := λ X Y Z f g, ⟨ C.compose f.val g.val, ♮ ⟩,
-  left_identity  := ♯,
-  right_identity := ♯,
-  associativity  := ♮
+  compose        := λ X Y Z f g, ⟨ C.compose f.val g.val, ♮ ⟩
 }
 
 definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (IdempotentCompletion C) := {
   onObjects     := λ X, ⟨ X, C.identity X, ♮ ⟩,
-  onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩,
-  identities    := ♮,
-  functoriality := ♮
+  onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩
 }
 
 -- -- PROJECT
@@ -86,16 +81,12 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
 private def IdempotentCompletion_idempotent_functor ( C : Category ) : Functor (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 {
     onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin tidy, induction X, tidy end ⟩,
-    onMorphisms   := λ X Y f, ⟨ f.val.val, ♯ ⟩,
-    identities    := ♯,
-    functoriality := ♯
+    onMorphisms   := λ X Y f, ⟨ f.val.val, ♯ ⟩
 }
 private def IdempotentCompletion_idempotent_inverse ( C : Category ) : Functor (IdempotentCompletion C) (IdempotentCompletion (IdempotentCompletion C)) :=
 {
     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
-    onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩,
-    identities    := ♯,
-    functoriality := ♯
+    onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩
 }
 
 -- PROJECT prove these lemmas about idempotent completion
@@ -134,9 +125,7 @@ definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Funct
                                 have p' := congr_arg subtype.val p, 
                                 rewrite f_property_right at p', 
                                 exact eq.symm p',
-                              end ⟩,
-  identities    := ♯,
-  functoriality := ♯, 
+                              end ⟩
 }
 
 -- lemma Functor_from_IdempotentCompletion_determined_by_restriction 

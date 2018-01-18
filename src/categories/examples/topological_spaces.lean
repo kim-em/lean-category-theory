@@ -43,15 +43,6 @@ def identity { α : Type } ( t : topological_space α ) : morphism t t := ⟨ id
 
 @[simp] lemma id_value { α : Type } ( t : topological_space α ) (x : α) : identity t x = x := rfl
 
-@[simp] lemma left_identity { α β : Type } { s : topological_space α } { t : topological_space β }
-( f: morphism s t ) : (identity t) ∘ f = f := by cases f; simp; refl
-
-@[simp] lemma right_identity { α β : Type } { s : topological_space α } { t : topological_space β }
-( f: morphism s t ) : f ∘ (identity s) = f := by cases f; simp; refl
-
-@[ematch] lemma associativity {α β γ δ : Type } {t : topological_space α} {s : topological_space β} {u : topological_space γ} {v : topological_space δ}
-(f : morphism s t) (g : morphism t u) (h : morphism u v) : h ∘ (g ∘ f) = (h ∘ g) ∘ f := by simp ; refl
-
 def Top : Category :=
 {
   Obj            := Σ α : Type, topological_space α,
