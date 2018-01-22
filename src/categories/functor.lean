@@ -15,9 +15,9 @@ structure {u1 v1 u2 v2} Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }
   (onMorphisms : Π { X Y : C.Obj },
                 C.Hom X Y → D.Hom (onObjects X) (onObjects Y))
   (identities : ∀ (X : C.Obj),
-    onMorphisms (C.identity X) = D.identity (onObjects X) . obvious)
+    onMorphisms (C.identity X) = D.identity (onObjects X) . tidy' )
   (functoriality : ∀ { X Y Z : C.Obj } (f : C.Hom X Y) (g : C.Hom Y Z),
-    onMorphisms (C.compose f g) = D.compose (onMorphisms f) (onMorphisms g) . obvious)
+    onMorphisms (C.compose f g) = D.compose (onMorphisms f) (onMorphisms g) . tidy' )
 
 make_lemma Functor.identities
 make_lemma Functor.functoriality

@@ -14,7 +14,7 @@ namespace categories.natural_transformation
 structure {u1 v1 u2 v2} NaturalTransformation { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F G : Functor C D ) :=
   (components: Π X : C.Obj, D.Hom (F.onObjects X) (G.onObjects X))
   (naturality: ∀ { X Y : C.Obj } (f : C.Hom X Y),
-     D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f) . obvious)
+     D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f) . tidy')
 
 make_lemma NaturalTransformation.naturality
 attribute [ematch] NaturalTransformation.naturality_lemma

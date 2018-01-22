@@ -87,8 +87,6 @@ begin
   have p' := congr_arg NaturalTransformation.components p,
   have p'' := congr_fun p' X,
   tidy,
-  rewrite ← D.associativity,
-  rewrite p'',
 end
 
 @[simp] lemma cone_in_functor_category_naturality
@@ -135,11 +133,11 @@ local attribute [reducible] universal.morphism_to_terminal_object_cone_point
 private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] { F : Functor J (FunctorCategory C D) } ( Y : Cone F ) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
       cone_morphism := {
         components := begin
-                         tidy {hints:=[7, 6, 7, 9, 18, 20]},  -- this will use morphism_to_terminal_object_cone_point
+                         tidy {hints:=[7, 6, 7, 9, 20, 22]},  -- this will use morphism_to_terminal_object_cone_point
                          exact (Y.cone_maps j).components X, 
                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
                        end,
-        naturality := by tidy {hints:=[9, 7, 6, 7, 9, 18, 14, 9, 10, 9, 10, 25]} 
+        naturality := by tidy {hints:=[9, 7, 6, 7, 9, 20, 16, 9, 10, 9, 10, 14]} 
       },
       commutativity := by tidy {hints:=[9, 7, 6, 7, 9, 10]} 
     }

@@ -54,7 +54,7 @@ definition WalkingPair' : Category := {
   Obj := Two,
   Hom := λ X Y, if X = Y then unit else empty,
   identity       := ♯,
-  compose        := begin tidy, simp at a, induction a, tidy, simp at a_1, induction a_1, tidy, simp at a_1, induction a_1, tidy,  end
+  compose        := begin tidy, simp at a, induction a, simp at a_1, induction a_1, simp at a_1, induction a_1, simp at a, induction a end
 }
 definition WalkingPair : Category := {
   Obj := bool,

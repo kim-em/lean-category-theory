@@ -11,8 +11,8 @@ namespace categories.isomorphism
 structure Isomorphism ( C: Category ) ( X Y : C.Obj ) :=
   (morphism : C.Hom X Y)
   (inverse : C.Hom Y X)
-  (witness_1 : C.compose morphism inverse = C.identity X . obvious)
-  (witness_2 : C.compose inverse morphism = C.identity Y . obvious)
+  (witness_1 : C.compose morphism inverse = C.identity X . tidy')
+  (witness_2 : C.compose inverse morphism = C.identity Y . tidy')
 
 make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
@@ -58,8 +58,8 @@ definition Isomorphism.reverse { C : Category } { X Y : C.Obj } ( I : Isomorphis
 
 structure is_Isomorphism { C : Category } { X Y : C.Obj } ( morphism : C.Hom X Y ) :=
   (inverse : C.Hom Y X)
-  (witness_1 : C.compose morphism inverse = C.identity X . obvious)
-  (witness_2 : C.compose inverse morphism = C.identity Y . obvious)
+  (witness_1 : C.compose morphism inverse = C.identity X . tidy')
+  (witness_2 : C.compose inverse morphism = C.identity Y . tidy')
 
 make_lemma is_Isomorphism.witness_1
 make_lemma is_Isomorphism.witness_2

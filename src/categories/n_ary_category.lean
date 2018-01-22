@@ -33,7 +33,7 @@ attribute [simp,ematch] n_ary_Category.associativity
 -- begin
 --   rewrite ← C.compose_length_one_path e,
 --   rewrite ← C.associativity,
---   blast,
+--   tidy,
 --   admit
 -- end
 
@@ -41,7 +41,7 @@ attribute [simp,ematch] n_ary_Category.associativity
 --     C.compose (@compose_each_path C.graph (@n_ary_Category.compose C) X Y p) = C.compose (concatenate_path_of_paths p) :=
 --     begin
 --       induction p,
---       blast,
+--       tidy,
 --       unfold compose_each_path._main,
 --       unfold concatenate_path_of_paths,
 --       rewrite C.associativity,
@@ -72,7 +72,7 @@ definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Catego
                       rewrite ← C.compose_empty_path, 
                       rewrite ← C.compose_length_one_path f,  
                       rewrite ← C.associativity,
-                      blast
+                      tidy
                     end,
   right_identity := begin
                       dsimp,
@@ -80,7 +80,7 @@ definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Catego
                       rewrite ← C.compose_empty_path, 
                       rewrite ← C.compose_length_one_path f,  
                       rewrite ← C.associativity,
-                      blast                    
+                      tidy                    
                     end,
   associativity  := begin
                       dsimp,
@@ -104,17 +104,17 @@ definition {u v} n_ary_Category_to_Category ( C: n_ary_Category.{u v} ) : Catego
 --   compose_empty_path := ♯,
 --   compose_length_one_path := begin tidy, admit end,
 --   associativity      := begin
---                           blast,
+--                           tidy,
 --                           induction p,
 --                           { -- if p was nil
---                             blast,
+--                             tidy,
 --                             admit
 --                           },
 --                           { -- if p was a path
 --                             unfold graphs.concatenate_paths,
 --                             unfold compose_path,
 --                             rewrite ih_1 q,
---                             blast
+--                             tidy
 --                           }
 --                         end
 -- }

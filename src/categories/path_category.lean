@@ -69,7 +69,7 @@ definition Functor.from_GraphHomomorphism { G : Graph } { C : Category } ( H : G
                       let p := f_ih g,
                       unfold concatenate_paths,
                       unfold path_to_morphism,
-                      blast,
+                      tidy,
                      }
                    end
 }

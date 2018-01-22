@@ -33,7 +33,7 @@ def compose { α β γ : Type } { s : topological_space α } { t : topological_s
 ( f: morphism s t ) ( g: morphism t u )  : morphism s u :=
 {  
   map        := λ x, g (f x),
-  continuity := continuous_compose f.continuity g.continuity
+  continuity := continuous.comp f.continuity g.continuity
 }
 
 local notation g ∘ f := compose f g

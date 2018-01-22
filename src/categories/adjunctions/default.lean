@@ -28,7 +28,7 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
   begin
     induction A,
     induction B,
-    blast
+    tidy
   end
 
 -- PROJECT: from an adjunction construct the triangles as equations between natural transformations.
@@ -56,8 +56,8 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
   ( A : Adjunction L R ) 
   { X Y : C.Obj } ( f : C.Hom X Y ) : C.compose (A.unit.components X) (R.onMorphisms (L.onMorphisms f)) = C.compose f (A.unit.components Y) :=
   begin
-    refine ( cast _ (A.unit.naturality f) ),
-    blast
+    refine ( cast _ (A.unit.naturality f) ), -- TODO can this be done with `its`
+    tidy
   end
 
 @[simp,ematch] lemma Adjunction.counit_naturality
@@ -67,7 +67,7 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
   { X Y : D.Obj } ( f : D.Hom X Y ) : D.compose (L.onMorphisms (R.onMorphisms f)) (A.counit.components Y) = D.compose (A.counit.components X) f :=
   begin
     refine ( cast _ (A.counit.naturality f) ),
-    blast
+    tidy
   end
 
 -- PROJECT examples

@@ -54,19 +54,41 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
 
 theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
-  tidy {hints:=[9, 8, 9, 8, 7, 9, 7, 12, 11, 9, 12, 17, 18, 17, 18, 17, 18, 17, 18, 20, 18, 17, 18, 19, 18, 20, 18, 17, 18, 17, 18, 17, 18, 19, 18, 20, 18, 17, 18, 20, 22, 20, 23, 22, 20, 23]},
+  fsplit,
+  fsplit,
+  intros,
+  dsimp',
+  intros,
+  dsimp_all',
+  automatic_induction,
+  dsimp',
+  dsimp_all',
+
   exact ((a.components _) (C.identity _)),
-  tidy {hints:=[9, 10, 20]},
+
+  dsimp',
+  intros,
+  fapply funext,
+  intros,
+  automatic_induction,
+  dsimp',
+  simp,
+  fsplit,
+  intros,
+  dsimp',
+  intros,
+  fsplit,
+  intros,
+  dsimp',
+  intros,
+  dsimp_all',
+  automatic_induction,
+  dsimp',
+  dsimp_all',
+
   exact ((X_fst.onMorphisms a_1) a),
-  -- PROJECT Can't all of this be automated? What's getting in the way?
-  have p := X_fst.functoriality_lemma x f,
-  tidy,
-  have p := f_fst.naturality_lemma x_1,
-  tidy,
-  have p := x.naturality_lemma x_1,
-  tidy,
-  have p := X_fst.identities_lemma,
-  tidy
+
+  tidy {hints:=[9, 7, 6, 7, 12, 11, 9, 10, 3, 9, 7, 6, 7, 6, 7, 6, 7, 9, 11, 9, 10, 3, 6, 7, 6, 7, 6, 7, 6, 7, 9, 12, 11, 9, 10, 6, 7, 6, 7, 9, 12, 11, 9, 10, 3]},
 end
 
 theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=

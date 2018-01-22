@@ -85,7 +85,7 @@ instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers
                          cone_point := Z,
                          cone_maps := λ j : Two, C.compose a (lim.terminal_object.cone_maps j),
                          commutativity := begin
-                                            tidy, any_goals { induction j }, any_goals { induction f_1 }, tidy,
+                                            tidy, any_goals { induction f_1 }, tidy,
                                             {
                                               have c := lim.terminal_object.commutativity,
                                               have c₁ := @c Two._0 Two._1 ff,
@@ -146,7 +146,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
         cone_maps     := λ j : J.Obj, C.compose equalizer.inclusion (product_over_objects.projection j),
         commutativity := λ j k f, begin
                                    have p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,                                
-                                   blast,                                   
+                                   tidy,                                   
                                   end
       },
       morphism_to_terminal_object_from := λ cone : Cone F, {
