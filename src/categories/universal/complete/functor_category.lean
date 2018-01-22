@@ -162,7 +162,7 @@ instance Limits_in_FunctorCategory ( C D : Category ) [ cmp : Complete D ] : Com
   limitCone := λ J F, {
     terminal_object                            := LimitObject_in_FunctorCategory F,
     morphism_to_terminal_object_from           := λ Y, morphism_to_LimitObject_in_FunctorCategory Y,
-    uniqueness_of_morphisms_to_terminal_object := by tidy {hints:=[7, 6, 6, 7, 6, 7, 9, 12, 18, 14, 9, 10, 6, 3]}
+    uniqueness_of_morphisms_to_terminal_object := by tidy {hints:=[7, 6, 6, 7, 6, 7, 9, 12, 20, 16, 9, 10, 6, 3]}
   }
 }
 
