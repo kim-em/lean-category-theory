@@ -49,7 +49,7 @@ attribute [instance] unit_or_empty_subsingleton
 attribute [instance] unit_or_empty_subsingleton'
 local attribute [applicable] subsingleton.elim
 
--- TODO automation? allow induction on booleans?
+-- TODO why do we have to do `simp at a` here?
 definition WalkingPair' : Category := {
   Obj := Two,
   Hom := λ X Y, if X = Y then unit else empty,
@@ -63,6 +63,11 @@ definition WalkingPair : Category := {
   compose        := begin tidy, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, induction a_1,induction a,induction a, induction a_1, end
 }
 
+lemma foo (p : ite (tt = ff) unit empty) : false :=
+begin
+simp at p, -- FIXME this works, but `simp at *` doesn't
+induction p
+end
 
 definition Pair_functor { C : Category } ( α β : C.Obj ) : Functor WalkingPair C :=
 {

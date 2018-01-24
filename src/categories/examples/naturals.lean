@@ -8,49 +8,34 @@ namespace categories.examples.naturals
 open categories
 open categories.functor
 
-@[simp]
-lemma nat_add_left_cancel_iff (a b : ℕ) : a + b = a ↔ b = 0 :=
-@add_left_cancel_iff _ _ a b 0
-
-@[simp]
-lemma nat_add_right_cancel_iff (a b : ℕ) : a + b = b ↔ a = 0 :=
+@[applicable] private lemma add_zero (a b) (p : b = 0) : (a + b = a) := 
 begin
-  have h := @add_right_cancel_iff _ _ b a 0,
-  simp at h,
-  exact h
+rw p,
+simp
+end
+@[simp] private lemma zero_add (a : ℕ) : (nat.add 0 a) = a := 
+begin
+-- this is ridiculous
+induction a,
+refl,
+unfold nat.add,
+rw a_ih,
 end
 
--- @[ematch]
--- lemma nat_add_associativity (a b c : ℕ) : nat.add (nat.add a b) c = nat.add a (nat.add b c) :=
--- begin
---   exact nat.add_assoc a b c
--- end
--- @[ematch]
--- lemma nat_add_commutativity (a b : ℕ) : nat.add a b = nat.add a b := ♮
+-- PROJECT This reducible is gross, but without it we can't see what NCategory.Hom is...
+@[reducible] definition ℕCategory : Category :=
+  {
+        Obj := unit,
+        Hom := λ _ _, ℕ,
+        identity := _, -- Notice we don't specify the identity here!
+        compose  := λ _ _ _ n m, n + m
+  }  
 
--- FIXME This reducible is gross, but without it we can't see what NCategory.Hom is...
--- @[reducible] definition ℕCategory : Category :=
---   begin
---     refine {
---         Obj := unit,
---         Hom := λ _ _, ℕ,
---         identity := _, -- Notice we don't specify the identity here: `refine` works it out for us.
---         compose  := λ _ _ _ n m, n + m,
-
---         left_identity  := _,
---         right_identity := _,
---         associativity  := _
---     },
---     all_goals { blast }
---   end
-
--- -- @[simp] lemma ℕCategory.hom { X Y : ℕCategory.Obj } : ℕCategory.Hom X Y = ℕ := ♮
-
--- definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
---   { onObjects   := id,
---     onMorphisms := λ _ _ n, n + n, -- TODO this is ugly.
---     identities    := ♯,
---     functoriality := ♯
---   }
+definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
+  { onObjects   := id,
+    onMorphisms := λ _ _ n, n + n, -- PROJECT this is ugly: why can't we write `2 * n`
+    identities    := ♯,
+    functoriality := ♯
+  }
 
 end categories.examples.naturals

@@ -10,8 +10,6 @@ open categories.graphs
 
 namespace categories
 
-meta def tidy' : tactic unit := tidy -- getting rid of the optional paramater
-
 structure {u v} Category :=
   ( Obj : Type u )
   ( Hom : Obj → Obj → Type v )

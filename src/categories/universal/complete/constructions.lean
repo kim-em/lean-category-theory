@@ -24,8 +24,7 @@ private definition {u v} Cone_from_map_to_limit
   ( f : C.Hom Z L.terminal_object.cone_point ) : Cone F :=
 {
   cone_point    := Z,
-  cone_maps     := λ j, C.compose f (L.terminal_object.cone_maps j),
-  commutativity := ♯ 
+  cone_maps     := λ j, C.compose f (L.terminal_object.cone_maps j)
 }
 private definition {u v} ConeMorphism_from_map_to_limit
   { C : Category.{u v} }
@@ -35,8 +34,7 @@ private definition {u v} ConeMorphism_from_map_to_limit
   { Z : C.Obj } 
   ( f : C.Hom Z L.terminal_object.cone_point ) : ConeMorphism (Cone_from_map_to_limit f) L.terminal_object :=
 {
-  cone_morphism := f,
-  commutativity := ♯ 
+  cone_morphism := f
 }
 
 open categories.util.finite.Two
@@ -48,13 +46,8 @@ instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers
     inclusion     := lim.terminal_object.cone_maps Two._0,
     witness       := let commutativity := @Cone.commutativity _ _ _ lim.terminal_object Two._0 Two._1 in 
                      begin
-                       have fw := commutativity tt,
-                       have gw := commutativity ff,
-                       -- TODO this is suffering from https://github.com/leanprover/lean/issues/1889
-                       dsimp at fw {unfold_reducible := tt, md := semireducible},
-                       dsimp at gw {unfold_reducible := tt, md := semireducible},
-                       rw fw,
-                       rw gw,
+                       erw commutativity tt,
+                       erw commutativity ff,
                      end,
     map           := begin
                        -- PROJECT this is really ugly! Those inductions should work better...
@@ -88,15 +81,11 @@ instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers
                                             tidy, any_goals { induction f_1 }, tidy,
                                             {
                                               have c := lim.terminal_object.commutativity,
-                                              have c₁ := @c Two._0 Two._1 ff,
-                                              dsimp at c₁ {unfold_reducible := tt, md := semireducible},
-                                              rw c₁,
+                                              erw @c Two._0 Two._1 ff,
                                             },
                                             {
                                               have c := lim.terminal_object.commutativity,
-                                              have c₂ := @c Two._0 Two._1 tt,
-                                              dsimp at c₂ {unfold_reducible := tt, md := semireducible},
-                                              rw c₂,
+                                              erw @c Two._0 Two._1 tt,
                                             },
                                           end
                        },

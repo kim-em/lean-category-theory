@@ -7,13 +7,11 @@ import .Two
 
 namespace categories.util.finite
 
--- TODO auto_param
-
 structure Bijection ( U V : Type ) :=
   ( morphism : U → V )
   ( inverse  : V → U )
-  ( witness_1 : ∀ u : U, inverse (morphism u) = u )
-  ( witness_2 : ∀ v : V, morphism (inverse v) = v )
+  ( witness_1 : ∀ u : U, inverse (morphism u) = u . tidy' )
+  ( witness_2 : ∀ v : V, morphism (inverse v) = v . tidy' )
 
 class Finite ( α : Type ) :=
   ( cardinality : nat )
@@ -32,8 +30,10 @@ instance empty_is_Finite : Finite empty := {
                  induction a,
                  apply empty_exfalso,
                  cases a_is_lt,
+                 dsimp,
                  intros, 
                  induction u,
+                 dsimp,
                  intros,
                  induction v,
                  cases v_is_lt,

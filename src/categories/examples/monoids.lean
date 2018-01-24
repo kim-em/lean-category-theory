@@ -56,11 +56,9 @@ definition CategoryOfMonoids : Category :=
 open categories.functor
 open categories.examples.semigroups
 
-definition cast_monoid_to_semigroup { α : Type } ( s : monoid α ) : semigroup α := @monoid.to_semigroup α s
-
 definition ForgetfulFunctor_Monoids_to_Semigroups : Functor CategoryOfMonoids CategoryOfSemigroups :=
 {
-  onObjects     := λ s, sigma.mk s.1 (@monoid.to_semigroup s.1 s.2),
+  onObjects     := λ s, ⟨ s.1, @monoid.to_semigroup s.1 s.2 ⟩,
   onMorphisms   := λ s t, λ f : monoid_morphism s.2 t.2, 
                   {
                     map            := f.map,

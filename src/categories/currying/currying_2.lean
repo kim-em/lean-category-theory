@@ -2,8 +2,6 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
--- TODO this was taking forever to compile
-
 import .currying_1
 
 open categories

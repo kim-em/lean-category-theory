@@ -26,9 +26,7 @@ definition {u1 v1 u2 v2 wc wd} Functor_restricts_to_FullSubcategory
   ( ZD : D.Obj → Sort wd )
   ( w : ∀ { X : C.Obj } (z : ZC X), ZD (F.onObjects X) ) : Functor (FullSubcategory C ZC) (FullSubcategory D ZD) := {
     onObjects     := λ X, ⟨ F.onObjects X.1, ⟨ w X.2.down ⟩  ⟩,
-    onMorphisms   := λ _ _ f, F.onMorphisms f,
-    identities    := ♯,
-    functoriality := ♯
+    onMorphisms   := λ _ _ f, F.onMorphisms f
   }
 
 end categories

@@ -5,6 +5,7 @@
 import ..natural_transformation
 import ..opposites
 import ..types
+import tidy.its
 
 open categories
 open categories.functor
@@ -56,8 +57,7 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
   ( A : Adjunction L R ) 
   { X Y : C.Obj } ( f : C.Hom X Y ) : C.compose (A.unit.components X) (R.onMorphisms (L.onMorphisms f)) = C.compose f (A.unit.components Y) :=
   begin
-    refine ( cast _ (A.unit.naturality f) ), -- TODO can this be done with `its`
-    tidy
+    its (A.unit.naturality f), 
   end
 
 @[simp,ematch] lemma Adjunction.counit_naturality
