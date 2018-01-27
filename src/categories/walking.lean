@@ -54,34 +54,28 @@ definition WalkingPair' : Category := {
   Obj := Two,
   Hom := λ X Y, if X = Y then unit else empty,
   identity       := ♯,
-  compose        := begin tidy, simp at a, induction a, simp at a_1, induction a_1, simp at a_1, induction a_1, simp at a, induction a end
+  compose        := ♯
 }
 definition WalkingPair : Category := {
   Obj := bool,
   Hom := λ X Y, if X = Y then unit else empty,
   identity       := ♯,
-  compose        := begin tidy, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, induction a_1,induction a,induction a, induction a_1, end
+  compose        := begin tidy, any_goals { induction X }, any_goals { induction Y }, any_goals { induction Z }, tidy, end
 }
-
-lemma foo (p : ite (tt = ff) unit empty) : false :=
-begin
-simp at p, -- FIXME this works, but `simp at *` doesn't
-induction p
-end
 
 definition Pair_functor { C : Category } ( α β : C.Obj ) : Functor WalkingPair C :=
 {
   onObjects     := λ p, cond p α β,
   onMorphisms   := λ X Y f, begin induction X, any_goals { induction Y }, any_goals { simp }, exact C.identity β, induction f, induction f, exact C.identity α end,
   identities    := begin tidy, induction X, refl, refl, end,
-  functoriality := begin tidy, induction X, any_goals {induction Y }, any_goals {induction Z}, any_goals { induction f }, any_goals { induction g }, tidy end
+  functoriality := begin tidy, induction X, any_goals { induction Y }, any_goals { induction Z }, any_goals { induction f }, any_goals { induction g }, tidy end
 }
 
 definition WalkingParallelPair : Category := {
   Obj := Two,
   Hom := begin intros, cases a, cases a_1, exact unit, exact bool, cases a_1, exact empty, exact unit, end,
   identity       := ♯,
-  compose        := begin intros, induction X, any_goals { induction Y }, any_goals { induction Z }, tidy, exact a_1, exact a end
+  compose        := begin intros, any_goals { induction X }, any_goals { induction Y }, any_goals { induction Z }, tidy, exact a_1, exact a end
 }
 
 definition ParallelPair_functor { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : Functor WalkingParallelPair C := 
