@@ -27,8 +27,6 @@ make_lemma Category.right_identity
 make_lemma Category.associativity
 attribute [ematch] Category.associativity_lemma
 
--- attribute [applicable] Category.identity -- No, this is a terrible idea. Sometimes the identity is not the answer. -- PROJECT 'semiapplicable' lemmas that only get applied when there are no dependent goals.
-
 @[tidy] meta def rewrite_associativity_backwards : tactic string := 
 (`[repeat_at_least_once { rewrite ← Category.associativity }])   
   >> `[simp]
