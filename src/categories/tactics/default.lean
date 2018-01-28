@@ -16,7 +16,7 @@ meta def trace_goal_type : tactic unit :=
 do g ← target,
    tactic.trace g,
    infer_type g >>= tactic.trace,
-   skip
+   tactic.skip
 
 set_option formatter.hide_full_terms false
 

@@ -15,9 +15,7 @@ local attribute [applicable] Category.identity -- This says that whenever there 
 definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
 {
   onObjects     := λ X, (X.snd, X.fst),
-  onMorphisms   := λ _ _ f, (f.snd, f.fst),
-  identities    := ♮,
-  functoriality := ♮
+  onMorphisms   := λ _ _ f, (f.snd, f.fst)
 }
 
 definition SwitchSymmetry
