@@ -100,12 +100,7 @@ lemma {u1 v1 u2 v2} Equivalences_are_Faithful { C : Category.{u1 v1} } { D : Cat
 begin
   erewrite ← e.isomorphism_1.naturality_2 (preimage e X Y h),
   repeat_at_least_once { erewrite ← C.associativity },
-  -- tidy, -- PROJECT this used to work!
-  erewrite e.isomorphism_1.componentwise_witness_1,
-  repeat_at_least_once { rewrite C.associativity },
-  erewrite e.isomorphism_1.componentwise_witness_1,
-  erewrite C.right_identity,
-  rewrite C.left_identity
+  tidy, 
 end
 
 lemma {u1 v1 u2 v2} Equivalences_are_Full { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Full (e.functor) :=

@@ -117,7 +117,7 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from { 
                                               cone_point := Z, 
                                               cone_maps := i, 
-                                              commutativity := by tidy
+                                              commutativity := begin tidy, dunfold Functor.fromFunction._aux_1, tidy, end
                                             }).cone_morphism,
                     factorisation := ♯ 
                   }
@@ -141,10 +141,8 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
       morphism_to_terminal_object_from := λ cone : Cone F, {
         cone_morphism := /- we need a morphism from the tip of f to the equalizer -/
                          equalizer.map
-                           (product_over_objects.map cone.cone_maps) ♯,
-        commutativity := ♯
-      },
-      uniqueness_of_morphisms_to_terminal_object := ♯
+                           (product_over_objects.map cone.cone_maps) ♯
+      }
     }
 }
 

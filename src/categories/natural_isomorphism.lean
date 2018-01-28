@@ -41,23 +41,15 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation { C D : Category }
   ( α : NaturalIsomorphism F G )
   { X Y : C.Obj }
   ( f : C.Hom X Y )
-   : D.compose (D.compose (α.inverse.components X) (F.onMorphisms f)) (α.morphism.components Y) = G.onMorphisms f := 
-   begin
-     -- PROJECT automation
-     rewrite ← α.inverse.naturality,
-     tidy
-   end
+   : D.compose (D.compose (α.inverse.components X) (F.onMorphisms f)) (α.morphism.components Y) = G.onMorphisms f := ♯
+
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
   { C : Category.{u1 v1} } { D : Category.{u2 v2} } 
   { F G : Functor C D }
   ( α : NaturalIsomorphism F G )
   { X Y : C.Obj }
   ( f : C.Hom X Y )
-   : D.compose (D.compose (α.morphism.components X) (G.onMorphisms f)) (α.inverse.components Y) = F.onMorphisms f := 
-   begin
-     rewrite ← α.morphism.naturality,
-     tidy
-   end
+   : D.compose (D.compose (α.morphism.components X) (G.onMorphisms f)) (α.inverse.components Y) = F.onMorphisms f := ♯
 
 definition NaturalIsomorphism.from_components
   { C D : Category }

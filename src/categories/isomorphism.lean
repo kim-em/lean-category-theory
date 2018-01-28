@@ -38,14 +38,12 @@ definition IsomorphismComposition { C : Category } { X Y Z : C.Obj } ( α : Isom
     simp at w,    
     have p : g = k,
       begin
-        dsimp at *,
         -- PROJECT why can't we automate this?
+        tidy,
         rewrite ← C.left_identity k,
         rewrite ← wα2,
         rewrite C.associativity,
-        rewrite w,
-        rewrite wβ1,
-        simp
+        simp *,
       end,
     smt_eblast
   end
