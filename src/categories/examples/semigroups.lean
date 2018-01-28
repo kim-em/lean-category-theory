@@ -1,7 +1,9 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
-import categories.category
+import categories.functor
+import categories.types
+import categories.universal.instances
 
 namespace categories.examples.semigroups
 
@@ -9,9 +11,10 @@ open categories
 
 structure {u} semigroup_morphism { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) :=
   (map: α → β)
-  (multiplicative : ∀ x y : α, map (semigroup.mul x y) = semigroup.mul (map x) (map y))
+  (multiplicative : ∀ x y : α, map (semigroup.mul x y) = semigroup.mul (map x) (map y) . tidy')
 
-attribute [simp,ematch] semigroup_morphism.multiplicative
+make_lemma semigroup_morphism.multiplicative
+attribute [ematch] semigroup_morphism.multiplicative_lemma
 
 definition {u} monoid_semigroup_to_map { α β : Type u } { s : semigroup α } { t: semigroup β } : has_coe_to_fun (semigroup_morphism s t) :=
 { F   := λ f, Π x : α, β,
@@ -19,14 +22,13 @@ definition {u} monoid_semigroup_to_map { α β : Type u } { s : semigroup α } {
 
 attribute [instance] monoid_semigroup_to_map
 
-definition {u} semigroup_identity { α : Type u } ( s: semigroup α ) : semigroup_morphism s s := ⟨ id, ♮ ⟩
+definition {u} semigroup_identity { α : Type u } ( s: semigroup α ) : semigroup_morphism s s := ⟨ id ⟩
 
 definition {u} semigroup_morphism_composition
   { α β γ : Type u } { s: semigroup α } { t: semigroup β } { u: semigroup γ}
   ( f: semigroup_morphism s t ) ( g: semigroup_morphism t u ) : semigroup_morphism s u :=
 {
-  map := λ x, g (f x),
-  multiplicative := ♯
+  map := λ x, g (f x)
 }
 
 @[applicable] lemma {u} semigroup_morphism_pointwise_equality
@@ -54,15 +56,27 @@ definition trivial_semigroup: semigroup punit := {
   mul_assoc := ♮
 }
 
--- PROJECT
+open categories.functor
+open categories.types
+open categories.initial
 
--- instance Semigroups_has_TerminalObject : has_TerminalObject CategoryOfSemigroups := {
---   terminal_object := {
---     terminal_object := ⟨ punit, trivial_semigroup ⟩,
---     morphism_to_terminal_object_from := ♯,
---     uniqueness_of_morphisms_to_terminal_object := begin tidy, admit end
---   }
--- }
+definition ForgetfulFunctor_Semigroups_to_Types : Functor CategoryOfSemigroups CategoryOfTypes :=
+{
+  onObjects     := λ s, s.1,
+  onMorphisms   := λ s t, λ f, f.map,
+}
+
+open categories.universal
+
+@[applicable] lemma {u} punit_equality
+  ( a b : punit.{u} ): a = b := ♯
+
+instance Semigroups_has_TerminalObject : has_TerminalObject CategoryOfSemigroups := {
+  terminal_object := {
+    terminal_object := ⟨ punit, trivial_semigroup ⟩,
+    morphism_to_terminal_object_from := ♯
+  }
+}
 
 -- instance Semigroups_has_BinaryProducts : has_BinaryProducts CategoryOfSemigroups := {
 --   binary_product := λ s t, {

@@ -38,8 +38,7 @@ instance empty_is_Finite : Finite empty := {
                  induction v,
                  cases v_is_lt,
               end
-}
-
+} 
 
 definition decidable_via_isomorphism { α β : Type } [ dec : decidable_eq β ] ( iso : Bijection α β ) : decidable_eq α :=
 begin
@@ -82,9 +81,7 @@ instance Two_is_Finite : Finite Two := {
     inverse  := λ n, match n.1, to_as_true n.2 with
                        | 0, _ := _0
                        | 1, _ := _1 
-                     end,
-    witness_1 := ♯,
-    witness_2 := ♯
+                     end
     }
   }
 

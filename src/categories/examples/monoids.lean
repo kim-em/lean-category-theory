@@ -10,27 +10,25 @@ namespace categories.examples.monoids
 open categories
 
 structure monoid_morphism { α β : Type } ( s : monoid α ) ( t : monoid β ) :=
-  (map: α → β)
-  (multiplicative : ∀ x y : α, map (monoid.mul x y) = monoid.mul (map x) (map y))
-  (unital : map(s.one) = t.one)
+  ( map: α → β )
+  ( multiplicative : ∀ x y : α, map (monoid.mul x y) = monoid.mul (map x) (map y) . tidy' )
+  ( unital : map(s.one) = t.one . tidy' )
 
-attribute [simp] monoid_morphism.multiplicative
-attribute [simp] monoid_morphism.unital
+make_lemma monoid_morphism.multiplicative
+make_lemma monoid_morphism.unital
 
 -- This defines a coercion so we can write `f x` for `map f x`.
 instance monoid_morphism_to_map { α β : Type } { s : monoid α } { t : monoid β } : has_coe_to_fun (monoid_morphism s t) :=
 { F   := λ f, Π x : α, β,
   coe := monoid_morphism.map }
 
-definition monoid_identity { α : Type } ( s : monoid α ) : monoid_morphism s s := ⟨ id, ♮, ♮ ⟩
+definition monoid_identity { α : Type } ( s : monoid α ) : monoid_morphism s s := ⟨ id, ♯, ♯  ⟩
 
 definition monoid_morphism_composition
   { α β γ : Type } { s : monoid α } { t : monoid β } { u : monoid γ}
   ( f: monoid_morphism s t ) ( g: monoid_morphism t u ) : monoid_morphism s u :=
 {
-  map := λ x, g (f x),
-  multiplicative := ♯,
-  unital := ♯
+  map := λ x, g (f x)
 }
 
 @[applicable] lemma monoid_morphism_pointwise_equality

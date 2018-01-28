@@ -18,11 +18,13 @@ open categories.universal
 namespace categories.universal
 
 -- definition comma_Product_to_Product { C : Category } { I : Type } ( F : I → C.Obj ) ( product : comma.Product F ) : Product F := {
---     product       := product.object.1,
---     projection    := product.object.2.2.components,
---     -- Grah, "tactic failed, result contains meta-variables"
---     map           := λ Z f, (product.morphisms ⟨ Z, _, { components := f, naturality := begin intros, unfold_projections, unfold_projections_hypotheses, simp, induction f_1, induction down, induction down_1, simp, end } ⟩).val.1,
---     factorisation := sorry,
+--     product       := product.terminal_object.1,
+--     projection    := product.terminal_object.2.2.components,
+--     map           := λ Z f, (product.morphism_to_terminal_object_from ⟨ Z, unit.star, ⟨ f ⟩ ⟩).val.1,
+--     factorisation := begin
+--                        have p := product.morphism_to_terminal_object_from,
+--                        tidy,
+--                      end,
 --     uniqueness    := sorry
 -- }
 

@@ -117,7 +117,7 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from { 
                                               cone_point := Z, 
                                               cone_maps := i, 
-                                              commutativity := begin tidy, dunfold Functor.fromFunction._aux_1, tidy, end
+                                              commutativity := ♯ 
                                             }).cone_morphism,
                     factorisation := ♯ 
                   }

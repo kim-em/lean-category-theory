@@ -92,3 +92,11 @@ definition ColimitCone { J C : Category } ( F : Functor J C ) := InitialObject (
 
 end categories.universal
 
+namespace categories.functor
+
+open categories.universal
+
+definition Functor.onCone { C D : Category } ( G : Functor C D ) { J : Category } { F : Functor J C } ( c : Cone F ) : Cone (FunctorComposition F G) := 
+(Cones_functoriality F G).onObjects c
+
+end categories.functor

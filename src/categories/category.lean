@@ -45,7 +45,7 @@ definition Category.graph ( C : Category ) : Graph :=
 
 @[ematch] lemma Category.identity_idempotent
   ( C : Category )
-  ( X : C.Obj ) : C.identity X = C.compose (C.identity X) (C.identity X) := ♮
+  ( X : C.Obj ) : C.identity X = C.compose (C.identity X) (C.identity X) := ♯
 
 open Category
 
