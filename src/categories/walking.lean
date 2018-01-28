@@ -49,6 +49,22 @@ attribute [instance] unit_or_empty_subsingleton
 attribute [instance] unit_or_empty_subsingleton'
 local attribute [applicable] subsingleton.elim
 
+
+meta def simp_at_each : tactic unit :=
+do l ← tactic.local_context,
+  (s, u) ← tactic.mk_simp_set ff [] [],
+  tactic.interactive.simp_core_aux {} tactic.failed s u l ff
+
+lemma simp_at_star_example (a : ite (_1 = _0) unit empty) : false:=
+begin
+simp_at_each,
+-- simp at *,
+-- simp at a,
+induction a,
+end
+
+local attribute [tidy] simp_at_each
+
 -- TODO why do we have to do `simp at a` here?
 definition WalkingPair' : Category := {
   Obj := Two,
