@@ -25,7 +25,8 @@ structure {u v} Category :=
 make_lemma Category.left_identity
 make_lemma Category.right_identity
 make_lemma Category.associativity
-attribute [ematch] Category.associativity_lemma
+attribute [simp] Category.left_identity_lemma Category.right_identity_lemma
+attribute [simp,ematch] Category.associativity_lemma
 
 @[tidy] meta def rewrite_associativity_backwards : tactic string := 
 (`[repeat_at_least_once { rewrite ← Category.associativity }])   

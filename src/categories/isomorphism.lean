@@ -16,7 +16,7 @@ structure Isomorphism ( C: Category ) ( X Y : C.Obj ) :=
 
 make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
-attribute [ematch] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
+attribute [simp,ematch] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
 
 instance Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } : has_coe (Isomorphism C X Y) (C.Hom X Y) :=
   { coe := Isomorphism.morphism }
@@ -61,7 +61,7 @@ structure is_Isomorphism { C : Category } { X Y : C.Obj } ( morphism : C.Hom X Y
 
 make_lemma is_Isomorphism.witness_1
 make_lemma is_Isomorphism.witness_2
-attribute [ematch] is_Isomorphism.witness_1_lemma is_Isomorphism.witness_2_lemma
+attribute [simp,ematch] is_Isomorphism.witness_1_lemma is_Isomorphism.witness_2_lemma
 
 instance is_Isomorphism_coercion_to_morphism { C : Category } { X Y : C.Obj } ( f : C.Hom X Y ): has_coe (is_Isomorphism f) (C.Hom X Y) :=
   { coe := λ _, f }

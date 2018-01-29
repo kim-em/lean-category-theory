@@ -17,7 +17,7 @@ structure {u1 v1 u2 v2} NaturalTransformation { C : Category.{u1 v1} } { D : Cat
      D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f) . tidy')
 
 make_lemma NaturalTransformation.naturality
-attribute [ematch] NaturalTransformation.naturality_lemma
+attribute [simp,ematch] NaturalTransformation.naturality_lemma
 
 -- This defines a coercion so we can write `α X` for `components α X`.
 instance NaturalTransformation_to_components { C D : Category } { F G : Functor C D } : has_coe_to_fun (NaturalTransformation F G) :=

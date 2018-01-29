@@ -137,8 +137,7 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
         cone_maps     := λ j : J.Obj, C.compose equalizer.inclusion (product_over_objects.projection j),
         commutativity := λ j k f, begin
                                    have p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,                                
-                                   dsimp at p, 
-                                                                      
+                                   tidy,
                                   end
       },
       morphism_to_terminal_object_from := λ cone : Cone F, {

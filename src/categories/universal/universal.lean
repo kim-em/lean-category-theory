@@ -30,7 +30,7 @@ definition Kernel { C : Category } [ Z : ZeroObject C ] { X Y : C.Obj } ( f : C.
 make_lemma Equalizer.witness
 make_lemma Equalizer.factorisation
 make_lemma Equalizer.uniqueness
-attribute [ematch] Equalizer.factorisation_lemma
+attribute [simp,ematch] Equalizer.factorisation_lemma
 attribute [applicable] Equalizer.inclusion Equalizer.map
 attribute [applicable] Equalizer.uniqueness_lemma
 
@@ -48,7 +48,7 @@ structure BinaryProduct { C : Category } ( X Y : C.Obj ) :=
 make_lemma BinaryProduct.left_factorisation
 make_lemma BinaryProduct.right_factorisation
 make_lemma BinaryProduct.uniqueness
-attribute [ematch] BinaryProduct.left_factorisation_lemma BinaryProduct.right_factorisation_lemma
+attribute [simp,ematch] BinaryProduct.left_factorisation_lemma BinaryProduct.right_factorisation_lemma
 attribute [applicable] BinaryProduct.left_projection BinaryProduct.right_projection BinaryProduct.map
 attribute [applicable] BinaryProduct.uniqueness_lemma
 
@@ -61,7 +61,7 @@ structure Product { C : Category } { I : Type } ( F : I → C.Obj ) :=
 
 make_lemma Product.factorisation
 make_lemma Product.uniqueness
-attribute [ematch] Product.factorisation_lemma
+attribute [simp,ematch] Product.factorisation_lemma
 attribute [applicable] Product.projection Product.map
 attribute [applicable] Product.uniqueness_lemma
 

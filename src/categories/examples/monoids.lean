@@ -16,6 +16,7 @@ structure monoid_morphism { α β : Type } ( s : monoid α ) ( t : monoid β ) :
 
 make_lemma monoid_morphism.multiplicative
 make_lemma monoid_morphism.unital
+attribute [simp] monoid_morphism.multiplicative_lemma monoid_morphism.unital_lemma
 
 -- This defines a coercion so we can write `f x` for `map f x`.
 instance monoid_morphism_to_map { α β : Type } { s : monoid α } { t : monoid β } : has_coe_to_fun (monoid_morphism s t) :=
