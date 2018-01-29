@@ -4,6 +4,7 @@
 import categories.functor
 import categories.types
 import categories.universal.instances
+import tidy.its
 
 namespace categories.examples.semigroups
 
@@ -78,31 +79,93 @@ instance Semigroups_has_TerminalObject : has_TerminalObject CategoryOfSemigroups
   }
 }
 
--- instance Semigroups_has_BinaryProducts : has_BinaryProducts CategoryOfSemigroups := {
---   binary_product := λ s t, {
---     product             := ⟨ s.1 × t.1, semigroup_product s.2 t.2 ⟩ ,
---     left_projection     := {
---       map := prod.fst,
---       multiplicative := ♯
---     },
---     right_projection    := {
---       map := prod.snd,
---       multiplicative := ♯
---     },
---     map                 := λ r f g, {
---       map := λ x, (f.map x, g.map x),
---       multiplicative := ♯ 
---     },
---     left_factorisation  := ♯,
---     right_factorisation := ♯,
---     uniqueness          := λ r f g w₁ w₂, begin
---       apply semigroup_morphism_pointwise_equality,
---       intro x,
---       apply pairs_componentwise_equal,
---       admit,
---       admit
---     end
---   }
--- }
+local attribute [applicable] semigroup.mul_assoc
+
+definition {u} semigroup_binary_product { α β : Type u } ( s : semigroup α ) ( t: semigroup β ) : semigroup (α × β) := {
+  mul := λ p q, (p.fst * q.fst, p.snd * q.snd),
+  mul_assoc := ♯
+}
+
+definition {u} semigroup_morphism_binary_product
+  { α β γ δ : Type u }
+  { s_f : semigroup α } { s_g: semigroup β } { t_f : semigroup γ } { t_g: semigroup δ }
+  ( f : semigroup_morphism s_f t_f ) ( g : semigroup_morphism s_g t_g )
+  : semigroup_morphism (semigroup_binary_product s_f s_g) (semigroup_binary_product t_f t_g) := {
+  map := λ p, (f p.1, g p.2)
+}
+
+instance Semigroups_has_BinaryProducts : has_BinaryProducts CategoryOfSemigroups := {
+  binary_product := λ s t, {
+    product             := ⟨ _, semigroup_binary_product s.2 t.2 ⟩ ,
+    left_projection     := ⟨ prod.fst ⟩,
+    right_projection    := ⟨ prod.snd ⟩,
+    map                 := λ _ f g, {
+      map := λ x, (f.map x, g.map x)
+    },
+    uniqueness          := λ _ f g w₁ w₂, begin
+                                             tidy,
+                                             have p := congr_arg semigroup_morphism.map w₁,
+                                             have p' := congr_fun p x,
+                                             exact p',
+                                             have q := congr_arg semigroup_morphism.map w₂,
+                                             have q' := congr_fun q x,
+                                             exact q',
+                                          end
+  }
+}
+
+definition {u v} semigroup_product { I : Type u } { f : I → Type v } ( s : Π i : I, semigroup (f i) ) : semigroup (Π i, f i) := {
+  mul := λ p q i, (p i) * (q i),
+  mul_assoc := ♯
+}
+
+definition {u v} semigroup_morphism_product
+  { I : Type u }
+  { f g : I → Type v }
+  { s : Π i : I, semigroup (f i) } { t : Π i : I, semigroup (g i) } 
+  ( f : Π i : I, semigroup_morphism (s i) (t i) )
+  : semigroup_morphism (semigroup_product s) (semigroup_product t) := {
+  map := λ p i, (f i) (p i)
+}
+
+instance Semigroups_has_Products : has_Products CategoryOfSemigroups := {
+  product := λ I F, {
+    product    := ⟨ _, semigroup_product (λ i, (F i).2) ⟩,
+    projection := λ i, { map := λ f, f i },
+    map        := λ _ f, { map := λ y j, (f j).map y },
+    uniqueness := λ _ f g w, begin
+                               tidy,   
+                               have p := congr_arg semigroup_morphism.map (w x_1),
+                               have p' := congr_fun p x,
+                               exact p',
+                             end
+  }
+}
+
+example : 1+1=2 := by simp
+
+definition {u} semigroup_equalizer { α β : Type u } { r : semigroup α } { s : semigroup β } ( f g : semigroup_morphism r s ) : semigroup { x : α // f.map x = g.map x } := {
+  mul := λ p q, ⟨ (p.val) * (q.val), ♯ ⟩ ,
+  mul_assoc := ♯
+}
+
+instance Semigroups_has_Equalizers : has_Equalizers CategoryOfSemigroups := {
+  equalizer := λ X Y f g, {
+    equalizer := ⟨ _, semigroup_equalizer f g ⟩,
+    inclusion := { map := λ x, x.val },
+    map       := λ _ h w, { map := λ x, ⟨ h.map x, begin
+                                                    tidy, 
+                                                    have p := congr_arg semigroup_morphism.map w,
+                                                    have p' := congr_fun p x,
+                                                    exact p', 
+                                                  end ⟩ },
+    uniqueness := λ r h k w, begin 
+                               tidy, 
+                               have p := congr_arg semigroup_morphism.map w,
+                               have p' := congr_fun p x,
+                               exact p'
+                             end,
+  }
+}
 
 end categories.examples.semigroups

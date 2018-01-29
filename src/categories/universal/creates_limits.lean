@@ -20,6 +20,10 @@ structure CreatesLimitsOfShape { A B : Category } ( F : Functor A B ) ( I : Cate
 structure CreatesLimits { A B : Category } ( F : Functor A B ) := 
   ( over : Π ( I : Category ), CreatesLimitsOfShape F I )
 
+structure CreatesProducts { A B : Category } ( F : Functor A B ) :=
+  ( over : Π ( I : Type ), CreatesLimitsOfShape F (DiscreteCategory I))
+
+
 -- PROJECT define CreatesProducts and CreatesEqualizers, and construct CreatesLimits from these.
 -- PROJECT show various forgetful functors create limits
 -- PROJECT use this to construct limits in various algebraic categories.

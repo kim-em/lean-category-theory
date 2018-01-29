@@ -4,6 +4,7 @@
 
 import ..complete
 import ...walking
+import tidy.its
 
 open categories
 open categories.functor
@@ -46,6 +47,7 @@ instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers
     inclusion     := lim.terminal_object.cone_maps Two._0,
     witness       := let commutativity := @Cone.commutativity _ _ _ lim.terminal_object Two._0 Two._1 in 
                      begin
+                       dsimp,
                        erw commutativity tt,
                        erw commutativity ff,
                      end,
@@ -135,7 +137,8 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
         cone_maps     := λ j : J.Obj, C.compose equalizer.inclusion (product_over_objects.projection j),
         commutativity := λ j k f, begin
                                    have p := congr_arg (λ i, C.compose i (product_over_morphisms.projection ⟨ j, ⟨ k, f ⟩ ⟩)) equalizer.witness,                                
-                                   tidy,                                   
+                                   dsimp at p, 
+                                                                      
                                   end
       },
       morphism_to_terminal_object_from := λ cone : Cone F, {
