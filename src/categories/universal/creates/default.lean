@@ -14,8 +14,8 @@ namespace categories.universal
 
 structure CreatesLimitsOfShape { A B : Category } ( F : Functor A B ) ( I : Category )  :=
   ( cone_from_limit : Π (D : Functor I A) (q : LimitCone (FunctorComposition D F)), Cone D )
-  ( image_of_cone_is_limit_cone : Π (D : Functor I A) (q : LimitCone (FunctorComposition D F)), @is_terminal (Cones (FunctorComposition D F)) (F.onCone (cone_from_limit D q)) )
-  ( every_such_cone_is_limit_cone : Π (D : Functor I A) (p : Cone D) (w : @is_terminal (Cones (FunctorComposition D F)) (F.onCone p)), @is_terminal (Cones D) p )
+  ( image_of_cone_is_limit_cone : Π (D : Functor I A) (q : LimitCone (FunctorComposition D F)), @is_terminal (Cones (FunctorComposition D F)) (F.onCones (cone_from_limit D q)) )
+  ( every_such_cone_is_limit_cone : Π (D : Functor I A) (p : Cone D) (w : @is_terminal (Cones (FunctorComposition D F)) (F.onCones p)), @is_terminal (Cones D) p )
 
 structure CreatesLimits { A B : Category } ( F : Functor A B ) := 
   ( over : Π ( I : Category ), CreatesLimitsOfShape F I )

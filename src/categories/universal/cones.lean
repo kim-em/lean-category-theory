@@ -96,7 +96,10 @@ namespace categories.functor
 
 open categories.universal
 
-definition Functor.onCone { C D : Category } ( G : Functor C D ) { J : Category } { F : Functor J C } ( c : Cone F ) : Cone (FunctorComposition F G) := 
+definition Functor.onCones { C D : Category } ( G : Functor C D ) { J : Category } { F : Functor J C } ( c : Cone F ) : Cone (FunctorComposition F G) := 
 (Cones_functoriality F G).onObjects c
+
+-- TODO cleanup
+-- @[simp] definition IdentityFunctor.onCones { C : Category } { J : Category } { F : Functor J C } ( c : Cone F ) : (IdentityFunctor C).onCones c = c
 
 end categories.functor

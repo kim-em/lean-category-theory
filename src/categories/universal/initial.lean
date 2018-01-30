@@ -5,6 +5,7 @@
 import ..isomorphism
 import ..functor_categories
 import ..opposites
+import tidy.its
 
 open categories
 open categories.isomorphism
@@ -25,10 +26,10 @@ instance InitialObject_coercion_to_object { C : Category } : has_coe (InitialObj
 
 structure is_initial { C : Category } ( X : C.Obj ) :=
   (morphism_from_initial_object_to           : ∀ Y : C.Obj, C.Hom X Y)
-  (uniqueness_of_morphisms_from_initial_object : ∀ Y : C.Obj, ∀ f : C.Hom X Y, f = morphism_from_initial_object_to Y)
+  (uniqueness_of_morphisms_from_initial_object : ∀ Y : C.Obj, ∀ f g : C.Hom X Y, f = g)
 
 -- We can't mark this as applicable, because that might generate goals that an object is initial!
-attribute [ematch] is_initial.uniqueness_of_morphisms_from_initial_object
+-- attribute [ematch] is_initial.uniqueness_of_morphisms_from_initial_object
 
 lemma InitialObjects_are_unique { C : Category } ( X Y : InitialObject C ) : Isomorphism C X Y := ♯
 
@@ -46,9 +47,7 @@ instance TerminalObject_coercion_to_object { C : Category } : has_coe (TerminalO
 
 structure is_terminal { C : Category } ( X : C.Obj ) :=
   (morphism_to_terminal_object_from : ∀ Y : C.Obj, C.Hom Y X)
-  (uniqueness_of_morphisms_to_terminal_object :  ∀ Y : C.Obj, ∀ f : C.Hom Y X, f = morphism_to_terminal_object_from Y)
-
-attribute [ematch] is_terminal.uniqueness_of_morphisms_to_terminal_object
+  (uniqueness_of_morphisms_to_terminal_object : ∀ Y : C.Obj, ∀ f g : C.Hom Y X, f = g . tidy')
 
 lemma TerminalObjects_are_unique { C : Category } ( X Y : TerminalObject C ) : Isomorphism C X Y := ♯
 

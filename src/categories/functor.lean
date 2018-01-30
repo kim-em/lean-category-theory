@@ -86,4 +86,7 @@ definition {u1 v1 u2 v2} Functor_onIsomorphisms
     inverse := F.onMorphisms g.inverse
   }
 
+class ReflectsIsomorphisms { C D : Category } ( F : Functor C D ) :=
+  ( reflects : Π { X Y : C.Obj } ( f : C.Hom X Y ) ( w : is_Isomorphism (F.onMorphisms f)), is_Isomorphism f )
+
 end categories.functor

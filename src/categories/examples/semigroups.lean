@@ -1,9 +1,8 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
-import categories.functor
-import categories.types
-import categories.universal.instances
+import ..universal.instances
+import ..universal.strongly_concrete
 import tidy.its
 
 namespace categories.examples.semigroups
@@ -142,8 +141,6 @@ instance Semigroups_has_Products : has_Products CategoryOfSemigroups := {
   }
 }
 
-example : 1+1=2 := by simp
-
 definition {u} semigroup_equalizer { α β : Type u } { r : semigroup α } { s : semigroup β } ( f g : semigroup_morphism r s ) : semigroup { x : α // f.map x = g.map x } := {
   mul := λ p q, ⟨ (p.val) * (q.val), ♯ ⟩ ,
   mul_assoc := ♯
@@ -167,5 +164,29 @@ instance Semigroups_has_Equalizers : has_Equalizers CategoryOfSemigroups := {
                              end,
   }
 }
+
+instance Semigroups_Concrete : Concrete CategoryOfSemigroups := {
+  F := {
+    onObjects   := λ r, r.1,
+    onMorphisms := λ _ _ f, f.map 
+  }
+}
+
+-- instance Semigroups_StronglyConcrete : StronglyConcrete CategoryOfSemigroups := {
+--    F := {
+--     onObjects   := λ r, r.1,
+--     onMorphisms := λ _ _ f, f.map 
+--   },
+--   reflects_isos := {
+--     reflects := λ X Y f w, {
+--       inverse := {
+--         map := w.inverse,
+--         multiplicative := sorry
+--       },
+--     }
+--   },
+--   preserves_limits := sorry,
+-- }
+
 
 end categories.examples.semigroups
