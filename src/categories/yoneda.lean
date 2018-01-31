@@ -32,6 +32,21 @@ definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opp
     }
 }
 
+definition {u v} CoYoneda ( C : Category.{u v} ) : Functor (Opposite C) (FunctorCategory C CategoryOfTypes.{v}) :=
+{
+    onObjects := λ X, {
+        onObjects     := λ Y, C.Hom X Y,
+        onMorphisms   := λ Y Y' f, λ g, C.compose g f
+    },
+    onMorphisms   := λ X X' f, {
+        components := λ Y, λ g, C.compose f g
+    }
+}
+
+class Representable { C : Category } ( F : Functor C CategoryOfTypes ) := 
+  ( c : C.Obj )
+  ( Φ : NaturalIsomorphism F ((CoYoneda C).onObjects c) )
+
 @[reducible] definition {v} YonedaEvaluation ( C : Category.{v v} )
   : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{v}
   := Evaluation (Opposite C) CategoryOfTypes.{v}

@@ -165,28 +165,4 @@ instance Semigroups_has_Equalizers : has_Equalizers CategoryOfSemigroups := {
   }
 }
 
-instance Semigroups_Concrete : Concrete CategoryOfSemigroups := {
-  F := {
-    onObjects   := λ r, r.1,
-    onMorphisms := λ _ _ f, f.map 
-  }
-}
-
--- instance Semigroups_StronglyConcrete : StronglyConcrete CategoryOfSemigroups := {
---    F := {
---     onObjects   := λ r, r.1,
---     onMorphisms := λ _ _ f, f.map 
---   },
---   reflects_isos := {
---     reflects := λ X Y f w, {
---       inverse := {
---         map := w.inverse,
---         multiplicative := sorry
---       },
---     }
---   },
---   preserves_limits := sorry,
--- }
-
-
 end categories.examples.semigroups

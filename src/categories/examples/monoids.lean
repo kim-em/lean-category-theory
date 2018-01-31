@@ -4,6 +4,9 @@
 
 import categories.functor
 import .semigroups
+import ..universal.strongly_concrete
+import algebra.group_power
+import tactic.ring
 
 namespace categories.examples.monoids
 
@@ -17,6 +20,13 @@ structure monoid_morphism { α β : Type } ( s : monoid α ) ( t : monoid β ) :
 make_lemma monoid_morphism.multiplicative
 make_lemma monoid_morphism.unital
 attribute [simp] monoid_morphism.multiplicative_lemma monoid_morphism.unital_lemma
+
+@[simp] lemma monoid_morphism_power { α β : Type } { s : monoid α } { t : monoid β } ( f : monoid_morphism s t ) ( a : α ) ( n : ℕ ) : f.map (@monoid.pow α s a n) = @monoid.pow β t (f.map a) n :=
+begin
+induction n,
+{ tidy },
+{ unfold monoid.pow, tidy }
+end
 
 -- This defines a coercion so we can write `f x` for `map f x`.
 instance monoid_morphism_to_map { α β : Type } { s : monoid α } { t : monoid β } : has_coe_to_fun (monoid_morphism s t) :=
@@ -64,5 +74,87 @@ definition ForgetfulFunctor_Monoids_to_Semigroups : Functor CategoryOfMonoids Ca
                     multiplicative := f.multiplicative
                   }
 }
+
+open categories.types
+
+definition ForgetfulFunctor_Monoids_to_Types : Functor CategoryOfMonoids CategoryOfTypes :=
+{
+    onObjects   := λ r, r.1,
+    onMorphisms := λ _ _ f, f.map 
+  }
+
+definition Monoids_Concrete : Concrete CategoryOfMonoids := {
+  F := ForgetfulFunctor_Monoids_to_Types
+}
+attribute [instance] Monoids_Concrete
+
+open categories.yoneda
+
+local attribute [tidy] ring
+
+-- set_option pp.all true
+definition ℕ_as_monoid_under_addition : monoid ℕ := {
+  one := 0,
+  mul := λ x y : ℕ , x + y,
+  one_mul := begin intros, simp [has_mul.mul] end,
+  mul_one := begin intros, simp [has_mul.mul] end,
+  mul_assoc := begin intros, simp [has_mul.mul] end
+}
+attribute [instance] ℕ_as_monoid_under_addition
+
+-- yuck
+@[simp] private lemma monoid_pow_add {α} [monoid α] (a : α) (x y : ℕ) : monoid.pow a (nat.add x y) = monoid.mul (monoid.pow a x) (monoid.pow a y) :=
+begin
+have p : (nat.add x y) = x + y, by unfold has_add.add,
+rw p,
+rw pow_add,
+refl,
+end
+
+-- yuck
+@[simp] private lemma monoid_pow_nat {α} [m : monoid α] (f : monoid_morphism ℕ_as_monoid_under_addition m) (n : ℕ): monoid.pow (f.map 1) n = f.map n :=
+begin
+induction n,
+{ tidy, erw f.unital_lemma, },
+{
+  unfold monoid.pow,
+  have p : nat.succ n_n = 1 + n_n, by simp,
+  rw p,
+  erw f.multiplicative_lemma,
+  rw n_ih,
+  refl,
+}
+end
+
+
+instance Monoids_ForgetfulFunctor_Representable : Representable (ForgetfulFunctor_Monoids_to_Types) := {
+  c := ⟨ ℕ, ℕ_as_monoid_under_addition ⟩,
+  Φ := {
+    morphism := {
+      components := λ r a, {
+        map := λ n, @monoid.pow r.1 r.2 a n,
+      },
+    },
+    inverse := {
+      components := λ r f, f.map 1
+    }
+  }
+}
+
+open categories.universal
+
+instance Monoids_StronglyConcrete : StronglyConcrete CategoryOfMonoids := {
+  F := ForgetfulFunctor_Monoids_to_Types,
+  reflects_isos := {
+    reflects := λ X Y f w, {
+      inverse := {
+        map := w.inverse,
+        multiplicative := sorry
+      },
+    }
+  },
+  preserves_limits := RepresentableFunctorPreservesLimits ForgetfulFunctor_Monoids_to_Types,
+}
+
 
 end categories.examples.monoids

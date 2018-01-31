@@ -13,9 +13,11 @@ open categories.types
 
 namespace categories.universal
 
-class StronglyConcrete ( C : Category ) extends Concrete C := 
+structure StronglyConcrete ( C : Category ) extends Concrete C := 
   ( reflects_isos    : ReflectsIsomorphisms F . tidy' )
   ( preserves_limits : PreservesLimits F )
+
+attribute [class] StronglyConcrete
 
 -- instance Types_StronglyConcrete : StronglyConcrete CategoryOfTypes := {
 --     F := IdentityFunctor CategoryOfTypes,
