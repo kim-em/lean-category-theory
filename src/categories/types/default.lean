@@ -22,15 +22,27 @@ definition {u} CategoryOfTypes : Category :=
 
 definition Bijection ( α β : Type ) := Isomorphism CategoryOfTypes α β 
 
-definition Bijection.witness_1 { α β : Type } ( iso : Bijection α β ) ( x : α ) : iso.inverse (iso.morphism x) = x :=
+@[simp] definition Bijection.witness_1 { α β : Type } ( iso : Bijection α β ) ( x : α ) : iso.inverse (iso.morphism x) = x :=
 begin
   have p := iso.witness_1, 
   tidy,
 end
-definition Bijection.witness_2 { α β : Type } ( iso : Bijection α β ) ( x : β ) : iso.morphism (iso.inverse x) = x :=
+@[simp] definition Bijection.witness_2 { α β : Type } ( iso : Bijection α β ) ( x : β ) : iso.morphism (iso.inverse x) = x :=
 begin
   have p := iso.witness_2,
   tidy,
 end
+
+@[simp] definition is_Isomorphism_in_Types.witness_1 { α β : Type } ( f : α → β ) ( h : @is_Isomorphism CategoryOfTypes α β f ) ( x : α ) : h.inverse (f x) = x :=
+begin
+  have p := h.witness_1, 
+  tidy,
+end
+@[simp] definition is_Isomorphism_in_Types.witness_2 { α β : Type } ( f : α → β ) ( h : @is_Isomorphism CategoryOfTypes α β f ) ( x : β ) : f (h.inverse x) = x :=
+begin
+  have p := h.witness_2,
+  tidy,
+end
+
 
 end categories.types

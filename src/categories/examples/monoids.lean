@@ -92,7 +92,6 @@ open categories.yoneda
 
 local attribute [tidy] ring
 
--- set_option pp.all true
 definition ℕ_as_monoid_under_addition : monoid ℕ := {
   one := 0,
   mul := λ x y : ℕ , x + y,
@@ -149,8 +148,10 @@ instance Monoids_StronglyConcrete : StronglyConcrete CategoryOfMonoids := {
     reflects := λ X Y f w, {
       inverse := {
         map := w.inverse,
-        multiplicative := sorry
+        multiplicative := sorry,
+        unital := sorry
       },
+      witness_2 := begin tidy, rw is_Isomorphism_in_Types.witness_2 f.map w, end -- FIXME why doesn't this work without the explicit arguments (or even just by simp)
     }
   },
   preserves_limits := RepresentableFunctorPreservesLimits ForgetfulFunctor_Monoids_to_Types,
