@@ -6,42 +6,45 @@ import categories.functor
 import .monoids
 import ..universal.strongly_concrete
 import tactic.ring
+import algebra.group_power
+import data.finsupp
+noncomputable theory
 
 namespace categories.examples.rings
 
 open categories
 open categories.examples.monoids
 
-structure ring_morphism { α β : Type } ( s : ring α ) ( t : ring β ) :=
+structure commutative_ring_morphism { α β : Type } ( s : comm_ring α ) ( t : comm_ring β ) :=
   ( map: α → β )
-  ( multiplicative : ∀ x y : α, map (ring.mul x y) = ring.mul (map x) (map y) . tidy' )
+  ( multiplicative : ∀ x y : α, map (comm_ring.mul x y) = comm_ring.mul (map x) (map y) . tidy' )
   ( unital : map(s.one) = t.one . tidy' )
-  ( additive : ∀ x y : α, map (ring.add x y) = ring.add (map x) (map y) . tidy' )
+  ( additive : ∀ x y : α, map (comm_ring.add x y) = comm_ring.add (map x) (map y) . tidy' )
 
-make_lemma ring_morphism.multiplicative
-make_lemma ring_morphism.unital
-make_lemma ring_morphism.additive
-attribute [simp] ring_morphism.multiplicative_lemma ring_morphism.unital_lemma ring_morphism.additive_lemma
+make_lemma commutative_ring_morphism.multiplicative
+make_lemma commutative_ring_morphism.unital
+make_lemma commutative_ring_morphism.additive
+attribute [simp] commutative_ring_morphism.multiplicative_lemma commutative_ring_morphism.unital_lemma commutative_ring_morphism.additive_lemma
 
 -- This defines a coercion so we can write `f x` for `map f x`.
-instance ring_morphism_to_map { α β : Type } { s : ring α } { t : ring β } : has_coe_to_fun (ring_morphism s t) :=
+instance commutative_ring_morphism_to_map { α β : Type } { s : comm_ring α } { t : comm_ring β } : has_coe_to_fun (commutative_ring_morphism s t) :=
 { F   := λ f, Π x : α, β,
   coe := λ r, r.map }
 
-definition ring_identity { α : Type } ( s : ring α ) : ring_morphism s s := {
+definition commutative_ring_identity { α : Type } ( s : comm_ring α ) : commutative_ring_morphism s s := {
   map := id
 }
 
-definition ring_morphism_composition
-  { α β γ : Type } { s : ring α } { t : ring β } { u : ring γ}
-  ( f: ring_morphism s t ) ( g: ring_morphism t u ) : ring_morphism s u :=
+definition commutative_ring_morphism_composition
+  { α β γ : Type } { s : comm_ring α } { t : comm_ring β } { u : comm_ring γ}
+  ( f: commutative_ring_morphism s t ) ( g: commutative_ring_morphism t u ) : commutative_ring_morphism s u :=
 {
   map := λ x, g (f x)
 }
 
-@[applicable] lemma ring_morphism_pointwise_equality
-  { α β : Type } { s : ring α } { t : ring β }
-  ( f g : ring_morphism s t )
+@[applicable] lemma commutative_ring_morphism_pointwise_equality
+  { α β : Type } { s : comm_ring α } { t : comm_ring β }
+  ( f g : commutative_ring_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=
 begin
     induction f with fc,
@@ -50,103 +53,133 @@ begin
     subst hc
 end
 
-definition CategoryOfRings : Category := 
+definition CategoryOfCommutativeRings : Category := 
 {
-    Obj := Σ α : Type, ring α,
-    Hom := λ s t, ring_morphism s.2 t.2,
+    Obj := Σ α : Type, comm_ring α,
+    Hom := λ s t, commutative_ring_morphism s.2 t.2,
 
-    identity := λ s, ring_identity s.2,
-    compose  := λ _ _ _ f g, ring_morphism_composition f g
+    identity := λ s, commutative_ring_identity s.2,
+    compose  := λ _ _ _ f g, commutative_ring_morphism_composition f g
 }
 
 open categories.functor
-open categories.examples.semigroups
-
-definition ForgetfulFunctor_Rings_to_Monoids : Functor CategoryOfRings CategoryOfMonoids :=
-{
-  onObjects     := λ s, ⟨ s.1, @ring.to_monoid s.1 s.2 ⟩,
-  onMorphisms   := λ s t, λ f : ring_morphism s.2 t.2, 
-                  {
-                    map            := f.map
-                  }
-}
-
 open categories.types
 
-definition ForgetfulFunctor_Rings_to_Types : Functor CategoryOfRings CategoryOfTypes :=
+definition ForgetfulFunctor_CommutativeRings_to_Types : Functor CategoryOfCommutativeRings CategoryOfTypes :=
 {
     onObjects   := λ r, r.1,
     onMorphisms := λ _ _ f, f.map 
   }
 
-definition Rings_Concrete : Concrete CategoryOfRings := {
-  F := ForgetfulFunctor_Rings_to_Types
+definition CommutativeRings_Concrete : Concrete CategoryOfCommutativeRings := {
+  F := ForgetfulFunctor_CommutativeRings_to_Types
 }
-attribute [instance] Rings_Concrete
+attribute [instance] CommutativeRings_Concrete
 
-structure polynomial (α) [ring α] :=
-  ( coefficients : list α )
-  ( leading_term_nonzero : ¬(coefficients.nth 0 = some 0) )
+def polynomials_over (α) [comm_ring α] : comm_ring (ℕ →₀ α) := finsupp.to_comm_ring
 
-open list
-
-definition trim {α} [ring α] [decidable_eq α] : list α → polynomial α
-| []       := ⟨ nil, sorry ⟩ 
-| (a :: t) := if h : a = 0 then trim t else ⟨ a :: t, sorry ⟩ 
-
-definition polynomial_ring {α} [ring α] [decidable_eq α] : ring (polynomial α) := {
-  zero := trim [],
-  one := trim [1],
-  add := sorry,
-  neg := sorry,
-  mul := sorry,
-  add_zero := sorry,
-  zero_add := sorry,
-  add_comm := sorry,
-  add_assoc := sorry,
-  add_left_neg := sorry,
-  one_mul := sorry,
-  mul_one := sorry,
-  mul_assoc := sorry,
-  left_distrib := sorry,
-  right_distrib := sorry,
+def evaluate_at {α} [r : comm_ring α] (a : α) : commutative_ring_morphism (polynomials_over α) r := {
+  map := λ p, p.sum (λ n c, c * (monoid.pow a n)),
+  unital := begin
+              dsimp {unfold_reducible := tt, md := semireducible},
+              rw finsupp.sum_single_index, 
+              {
+                dsimp, 
+                have p := comm_ring.one_mul, 
+                dsimp at p {unfold_reducible := tt, md := semireducible}, 
+                rw p,
+                refl,
+              },
+              {
+                dsimp {unfold_reducible := tt, md := semireducible},               
+                have p := comm_ring.mul_one, 
+                dsimp at p {unfold_reducible := tt, md := semireducible}, 
+                rw p,
+              },
+            end,
+  multiplicative := sorry,
+  additive := sorry
 }
+
+def map_coefficients {α β} [r : comm_ring α] [s : comm_ring β] (f : commutative_ring_morphism r s) : commutative_ring_morphism (polynomials_over α) (polynomials_over β) := {
+  map := λ g, {
+    val := f.map ∘ g,
+    property := sorry, -- ugh, multisets 
+  },
+  unital := sorry,
+  multiplicative := sorry,
+  additive := sorry
+}
+
+private def include_naturals' (α) [r : comm_ring α] : ℕ → α 
+| 0       := (0 : α)
+| (n + 1) := (include_naturals' n) + (1 : α)
+
+private def include_integers' (α) [r : comm_ring α] ( i : ℤ ) := 
+if i >= 0 then include_naturals' α (i.nat_abs) else - (include_naturals' α (i.nat_abs))
+
+def include_integers (α) [r : comm_ring α] : commutative_ring_morphism ((by apply_instance) : comm_ring ℤ) r := {
+  map := include_integers' α,
+  unital := sorry,
+  multiplicative := sorry,
+  additive := sorry
+}
+
+def evaluate_integer_polynomial_at {α} [r : comm_ring α] (a : α) : commutative_ring_morphism (polynomials_over ℤ) r :=
+commutative_ring_morphism_composition (map_coefficients (include_integers α)) (evaluate_at a)
 
 open categories.yoneda
 
-local attribute [tidy] ring
+instance Rings_ForgetfulFunctor_Representable : Representable (ForgetfulFunctor_CommutativeRings_to_Types) := {
+  c := ⟨ ℕ →₀ ℤ, (polynomials_over ℤ) ⟩,
+  Φ := {
+    morphism := {
+      components := λ r x, @evaluate_integer_polynomial_at r.1 r.2 x, 
+      naturality := sorry
+    },
+    inverse := {
+      components := λ r f, f.map (finsupp.single 1 1),
+    },
+    witness_1 := sorry,
+    witness_2 := sorry
+  }
+}
+
+open categories.universal
+
+instance Ring_StronglyConcrete : StronglyConcrete CategoryOfCommutativeRings := {
+  F := ForgetfulFunctor_CommutativeRings_to_Types,
+  reflects_isos := {
+    reflects := λ X Y f w, {
+      inverse := {
+        map := w.inverse,
+        multiplicative := sorry,
+        unital := sorry,
+        additive := sorry
+      },
+      witness_2 := begin tidy, rw is_Isomorphism_in_Types.witness_2 f.map w, end -- FIXME why doesn't this work without the explicit arguments (or even just by simp)
+    }
+  },
+  preserves_limits := RepresentableFunctorPreservesLimits ForgetfulFunctor_CommutativeRings_to_Types,
+}
 
 
--- instance Monoids_ForgetfulFunctor_Representable : Representable (ForgetfulFunctor_Monoids_to_Types) := {
---   c := ⟨ ℕ, ℕ_as_monoid_under_addition ⟩,
---   Φ := {
---     morphism := {
---       components := λ r a, {
---         map := λ n, @monoid.pow r.1 r.2 a n,
---       },
---     },
---     inverse := {
---       components := λ r f, f.map 1
---     }
---   }
--- }
+-- This is the start of defining polynomials, power series, Laurent polynomials, and Laurent series all at once.
+-- It's not really relevant here.
+open set
+structure convolution_support (α) [monoid α] :=
+  ( supports   : set (set α) )
+  ( union      : Π U V ∈ supports, U ∪ V ∈ supports )
+  ( finiteness : Π U V ∈ supports, Π a : α, finite { p : prod α α | p.1 ∈ U ∧ p.2 ∈ V ∧ p.1 * p.2 = a } )
+  ( support    : Π U V ∈ supports, supports { a : α | ∃ u v, u ∈ U ∧ v ∈ V ∧ u * v = a })
 
--- open categories.universal
+definition polynomial_support : convolution_support ℕ := {
+  supports := finite,
+  union := sorry,
+  finiteness := sorry,
+  support := sorry
+}
 
--- instance Monoids_StronglyConcrete : StronglyConcrete CategoryOfMonoids := {
---   F := ForgetfulFunctor_Monoids_to_Types,
---   reflects_isos := {
---     reflects := λ X Y f w, {
---       inverse := {
---         map := w.inverse,
---         multiplicative := sorry,
---         unital := sorry
---       },
---       witness_2 := begin tidy, rw is_Isomorphism_in_Types.witness_2 f.map w, end -- FIXME why doesn't this work without the explicit arguments (or even just by simp)
---     }
---   },
---   preserves_limits := RepresentableFunctorPreservesLimits ForgetfulFunctor_Monoids_to_Types,
--- }
 
 
 end categories.examples.rings
