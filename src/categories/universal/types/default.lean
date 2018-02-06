@@ -5,7 +5,7 @@ open categories.universal
 open categories.isomorphism
 namespace categories.types
 
-definition {u} Types_has_Products : has_Products CategoryOfTypes.{u} := {
+definition {u} Types_has_Products : has_Products.{u+1 u u} CategoryOfTypes.{u} := {
   product := λ I φ, {
     product       := Π i : I, φ i,
     projection    := λ i x, x i,
@@ -20,7 +20,7 @@ definition {u} Types_has_Products : has_Products CategoryOfTypes.{u} := {
 }
 attribute [instance] Types_has_Products
 
-definition {u} Types_has_Coproducts : has_Coproducts CategoryOfTypes.{u} := {
+definition {u} Types_has_Coproducts : has_Coproducts.{u+1 u u} CategoryOfTypes.{u} := {
   coproduct := λ I φ, {
     coproduct     := Σ i : I, φ i,
     inclusion     := λ i x, ⟨ i, x ⟩ ,

@@ -11,7 +11,7 @@ namespace categories.types
 open categories
 open categories.isomorphism
 
-definition {u} CategoryOfTypes : Category :=
+definition {u} CategoryOfTypes : Category.{u+1 u} :=
 {
     Obj := Type u,
     Hom := λ a b, a → b,

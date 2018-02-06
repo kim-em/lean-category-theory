@@ -87,8 +87,18 @@ definition Cocones { J C : Category } ( F : Functor J C ) : Category :=
   identity       := λ X, ⟨ C.identity X.cocone_point ⟩
 }
 
-definition LimitCone   { J C : Category } ( F : Functor J C ) := TerminalObject (Cones F)
-definition ColimitCone { J C : Category } ( F : Functor J C ) := InitialObject (Cocones F)
+definition Cocones_functoriality { J C D : Category } ( F : Functor J C ) ( G : Functor C D ) : Functor (Cocones F) (Cocones (FunctorComposition F G)) := {
+  onObjects     := λ X, {
+    cocone_point    := G.onObjects X.cocone_point,
+    cocone_maps     := λ j, G.onMorphisms (X.cocone_maps j)
+  },
+  onMorphisms   := λ X Y f, {
+    cocone_morphism := G.onMorphisms f.cocone_morphism
+  }
+}
+
+definition LimitCone     { J C : Category } ( F : Functor J C ) := TerminalObject (Cones F)
+definition ColimitCocone { J C : Category } ( F : Functor J C ) := InitialObject (Cocones F)
 
 end categories.universal
 
@@ -98,6 +108,8 @@ open categories.universal
 
 definition Functor.onCones { C D : Category } ( G : Functor C D ) { J : Category } { F : Functor J C } ( c : Cone F ) : Cone (FunctorComposition F G) := 
 (Cones_functoriality F G).onObjects c
+definition Functor.onCocones { C D : Category } ( G : Functor C D ) { J : Category } { F : Functor J C } ( c : Cocone F ) : Cocone (FunctorComposition F G) := 
+(Cocones_functoriality F G).onObjects c
 
 -- TODO cleanup
 -- @[simp] definition IdentityFunctor.onCones { C : Category } { J : Category } { F : Functor J C } ( c : Cone F ) : (IdentityFunctor C).onCones c = c

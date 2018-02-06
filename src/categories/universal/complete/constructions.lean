@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison
 
 import ..complete
+import ..opposites
 import ...walking
 import tidy.its
 
@@ -13,12 +14,15 @@ open categories.isomorphism
 open categories.initial
 open categories.walking
 open categories.util.finite
+open categories.universal.opposites
 
 namespace categories.universal
 
-private definition {u v} Cone_from_map_to_limit
-  { C : Category.{u v} }
-  { J : Category.{u v} } 
+universes u₁ u₂ u₃ u₄
+
+private definition Cone_from_map_to_limit
+  { C : Category }
+  { J : Category } 
   { F : Functor J C } 
   { L : LimitCone F } 
   { Z : C.Obj } 
@@ -27,9 +31,9 @@ private definition {u v} Cone_from_map_to_limit
   cone_point    := Z,
   cone_maps     := λ j, C.compose f (L.terminal_object.cone_maps j)
 }
-private definition {u v} ConeMorphism_from_map_to_limit
-  { C : Category.{u v} }
-  { J : Category.{u v} } 
+private definition ConeMorphism_from_map_to_limit
+  { C : Category }
+  { J : Category } 
   { F : Functor J C } 
   { L : LimitCone F } 
   { Z : C.Obj } 
@@ -38,10 +42,12 @@ private definition {u v} ConeMorphism_from_map_to_limit
   cone_morphism := f
 }
 
+set_option pp.universes true
+
 open categories.util.finite.Two
 
 -- PROJECT this construction is unpleasant
-instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers C := {
+definition Equalizers_from_Limits ( C : Category.{u₁ u₂} ) [ Complete.{u₁ u₂ u₃ u₄} C ] : has_Equalizers.{u₁ u₂} C := {
   equalizer := λ X Y f g, let lim := limitCone(ParallelPair_functor f g) in {
     equalizer     := lim.terminal_object.cone_point,
     inclusion     := lim.terminal_object.cone_maps Two._0,
@@ -103,8 +109,8 @@ instance Equalizers_from_Limits ( C : Category ) [ Complete C ] : has_Equalizers
   }                       
 }
 
-instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C := {
-    product := λ { I : Type } ( F : I → C.Obj ), 
+definition Products_from_Limits (C : Category.{u₁ u₂}) [Complete.{u₁ u₂ u₃ u₄} C] : has_Products.{u₁ u₂ u₃} C := {
+    product := λ {I : Type u₃} (F : I → C.Obj), 
                  let lim_F := limitCone (Functor.fromFunction F) in
                   {
                     product       := lim_F.terminal_object.cone_point,
@@ -125,7 +131,7 @@ instance Products_from_Limits ( C : Category ) [ Complete C ] : has_Products C :
                   }
 }
 
-instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ] [ has_Equalizers C ] : Complete C := {
+instance Limits_from_Products_and_Equalizers ( C : Category.{u₁ u₂} ) [ has_Products.{u₁ u₂ u₃} C ] [ has_Equalizers.{u₁ u₂} C ] : Complete.{u₁ u₂ u₃ u₃} C := {
   limitCone := λ J F,
     let product_over_objects   := product (F.onObjects) in
     let product_over_morphisms := product (λ f : ( Σ s : J.Obj, Σ t : J.Obj, J.Hom s t ), F.onObjects f.2.1) in
@@ -147,5 +153,19 @@ instance Limits_from_Products_and_Equalizers ( C : Category ) [ has_Products C ]
       }
     }
 }
+
+open categories.opposites
+
+
+instance Coequalizers_from_Colimits ( C : Category.{u₁ u₂} ) [ Cocomplete.{u₁ u₂ u₃ u₄} C ] : has_Coequalizers.{u₁ u₂} C := {
+  coequalizer := λ _ _ f g, Equalizer_in_Opposite (@equalizer (Opposite C) _ _ _ f g)
+}
+
+instance Coproducts_from_Colimits ( C : Category.{u₁ u₂} ) [ Cocomplete.{u₁ u₂ u₃ u₄} C ] : has_Coproducts.{u₁ u₂ u₃} C := {
+  coproduct := λ _ F, Product_in_Opposite (@product (Opposite C) _ _ F)
+}
+
+instance Colimits_from_Coproducts_and_Coequalizers ( C : Category.{u₁ u₂} ) [ has_Coproducts.{u₁ u₂ u₃} C ] [ has_Coequalizers.{u₁ u₂} C ] : Cocomplete.{u₁ u₂ u₃ u₃} C := sorry
+
 
 end categories.universal

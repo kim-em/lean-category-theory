@@ -52,7 +52,7 @@ attribute [simp,ematch] BinaryProduct.left_factorisation_lemma BinaryProduct.rig
 attribute [applicable] BinaryProduct.left_projection BinaryProduct.right_projection BinaryProduct.map
 attribute [applicable] BinaryProduct.uniqueness_lemma
 
-structure Product { C : Category } { I : Type } ( F : I → C.Obj ) :=
+structure {u v w} Product { C : Category.{u v} } { I : Type w } ( F : I → C.Obj ) :=
   ( product       : C.Obj )
   ( projection    : Π i : I, C.Hom product (F i) )
   ( map           : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom Z (F i) ), C.Hom Z product )
@@ -94,14 +94,15 @@ attribute [simp,ematch] BinaryCoproduct.left_factorisation BinaryCoproduct.right
 attribute [applicable] BinaryCoproduct.left_inclusion BinaryCoproduct.right_inclusion BinaryCoproduct.map
 attribute [applicable] BinaryCoproduct.uniqueness
 
-structure Coproduct { C : Category } { I : Type } ( X : I → C.Obj ) :=
+structure {u v w} Coproduct { C : Category.{u v} } { I : Type w } ( X : I → C.Obj ) :=
   ( coproduct     : C.Obj )
   ( inclusion     : Π i : I, C.Hom (X i) coproduct )
   ( map           : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom (X i) Z ), C.Hom coproduct Z )
   ( factorisation : ∀ { Z : C.Obj } ( f : Π i : I, C.Hom (X i) Z ) ( i : I ), C.compose (inclusion i) (map f) = f i )
   ( uniqueness    : ∀ { Z : C.Obj } ( f g : C.Hom coproduct Z ) ( witness : ∀ i : I, C.compose (inclusion i) f = C.compose (inclusion i) g), f = g )
 
-@[reducible] definition {u} unique_up_to_isomorphism ( α : Type u ) { C : Category } ( f : α → C.Obj ) := Π X Y : α, Isomorphism C (f X) (f Y)
+-- PROJECT prove all these things are unique up to unique isomorphism
+-- @[reducible] definition {u} unique_up_to_isomorphism ( α : Type u ) { C : Category } ( f : α → C.Obj ) := Π X Y : α, Isomorphism C (f X) (f Y)
 
 end categories.universal
 
