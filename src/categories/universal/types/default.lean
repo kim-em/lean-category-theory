@@ -80,8 +80,20 @@ definition {u} Types_has_BinaryCoproducts : has_BinaryCoproducts CategoryOfTypes
 }
 attribute [instance] Types_has_BinaryCoproducts
 
--- Does Types have coequalizers? Quotients are hard.
--- definition {u} relation_from_functions { α β : Type u } ( f g : α → β ) : β → β → Prop :=
---   λ b0 bn : β, ∃ l : list α, 
+-- PROJECT Does Types have coequalizers? 
+
+definition {u} Types_has_Coequalizers : has_Coequalizers CategoryOfTypes.{u} :=
+{ coequalizer := λ α β f g,
+  {
+    coequalizer   := quotient (eqv_gen.setoid (λ x y, ∃ a : α, f a = x ∧ g a = y)),
+    projection    := λ x, begin apply quotient.mk, exact x end,
+    witness       := begin tidy, apply quotient.sound, apply eqv_gen.rel, existsi x, simp, end,
+    map           := begin tidy, induction a, exact k a, sorry  end,
+    factorisation := ♯,
+    uniqueness    := begin tidy, sorry end 
+  }
+}
+attribute [instance] Types_has_Equalizers
+
 
 end categories.types

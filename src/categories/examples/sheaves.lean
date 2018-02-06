@@ -6,6 +6,7 @@ import ..functor
 import ..opposites
 import .topological_spaces
 import ..universal.strongly_concrete
+import ..examples.rings
 -- import data.set.basic
 
 open categories
@@ -75,8 +76,19 @@ structure Sheaf { α } ( X : topological_space α ) :=
 
 open categories.universal
 
-structure SheafOf ( C : Category ) [ sc : StronglyConcrete C ] { α } ( X : topological_space α ) :=
+structure {u v} SheafOf ( C : Category.{u v} ) [ sc : StronglyConcrete.{u v 0 0 0} C ] { α } ( X : topological_space α ) :=
   ( presheaf        : PresheafOf C X )
   ( sheaf_condition : Π ( U : OpenCovering X ) ( s : CompatibleSections U (FunctorComposition presheaf sc.F) ), Gluing s )
+
+open categories.examples.rings
+
+set_option pp.all true
+
+structure {u v} RingedSpace (α : Type u) :=
+  ( space : topological_space α)
+  ( structure_sheaf : SheafOf CategoryOfCommutativeRings.{v} space ) 
+
+structure LocallyRingedSpace (α : Type) extends RingedSpace α :=
+  ( local_rings : ∀ a : α, is_local (stalk_at a structure_sheaf) )
 
 end categories.examples.sheaves
