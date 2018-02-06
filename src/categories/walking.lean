@@ -63,7 +63,7 @@ definition WalkingPair : Category.{u₁ u₂} := {
   Hom := λ X Y, if X = Y then punit else pempty,
   identity       := by tidy, 
   compose        := by tidy,
-  left_identity := begin dsimp', intros, induction_Two, dsimp', simp_at_each, automatic_induction,tidy {max_steps:=8,trace_steps:=tt}, end,
+  left_identity := begin dsimp', intros, induction_Two, dsimp', automatic_induction, simp_at_each, automatic_induction,tidy {max_steps:=8,trace_steps:=tt}, end,
   right_identity := sorry,
   associativity := sorry
 }
