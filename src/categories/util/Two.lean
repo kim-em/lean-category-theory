@@ -2,15 +2,27 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import tidy.at_least_one
-import tidy.tidy_attributes
+import tidy.tidy
 
 open tactic
 
-inductive Two : Type
+inductive {u} Two : Type u
 | _0 : Two
 | _1 : Two
+
+open Two
+
+@[simp] lemma Two_0_eq_1_eq_false : ¬(_0 = _1) :=
+by contradiction
+
+@[simp] lemma Two_1_eq_0_eq_false : ¬(_1 = _0) :=
+by contradiction
+
+@[applicable] definition decidable_true  : decidable true  := is_true  begin trivial end
+@[applicable] definition decidable_false : decidable false := is_false ♯ 
 
 @[tidy] meta def induction_Two : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(Two) := induction h >> skip | _ := failed end))
+
+instance Two_decidable : decidable_eq Two := ♯

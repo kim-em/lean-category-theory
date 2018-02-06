@@ -17,8 +17,8 @@ open categories.examples.topological_spaces
 
 namespace categories.examples.sheaves
 
-def PresheafOf ( C : Category ) { α } ( X : topological_space α ) := Functor (Opposite (X.OpenSets)) C
-def Presheaf { α } ( X : topological_space α ) := PresheafOf CategoryOfTypes X
+def {u v w} PresheafOf ( C : Category.{u v} ) { α : Type w } ( X : topological_space α ) := Functor (Opposite (X.OpenSets)) C
+def {w} Presheaf { α : Type w } ( X : topological_space α ) := PresheafOf CategoryOfTypes X
 
 structure OpenCovering { α } ( X : topological_space α ) :=
   ( I   : Type )
@@ -52,7 +52,7 @@ private definition restriction_to_intersection_1
   ( i j : C.I ) 
   { D : Category }
   ( F : PresheafOf D X ) : D.Hom (F.onObjects (C.U i)) (F.onObjects ((C.U i) ∩ (C.U j))) := 
-F.onMorphisms (plift.up (intersection_inclusion_1 i j))
+F.onMorphisms (ulift.up (plift.up (intersection_inclusion_1 i j)))
 
 private definition restriction_to_intersection_2
   { α } { X : topological_space α } 
@@ -60,7 +60,7 @@ private definition restriction_to_intersection_2
   ( i j : C.I ) 
   { D : Category }
   ( F : PresheafOf D X ) : D.Hom (F.onObjects (C.U j)) (F.onObjects ((C.U i) ∩ (C.U j))) := 
-F.onMorphisms (plift.up (intersection_inclusion_2 i j))
+F.onMorphisms (ulift.up (plift.up (intersection_inclusion_2 i j)))
 
 structure CompatibleSections { α } { X : topological_space α } ( covering : OpenCovering X ) ( F : Presheaf X ) := 
   ( sections      : Π i : covering.I, F.onObjects (covering.U i) )
@@ -68,7 +68,7 @@ structure CompatibleSections { α } { X : topological_space α } ( covering : Op
 
 structure Gluing { α } { X : topological_space α } { U : OpenCovering X } { F : Presheaf X } ( s : CompatibleSections U F ) :=
   ( section_     : F.onObjects U.union )
-  ( restrictions : ∀ i : U.I, F.onMorphisms (plift.up (U.union_inclusion i)) section_ = s.sections i)
+  ( restrictions : ∀ i : U.I, F.onMorphisms (ulift.up (plift.up (U.union_inclusion i))) section_ = s.sections i)
 
 structure Sheaf { α } ( X : topological_space α ) :=
   ( presheaf        : Presheaf X )
@@ -76,7 +76,7 @@ structure Sheaf { α } ( X : topological_space α ) :=
 
 open categories.universal
 
-structure {u v} SheafOf ( C : Category.{u v} ) [ sc : StronglyConcrete.{u v 0 0 0} C ] { α } ( X : topological_space α ) :=
+structure {u₁ u₂ u₃ u₄} NaiveSheafOf ( C : Category.{u₁ u₂} ) [ sc : StronglyConcrete.{u₁ u₂ u₃ u₄ u₄} C ] { α : Type u₄ } ( X : topological_space α ) :=
   ( presheaf        : PresheafOf C X )
   ( sheaf_condition : Π ( U : OpenCovering X ) ( s : CompatibleSections U (FunctorComposition presheaf sc.F) ), Gluing s )
 
@@ -84,9 +84,11 @@ open categories.examples.rings
 
 set_option pp.all true
 
+#print NaiveSheafOf
+
 structure {u v} RingedSpace (α : Type u) :=
-  ( space : topological_space α)
-  ( structure_sheaf : SheafOf CategoryOfCommutativeRings.{v} space ) 
+  ( space : topological_space α )
+  ( structure_sheaf : NaiveSheafOf CategoryOfCommutativeRings.{v} space ) 
 
 structure LocallyRingedSpace (α : Type) extends RingedSpace α :=
   ( local_rings : ∀ a : α, is_local (stalk_at a structure_sheaf) )

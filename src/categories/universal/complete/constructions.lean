@@ -43,15 +43,16 @@ private definition ConeMorphism_from_map_to_limit
 }
 
 set_option pp.universes true
+set_option trace.class_instances true
 
 open categories.util.finite.Two
 
 -- PROJECT this construction is unpleasant
-definition Equalizers_from_Limits ( C : Category.{u₁ u₂} ) [ Complete.{u₁ u₂ u₃ u₄} C ] : has_Equalizers.{u₁ u₂} C := {
+definition Equalizers_from_Limits ( C : Category.{u₁ u₂} ) [ Complete.{u₁ u₂ 0 0} C ] : has_Equalizers.{u₁ u₂} C := {
   equalizer := λ X Y f g, let lim := limitCone(ParallelPair_functor f g) in {
     equalizer     := lim.terminal_object.cone_point,
     inclusion     := lim.terminal_object.cone_maps Two._0,
-    witness       := let commutativity := @Cone.commutativity _ _ _ lim.terminal_object Two._0 Two._1 in 
+    witness       := let commutativity := @Cone.commutativity_lemma _ _ _ lim.terminal_object Two._0 Two._1 in 
                      begin
                        dsimp,
                        erw commutativity tt,
