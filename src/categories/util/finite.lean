@@ -88,14 +88,4 @@ instance Two_is_Finite : Finite Two := {
     }
   }
 
-definition Two.choice { α : Sort u } ( a b : α ) : Two → α 
-| _0 := a
-| _1 := b
-definition Two.split_choice { Z : Two → Sort v } ( f : Z _0 ) ( g : Z _1 ) : Π i : Two, Z i
-| _0 := f
-| _1 := g
-definition Two.dependent_choice { α : Sort u } { Z : α → Sort v } { a b : α } ( f : Z a ) ( g : Z b ) : Π i : Two, Z (Two.choice a b i) 
-| _0 := f
-| _1 := g
-
 end categories.util.finite
