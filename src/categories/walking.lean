@@ -22,7 +22,7 @@ begin
 tidy,
 end
 
-def {u} unit_or_empty_subsingleton {α : Type u} [decidable_eq α] {a b : α} : subsingleton (ite (a = b) unit empty) :=
+def unit_or_empty_subsingleton {α : Type u₁} [decidable_eq α] {a b : α} : subsingleton (ite (a = b) unit empty) :=
 begin
 by_cases a = b,
 rw h,
@@ -32,7 +32,7 @@ rw if_neg h,
 apply_instance,
 end
 -- TODO remove?
--- def {u} unit_or_empty_subsingleton' {α : Type u} [decidable_eq α] {a : α} {Z : Type}: subsingleton (ite (a = a) unit Z) :=
+-- def unit_or_empty_subsingleton' {α : Type u₁} [decidable_eq α] {a : α} {Z : Type}: subsingleton (ite (a = a) unit Z) :=
 -- begin
 -- simp,
 -- apply_instance,
@@ -58,12 +58,55 @@ do l ← local_context,
    at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(pempty) := induction h >> skip | _ := failed end))
 
 
+meta def induction' (e :expr) := tactic.interactive.induction (none, to_pexpr e) none [] none
+
+definition foo (f : ite (_0 = _0) punit pempty) : punit.star = f := begin
+induction f,
+refl,
+end
+
+meta def induction_only : tactic unit :=
+do l ← local_context,
+   match l with 
+   | [e] := do t ← infer_type e,
+               t ← whnf t,
+               match t with
+               | `(punit) := induction' e
+               | _ := skip
+               end
+   | _   := failed
+   end
+
+definition foo' (f : ite (_0 = _0) punit pempty) : punit.star = f :=
+begin
+induction_only,
+refl
+end
+
+
 definition WalkingPair : Category.{u₁ u₂} := {
   Obj := Two,
   Hom := λ X Y, if X = Y then punit else pempty,
   identity       := by tidy, 
   compose        := by tidy,
-  left_identity := begin dsimp', intros, induction_Two, dsimp', automatic_induction, simp_at_each, automatic_induction,tidy {max_steps:=8,trace_steps:=tt}, end,
+  left_identity := begin dsimp', intros, induction_Two, dsimp', 
+                    --  do l ← local_context, 
+                    --     tactic.trace l.head, 
+                    --     t ← infer_type l.head, 
+                    --     tactic.trace t, 
+                    --     t' <- whnf t, 
+                    --     tactic.trace t', 
+                    --     match t' with 
+                    --       | `(punit) := tactic.trace "foo" 
+                    --       | _ := tactic.trace "bar" 
+                    --     end,
+                    --  induction f,
+                      do l ← local_context, 
+                      h ← pure l.head,
+                        induction' h, skip,
+                       induction f,
+                      admit
+                    end,
   right_identity := sorry,
   associativity := sorry
 }
