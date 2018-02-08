@@ -7,7 +7,6 @@ import ..opposites
 import .topological_spaces
 import ..universal.strongly_concrete
 import ..examples.rings
--- import data.set.basic
 
 open categories
 open categories.functor
@@ -76,7 +75,7 @@ structure Sheaf { α } ( X : topological_space α ) :=
 
 open categories.universal
 
-structure {u₁ u₂ u₃ u₄} NaiveSheafOf ( C : Category.{u₁ u₂} ) [ sc : StronglyConcrete.{u₁ u₂ u₃ u₄ u₄} C ] { α : Type u₄ } ( X : topological_space α ) :=
+structure {u₁ u₂ u₃ u₄} NaiveSheafOf ( C : Category.{u₁ u₂} ) { α : Type u₃ } ( X : topological_space α ) [ sc : StronglyConcrete.{u₁ u₂ u₄ u₃ u₃} C ] :=
   ( presheaf        : PresheafOf C X )
   ( sheaf_condition : Π ( U : OpenCovering X ) ( s : CompatibleSections U (FunctorComposition presheaf sc.F) ), Gluing s )
 
@@ -90,7 +89,8 @@ structure {u v} RingedSpace (α : Type u) :=
   ( space : topological_space α )
   ( structure_sheaf : NaiveSheafOf CategoryOfCommutativeRings.{v} space ) 
 
-structure LocallyRingedSpace (α : Type) extends RingedSpace α :=
-  ( local_rings : ∀ a : α, is_local (stalk_at a structure_sheaf) )
+-- TODO define stalks first (for which Rings needs colimits)
+-- structure LocallyRingedSpace (α : Type) extends RingedSpace α :=
+--   ( local_rings : ∀ a : α, is_local (stalk_at a structure_sheaf) )
 
 end categories.examples.sheaves

@@ -22,20 +22,26 @@ unfold nat.add,
 rw a_ih,
 end
 
+@[simp] private lemma zero_add (a b : ℕ) : ((nat.add b a) = a) ↔ (b = 0) := 
+begin
+tidy,
+sorry,
+rw a_1, simp
+end
+
+
 -- PROJECT This reducible is gross, but without it we can't see what NCategory.Hom is...
 @[reducible] definition ℕCategory : Category :=
   {
         Obj := unit,
         Hom := λ _ _, ℕ,
-        identity := _, -- Notice we don't specify the identity here!
-        compose  := λ _ _ _ n m, n + m
+        identity := _,
+        compose  := λ _ _ _ n m, n + m,
   }  
 
 definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
   { onObjects   := id,
     onMorphisms := λ _ _ n, n + n, -- PROJECT this is ugly: why can't we write `2 * n`
-    identities    := ♯,
-    functoriality := ♯
   }
 
 end categories.examples.naturals

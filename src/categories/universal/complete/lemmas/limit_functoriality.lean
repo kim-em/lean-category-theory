@@ -40,7 +40,7 @@ namespace categories.universal.lemmas.limit_functoriality
     : C.compose (L.morphism_to_terminal_object_from X).cone_morphism (L.terminal_object.cone_maps j) = X.cone_maps j :=
   (L.morphism_to_terminal_object_from X).commutativity j
 
-@[applicable] definition morphism_to_terminal_object_cone_point 
+@[applicable,reducible] definition morphism_to_terminal_object_cone_point 
   { J D : Category }
   { Z : D.Obj }
   { G : Functor J D }

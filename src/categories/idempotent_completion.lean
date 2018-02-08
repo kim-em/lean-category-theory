@@ -80,7 +80,7 @@ definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : F
 
 private def IdempotentCompletion_idempotent_functor ( C : Category ) : Functor (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 {
-    onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin tidy, induction X, tidy end ⟩,
+    onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin induction X, tidy end ⟩,
     onMorphisms   := λ X Y f, ⟨ f.val.val, ♯ ⟩
 }
 private def IdempotentCompletion_idempotent_inverse ( C : Category ) : Functor (IdempotentCompletion C) (IdempotentCompletion (IdempotentCompletion C)) :=

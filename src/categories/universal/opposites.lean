@@ -39,9 +39,16 @@ def Coproduct_in_Opposite       {C : Category} {I: Type} {F : I → C.Obj}      
 def Cones_in_Opposite   {J C : Category} (F : Functor J C) : Equivalence (Cones (OppositeFunctor F)) (Cocones F) := sorry
 def Cocones_in_Opposite {J C : Category} (F : Functor J C) : Equivalence (Cocones (OppositeFunctor F)) (Cones F) := sorry
 
-instance Cocomplete_of_Opposite_Complete {C : Category} [Complete (Opposite C)]   : Cocomplete C := sorry
-instance Complete_of_Opposite_Cocomplete {C : Category} [Cocomplete (Opposite C)] : Complete C := sorry
-instance Opposite_Complete_of_Cocomplete {C : Category} [Cocomplete C]            : Complete (Opposite C) := sorry
-instance Opposite_Cocomplete_of_Complete {C : Category} [Complete C]              : Cocomplete (Opposite C) := sorry
+instance Opposite_has_Products_of_has_Coproducts     {C : Category} [c : has_Coproducts C]   : has_Products (Opposite C) := sorry
+instance Opposite_has_Equalizers_of_has_Coequalizers {C : Category} [c : has_Coequalizers C] : has_Equalizers (Opposite C) := sorry
+instance Opposite_has_Coproducts_of_has_Products     {C : Category} [c : has_Products C]     : has_Coproducts (Opposite C) := sorry
+instance Opposite_has_Coequalizers_of_has_Equalizers {C : Category} [c : has_Equalizers C]   : has_Coequalizers (Opposite C) := sorry
+
+instance Opposite_Complete_of_Cocomplete {C : Category} [c : Cocomplete C]            : Complete (Opposite C) := sorry
+instance Opposite_Cocomplete_of_Complete {C : Category} [c : Complete C]              : Cocomplete (Opposite C) := sorry
+
+-- It doesn't make sense to have instances here; too many loops!
+def Cocomplete_of_Opposite_Complete (C : Category) [ Complete (Opposite C) ]   : Cocomplete C := sorry
+def Complete_of_Opposite_Cocomplete (C : Category) [ Cocomplete (Opposite C) ] : Complete C := sorry
 
 end categories.universal.opposites

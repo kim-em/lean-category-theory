@@ -128,7 +128,7 @@ begin
 end
 
 -- needed for the proof of naturality below
-local attribute [reducible] universal.morphism_to_terminal_object_cone_point
+local attribute [reducible] universal.lemmas.limit_functoriality.morphism_to_terminal_object_cone_point
 
 private definition morphism_to_LimitObject_in_FunctorCategory { J C D : Category } [ cmp : Complete D ] { F : Functor J (FunctorCategory C D) } ( Y : Cone F ) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
       cone_morphism := {
