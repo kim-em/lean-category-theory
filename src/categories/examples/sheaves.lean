@@ -81,13 +81,11 @@ structure {u₁ u₂ u₃ u₄} NaiveSheafOf ( C : Category.{u₁ u₂} ) { α :
 
 open categories.examples.rings
 
-set_option pp.all true
-
-#print NaiveSheafOf
+-- PROJECT work out why typeclass inference is failing here: we shouldn't have to use @ below, or specify CommutativeRings_StronglyConcrete
 
 structure {u v} RingedSpace (α : Type u) :=
   ( space : topological_space α )
-  ( structure_sheaf : NaiveSheafOf CategoryOfCommutativeRings.{v} space ) 
+  ( structure_sheaf : @NaiveSheafOf CategoryOfCommutativeRings.{v} α space CommutativeRings_StronglyConcrete ) 
 
 -- TODO define stalks first (for which Rings needs colimits)
 -- structure LocallyRingedSpace (α : Type) extends RingedSpace α :=

@@ -17,24 +17,26 @@ open categories.equivalence
 
 namespace categories.universal.opposites
 
-def InitialObject_in_Opposite {C : Category} (i : InitialObject (Opposite C)) : TerminalObject C := {
+universes u₁ u₂ u₃
+
+def InitialObject_in_Opposite {C : Category.{u₁ u₂}} (i : InitialObject (Opposite C)) : TerminalObject C := {
   terminal_object := i.initial_object,
   morphism_to_terminal_object_from := i.morphism_from_initial_object_to,
   uniqueness_of_morphisms_to_terminal_object := i.uniqueness_of_morphisms_from_initial_object
 }
 
-def TerminalObject_in_Opposite {C : Category} (t : TerminalObject (Opposite C)) : InitialObject C := {
+def TerminalObject_in_Opposite {C : Category.{u₁ u₂}} (t : TerminalObject (Opposite C)) : InitialObject C := {
   initial_object := t.terminal_object,
   morphism_from_initial_object_to := t.morphism_to_terminal_object_from,
   uniqueness_of_morphisms_from_initial_object := t.uniqueness_of_morphisms_to_terminal_object
 }
 
-def Equalizer_in_Opposite       {C : Category} {X Y : C.Obj} {f g : C.Hom X Y} (e : @Equalizer (Opposite C) Y X f g)   : Coequalizer f g := sorry
-def Coequalizer_in_Opposite     {C : Category} {X Y : C.Obj} {f g : C.Hom X Y} (e : @Coequalizer (Opposite C) Y X f g) : Equalizer f g := sorry
-def BinaryProduct_in_Opposite   {C : Category} {X Y : C.Obj}                   (p : @BinaryProduct (Opposite C) X Y)   : BinaryCoproduct X Y := sorry
-def BinaryCoproduct_in_Opposite {C : Category} {X Y : C.Obj}                   (p : @BinaryCoproduct (Opposite C) X Y) : BinaryProduct X Y := sorry
-def Product_in_Opposite         {C : Category} {I: Type} {F : I → C.Obj}       (p : @Product (Opposite C) _ F)         : Coproduct F := sorry
-def Coproduct_in_Opposite       {C : Category} {I: Type} {F : I → C.Obj}       (p : @Coproduct (Opposite C) _ F)       : Product F := sorry
+def Coequalizer_from_Equalizer_in_Opposite          {C : Category.{u₁ u₂}} {X Y : C.Obj} {f g : C.Hom X Y} (e : @Equalizer (Opposite C) Y X f g)   : Coequalizer f g := sorry
+def Equalizer_from_Coequalizer_in_Opposite          {C : Category.{u₁ u₂}} {X Y : C.Obj} {f g : C.Hom X Y} (e : @Coequalizer (Opposite C) Y X f g) : Equalizer f g := sorry
+def Coproduct_from_Product_in_Opposite              {C : Category.{u₁ u₂}} {I: Type u₃} {F : I → C.Obj}   (p : @Product (Opposite C) _ F)         : Coproduct F := sorry
+def Product_from_Coproduct_in_Opposite              {C : Category.{u₁ u₂}} {I: Type u₃} {F : I → C.Obj}   (p : @Coproduct (Opposite C) _ F)       : Product F := sorry
+def BinaryCoproduct_from_BinaryProduct_in_Opposite {C : Category.{u₁ u₂}} {X Y : C.Obj}                    (p : @BinaryProduct (Opposite C) X Y)   : BinaryCoproduct X Y := sorry
+def BinaryProduct_from_BinaryCoproduct_in_Opposite  {C : Category.{u₁ u₂}} {X Y : C.Obj}                   (p : @BinaryCoproduct (Opposite C) X Y) : BinaryProduct X Y := sorry
 
 def Cones_in_Opposite   {J C : Category} (F : Functor J C) : Equivalence (Cones (OppositeFunctor F)) (Cocones F) := sorry
 def Cocones_in_Opposite {J C : Category} (F : Functor J C) : Equivalence (Cocones (OppositeFunctor F)) (Cones F) := sorry

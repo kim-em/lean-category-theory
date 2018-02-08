@@ -78,14 +78,14 @@ instance Equalizers_from_Limits ( C : Category.{u₁ u₂} ) [ Complete.{u₁ u�
                          cone_point := Z,
                          cone_maps := λ j : Two, C.compose a (lim.terminal_object.cone_maps j),
                          commutativity := begin
-                                            tidy,-- any_goals { induction f_1 }, tidy,
+                                            tidy,
                                             {
                                               have c := lim.terminal_object.commutativity,
-                                              erw @c Two._0 Two._1 ff,
+                                              erw @c Two._0 Two._1 Two._0,
                                             },
                                             {
                                               have c := lim.terminal_object.commutativity,
-                                              erw @c Two._0 Two._1 tt,
+                                              erw @c Two._0 Two._1 Two._1,
                                             },
                                           end
                        },
@@ -94,7 +94,7 @@ instance Equalizers_from_Limits ( C : Category.{u₁ u₂} ) [ Complete.{u₁ u�
                        -- finally, take care of those placeholders
                        tidy,
                        have c := lim.terminal_object.commutativity,
-                       rw ← @c Two._0 Two._1 tt,
+                       rw ← @c Two._0 Two._1 Two._1,
                        repeat { rw ← C.associativity },
                        rw witness, 
                      end

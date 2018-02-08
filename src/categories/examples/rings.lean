@@ -153,7 +153,8 @@ open categories.universal
 set_option pp.all true
 definition CommutativeRings_StronglyConcrete : StronglyConcrete CategoryOfCommutativeRings := sorry
 attribute [instance] CommutativeRings_StronglyConcrete
-example : StronglyConcrete CategoryOfCommutativeRings := by apply_instance -- FIXME
+-- example : StronglyConcrete CategoryOfCommutativeRings := by apply_instance -- FIXME
+-- #check CommutativeRings_StronglyConcrete
 
 
 -- This is the start of defining polynomials, power series, Laurent polynomials, and Laurent series all at once.

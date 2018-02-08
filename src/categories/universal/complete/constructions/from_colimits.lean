@@ -17,15 +17,12 @@ open categories.universal.opposites
 namespace categories.universal
 
 universes u₁ u₂ u₃ u₄
-set_option pp.universes true
 
 instance Coequalizers_from_Colimits ( C : Category.{u₁ u₂} ) [ Cocomplete.{u₁ u₂ u₃ u₄} C ] : has_Coequalizers.{u₁ u₂} C :=
-{ coequalizer := λ _ _ f g, Equalizer_in_Opposite (@equalizer (Opposite C) _ _ _ f g) }
+{ coequalizer := λ _ _ f g, Coequalizer_from_Equalizer_in_Opposite (@equalizer (Opposite C) _ _ _ f g) }
 
-set_option trace.class_instances true
-
-instance Coproducts_from_Colimits ( C : Category.{u₁ u₂} ) [ Cocomplete.{u₁ u₂ u₃ u₄} C ] : has_Coproducts.{u₁ u₂ u₃} C := {
-  coproduct := λ _ F, Product_in_Opposite (@product (Opposite C) _ _ F)
+instance Coproducts_from_Colimits ( C : Category.{u₁ u₂} ) [ Cocomplete.{u₁ u₂ u₃ u₃} C ] : has_Coproducts.{u₁ u₂ u₃} C := {
+  coproduct := λ _ F, Coproduct_from_Product_in_Opposite (@product.{u₁ u₂ u₃} (Opposite C) (@universal.Products_from_Limits (Opposite C) (universal.opposites.Opposite_Complete_of_Cocomplete)) _ F)
 }
 
 end categories.universal
