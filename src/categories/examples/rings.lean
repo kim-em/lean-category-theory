@@ -77,8 +77,6 @@ definition CommutativeRings_Concrete : Concrete CategoryOfCommutativeRings := {
 }
 attribute [instance] CommutativeRings_Concrete
 
-
-
 def polynomials_over (α) [comm_ring α] : comm_ring (ℕ →₀ α) := finsupp.to_comm_ring
 
 def evaluate_at {α} [r : comm_ring α] (a : α) : commutative_ring_morphism (polynomials_over α) r := {
@@ -150,7 +148,6 @@ open categories.universal
 --   preserves_limits := RepresentableFunctorPreservesLimits ForgetfulFunctor_CommutativeRings_to_Types,
 -- }
 -- attribute [instance] CommutativeRings_StronglyConcrete
-set_option pp.all true
 definition CommutativeRings_StronglyConcrete : StronglyConcrete CategoryOfCommutativeRings := sorry
 attribute [instance] CommutativeRings_StronglyConcrete
 -- example : StronglyConcrete CategoryOfCommutativeRings := by apply_instance -- FIXME

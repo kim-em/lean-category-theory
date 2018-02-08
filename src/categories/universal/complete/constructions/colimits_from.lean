@@ -17,7 +17,6 @@ open categories.universal.opposites
 namespace categories.universal
 
 universes u₁ u₂ u₃ u₄
-set_option pp.universes true
 
 instance Colimits_from_Coproducts_and_Coequalizers ( C : Category.{u₁ u₂} ) [ has_Coproducts.{u₁ u₂ u₃} C ] [ has_Coequalizers.{u₁ u₂} C ] : Cocomplete.{u₁ u₂ u₃ u₃} C := 
 @Cocomplete_of_Opposite_Complete C (@universal.Limits_from_Products_and_Equalizers (Opposite C) (universal.opposites.Opposite_has_Products_of_has_Coproducts) (universal.opposites.Opposite_has_Equalizers_of_has_Coequalizers))

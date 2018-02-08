@@ -41,9 +41,6 @@ private definition ConeMorphism_from_map_to_limit
   cone_morphism := f
 }
 
-set_option pp.universes true
--- set_option trace.class_instances true
-
 -- PROJECT this construction is unpleasant
 instance Equalizers_from_Limits ( C : Category.{u₁ u₂} ) [ Complete.{u₁ u₂ 0 0} C ] : has_Equalizers.{u₁ u₂} C := {
   equalizer := λ X Y f g, let lim := limitCone(ParallelPair_functor f g) in {

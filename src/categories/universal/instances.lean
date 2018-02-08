@@ -79,8 +79,6 @@ instance FiniteCoproducts_from_Coproducts ( C : Category ) [ has_Coproducts C ] 
   coproduct := λ _ _ f, has_Coproducts.coproduct f
 }
 
-set_option pp.universes true
-
 instance BinaryProducts_from_FiniteProducts ( C : Category.{u v} ) [ has_FiniteProducts.{u v 0} C ] : has_BinaryProducts C := {
   binary_product := λ X Y : C.Obj,
     let F := Two.choice X Y in
