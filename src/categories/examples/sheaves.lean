@@ -6,6 +6,7 @@ import ..functor
 import ..opposites
 import .topological_spaces
 import ..universal.strongly_concrete
+import ..universal.complete
 import ..examples.rings
 
 open categories
@@ -16,8 +17,10 @@ open categories.examples.topological_spaces
 
 namespace categories.examples.sheaves
 
-def {u v w} PresheafOf ( C : Category.{u v} ) { α : Type w } ( X : topological_space α ) := Functor (Opposite (X.OpenSets)) C
-def {w} Presheaf { α : Type w } ( X : topological_space α ) := PresheafOf CategoryOfTypes X
+universes u₁ u₂ u₃ u₄
+
+def PresheafOf ( C : Category.{u₁ u₂} ) { α : Type u₃ } ( X : topological_space α ) := Functor (Opposite (OpenSets X)) C
+def Presheaf { α : Type u₁ } ( X : topological_space α ) := PresheafOf CategoryOfTypes X
 
 structure OpenCovering { α } ( X : topological_space α ) :=
   ( I   : Type )
@@ -75,20 +78,36 @@ structure Sheaf { α } ( X : topological_space α ) :=
 
 open categories.universal
 
-structure {u₁ u₂ u₃ u₄} NaiveSheafOf ( C : Category.{u₁ u₂} ) { α : Type u₃ } ( X : topological_space α ) [ sc : StronglyConcrete.{u₁ u₂ u₄ u₃ u₃} C ] :=
+structure NaiveSheafOf ( C : Category.{u₁ u₂} ) { α : Type u₃ } ( X : topological_space α ) [ sc : StronglyConcrete.{u₁ u₂ u₄ u₃ u₃} C ] :=
   ( presheaf        : PresheafOf C X )
   ( sheaf_condition : Π ( U : OpenCovering X ) ( s : CompatibleSections U (FunctorComposition presheaf sc.F) ), Gluing s )
 
 open categories.examples.rings
 
 -- PROJECT work out why typeclass inference is failing here: we shouldn't have to use @ below, or specify CommutativeRings_StronglyConcrete
-
-structure {u v} RingedSpace (α : Type u) :=
+set_option pp.universes true
+structure RingedSpace (α : Type u₁) :=
   ( space : topological_space α )
-  ( structure_sheaf : @NaiveSheafOf CategoryOfCommutativeRings.{v} α space CommutativeRings_StronglyConcrete ) 
+  ( structure_sheaf : @NaiveSheafOf CategoryOfCommutativeRings.{u₂} α space CommutativeRings_StronglyConcrete ) 
 
--- TODO define stalks first (for which Rings needs colimits)
--- structure LocallyRingedSpace (α : Type) extends RingedSpace α :=
---   ( local_rings : ∀ a : α, is_local (stalk_at a structure_sheaf) )
+
+definition NaiveSheafOf.near { C : Category.{u₁ u₂} } { α : Type u₃ } { X : topological_space α } [ sc : StronglyConcrete.{u₁ u₂ u₄ u₃ u₃} C ] ( F : NaiveSheafOf C X ) (x : α) : Functor (Opposite (Neighbourhoods.{u₃ u₃} X x)) C := 
+FunctorComposition (OppositeFunctor (FullSubcategoryInclusion)) F.presheaf
+
+definition ColimitStalk_at {C : Category.{u₁ u₂}} [StronglyConcrete.{u₁ u₂ u₄ u₃ u₃} C] [Cocomplete.{u₁ u₂ u₃ u₃} C] {α : Type u₃} {X : topological_space α} (F : NaiveSheafOf C X) (x : α): ColimitCocone (F.near x) :=
+colimitCocone (F.near x)
+
+definition Stalk_at {C : Category.{u₁ u₂}} [StronglyConcrete.{u₁ u₂ u₄ u₃ u₃} C] [Cocomplete.{u₁ u₂ u₃ u₃} C] {α : Type u₃} {X : topological_space α} (F : NaiveSheafOf C X) (x : α): C.Obj :=
+colimit (F.near x)
+
+definition is_local {α} : comm_ring α → Prop := sorry
+
+-- FIXME
+-- def foo : Cocomplete.{u₂+1 u₂ u₁ u₁} CategoryOfCommutativeRings.{u₂} := by apply_instance
+-- def foo' : Cocomplete.{u₂+1 u₂ u₁ u₁} CategoryOfCommutativeRings.{u₂} := examples.rings.CategoryOfCommutativeRings_Cocomplete
+
+-- structure LocallyRingedSpace (α : Type u₁) extends RingedSpace.{u₁ u₂} α :=
+--   ( local_rings : ∀ a : α, is_local (Stalk_at structure_sheaf a) )
+
 
 end categories.examples.sheaves

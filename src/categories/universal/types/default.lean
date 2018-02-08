@@ -42,13 +42,7 @@ definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
     equalizer     := { x : α // f x = g x },
     inclusion     := λ x, x.val,
     witness       := ♯,
-    map           := begin
-                       tidy,
-                       exact k a,
-                       tidy,
-                    end,
-    factorisation := ♯,
-    uniqueness    := ♯ 
+    map           := ♯
   }
 }
 attribute [instance] Types_has_Equalizers
@@ -59,10 +53,7 @@ definition {u} Types_has_BinaryProducts : has_BinaryProducts CategoryOfTypes.{u}
     product             := X × Y,
     left_projection     := prod.fst,
     right_projection    := prod.snd,
-    map                 := λ _ f g z, (f z, g z),
-    left_factorisation  := by tidy,
-    right_factorisation := by tidy,
-    uniqueness          := by tidy
+    map                 := λ _ f g z, (f z, g z)
   }
 }
 attribute [instance] Types_has_BinaryProducts
@@ -73,14 +64,17 @@ definition {u} Types_has_BinaryCoproducts : has_BinaryCoproducts CategoryOfTypes
     left_inclusion     := sum.inl,
     right_inclusion    := sum.inr,
     map                 := λ _ f g z, sum.cases_on z f g,
-    left_factorisation  := by tidy,
-    right_factorisation := by tidy,
     uniqueness          := begin tidy, induction x, tidy, end
   }
 }
 attribute [instance] Types_has_BinaryCoproducts
 
--- PROJECT Does Types have coequalizers? 
+-- TODO ask if this can live in mathlib? I've also needed it for Mitchell's group theory work.
+@[simp] lemma {u₁ u₂} parallel_transport_for_trivial_bundles {α : Sort u₁} {a b : α} {β : Sort u₂} (p : a = b) (x : β) : @eq.rec α a (λ a, β) x b p = x :=
+begin
+induction p,
+simp,
+end
 
 definition {u} Types_has_Coequalizers : has_Coequalizers CategoryOfTypes.{u} :=
 { coequalizer := λ α β f g,
@@ -88,9 +82,25 @@ definition {u} Types_has_Coequalizers : has_Coequalizers CategoryOfTypes.{u} :=
     coequalizer   := quotient (eqv_gen.setoid (λ x y, ∃ a : α, f a = x ∧ g a = y)),
     projection    := λ x, begin apply quotient.mk, exact x end,
     witness       := begin tidy, apply quotient.sound, apply eqv_gen.rel, existsi x, simp, end,
-    map           := begin tidy, induction a, exact k a, sorry  end,
+    map           := begin
+                       tidy, 
+                       induction a, 
+                       exact k a, 
+                       induction a_p, 
+                       tidy, 
+                       induction a_p_a, 
+                       induction a_p_a_h, 
+                       rw ← a_p_a_h_left, 
+                       rw ← a_p_a_h_right,
+                       exact congr_fun w a_p_a_w
+                     end,
     factorisation := ♯,
-    uniqueness    := begin tidy, sorry end 
+    uniqueness    := begin
+                       tidy,
+                       induction x,
+                       have p := congr_fun witness x,
+                       tidy,
+                     end 
   }
 }
 attribute [instance] Types_has_Equalizers

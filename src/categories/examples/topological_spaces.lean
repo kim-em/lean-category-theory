@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Patrick Massot, Scott Morrison
 
-import ..category
+import ..full_subcategory
 import analysis.topology.topological_space
 import analysis.topology.continuity
 
@@ -66,20 +66,14 @@ instance OpenSet.has_inter { α : Type u₁ } { X : topological_space α } : has
 instance OpenSet.has_subset { α : Type u₁ } { X : topological_space α } : has_subset (OpenSet X) := {
   subset := λ U V, U.underlying_set ⊆ V.underlying_set
 }
-instance OpenSet.mem { α : Type u₁ } { X : topological_space α } : has_mem α (OpenSet X) := {
+instance OpenSet.has_mem { α : Type u₁ } { X : topological_space α } : has_mem α (OpenSet X) := {
   mem := λ a V, a ∈ V.underlying_set
 }
-
-end categories.examples.topological_spaces
-
-open categories.examples.topological_spaces
-
-universes u₁ u₂
 
 local attribute [applicable] set.subset.refl
 local attribute [applicable] topological_space.is_open_inter
 
-def topological_space.OpenSets { α : Type u₁ } ( X : topological_space α ) : Category.{u₁ u₂} :=
+def OpenSets { α : Type u₁ } ( X : topological_space α ) : Category.{u₁ u₂} :=
 {
   Obj            := OpenSet X,
   Hom            := λ U V, ulift (plift (U ⊆ V)),
@@ -87,6 +81,10 @@ def topological_space.OpenSets { α : Type u₁ } ( X : topological_space α ) :
   compose        := λ _ _ _ f g, begin tidy, apply set.subset.trans f g end
 }
 
-instance topological_space.OpenSets.has_inter { α : Type u₁ } ( X : topological_space α )  : has_inter ((X.OpenSets).Obj)  := OpenSet.has_inter 
-instance topological_space.OpenSets.has_subset { α : Type u₁ } ( X : topological_space α ) : has_subset ((X.OpenSets).Obj) := OpenSet.has_subset
+instance topological_space.OpenSets.has_inter { α : Type u₁ } ( X : topological_space α )  : has_inter ((OpenSets X).Obj)  := OpenSet.has_inter 
+instance topological_space.OpenSets.has_subset { α : Type u₁ } ( X : topological_space α ) : has_subset ((OpenSets X).Obj) := OpenSet.has_subset
+instance topological_space.OpenSets.has_mem { α : Type u₁ } ( X : topological_space α ) : has_mem α ((OpenSets X).Obj) := OpenSet.has_mem
 
+definition Neighbourhoods {α} (X : topological_space α) (x : α) : Category := FullSubcategory (OpenSets X) (λ U, x ∈ U)
+
+end categories.examples.topological_spaces

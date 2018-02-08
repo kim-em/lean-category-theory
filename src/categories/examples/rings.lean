@@ -5,6 +5,7 @@
 import categories.functor
 import .monoids
 import ..universal.strongly_concrete
+import ..universal.complete.constructions.colimits_from
 import tactic.ring
 import algebra.group_power
 import data.finsupp
@@ -12,10 +13,12 @@ noncomputable theory
 
 namespace categories.examples.rings
 
+universes u v
+
 open categories
 open categories.examples.monoids
 
-structure {u} commutative_ring_morphism { α β : Type u } ( s : comm_ring α ) ( t : comm_ring β ) :=
+structure commutative_ring_morphism { α β : Type u } ( s : comm_ring α ) ( t : comm_ring β ) :=
   ( map: α → β )
   ( multiplicative : ∀ x y : α, map (comm_ring.mul x y) = comm_ring.mul (map x) (map y) . tidy' )
   ( unital : map(s.one) = t.one . tidy' )
@@ -27,23 +30,22 @@ make_lemma commutative_ring_morphism.additive
 attribute [simp] commutative_ring_morphism.multiplicative_lemma commutative_ring_morphism.unital_lemma commutative_ring_morphism.additive_lemma
 
 -- This defines a coercion so we can write `f x` for `map f x`.
-definition {u} commutative_ring_morphism_to_map { α β : Type u } { s : comm_ring α } { t : comm_ring β } : has_coe_to_fun (commutative_ring_morphism s t) :=
+instance commutative_ring_morphism_to_map { α β : Type u } { s : comm_ring α } { t : comm_ring β } : has_coe_to_fun (commutative_ring_morphism s t) :=
 { F   := λ f, Π x : α, β,
   coe := λ r, r.map }
-attribute [instance] commutative_ring_morphism_to_map
 
-definition {u} commutative_ring_identity { α : Type u } ( s : comm_ring α ) : commutative_ring_morphism s s := {
+definition commutative_ring_identity { α : Type u } ( s : comm_ring α ) : commutative_ring_morphism s s := {
   map := id
 }
 
-definition {u} commutative_ring_morphism_composition
+definition commutative_ring_morphism_composition
   { α β γ : Type u } { s : comm_ring α } { t : comm_ring β } { u : comm_ring γ}
   ( f: commutative_ring_morphism s t ) ( g: commutative_ring_morphism t u ) : commutative_ring_morphism s u :=
 {
   map := λ x, g (f x)
 }
 
-@[applicable] lemma {u} commutative_ring_morphism_pointwise_equality
+@[applicable] lemma commutative_ring_morphism_pointwise_equality
   { α β : Type u } { s : comm_ring α } { t : comm_ring β }
   ( f g : commutative_ring_morphism s t )
   ( w : ∀ x : α, f x = g x) : f = g :=
@@ -54,7 +56,7 @@ begin
     subst hc
 end
 
-definition {u} CategoryOfCommutativeRings : Category.{u+1 u} := 
+definition CategoryOfCommutativeRings : Category.{u+1 u} := 
 {
     Obj := Σ α : Type u, comm_ring α,
     Hom := λ s t, commutative_ring_morphism s.2 t.2,
@@ -148,11 +150,19 @@ open categories.universal
 --   preserves_limits := RepresentableFunctorPreservesLimits ForgetfulFunctor_CommutativeRings_to_Types,
 -- }
 -- attribute [instance] CommutativeRings_StronglyConcrete
+
 definition CommutativeRings_StronglyConcrete : StronglyConcrete CategoryOfCommutativeRings := sorry
 attribute [instance] CommutativeRings_StronglyConcrete
 -- example : StronglyConcrete CategoryOfCommutativeRings := by apply_instance -- FIXME
 -- #check CommutativeRings_StronglyConcrete
 
+set_option pp.universes true
+instance CategoryOfCommutativeRings_has_Coproducts : has_Coproducts.{u+1 u v} CategoryOfCommutativeRings := sorry
+instance CategoryOfCommutativeRings_has_Coequalizers : has_Coequalizers.{u+1 u} CategoryOfCommutativeRings := sorry
+
+-- FIXME this should work `by apply_instance`
+instance CategoryOfCommutativeRings_Cocomplete : Cocomplete.{u+1 u v v} CategoryOfCommutativeRings.{u} := @universal.Colimits_from_Coproducts_and_Coequalizers CategoryOfCommutativeRings rings.CategoryOfCommutativeRings_has_Coproducts rings.CategoryOfCommutativeRings_has_Coequalizers
+#print rings.CategoryOfCommutativeRings_Cocomplete
 
 -- This is the start of defining polynomials, power series, Laurent polynomials, and Laurent series all at once.
 -- It's not really relevant here.

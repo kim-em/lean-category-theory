@@ -84,15 +84,18 @@ structure BinaryCoproduct { C : Category } ( X Y : C.Obj ) :=
   ( left_inclusion      : C.Hom X coproduct )
   ( right_inclusion     : C.Hom Y coproduct )
   ( map                 : ∀ { Z : C.Obj } ( f : C.Hom X Z ) ( g : C.Hom Y Z ), C.Hom coproduct Z )
-  ( left_factorisation  : ∀ { Z : C.Obj } ( f : C.Hom X Z ) ( g : C.Hom Y Z ), C.compose left_inclusion (map f g)  = f ) 
-  ( right_factorisation : ∀ { Z : C.Obj } ( f : C.Hom X Z ) ( g : C.Hom Y Z ), C.compose right_inclusion(map f g) = g ) 
+  ( left_factorisation  : ∀ { Z : C.Obj } ( f : C.Hom X Z ) ( g : C.Hom Y Z ), C.compose left_inclusion (map f g)  = f . tidy' ) 
+  ( right_factorisation : ∀ { Z : C.Obj } ( f : C.Hom X Z ) ( g : C.Hom Y Z ), C.compose right_inclusion(map f g) = g . tidy' ) 
   ( uniqueness          : ∀ { Z : C.Obj } ( f g : C.Hom coproduct Z )
                             ( left_witness  : C.compose left_inclusion f = C.compose left_inclusion g )
-                            ( right_witness : C.compose right_inclusion f = C.compose right_inclusion g ), f = g )
+                            ( right_witness : C.compose right_inclusion f = C.compose right_inclusion g ), f = g . tidy' )
 
-attribute [simp,ematch] BinaryCoproduct.left_factorisation BinaryCoproduct.right_factorisation 
+make_lemma BinaryCoproduct.left_factorisation
+make_lemma BinaryCoproduct.right_factorisation
+make_lemma BinaryCoproduct.uniqueness
+attribute [simp,ematch] BinaryCoproduct.left_factorisation_lemma BinaryCoproduct.right_factorisation_lemma
 attribute [applicable] BinaryCoproduct.left_inclusion BinaryCoproduct.right_inclusion BinaryCoproduct.map
-attribute [applicable] BinaryCoproduct.uniqueness
+attribute [applicable] BinaryCoproduct.uniqueness_lemma
 
 structure {u v w} Coproduct { C : Category.{u v} } { I : Type w } ( X : I → C.Obj ) :=
   ( coproduct     : C.Obj )

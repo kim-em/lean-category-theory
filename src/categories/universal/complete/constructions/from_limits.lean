@@ -57,7 +57,6 @@ instance Equalizers_from_Limits ( C : Category.{u₁ u₂} ) [ Complete.{u₁ u�
                        tidy,
                        induction j,
                        tidy,
-                       exact k,
                        exact C.compose k f,
                        induction j,
                        induction k_1,
@@ -108,7 +107,7 @@ instance Products_from_Limits (C : Category.{u₁ u₂}) [Complete.{u₁ u₂ u�
                                                 intros, 
                                                 have p := lim_F.uniqueness_of_morphisms_to_terminal_object, 
                                                 have q := p _ (ConeMorphism_from_map_to_limit f)
-                                                  { cone_morphism := g, commutativity := begin tidy, simp *, end }, -- PROJECT think about automation here
+                                                  { cone_morphism := g, commutativity := begin tidy, simp *, end }, -- (`simp *` isn't good in tidy; it's really slow)
                                                 exact congr_arg ConeMorphism.cone_morphism q, -- PROJECT surely this line can be automated: if you know a = b, you know a.x = b.x
                                               end,
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from { 
