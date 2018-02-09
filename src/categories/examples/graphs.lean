@@ -10,11 +10,11 @@ open categories.graphs
 namespace categories.examples.graphs
 
 @[applicable] private lemma {u1 v1 u2 v2} GraphHomomorphisms_pointwise_equal
-  { C : Graph.{u1 v1} }
-  { D : Graph.{u2 v2} } 
-  { F G : GraphHomomorphism C D } 
-  ( objectWitness : ∀ X : C.Obj, F.onObjects X = G.onObjects X ) 
-  ( morphismWitness : ∀ X Y : C.Obj, ∀ f : C.Hom X Y, ⟦ F.onMorphisms f ⟧ = G.onMorphisms f ) : F = G :=
+  {C : Graph.{u1 v1}}
+  {D : Graph.{u2 v2}} 
+  {F G : GraphHomomorphism C D} 
+  (objectWitness : ∀ X : C.Obj, F.onObjects X = G.onObjects X) 
+  (morphismWitness : ∀ X Y : C.Obj, ∀ f : C.Hom X Y, ⟦ F.onMorphisms f ⟧ = G.onMorphisms f) : F = G :=
 begin
   induction F with F_onObjects F_onMorphisms,
   induction G with G_onObjects G_onMorphisms,
@@ -32,11 +32,11 @@ definition CategoryOfGraphs : Category := {
     identity := λ G, {
         onObjects   := id,
         onMorphisms := λ _ _ f, f
-    },
+   },
     compose := λ _ _ _ f g, {
         onObjects   := λ x, g.onObjects (f.onObjects x),
         onMorphisms := λ _ _ e, g.onMorphisms (f.onMorphisms e)
-    }
+   }
 }
 
 end categories.examples.graphs

@@ -26,11 +26,11 @@ theorem Currying_for_functors :
     isomorphism_1 := {
      morphism  := Curry_Uncurry_to_identity C D E,
      inverse   := identity_to_Curry_Uncurry C D E
-    },
+   },
     isomorphism_2 := {
      morphism  := Uncurry_Curry_to_identity C D E,
      inverse   := identity_to_Uncurry_Curry C D E
-    },
-  }
+   },
+ }
 
 end categories.natural_transformation

@@ -15,7 +15,7 @@ open categories.types
 
 namespace categories.adjunctions
 
-private definition Adjunction_to_HomAdjunction_morphism { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R ) 
+private definition Adjunction_to_HomAdjunction_morphism {C D : Category} {L : Functor C D} {R : Functor D C} (A : Adjunction L R) 
   : NaturalTransformation (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
                           (FunctorComposition (IdentityFunctor (Opposite C) × R) (HomPairing C)) := 
 {
@@ -24,7 +24,7 @@ private definition Adjunction_to_HomAdjunction_morphism { C D : Category } { L :
     λ f, C.compose (A.unit.components P.1) (R.onMorphisms f)
 }
 
-private definition Adjunction_to_HomAdjunction_inverse { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R ) 
+private definition Adjunction_to_HomAdjunction_inverse {C D : Category} {L : Functor C D} {R : Functor D C} (A : Adjunction L R) 
   : NaturalTransformation (FunctorComposition (IdentityFunctor (Opposite C) × R) (HomPairing C))
                           (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D)) :=
 {
@@ -33,15 +33,15 @@ private definition Adjunction_to_HomAdjunction_inverse { C D : Category } { L : 
     λ f, D.compose (L.onMorphisms f) (A.counit.components P.2)
 }
 
-definition Adjunction_to_HomAdjunction  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : Adjunction L R ) : HomAdjunction L R := 
+definition Adjunction_to_HomAdjunction  {C D : Category} {L : Functor C D} {R : Functor D C} (A : Adjunction L R) : HomAdjunction L R := 
 {
     morphism  := Adjunction_to_HomAdjunction_morphism A,
     inverse   := Adjunction_to_HomAdjunction_inverse A
-  }
+ }
 
 @[simp] lemma mate_of_L
-  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
-  { X Y : C.Obj } ( f : C.Hom X Y )
+  {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+  {X Y : C.Obj} (f : C.Hom X Y)
     : C.compose ((A.morphism).components (X, L.onObjects X) (D.identity (L.onObjects X)))
       (R.onMorphisms (L.onMorphisms f))
       = (A.morphism).components (X, L.onObjects Y) (L.onMorphisms f) :=
@@ -53,8 +53,8 @@ begin
 end
 
 @[simp] lemma mate_of_L'
-  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
-  { X Y : C.Obj } ( f : C.Hom X Y )
+  {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+  {X Y : C.Obj} (f : C.Hom X Y)
     : C.compose f ((A.morphism).components (Y, L.onObjects Y) (D.identity (L.onObjects Y)))
       = (A.morphism).components (X, L.onObjects Y) (L.onMorphisms f) :=
 begin
@@ -66,8 +66,8 @@ begin
 end
 
 @[simp] lemma mate_of_R
-  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
-  { X Y : D.Obj } ( f : D.Hom X Y )
+  {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+  {X Y : D.Obj} (f : D.Hom X Y)
     : D.compose (L.onMorphisms (R.onMorphisms f)) ((A.inverse).components (R.onObjects Y, Y) (C.identity (R.onObjects Y)))
       = (A.inverse).components (R.onObjects X, Y) (R.onMorphisms f) :=
 begin
@@ -78,8 +78,8 @@ begin
 end
 
 @[simp] lemma mate_of_R'
-  { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
-  { X Y : D.Obj } ( f : D.Hom X Y )
+  {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+  {X Y : D.Obj} (f : D.Hom X Y)
     : D.compose ((A.inverse).components (R.onObjects X, X) (C.identity (R.onObjects X))) f = 
     (A.inverse).components (R.onObjects X, Y) (R.onMorphisms f) :=
 begin
@@ -89,17 +89,17 @@ begin
   -- exact q.symm
 end
 
-private definition unit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) := {
+private definition unit_from_HomAdjunction {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) := {
     components := λ X : C.Obj, A.morphism.components (X, L.onObjects X) (D.identity (L.onObjects X))
-  }
-private definition counit_from_HomAdjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) := {
+ }
+private definition counit_from_HomAdjunction {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) := {
     components := λ X : D.Obj, A.inverse.components (R.onObjects X, X) (C.identity (R.onObjects X))
-  }
+ }
 
 -- lemma pre_triangle_1 
--- { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R )
--- ( X : C.Obj )
--- ( Y : D.Obj )
+-- {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+-- (X : C.Obj)
+-- (Y : D.Obj)
 -- : ∀ f : C.Hom X (R.onObjects Y), C.compose f (C.compose ((unit_from_HomAdjunction A).components (R.onObjects Y)) (R.onMorphisms ((counit_from_HomAdjunction A).components Y))) = f :=
 -- begin
 --   intro f,
@@ -118,7 +118,7 @@ private definition counit_from_HomAdjunction { C D : Category } { L : Functor C 
 --   tidy,
 -- end
 
--- definition HomAdjunction_to_Adjunction { C D : Category } { L : Functor C D } { R : Functor D C } ( A : HomAdjunction L R ) : Adjunction L R := 
+-- definition HomAdjunction_to_Adjunction {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) : Adjunction L R := 
 -- {
 --   unit       := unit_from_HomAdjunction A,
 --   counit     := counit_from_HomAdjunction A,
@@ -133,9 +133,9 @@ private definition counit_from_HomAdjunction { C D : Category } { L : Functor C 
 --                   admit
 --                 end,
 --   triangle_2 := sorry
--- }
+--}
 
--- definition Adjunctions_agree { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :
+-- definition Adjunctions_agree {C D : Category} (L : Functor C D) (R : Functor D C) :
 --   Isomorphism CategoryOfTypes (Adjunction L R) (HomAdjunction L R) := 
 -- {
 --   morphism  := Adjunction_to_HomAdjunction,
@@ -145,6 +145,6 @@ private definition counit_from_HomAdjunction { C D : Category } { L : Functor C 
 --                  tidy,
 --                  -- this is just another lemma about mates; perhaps the same as the one we use above.
 --                end
--- }
+--}
 
 end categories.adjunctions

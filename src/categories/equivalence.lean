@@ -12,15 +12,15 @@ open categories.functor_categories
 
 namespace categories.equivalence
 
-structure {u1 v1 u2 v2} Equivalence ( C : Category.{u1 v1} ) ( D : Category.{u2 v2} ) :=
-  ( functor : Functor C D )
-  ( inverse : Functor D C )
-  ( isomorphism_1 : NaturalIsomorphism (FunctorComposition functor inverse) (IdentityFunctor C) . tidy' )
-  ( isomorphism_2 : NaturalIsomorphism (FunctorComposition inverse functor) (IdentityFunctor D) . tidy' )
+structure {u1 v1 u2 v2} Equivalence (C : Category.{u1 v1}) (D : Category.{u2 v2}) :=
+  (functor : Functor C D)
+  (inverse : Functor D C)
+  (isomorphism_1 : NaturalIsomorphism (FunctorComposition functor inverse) (IdentityFunctor C) . tidy')
+  (isomorphism_2 : NaturalIsomorphism (FunctorComposition inverse functor) (IdentityFunctor D) . tidy')
 
-definition {u1 v1 u2 v2} is_Equivalence { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := { e : Equivalence C D // e.functor = F }
+definition {u1 v1 u2 v2} is_Equivalence {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F : Functor C D) := {e : Equivalence C D // e.functor = F}
 
-definition {u1 v1 u2 v2} Equivalence.reverse { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( e : Equivalence C D ) : Equivalence D C :=
+definition {u1 v1 u2 v2} Equivalence.reverse {C : Category.{u1 v1}} {D : Category.{u2 v2}} (e : Equivalence C D) : Equivalence D C :=
 {
   functor := e.inverse,
   inverse := e.functor,
@@ -29,11 +29,11 @@ definition {u1 v1 u2 v2} Equivalence.reverse { C : Category.{u1 v1} } { D : Cate
 }
 
 definition {u1 v1 u2 v2 u3 v3} EquivalenceComposition
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  ( e : Equivalence C D )
-  ( f : Equivalence D E )
+  {C : Category.{u1 v1}}
+  {D : Category.{u2 v2}}
+  {E : Category.{u3 v3}}
+  (e : Equivalence C D)
+  (f : Equivalence D E)
    : Equivalence C E := {
   functor := FunctorComposition e.functor f.functor,
   inverse := FunctorComposition f.inverse e.inverse,
@@ -47,7 +47,7 @@ definition {u1 v1 u2 v2 u3 v3} EquivalenceComposition
                  (Functor_onIsomorphisms (whisker_on_left_functor D e.functor) f.isomorphism_1))
       ... ≅ₙ IdentityFunctor C
            : NaturalIsomorphism'.mkNatIso e.isomorphism_1
-     ).iso,
+    ).iso,
   isomorphism_2 :=
     (
       calc
@@ -58,24 +58,24 @@ definition {u1 v1 u2 v2 u3 v3} EquivalenceComposition
                  (Functor_onIsomorphisms (whisker_on_left_functor D f.inverse) e.isomorphism_2))
       ... ≅ₙ IdentityFunctor E
            : NaturalIsomorphism'.mkNatIso f.isomorphism_2
-     ).iso
+    ).iso
 }
 
-structure {u1 v1 u2 v2} Full     { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) :=
-  ( preimage : ∀ { X Y : C.Obj } ( f : D.Hom (F.onObjects X) (F.onObjects Y) ), C.Hom X Y )
-  ( witness  : ∀ { X Y : C.Obj } ( f : D.Hom (F.onObjects X) (F.onObjects Y) ), F.onMorphisms (preimage f) = f )
+structure {u1 v1 u2 v2} Full     {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F : Functor C D) :=
+  (preimage : ∀ {X Y : C.Obj} (f : D.Hom (F.onObjects X) (F.onObjects Y)), C.Hom X Y)
+  (witness  : ∀ {X Y : C.Obj} (f : D.Hom (F.onObjects X) (F.onObjects Y)), F.onMorphisms (preimage f) = f)
 
 attribute [semiapplicable] Full.preimage 
 
 attribute [simp,ematch] Full.witness
 
-structure {u1 v1 u2 v2} Faithful { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) :=
-  ( injectivity : ∀ { X Y : C.Obj } ( f g : C.Hom X Y ) ( p : F.onMorphisms f = F.onMorphisms g ), f = g )
+structure {u1 v1 u2 v2} Faithful {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F : Functor C D) :=
+  (injectivity : ∀ {X Y : C.Obj} (f g : C.Hom X Y) (p : F.onMorphisms f = F.onMorphisms g), f = g)
 
 attribute [semiapplicable] Faithful.injectivity
 
-definition {u1 v1 u2 v2} Embedding { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := (Full F) × (Faithful F)
+definition {u1 v1 u2 v2} Embedding {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F : Functor C D) := (Full F) × (Faithful F)
 
-definition {u1 v1 u2 v2} EssentiallySurjective { C : Category.{u1 v1} } { D : Category.{u2 v2} } ( F : Functor C D ) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F.onObjects c) d
+definition {u1 v1 u2 v2} EssentiallySurjective {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F : Functor C D) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F.onObjects c) d
 
 end categories.equivalence

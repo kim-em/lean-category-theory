@@ -13,36 +13,36 @@ open categories.functor_categories
 
 namespace categories.idempotent_completion
 
-structure Idempotent ( C : Category ) :=
-   ( object : C.Obj )
-   ( idempotent : C.Hom object object )
-   ( witness : C.compose idempotent idempotent = idempotent )
+structure Idempotent (C : Category) :=
+   (object : C.Obj)
+   (idempotent : C.Hom object object)
+   (witness : C.compose idempotent idempotent = idempotent)
 
 attribute [simp,ematch] Idempotent.witness
 
 local attribute [ematch] subtype.property
 
-definition IdempotentCompletion ( C: Category ) : Category :=
+definition IdempotentCompletion (C: Category) : Category :=
 {
   Obj            := Idempotent C,
-  Hom            := λ X Y, { f : C.Hom X.object Y.object // C.compose X.idempotent f = f ∧ C.compose f Y.idempotent = f },
+  Hom            := λ X Y, {f : C.Hom X.object Y.object // C.compose X.idempotent f = f ∧ C.compose f Y.idempotent = f},
   identity       := λ X, ⟨ X.idempotent, ♮ ⟩,
   compose        := λ X Y Z f g, ⟨ C.compose f.val g.val, ♮ ⟩
 }
 
-definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (IdempotentCompletion C) := {
+definition functor_to_IdempotentCompletion (C : Category) : Functor C (IdempotentCompletion C) := {
   onObjects     := λ X, ⟨ X, C.identity X, ♮ ⟩,
   onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩
 }
 
 -- -- PROJECT
--- definition IdempotentCompletion_functorial ( C D : Category ) : Functor (FunctorCategory C D) (FunctorCategory (IdempotentCompletion C) (IdempotentCompletion D)) := {
+-- definition IdempotentCompletion_functorial (C D : Category) : Functor (FunctorCategory C D) (FunctorCategory (IdempotentCompletion C) (IdempotentCompletion D)) := {
 --   onObjects     := λ F, {
 --     onObjects     := λ X, ⟨ F.onObjects X.object, F.onMorphisms X.idempotent, ♯ ⟩ ,
 --     onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val), ♯ ⟩,
 --     identities    := ♯,
 --     functoriality := ♯
---   },
+--  },
 --   onMorphisms   := λ F G τ, {
 --     components := λ X, ⟨ τ.components X.object, 
 --                          begin 
@@ -52,14 +52,14 @@ definition functor_to_IdempotentCompletion ( C : Category ) : Functor C (Idempot
 --                          end
 --                        ⟩,
 --     naturality := ♯
---   },
+--  },
 --   identities    := sorry, -- we've made a mistake somewhere..
 --   functoriality := sorry
--- }
+--}
 
 open categories.equivalence
 
--- lemma embedding_in_IdempotentCompletition ( C: Category ) : Embedding (functor_to_IdempotentCompletion C) :=
+-- lemma embedding_in_IdempotentCompletition (C: Category) : Embedding (functor_to_IdempotentCompletion C) :=
 -- begin
 --   unfold Embedding,
 --   split,
@@ -75,15 +75,15 @@ open categories.equivalence
 --   end
 -- end
 
-definition restrict_Functor_from_IdempotentCompletion { C D : Category } ( F : Functor (IdempotentCompletion C) D ) : Functor C D :=
+definition restrict_Functor_from_IdempotentCompletion {C D : Category} (F : Functor (IdempotentCompletion C) D) : Functor C D :=
   FunctorComposition (functor_to_IdempotentCompletion C) F
 
-private def IdempotentCompletion_idempotent_functor ( C : Category ) : Functor (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
+private def IdempotentCompletion_idempotent_functor (C : Category) : Functor (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 {
     onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin induction X, tidy end ⟩,
     onMorphisms   := λ X Y f, ⟨ f.val.val, ♯ ⟩
 }
-private def IdempotentCompletion_idempotent_inverse ( C : Category ) : Functor (IdempotentCompletion C) (IdempotentCompletion (IdempotentCompletion C)) :=
+private def IdempotentCompletion_idempotent_inverse (C : Category) : Functor (IdempotentCompletion C) (IdempotentCompletion (IdempotentCompletion C)) :=
 {
     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
     onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩
@@ -91,17 +91,17 @@ private def IdempotentCompletion_idempotent_inverse ( C : Category ) : Functor (
 
 -- PROJECT prove these lemmas about idempotent completion
 
--- lemma IdempotentCompletion_idempotent ( C : Category ) :
+-- lemma IdempotentCompletion_idempotent (C : Category) :
 --   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 -- {
 --   functor := IdempotentCompletion_idempotent_functor C,
 --   inverse := IdempotentCompletion_idempotent_inverse C,
 --   isomorphism_1 := begin tidy, exact C.identity _, tidy, induction f_2, tidy, end, -- PROJECT very slow??
 --   isomorphism_2 := sorry
--- }
+--}
 
 -- Oh, I guess I had originally intended that this should use the previous results... oh well.
-definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Functor C (IdempotentCompletion D) ) : 
+definition extend_Functor_to_IdempotentCompletion {C D : Category} (F : Functor C (IdempotentCompletion D)) : 
   Functor (IdempotentCompletion C) (IdempotentCompletion D) :=
 {
   onObjects     := λ X, let FX := F.onObjects X.object in
@@ -129,7 +129,7 @@ definition extend_Functor_to_IdempotentCompletion { C D : Category } ( F : Funct
 }
 
 -- lemma Functor_from_IdempotentCompletion_determined_by_restriction 
---   { C D : Category } ( F : Functor (IdempotentCompletion C) (IdempotentCompletion D) ) :
+--   {C D : Category} (F : Functor (IdempotentCompletion C) (IdempotentCompletion D)) :
 --     NaturalIsomorphism (extend_Functor_to_IdempotentCompletion (restrict_Functor_from_IdempotentCompletion F)) F := 
 --       sorry
 

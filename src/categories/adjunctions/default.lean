@@ -14,18 +14,18 @@ open categories.types
 
 namespace categories.adjunctions
 
-structure Adjunction { C D : Category } ( L : Functor C D ) ( R : Functor D C ) :=
-  ( unit       : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
-  ( counit     : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) )
-  ( triangle_1 : ∀ X : D.Obj, C.compose (unit.components (R.onObjects X)) (R.onMorphisms (counit.components X)) = C.identity (R.onObjects X) )
-  ( triangle_2 : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L.onObjects X)) = D.identity (L.onObjects X) )
+structure Adjunction {C D : Category} (L : Functor C D) (R : Functor D C) :=
+  (unit       : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
+  (counit     : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D))
+  (triangle_1 : ∀ X : D.Obj, C.compose (unit.components (R.onObjects X)) (R.onMorphisms (counit.components X)) = C.identity (R.onObjects X))
+  (triangle_2 : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L.onObjects X)) = D.identity (L.onObjects X))
 
 attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
 @[applicable] lemma Adjunctions_pointwise_equal
-  { C D : Category } ( L : Functor C D ) ( R : Functor D C )
-  ( A B : Adjunction L R )
-  ( w1 : A.unit = B.unit ) ( w2 : A.counit = B.counit ) : A = B :=
+  {C D : Category} (L : Functor C D) (R : Functor D C)
+  (A B : Adjunction L R)
+  (w1 : A.unit = B.unit) (w2 : A.counit = B.counit) : A = B :=
   begin
     induction A,
     induction B,
@@ -34,39 +34,39 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
 -- PROJECT: from an adjunction construct the triangles as equations between natural transformations.
 -- definition Triangle_1
---   { C D : Category }
---   { L : Functor C D }
---   { R : Functor D C }
---   ( unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
---   ( counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) ) :=
+--   {C D : Category}
+--   {L : Functor C D}
+--   {R : Functor D C}
+--   (unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
+--   (counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D)) :=
 --   @vertical_composition_of_NaturalTransformations D C R (FunctorComposition (FunctorComposition R L) R) R ⟦ whisker_on_left R unit ⟧ ⟦ whisker_on_right counit R ⟧
 --   = IdentityNaturalTransformation R
 
 -- definition Triangle_2
---   { C D : Category }
---   { L : Functor C D }
---   { R : Functor D C }
---   ( unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) )
---   ( counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) ) :=
+--   {C D : Category}
+--   {L : Functor C D}
+--   {R : Functor D C}
+--   (unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
+--   (counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D)) :=
 --   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
 --   = IdentityNaturalTransformation L
 
 @[simp,ematch] lemma Adjunction.unit_naturality
-  { C D : Category } 
-  { L : Functor C D } { R : Functor D C } 
-  ( A : Adjunction L R ) 
-  { X Y : C.Obj } ( f : C.Hom X Y ) : C.compose (A.unit.components X) (R.onMorphisms (L.onMorphisms f)) = C.compose f (A.unit.components Y) :=
+  {C D : Category} 
+  {L : Functor C D} {R : Functor D C} 
+  (A : Adjunction L R) 
+  {X Y : C.Obj} (f : C.Hom X Y) : C.compose (A.unit.components X) (R.onMorphisms (L.onMorphisms f)) = C.compose f (A.unit.components Y) :=
   begin
     its (A.unit.naturality f), 
   end
 
 @[simp,ematch] lemma Adjunction.counit_naturality
-  { C D : Category } 
-  { L : Functor C D } { R : Functor D C } 
-  ( A : Adjunction L R ) 
-  { X Y : D.Obj } ( f : D.Hom X Y ) : D.compose (L.onMorphisms (R.onMorphisms f)) (A.counit.components Y) = D.compose (A.counit.components X) f :=
+  {C D : Category} 
+  {L : Functor C D} {R : Functor D C} 
+  (A : Adjunction L R) 
+  {X Y : D.Obj} (f : D.Hom X Y) : D.compose (L.onMorphisms (R.onMorphisms f)) (A.counit.components Y) = D.compose (A.counit.components X) f :=
   begin
-    refine ( cast _ (A.counit.naturality f) ),
+    refine (cast _ (A.counit.naturality f)),
     tidy
   end
 

@@ -50,7 +50,7 @@ definition WalkingPair : Category.{u₁ u₂} := {
 }
 
 local attribute [applicable] Category.identity
-definition Pair_functor { C : Category.{u₃ u₄} } ( α β : C.Obj ) : Functor.{u₁ u₂ u₃ u₄} WalkingPair C :=
+definition Pair_functor {C : Category.{u₃ u₄}} (α β : C.Obj) : Functor.{u₁ u₂ u₃ u₄} WalkingPair C :=
 {
   onObjects     := λ p, p.choice α β,
   onMorphisms   := by tidy
@@ -61,29 +61,29 @@ definition WalkingParallelPair : Category.{u₁ u₂} := {
   Hom := begin
            intros X Y,
            induction X,
-           { induction Y, exact punit, exact Two },
-           { induction Y, exact pempty, exact punit }
+           {induction Y, exact punit, exact Two},
+           {induction Y, exact pempty, exact punit}
          end,
   identity       := by tidy,
   compose        := begin
-                      intros X Y Z f g, induction X, any_goals { induction Y }, any_goals { induction Z }, any_goals { dsimp at * }, 
+                      intros X Y Z f g, induction X, any_goals {induction Y}, any_goals {induction Z}, any_goals {dsimp at *}, 
                       exact punit.star, exact g, exact punit.star, exact f, induction f, exact punit.star, induction g, exact punit.star
                     end
 }
 
 -- this style is obscene. FIXME learn to use match statements  (or rather, to automatically unfold them)
-definition ParallelPair_functor { C : Category } { α β : C.Obj } ( f g : C.Hom α β ) : Functor WalkingParallelPair C := 
+definition ParallelPair_functor {C : Category} {α β : C.Obj} (f g : C.Hom α β) : Functor WalkingParallelPair C := 
 {
   onObjects     := begin intros X, induction X, exact α, exact β end,
   onMorphisms   := begin
                      intros,
                      induction X,
-                     { induction Y,
-                       { exact C.identity α },
-                       { induction a, exact f, exact g } },
-                     { induction Y,
-                       { induction a },
-                       { exact C.identity β } }
+                     {induction Y,
+                       {exact C.identity α},
+                       {induction a, exact f, exact g}},
+                     {induction Y,
+                       {induction a},
+                       {exact C.identity β}}
                    end
 }
 

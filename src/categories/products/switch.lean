@@ -12,14 +12,14 @@ namespace categories.products
 
 local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition SwitchProductCategory ( C D : Category ) : Functor (C × D) (D × C) :=
+definition SwitchProductCategory (C D : Category) : Functor (C × D) (D × C) :=
 {
   onObjects     := λ X, (X.snd, X.fst),
   onMorphisms   := λ _ _ f, (f.snd, f.fst)
 }
 
 definition SwitchSymmetry
-  ( C D : Category )
+  (C D : Category)
     : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) := ♯
         
 end categories.products

@@ -21,36 +21,36 @@ open categories.opposites
 
 namespace categories.yoneda
 
-definition {u v} Yoneda ( C : Category.{u v} ) : Functor C (FunctorCategory (Opposite C) CategoryOfTypes.{v}) :=
+definition {u v} Yoneda (C : Category.{u v}) : Functor C (FunctorCategory (Opposite C) CategoryOfTypes.{v}) :=
 {
     onObjects := λ X, {
         onObjects     := λ Y, C.Hom Y X,
         onMorphisms   := λ Y Y' f, λ g, C.compose f g
-    },
+   },
     onMorphisms   := λ X X' f, {
         components := λ Y, λ g, C.compose g f
-    }
+   }
 }
 
-definition {u v} CoYoneda ( C : Category.{u v} ) : Functor (Opposite C) (FunctorCategory C CategoryOfTypes.{v}) :=
+definition {u v} CoYoneda (C : Category.{u v}) : Functor (Opposite C) (FunctorCategory C CategoryOfTypes.{v}) :=
 {
     onObjects := λ X, {
         onObjects     := λ Y, C.Hom X Y,
         onMorphisms   := λ Y Y' f, λ g, C.compose g f
-    },
+   },
     onMorphisms   := λ X X' f, {
         components := λ Y, λ g, C.compose f g
-    }
+   }
 }
 
-class Representable { C : Category } ( F : Functor C CategoryOfTypes ) := 
-  ( c : C.Obj )
-  ( Φ : NaturalIsomorphism F ((CoYoneda C).onObjects c) )
+class Representable {C : Category} (F : Functor C CategoryOfTypes) := 
+  (c : C.Obj)
+  (Φ : NaturalIsomorphism F ((CoYoneda C).onObjects c))
 
-@[reducible] definition {v} YonedaEvaluation ( C : Category.{v v} )
+@[reducible] definition {v} YonedaEvaluation (C : Category.{v v})
   : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{v}
   := Evaluation (Opposite C) CategoryOfTypes.{v}
-@[reducible] definition {v} YonedaPairing ( C : Category.{v v} ) 
+@[reducible] definition {v} YonedaPairing (C : Category.{v v}) 
   : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{v}
   := FunctorComposition
       (FunctorComposition
@@ -59,15 +59,15 @@ class Representable { C : Category } ( F : Functor C CategoryOfTypes ) :=
       (HomPairing (FunctorCategory (Opposite C) CategoryOfTypes.{v})) 
 
 @[simp] private lemma YonedaLemma_aux_1
-   { C : Category }
-   { X Y : C.Obj }
-   ( f : C.Hom X Y )
-   { F G : Functor (Opposite C) CategoryOfTypes }
-   ( τ : NaturalTransformation F G )
-   ( Z : F.onObjects Y ) :
+   {C : Category}
+   {X Y : C.Obj}
+   (f : C.Hom X Y)
+   {F G : Functor (Opposite C) CategoryOfTypes}
+   (τ : NaturalTransformation F G)
+   (Z : F.onObjects Y) :
      G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
-theorem {v} YonedaLemma ( C : Category.{v v} ) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+theorem {v} YonedaLemma (C : Category.{v v}) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
   fsplit,
   fsplit,
@@ -106,7 +106,7 @@ begin
   tidy {hints:=[9, 7, 6, 7, 11, 13, 9, 10, 3, 9, 7, 6, 7, 6, 7, 6, 7, 9, 11, 13, 9, 10, 3, 6, 7, 6, 7, 6, 7, 6, 7, 9, 11, 13, 9, 10, 6, 7, 6, 7, 9, 11, 13, 9, 10, 3]},
 end
 
-theorem {u v} YonedaEmbedding ( C : Category.{u v} ) : Embedding (Yoneda C) :=
+theorem {u v} YonedaEmbedding (C : Category.{u v}) : Embedding (Yoneda C) :=
 begin
   unfold Embedding,
   fsplit,
@@ -116,20 +116,20 @@ begin
     {
         tidy,
         exact (f.components X) (C.identity X)
-    },
+   },
     {
         tidy,
         have q := congr_fun (f.naturality x) (C.identity X),
         tidy,
-    }
-  },
+   }
+ },
   {
     -- Show it is faithful
     tidy,
     have q := congr_fun p X,
     have q' := congr_fun q (C.identity X),
     tidy,
-  }
+ }
 end
 
 end categories.yoneda

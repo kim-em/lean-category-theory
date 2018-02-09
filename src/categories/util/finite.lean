@@ -10,14 +10,14 @@ namespace categories.util.finite
 universes u v
 
 structure Bijection (U : Type u) (V : Type v) := -- TODO this should use equiv
-  ( morphism : U → V )
-  ( inverse  : V → U )
-  ( witness_1 : ∀ u : U, inverse (morphism u) = u . tidy' )
-  ( witness_2 : ∀ v : V, morphism (inverse v) = v . tidy' )
+  (morphism : U → V)
+  (inverse  : V → U)
+  (witness_1 : ∀ u : U, inverse (morphism u) = u . tidy')
+  (witness_2 : ∀ v : V, morphism (inverse v) = v . tidy')
 
 class Finite (α : Type u) :=
-  ( cardinality : nat )
-  ( bijection : Bijection α (fin cardinality) ) -- TODO this should just assert the existence of a bijection
+  (cardinality : nat)
+  (bijection : Bijection α (fin cardinality)) -- TODO this should just assert the existence of a bijection
 
 @[applicable] definition empty_exfalso (x : false) : empty := begin exfalso, trivial end
 
@@ -42,7 +42,7 @@ instance empty_is_Finite : Finite empty := {
               end
 } 
 
-definition decidable_via_isomorphism {α : Type u} {β : Type v} [ dec : decidable_eq β ] ( iso : Bijection α β ) : decidable_eq α :=
+definition decidable_via_isomorphism {α : Type u} {β : Type v} [dec : decidable_eq β] (iso : Bijection α β) : decidable_eq α :=
 begin
   tidy,
   have x := dec (iso.morphism a) (iso.morphism b),
@@ -54,7 +54,7 @@ begin
                  end,
   exact is_true  begin 
                    have eq' := congr_arg iso.inverse eq,
-                   repeat_at_least_once { rewrite Bijection.witness_1 at eq' },
+                   repeat_at_least_once {rewrite Bijection.witness_1 at eq'},
                    exact eq',
                  end
 end
@@ -62,7 +62,7 @@ end
 definition Finite_has_decidable_eq {α : Type u} [fin : Finite α] : decidable_eq α := decidable_via_isomorphism fin.bijection
 attribute [instance] Finite_has_decidable_eq
 -- PROJECT etc.
--- instance Finite_product { α β : Type } [ Finite α ] [ Finite β ] : Finite (α × β) := sorry
+-- instance Finite_product {α β : Type} [Finite α] [Finite β] : Finite (α × β) := sorry
 
 def empty_function           {α : Sort u} : empty → α := ♯
 def empty_dependent_function {Z : empty → Sort u} : Π i : empty, Z i := ♯
@@ -85,7 +85,7 @@ instance Two_is_Finite : Finite Two := {
                        | 0, _ := _0
                        | 1, _ := _1 
                      end
-    }
-  }
+   }
+ }
 
 end categories.util.finite

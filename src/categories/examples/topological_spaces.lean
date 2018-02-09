@@ -17,9 +17,9 @@ structure morphism {α : Type u₁} {β : Type u₂} (t : topological_space α) 
 (continuity : continuous map)
 
 @[applicable] lemma morphism_pointwise_equality
-  {α : Type u₁} {β : Type u₂} { s : topological_space α } { t: topological_space β }
-  ( f g : morphism s t )
-  ( w : ∀ x : α, f.map x = g.map x) : f = g :=
+  {α : Type u₁} {β : Type u₂} {s : topological_space α} {t: topological_space β}
+  (f g : morphism s t)
+  (w : ∀ x : α, f.map x = g.map x) : f = g :=
 begin
     induction f with fc,
     induction g with gc,
@@ -27,13 +27,13 @@ begin
     subst hc
 end
 
-instance morphism_to_map {α : Type u₁} {β : Type u₂} { s : topological_space α } { t : topological_space β } : has_coe_to_fun (morphism s t) :=
-{ F   := λ f, Π x : α, β,
-coe := morphism.map }
+instance morphism_to_map {α : Type u₁} {β : Type u₂} {s : topological_space α} {t : topological_space β} : has_coe_to_fun (morphism s t) :=
+{F   := λ f, Π x : α, β,
+coe := morphism.map}
 
-def compose {α : Type u₁} {β : Type u₂} {γ : Type u₃} { s : topological_space α } { t : topological_space β } { u : topological_space γ}
-( f: morphism s t ) ( g: morphism t u )  : morphism s u :=
-{  
+def compose {α : Type u₁} {β : Type u₂} {γ : Type u₃} {s : topological_space α} {t : topological_space β} {u : topological_space γ}
+(f: morphism s t) (g: morphism t u)  : morphism s u :=
+{ 
   map        := λ x, g (f x),
   continuity := continuous.comp f.continuity g.continuity
 }
@@ -41,9 +41,9 @@ def compose {α : Type u₁} {β : Type u₂} {γ : Type u₃} { s : topological
 local notation g ∘ f := compose f g
 local attribute [simp] compose
 
-def identity { α : Type u₁ } ( t : topological_space α ) : morphism t t := ⟨ id, continuous_id ⟩
+def identity {α : Type u₁} (t : topological_space α) : morphism t t := ⟨ id, continuous_id ⟩
 
-@[simp] lemma id_value { α : Type u₁ } ( t : topological_space α ) (x : α) : identity t x = x := rfl
+@[simp] lemma id_value {α : Type u₁} (t : topological_space α) (x : α) : identity t x = x := rfl
 
 def Top : Category.{u₁+1 u₁} :=
 {
@@ -53,27 +53,27 @@ def Top : Category.{u₁+1 u₁} :=
   compose        := λ _ _ _ f g, compose f g
 }
 
-structure OpenSet { α : Type u₁ } ( X : topological_space α ) := 
- ( underlying_set : set α )
- ( is_open : X.is_open underlying_set )
+structure OpenSet {α : Type u₁} (X : topological_space α) := 
+ (underlying_set : set α)
+ (is_open : X.is_open underlying_set)
 
 attribute [applicable] OpenSet.is_open
 local attribute [applicable] topological_space.is_open_inter
 
-instance OpenSet.has_inter { α : Type u₁ } { X : topological_space α } : has_inter (OpenSet X) := {
+instance OpenSet.has_inter {α : Type u₁} {X : topological_space α} : has_inter (OpenSet X) := {
   inter := λ U V, ⟨ U.underlying_set ∩ V.underlying_set, ♯ ⟩ 
 }
-instance OpenSet.has_subset { α : Type u₁ } { X : topological_space α } : has_subset (OpenSet X) := {
+instance OpenSet.has_subset {α : Type u₁} {X : topological_space α} : has_subset (OpenSet X) := {
   subset := λ U V, U.underlying_set ⊆ V.underlying_set
 }
-instance OpenSet.has_mem { α : Type u₁ } { X : topological_space α } : has_mem α (OpenSet X) := {
+instance OpenSet.has_mem {α : Type u₁} {X : topological_space α} : has_mem α (OpenSet X) := {
   mem := λ a V, a ∈ V.underlying_set
 }
 
 local attribute [applicable] set.subset.refl
 local attribute [applicable] topological_space.is_open_inter
 
-def OpenSets { α : Type u₁ } ( X : topological_space α ) : Category.{u₁ u₂} :=
+def OpenSets {α : Type u₁} (X : topological_space α) : Category.{u₁ u₂} :=
 {
   Obj            := OpenSet X,
   Hom            := λ U V, ulift (plift (U ⊆ V)),
@@ -81,9 +81,9 @@ def OpenSets { α : Type u₁ } ( X : topological_space α ) : Category.{u₁ u�
   compose        := λ _ _ _ f g, begin tidy, apply set.subset.trans f g end
 }
 
-instance topological_space.OpenSets.has_inter { α : Type u₁ } ( X : topological_space α )  : has_inter ((OpenSets X).Obj)  := OpenSet.has_inter 
-instance topological_space.OpenSets.has_subset { α : Type u₁ } ( X : topological_space α ) : has_subset ((OpenSets X).Obj) := OpenSet.has_subset
-instance topological_space.OpenSets.has_mem { α : Type u₁ } ( X : topological_space α ) : has_mem α ((OpenSets X).Obj) := OpenSet.has_mem
+instance topological_space.OpenSets.has_inter {α : Type u₁} (X : topological_space α)  : has_inter ((OpenSets X).Obj)  := OpenSet.has_inter 
+instance topological_space.OpenSets.has_subset {α : Type u₁} (X : topological_space α) : has_subset ((OpenSets X).Obj) := OpenSet.has_subset
+instance topological_space.OpenSets.has_mem {α : Type u₁} (X : topological_space α) : has_mem α ((OpenSets X).Obj) := OpenSet.has_mem
 
 definition Neighbourhoods {α} (X : topological_space α) (x : α) : Category := FullSubcategory (OpenSets X) (λ U, x ∈ U)
 

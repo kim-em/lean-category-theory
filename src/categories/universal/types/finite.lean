@@ -16,8 +16,8 @@ namespace categories.types
 --                        have p := witness x_1,
 --                        tidy,
 --                      end
---   }
--- }
+--  }
+--}
 
 -- definition {u} FiniteTypes_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfFiniteTypes.{u} := {
 --   coproduct := λ I fin φ, {
@@ -30,13 +30,13 @@ namespace categories.types
 --                        have p := witness fst,
 --                        tidy,
 --                      end
---   }
--- }
+--  }
+--}
 
 -- definition {u} FiniteTypes_has_Equalizers : has_Equalizers CategoryOfFiniteTypes.{u} :=
--- { equalizer := λ α _ f g,
+-- {equalizer := λ α _ f g,
 --   {
---     equalizer     := ⟨ { x : α.1 // f x = g x }, sorry ⟩,
+--     equalizer     := ⟨ {x : α.1 // f x = g x}, sorry ⟩,
 --     inclusion     := λ x, x.val,
 --     witness       := ♯,
 --     map           := begin
@@ -46,8 +46,8 @@ namespace categories.types
 --                     end,
 --     factorisation := ♯,
 --     uniqueness    := ♯
---   }
--- }
+--  }
+--}
 -- attribute [instance] FiniteTypes_has_Equalizers
 
 end categories.types

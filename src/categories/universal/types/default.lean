@@ -16,7 +16,7 @@ definition {u} Types_has_Products : has_Products.{u+1 u u} CategoryOfTypes.{u} :
                        have p := witness x_1,
                        tidy,
                      end
-  }
+ }
 }
 attribute [instance] Types_has_Products
 
@@ -31,19 +31,19 @@ definition {u} Types_has_Coproducts : has_Coproducts.{u+1 u u} CategoryOfTypes.{
                        have p := witness x_fst,
                        tidy
                      end
-  }
+ }
 }
 attribute [instance] Types_has_Coproducts
 
 -- PROJECT better automation.
 definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
-{ equalizer := λ α _ f g,
+{equalizer := λ α _ f g,
   {
-    equalizer     := { x : α // f x = g x },
+    equalizer     := {x : α // f x = g x},
     inclusion     := λ x, x.val,
     witness       := ♯,
     map           := ♯
-  }
+ }
 }
 attribute [instance] Types_has_Equalizers
 
@@ -54,7 +54,7 @@ definition {u} Types_has_BinaryProducts : has_BinaryProducts CategoryOfTypes.{u}
     left_projection     := prod.fst,
     right_projection    := prod.snd,
     map                 := λ _ f g z, (f z, g z)
-  }
+ }
 }
 attribute [instance] Types_has_BinaryProducts
 
@@ -65,7 +65,7 @@ definition {u} Types_has_BinaryCoproducts : has_BinaryCoproducts CategoryOfTypes
     right_inclusion    := sum.inr,
     map                 := λ _ f g z, sum.cases_on z f g,
     uniqueness          := begin tidy, induction x, tidy, end
-  }
+ }
 }
 attribute [instance] Types_has_BinaryCoproducts
 
@@ -77,7 +77,7 @@ simp,
 end
 
 definition {u} Types_has_Coequalizers : has_Coequalizers CategoryOfTypes.{u} :=
-{ coequalizer := λ α β f g,
+{coequalizer := λ α β f g,
   {
     coequalizer   := quotient (eqv_gen.setoid (λ x y, ∃ a : α, f a = x ∧ g a = y)),
     projection    := λ x, begin apply quotient.mk, exact x end,
@@ -101,7 +101,7 @@ definition {u} Types_has_Coequalizers : has_Coequalizers CategoryOfTypes.{u} :=
                        have p := congr_fun witness x,
                        tidy,
                      end 
-  }
+ }
 }
 attribute [instance] Types_has_Equalizers
 

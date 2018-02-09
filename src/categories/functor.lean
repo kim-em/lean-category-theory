@@ -10,14 +10,14 @@ open categories.isomorphism
 
 namespace categories.functor
 
-structure {u1 v1 u2 v2} Functor (C : Category.{ u1 v1 }) (D : Category.{ u2 v2 }) :=
+structure {u1 v1 u2 v2} Functor (C : Category.{u1 v1}) (D : Category.{u2 v2}) :=
   (onObjects   : C.Obj → D.Obj)
-  (onMorphisms : Π { X Y : C.Obj },
+  (onMorphisms : Π {X Y : C.Obj},
                 C.Hom X Y → D.Hom (onObjects X) (onObjects Y))
   (identities : ∀ (X : C.Obj),
-    onMorphisms (C.identity X) = D.identity (onObjects X) . tidy' )
-  (functoriality : ∀ { X Y Z : C.Obj } (f : C.Hom X Y) (g : C.Hom Y Z),
-    onMorphisms (C.compose f g) = D.compose (onMorphisms f) (onMorphisms g) . tidy' )
+    onMorphisms (C.identity X) = D.identity (onObjects X) . tidy')
+  (functoriality : ∀ {X Y Z : C.Obj} (f : C.Hom X Y) (g : C.Hom Y Z),
+    onMorphisms (C.compose f g) = D.compose (onMorphisms f) (onMorphisms g) . tidy')
 
 make_lemma Functor.identities
 make_lemma Functor.functoriality
@@ -26,23 +26,23 @@ attribute [simp,ematch] Functor.functoriality_lemma
 
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.
-instance Functor_to_onObjects { C D : Category }: has_coe_to_fun (Functor C D) :=
-{ F   := λ f, C.Obj → D.Obj,
-  coe := Functor.onObjects }
+instance Functor_to_onObjects {C D : Category}: has_coe_to_fun (Functor C D) :=
+{F   := λ f, C.Obj → D.Obj,
+  coe := Functor.onObjects}
 
 -- This defines a coercion allowing us to write `F f` for `onMorphisms F f`
 -- but sadly it doesn't work if to_onObjects is already in scope.
--- instance Functor_to_onMorphisms { C D : Category } : has_coe_to_fun (Functor C D) :=
--- { F   := λ f, Π ⦃X Y : C.Obj⦄, C.Hom X Y → D.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
---  coe := Functor.onMorphisms }
+-- instance Functor_to_onMorphisms {C D : Category} : has_coe_to_fun (Functor C D) :=
+-- {F   := λ f, Π ⦃X Y : C.Obj⦄, C.Hom X Y → D.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
+--  coe := Functor.onMorphisms}
 
-definition {u1 v1} IdentityFunctor ( C: Category.{u1 v1} ) : Functor C C :=
+definition {u1 v1} IdentityFunctor (C: Category.{u1 v1}) : Functor C C :=
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f
 }
 
-definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D : Category.{u2 v2} } { E : Category.{u3 v3} } ( F : Functor C D ) ( G : Functor D E ) : Functor C E :=
+definition {u1 v1 u2 v2 u3 v3} FunctorComposition {C : Category.{u1 v1}} {D : Category.{u2 v2}} {E : Category.{u3 v3}} (F : Functor C D) (G : Functor D E) : Functor C E :=
 {
   onObjects     := λ X, G.onObjects (F.onObjects X),
   onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f)
@@ -50,8 +50,8 @@ definition {u1 v1 u2 v2 u3 v3} FunctorComposition { C : Category.{u1 v1} } { D :
 
 -- Functors preserve isomorphisms
 definition {u1 v1 u2 v2} Functor_onIsomorphisms
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} } 
+  {C : Category.{u1 v1}}
+  {D : Category.{u2 v2}} 
   {X Y : C.Obj}
   (F : Functor C D)
   (g : Isomorphism C X Y) :
@@ -59,9 +59,9 @@ definition {u1 v1 u2 v2} Functor_onIsomorphisms
   {
     morphism := F.onMorphisms g.morphism,
     inverse := F.onMorphisms g.inverse
-  }
+ }
 
-class ReflectsIsomorphisms { C D : Category } ( F : Functor C D ) :=
-  ( reflects : Π { X Y : C.Obj } ( f : C.Hom X Y ) ( w : is_Isomorphism (F.onMorphisms f)), is_Isomorphism f )
+class ReflectsIsomorphisms {C D : Category} (F : Functor C D) :=
+  (reflects : Π {X Y : C.Obj} (f : C.Hom X Y) (w : is_Isomorphism (F.onMorphisms f)), is_Isomorphism f)
 
 end categories.functor

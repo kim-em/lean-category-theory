@@ -12,40 +12,40 @@ namespace categories.examples.monoids
 
 open categories
 
-structure monoid_morphism { α β : Type } ( s : monoid α ) ( t : monoid β ) :=
-  ( map: α → β )
-  ( multiplicative : ∀ x y : α, map (monoid.mul x y) = monoid.mul (map x) (map y) . tidy' )
-  ( unital : map(s.one) = t.one . tidy' )
+structure monoid_morphism {α β : Type} (s : monoid α) (t : monoid β) :=
+  (map: α → β)
+  (multiplicative : ∀ x y : α, map (monoid.mul x y) = monoid.mul (map x) (map y) . tidy')
+  (unital : map(s.one) = t.one . tidy')
 
 make_lemma monoid_morphism.multiplicative
 make_lemma monoid_morphism.unital
 attribute [simp] monoid_morphism.multiplicative_lemma monoid_morphism.unital_lemma
 
-@[simp] lemma monoid_morphism_power { α β : Type } { s : monoid α } { t : monoid β } ( f : monoid_morphism s t ) ( a : α ) ( n : ℕ ) : f.map (@monoid.pow α s a n) = @monoid.pow β t (f.map a) n :=
+@[simp] lemma monoid_morphism_power {α β : Type} {s : monoid α} {t : monoid β} (f : monoid_morphism s t) (a : α) (n : ℕ) : f.map (@monoid.pow α s a n) = @monoid.pow β t (f.map a) n :=
 begin
 induction n,
-{ tidy },
-{ unfold monoid.pow, tidy }
+{tidy},
+{unfold monoid.pow, tidy}
 end
 
 -- This defines a coercion so we can write `f x` for `map f x`.
-instance monoid_morphism_to_map { α β : Type } { s : monoid α } { t : monoid β } : has_coe_to_fun (monoid_morphism s t) :=
-{ F   := λ f, Π x : α, β,
-  coe := monoid_morphism.map }
+instance monoid_morphism_to_map {α β : Type} {s : monoid α} {t : monoid β} : has_coe_to_fun (monoid_morphism s t) :=
+{F   := λ f, Π x : α, β,
+  coe := monoid_morphism.map}
 
-definition monoid_identity { α : Type } ( s : monoid α ) : monoid_morphism s s := ⟨ id, ♯, ♯  ⟩
+definition monoid_identity {α : Type} (s : monoid α) : monoid_morphism s s := ⟨ id, ♯, ♯  ⟩
 
 definition monoid_morphism_composition
-  { α β γ : Type } { s : monoid α } { t : monoid β } { u : monoid γ}
-  ( f: monoid_morphism s t ) ( g: monoid_morphism t u ) : monoid_morphism s u :=
+  {α β γ : Type} {s : monoid α} {t : monoid β} {u : monoid γ}
+  (f: monoid_morphism s t) (g: monoid_morphism t u) : monoid_morphism s u :=
 {
   map := λ x, g (f x)
 }
 
 @[applicable] lemma monoid_morphism_pointwise_equality
-  { α β : Type } { s : monoid α } { t : monoid β }
-  ( f g : monoid_morphism s t )
-  ( w : ∀ x : α, f x = g x) : f = g :=
+  {α β : Type} {s : monoid α} {t : monoid β}
+  (f g : monoid_morphism s t)
+  (w : ∀ x : α, f x = g x) : f = g :=
 begin
     induction f with fc,
     induction g with gc,
@@ -72,7 +72,7 @@ definition ForgetfulFunctor_Monoids_to_Semigroups : Functor CategoryOfMonoids Ca
                   {
                     map            := f.map,
                     multiplicative := f.multiplicative
-                  }
+                 }
 }
 
 open categories.types
@@ -81,7 +81,7 @@ definition ForgetfulFunctor_Monoids_to_Types : Functor CategoryOfMonoids Categor
 {
     onObjects   := λ r, r.1,
     onMorphisms := λ _ _ f, f.map 
-  }
+ }
 
 definition Monoids_Concrete : Concrete CategoryOfMonoids := {
   F := ForgetfulFunctor_Monoids_to_Types
@@ -114,7 +114,7 @@ end
 @[simp] private lemma monoid_pow_nat {α} [m : monoid α] (f : monoid_morphism ℕ_as_monoid_under_addition m) (n : ℕ): monoid.pow (f.map 1) n = f.map n :=
 begin
 induction n,
-{ tidy, erw f.unital_lemma, },
+{tidy, erw f.unital_lemma,},
 {
   unfold monoid.pow,
   have p : nat.succ n_n = 1 + n_n, by simp,
@@ -132,12 +132,12 @@ instance Monoids_ForgetfulFunctor_Representable : Representable (ForgetfulFuncto
     morphism := {
       components := λ r a, {
         map := λ n, @monoid.pow r.1 r.2 a n,
-      },
-    },
+     },
+   },
     inverse := {
       components := λ r f, f.map 1
-    }
-  }
+   }
+ }
 }
 
 open categories.universal
@@ -150,10 +150,10 @@ instance Monoids_StronglyConcrete : StronglyConcrete CategoryOfMonoids := {
         map := w.inverse,
         multiplicative := sorry,
         unital := sorry
-      },
+     },
       witness_2 := begin tidy, rw is_Isomorphism_in_Types.witness_2 f.map w, end -- FIXME why doesn't this work without the explicit arguments (or even just by simp)
-    }
-  },
+   }
+ },
   preserves_limits := RepresentableFunctorPreservesLimits ForgetfulFunctor_Monoids_to_Types,
 }
 

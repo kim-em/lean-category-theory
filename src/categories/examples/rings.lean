@@ -18,11 +18,11 @@ universes u v
 open categories
 open categories.examples.monoids
 
-structure commutative_ring_morphism { α β : Type u } ( s : comm_ring α ) ( t : comm_ring β ) :=
-  ( map: α → β )
-  ( multiplicative : ∀ x y : α, map (comm_ring.mul x y) = comm_ring.mul (map x) (map y) . tidy' )
-  ( unital : map(s.one) = t.one . tidy' )
-  ( additive : ∀ x y : α, map (comm_ring.add x y) = comm_ring.add (map x) (map y) . tidy' )
+structure commutative_ring_morphism {α β : Type u} (s : comm_ring α) (t : comm_ring β) :=
+  (map: α → β)
+  (multiplicative : ∀ x y : α, map (comm_ring.mul x y) = comm_ring.mul (map x) (map y) . tidy')
+  (unital : map(s.one) = t.one . tidy')
+  (additive : ∀ x y : α, map (comm_ring.add x y) = comm_ring.add (map x) (map y) . tidy')
 
 make_lemma commutative_ring_morphism.multiplicative
 make_lemma commutative_ring_morphism.unital
@@ -30,25 +30,25 @@ make_lemma commutative_ring_morphism.additive
 attribute [simp] commutative_ring_morphism.multiplicative_lemma commutative_ring_morphism.unital_lemma commutative_ring_morphism.additive_lemma
 
 -- This defines a coercion so we can write `f x` for `map f x`.
-instance commutative_ring_morphism_to_map { α β : Type u } { s : comm_ring α } { t : comm_ring β } : has_coe_to_fun (commutative_ring_morphism s t) :=
-{ F   := λ f, Π x : α, β,
-  coe := λ r, r.map }
+instance commutative_ring_morphism_to_map {α β : Type u} {s : comm_ring α} {t : comm_ring β} : has_coe_to_fun (commutative_ring_morphism s t) :=
+{F   := λ f, Π x : α, β,
+  coe := λ r, r.map}
 
-definition commutative_ring_identity { α : Type u } ( s : comm_ring α ) : commutative_ring_morphism s s := {
+definition commutative_ring_identity {α : Type u} (s : comm_ring α) : commutative_ring_morphism s s := {
   map := id
 }
 
 definition commutative_ring_morphism_composition
-  { α β γ : Type u } { s : comm_ring α } { t : comm_ring β } { u : comm_ring γ}
-  ( f: commutative_ring_morphism s t ) ( g: commutative_ring_morphism t u ) : commutative_ring_morphism s u :=
+  {α β γ : Type u} {s : comm_ring α} {t : comm_ring β} {u : comm_ring γ}
+  (f: commutative_ring_morphism s t) (g: commutative_ring_morphism t u) : commutative_ring_morphism s u :=
 {
   map := λ x, g (f x)
 }
 
 @[applicable] lemma commutative_ring_morphism_pointwise_equality
-  { α β : Type u } { s : comm_ring α } { t : comm_ring β }
-  ( f g : commutative_ring_morphism s t )
-  ( w : ∀ x : α, f x = g x) : f = g :=
+  {α β : Type u} {s : comm_ring α} {t : comm_ring β}
+  (f g : commutative_ring_morphism s t)
+  (w : ∀ x : α, f x = g x) : f = g :=
 begin
     induction f with fc,
     induction g with gc,
@@ -72,7 +72,7 @@ definition ForgetfulFunctor_CommutativeRings_to_Types : Functor CategoryOfCommut
 {
     onObjects   := λ r, r.1,
     onMorphisms := λ _ _ f, f.map 
-  }
+ }
 
 definition CommutativeRings_Concrete : Concrete CategoryOfCommutativeRings := {
   F := ForgetfulFunctor_CommutativeRings_to_Types
@@ -92,7 +92,7 @@ def map_coefficients {α β} [r : comm_ring α] [s : comm_ring β] (f : commutat
   map := λ g, {
     val := f.map ∘ g,
     property := sorry, -- ugh, multisets 
-  },
+ },
   unital := sorry,
   multiplicative := sorry,
   additive := sorry
@@ -102,7 +102,7 @@ private def include_naturals' (α) [r : comm_ring α] : ℕ → α
 | 0       := (0 : α)
 | (n + 1) := (include_naturals' n) + (1 : α)
 
-private def include_integers' (α) [r : comm_ring α] ( i : ℤ ) := 
+private def include_integers' (α) [r : comm_ring α] (i : ℤ) := 
 if i >= 0 then include_naturals' α (i.nat_abs) else - (include_naturals' α (i.nat_abs))
 
 def include_integers (α) [r : comm_ring α] : commutative_ring_morphism ((by apply_instance) : comm_ring ℤ) r := {
@@ -123,13 +123,13 @@ instance Rings_ForgetfulFunctor_Representable : Representable (ForgetfulFunctor_
     morphism := {
       components := λ r x, @evaluate_integer_polynomial_at r.1 r.2 x, 
       naturality := sorry
-    },
+   },
     inverse := {
       components := λ r f, f.map (finsupp.single 1 1),
-    },
+   },
     witness_1 := sorry,
     witness_2 := sorry
-  }
+ }
 }
 
 open categories.universal
@@ -143,12 +143,12 @@ open categories.universal
 --         multiplicative := sorry,
 --         unital := sorry,
 --         additive := sorry
---       },
+--      },
 --       witness_2 := begin tidy, rw is_Isomorphism_in_Types.witness_2 f.map w, end -- FIXME why doesn't this work without the explicit arguments (or even just by simp)
---     }
---   },
+--    }
+--  },
 --   preserves_limits := RepresentableFunctorPreservesLimits ForgetfulFunctor_CommutativeRings_to_Types,
--- }
+--}
 -- attribute [instance] CommutativeRings_StronglyConcrete
 
 definition CommutativeRings_StronglyConcrete : StronglyConcrete CategoryOfCommutativeRings := sorry
@@ -168,10 +168,10 @@ instance CategoryOfCommutativeRings_Cocomplete : Cocomplete.{u+1 u v v} Category
 -- It's not really relevant here.
 open set
 structure convolution_support (α) [monoid α] :=
-  ( supports   : set (set α) )
-  ( union      : Π U V ∈ supports, U ∪ V ∈ supports )
-  ( finiteness : Π U V ∈ supports, Π a : α, finite { p : prod α α | p.1 ∈ U ∧ p.2 ∈ V ∧ p.1 * p.2 = a } )
-  ( support    : Π U V ∈ supports, supports { a : α | ∃ u v, u ∈ U ∧ v ∈ V ∧ u * v = a })
+  (supports   : set (set α))
+  (union      : Π U V ∈ supports, U ∪ V ∈ supports)
+  (finiteness : Π U V ∈ supports, Π a : α, finite {p : prod α α | p.1 ∈ U ∧ p.2 ∈ V ∧ p.1 * p.2 = a})
+  (support    : Π U V ∈ supports, supports {a : α | ∃ u v, u ∈ U ∧ v ∈ V ∧ u * v = a})
 
 definition polynomial_support : convolution_support ℕ := {
   supports := finite,

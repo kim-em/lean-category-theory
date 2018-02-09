@@ -10,24 +10,24 @@ open categories.natural_transformation
 namespace categories.products
 
 @[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_identities
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  ( F : Functor (C × D) E )
-  ( X : C.Obj )
-  ( Y : D.Obj )
+  {C : Category.{u1 v1}}
+  {D : Category.{u2 v2}}
+  {E : Category.{u3 v3}}
+  (F : Functor (C × D) E)
+  (X : C.Obj)
+  (Y : D.Obj)
   : @Functor.onMorphisms _ _ F (X, Y) (X, Y) (C.identity X, D.identity Y) = E.identity (F.onObjects (X, Y))
   := F.identities (X, Y)
 
 @[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_left_identity
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  ( F : Functor (C × D) E )
-  ( W : C.Obj )
-  { X Y Z : D.Obj }
-  ( f : D.Hom X Y )
-  ( g : D.Hom Y Z )
+  {C : Category.{u1 v1}}
+  {D : Category.{u2 v2}}
+  {E : Category.{u3 v3}}
+  (F : Functor (C × D) E)
+  (W : C.Obj)
+  {X Y Z : D.Obj}
+  (f : D.Hom X Y)
+  (g : D.Hom Y Z)
   : @Functor.onMorphisms _ _ F (W, X) (W, Z) (C.identity W, D.compose f g) =
       E.compose (@Functor.onMorphisms _ _ F (W, X) (W, Y) (C.identity W, f)) (@Functor.onMorphisms _ _ F (W, Y) (W, Z) (C.identity W, g)) :=
 begin
@@ -36,14 +36,14 @@ begin
 end
 
 @[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_right_identity
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  ( F : Functor (C × D) E )
-  ( X Y Z : C.Obj )
-  { W : D.Obj }
-  ( f : C.Hom X Y )
-  ( g : C.Hom Y Z )
+  {C : Category.{u1 v1}}
+  {D : Category.{u2 v2}}
+  {E : Category.{u3 v3}}
+  (F : Functor (C × D) E)
+  (X Y Z : C.Obj)
+  {W : D.Obj}
+  (f : C.Hom X Y)
+  (g : C.Hom Y Z)
   : @Functor.onMorphisms _ _ F (X, W) (Z, W) (C.compose f g, D.identity W) =
       E.compose (@Functor.onMorphisms _ _ F (X, W) (Y, W) (f, D.identity W)) (@Functor.onMorphisms _ _ F (Y, W) (Z, W) (g, D.identity W)) :=
 begin
@@ -52,14 +52,14 @@ begin
 end
 
 @[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_diagonal_identities_1
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  ( F : Functor (C × D) E )
-  ( X X' : C.Obj )
-  ( f : C.Hom X X' )
-  ( Y Y' : D.Obj )
-  ( g : D.Hom Y Y' )
+  {C : Category.{u1 v1}}
+  {D : Category.{u2 v2}}
+  {E : Category.{u3 v3}}
+  (F : Functor (C × D) E)
+  (X X' : C.Obj)
+  (f : C.Hom X X')
+  (Y Y' : D.Obj)
+  (g : D.Hom Y Y')
   : E.compose (@Functor.onMorphisms _ _ F (X, Y) (X, Y') (C.identity X, g)) (@Functor.onMorphisms _ _ F (X, Y') (X', Y') (f, D.identity Y')) =
    @Functor.onMorphisms _ _ F (X, Y) (X', Y') (f, g) :=
 begin
@@ -68,14 +68,14 @@ begin
 end
 
 @[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_diagonal_identities_2
-  { C : Category.{u1 v1} }
-  { D : Category.{u2 v2} }
-  { E : Category.{u3 v3} }
-  ( F : Functor (C × D) E )
-  ( X X' : C.Obj )
-  ( f : C.Hom X X' )
-  ( Y Y' : D.Obj )
-  ( g : D.Hom Y Y' )
+  {C : Category.{u1 v1}}
+  {D : Category.{u2 v2}}
+  {E : Category.{u3 v3}}
+  (F : Functor (C × D) E)
+  (X X' : C.Obj)
+  (f : C.Hom X X')
+  (Y Y' : D.Obj)
+  (g : D.Hom Y Y')
   : E.compose (@Functor.onMorphisms _ _ F (X, Y) (X', Y) (f, D.identity Y)) (@Functor.onMorphisms _ _ F (X', Y) (X', Y') (C.identity X', g)) =
    @Functor.onMorphisms _ _ F (X, Y) (X', Y') (f, g) :=
 begin

@@ -19,17 +19,17 @@ open categories.universal
 
 namespace categories.universal
 
-definition comma_Cone_to_Cone { J C : Category } { F : Functor J C } ( cone : (comma.Cones F).Obj ) : Cone F := 
+definition comma_Cone_to_Cone {J C : Category} {F : Functor J C} (cone : (comma.Cones F).Obj) : Cone F := 
 {
   cone_point    := cone.1,
   cone_maps     := λ j : J.Obj, (cone.2.2).components j,
-  commutativity := λ ( j k : J.Obj ) ( f : J.Hom j k ), 
+  commutativity := λ (j k : J.Obj) (f : J.Hom j k), 
                       begin
                         its eq.symm ((cone.2.2).naturality f),
                       end
 }
 
-definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J C } { X Y : (comma.Cones F).Obj } ( f : (comma.Cones F).Hom X Y ) : ConeMorphism (comma_Cone_to_Cone X) (comma_Cone_to_Cone Y) := 
+definition comma_ConeMorphism_to_ConeMorphism {J C : Category} {F : Functor J C} {X Y : (comma.Cones F).Obj} (f : (comma.Cones F).Hom X Y) : ConeMorphism (comma_Cone_to_Cone X) (comma_Cone_to_Cone Y) := 
 {
   cone_morphism      := f.val.1,
   commutativity := λ j : J.Obj, begin
@@ -39,30 +39,30 @@ definition comma_ConeMorphism_to_ConeMorphism { J C : Category } { F : Functor J
                                 end
 }
 
-definition Cone_to_comma_Cone { J C : Category } { F : Functor J C } ( cone : Cone F ) : (comma.Cones F).Obj := 
+definition Cone_to_comma_Cone {J C : Category} {F : Functor J C} (cone : Cone F) : (comma.Cones F).Obj := 
 ⟨ cone.cone_point, ♯, {
     components := λ j, cone.cone_maps j,
     naturality := λ _ _ f, begin
                             its eq.symm (cone.commutativity f) 
                           end
-  } ⟩
+ } ⟩
 
-definition ConeMorphism_to_comma_ConeMorphism { J C : Category } { F : Functor J C } { X Y : Cone F } ( f : ConeMorphism X Y ) : (comma.Cones F).Hom (Cone_to_comma_Cone X) (Cone_to_comma_Cone Y) := 
+definition ConeMorphism_to_comma_ConeMorphism {J C : Category} {F : Functor J C} {X Y : Cone F} (f : ConeMorphism X Y) : (comma.Cones F).Hom (Cone_to_comma_Cone X) (Cone_to_comma_Cone Y) := 
   ⟨ (f.cone_morphism, ♯), ♯ ⟩
 
-definition comma_Cones_to_Cones { J C : Category } ( F : Functor J C ) : Functor (comma.Cones F) (Cones F) := {
+definition comma_Cones_to_Cones {J C : Category} (F : Functor J C) : Functor (comma.Cones F) (Cones F) := {
     onObjects     := comma_Cone_to_Cone,
     onMorphisms   := λ _ _ f, comma_ConeMorphism_to_ConeMorphism f
-  }
+ }
 
-definition Cones_to_comma_Cones { J C : Category } ( F : Functor J C ) : Functor (Cones F) (comma.Cones F) := {
+definition Cones_to_comma_Cones {J C : Category} (F : Functor J C) : Functor (Cones F) (comma.Cones F) := {
     onObjects     := Cone_to_comma_Cone,
     onMorphisms   := λ _ _ f, ConeMorphism_to_comma_ConeMorphism f
-  }
+ }
 
 local attribute [applicable] Category.identity
 
-definition Cones_agree { J C : Category } ( F : Functor J C ) : Equivalence (comma.Cones F) (Cones F) := {
+definition Cones_agree {J C : Category} (F : Functor J C) : Equivalence (comma.Cones F) (Cones F) := {
   functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F
 }

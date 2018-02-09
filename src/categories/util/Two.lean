@@ -30,17 +30,17 @@ do l ← local_context,
 
 instance Two_decidable : decidable_eq Two := ♯
 
-definition Two.choice { α : Sort u } ( a b : α ) : Two → α 
+definition Two.choice {α : Sort u} (a b : α) : Two → α 
 | _0 := a
 | _1 := b
 
-@[simp] lemma Two.choice_0 { α : Sort u } ( a b : α ) : Two.choice a b _0 = a := by refl
-@[simp] lemma Two.choice_1 { α : Sort u } ( a b : α ) : Two.choice a b _1 = b := by refl
+@[simp] lemma Two.choice_0 {α : Sort u} (a b : α) : Two.choice a b _0 = a := by refl
+@[simp] lemma Two.choice_1 {α : Sort u} (a b : α) : Two.choice a b _1 = b := by refl
 
-definition Two.split_choice { Z : Two → Sort v } ( f : Z _0 ) ( g : Z _1 ) : Π i : Two, Z i
+definition Two.split_choice {Z : Two → Sort v} (f : Z _0) (g : Z _1) : Π i : Two, Z i
 | _0 := f
 | _1 := g
-definition Two.dependent_choice { α : Sort u } { Z : α → Sort v } { a b : α } ( f : Z a ) ( g : Z b ) : Π i : Two, Z (Two.choice a b i) 
+definition Two.dependent_choice {α : Sort u} {Z : α → Sort v} {a b : α} (f : Z a) (g : Z b) : Π i : Two, Z (Two.choice a b i) 
 | _0 := f
 | _1 := g
 

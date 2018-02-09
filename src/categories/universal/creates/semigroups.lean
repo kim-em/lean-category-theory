@@ -16,10 +16,10 @@ namespace categories.examples.semigroups
 --     cone_from_limit := λ D q, {
 --       cone_point := begin sorry end,
 --       cone_maps  := sorry
---     },
+--    },
 --     image_of_cone_is_limit_cone := sorry,
 --     every_such_cone_is_limit_cone := sorry
---   }
--- }
+--  }
+--}
 
 end categories.examples.semigroups

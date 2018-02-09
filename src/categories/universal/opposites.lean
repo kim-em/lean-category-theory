@@ -50,7 +50,7 @@ instance Opposite_Complete_of_Cocomplete {C : Category} [c : Cocomplete C]      
 instance Opposite_Cocomplete_of_Complete {C : Category} [c : Complete C]              : Cocomplete (Opposite C) := sorry
 
 -- It doesn't make sense to have instances here; too many loops!
-def Cocomplete_of_Opposite_Complete (C : Category) [ Complete (Opposite C) ]   : Cocomplete C := sorry
-def Complete_of_Opposite_Cocomplete (C : Category) [ Cocomplete (Opposite C) ] : Complete C := sorry
+def Cocomplete_of_Opposite_Complete (C : Category) [Complete (Opposite C)]   : Cocomplete C := sorry
+def Complete_of_Opposite_Cocomplete (C : Category) [Cocomplete (Opposite C)] : Complete C := sorry
 
 end categories.universal.opposites

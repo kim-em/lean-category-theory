@@ -10,6 +10,6 @@ begin
   reflexivity,
 end
 
--- lemma hfunext {α₁ : Type} {β₁ : Type} {α₂ : Type} {β₂ : Type} { f₁ : α₁ → β₁ } { f₂ : α₂ → β₂ } (hα : α₁ = α₂) : f₁ == f₂ :=
+-- lemma hfunext {α₁ : Type} {β₁ : Type} {α₂ : Type} {β₂ : Type} {f₁ : α₁ → β₁} {f₂ : α₂ → β₂} (hα : α₁ = α₂) : f₁ == f₂ :=
 -- begin
 -- end

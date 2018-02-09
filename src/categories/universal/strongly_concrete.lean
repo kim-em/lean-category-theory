@@ -17,9 +17,9 @@ universes u₁ u₂ -- parameterising the category
 universes u₃    -- parameterising Types
 universes u₄ u₅ -- parameterising index categories for limits
 
-class StronglyConcrete ( C : Category.{u₁ u₂} ) extends Concrete.{u₁ u₂ u₃} C := 
-  ( reflects_isos    : ReflectsIsomorphisms F . tidy' )
-  ( preserves_limits : PreservesLimits.{u₁ u₂ u₃+1 u₃ u₄ u₅} F )
+class StronglyConcrete (C : Category.{u₁ u₂}) extends Concrete.{u₁ u₂ u₃} C := 
+  (reflects_isos    : ReflectsIsomorphisms F . tidy')
+  (preserves_limits : PreservesLimits.{u₁ u₂ u₃+1 u₃ u₄ u₅} F)
 
 -- instance Types_StronglyConcrete : StronglyConcrete CategoryOfTypes := {
 --     F := IdentityFunctor CategoryOfTypes,
@@ -29,10 +29,10 @@ class StronglyConcrete ( C : Category.{u₁ u₂} ) extends Concrete.{u₁ u₂ 
 --       preserves := λ I D q, {
 --           morphism_to_terminal_object_from := λ c, {
 --               cone_morphism := (q.morphism_to_terminal_object_from c).cone_morphism,
---           },
+--          },
 --           uniqueness_of_morphisms_to_terminal_object := sorry
---       }
---     },
--- }
+--      }
+--    },
+--}
 
 end categories.universal
