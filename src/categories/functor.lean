@@ -10,14 +10,20 @@ open categories.isomorphism
 
 namespace categories.functor
 
-structure {u1 v1 u2 v2} Functor (C : Category.{u1 v1}) (D : Category.{u2 v2}) :=
-  (onObjects   : C.Obj → D.Obj)
-  (onMorphisms : Π {X Y : C.Obj},
-                C.Hom X Y → D.Hom (onObjects X) (onObjects Y))
-  (identities : ∀ (X : C.Obj),
-    onMorphisms (C.identity X) = D.identity (onObjects X) . tidy')
-  (functoriality : ∀ {X Y Z : C.Obj} (f : C.Hom X Y) (g : C.Hom Y Z),
-    onMorphisms (C.compose f g) = D.compose (onMorphisms f) (onMorphisms g) . tidy')
+universes u1 v1 u2 v2 u3 v3
+
+variable (C : Type u1)
+variable (D : Type u2)
+variable (E : Type u3)
+
+structure Functor [category.{u1 v1} C] [category.{u2 v2} D] :=
+  (onObjects   : C → D)
+  (onMorphisms : Π {X Y : C},
+                Hom X Y → Hom (onObjects X) (onObjects Y))
+  (identities : ∀ (X : C),
+    onMorphisms (𝟙 X) = 𝟙 (onObjects X) . tidy')
+  (functoriality : ∀ {X Y Z : C} (f : Hom X Y) (g : Hom Y Z),
+    onMorphisms (f >> g) = (onMorphisms f) >> (onMorphisms g) . tidy')
 
 make_lemma Functor.identities
 make_lemma Functor.functoriality
@@ -26,23 +32,17 @@ attribute [simp,ematch] Functor.functoriality_lemma
 
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.
-instance Functor_to_onObjects {C D : Category}: has_coe_to_fun (Functor C D) :=
-{F   := λ f, C.Obj → D.Obj,
+instance Functor_to_onObjects [category.{u1 v1} C] [category.{u2 v2} D]: has_coe_to_fun (Functor C D) :=
+{F   := λ f, C → D,
   coe := Functor.onObjects}
 
--- This defines a coercion allowing us to write `F f` for `onMorphisms F f`
--- but sadly it doesn't work if to_onObjects is already in scope.
--- instance Functor_to_onMorphisms {C D : Category} : has_coe_to_fun (Functor C D) :=
--- {F   := λ f, Π ⦃X Y : C.Obj⦄, C.Hom X Y → D.Hom (f X) (f Y), -- contrary to usual use, `f` here denotes the Functor.
---  coe := Functor.onMorphisms}
-
-definition {u1 v1} IdentityFunctor (C: Category.{u1 v1}) : Functor C C :=
+definition IdentityFunctor [category.{u1 v1} C] : Functor C C :=
 {
   onObjects     := id,
   onMorphisms   := λ _ _ f, f
 }
 
-definition {u1 v1 u2 v2 u3 v3} FunctorComposition {C : Category.{u1 v1}} {D : Category.{u2 v2}} {E : Category.{u3 v3}} (F : Functor C D) (G : Functor D E) : Functor C E :=
+definition FunctorComposition {C : Category.{u1 v1}} {D : Category.{u2 v2}} {E : Category.{u3 v3}} (F : Functor C D) (G : Functor D E) : Functor C E :=
 {
   onObjects     := λ X, G.onObjects (F.onObjects X),
   onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f)
