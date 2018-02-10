@@ -21,17 +21,17 @@ class category (Obj : Type u) :=
   (associativity  : ∀ {W X Y Z : Obj} (f : Hom W X) (g : Hom X Y) (h : Hom Y Z),
     compose (compose f g) h = compose f (compose g h) )
 
--- because we provided default tactics for generating fields above, we need to extract separate lemmas as well.
-make_lemma category.left_identity
-make_lemma category.right_identity
-make_lemma category.associativity
-attribute [simp] category.left_identity_lemma category.right_identity_lemma
-attribute [simp,ematch] category.associativity_lemma
-
 def Hom {α : Type u} [category.{u v} α] : α → α → Type v := category.Hom
 
 notation `𝟙` := category.identity
 infixr ` >> `:80 := category.compose
+
+variable {C : Type u}
+variables {W X Y Z : C}
+
+@[simp] def category.left_identity_lemma [category.{u v} C] (f : Hom X Y) : 𝟙 X >> f = f := by rw category.left_identity
+@[simp] def category.right_identity_lemma [category.{u v} C] (f : Hom X Y) : f >> 𝟙 Y = f := by rw category.right_identity
+@[simp,ematch] def category.associativity_lemma [category.{u v} C] (f : Hom W X) (g : Hom X Y) (h : Hom Y Z) : (f >> g) >> h = f >> (g >> h) := by rw category.associativity
 
 @[ematch] lemma category.identity_idempotent {α} [category α] (X : α) :
   𝟙 X >> 𝟙 X = 𝟙 X := by simp

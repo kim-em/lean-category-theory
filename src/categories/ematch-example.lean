@@ -9,13 +9,19 @@ class category (Obj : Type u) :=
   (associativity  : ∀ {W X Y Z : Obj} (f : Hom W X) (g : Hom X Y) (h : Hom Y Z),
     compose (compose f g) h = compose f (compose g h) )
 
-attribute [simp] category.left_identity category.right_identity
-attribute [simp,ematch] category.associativity
-
 def Hom {α : Type u} [category.{u v} α] : α → α → Type v := category.Hom
 
 notation `𝟙` := category.identity
 infixr ` >> `:80 := category.compose
+
+section
+variable {C : Type u1}
+variables {W X Y Z : C}
+
+@[simp] def category.left_identity_lemma [category.{u1 v1} C] (f : Hom X Y) : 𝟙 X >> f = f := by rw category.left_identity
+@[simp] def category.right_identity_lemma [category.{u1 v1} C] (f : Hom X Y) : f >> 𝟙 Y = f := by rw category.right_identity
+@[simp,ematch] def category.associativity_lemma [category.{u1 v1} C] (f : Hom W X) (g : Hom X Y) (h : Hom Y Z) : (f >> g) >> h = f >> (g >> h) := by rw category.associativity
+end
 
 variable (C : Type u1)
 variable (D : Type u2)
@@ -28,8 +34,7 @@ structure Functor [category.{u1 v1} C] [category.{u2 v2} D] :=
                 Hom X Y → Hom (onObjects X) (onObjects Y))
   (identities : ∀ (X : C),
     onMorphisms (𝟙 X) = 𝟙 (onObjects X))
-  (functoriality : ∀ {X Y Z : C} (f : Hom X Y) (g : Hom Y Z),
-    onMorphisms (f >> g) = (onMorphisms f) >> (onMorphisms g))
+  (functoriality : ∀ {X Y Z : C} (f : Hom X Y) (g : Hom Y Z), onMorphisms (f >> g) = (onMorphisms f) >> (onMorphisms g))
 
 attribute [simp,ematch] Functor.identities
 attribute [simp,ematch] Functor.functoriality
