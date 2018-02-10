@@ -13,10 +13,10 @@ variable {O : Type u}
 variables {X Y Z : O}
 
 structure Isomorphism [C : category.{u v} O] (X Y : O) :=
-  (morphism : Hom X Y)
-  (inverse : Hom Y X)
-  (witness_1 : morphism >> inverse = 𝟙 X . tidy')
-  (witness_2 : inverse >> morphism = 𝟙 Y . tidy')
+(morphism : Hom X Y)
+(inverse : Hom Y X)
+(witness_1 : morphism >> inverse = 𝟙 X . tidy')
+(witness_2 : inverse >> morphism = 𝟙 Y . tidy')
 
 make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
@@ -52,16 +52,15 @@ definition IsomorphismComposition [C : category.{u v} O] (α : Isomorphism X Y) 
     smt_eblast
   end
 
-definition Isomorphism.reverse [C : category O] (I : Isomorphism X Y) : Isomorphism Y X :=
-  {
-    morphism  := I.inverse,
-    inverse   := I.morphism
- }
+definition Isomorphism.reverse [C : category O] (I : Isomorphism X Y) : Isomorphism Y X := {
+  morphism  := I.inverse,
+  inverse   := I.morphism
+}
 
 structure is_Isomorphism [C : category O] (morphism : Hom X Y) :=
-  (inverse : Hom Y X)
-  (witness_1 : morphism >> inverse = 𝟙 X . tidy')
-  (witness_2 : inverse >> morphism = 𝟙 Y . tidy')
+(inverse : Hom Y X)
+(witness_1 : morphism >> inverse = 𝟙 X . tidy')
+(witness_2 : inverse >> morphism = 𝟙 Y . tidy')
 
 make_lemma is_Isomorphism.witness_1
 make_lemma is_Isomorphism.witness_2

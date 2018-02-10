@@ -15,6 +15,7 @@ universes u1 v1 u2 v2 u3 v3
 variable (C : Type u1)
 variable (D : Type u2)
 variable (E : Type u3)
+variables {X Y : C}
 
 structure Functor [category.{u1 v1} C] [category.{u2 v2} D] :=
   (onObjects   : C → D)
@@ -42,26 +43,21 @@ definition IdentityFunctor [category.{u1 v1} C] : Functor C C :=
   onMorphisms   := λ _ _ f, f
 }
 
-definition FunctorComposition {C : Category.{u1 v1}} {D : Category.{u2 v2}} {E : Category.{u3 v3}} (F : Functor C D) (G : Functor D E) : Functor C E :=
+definition FunctorComposition [category.{u1 v1} C] [category.{u2 v2} D] [category.{u3 v3} E] (F : Functor C D) (G : Functor D E) : Functor C E :=
 {
   onObjects     := λ X, G.onObjects (F.onObjects X),
   onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f)
 }
 
 -- Functors preserve isomorphisms
-definition {u1 v1 u2 v2} Functor_onIsomorphisms
-  {C : Category.{u1 v1}}
-  {D : Category.{u2 v2}} 
-  {X Y : C.Obj}
-  (F : Functor C D)
-  (g : Isomorphism C X Y) :
-  Isomorphism D (F.onObjects X) (F.onObjects Y) :=
-  {
+definition Functor_onIsomorphisms [category.{u1 v1} C] [category.{u2 v2} D] (F : Functor C D) (g : Isomorphism X Y) : Isomorphism (F.onObjects X) (F.onObjects Y) :=
+{
     morphism := F.onMorphisms g.morphism,
-    inverse := F.onMorphisms g.inverse
- }
+    inverse := F.onMorphisms g.inverse,
+    witness_1 := by tidy,
+}
 
-class ReflectsIsomorphisms {C D : Category} (F : Functor C D) :=
-  (reflects : Π {X Y : C.Obj} (f : C.Hom X Y) (w : is_Isomorphism (F.onMorphisms f)), is_Isomorphism f)
+class ReflectsIsomorphisms [category.{u1 v1} C] [category.{u2 v2} D] (F : Functor C D) :=
+  (reflects : Π (f : Hom X Y) (w : is_Isomorphism (F.onMorphisms f)), is_Isomorphism f)
 
 end categories.functor
