@@ -41,5 +41,12 @@ example
   (F : Functor C D)
   (g : Isomorphism C X Y) : D.compose (F.onMorphisms (g.morphism)) (F.onMorphisms (g.inverse)) = D.identity (F.onObjects X) :=
 begin
+ /- 
+  - The goal is
+  -
+  - ⊢ D.compose (F.onMorphisms (g.morphism)) (F.onMorphisms (g.inverse)) = D.identity (F.onObjects X)
+  -
+  - To solve this, we need to use F.functoriality in reverse, then g.witness_1, then F.identities.
+  -/
   using_smt $ smt_tactic.eblast
 end
