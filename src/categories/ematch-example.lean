@@ -34,6 +34,8 @@ structure Isomorphism (C: Category) (X Y : C.Obj) :=
 
 attribute [simp,ematch] Isomorphism.witness_1 Isomorphism.witness_2
 
+set_option trace.debug.smt.ematch true
+
 example
   {C : Category.{u1 v1}}
   {D : Category.{u2 v2}} 
