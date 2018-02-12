@@ -34,7 +34,7 @@ attribute [simp,ematch] n_ary_Category.associativity
 --   rewrite ← C.compose_length_one_path e,
 --   rewrite ← C.associativity,
 --   tidy,
---   admit
+--   sorry
 -- end
 
 -- lemma n_ary_Category.associativity'' {C: n_ary_Category} {X Y : C.Obj} (p : path_of_paths X Y) :
