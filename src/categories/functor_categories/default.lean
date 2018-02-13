@@ -53,7 +53,7 @@ definition whiskering_on_right (C : Type u₁) [category C] (D : Type u₂) [cat
 }
 
 definition whisker_on_right_functor (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] (H : Functor D E) :
-  Functor (FunctorCategory C D) (FunctorCategory C E) :=
+  Functor (Functor C D) (Functor C E) :=
 (whiskering_on_right C D E).onObjects H
 
 variable {C : Type u₁}

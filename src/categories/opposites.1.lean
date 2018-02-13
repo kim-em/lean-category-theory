@@ -15,57 +15,28 @@ namespace categories.opposites
 
 universes u₁ u₂
 
-inductive op (C : Type u₁) : Type u₁
-| op : C → op
-
-notation C `ᵒᵖ` := op C
-
 variable {C : Type u₁}
 variable [category C]
 variable {D : Type u₂}
 variable [category D]
 
-def op.of : Cᵒᵖ  → C
-| (op.op X) := X
-
-instance opposite_coercion_1 : has_coe (Cᵒᵖ) C :=
-  {coe := op.of}
-instance opposite_coercion_2 : has_coe C (Cᵒᵖ) :=
-  {coe := op.op}
-
-instance Opposite : category (Cᵒᵖ):=
+definition Opposite : category C :=
 {
-    Hom := λ X Y : Cᵒᵖ, Hom (Y : C) (X : C),
+    Hom := λ X Y : C, Hom Y X,
     compose  := λ _ _ _ f g, g >> f,
     identity := λ X, 𝟙 X
 }
 
-
-instance opposite_coercion_3 (X Y : C) : has_coe (Hom X Y) (@Hom (Cᵒᵖ) _ Y X) :=
-  {coe := id}
-instance opposite_coercion_4 (X Y : (Cᵒᵖ)) : has_coe (Hom X Y) (@Hom C _ Y X) :=
-  {coe := id}
-
-definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=
+definition OppositeFunctor (F : Functor C D) : @Functor C D (@Opposite _ _) (@Opposite _ _) :=
 {
   onObjects     := λ X, F.onObjects X,
   onMorphisms   := λ X Y f, F.onMorphisms f
 }
 
-definition HomPairing {C : Type u₁} [C_cat : category C]: Functor ((Cᵒᵖ) × C) (Type u₁) :=
+definition HomPairing {C : Type u₁} [category C]: @Functor (C × C) (Type u₁) (@products.ProductCategory _  (@Opposite _ _) _ _) _ :=
 {
-  onObjects     := λ p, @Hom C _ p.1 p.2,
-  onMorphisms   := λ X Y f,
-                   begin
-                     tidy,
-                     induction f,
-                     tidy,
-                     induction Y_fst,
-                     induction X_fst,
-                     unfold op.of,
-                     unfold op.of at a,
-                     exact f_fst >> a >> f_snd
-                   end
+  onObjects     := λ p, Hom p.1 p.2,
+  onMorphisms   := λ X Y f, λ g, ((f.1 : @Hom C _ Y.1 X.1) >> (g : @Hom C _ X.1 X.2)) >> f.2
   --λ X Y f, λ g : @Hom C _ X.1 X.2, (@category.compose _ C_cat _ _ _ (@category.compose _ C_cat _ _ _ (f.1 : @Hom C _ Y.1 X.1)  (g : @Hom C _ X.1 X.2)) (f.2 : @Hom C _ X.2 Y.2))
 }
 

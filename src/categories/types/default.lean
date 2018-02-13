@@ -10,7 +10,7 @@ namespace categories.types
 open categories
 open categories.isomorphism
 
-universe u
+universes u v
 
 instance CategoryOfTypes : category.{u+1} (Type u) :=
 {
@@ -18,6 +18,15 @@ instance CategoryOfTypes : category.{u+1} (Type u) :=
     identity := λ a, ulift.up id,
     compose  := λ _ _ _ f g, ulift.up (g.down ∘ f.down)
 }
+
+@[applicable] lemma ulift_equal {α : Type v}
+  (X Y : ulift.{u v} α)
+  (w : X.down = Y.down) : X = Y :=
+  begin
+    induction X,
+    induction Y,
+    tidy
+  end
 
 definition Bijection (α β : Type u) := Isomorphism α β 
 
