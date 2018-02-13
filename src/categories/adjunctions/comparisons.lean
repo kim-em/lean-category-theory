@@ -130,7 +130,7 @@ private definition counit_from_HomAdjunction {C D : Category} {L : Functor C D} 
 --                   tidy,
 --                   have p4 := congr_fun p3 (C.identity (R.onObjects X)),
 --                   tidy,
---                   admit
+--                   sorry
 --                 end,
 --   triangle_2 := sorry
 --}

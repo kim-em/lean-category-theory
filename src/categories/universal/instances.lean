@@ -100,7 +100,7 @@ instance BinaryProducts_from_FiniteProducts (C : Category.{u v}) [has_FiniteProd
 --   : Π n : nat, Π (I : Type) (fin : Finite I) (p : fin.cardinality = n) (f : I → C.Obj), Product f
 -- | 0        := λ {I : Type} [fin : Finite I] (p : fin.cardinality = 0) (f : I → C.Obj), {
 --                 product       := terminal_object,
---                 projection    := begin intros, admit end,
+--                 projection    := begin intros, sorry end,
 --                 map           := sorry,
 --                 factorisation := sorry,
 --                 uniqueness    := sorry

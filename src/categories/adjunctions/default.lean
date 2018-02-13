@@ -51,13 +51,16 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 --   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
 --   = IdentityNaturalTransformation L
 
+-- TODO automation
 @[simp,ematch] lemma Adjunction.unit_naturality
   {C D : Category} 
   {L : Functor C D} {R : Functor D C} 
   (A : Adjunction L R) 
   {X Y : C.Obj} (f : C.Hom X Y) : C.compose (A.unit.components X) (R.onMorphisms (L.onMorphisms f)) = C.compose f (A.unit.components Y) :=
   begin
-    its (A.unit.naturality f), 
+  tidy,
+  erw A.unit.naturality,
+  tidy,
   end
 
 @[simp,ematch] lemma Adjunction.counit_naturality
@@ -66,8 +69,9 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
   (A : Adjunction L R) 
   {X Y : D.Obj} (f : D.Hom X Y) : D.compose (L.onMorphisms (R.onMorphisms f)) (A.counit.components Y) = D.compose (A.counit.components X) f :=
   begin
-    refine (cast _ (A.counit.naturality f)),
-    tidy
+  tidy,
+  erw A.counit.naturality,
+  tidy,
   end
 
 -- PROJECT examples

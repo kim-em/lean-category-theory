@@ -31,6 +31,17 @@ make_lemma Functor.functoriality
 attribute [simp,ematch] Functor.identities_lemma
 attribute [simp,ematch] Functor.functoriality_lemma
 
+
+definition IdentityFunctor (C: Category.{u1 v1}) : Functor C C :=
+{
+  onObjects     := id,
+  onMorphisms   := λ _ _ f, f
+}
+
+variable {C : Category.{u1 v1}} 
+variable {D : Category.{u2 v2}} 
+variable {E : Category.{u3 v3}}
+
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.
 instance Functor_to_onObjects [category.{u1 v1} C] [category.{u2 v2} D]: has_coe_to_fun (Functor C D) :=

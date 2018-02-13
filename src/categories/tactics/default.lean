@@ -8,8 +8,6 @@ import tidy.auto_cast
 
 open tactic
 
-meta def tidy' : tactic unit := tidy -- getting rid of the optional paramater
-
 @[applicable] lemma {u v} pairs_componentwise_equal {α : Type u} {β : Type v} {X Y : α × β} (p1 : X.1 = Y.1) (p2 : X.2 = Y.2) : X = Y := ♯
 
 meta def trace_goal_type : tactic unit :=

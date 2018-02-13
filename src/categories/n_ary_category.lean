@@ -34,7 +34,7 @@ attribute [simp,ematch] n_ary_Category.associativity
 --   rewrite ← C.compose_length_one_path e,
 --   rewrite ← C.associativity,
 --   tidy,
---   admit
+--   sorry
 -- end
 
 -- lemma n_ary_Category.associativity'' {C: n_ary_Category} {X Y : C.Obj} (p : path_of_paths X Y) :
@@ -102,13 +102,13 @@ definition {u v} n_ary_Category_to_Category (C: n_ary_Category.{u v}) : Category
 --   identity := λ X, C.identity X,
 --   compose  := λ X Y f, @compose_path C.graph (C.identity) (@Category.compose C) X Y f,
 --   compose_empty_path := ♯,
---   compose_length_one_path := begin tidy, admit end,
+--   compose_length_one_path := begin tidy, sorry end,
 --   associativity      := begin
 --                           tidy,
 --                           induction p,
 --                           {-- if p was nil
 --                             tidy,
---                             admit
+--                             sorry
 --                          },
 --                           {-- if p was a path
 --                             unfold graphs.concatenate_paths,

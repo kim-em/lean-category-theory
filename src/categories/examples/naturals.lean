@@ -26,7 +26,7 @@ end
 begin
 tidy,
 {
-have q : nat.add b a = a + b, by tidy,
+have q : nat.add b a = a + b, begin[smt] eblast end,
 rw q at a_1,
 have p : a = a + 0, by simp,
 rw p at a_1,
@@ -37,18 +37,18 @@ exact nat.add_left_cancel a_1
 {rw a_1, simp}
 end
 
--- PROJECT This reducible is gross, but without it we can't see what NCategory.Hom is...
-@[reducible] definition ℕCategory : Category :=
-  {
-        Obj := unit,
-        Hom := λ _ _, ℕ,
-        identity := _,
-        compose  := λ _ _ _ n m, n + m,
- }  
+-- -- PROJECT This reducible is gross, but without it we can't see what NCategory.Hom is...
+-- @[reducible] definition ℕCategory : Category :=
+--   {
+--         Obj := unit,
+--         Hom := λ _ _, ℕ,
+--         identity := _,
+--         compose  := λ _ _ _ n m, n + m,
+--  }  
 
-definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
-  {onObjects   := id,
-    onMorphisms := λ _ _ n, n + n, -- PROJECT this is ugly: why can't we write `2 * n`
- }
+-- definition DoublingAsFunctor : Functor ℕCategory ℕCategory :=
+--   {onObjects   := id,
+--     onMorphisms := λ _ _ n, n + n, -- PROJECT this is ugly: why can't we write `2 * n`
+--  }
 
 end categories.examples.naturals

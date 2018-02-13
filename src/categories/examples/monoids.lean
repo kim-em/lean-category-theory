@@ -14,8 +14,8 @@ open categories
 
 structure monoid_morphism {α β : Type} (s : monoid α) (t : monoid β) :=
   (map: α → β)
-  (multiplicative : ∀ x y : α, map (monoid.mul x y) = monoid.mul (map x) (map y) . tidy')
-  (unital : map(s.one) = t.one . tidy')
+  (multiplicative : ∀ x y : α, map (monoid.mul x y) = monoid.mul (map x) (map y) . obviously)
+  (unital : map(s.one) = t.one . obviously)
 
 make_lemma monoid_morphism.multiplicative
 make_lemma monoid_morphism.unital
@@ -25,7 +25,7 @@ attribute [simp] monoid_morphism.multiplicative_lemma monoid_morphism.unital_lem
 begin
 induction n,
 {tidy},
-{unfold monoid.pow, tidy}
+{unfold monoid.pow, tidy, begin[smt] eblast end}
 end
 
 -- This defines a coercion so we can write `f x` for `map f x`.

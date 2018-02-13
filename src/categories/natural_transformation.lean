@@ -3,6 +3,7 @@
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
 import .functor
+import tidy.rewrite_search
 
 open categories
 open categories.functor
@@ -12,7 +13,7 @@ namespace categories.natural_transformation
 structure {u1 v1 u2 v2} NaturalTransformation {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F G : Functor C D) :=
   (components: Π X : C.Obj, D.Hom (F.onObjects X) (G.onObjects X))
   (naturality: ∀ {X Y : C.Obj} (f : C.Hom X Y),
-     D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f) . tidy')
+     D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f) . obviously)
 
 make_lemma NaturalTransformation.naturality
 attribute [simp,ematch] NaturalTransformation.naturality_lemma
@@ -36,18 +37,18 @@ instance NaturalTransformation_to_components {C D : Category} {F G : Functor C D
   end
 
 definition {u1 v1 u2 v2} IdentityNaturalTransformation {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F : Functor C D) : NaturalTransformation F F :=
-  {
+{
     components := λ X, D.identity (F.onObjects X)
- }
+}
 
 definition {u1 v1 u2 v2} vertical_composition_of_NaturalTransformations
   {C : Category.{u1 v1}} {D : Category.{u2 v2}} 
   {F G H : Functor C D}
   (α : NaturalTransformation F G)
   (β : NaturalTransformation G H) : NaturalTransformation F H :=
-  {
-    components := λ X, D.compose (α.components X) (β.components X),
- }
+{
+    components := λ X, D.compose (α.components X) (β.components X)
+}
 
 notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
 
@@ -64,9 +65,10 @@ definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
   {H I : Functor D E}
   (α : NaturalTransformation F G)
   (β : NaturalTransformation H I) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
-  {
-    components := λ X : C.Obj, E.compose (β.components (F.onObjects X)) (I.onMorphisms (α.components X))
- }
+{
+    components := λ X : C.Obj, E.compose (β.components (F.onObjects X)) (I.onMorphisms (α.components X)),
+    naturality := begin dsimp', intros, simp, rewrite_search_using `ematch end
+}
 
 notation α `∘ₕ` β := horizontal_composition_of_NaturalTransformations α β
 

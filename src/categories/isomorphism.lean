@@ -15,8 +15,8 @@ variables {X Y Z : C}
 structure Isomorphism [category.{u v} C] (X Y : C) :=
 (morphism : Hom X Y)
 (inverse : Hom Y X)
-(witness_1 : morphism >> inverse = 𝟙 X . tidy')
-(witness_2 : inverse >> morphism = 𝟙 Y . tidy')
+(witness_1 : morphism >> inverse = 𝟙 X . obviously)
+(witness_2 : inverse >> morphism = 𝟙 Y . obviously)
 
 make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
@@ -59,8 +59,8 @@ definition Isomorphism.reverse [category C] (I : Isomorphism X Y) : Isomorphism 
 
 structure is_Isomorphism [category C] (morphism : Hom X Y) :=
 (inverse : Hom Y X)
-(witness_1 : morphism >> inverse = 𝟙 X . tidy')
-(witness_2 : inverse >> morphism = 𝟙 Y . tidy')
+(witness_1 : morphism >> inverse = 𝟙 X . obviously)
+(witness_2 : inverse >> morphism = 𝟙 Y . obviously)
 
 make_lemma is_Isomorphism.witness_1
 make_lemma is_Isomorphism.witness_2

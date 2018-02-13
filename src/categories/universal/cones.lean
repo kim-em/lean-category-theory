@@ -14,14 +14,14 @@ namespace categories.universal
 structure Cone {J C : Category} (F : Functor J C) :=
   (cone_point    : C.Obj)
   (cone_maps     : Π j : J.Obj, C.Hom cone_point (F.onObjects j))
-  (commutativity : Π {j k : J.Obj}, Π f : J.Hom j k, C.compose (cone_maps j) (F.onMorphisms f) = cone_maps k . tidy')
+  (commutativity : Π {j k : J.Obj}, Π f : J.Hom j k, C.compose (cone_maps j) (F.onMorphisms f) = cone_maps k . obviously)
 
 make_lemma Cone.commutativity
 attribute [simp,ematch] Cone.commutativity_lemma
 
 structure ConeMorphism {J C : Category} {F : Functor J C} (X Y : Cone F) :=
   (cone_morphism      : C.Hom X.cone_point Y.cone_point)
-  (commutativity : Π j : J.Obj, C.compose cone_morphism (Y.cone_maps j) = (X.cone_maps j) . tidy')
+  (commutativity : Π j : J.Obj, C.compose cone_morphism (Y.cone_maps j) = (X.cone_maps j) . obviously)
 
 make_lemma ConeMorphism.commutativity
 attribute [simp,ematch] ConeMorphism.commutativity_lemma
@@ -57,14 +57,14 @@ definition Cones_functoriality {J C D : Category} (F : Functor J C) (G : Functor
 structure Cocone {J C : Category} (F : Functor J C) :=
   (cocone_point  : C.Obj)
   (cocone_maps   : Π j : J.Obj, C.Hom (F.onObjects j) cocone_point)
-  (commutativity : Π {j k : J.Obj}, Π f : J.Hom j k, C.compose (F.onMorphisms f) (cocone_maps k) = cocone_maps j . tidy')
+  (commutativity : Π {j k : J.Obj}, Π f : J.Hom j k, C.compose (F.onMorphisms f) (cocone_maps k) = cocone_maps j . obviously)
 
 make_lemma Cocone.commutativity
 attribute [simp,ematch] Cocone.commutativity_lemma
 
 structure CoconeMorphism {J C : Category} {F : Functor J C} (X Y : Cocone F) :=
   (cocone_morphism      : C.Hom X.cocone_point Y.cocone_point)
-  (commutativity : Π j : J.Obj, C.compose (X.cocone_maps j) cocone_morphism = (Y.cocone_maps j) . tidy')
+  (commutativity : Π j : J.Obj, C.compose (X.cocone_maps j) cocone_morphism = (Y.cocone_maps j) . obviously)
 
 make_lemma CoconeMorphism.commutativity
 attribute [simp,ematch] CoconeMorphism.commutativity_lemma
