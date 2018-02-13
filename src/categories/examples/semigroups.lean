@@ -11,7 +11,7 @@ open categories
 
 structure {u} semigroup_morphism {α β : Type u} (s : semigroup α) (t: semigroup β) :=
   (map: α → β)
-  (multiplicative : ∀ x y : α, map (semigroup.mul x y) = semigroup.mul (map x) (map y) . tidy')
+  (multiplicative : ∀ x y : α, map (semigroup.mul x y) = semigroup.mul (map x) (map y) . obviously)
 
 make_lemma semigroup_morphism.multiplicative
 attribute [simp,ematch] semigroup_morphism.multiplicative_lemma

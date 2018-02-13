@@ -12,8 +12,8 @@ universes u v
 structure Bijection (U : Type u) (V : Type v) := -- TODO this should use equiv
   (morphism : U → V)
   (inverse  : V → U)
-  (witness_1 : ∀ u : U, inverse (morphism u) = u . tidy')
-  (witness_2 : ∀ v : V, morphism (inverse v) = v . tidy')
+  (witness_1 : ∀ u : U, inverse (morphism u) = u . obviously)
+  (witness_2 : ∀ v : V, morphism (inverse v) = v . obviously)
 
 class Finite (α : Type u) :=
   (cardinality : nat)

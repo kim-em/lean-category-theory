@@ -10,7 +10,6 @@ definition {u} Types_has_Products : has_Products.{u+1 u u} CategoryOfTypes.{u} :
     product       := Π i : I, φ i,
     projection    := λ i x, x i,
     map           := λ Z f z i, f i z, 
-    factorisation := ♯,
     uniqueness    := begin
                        tidy,
                        have p := witness x_1,
@@ -25,7 +24,6 @@ definition {u} Types_has_Coproducts : has_Coproducts.{u+1 u u} CategoryOfTypes.{
     coproduct     := Σ i : I, φ i,
     inclusion     := λ i x, ⟨ i, x ⟩ ,
     map           := λ Z f p, f p.1 p.2, 
-    factorisation := ♯,
     uniqueness    := begin
                        tidy,
                        have p := witness x_fst,
@@ -35,13 +33,11 @@ definition {u} Types_has_Coproducts : has_Coproducts.{u+1 u u} CategoryOfTypes.{
 }
 attribute [instance] Types_has_Coproducts
 
--- PROJECT better automation.
-definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} :=
-{equalizer := λ α _ f g,
-  {
+
+definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} := {
+  equalizer := λ α _ f g, {
     equalizer     := {x : α // f x = g x},
     inclusion     := λ x, x.val,
-    witness       := ♯,
     map           := ♯
  }
 }
@@ -92,7 +88,8 @@ definition {u} Types_has_Coequalizers : has_Coequalizers CategoryOfTypes.{u} :=
                        induction a_p_a_h, 
                        rw ← a_p_a_h_left, 
                        rw ← a_p_a_h_right,
-                       exact congr_fun w a_p_a_w
+                       exact congr_fun w a_p_a_w,
+                       obviously,
                      end,
     factorisation := ♯,
     uniqueness    := begin

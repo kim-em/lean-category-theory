@@ -15,7 +15,7 @@ namespace categories.initial
 structure InitialObject (C : Category) :=
   (initial_object                              : C.Obj)
   (morphism_from_initial_object_to             : ∀ Y : C.Obj, C.Hom initial_object Y)
-  (uniqueness_of_morphisms_from_initial_object : ∀ Y : C.Obj, ∀ f g : C.Hom initial_object Y, f = g . tidy')
+  (uniqueness_of_morphisms_from_initial_object : ∀ Y : C.Obj, ∀ f g : C.Hom initial_object Y, f = g . obviously)
 
 attribute [applicable] InitialObject.morphism_from_initial_object_to
 make_lemma InitialObject.uniqueness_of_morphisms_from_initial_object
@@ -36,7 +36,7 @@ lemma InitialObjects_are_unique {C : Category} (X Y : InitialObject C) : Isomorp
 structure TerminalObject (C : Category) :=
   (terminal_object                            : C.Obj)
   (morphism_to_terminal_object_from           : ∀ Y : C.Obj, C.Hom Y terminal_object)
-  (uniqueness_of_morphisms_to_terminal_object : ∀ Y : C.Obj, ∀ f g : C.Hom Y terminal_object, f = g . tidy')
+  (uniqueness_of_morphisms_to_terminal_object : ∀ Y : C.Obj, ∀ f g : C.Hom Y terminal_object, f = g . obviously)
 
 attribute [applicable] TerminalObject.morphism_to_terminal_object_from
 make_lemma TerminalObject.uniqueness_of_morphisms_to_terminal_object
@@ -47,7 +47,7 @@ instance TerminalObject_coercion_to_object {C : Category} : has_coe (TerminalObj
 
 structure is_terminal {C : Category} (X : C.Obj) :=
   (morphism_to_terminal_object_from : ∀ Y : C.Obj, C.Hom Y X)
-  (uniqueness_of_morphisms_to_terminal_object : ∀ Y : C.Obj, ∀ f g : C.Hom Y X, f = g . tidy')
+  (uniqueness_of_morphisms_to_terminal_object : ∀ Y : C.Obj, ∀ f g : C.Hom Y X, f = g . obviously)
 
 lemma TerminalObjects_are_unique {C : Category} (X Y : TerminalObject C) : Isomorphism C X Y := ♯
 
