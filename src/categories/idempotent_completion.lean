@@ -48,7 +48,7 @@ definition functor_to_IdempotentCompletion (C : Category) : Functor C (Idempoten
 --                          begin 
 --                            tidy, 
 --                           --  have p := τ.naturality,
---                            admit, admit
+--                            sorry, sorry
 --                          end
 --                        ⟩,
 --     naturality := ♯
@@ -68,7 +68,7 @@ open categories.equivalence
 --     exact f_val,
 --     refl, -- TODO Goals says 'f_val = f_val', but is secretly still '?m_1[C, X, Y, f_1, _] = f_1',
 --     -- I posted a gist about this, and ask Mario about it: https://gist.github.com/semorrison/ddee284b92d64c931a21b5853cf6f1e1
---     -- admit, 
+--     -- sorry, 
 --   end,
 --   begin
 --     tidy,

@@ -20,9 +20,9 @@ open categories.examples.monoids
 
 structure commutative_ring_morphism {α β : Type u} (s : comm_ring α) (t : comm_ring β) :=
   (map: α → β)
-  (multiplicative : ∀ x y : α, map (comm_ring.mul x y) = comm_ring.mul (map x) (map y) . tidy')
-  (unital : map(s.one) = t.one . tidy')
-  (additive : ∀ x y : α, map (comm_ring.add x y) = comm_ring.add (map x) (map y) . tidy')
+  (multiplicative : ∀ x y : α, map (comm_ring.mul x y) = comm_ring.mul (map x) (map y) . obviously)
+  (unital : map(s.one) = t.one . obviously)
+  (additive : ∀ x y : α, map (comm_ring.add x y) = comm_ring.add (map x) (map y) . obviously)
 
 make_lemma commutative_ring_morphism.multiplicative
 make_lemma commutative_ring_morphism.unital
@@ -162,7 +162,7 @@ instance CategoryOfCommutativeRings_has_Coequalizers : has_Coequalizers.{u+1 u} 
 
 -- FIXME this should work `by apply_instance`
 instance CategoryOfCommutativeRings_Cocomplete : Cocomplete.{u+1 u v v} CategoryOfCommutativeRings.{u} := @universal.Colimits_from_Coproducts_and_Coequalizers CategoryOfCommutativeRings rings.CategoryOfCommutativeRings_has_Coproducts rings.CategoryOfCommutativeRings_has_Coequalizers
-#print rings.CategoryOfCommutativeRings_Cocomplete
+-- #print rings.CategoryOfCommutativeRings_Cocomplete
 
 -- This is the start of defining polynomials, power series, Laurent polynomials, and Laurent series all at once.
 -- It's not really relevant here.

@@ -13,7 +13,7 @@ open categories.equivalence
 
 class {u v w} Concrete (C : Category.{u v}) := 
   (F : Functor C CategoryOfTypes.{w})
-  (w : Faithful F . tidy')
+  (w : Faithful F . obviously)
 
 instance Types_Concrete : Concrete CategoryOfTypes := {
     F := IdentityFunctor CategoryOfTypes
