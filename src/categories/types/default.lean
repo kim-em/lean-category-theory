@@ -3,7 +3,6 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import ..category
-import ..full_subcategory
 import ..isomorphism
 
 namespace categories.types
@@ -11,36 +10,41 @@ namespace categories.types
 open categories
 open categories.isomorphism
 
-definition {u} CategoryOfTypes : Category.{u+1 u} :=
-{
-    Obj := Type u,
-    Hom := λ a b, a → b,
+universe u
 
-    identity := λ a, id,
-    compose  := λ _ _ _ f g, g ∘ f
+instance CategoryOfTypes : category.{u+1} (Type u) :=
+{
+    Hom := λ a b, ulift.{u+1} (a → b),
+    identity := λ a, ulift.up id,
+    compose  := λ _ _ _ f g, ulift.up (g.down ∘ f.down)
 }
 
-definition Bijection (α β : Type) := Isomorphism CategoryOfTypes α β 
+definition Bijection (α β : Type u) := Isomorphism α β 
 
-@[simp] definition Bijection.witness_1 {α β : Type} (iso : Bijection α β) (x : α) : iso.inverse (iso.morphism x) = x :=
+@[simp] definition Bijection.witness_1 {α β : Type u} (iso : Bijection α β) (x : α) : iso.inverse.down (iso.morphism.down x) = x :=
 begin
   have p := iso.witness_1, 
+  have p' := congr_arg ulift.down p,
   tidy,
 end
-@[simp] definition Bijection.witness_2 {α β : Type} (iso : Bijection α β) (x : β) : iso.morphism (iso.inverse x) = x :=
+@[simp] definition Bijection.witness_2 {α β : Type u} (iso : Bijection α β) (x : β) : iso.morphism.down (iso.inverse.down x) = x :=
 begin
   have p := iso.witness_2,
+  have p' := congr_arg ulift.down p,
   tidy,
 end
 
-@[simp] definition is_Isomorphism_in_Types.witness_1 {α β : Type} (f : α → β) (h : @is_Isomorphism CategoryOfTypes α β f) (x : α) : h.inverse (f x) = x :=
+-- TODO the @s are unpleasant here
+@[simp] definition is_Isomorphism_in_Types.witness_1 {α β : Type u} (f : α → β) (h : @is_Isomorphism _ α β _ (ulift.up f)) (x : α) : h.inverse.down (f x) = x :=
 begin
   have p := h.witness_1, 
+  have p' := congr_arg ulift.down p,
   tidy,
 end
-@[simp] definition is_Isomorphism_in_Types.witness_2 {α β : Type} (f : α → β) (h : @is_Isomorphism CategoryOfTypes α β f) (x : β) : f (h.inverse x) = x :=
+@[simp] definition is_Isomorphism_in_Types.witness_2 {α β : Type u} (f : α → β) (h : @is_Isomorphism _ α β _ (ulift.up f)) (x : β) : f (h.inverse.down x) = x :=
 begin
   have p := h.witness_2,
+  have p' := congr_arg ulift.down p,
   tidy,
 end
 

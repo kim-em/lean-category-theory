@@ -11,22 +11,16 @@ open categories.natural_transformation
 
 namespace categories.functor_categories
 
-universes u1 v1 u2 v2 u3 v3
+universes u₁ u₂ u₃
 
-definition FunctorCategory (C : Category.{u1 v1}) (D : Category.{u2 v2}) : Category :=
+instance FunctorCategory (C : Type u₁) [category C] (D : Type u₂) [category D] : category (Functor C D):=
 {
-  Obj := Functor C D,
   Hom := λ F G, NaturalTransformation F G,
-
   identity := λ F, IdentityNaturalTransformation F,
-  compose  := @vertical_composition_of_NaturalTransformations C D
+  compose  := @vertical_composition_of_NaturalTransformations C _ D _
 }
 
-definition whiskering_on_left
-  (C : Category.{u1 v1})
-  (D : Category.{u2 v2})
-  (E : Category.{u3 v3}) :
-    Functor (FunctorCategory C D) (FunctorCategory (FunctorCategory D E) (FunctorCategory C E)) :=
+definition whiskering_on_left (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] : Functor (Functor C D) (Functor (Functor D E) (Functor C E)) :=
 {
   onObjects     := λ F, {
     onObjects     := λ G, FunctorComposition F G,
@@ -40,17 +34,12 @@ definition whiskering_on_left
 }
 
 definition whisker_on_left_functor
-  {C : Category.{u1 v1}} {D : Category.{u2 v2}}
-  (E : Category.{u3 v3})
-  (F : Functor C D) :
-  Functor (FunctorCategory D E) (FunctorCategory C E) :=
+  (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] (F : Functor C D) :
+  Functor (Functor D E) (Functor C E) :=
   (whiskering_on_left C D E).onObjects F
 
-definition whiskering_on_right
-  (C : Category.{u1 v1})
-  (D : Category.{u2 v2})
-  (E : Category.{u3 v3}) :
-    Functor (FunctorCategory D E) (FunctorCategory (FunctorCategory C D) (FunctorCategory C E)) :=
+definition whiskering_on_right (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] :
+    Functor (Functor D E) (Functor (Functor C D) (Functor C E)) :=
 {
   onObjects     := λ H, {
     onObjects     := λ F, FunctorComposition F H,
@@ -63,39 +52,37 @@ definition whiskering_on_right
  }
 }
 
-definition whisker_on_right_functor
-  (C : Category.{u1 v1})
-  {D : Category.{u2 v2}} {E : Category.{u3 v3}}
-  (H : Functor D E) :
+definition whisker_on_right_functor (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] (H : Functor D E) :
   Functor (FunctorCategory C D) (FunctorCategory C E) :=
 (whiskering_on_right C D E).onObjects H
 
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+variable {E : Type u₃}
+variable [category E]
+
 @[ematch] lemma NaturalTransformation_to_FunctorCategory.components_naturality
-  {C : Category.{u1 v1}}
-  {D : Category.{u2 v2}}
-  {E : Category.{u3 v3}}
-  {F G : Functor C (FunctorCategory D E)}
+  {F G : Functor C (Functor D E)}
   (T : NaturalTransformation F G) 
-  (X : C.Obj)
-  {Y Z : D.Obj}
-  (f : D.Hom Y Z)
-    : E.compose ((F.onObjects X).onMorphisms f) ((T.components X).components Z) =
-    E.compose ((T.components X).components Y) ((G.onObjects X).onMorphisms f) :=
+  (X : C)
+  {Y Z : D}
+  (f : Hom Y Z)
+    : ((F.onObjects X).onMorphisms f) >> ((T.components X).components Z) =
+    ((T.components X).components Y) >> ((G.onObjects X).onMorphisms f) :=
 begin
   exact (T.components _).naturality _
 end
 
 @[ematch] lemma NaturalTransformation_to_FunctorCategory.naturality_components
-  {C : Category.{u1 v1}}
-  {D : Category.{u2 v2}}
-  {E : Category.{u3 v3}}
-  {F G : Functor C (FunctorCategory D E)}
+  {F G : Functor C (Functor D E)}
   (T : NaturalTransformation F G) 
-  (Z : D.Obj)
-  {X Y : C.Obj}
-  (f : C.Hom X Y)
-  : E.compose ((F.onMorphisms f).components Z) ((T.components Y).components Z) =
-    E.compose ((T.components X).components Z) ((G.onMorphisms f).components Z) :=
+  (Z : D)
+  {X Y : C}
+  (f : Hom X Y)
+  : ((F.onMorphisms f).components Z) >> ((T.components Y).components Z) =
+    ((T.components X).components Z) >> ((G.onMorphisms f).components Z) :=
 begin
   have p := T.naturality _,
   have q := congr_arg NaturalTransformation.components p,

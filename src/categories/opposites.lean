@@ -13,21 +13,40 @@ open categories.types
 
 namespace categories.opposites
 
-definition Opposite (C : Category) : Category :=
+universes u₁ u₂
+
+inductive op (C : Type u₁) : Type u₁
+| op : C → op
+
+notation C `ᵒᵖ` := op C
+
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+
+def op.of : Cᵒᵖ  → C
+| (op.op X) := X
+
+instance opposite_coercion_1 : has_coe (Cᵒᵖ) C :=
+  {coe := op.of}
+instance opposite_coercion_2 : has_coe C (Cᵒᵖ) :=
+  {coe := op.op}
+
+instance Opposite : category (Cᵒᵖ):=
 {
-    Obj := C.Obj,
-    Hom := λ X Y, C.Hom Y X,
-    compose  := λ _ _ _ f g, C.compose g f,
-    identity := λ X, C.identity X
+    Hom := λ X Y, Hom (Y : C) (X : C),
+    compose  := λ _ _ _ f g, g >> f,
+    identity := λ X, 𝟙 X
 }
 
-definition OppositeFunctor {C D : Category} (F : Functor C D) : Functor (Opposite C) (Opposite D) :=
+definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=
 {
-  onObjects     := F.onObjects,
+  onObjects     := λ X, F.onObjects X,
   onMorphisms   := λ X Y f, F.onMorphisms f
 }
 
-definition {u v} HomPairing (C : Category.{u v}) : Functor ((Opposite C) × C) CategoryOfTypes.{v} :=
+definition HomPairing (C : Type u₁) : Functor ((Cᵒᵖ) × C) (Type u₁) :=
 {
   onObjects     := λ p, C.Hom p.1 p.2,
   onMorphisms   := λ _ _ f, λ g, C.compose (C.compose f.1 g) f.2

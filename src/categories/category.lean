@@ -10,30 +10,30 @@ open categories.graphs
 
 namespace categories
 
-universes u v
+universes u
 
 class category (Obj : Type u) :=
-  (Hom : Obj → Obj → Type v)
+  (Hom : Obj → Obj → Type u)
   (identity : Π X : Obj, Hom X X)
   (compose  : Π {X Y Z : Obj}, Hom X Y → Hom Y Z → Hom X Z)
-  (left_identity  : ∀ {X Y : Obj} (f : Hom X Y), compose (identity X) f = f )
-  (right_identity : ∀ {X Y : Obj} (f : Hom X Y), compose f (identity Y) = f )
+  (left_identity  : ∀ {X Y : Obj} (f : Hom X Y), compose (identity X) f = f . obviously)
+  (right_identity : ∀ {X Y : Obj} (f : Hom X Y), compose f (identity Y) = f . obviously)
   (associativity  : ∀ {W X Y Z : Obj} (f : Hom W X) (g : Hom X Y) (h : Hom Y Z),
-    compose (compose f g) h = compose f (compose g h) )
+    compose (compose f g) h = compose f (compose g h) . obviously)
 
-def Hom {α : Type u} [category.{u v} α] : α → α → Type v := category.Hom
+variable {C : Type u}
+variables {W X Y Z : C}
+variable [category C]
+
+def Hom : C → C → Type u := category.Hom
 
 notation `𝟙` := category.identity
 infixr ` >> `:80 := category.compose
 
-variable {C : Type u}
-variables {W X Y Z : C}
+@[simp] def category.left_identity_lemma (f : Hom X Y) : 𝟙 X >> f = f := by rw category.left_identity
+@[simp] def category.right_identity_lemma (f : Hom X Y) : f >> 𝟙 Y = f := by rw category.right_identity
+@[simp,ematch] def category.associativity_lemma (f : Hom W X) (g : Hom X Y) (h : Hom Y Z) : (f >> g) >> h = f >> (g >> h) := by rw category.associativity
 
-@[simp] def category.left_identity_lemma [category.{u v} C] (f : Hom X Y) : 𝟙 X >> f = f := by rw category.left_identity
-@[simp] def category.right_identity_lemma [category.{u v} C] (f : Hom X Y) : f >> 𝟙 Y = f := by rw category.right_identity
-@[simp,ematch] def category.associativity_lemma [category.{u v} C] (f : Hom W X) (g : Hom X Y) (h : Hom Y Z) : (f >> g) >> h = f >> (g >> h) := by rw category.associativity
-
-@[ematch] lemma category.identity_idempotent {α} [category α] (X : α) :
-  𝟙 X >> 𝟙 X = 𝟙 X := by simp
+@[ematch] lemma category.identity_idempotent (X : C) : 𝟙 X >> 𝟙 X = 𝟙 X := by simp
 
 end categories
