@@ -1,3 +1,15 @@
+class X (α : Type).
+structure Y (α β) [X α] [X β] := (f : α → α)
+@[ematch] theorem T (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x := sorry
+example (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x :=
+begin [smt] ematch end -- doesn't work
+
+structure Y' (α /-β-/) [X α] /-[X β]-/ := (f : α → α)
+@[ematch] theorem T' (α /-β-/) [X α] /-[X β]-/(F : Y' α /-β-/) (x : α) : F.f x = x := sorry
+example (α /-β-/) [X α] /-[X β]-/ (F : Y' α /-β-/) (x : α) : F.f x = x :=
+begin [smt] ematch end -- works!
+
+
 universes u v u1 v1 u2 v2 u3 v3
 
 class category (Obj : Type u) :=
@@ -46,6 +58,8 @@ structure Isomorphism [category.{u1 v1} C] (X Y : C) :=
 (witness_2 : inverse >> morphism = 𝟙 Y)
 attribute [simp,ematch] Isomorphism.witness_1 Isomorphism.witness_2
 
+set_option trace.debug.smt.ematch true
+
 example
   [category.{u1 v1} C]
   [category.{u2 v2} D]
@@ -59,5 +73,9 @@ begin
   -
   - To solve this, we need to use F.functoriality in reverse, then g.witness_1, then F.identities.
   -/
-  using_smt $ smt_tactic.eblast -- Can't work it out. :-(
+  using_smt $ smt_tactic.eblast, -- Can't work it out. :-(
+  
+  rw ← F.functoriality,
+  rw g.witness_1,
+  rw F.identities
 end
