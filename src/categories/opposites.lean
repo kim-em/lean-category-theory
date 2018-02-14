@@ -13,22 +13,19 @@ open categories.types
 
 namespace categories.opposites
 
-definition Opposite (C : Category) : Category :=
-{
+definition Opposite (C : Category) : Category := {
     Obj := C.Obj,
     Hom := λ X Y, C.Hom Y X,
     compose  := λ _ _ _ f g, C.compose g f,
     identity := λ X, C.identity X
 }
 
-definition OppositeFunctor {C D : Category} (F : Functor C D) : Functor (Opposite C) (Opposite D) :=
-{
+definition OppositeFunctor {C D : Category} (F : Functor C D) : Functor (Opposite C) (Opposite D) := {
   onObjects     := F.onObjects,
   onMorphisms   := λ X Y f, F.onMorphisms f
 }
 
-definition {u v} HomPairing (C : Category.{u v}) : Functor ((Opposite C) × C) CategoryOfTypes.{v} :=
-{
+definition {u v} HomPairing (C : Category.{u v}) : Functor ((Opposite C) × C) CategoryOfTypes.{v} := {
   onObjects     := λ p, C.Hom p.1 p.2,
   onMorphisms   := λ _ _ f, λ g, C.compose (C.compose f.1 g) f.2
 }
