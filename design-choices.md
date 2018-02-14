@@ -48,6 +48,15 @@ We immediately see two advantages of the unbundled approach:
 
 However, not having to specify the category quickly becomes a mixed blessing --- because in the cases where we _need_ to specify the category, it is rather cumbersome to do so (lots of `@`s and `_`s), or worse.
 
+A historical note: there have been many previous category theory libraries in interactive theorem provers. Let me mention two:
+1. The development in Lean 2, at https://github.com/leanprover/lean2/tree/master/library/algebra/category. This uses unbundled objects, but not typeclasses. I think that development stopped just short of running into the problem described below.
+2. "Experience Implementing a Performant Category-Theory Library in Coq", by Gross, Chlipala, Spivak, https://arxiv.org/pdf/1401.7694.pdf. They decide to use fully bundled categories, and explain in detail why. 
+Two quotes: 'Switching from the version where the types
+of objects and morphisms were parameters brought a factor of three speed-up
+in compilation time over our whole development.' and 'One of the main benefits to making all of
+the relevant components arguments, ..., is that it allows the use of type-class resolution without having to
+worry about overlapping instances.'
+
 ## Same objects, many categories
 Unlike in the situation with undergraduate abstract algebra (rings and fields and so on), where we typically only think about a single ring structure on a given set at a time, in applications of category theory the objects very often do not specify the category. In all the first examples there is an obvious natural category structure (the category of rings, or modules for an algebra, etc), and so it seems very nice to just be able to refer to the objects and write things like `Functor Rings Types`. One of the first places that we want to consider two different category structures on the same collection of objects is in defining opposite categories. I'll use this example to illustrate the difficulties below. I also want to emphasise that this rather formal example is just one of many. Others include:
 
@@ -107,7 +116,7 @@ definition HomPairing {C : Type u₁} [C_cat : category C]: Functor ((Cᵒᵖ) �
   onMorphisms   := λ X Y f, sorry
 }
 ````
-So far I haven't found a way to fill in `sorry`, let alone one that doesn't have a million `@`s and coercions. (Help wanted!)
+So far I haven't found a way to fill in `sorry`, let alone one that doesn't have a million `@`s and coercions. (Help wanted!) (An aside: I note that the category theory development in Lean also seems to have stopped at this point: https://github.com/leanprover/lean2/blob/master/library/algebra/category/adjoint.lean. They use unbundled categories, but without typeclasses.)
 
 If anyone is interested you can play with either of these examples in the repository at https://github.com/semorrison/lean-category-theory.git. The `master` branch contains the bundled development, the `unbundled` branch contains the unbundled development (note most files in this branch don't compile). The stuff on opposites is in `src/categories/opposities.lean`.
 
