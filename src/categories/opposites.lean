@@ -28,6 +28,8 @@ variable [category D]
 def op.of : Cᵒᵖ  → C
 | (op.op X) := X
 
+#print op.of
+
 instance opposite_coercion_1 : has_coe (Cᵒᵖ) C :=
   {coe := op.of}
 instance opposite_coercion_2 : has_coe C (Cᵒᵖ) :=
