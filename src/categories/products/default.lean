@@ -10,6 +10,8 @@ open categories.functor_categories
 
 namespace categories.products
 
+universes u₁ v₁ u₂ v₂ 
+
 definition ProductCategory (C D : Category) :
   Category :=
   {
@@ -68,7 +70,10 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-definition {u1 v1 u2 v2} Evaluation (C : Category.{u1 v1}) (D : Category.{u2 v2}) : Functor (ProductCategory (FunctorCategory C D) C) D := {
+variable (C : Category.{u1 v1})
+variable (D : Category.{u2 v2})
+
+definition Evaluation : Functor (ProductCategory (FunctorCategory C D) C) D := {
   onObjects     := λ p, p.1.onObjects p.2,
   onMorphisms   := λ x y f, D.compose (x.1.onMorphisms f.2) (f.1.components y.2)
 }
