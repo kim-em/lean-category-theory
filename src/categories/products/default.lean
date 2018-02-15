@@ -70,8 +70,8 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-variable (C : Category.{u1 v1})
-variable (D : Category.{u2 v2})
+variable (C : Category.{u₁ v₁})
+variable (D : Category.{u₂ v₂})
 
 definition Evaluation : Functor (ProductCategory (FunctorCategory C D) C) D := {
   onObjects     := λ p, p.1.onObjects p.2,
