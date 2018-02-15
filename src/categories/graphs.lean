@@ -4,41 +4,47 @@
 
 namespace categories.graphs
 
-structure {u v} Graph :=
-  (Obj : Type u)
-  (Hom : Obj → Obj → Type v)
+universes u₁ u₂
 
-open Graph
+class graph (vertices : Type u₁) :=
+  (edges : vertices → vertices → Type u₁)
 
-structure GraphHomomorphism (G H : Graph) := 
-  (onObjects   : G.Obj → H.Obj)
-  (onMorphisms : ∀ {X Y : G.Obj}, G.Hom X Y → H.Hom (onObjects X) (onObjects Y))
+variable {C : Type u₁}
+variables {W X Y Z : C}
+variable [graph C]
 
-inductive {u v} path {G : Graph.{u v}} : Obj G → Obj G → Type (max u v)
-| nil  : Π (h : G.Obj), path h h
-| cons : Π {h s t : G.Obj} (e : G.Hom h s) (l : path s t), path h t
+def edges : C → C → Type u₁ := graph.edges
+
+structure GraphHomomorphism (G : Type u₁) (H : Type u₂) [graph G] [graph H] := 
+  (onVertices : G → H)
+  (onEdges    : ∀ {X Y : G}, edges X Y → edges (onVertices X) (onVertices Y))
+
+variable {G : Type u₁}
+variable {H : Type u₂}
+variable [graph G]
+variable [graph H]
+
+inductive path : G → G → Type u₁
+| nil  : Π (h : G), path h h
+| cons : Π {h s t : G} (e : edges h s) (l : path s t), path h t
 
 notation a :: b := path.cons a b
 notation `p[` l:(foldr `, ` (h t, path.cons h t) path.nil _ `]`) := l
 
-inductive {u v} path_of_paths {G : Graph.{u v}} : Obj G → Obj G → Type (max u v)
-| nil  : Π (h : G.Obj), path_of_paths h h
-| cons : Π {h s t : G.Obj} (e : path h s) (l : path_of_paths s t), path_of_paths h t
+inductive path_of_paths : G → G → Type u₁ 
+| nil  : Π (h : G), path_of_paths h h
+| cons : Π {h s t : G} (e : path h s) (l : path_of_paths s t), path_of_paths h t
 
 notation a :: b := path_of_paths.cons a b
 notation `pp[` l:(foldr `, ` (h t, path_of_paths.cons h t) path_of_paths.nil _ `]`) := l
 
 -- The pattern matching trick used here was explained by Jeremy Avigad at https://groups.google.com/d/msg/lean-user/JqaI12tdk3g/F9MZDxkFDAAJ
-definition concatenate_paths
- {G : Graph} :
- Π {x y z : G.Obj}, path x y → path y z → path x z
+definition concatenate_paths : Π {x y z : G}, path x y → path y z → path x z
 | ._ ._ _ (path.nil _)               q := q
-| ._ ._ _ (@path.cons ._ _ _ _ e p') q := path.cons e (concatenate_paths p' q)
+| ._ ._ _ (@path.cons ._ _ _ _ _ e p') q := path.cons e (concatenate_paths p' q)
 
-definition concatenate_path_of_paths
- {G : Graph} :
- Π {x y : G.Obj}, path_of_paths x y → path x y
+definition concatenate_path_of_paths : Π {x y : G}, path_of_paths x y → path x y
 | ._ ._ (path_of_paths.nil X) := path.nil X
-| ._ ._ (@path_of_paths.cons ._ _ _ _ e p') := concatenate_paths e (concatenate_path_of_paths p')
+| ._ ._ (@path_of_paths.cons ._ _ _ _ _ e p') := concatenate_paths e (concatenate_path_of_paths p')
 
 end categories.graphs

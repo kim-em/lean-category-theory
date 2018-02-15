@@ -8,18 +8,23 @@ open categories
 
 namespace categories
 
-structure Monic {C : Category} {Y Z : C.Obj} (f : C.Hom Y Z) :=
-  (witness : ∀ {X : C.Obj} {a b : C.Hom X Y} (p : C.compose a f = C.compose b f), a = b)
-structure Epic {C : Category} {X Y : C.Obj} (f : C.Hom X Y) :=
-  (witness : ∀ {Z : C.Obj} {a b : C.Hom Y Z} (p : C.compose f a = C.compose f b), a = b)
+universe u
+variable {C : Type u}
+variable [category C]
+variables {X Y Z : C}
 
-structure SplitMonic {C : Category} {Y Z : C.Obj} (f : C.Hom Y Z) :=
-  (right_inverse : C.Hom Z Y)
-  (evidence      : C.compose f right_inverse = C.identity Y)
+structure Monic (f : Hom Y Z) :=
+  (witness : ∀ {X : C} {a b : Hom X Y} (p : a >> f = b >> f), a = b)
+structure Epic (f : Hom X Y) :=
+  (witness : ∀ {Z : C} {a b : Hom Y Z} (p : f >> a = f >> b), a = b)
 
-lemma SplitMonic_implies_Monic {C : Category} {Y Z : C.Obj} {f : C.Hom Y Z} (m : SplitMonic f) : Monic f := {
+structure SplitMonic (f : Hom Y Z) :=
+  (right_inverse : Hom Z Y)
+  (evidence      : f >> right_inverse = 𝟙 Y)
+
+lemma SplitMonic_implies_Monic {f : Hom Y Z} (m : SplitMonic f) : Monic f := {
     witness := λ _ a b p, begin
-                            have e := congr_arg (λ g, C.compose g m.right_inverse) p,
+                            have e := congr_arg (λ g, g >> m.right_inverse) p,
                             simp at e,
                             -- repeat_at_least_once {rewrite C.associativity at e},
                             repeat_at_least_once {rewrite m.evidence at e},
