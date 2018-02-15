@@ -81,7 +81,7 @@ instance Semigroups_has_TerminalObject : has_TerminalObject CategoryOfSemigroups
 local attribute [applicable] semigroup.mul_assoc
 
 definition {u} semigroup_binary_product {α β : Type u} (s : semigroup α) (t: semigroup β) : semigroup (α × β) := {
-  mul := λ p q, (p.fst * q.fst, p.snd * q.snd),
+  mul := λ p q, (p.1 * q.1, p.2 * q.2),
   mul_assoc := ♯
 }
 
@@ -96,8 +96,8 @@ definition {u} semigroup_morphism_binary_product
 instance Semigroups_has_BinaryProducts : has_BinaryProducts CategoryOfSemigroups := {
   binary_product := λ s t, {
     product             := ⟨ _, semigroup_binary_product s.2 t.2 ⟩ ,
-    left_projection     := ⟨ prod.fst ⟩,
-    right_projection    := ⟨ prod.snd ⟩,
+    left_projection     := ⟨ prod.1 ⟩,
+    right_projection    := ⟨ prod.2 ⟩,
     map                 := λ _ f g, {
       map := λ x, (f.map x, g.map x)
    },

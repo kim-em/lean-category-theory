@@ -47,8 +47,8 @@ attribute [instance] Types_has_Equalizers
 definition {u} Types_has_BinaryProducts : has_BinaryProducts CategoryOfTypes.{u} := {
   binary_product := λ X Y, {
     product             := X × Y,
-    left_projection     := prod.fst,
-    right_projection    := prod.snd,
+    left_projection     := prod.1,
+    right_projection    := prod.2,
     map                 := λ _ f g z, (f z, g z)
  }
 }
