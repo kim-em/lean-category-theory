@@ -3,10 +3,6 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .tactics
-import .graphs
-import tidy.make_lemma
-
-open categories.graphs
 
 namespace categories
 

@@ -2,6 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan and Scott Morrison
 
+import ..tactics
+
 namespace categories.graphs
 
 universes u₁ u₂
@@ -15,14 +17,29 @@ variable [graph C]
 
 def edges : C → C → Type u₁ := graph.edges
 
-structure GraphHomomorphism (G : Type u₁) (H : Type u₂) [graph G] [graph H] := 
+structure graph_homomorphism (G : Type u₁) [graph G] (H : Type u₂) [graph H] := 
   (onVertices : G → H)
   (onEdges    : ∀ {X Y : G}, edges X Y → edges (onVertices X) (onVertices Y))
 
 variable {G : Type u₁}
-variable {H : Type u₂}
 variable [graph G]
+variable {H : Type u₂}
 variable [graph H]
+
+@[applicable] lemma graph_homomorphisms_pointwise_equal
+  {p q : graph_homomorphism G H} 
+  (vertexWitness : ∀ X : G, p.onVertices X = q.onVertices X) 
+  (edgeWitness : ∀ X Y : G, ∀ f : edges X Y, ⟦ p.onEdges f ⟧ = q.onEdges f) : p = q :=
+begin
+  induction p with p_onVertices p_onEdges,
+  induction q with q_onVertices q_onEdges,
+  have h_vertices : p_onVertices = q_onVertices, exact funext vertexWitness,
+  subst h_vertices,
+  have h_edges : @p_onEdges = @q_onEdges, 
+  apply funext, intro X, apply funext, intro Y, apply funext, intro f,
+  exact edgeWitness X Y f,
+  subst h_edges
+end
 
 inductive path : G → G → Type u₁
 | nil  : Π (h : G), path h h

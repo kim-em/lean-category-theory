@@ -1,13 +1,13 @@
-class X (α : Type).
-structure Y (α β) [X α] [X β] := (f : α → α)
-@[ematch] theorem T (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x := sorry
-example (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x :=
-begin [smt] ematch end -- doesn't work
+-- class X (α : Type).
+-- structure Y (α β) [X α] [X β] := (f : α → α)
+-- @[ematch] theorem T (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x := sorry
+-- example (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x :=
+-- begin [smt] ematch end -- doesn't work
 
-structure Y' (α /-β-/) [X α] /-[X β]-/ := (f : α → α)
-@[ematch] theorem T' (α /-β-/) [X α] /-[X β]-/(F : Y' α /-β-/) (x : α) : F.f x = x := sorry
-example (α /-β-/) [X α] /-[X β]-/ (F : Y' α /-β-/) (x : α) : F.f x = x :=
-begin [smt] ematch end -- works!
+-- structure Y' (α /-β-/) [X α] /-[X β]-/ := (f : α → α)
+-- @[ematch] theorem T' (α /-β-/) [X α] /-[X β]-/(F : Y' α /-β-/) (x : α) : F.f x = x := sorry
+-- example (α /-β-/) [X α] /-[X β]-/ (F : Y' α /-β-/) (x : α) : F.f x = x :=
+-- begin [smt] ematch end -- works!
 
 
 universes u v u1 v1 u2 v2 u3 v3
@@ -58,7 +58,7 @@ structure Isomorphism [category.{u1 v1} C] (X Y : C) :=
 (witness_2 : inverse >> morphism = 𝟙 Y)
 attribute [simp,ematch] Isomorphism.witness_1 Isomorphism.witness_2
 
-set_option trace.debug.smt.ematch true
+-- set_option trace.debug.smt.ematch true
 
 example
   [category.{u1 v1} C]

@@ -6,6 +6,8 @@ import tidy.applicable tidy.force tidy.at_least_one tidy.repeat_at_least_once ti
 
 import tidy.auto_cast
 
+import tidy.make_lemma
+
 open tactic
 
 @[applicable] lemma {u v} pairs_componentwise_equal {α : Type u} {β : Type v} {X Y : α × β} (p1 : X.1 = Y.1) (p2 : X.2 = Y.2) : X = Y := ♯
