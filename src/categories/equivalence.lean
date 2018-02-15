@@ -50,7 +50,7 @@ definition EquivalenceComposition
           ≅ₙ FunctorComposition e.functor e.inverse
            : NaturalIsomorphism'.mkNatIso
                (Functor.onIsomorphisms (whisker_on_right_functor C e.inverse)
-                 (Functor.onIsomorphisms (whisker_on_left_functor D e.functor) f.isomorphism_1))
+                 (Functor.onIsomorphisms (whisker_on_left_functor e.functor D) f.isomorphism_1))
       ... ≅ₙ IdentityFunctor C
            : NaturalIsomorphism'.mkNatIso e.isomorphism_1
     ).iso,
@@ -61,14 +61,14 @@ definition EquivalenceComposition
           ≅ₙ FunctorComposition f.inverse f.functor
            : NaturalIsomorphism'.mkNatIso
                (Functor.onIsomorphisms (whisker_on_right_functor E f.functor)
-                 (Functor.onIsomorphisms (whisker_on_left_functor D f.inverse) e.isomorphism_2))
+                 (Functor.onIsomorphisms (whisker_on_left_functor f.inverse D) e.isomorphism_2))
       ... ≅ₙ IdentityFunctor E
            : NaturalIsomorphism'.mkNatIso f.isomorphism_2
     ).iso
 }
 
 structure Full (F : Functor C D) :=
-  (preimage : ∀ {X Y : C} (f : Hom (F.onObjects X) (F.onObjects Y)), C.Hom X Y)
+  (preimage : ∀ {X Y : C} (f : Hom (F.onObjects X) (F.onObjects Y)), Hom X Y)
   (witness  : ∀ {X Y : C} (f : Hom (F.onObjects X) (F.onObjects Y)), F.onMorphisms (preimage f) = f)
 
 attribute [semiapplicable] Full.preimage 
@@ -76,12 +76,12 @@ attribute [semiapplicable] Full.preimage
 attribute [simp,ematch] Full.witness
 
 structure Faithful (F : Functor C D) :=
-  (injectivity : ∀ {X Y : C.Obj} (f g : C.Hom X Y) (p : F.onMorphisms f = F.onMorphisms g), f = g)
+  (injectivity : ∀ {X Y : C} (f g : Hom X Y) (p : F.onMorphisms f = F.onMorphisms g), f = g)
 
 attribute [semiapplicable] Faithful.injectivity
 
 definition Embedding (F : Functor C D) := (Full F) × (Faithful F)
 
-definition EssentiallySurjective (F : Functor C D) := Π d : D.Obj, Σ c : C.Obj, Isomorphism D (F.onObjects c) d
+definition EssentiallySurjective (F : Functor C D) := Π d : D, Σ c : C, Isomorphism (F.onObjects c) d
 
 end categories.equivalence

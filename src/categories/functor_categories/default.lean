@@ -34,7 +34,7 @@ definition whiskering_on_left (C : Type u₁) [category C] (D : Type u₂) [cate
 }
 
 definition whisker_on_left_functor
-  (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] (F : Functor C D) :
+  {C : Type u₁} [category C] {D : Type u₂} [category D] (F : Functor C D) (E : Type u₃) [category E] :
   Functor (Functor D E) (Functor C E) :=
   (whiskering_on_left C D E).onObjects F
 
@@ -52,7 +52,7 @@ definition whiskering_on_right (C : Type u₁) [category C] (D : Type u₂) [cat
  }
 }
 
-definition whisker_on_right_functor (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] (H : Functor D E) :
+definition whisker_on_right_functor (C : Type u₁) [category C] {D : Type u₂} [category D] {E : Type u₃} [category E] (H : Functor D E) :
   Functor (Functor C D) (Functor C E) :=
 (whiskering_on_right C D E).onObjects H
 

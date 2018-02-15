@@ -17,25 +17,23 @@ variable [category C]
 variable {D : Type u₂}
 variable [category D]
 
--- TODO consider changing Sort to Type here, and making people put in their own plifts.
-
-instance FullSubcategory (Z : C → Sort u₁) : category (Σ X : C, plift (Z X)) := {
+instance FullSubcategory (Z : C → Type u₁) : category (Σ X : C, Z X) := {
   Hom := λ X Y, Hom X.1 Y.1,
   identity       := by tidy,
   compose        := λ _ _ _ f g, f >> g
 }
 
-definition FullSubcategoryInclusion {Z : C → Sort u₁} : Functor (Σ X : C, plift (Z X)) C := {
+definition FullSubcategoryInclusion {Z : C → Type u₁} : Functor (Σ X : C, Z X) C := {
   onObjects := λ X, X.1,
   onMorphisms := λ _ _ f, f
 }
 
 definition Functor_restricts_to_FullSubcategory 
   (F : Functor C D) 
-  (ZC : C → Sort u₁)
-  (ZD : D → Sort u₂)
-  (w : ∀ {X : C} (z : ZC X), ZD (F.onObjects X)) : Functor (Σ X : C, plift (ZC X)) (Σ Y : D, plift (ZD Y)) := {
-    onObjects     := λ X, ⟨ F.onObjects X.1, ⟨ w X.2.down ⟩  ⟩,
+  (ZC : C → Type u₁)
+  (ZD : D → Type u₂)
+  (w : ∀ {X : C} (z : ZC X), ZD (F.onObjects X)) : Functor (Σ X : C, ZC X) (Σ Y : D, ZD Y) := {
+    onObjects     := λ X, ⟨ F.onObjects X.1, ⟨ w X.2 ⟩  ⟩,
     onMorphisms   := λ _ _ f, F.onMorphisms f
  }
 

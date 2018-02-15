@@ -15,12 +15,12 @@ open categories.natural_transformation
 
 namespace categories.universal
 
-structure iterated_limit_for_bifunctor 
-  {J K : Category}
-  {C : Category}
-  (F : Functor (J × K) C) :=
-  (limitFunctor : LimitCone (Curry_Functors J K C F))
-  (limitObject  : LimitCone (limitFunctor.terminal_object.cone_point))
+-- structure iterated_limit_for_bifunctor 
+--   {J K : Category}
+--   {C : Category}
+--   (F : Functor (J × K) C) :=
+--   (limitFunctor : LimitCone (Curry_Functors J K C F))
+  -- (limitObject  : LimitCone (limitFunctor.terminal_object.cone_point))
 
 -- definition Fubini_for_Limits
 --   {J K : Category}

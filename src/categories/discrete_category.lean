@@ -7,29 +7,27 @@ import .functor
 
 namespace categories
 
+universes u₁ u₂ 
+
 open categories.functor
-open plift -- we first plift propositional equality to Type 0,
-open ulift -- then ulift up to Type v
 
-local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition {u v} DiscreteCategory (α : Type u) : Category.{u v} :=
-{
-  Obj            := α,
+definition  DiscreteCategory (α : Type u₁) : category α := {
   Hom            := λ X Y, ulift (plift (X = Y)),
   identity       := ♯,
   compose        := ♯
 }
 
-definition {u v} EmptyCategory := DiscreteCategory.{u v} (ulift empty)
+definition EmptyCategory := DiscreteCategory (pempty.{u₁})
 
-definition {u1 v1 u2 v2} EmptyFunctor (C : Category.{u2 v2}) : Functor EmptyCategory.{u1 v1} C := ♯
+definition EmptyFunctor (C : Type u₂) [category C] : @Functor _ EmptyCategory.{u₁} C _ := ♯
 
-open tactic
-
-definition {u1 v1 u2 v2} Functor.fromFunction {C : Category.{u1 v1}} {I : Type u2} (F : I → C.Obj) : Functor (DiscreteCategory.{u2 v2} I) C := {
+definition {u1 v1 u2 v2} Functor.fromFunction {C : Type u₂} [category C] {I : Type u₂} (F : I → C) : @Functor _ (DiscreteCategory I) C _ := {
   onObjects     := F,
-  onMorphisms   := ♯
+  onMorphisms   := begin tidy, induction a, induction a, induction a, tidy, end, -- FIXME this used to work by ♯
+  -- identities :=sorry,
+  -- functoriality:=sorry
 }
 
 end categories

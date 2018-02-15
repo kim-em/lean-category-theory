@@ -14,18 +14,17 @@ open categories.functor_categories
 
 namespace categories.natural_transformation
 
-universes u1 v1 u2 v2 u3 v3
+universes u₁ u₂ u₃
 
-variable C : Category.{u1 v1}
-variable D : Category.{u2 v2}
-variable E : Category.{u3 v3}
+variables (C : Type u₁) (D : Type u₂) (E : Type u₃)
+variables [category C] [category D] [category E]
 
 definition Uncurry_Functors :
-  Functor (FunctorCategory C (FunctorCategory D E)) (FunctorCategory (C × D) E) := 
+  Functor (Functor C (Functor D E)) (Functor (C × D) E) := 
     {
-      onObjects     := λ (F : Functor C (FunctorCategory D E)), {
+      onObjects     := λ (F : Functor C (Functor D E)), {
         onObjects     := λ X, (F.onObjects X.1).onObjects X.2,
-        onMorphisms   := λ X Y f, E.compose ((F.onMorphisms f.1).components X.2) ((F.onObjects Y.1).onMorphisms f.2)
+        onMorphisms   := λ X Y f, ((F.onMorphisms f.1).components X.2) >> ((F.onObjects Y.1).onMorphisms f.2)
      },
       onMorphisms   := λ F G (T : NaturalTransformation F G), {
         components := λ X, (T.components _).components _
@@ -33,15 +32,15 @@ definition Uncurry_Functors :
    }
 
 definition Curry_Functors :
-  Functor (FunctorCategory (C × D) E) (FunctorCategory C (FunctorCategory D E)) :=
+  Functor (Functor (C × D) E) (Functor C (Functor D E)) :=
 {
       onObjects     := λ F: Functor (C × D) E, {
         onObjects     := λ X, {
           onObjects     := λ Y, F.onObjects (X, Y),
-          onMorphisms   := λ Y Y' g, F.onMorphisms (C.identity X, g)
+          onMorphisms   := λ Y Y' g, F.onMorphisms (𝟙 X, g)
        },
         onMorphisms   := λ X X' f, {
-          components := λ Y, F.onMorphisms (f, D.identity Y)
+          components := λ Y, F.onMorphisms (f, 𝟙 Y)
        }
      },
       onMorphisms   := λ F G T, {

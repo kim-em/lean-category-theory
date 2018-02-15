@@ -3,7 +3,6 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .discrete_category
-import .path_category
 import .util.finite
 
 open categories
@@ -41,6 +40,7 @@ attribute [instance] unit_or_empty_subsingleton
 -- attribute [instance] unit_or_empty_subsingleton'
 local attribute [applicable] subsingleton.elim
 
+open Two
 
 definition WalkingPair : category Two := {
   Hom := λ X Y, if X = Y then punit else pempty,
@@ -48,14 +48,26 @@ definition WalkingPair : category Two := {
   compose        := by tidy,
 }
 
-local attribute [applicable] Category.identity
+local attribute [applicable] category.identity
 
-variable {C : Category.{u₁ u₂}} 
+variable {C : Type u₁}
+variable [category C]
 
-definition Pair_functor (α β : C) : @Functor Two WalkingPair C _ :=
-{
+set_option pp.all true
+definition Pair_functor (α β : C) : @Functor Two WalkingPair C _ := {
   onObjects     := λ p, p.choice α β,
-  onMorphisms   := by tidy
+  onMorphisms   := λ X Y f, match X, Y, f with
+                            | _0, _0, _ := 𝟙 α
+                            | _1, _1, _ := 𝟙 β
+                            end,
+  functoriality := begin
+                     tidy, 
+                     all_goals { induction f }, 
+                     all_goals { induction g }, 
+                     all_goals { dunfold Pair_functor._match_1 }, 
+                     erw category.left_identity, -- FIXME
+                     erw category.left_identity, 
+                   end
 }
 
 definition WalkingParallelPair : category Two := {
@@ -80,12 +92,13 @@ definition ParallelPair_functor {α β : C} (f g : Hom α β) : @Functor Two Wal
                      intros,
                      induction X,
                      {induction Y,
-                       {exact C.identity α},
+                       {exact 𝟙 α},
                        {induction a, exact f, exact g}},
                      {induction Y,
                        {induction a},
-                       {exact C.identity β}}
-                   end
+                       {exact 𝟙 β}}
+                   end,
+  functoriality := begin tidy, any_goals { induction f_1 }, any_goals { induction g_1 },  end
 }
 
 end categories.walking

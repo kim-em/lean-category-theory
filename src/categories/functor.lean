@@ -12,7 +12,7 @@ namespace categories.functor
 
 universes u₁ u₂ u₃ 
 
-structure Functor (C : Type u₁) (D : Type u₂) [category C] [category D] :=
+structure Functor (C : Type u₁) [category C] (D : Type u₂) [category D] :=
   (onObjects   : C → D)
   (onMorphisms : Π {X Y : C},
                 Hom X Y → Hom (onObjects X) (onObjects Y))
@@ -33,10 +33,10 @@ definition IdentityFunctor (C) [category C] : Functor C C :=
 }
 
 variable {C : Type u₁}
-variable {D : Type u₂}
-variable {E : Type u₃}
 variable [category C]
+variable {D : Type u₂}
 variable [category D]
+variable {E : Type u₃}
 variable [category E]
 variables {X Y : C}
 
