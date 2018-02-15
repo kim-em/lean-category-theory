@@ -52,27 +52,26 @@ class Representable (F : Functor C (Type u₁)) :=
   (c : C)
   (Φ : NaturalIsomorphism F ((CoYoneda C).onObjects c))
 
-@[reducible] definition {v} YonedaEvaluation (C : Category.{v v})
-  : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{v}
-  := Evaluation (Opposite C) CategoryOfTypes.{v}
-@[reducible] definition {v} YonedaPairing (C : Category.{v v}) 
-  : Functor (ProductCategory (FunctorCategory (Opposite C) CategoryOfTypes.{v}) (Opposite C)) CategoryOfTypes.{v}
+@[reducible] definition {v} YonedaEvaluation (C : Type u₁) [category C]
+  : Functor ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type u₁)
+  := Evaluation (Cᵒᵖ) (Type u₁)
+@[reducible] definition {v} YonedaPairing (C : Type u₁) [category C] 
+  : Functor ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type u₁)
   := FunctorComposition
       (FunctorComposition
         (ProductFunctor (IdentityFunctor _) (OppositeFunctor (Yoneda C)))
         (SwitchProductCategory _ _))
-      (HomPairing (FunctorCategory (Opposite C) CategoryOfTypes.{v})) 
+      (HomPairing (Functor (Cᵒᵖ) (Type u₁))) 
 
 @[simp] private lemma YonedaLemma_aux_1
-   {C : Category}
-   {X Y : C.Obj}
-   (f : C.Hom X Y)
-   {F G : Functor (Opposite C) CategoryOfTypes}
+   {X Y : C}
+   (f : Hom X Y)
+   {F G : Functor (Cᵒᵖ) (Type u₁)}
    (τ : NaturalTransformation F G)
    (Z : F.onObjects Y) :
      G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
-theorem {v} YonedaLemma (C : Category.{v v}) : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+theorem {v} YonedaLemma (C : Type u₁) [category C]: NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
   fsplit,
   fsplit,
@@ -111,7 +110,7 @@ begin
   tidy {hints:=[9, 7, 6, 7, 11, 13, 9, 10, 3, 9, 7, 6, 7, 6, 7, 6, 7, 9, 11, 13, 9, 10, 3, 6, 7, 6, 7, 6, 7, 6, 7, 9, 11, 13, 9, 10, 6, 7, 6, 7, 9, 11, 13, 9, 10, 3]},
 end
 
-theorem {u v} YonedaEmbedding (C : Category.{u v}) : Embedding (Yoneda C) :=
+theorem YonedaEmbedding (C : Type u₁) [category C] : Embedding (Yoneda C) :=
 begin
   unfold Embedding,
   fsplit,

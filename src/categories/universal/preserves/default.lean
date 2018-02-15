@@ -15,14 +15,19 @@ namespace categories.universal
 
 universes u₁ u₂ u₃ u₄ u₅ u₆
 
-class PreservesLimits {A : Category.{u₁ u₂}} {B : Category.{u₃ u₄}} (F : Functor A B) :=
-(preserves : Π {I : Category.{u₅ u₆}} (D : Functor I A) (q : LimitCone D), @is_terminal (Cones (FunctorComposition D F)) (F.onCones q.terminal_object))
+variable {A : Type u₁}
+variable [category A]
+variable {B : Type u₁}
+variable [category B]
 
-theorem HomFunctorPreservesLimits {A : Category} (a : A.Obj) : PreservesLimits ((CoYoneda A).onObjects a) := {
+class PreservesLimits (F : Functor A B) :=
+(preserves : Π {I : Type u₁} [category I] (D : Functor I A) (q : LimitCone D), @is_terminal (Cone (FunctorComposition D F)) _ (F.onCones q.terminal_object))
+
+theorem HomFunctorPreservesLimits (a : A) : PreservesLimits ((CoYoneda A).onObjects a) := {
     preserves := λ I D q, sorry
 }
 
-definition RepresentableFunctorPreservesLimits {A : Category} (F : Functor A CategoryOfTypes) [Representable F] : PreservesLimits F := sorry
+definition RepresentableFunctorPreservesLimits (F : Functor A (Type u₁)) [Representable F] : PreservesLimits F := sorry
 attribute [instance] RepresentableFunctorPreservesLimits
 
 end categories.universal
