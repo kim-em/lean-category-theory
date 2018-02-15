@@ -10,28 +10,31 @@ namespace categories
 
 universes u₁ u₂ v₁ v₂ w wc wd
 
-local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition FullSubcategory (C : Category.{u₁ u₂}) (Z : C.Obj → Sort w) : Category.{(max u₁ w) u₂} :=
-{
-  Obj := Σ X : C.Obj, plift (Z X),
-  Hom := λ X Y, C.Hom X.1 Y.1,
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+
+-- TODO consider changing Sort to Type here, and making people put in their own plifts.
+
+instance FullSubcategory (Z : C → Sort u₁) : category (Σ X : C, plift (Z X)) := {
+  Hom := λ X Y, Hom X.1 Y.1,
   identity       := by tidy,
-  compose        := λ _ _ _ f g, C.compose f g
+  compose        := λ _ _ _ f g, f >> g
 }
 
-definition FullSubcategoryInclusion {C : Category} {Z : C.Obj → Sort} : Functor (FullSubcategory C Z) C := {
+definition FullSubcategoryInclusion {Z : C → Sort u₁} : Functor (Σ X : C, plift (Z X)) C := {
   onObjects := λ X, X.1,
   onMorphisms := λ _ _ f, f
 }
 
 definition Functor_restricts_to_FullSubcategory 
-  {C : Category.{u₁ v₁}} 
-  {D : Category.{u₂ v₂}} 
   (F : Functor C D) 
-  (ZC : C.Obj → Sort wc)
-  (ZD : D.Obj → Sort wd)
-  (w : ∀ {X : C.Obj} (z : ZC X), ZD (F.onObjects X)) : Functor (FullSubcategory C ZC) (FullSubcategory D ZD) := {
+  (ZC : C → Sort u₁)
+  (ZD : D → Sort u₂)
+  (w : ∀ {X : C} (z : ZC X), ZD (F.onObjects X)) : Functor (Σ X : C, plift (ZC X)) (Σ Y : D, plift (ZD Y)) := {
     onObjects     := λ X, ⟨ F.onObjects X.1, ⟨ w X.2.down ⟩  ⟩,
     onMorphisms   := λ _ _ f, F.onMorphisms f
  }

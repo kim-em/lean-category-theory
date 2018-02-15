@@ -13,7 +13,7 @@ open categories.util.finite
 
 namespace categories.walking
 
-universes u₁ u₂ u₃ u₄
+universes u₁ u₂
 
 open Two
 
@@ -42,22 +42,23 @@ attribute [instance] unit_or_empty_subsingleton
 local attribute [applicable] subsingleton.elim
 
 
-definition WalkingPair : Category.{u₁ u₂} := {
-  Obj := Two,
+definition WalkingPair : category Two := {
   Hom := λ X Y, if X = Y then punit else pempty,
   identity       := by tidy, 
   compose        := by tidy,
 }
 
 local attribute [applicable] Category.identity
-definition Pair_functor {C : Category.{u₃ u₄}} (α β : C.Obj) : Functor.{u₁ u₂ u₃ u₄} WalkingPair C :=
+
+variable {C : Category.{u₁ u₂}} 
+
+definition Pair_functor (α β : C) : @Functor Two WalkingPair C _ :=
 {
   onObjects     := λ p, p.choice α β,
   onMorphisms   := by tidy
 }
 
-definition WalkingParallelPair : Category.{u₁ u₂} := {
-  Obj := Two,
+definition WalkingParallelPair : category Two := {
   Hom := begin
            intros X Y,
            induction X,
@@ -72,7 +73,7 @@ definition WalkingParallelPair : Category.{u₁ u₂} := {
 }
 
 -- this style is obscene. FIXME learn to use match statements  (or rather, to automatically unfold them)
-definition ParallelPair_functor {C : Category} {α β : C.Obj} (f g : C.Hom α β) : Functor WalkingParallelPair C := 
+definition ParallelPair_functor {α β : C} (f g : Hom α β) : @Functor Two WalkingParallelPair C _ := 
 {
   onObjects     := begin intros X, induction X, exact α, exact β end,
   onMorphisms   := begin

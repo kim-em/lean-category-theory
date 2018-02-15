@@ -71,9 +71,5 @@ namespace ProductNaturalTransformation
   notation α `×` β := ProductNaturalTransformation α β
 end ProductNaturalTransformation
 
-definition Evaluation : Functor ((Functor C D) × C) D := {
-  onObjects     := λ p, p.1.onObjects p.2,
-  onMorphisms   := λ x y f, (x.1.onMorphisms f.2) >> (f.1.components y.2)
-}
 
 end categories.products

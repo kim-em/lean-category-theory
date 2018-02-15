@@ -21,30 +21,35 @@ open categories.opposites
 
 namespace categories.yoneda
 
-definition {u v} Yoneda (C : Category.{u v}) : Functor C (FunctorCategory (Opposite C) CategoryOfTypes.{v}) :=
+universes u₁ u₂
+
+definition Yoneda (C : Type u₁) [category C] : Functor C (Functor (Cᵒᵖ) (Type u₁)) :=
 {
     onObjects := λ X, {
-        onObjects     := λ Y, C.Hom Y X,
-        onMorphisms   := λ Y Y' f, λ g, C.compose f g
+        onObjects     := λ Y, @Hom C _ Y X,
+        onMorphisms   := λ Y Y' f, ulift.up (λ g, f >> g)
    },
     onMorphisms   := λ X X' f, {
-        components := λ Y, λ g, C.compose g f
+        components := λ Y, ulift.up (λ g, g >> f)
    }
 }
 
-definition {u v} CoYoneda (C : Category.{u v}) : Functor (Opposite C) (FunctorCategory C CategoryOfTypes.{v}) :=
+definition CoYoneda (C : Type u₁) [category C] : Functor (Cᵒᵖ) (Functor C (Type u₁)) :=
 {
     onObjects := λ X, {
-        onObjects     := λ Y, C.Hom X Y,
-        onMorphisms   := λ Y Y' f, λ g, C.compose g f
+        onObjects     := λ Y, @Hom C _ X Y,
+        onMorphisms   := λ Y Y' f, ulift.up (λ g, g >> f)
    },
     onMorphisms   := λ X X' f, {
-        components := λ Y, λ g, C.compose f g
+        components := λ Y, ulift.up (λ g, f >> g)
    }
 }
 
-class Representable {C : Category} (F : Functor C CategoryOfTypes) := 
-  (c : C.Obj)
+variable {C : Type u₁}
+variable [category C]
+
+class Representable (F : Functor C (Type u₁)) := 
+  (c : C)
   (Φ : NaturalIsomorphism F ((CoYoneda C).onObjects c))
 
 @[reducible] definition {v} YonedaEvaluation (C : Category.{v v})

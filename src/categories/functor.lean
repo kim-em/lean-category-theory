@@ -53,7 +53,7 @@ definition FunctorComposition (F : Functor C D) (G : Functor D E) : Functor C E 
 }
 
 -- Functors preserve isomorphisms
-definition Functor_onIsomorphisms (F : Functor C D) (g : Isomorphism X Y) : Isomorphism (F.onObjects X) (F.onObjects Y) :=
+definition Functor.onIsomorphisms (F : Functor C D) (g : Isomorphism X Y) : Isomorphism (F.onObjects X) (F.onObjects Y) :=
 {
     morphism := F.onMorphisms g.morphism,
     inverse := F.onMorphisms g.inverse,

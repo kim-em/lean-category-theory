@@ -1,0 +1,27 @@
+-- Copyright (c) 2018 Scott Morrison. All rights reserved.
+-- Released under Apache 2.0 license as described in the file LICENSE.
+-- Authors: Scott Morrison
+
+import ..natural_transformation
+import ..products
+
+open categories
+open categories.isomorphism
+open categories.functor
+open categories.natural_transformation
+
+namespace categories.functor_categories
+
+universes u₁ u₂
+
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+
+definition Evaluation : Functor ((Functor C D) × C) D := {
+  onObjects     := λ p, p.1.onObjects p.2,
+  onMorphisms   := λ x y f, (x.1.onMorphisms f.2) >> (f.1.components y.2)
+}
+
+end categories.functor_categories

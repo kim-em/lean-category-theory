@@ -12,7 +12,7 @@ open categories.isomorphism
 
 universes u v
 
-instance CategoryOfTypes : category.{u+1} (Type u) :=
+@[reducible] instance CategoryOfTypes : category.{u+1} (Type u) :=
 {
     Hom := λ a b, ulift.{u+1} (a → b),
     identity := λ a, ulift.up id,
@@ -44,13 +44,13 @@ begin
 end
 
 -- TODO the @s are unpleasant here
-@[simp] definition is_Isomorphism_in_Types.witness_1 {α β : Type u} (f : α → β) (h : @is_Isomorphism _ α β _ (ulift.up f)) (x : α) : h.inverse.down (f x) = x :=
+@[simp] definition is_Isomorphism_in_Types.witness_1 {α β : Type u} (f : α → β) (h : @is_Isomorphism _ _ α β (ulift.up f)) (x : α) : h.inverse.down (f x) = x :=
 begin
   have p := h.witness_1, 
   have p' := congr_arg ulift.down p,
   tidy,
 end
-@[simp] definition is_Isomorphism_in_Types.witness_2 {α β : Type u} (f : α → β) (h : @is_Isomorphism _ α β _ (ulift.up f)) (x : β) : f (h.inverse.down x) = x :=
+@[simp] definition is_Isomorphism_in_Types.witness_2 {α β : Type u} (f : α → β) (h : @is_Isomorphism _ _ α β (ulift.up f)) (x : β) : f (h.inverse.down x) = x :=
 begin
   have p := h.witness_2,
   have p' := congr_arg ulift.down p,

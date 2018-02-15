@@ -10,9 +10,10 @@ namespace categories.isomorphism
 universes u
 
 variable {C : Type u}
+variable [category C]
 variables {X Y Z : C}
 
-structure Isomorphism [category C] (X Y : C) :=
+structure Isomorphism (X Y : C) :=
 (morphism : Hom X Y)
 (inverse : Hom Y X)
 (witness_1 : morphism >> inverse = 𝟙 X . obviously)
@@ -21,8 +22,6 @@ structure Isomorphism [category C] (X Y : C) :=
 make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
 attribute [simp,ematch] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
-
-variable [category C]
 
 instance Isomorphism_coercion_to_morphism : has_coe (Isomorphism X Y) (Hom X Y) :=
   {coe := Isomorphism.morphism}
