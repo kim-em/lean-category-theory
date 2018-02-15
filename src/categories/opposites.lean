@@ -29,16 +29,15 @@ instance Opposite : category (Cᵒᵖ) :=
   compose  := λ _ _ _ f g, g >> f,
   identity := λ X, 𝟙 X }
 
-definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=
-{
+definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=  {
   onObjects     := λ X, F.onObjects X,
   onMorphisms   := λ X Y f, F.onMorphisms f
 }
 
-definition HomPairing {C : Type u₁} [C_cat : category C]: Functor (Cᵒᵖ × C) (Type u₁) :=
-{ onObjects     := λ p, @Hom C _ p.1 p.2,
-  onMorphisms   := λ X Y f, ⟨λ h, f.1 >> h >> f.2⟩ }
-
+definition HomPairing {C : Type u₁} [C_cat : category C]: Functor (Cᵒᵖ × C) (Type u₁) := { 
+  onObjects     := λ p, @Hom C _ p.1 p.2,
+  onMorphisms   := λ X Y f, ⟨λ h, f.1 >> h >> f.2⟩
+}
 
 -- PROJECT prove C^op^op is C
 -- definition OppositeOpposite (C : Category) : Equivalence (Opposite (Opposite C)) C := sorry
