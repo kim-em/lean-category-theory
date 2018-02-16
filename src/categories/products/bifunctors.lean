@@ -30,8 +30,8 @@ variable [category E]
   {X Y Z : D}
   (f : Hom X Y)
   (g : Hom Y Z)
-  : @Functor.onMorphisms _ _ _ _ F (W, X) (W, Z) (𝟙 W, f >> g) =
-      (@Functor.onMorphisms _ _ _ _ F (W, X) (W, Y) (𝟙 W, f)) >> (@Functor.onMorphisms _ _ _ _ F (W, Y) (W, Z) (𝟙 W, g)) :=
+  : @Functor.onMorphisms _ _ _ _ F (W, X) (W, Z) (𝟙 W, f ≫ g) =
+      (@Functor.onMorphisms _ _ _ _ F (W, X) (W, Y) (𝟙 W, f)) ≫ (@Functor.onMorphisms _ _ _ _ F (W, Y) (W, Z) (𝟙 W, g)) :=
 begin
   have p := @Functor.functoriality _ _ _ _ F (W, X) (W, Y) (W, Z) (𝟙 W, f) (𝟙 W, g),
   tidy,
@@ -43,8 +43,8 @@ end
   {W : D}
   (f : Hom X Y)
   (g : Hom Y Z)
-  : @Functor.onMorphisms _ _ _ _ F (X, W) (Z, W) (f >> g, 𝟙 W) =
-      (@Functor.onMorphisms _ _ _ _ F (X, W) (Y, W) (f, 𝟙 W)) >> (@Functor.onMorphisms _ _ _ _ F (Y, W) (Z, W) (g, 𝟙 W)) :=
+  : @Functor.onMorphisms _ _ _ _ F (X, W) (Z, W) (f ≫ g, 𝟙 W) =
+      (@Functor.onMorphisms _ _ _ _ F (X, W) (Y, W) (f, 𝟙 W)) ≫ (@Functor.onMorphisms _ _ _ _ F (Y, W) (Z, W) (g, 𝟙 W)) :=
 begin
   have p := @Functor.functoriality _ _ _ _ F (X, W) (Y, W) (Z, W) (f, 𝟙 W) (g, 𝟙 W),
   tidy
@@ -56,7 +56,7 @@ end
   (f : Hom X X')
   (Y Y' : D)
   (g : Hom Y Y')
-  : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y') (𝟙 X, g)) >> (@Functor.onMorphisms _ _ _ _ F (X, Y') (X', Y') (f, 𝟙 Y')) =
+  : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y') (𝟙 X, g)) ≫ (@Functor.onMorphisms _ _ _ _ F (X, Y') (X', Y') (f, 𝟙 Y')) =
    @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
 begin
   have p := eq.symm (@Functor.functoriality _ _ _ _ F (X, Y) (X, Y') (X', Y') (𝟙 X, g) (f, 𝟙 Y')),
@@ -69,7 +69,7 @@ end
   (f : Hom X X')
   (Y Y' : D)
   (g : Hom Y Y')
-  : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y) (f, 𝟙 Y)) >> (@Functor.onMorphisms _ _ _ _ F (X', Y) (X', Y') (𝟙 X', g)) =
+  : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y) (f, 𝟙 Y)) ≫ (@Functor.onMorphisms _ _ _ _ F (X', Y) (X', Y') (𝟙 X', g)) =
    @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
 begin
   have p := eq.symm (@Functor.functoriality _ _ _ _ F (X, Y) (X', Y) (X', Y') (f, 𝟙 Y) (𝟙 X', g)),

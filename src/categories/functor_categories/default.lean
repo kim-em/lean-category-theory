@@ -69,8 +69,8 @@ variable [category E]
   (X : C)
   {Y Z : D}
   (f : Hom Y Z)
-    : ((F.onObjects X).onMorphisms f) >> ((T.components X).components Z) =
-    ((T.components X).components Y) >> ((G.onObjects X).onMorphisms f) :=
+    : ((F.onObjects X).onMorphisms f) ≫ ((T.components X).components Z) =
+    ((T.components X).components Y) ≫ ((G.onObjects X).onMorphisms f) :=
 begin
   exact (T.components _).naturality _
 end
@@ -81,8 +81,8 @@ end
   (Z : D)
   {X Y : C}
   (f : Hom X Y)
-  : ((F.onMorphisms f).components Z) >> ((T.components Y).components Z) =
-    ((T.components X).components Z) >> ((G.onMorphisms f).components Z) :=
+  : ((F.onMorphisms f).components Z) ≫ ((T.components Y).components Z) =
+    ((T.components X).components Z) ≫ ((G.onMorphisms f).components Z) :=
 begin
   have p := T.naturality _,
   have q := congr_arg NaturalTransformation.components p,

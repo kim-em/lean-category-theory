@@ -24,7 +24,7 @@ variable [category D]
 instance ProductCategory : category (C × D) := {
     Hom      := (λ X Y : C × D, Hom (X.1) (Y.1) × Hom (X.2) (Y.2)),
     identity := λ X, ⟨ 𝟙 (X.1), 𝟙 (X.2) ⟩,
-    compose  := λ _ _ _ f g, (f.1 >> g.1, f.2 >> g.2)
+    compose  := λ _ _ _ f g, (f.1 ≫ g.1, f.2 ≫ g.2)
  }
 
 definition RightInjectionAt (Z : D) : Functor C (C × D) := {

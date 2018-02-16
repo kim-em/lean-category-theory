@@ -51,9 +51,9 @@ variable [category C]
 definition comma (S : Functor A C) (T : Functor B C) := Σ a : A, Σ b : B, Hom (S.onObjects a) (T.onObjects b)
 
 instance CommaCategory (S : Functor A C) (T : Functor B C) : category (comma S T) := {
-  Hom      := λ p q, {gh : (Hom p.1 q.1) × (Hom p.2.1 q.2.1) // (S.onMorphisms gh.1) >> q.2.2 = p.2.2 >> (T.onMorphisms gh.2)},
+  Hom      := λ p q, {gh : (Hom p.1 q.1) × (Hom p.2.1 q.2.1) // (S.onMorphisms gh.1) ≫ q.2.2 = p.2.2 ≫ (T.onMorphisms gh.2)},
   identity := λ p, ⟨ (𝟙 p.1, 𝟙 p.2.1), ♮ ⟩,
-  compose  := λ p q r f g, ⟨ ((val f).1 >> (val g).1, (val f).2 >> (val g).2), ♮ ⟩
+  compose  := λ p q r f g, ⟨ ((val f).1 ≫ (val g).1, (val f).2 ≫ (val g).2), ♮ ⟩
 }
 
 -- cf Leinster Remark 2.3.2

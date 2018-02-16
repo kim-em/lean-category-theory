@@ -24,7 +24,7 @@ instance Types_has_Products : has_Products (Type u) := {
 open tactic
 meta def injections : tactic unit :=
 do l ← local_context,
-   at_least_one $ l.map $ λ e, injection e >> skip
+   at_least_one $ l.map $ λ e, injection e ≫ skip
 
 instance Types_has_Coproducts : has_Coproducts (Type u) := {
   coproduct := λ I φ, {

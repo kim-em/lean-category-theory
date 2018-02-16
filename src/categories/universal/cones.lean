@@ -17,7 +17,7 @@ variables {J : Type u} {C : Type u} {D : Type u} [category J] [category C] [cate
 structure Cone (F : Functor J C) :=
   (cone_point    : C)
   (cone_maps     : Π j : J, Hom cone_point (F.onObjects j))
-  (commutativity : Π {j k : J}, Π f : Hom j k, (cone_maps j) >> (F.onMorphisms f) = cone_maps k . obviously)
+  (commutativity : Π {j k : J}, Π f : Hom j k, (cone_maps j) ≫ (F.onMorphisms f) = cone_maps k . obviously)
 
 make_lemma Cone.commutativity
 attribute [simp,ematch] Cone.commutativity_lemma
@@ -26,7 +26,7 @@ variable {F : Functor J C}
 
 structure ConeMorphism (X Y : Cone F) :=
   (cone_morphism      : Hom X.cone_point Y.cone_point)
-  (commutativity : Π j : J, cone_morphism >> (Y.cone_maps j) = (X.cone_maps j) . obviously)
+  (commutativity : Π j : J, cone_morphism ≫ (Y.cone_maps j) = (X.cone_maps j) . obviously)
 
 make_lemma ConeMorphism.commutativity
 attribute [simp,ematch] ConeMorphism.commutativity_lemma
@@ -43,7 +43,7 @@ attribute [simp,ematch] ConeMorphism.commutativity_lemma
 
 instance Cones (F : Functor J C) : category (Cone F) := {
   Hom            := λ X Y, ConeMorphism X Y,
-  compose        := λ X Y Z f g, ⟨ f.cone_morphism >> g.cone_morphism ⟩,
+  compose        := λ X Y Z f g, ⟨ f.cone_morphism ≫ g.cone_morphism ⟩,
   identity       := λ X, ⟨ 𝟙 X.cone_point ⟩
 }
 
@@ -60,14 +60,14 @@ definition Cones_functoriality (F : Functor J C) (G : Functor C D) : Functor (Co
 structure Cocone (F : Functor J C) :=
   (cocone_point  : C)
   (cocone_maps   : Π j : J, Hom (F.onObjects j) cocone_point)
-  (commutativity : Π {j k : J}, Π f : Hom j k, (F.onMorphisms f) >> (cocone_maps k) = cocone_maps j . obviously)
+  (commutativity : Π {j k : J}, Π f : Hom j k, (F.onMorphisms f) ≫ (cocone_maps k) = cocone_maps j . obviously)
 
 make_lemma Cocone.commutativity
 attribute [simp,ematch] Cocone.commutativity_lemma
 
 structure CoconeMorphism (X Y : Cocone F) :=
   (cocone_morphism      : Hom X.cocone_point Y.cocone_point)
-  (commutativity : Π j : J, (X.cocone_maps j) >> cocone_morphism = (Y.cocone_maps j) . obviously)
+  (commutativity : Π j : J, (X.cocone_maps j) ≫ cocone_morphism = (Y.cocone_maps j) . obviously)
 
 make_lemma CoconeMorphism.commutativity
 attribute [simp,ematch] CoconeMorphism.commutativity_lemma
@@ -84,7 +84,7 @@ attribute [simp,ematch] CoconeMorphism.commutativity_lemma
 
 instance Cocones (F : Functor J C) : category (Cocone F) := {
   Hom            := λ X Y, CoconeMorphism X Y,
-  compose        := λ X Y Z f g, ⟨ f.cocone_morphism >> g.cocone_morphism ⟩,
+  compose        := λ X Y Z f g, ⟨ f.cocone_morphism ≫ g.cocone_morphism ⟩,
   identity       := λ X, ⟨ 𝟙 X.cocone_point ⟩
 }
 

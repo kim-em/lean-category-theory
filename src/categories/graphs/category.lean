@@ -31,6 +31,6 @@ definition concatenate_paths : Π {x y z : C}, morphism_path x y → morphism_pa
 
 definition category.compose_path : Π {X Y : C}, morphism_path X Y → Hom X Y
 | X ._  (morphism_path.nil ._)                := 𝟙 X
-| _ _   (@morphism_path.cons ._ ._ _ _ ._ e p)  := e >> (category.compose_path p)
+| _ _   (@morphism_path.cons ._ ._ _ _ ._ e p)  := e ≫ (category.compose_path p)
 
 end categories

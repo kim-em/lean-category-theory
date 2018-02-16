@@ -22,13 +22,13 @@ variable [category D]
 instance FullSubcategory (Z : C → Type u₁) : category (Σ X : C, Z X) := {
   Hom := λ X Y, Hom X.1 Y.1,
   identity       := by tidy,
-  compose        := λ _ _ _ f g, f >> g
+  compose        := λ _ _ _ f g, f ≫ g
 }
 
 instance FullSubcategory' (Z : C → Sort u₁) : category (psigma Z) := {
   Hom := λ X Y, Hom X.1 Y.1,
   identity       := by tidy,
-  compose        := λ _ _ _ f g, f >> g
+  compose        := λ _ _ _ f g, f ≫ g
 }
 
 definition FullSubcategoryInclusion {Z : C → Type u₁} : Functor (Σ X : C, Z X) C := {

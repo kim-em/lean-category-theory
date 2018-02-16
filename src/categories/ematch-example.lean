@@ -24,15 +24,15 @@ class category (Obj : Type u) :=
 def Hom {α : Type u} [category.{u v} α] : α → α → Type v := category.Hom
 
 notation `𝟙` := category.identity
-infixr ` >> `:80 := category.compose
+infixr ` ≫ `:80 := category.compose
 
 section
 variable {C : Type u1}
 variables {W X Y Z : C}
 
-@[simp] def category.left_identity_lemma [category.{u1 v1} C] (f : Hom X Y) : 𝟙 X >> f = f := by rw category.left_identity
-@[simp] def category.right_identity_lemma [category.{u1 v1} C] (f : Hom X Y) : f >> 𝟙 Y = f := by rw category.right_identity
-@[simp,ematch] def category.associativity_lemma [category.{u1 v1} C] (f : Hom W X) (g : Hom X Y) (h : Hom Y Z) : (f >> g) >> h = f >> (g >> h) := by rw category.associativity
+@[simp] def category.left_identity_lemma [category.{u1 v1} C] (f : Hom X Y) : 𝟙 X ≫ f = f := by rw category.left_identity
+@[simp] def category.right_identity_lemma [category.{u1 v1} C] (f : Hom X Y) : f ≫ 𝟙 Y = f := by rw category.right_identity
+@[simp,ematch] def category.associativity_lemma [category.{u1 v1} C] (f : Hom W X) (g : Hom X Y) (h : Hom Y Z) : (f ≫ g) ≫ h = f ≫ (g ≫ h) := by rw category.associativity
 end
 
 variable (C : Type u1)
@@ -46,7 +46,7 @@ structure Functor [category.{u1 v1} C] [category.{u2 v2} D] :=
                 Hom X Y → Hom (onObjects X) (onObjects Y))
   (identities : ∀ (X : C),
     onMorphisms (𝟙 X) = 𝟙 (onObjects X))
-  (functoriality : ∀ {X Y Z : C} (f : Hom X Y) (g : Hom Y Z), onMorphisms (f >> g) = (onMorphisms f) >> (onMorphisms g))
+  (functoriality : ∀ {X Y Z : C} (f : Hom X Y) (g : Hom Y Z), onMorphisms (f ≫ g) = (onMorphisms f) ≫ (onMorphisms g))
 
 attribute [simp,ematch] Functor.identities
 attribute [simp,ematch] Functor.functoriality
@@ -54,8 +54,8 @@ attribute [simp,ematch] Functor.functoriality
 structure Isomorphism [category.{u1 v1} C] (X Y : C) :=
 (morphism : Hom X Y)
 (inverse : Hom Y X)
-(witness_1 : morphism >> inverse = 𝟙 X)
-(witness_2 : inverse >> morphism = 𝟙 Y)
+(witness_1 : morphism ≫ inverse = 𝟙 X)
+(witness_2 : inverse ≫ morphism = 𝟙 Y)
 attribute [simp,ematch] Isomorphism.witness_1 Isomorphism.witness_2
 
 -- set_option trace.debug.smt.ematch true
@@ -64,12 +64,12 @@ example
   [category.{u1 v1} C]
   [category.{u2 v2} D]
   (F : Functor C D)
-  (g : Isomorphism C X Y) : (F.onMorphisms (g.morphism)) >> (F.onMorphisms (g.inverse)) = 𝟙 (F.onObjects X) :=
+  (g : Isomorphism C X Y) : (F.onMorphisms (g.morphism)) ≫ (F.onMorphisms (g.inverse)) = 𝟙 (F.onObjects X) :=
 begin
  /- 
   - The goal is
   -
-  - ⊢ F.onMorphisms (g.morphism) >> F.onMorphisms (g.inverse) = 𝟙 (F.onObjects X)
+  - ⊢ F.onMorphisms (g.morphism) ≫ F.onMorphisms (g.inverse) = 𝟙 (F.onObjects X)
   -
   - To solve this, we need to use F.functoriality in reverse, then g.witness_1, then F.identities.
   -/

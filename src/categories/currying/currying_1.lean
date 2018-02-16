@@ -24,7 +24,7 @@ definition Uncurry_Functors :
     {
       onObjects     := λ (F : Functor C (Functor D E)), {
         onObjects     := λ X, (F.onObjects X.1).onObjects X.2,
-        onMorphisms   := λ X Y f, ((F.onMorphisms f.1).components X.2) >> ((F.onObjects Y.1).onMorphisms f.2)
+        onMorphisms   := λ X Y f, ((F.onMorphisms f.1).components X.2) ≫ ((F.onObjects Y.1).onMorphisms f.2)
      },
       onMorphisms   := λ F G (T : NaturalTransformation F G), {
         components := λ X, (T.components _).components _

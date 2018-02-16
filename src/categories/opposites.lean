@@ -26,7 +26,7 @@ notation C `ᵒᵖ` := op C
 
 instance Opposite : category (Cᵒᵖ) :=
 { Hom := λ X Y : C, Hom Y X,
-  compose  := λ _ _ _ f g, g >> f,
+  compose  := λ _ _ _ f g, g ≫ f,
   identity := λ X, 𝟙 X }
 
 definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=  {
@@ -36,7 +36,7 @@ definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=  {
 
 definition HomPairing {C : Type u₁} [C_cat : category C]: Functor (Cᵒᵖ × C) (Type u₁) := { 
   onObjects     := λ p, @Hom C _ p.1 p.2,
-  onMorphisms   := λ X Y f, ⟨λ h, f.1 >> h >> f.2⟩
+  onMorphisms   := λ X Y f, ⟨λ h, f.1 ≫ h ≫ f.2⟩
 }
 
 -- PROJECT prove C^op^op is C
@@ -47,7 +47,7 @@ definition HomPairing {C : Type u₁} [C_cat : category C]: Functor (Cᵒᵖ × 
   (F : Functor (Cᵒᵖ) D)
   (X Y Z : C)
   (f : Hom X Y) (g : Hom Y Z) :
-    F.onMorphisms ((f >> g) : Hom X Z) = (F.onMorphisms g) >> (F.onMorphisms f) := begin erw F.functoriality, end -- TODO automate?
+    F.onMorphisms ((f ≫ g) : Hom X Z) = (F.onMorphisms g) ≫ (F.onMorphisms f) := begin erw F.functoriality, end -- TODO automate?
 
 @[simp,ematch] lemma ContravariantFunctor.identities
   (F : Functor (Cᵒᵖ) D)

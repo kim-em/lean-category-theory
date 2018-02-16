@@ -27,10 +27,10 @@ definition Yoneda (C : Type u₁) [category C] : Functor C (Functor (Cᵒᵖ) (T
 {
     onObjects := λ X, {
         onObjects     := λ Y, @Hom C _ Y X,
-        onMorphisms   := λ Y Y' f, ulift.up (λ g, f >> g)
+        onMorphisms   := λ Y Y' f, ulift.up (λ g, f ≫ g)
    },
     onMorphisms   := λ X X' f, {
-        components := λ Y, ulift.up (λ g, g >> f)
+        components := λ Y, ulift.up (λ g, g ≫ f)
    }
 }
 
@@ -38,10 +38,10 @@ definition CoYoneda (C : Type u₁) [category C] : Functor (Cᵒᵖ) (Functor C 
 {
     onObjects := λ X, {
         onObjects     := λ Y, @Hom C _ X Y,
-        onMorphisms   := λ Y Y' f, ulift.up (λ g, g >> f)
+        onMorphisms   := λ Y Y' f, ulift.up (λ g, g ≫ f)
    },
     onMorphisms   := λ X X' f, {
-        components := λ Y, ulift.up (λ g, f >> g)
+        components := λ Y, ulift.up (λ g, f ≫ g)
    }
 }
 

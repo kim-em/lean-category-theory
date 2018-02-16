@@ -37,14 +37,14 @@ or
 ````
 definition Evaluation : Functor ((Functor C D) × C) D := {
   onObjects     := λ p, p.1.onObjects p.2,
-  onMorphisms   := λ x y f, (x.1.onMorphisms f.2) >> (f.1.components y.2)
+  onMorphisms   := λ x y f, (x.1.onMorphisms f.2) ≫ (f.1.components y.2)
 }
 ````
 A quick aside: notice in both of these examples we don't explicitly provide evidence that the functor preserves identities or composition. This is not the sort of thing humans would put up, and an important (but only partially achieved) design goal in my library was to automate away trivial checking of definitions which would otherwise overwhelm a formal development of category theory. In both case the evidence is provided by a tactic. More on this later.
 
 We immediately see two advantages of the unbundled approach:
 1. The signatures are slightly simpler, because we refer directly to the types of objects, and use typeclass inference to provide the actual categories. Thus we write `Functor C D` instead of having to remember the additional name `FunctorCategory C D`, and can just use `×`, the built-in product of types rather than having the explicitly write `ProductCategory`.
-2. It is easier to introduce notation for composition (here tentatively `>>`), because typeclass inference can automatically provide the instance of the actual category handling the composition.
+2. It is easier to introduce notation for composition (here tentatively `≫`), because typeclass inference can automatically provide the instance of the actual category handling the composition.
 
 However, not having to specify the category quickly becomes a mixed blessing --- because in the cases where we _need_ to specify the category, it is rather cumbersome to do so (lots of `@`s and `_`s), or worse.
 
@@ -88,7 +88,7 @@ instance opposite_coercion_2 : has_coe C (Cᵒᵖ) :=
 
 instance Opposite : category (Cᵒᵖ):= {
     Hom := λ X Y : Cᵒᵖ, Hom (Y : C) (X : C),
-    compose  := λ _ _ _ f g, g >> f,
+    compose  := λ _ _ _ f g, g ≫ f,
     identity := λ X, 𝟙 X
 }
 ````

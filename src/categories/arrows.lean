@@ -21,9 +21,9 @@ local attribute [applicable] category.identity -- This says that whenever there 
 definition arrows (C : Type u₁) [category C] := Σ (p : C × C), Hom p.1 p.2
 
 instance Arrows (C : Type u₁) [category C] : category (arrows C):= {
-  Hom := λ X Y, {f : (Hom X.1.1 Y.1.1 × Hom X.1.2 Y.1.2) // f.1 >> Y.2 = X.2 >> f.2},
+  Hom := λ X Y, {f : (Hom X.1.1 Y.1.1 × Hom X.1.2 Y.1.2) // f.1 ≫ Y.2 = X.2 ≫ f.2},
   identity       := by tidy,
-  compose        := λ X Y Z f g, ⟨ (f.val.1 >> g.val.1, f.val.2 >> g.val.2), ♯ ⟩ 
+  compose        := λ X Y Z f g, ⟨ (f.val.1 ≫ g.val.1, f.val.2 ≫ g.val.2), ♯ ⟩ 
 }
 
 variable {C : Type u₁}

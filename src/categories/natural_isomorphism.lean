@@ -32,29 +32,29 @@ variables {F G H : Functor C D}
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1
   (α : NaturalIsomorphism F G)
   (X : C)
-   : (α.morphism.components X) >> (α.inverse.components X) = 𝟙 (F.onObjects X)
+   : (α.morphism.components X) ≫ (α.inverse.components X) = 𝟙 (F.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2
   (α : NaturalIsomorphism F G)
   (X : C)
-   : (α.inverse.components X) >> (α.morphism.components X) = 𝟙 (G.onObjects X)
+   : (α.inverse.components X) ≫ (α.morphism.components X) = 𝟙 (G.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_2
 
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_1 
   (α : NaturalIsomorphism F G)
   {X Y : C}
   (f : Hom X Y)
-   : (α.inverse.components X) >> (F.onMorphisms f) >> (α.morphism.components Y) = G.onMorphisms f := ♯
+   : (α.inverse.components X) ≫ (F.onMorphisms f) ≫ (α.morphism.components Y) = G.onMorphisms f := ♯
 
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
   (α : NaturalIsomorphism F G)
   {X Y : C}
   (f : Hom X Y)
-   : (α.morphism.components X) >> (G.onMorphisms f) >> (α.inverse.components Y) = F.onMorphisms f := ♯
+   : (α.morphism.components X) ≫ (G.onMorphisms f) ≫ (α.inverse.components Y) = F.onMorphisms f := ♯
 
 definition NaturalIsomorphism.from_components
   (components : ∀ X : C, Isomorphism (F.onObjects X) (G.onObjects X))
-  (naturality : ∀ {X Y : C} (f : Hom X Y), (F.onMorphisms f) >> (components Y).morphism = (components X).morphism >> (G.onMorphisms f)) : NaturalIsomorphism F G :=
+  (naturality : ∀ {X Y : C} (f : Hom X Y), (F.onMorphisms f) ≫ (components Y).morphism = (components X).morphism ≫ (G.onMorphisms f)) : NaturalIsomorphism F G :=
   {
     morphism  := {
       components := λ X, (components X).morphism,
@@ -62,7 +62,7 @@ definition NaturalIsomorphism.from_components
     inverse   := {
       components := λ X, (components X).inverse,
       naturality := λ X Y f, begin
-                               let p := congr_arg (λ f : Hom (F.onObjects X) (G.onObjects Y), (components X).inverse >> (f >> (components Y).inverse)) (eq.symm (naturality f)),
+                               let p := congr_arg (λ f : Hom (F.onObjects X) (G.onObjects Y), (components X).inverse ≫ (f ≫ (components Y).inverse)) (eq.symm (naturality f)),
                                simp at p,
                                rewrite ← category.associativity at p,
                                simp at p,
@@ -98,13 +98,13 @@ definition is_NaturalIsomorphism  (α : NaturalTransformation F G) := @is_Isomor
   (α : NaturalTransformation F G)
   (w : is_NaturalIsomorphism α)
   (X : C)
-   : (α.components X) >> (w.inverse.components X) = 𝟙 (F.onObjects X)
+   : (α.components X) ≫ (w.inverse.components X) = 𝟙 (F.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_1
 @[ematch] lemma is_NaturalIsomorphism_componentwise_witness_2
   (α : NaturalTransformation F G)
   (w : is_NaturalIsomorphism α)
   (X : C)
-   : (w.inverse.components X) >> (α.components X) = 𝟙 (G.onObjects X)
+   : (w.inverse.components X) ≫ (α.components X) = 𝟙 (G.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_2
 
 

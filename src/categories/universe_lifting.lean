@@ -16,7 +16,7 @@ variable [category C]
 instance universe_lift : category (ulift.{u₂} C) := {
     Hom := λ X Y, ulift (Hom X.down Y.down),
     identity := λ X, ulift.up (𝟙 X.down),
-    compose := λ _ _ _ f g, ulift.up (f.down >> g.down) 
+    compose := λ _ _ _ f g, ulift.up (f.down ≫ g.down) 
 }
 
 local attribute [applicable] category.identity

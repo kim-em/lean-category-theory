@@ -19,7 +19,7 @@ structure Functor (C : Type u₁) [category C] (D : Type u₂) [category D] :=
   (identities : ∀ (X : C),
     onMorphisms (𝟙 X) = 𝟙 (onObjects X) . obviously)
   (functoriality : ∀ {X Y Z : C} (f : Hom X Y) (g : Hom Y Z),
-    onMorphisms (f >> g) = (onMorphisms f) >> (onMorphisms g) . obviously)
+    onMorphisms (f ≫ g) = (onMorphisms f) ≫ (onMorphisms g) . obviously)
 
 make_lemma Functor.identities
 make_lemma Functor.functoriality

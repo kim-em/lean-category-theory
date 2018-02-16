@@ -60,6 +60,6 @@ class ZeroObject (C : Type u) [category C] :=
   (is_initial  : is_initial  zero_object)
   (is_terminal : is_terminal zero_object)
 
-definition ZeroObject.zero_morphism (Z : ZeroObject C) (X Y : C) : Hom X Y := (Z.is_terminal.morphism_to_terminal_object_from X) >> (Z.is_initial.morphism_from_initial_object_to Y) 
+definition ZeroObject.zero_morphism (Z : ZeroObject C) (X Y : C) : Hom X Y := (Z.is_terminal.morphism_to_terminal_object_from X) ≫ (Z.is_initial.morphism_from_initial_object_to Y) 
 
 end categories.initial

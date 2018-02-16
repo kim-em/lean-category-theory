@@ -57,7 +57,7 @@ definition {u v} path_to_morphism
   (H : graph_homomorphism G C)
   : Π {X Y : G}, path X Y → Hom (H.onVertices X) (H.onVertices Y) 
 | ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
-| ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) >> (path_to_morphism p)
+| ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) ≫ (path_to_morphism p)
  
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
 definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) C :=

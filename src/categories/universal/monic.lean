@@ -21,7 +21,7 @@ structure RegularMonic (f : Hom X Y) :=
   (a b : Hom Y Z)
   (e : Equalizer a b)
   (i : Isomorphism e.equalizer X)
-  (w : e.inclusion = i.morphism >> f)
+  (w : e.inclusion = i.morphism ≫ f)
 
 -- EXERCISE
 -- lemma SplitMonic_implies_RegularMonic
@@ -38,6 +38,6 @@ structure RegularEpic (f : Hom Y Z) :=
   (a b : Hom X Y)
   (c : Coequalizer a b)
   (i : Isomorphism c.coequalizer Z)
-  (w : c.projection = f >> i.inverse)
+  (w : c.projection = f ≫ i.inverse)
 
 end categories

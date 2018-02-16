@@ -24,12 +24,12 @@ variable [category C]
 def Hom : C → C → Type u := category.Hom
 
 notation `𝟙` := category.identity
-infixr ` >> `:80 := category.compose
+infixr ` ≫ `:80 := category.compose
 
-@[simp] def category.left_identity_lemma (f : Hom X Y) : 𝟙 X >> f = f := by rw category.left_identity
-@[simp] def category.right_identity_lemma (f : Hom X Y) : f >> 𝟙 Y = f := by rw category.right_identity
-@[simp,ematch] def category.associativity_lemma (f : Hom W X) (g : Hom X Y) (h : Hom Y Z) : (f >> g) >> h = f >> (g >> h) := by rw category.associativity
+@[simp] def category.left_identity_lemma (f : Hom X Y) : 𝟙 X ≫ f = f := by rw category.left_identity
+@[simp] def category.right_identity_lemma (f : Hom X Y) : f ≫ 𝟙 Y = f := by rw category.right_identity
+@[simp,ematch] def category.associativity_lemma (f : Hom W X) (g : Hom X Y) (h : Hom Y Z) : (f ≫ g) ≫ h = f ≫ (g ≫ h) := by rw category.associativity
 
-@[ematch] lemma category.identity_idempotent (X : C) : 𝟙 X >> 𝟙 X = 𝟙 X := by simp
+@[ematch] lemma category.identity_idempotent (X : C) : 𝟙 X ≫ 𝟙 X = 𝟙 X := by simp
 
 end categories

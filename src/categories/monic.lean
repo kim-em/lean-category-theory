@@ -14,17 +14,17 @@ variable [category C]
 variables {X Y Z : C}
 
 structure Monic (f : Hom Y Z) :=
-  (witness : ∀ {X : C} {a b : Hom X Y} (p : a >> f = b >> f), a = b)
+  (witness : ∀ {X : C} {a b : Hom X Y} (p : a ≫ f = b ≫ f), a = b)
 structure Epic (f : Hom X Y) :=
-  (witness : ∀ {Z : C} {a b : Hom Y Z} (p : f >> a = f >> b), a = b)
+  (witness : ∀ {Z : C} {a b : Hom Y Z} (p : f ≫ a = f ≫ b), a = b)
 
 structure SplitMonic (f : Hom Y Z) :=
   (right_inverse : Hom Z Y)
-  (evidence      : f >> right_inverse = 𝟙 Y)
+  (evidence      : f ≫ right_inverse = 𝟙 Y)
 
 lemma SplitMonic_implies_Monic {f : Hom Y Z} (m : SplitMonic f) : Monic f := {
     witness := λ _ a b p, begin
-                            have e := congr_arg (λ g, g >> m.right_inverse) p,
+                            have e := congr_arg (λ g, g ≫ m.right_inverse) p,
                             simp at e,
                             -- repeat_at_least_once {rewrite C.associativity at e},
                             repeat_at_least_once {rewrite m.evidence at e},

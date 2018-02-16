@@ -21,7 +21,7 @@ variable [category E]
 structure NaturalTransformation (F G : Functor C D) :=
   (components: Π X : C, Hom (F.onObjects X) (G.onObjects X))
   (naturality: ∀ {X Y : C} (f : Hom X Y),
-     (F.onMorphisms f) >> (components Y) = (components X) >> (G.onMorphisms f) . obviously)
+     (F.onMorphisms f) ≫ (components Y) = (components X) ≫ (G.onMorphisms f) . obviously)
 
 make_lemma NaturalTransformation.naturality
 attribute [simp,ematch] NaturalTransformation.naturality_lemma
@@ -53,7 +53,7 @@ definition vertical_composition_of_NaturalTransformations
   (α : NaturalTransformation F G)
   (β : NaturalTransformation G H) : NaturalTransformation F H :=
 {
-    components := λ X, (α.components X) >> (β.components X)
+    components := λ X, (α.components X) ≫ (β.components X)
 }
 
 notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
@@ -68,7 +68,7 @@ definition horizontal_composition_of_NaturalTransformations
   (α : NaturalTransformation F G)
   (β : NaturalTransformation H I) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
 {
-    components := λ X : C, (β.components (F.onObjects X)) >> (I.onMorphisms (α.components X)),
+    components := λ X : C, (β.components (F.onObjects X)) ≫ (I.onMorphisms (α.components X)),
     -- naturality := begin tidy, rewrite_search_using `ematch {max_steps:=7} end
 }
 
