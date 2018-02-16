@@ -11,6 +11,8 @@ namespace categories.examples.groups
 
 open categories
 
+
+
 universe u₁
 
 definition Group := Σ α : Type u₁, group α
@@ -21,22 +23,28 @@ meta def is_group_hom_obviously := `[unfold is_group_hom, obviously]
 
 structure GroupHomomorphism (G H : Group.{u₁}) : Type (u₁+1) := -- Notice that we push this up one universe level, because our categories expect Obj and Hom at the same universe level.
   (map: G.1 → H.1)
-  (is_group_hom : by exactI is_group_hom map . is_group_hom_obviously) -- we need `by exactI` here to get the group instances.
+  (is_group_hom : is_group_hom map . is_group_hom_obviously) -- we need `by exactI` here to get the group instances.
 
 instance GroupHomomorphism_to_map {G H : Group} : has_coe_to_fun (GroupHomomorphism G H) :=
 {F   := λ f, Π x : G.1, H.1,
   coe := GroupHomomorphism.map}
 
-@[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : by exactI f(x * y) = f(x) * f(y) := -- again, we need to get the group instances.
-begin
-  dsimp {unfold_reducible := tt, md := semireducible},
-  erw f.is_group_hom,
-  refl,
+open tactic
+meta def simplify_proof (tac : tactic unit) : tactic unit :=
+λ s,
+  let tac1 : tactic expr := do
+    tac,
+    r ← result,
+    lems ← simp_lemmas.mk_default,
+    lems.dsimplify [] r in
+match tac1 s with
+| result.success r s' := (result >>= unify r) s
+| result.exception msg e s' := result.exception msg e s'
 end
 
-#print GroupHomomorphism.is_group_hom_lemma -- yuck, the type is
--- ∀ (G H : Group) (f : GroupHomomorphism G H) (x y : G.fst),
---  id (λ (G H : Group) (f : GroupHomomorphism G H) (x y : G.fst), ⇑f (x * y) = ⇑f x * ⇑f y) G H f x y
+-- set_option pp.all true
+@[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom
+@[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma' (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f(x * y) = f(x) * f(y) := begin dsimp [coe_fn,has_coe_to_fun.coe], simp, end
 
 definition GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G := ⟨ id ⟩
 
@@ -49,11 +57,7 @@ definition GroupHomomorphism.composition
                     unfold is_group_hom, 
                     dsimp, 
                     intros, 
-                    -- we can't just say `simp`, and have GroupHomomorphism.is_group_hom_lemma finish, because its type is gross because of the exactI.
-                    have h := GroupHomomorphism.is_group_hom_lemma, 
-                    dsimp at h, 
-                    rw h, 
-                    rw h,
+                    simp,
                   end
 }
 

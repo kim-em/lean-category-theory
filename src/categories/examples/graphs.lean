@@ -38,7 +38,7 @@ instance CategoryOfGraphs : category Graph := {
       onEdges := λ _ _ f, f
   } ⟩,
   compose := λ G H K f g, ⟨ {
-      onVertices := λ v, by exactI g.map.onVertices (f.map.onVertices v),
+      onVertices := λ v, g.map.onVertices (f.map.onVertices v),
       onEdges    := λ v w e, g.map.onEdges (f.map.onEdges e)
   } ⟩
 }
