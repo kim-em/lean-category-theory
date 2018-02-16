@@ -1,8 +1,9 @@
--- Copyright (c) 2017 Scott Morrison. All rights reserved.
+-- Copyright (c) 2018 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
--- Authors: Stephen Morgan, Scott Morrison
+-- Authors: Scott Morrison
 import ...functor
 import ...types
+import algebra.group
 import tactic.finish
 
 namespace categories.examples.groups
@@ -56,7 +57,7 @@ definition GroupHomomorphism.composition
                   end
 }
 
-@[applicable] lemma semigroup_morphism_pointwise_equality
+@[applicable] lemma GroupHomomorphism_pointwise_equality
   {G H : Group}
   (f g : GroupHomomorphism G H)
   (w : ∀ x : G.1, f x = g x) : f = g :=
