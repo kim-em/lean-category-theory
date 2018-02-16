@@ -81,7 +81,7 @@ instance CategoryOfGroups : category Group := {
 open categories.functor
 open categories.types
 
-definition ForgetfulFunctor_Semigroups_to_Types : Functor Group (Type u₁) :=
+definition ForgetfulFunctor_Groups_to_Types : Functor Group (Type u₁) :=
 {
   onObjects     := λ s, s.1,
   onMorphisms   := λ s t, λ f, ulift.up f.map,

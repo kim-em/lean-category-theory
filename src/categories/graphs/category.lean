@@ -12,7 +12,7 @@ open categories.graphs
 universe u
 variable {C : Type u}
 
-instance Category.graph [𝓒 : category C] : graph C := {
+instance category.graph [𝓒 : category C] : graph C := {
   edges := 𝓒.Hom
 }
 

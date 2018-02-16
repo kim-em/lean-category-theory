@@ -11,12 +11,17 @@ open categories.types
 open categories.functor
 open categories.equivalence
 
-class {u v w} Concrete (C : Category.{u v}) := 
-  (F : Functor C CategoryOfTypes.{w})
+universe u
+variable {C : Type u}
+variable [category C]
+
+-- TODO is this usable?
+class Concrete (C : Type (u+1)) [category C] := 
+  (F : Functor C (Type u))
   (w : Faithful F . obviously)
 
-instance Types_Concrete : Concrete CategoryOfTypes := {
-    F := IdentityFunctor CategoryOfTypes
+instance Types_Concrete : Concrete (Type u) := {
+    F := IdentityFunctor (Type u)
 }
 
 end categories

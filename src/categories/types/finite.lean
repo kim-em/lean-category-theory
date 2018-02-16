@@ -11,8 +11,16 @@ namespace categories.types
 open categories
 open categories.util.finite
 
-definition {u} CategoryOfDecidableTypes : category (psigma decidable_eq.{u}) := by apply_instance
-definition {u} CategoryOfFiniteTypes : Category := FullSubcategory CategoryOfTypes Finite
+universe u
+
+set_option pp.universes true
+@[reducible] definition DecidableType := @psigma (Type u) decidable_eq 
+definition FiniteType := Σ X : Type u, Finite X
+
+definition CategoryOfDecidableTypes : category DecidableType := by apply_instance
+
+-- PROJECT
+-- definition CategoryOfFiniteTypes : category FiniteType := @categories.FullSubcategory (Type u) _ (λ X, Finite X)
 
 -- PROJECT we could construct an embedding of Finite into Decidable?
 

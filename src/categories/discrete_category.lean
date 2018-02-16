@@ -4,6 +4,7 @@
 
 import .category
 import .functor
+import tidy.its
 
 namespace categories
 
@@ -23,11 +24,12 @@ definition EmptyCategory := DiscreteCategory (pempty.{u₁})
 
 definition EmptyFunctor (C : Type u₂) [category C] : @Functor _ EmptyCategory.{u₁} C _ := ♯
 
+-- FIXME This is really horrible! Please help out. :-)
 definition {u1 v1 u2 v2} Functor.fromFunction {C : Type u₂} [category C] {I : Type u₂} (F : I → C) : @Functor _ (DiscreteCategory I) C _ := {
   onObjects     := F,
-  onMorphisms   := begin tidy, induction a, induction a, induction a, tidy, end, -- FIXME this used to work by ♯
-  -- identities :=sorry,
-  -- functoriality:=sorry
+  onMorphisms   := λ X Y f, begin cases f, cases f, rw f, exact 𝟙 (F Y) end,
+  identities := begin tidy, end,
+  functoriality:= begin tidy, cases f, cases f, induction f, cases g, cases g, induction g, tidy, end
 }
 
 end categories

@@ -41,7 +41,7 @@ definition IsomorphismComposition (α : Isomorphism X Y) (β : Isomorphism Y Z) 
     simp at w,    
     have p : g = k,
       begin
-        -- PROJECT why can't we automate this?
+        -- PROJECT why can't we automate this? -- why doesn't rewrite search work?
         tidy,
         resetI,
         rewrite ← @category.left_identity C _ _ _ k,

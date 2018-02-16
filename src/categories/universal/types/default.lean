@@ -5,46 +5,51 @@ open categories.universal
 open categories.isomorphism
 namespace categories.types
 
-definition {u} Types_has_Products : has_Products.{u+1 u u} CategoryOfTypes.{u} := {
+universe u
+
+instance Types_has_Products : has_Products (Type u) := {
   product := λ I φ, {
     product       := Π i : I, φ i,
-    projection    := λ i x, x i,
-    map           := λ Z f z i, f i z, 
+    projection    := λ i, ulift.up (λ x, x i),
+    map           := λ Z f, ulift.up (λ z i, (f i).down z), 
     uniqueness    := begin
                        tidy,
                        have p := witness x_1,
+                       have p' := congr_arg ulift.down p,
                        tidy,
                      end
  }
 }
-attribute [instance] Types_has_Products
 
-definition {u} Types_has_Coproducts : has_Coproducts.{u+1 u u} CategoryOfTypes.{u} := {
+open tactic
+meta def injections : tactic unit :=
+do l ← local_context,
+   at_least_one $ l.map $ λ e, injection e >> skip
+
+instance Types_has_Coproducts : has_Coproducts (Type u) := {
   coproduct := λ I φ, {
     coproduct     := Σ i : I, φ i,
-    inclusion     := λ i x, ⟨ i, x ⟩ ,
-    map           := λ Z f p, f p.1 p.2, 
+    inclusion     := λ i, ulift.up (λ x, ⟨ i, x ⟩),
+    map           := λ Z f, ulift.up (λ p, (f p.1).down p.2), 
     uniqueness    := begin
                        tidy,
                        have p := witness x_fst,
+                       injection p,
                        tidy
                      end
  }
 }
-attribute [instance] Types_has_Coproducts
 
-
-definition {u} Types_has_Equalizers : has_Equalizers CategoryOfTypes.{u} := {
-  equalizer := λ α _ f g, {
-    equalizer     := {x : α // f x = g x},
-    inclusion     := λ x, x.val,
-    map           := ♯
+instance Types_has_Equalizers : has_Equalizers (Type u)  := {
+  equalizer := λ α β f g, {
+    equalizer     := {x : α // f.down x = g.down x},
+    inclusion     := ulift.up (λ x, x.val),
+    map           := λ γ k h, ulift.up (λ g, ⟨ k.down g, begin tidy, injection h, tidy, end ⟩ )
  }
 }
-attribute [instance] Types_has_Equalizers
 
 -- Even though this can be automatically generated, this is a much cleaner version.
-definition {u} Types_has_BinaryProducts : has_BinaryProducts CategoryOfTypes.{u} := {
+instance Types_has_BinaryProducts : has_BinaryProducts (Type u)  := {
   binary_product := λ X Y, {
     product             := X × Y,
     left_projection     := prod.1,
@@ -52,9 +57,8 @@ definition {u} Types_has_BinaryProducts : has_BinaryProducts CategoryOfTypes.{u}
     map                 := λ _ f g z, (f z, g z)
  }
 }
-attribute [instance] Types_has_BinaryProducts
 
-definition {u} Types_has_BinaryCoproducts : has_BinaryCoproducts CategoryOfTypes.{u} := {
+instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u)  := {
   binary_coproduct := λ X Y, {
     coproduct           := X ⊕ Y,
     left_inclusion     := sum.inl,
@@ -63,7 +67,6 @@ definition {u} Types_has_BinaryCoproducts : has_BinaryCoproducts CategoryOfTypes
     uniqueness          := begin tidy, induction x, tidy, end
  }
 }
-attribute [instance] Types_has_BinaryCoproducts
 
 -- TODO ask if this can live in mathlib? I've also needed it for Mitchell's group theory work.
 @[simp] lemma {u₁ u₂} parallel_transport_for_trivial_bundles {α : Sort u₁} {a b : α} {β : Sort u₂} (p : a = b) (x : β) : @eq.rec α a (λ a, β) x b p = x :=
@@ -72,7 +75,7 @@ induction p,
 simp,
 end
 
-definition {u} Types_has_Coequalizers : has_Coequalizers CategoryOfTypes.{u} :=
+instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
 {coequalizer := λ α β f g,
   {
     coequalizer   := quotient (eqv_gen.setoid (λ x y, ∃ a : α, f a = x ∧ g a = y)),
@@ -100,7 +103,6 @@ definition {u} Types_has_Coequalizers : has_Coequalizers CategoryOfTypes.{u} :=
                      end 
  }
 }
-attribute [instance] Types_has_Equalizers
 
 
 end categories.types

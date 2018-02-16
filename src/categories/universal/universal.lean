@@ -16,7 +16,7 @@ open categories.util.finite
 
 namespace categories.universal
 
-universe u₁
+universes u₁ u₂
 variables {C : Type u₁}
 variables [category C]
 variables {X Y : C}
@@ -57,7 +57,7 @@ attribute [simp,ematch] BinaryProduct.left_factorisation_lemma BinaryProduct.rig
 attribute [applicable] BinaryProduct.left_projection BinaryProduct.right_projection BinaryProduct.map
 attribute [applicable] BinaryProduct.uniqueness_lemma
 
-structure Product {I : Type u₁} (F : I → C) :=
+structure Product {I : Type u₂} (F : I → C) :=
   (product       : C)
   (projection    : Π i : I, Hom product (F i))
   (map           : ∀ {Z : C} (f : Π i : I, Hom Z (F i)), Hom Z product)
@@ -102,7 +102,7 @@ attribute [simp,ematch] BinaryCoproduct.left_factorisation_lemma BinaryCoproduct
 attribute [applicable] BinaryCoproduct.left_inclusion BinaryCoproduct.right_inclusion BinaryCoproduct.map
 attribute [applicable] BinaryCoproduct.uniqueness_lemma
 
-structure Coproduct {I : Type u₁} (X : I → C) :=
+structure Coproduct {I : Type u₂} (X : I → C) :=
   (coproduct     : C)
   (inclusion     : Π i : I, Hom (X i) coproduct)
   (map           : ∀ {Z : C} (f : Π i : I, Hom (X i) Z), Hom coproduct Z)

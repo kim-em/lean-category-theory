@@ -12,7 +12,7 @@ open categories.isomorphism
 
 universes u v
 
-@[reducible] instance CategoryOfTypes : category.{u+1} (Type u) :=
+@[reducible] instance CategoryOfTypes : category (Type u) :=
 {
     Hom := λ a b, ulift.{u+1} (a → b),
     identity := λ a, ulift.up id,

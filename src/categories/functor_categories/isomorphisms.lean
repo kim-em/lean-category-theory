@@ -11,23 +11,29 @@ open categories.natural_transformation
 
 namespace categories.functor_categories
 
-local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+universes u₁ u₂ u₃ u₄
 
-definition {u1 v1 u2 v2 u3 v3 u4 v4} FunctorComposition_associator
-  {B : Category.{u1 v1}} {C : Category.{u2 v2}} {D : Category.{u3 v3}} {E : Category.{u4 v4}}
+variable {B : Type u₁}
+variable [category B]
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₁}
+variable [category D]
+variable {E : Type u₁}
+variable [category E]
+
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+
+definition FunctorComposition_associator
   (F : Functor B C)
   (G : Functor C D)
   (H : Functor D E)
 : NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := ♯
 
-definition {u1 v1 u2 v2} FunctorComposition_left_unitor
-  {C : Category.{u1 v1}} {D : Category.{u2 v2}}
-  (F : Functor C D)
+definition FunctorComposition_left_unitor (F : Functor C D)
 : NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := ♯
 
-definition {u1 v1 u2 v2} FunctorComposition_right_unitor
-  {C : Category.{u1 v1}} {D : Category.{u2 v2}}
-  (F : Functor C D)
+definition FunctorComposition_right_unitor (F : Functor C D)
 : NaturalIsomorphism (FunctorComposition F (IdentityFunctor D)) F := ♯
 
 end categories.functor_categories
