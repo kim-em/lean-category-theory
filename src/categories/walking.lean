@@ -6,7 +6,6 @@ import .discrete_category
 import .util.finite
 
 open categories
-open categories.graphs
 open categories.functor
 open categories.util.finite
 

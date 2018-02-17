@@ -18,12 +18,29 @@ local attribute [applicable] category.identity -- This says that whenever there 
 
 -- Is there any point defining these separately (rather than as the functor category from the walking arrow)?
 
-definition arrows (C : Type u₁) [category C] := Σ (p : C × C), Hom p.1 p.2
+definition arrow (C : Type u₁) [category C] := Σ (p : C × C), Hom p.1 p.2
+structure arrow_hom {C : Type u₁} [category C] (X Y : arrow C) :=
+(morphism : Hom X.1.1 Y.1.1 × Hom X.1.2 Y.1.2 )
+(commutativity : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously)
 
-instance Arrows (C : Type u₁) [category C] : category (arrows C):= {
-  Hom := λ X Y, {f : (Hom X.1.1 Y.1.1 × Hom X.1.2 Y.1.2) // f.1 ≫ Y.2 = X.2 ≫ f.2},
+make_lemma arrow_hom.commutativity
+attribute [ematch] arrow_hom.commutativity_lemma
+
+@[applicable] lemma arrow_hom_equal
+  {C : Type u₁} [category C] (f g : arrow C)
+  (α β : arrow_hom f g)
+  (w : α.morphism = β.morphism) : α = β :=
+  begin
+    induction α with α_morphism,
+    induction β with β_morphism,
+    tidy,
+  end
+
+
+instance Arrows (C : Type u₁) [category C] : category (arrow C):= {
+  Hom := arrow_hom,
   identity       := by tidy,
-  compose        := λ X Y Z f g, ⟨ (f.val.1 ≫ g.val.1, f.val.2 ≫ g.val.2), ♯ ⟩ 
+  compose        := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ 
 }
 
 variable {C : Type u₁}
@@ -31,13 +48,13 @@ variable [category C]
 variable {D : Type u₂}
 variable [category D]
 
-definition Functor.onArrows : Functor (Functor C D) (Functor (arrows C) (arrows D)) := {
+definition Functor.onArrows : Functor (Functor C D) (Functor (arrow C) (arrow D)) := {
   onObjects := λ F, {
     onObjects     := λ X, ⟨ (F.onObjects X.1.1, F.onObjects X.1.2), F.onMorphisms X.2 ⟩,
-    onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val.1, F.onMorphisms f.val.2), ♯ ⟩
+    onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.morphism.1, F.onMorphisms f.morphism.2) ⟩
   },
   onMorphisms := λ F G τ, {
-    components := λ X, ⟨ (τ.components X.1.1, τ.components X.1.2), ♯ ⟩ 
+    components := λ X, ⟨ (τ.components X.1.1, τ.components X.1.2) ⟩ 
   }
 }
 

@@ -34,7 +34,7 @@ definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=  {
   onMorphisms   := λ X Y f, F.onMorphisms f
 }
 
-definition HomPairing {C : Type u₁} [C_cat : category C]: Functor (Cᵒᵖ × C) (Type u₁) := { 
+definition HomPairing (C : Type u₁) [category C]: Functor.{u₁ (u₁+1)} (Cᵒᵖ × C) (Type u₁) := { 
   onObjects     := λ p, @Hom C _ p.1 p.2,
   onMorphisms   := λ X Y f, ⟨λ h, f.1 ≫ h ≫ f.2⟩
 }

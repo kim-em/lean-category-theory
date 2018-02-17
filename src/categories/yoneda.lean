@@ -8,6 +8,7 @@ import .opposites
 import .equivalence
 import .products.switch
 import .types
+import .functor_categories.evaluation
 
 open categories
 open categories.functor
@@ -23,7 +24,7 @@ namespace categories.yoneda
 
 universes u₁ u₂
 
-definition Yoneda (C : Type u₁) [category C] : Functor C (Functor (Cᵒᵖ) (Type u₁)) :=
+definition Yoneda (C : Type u₁) [category C] : Functor.{u₁ (u₁+1)} C (Functor (Cᵒᵖ) (Type u₁)) :=
 {
     onObjects := λ X, {
         onObjects     := λ Y, @Hom C _ Y X,
@@ -34,7 +35,7 @@ definition Yoneda (C : Type u₁) [category C] : Functor C (Functor (Cᵒᵖ) (T
    }
 }
 
-definition CoYoneda (C : Type u₁) [category C] : Functor (Cᵒᵖ) (Functor C (Type u₁)) :=
+definition CoYoneda (C : Type u₁) [category C] : Functor.{u₁ (u₁+1)} (Cᵒᵖ) (Functor C (Type u₁)) :=
 {
     onObjects := λ X, {
         onObjects     := λ Y, @Hom C _ X Y,
@@ -52,16 +53,20 @@ class Representable (F : Functor C (Type u₁)) :=
   (c : C)
   (Φ : NaturalIsomorphism F ((CoYoneda C).onObjects c))
 
-@[reducible] definition {v} YonedaEvaluation (C : Type u₁) [category C]
-  : Functor ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type u₁)
+@[reducible] definition YonedaEvaluation (C : Type u₁) [category C]
+  : Functor.{(u₁+1) (u₁+1)} ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type u₁)
   := Evaluation (Cᵒᵖ) (Type u₁)
-@[reducible] definition {v} YonedaPairing (C : Type u₁) [category C] 
-  : Functor ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type u₁)
-  := FunctorComposition
-      (FunctorComposition
-        (ProductFunctor (IdentityFunctor _) (OppositeFunctor (Yoneda C)))
-        (SwitchProductCategory _ _))
-      (HomPairing (Functor (Cᵒᵖ) (Type u₁))) 
+@[reducible] definition YonedaPairing (C : Type u₁) [category C] 
+  : Functor.{(u₁+1) (u₁+1)} ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type u₁) := {
+    onObjects := λ F, NaturalTransformation F.1 ((Yoneda C).onObjects F.2)
+  }
+  -- := FunctorComposition
+  --     (FunctorComposition
+  --       (ProductFunctor (IdentityFunctor _) (OppositeFunctor (Yoneda C)))
+  --       (SwitchProductCategory _ _))
+  --     (HomPairing (Functor (Cᵒᵖ) (Type u₁))) 
+
+
 
 @[simp] private lemma YonedaLemma_aux_1
    {X Y : C}
@@ -69,7 +74,7 @@ class Representable (F : Functor C (Type u₁)) :=
    {F G : Functor (Cᵒᵖ) (Type u₁)}
    (τ : NaturalTransformation F G)
    (Z : F.onObjects Y) :
-     G.onMorphisms f (τ.components Y Z) = τ.components X (F.onMorphisms f Z) := eq.symm (congr_fun (τ.naturality f) Z)
+     (G.onMorphisms f).down (τ.components Y Z) = τ.components X ((F.onMorphisms f).down Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
 theorem {v} YonedaLemma (C : Type u₁) [category C]: NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin

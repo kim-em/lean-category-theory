@@ -6,7 +6,7 @@ import .tactics
 
 namespace categories
 
-universes u
+universes u v
 
 class category (Obj : Type u) :=
   (Hom : Obj → Obj → Type u)
