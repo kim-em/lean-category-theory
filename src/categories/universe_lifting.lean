@@ -4,13 +4,14 @@
 
 import .equivalence
 
+open categories.functor
 open categories.equivalence
 
 namespace categories
 
 universes u₁ u₂
 
-variable {C : Type u₁}
+variable (C : Type u₁)
 variable [category C]
 
 instance universe_lift : category (ulift.{u₂} C) := {

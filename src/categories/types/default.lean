@@ -4,11 +4,13 @@
 
 import ..category
 import ..isomorphism
+import ..functor
 
 namespace categories.types
 
 open categories
 open categories.isomorphism
+open categories.functor
 
 universes u v
 
@@ -27,6 +29,11 @@ universes u v
     induction Y,
     tidy
   end
+
+definition UniverseLift : Functor (Type u) (Type (u+1)) := {
+    onObjects := λ X, ulift.{u+1} X,
+    onMorphisms := λ X Y f, ulift.up (λ x : ulift.{u+1} X, ulift.up (f.down x.down))
+}
 
 definition Bijection (α β : Type u) := Isomorphism α β 
 
