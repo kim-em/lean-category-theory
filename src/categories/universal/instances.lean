@@ -10,7 +10,6 @@ open categories.functor
 open categories.isomorphism
 open categories.initial
 open categories.types
-open categories.util
 open categories.util.finite
 
 namespace categories.universal
@@ -122,7 +121,7 @@ end
 -- PROJECT this has become nontrivial, because we're asserting that finite products can be indexed from the same universe level.
 -- This requires us to use the fact that `fin n` is in level 0.
 -- section
--- variable (C : Type (u+1))
+-- variable (C : Type (max (u+1) v))
 -- variable [category C]
 
 -- instance FiniteProducts_from_Products [has_Products C] : has_FiniteProducts C := {

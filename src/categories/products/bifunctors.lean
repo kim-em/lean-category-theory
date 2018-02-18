@@ -16,7 +16,7 @@ variable {D : Type u₂}
 variable [category D]
 variable {E : Type u₃}
 variable [category E]
-#check Functor.onMorphisms
+
 @[simp] lemma Bifunctor_identities
   (F : Functor (C × D) E)
   (X : C)

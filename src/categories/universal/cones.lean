@@ -11,9 +11,9 @@ open categories.initial
 
 namespace categories.universal
 
-universes u
+universes u v w
 variables {J : Type u} [category J]
-variables {C : Type (u+1)} [category C] {D : Type (u+1)} [category D]
+variables {C : Type v} [category C] {D : Type w} [category D]
 
 structure Cone (F : Functor J C) :=
   (cone_point    : C)
@@ -25,7 +25,7 @@ attribute [simp,ematch] Cone.commutativity_lemma
 
 variable {F : Functor J C}
 
-structure ConeMorphism (X Y : Cone F) :=
+structure ConeMorphism (X Y : Cone F) : Type (max u v) :=
   (cone_morphism      : Hom X.cone_point Y.cone_point)
   (commutativity : Π j : J, cone_morphism ≫ (Y.cone_maps j) = (X.cone_maps j) . obviously)
 
@@ -66,7 +66,7 @@ structure Cocone (F : Functor J C) :=
 make_lemma Cocone.commutativity
 attribute [simp,ematch] Cocone.commutativity_lemma
 
-structure CoconeMorphism (X Y : Cocone F) :=
+structure CoconeMorphism (X Y : Cocone F) : Type (max u v) :=
   (cocone_morphism      : Hom X.cocone_point Y.cocone_point)
   (commutativity : Π j : J, (X.cocone_maps j) ≫ cocone_morphism = (Y.cocone_maps j) . obviously)
 
@@ -106,9 +106,9 @@ end categories.universal
 
 namespace categories.functor
 
-universes u
+universes u v w
 variables {J : Type u} [category J]
-variables {C : Type (u+1)} [category C] {D : Type (u+1)} [category D]
+variables {C : Type v} [category C] {D : Type w} [category D]
 variable {F : Functor J C}
 
 open categories.universal

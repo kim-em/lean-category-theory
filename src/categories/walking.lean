@@ -52,7 +52,6 @@ local attribute [applicable] category.identity
 variable {C : Type u₁}
 variable [category C]
 
-set_option pp.all true
 definition Pair_functor (α β : C) : @Functor Two WalkingPair C _ := {
   onObjects     := λ p, p.choice α β,
   onMorphisms   := λ X Y f, match X, Y, f with

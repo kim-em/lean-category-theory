@@ -15,7 +15,6 @@ open categories.isomorphism
 open categories.products
 open categories.initial
 open categories.types
-open categories.util
 
 namespace categories.universal
 

@@ -12,7 +12,6 @@ open categories.isomorphism
 open categories.products
 open categories.initial
 open categories.types
-open categories.util
 open categories.universal
 
 namespace categories.universal.lemmas.limit_functoriality

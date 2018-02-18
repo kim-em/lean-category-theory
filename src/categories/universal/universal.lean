@@ -3,7 +3,6 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import .cones
-import ..util.hlist
 import ..util.finite
 
 open categories
@@ -11,7 +10,6 @@ open categories.functor
 open categories.isomorphism
 open categories.initial
 open categories.types
-open categories.util
 open categories.util.finite
 
 namespace categories.universal

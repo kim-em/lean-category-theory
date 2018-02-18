@@ -1,5 +1,6 @@
 import ...types
 import ..instances
+import ...transport
 
 open categories.universal
 open categories.isomorphism
@@ -39,7 +40,7 @@ instance Types_has_Equalizers : has_Equalizers (Type u)  := {
   equalizer := λ α β f g, {
     equalizer     := {x : α // f.down x = g.down x},
     inclusion     := ulift.up (λ x, x.val),
-    map           := λ γ k h, ulift.up (λ g, ⟨ k.down g, begin tidy, injection h, tidy, end ⟩ )
+    map           := λ γ k h, ulift.up (λ g, ⟨ k.down g, ♯ ⟩ )
  }
 }
 
@@ -47,53 +48,47 @@ instance Types_has_Equalizers : has_Equalizers (Type u)  := {
 instance Types_has_BinaryProducts : has_BinaryProducts (Type u)  := {
   binary_product := λ X Y, {
     product             := X × Y,
-    left_projection     := prod.1,
-    right_projection    := prod.2,
-    map                 := λ _ f g z, (f z, g z)
+    left_projection     := ulift.up prod.fst,
+    right_projection    := ulift.up prod.snd,
+    map                 := λ _ f g, ulift.up (λ z, (f.down z, g.down z))
  }
 }
 
 instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u)  := {
   binary_coproduct := λ X Y, {
     coproduct           := X ⊕ Y,
-    left_inclusion     := sum.inl,
-    right_inclusion    := sum.inr,
-    map                 := λ _ f g z, sum.cases_on z f g,
-    uniqueness          := begin tidy, induction x, tidy, end
+    left_inclusion     := ulift.up sum.inl,
+    right_inclusion    := ulift.up sum.inr,
+    map                 := λ _ f g, ulift.up (λ z, sum.cases_on z f.down g.down),
+    uniqueness          := λ Z f g lw rw, begin tidy, induction x, tidy, end
  }
 }
 
--- TODO ask if this can live in mathlib? I've also needed it for Mitchell's group theory work.
-@[simp] lemma {u₁ u₂} parallel_transport_for_trivial_bundles {α : Sort u₁} {a b : α} {β : Sort u₂} (p : a = b) (x : β) : @eq.rec α a (λ a, β) x b p = x :=
-begin
-induction p,
-simp,
-end
 
 instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
 {coequalizer := λ α β f g,
   {
-    coequalizer   := quotient (eqv_gen.setoid (λ x y, ∃ a : α, f a = x ∧ g a = y)),
-    projection    := λ x, begin apply quotient.mk, exact x end,
+    coequalizer   := quotient (eqv_gen.setoid (λ x y, ∃ a : α, f.down a = x ∧ g.down a = y)),
+    projection    := ulift.up (λ x, begin apply quotient.mk, exact x end),
     witness       := begin tidy, apply quotient.sound, apply eqv_gen.rel, existsi x, simp, end,
     map           := begin
                        tidy, 
                        induction a, 
-                       exact k a, 
+                       exact k.down a, 
                        induction a_p, 
                        tidy, 
                        induction a_p_a, 
                        induction a_p_a_h, 
                        rw ← a_p_a_h_left, 
                        rw ← a_p_a_h_right,
-                       exact congr_fun w a_p_a_w,
+                       exact congr_fun h_1 a_p_a_w,
                        obviously,
                      end,
     factorisation := ♯,
     uniqueness    := begin
                        tidy,
                        induction x,
-                       have p := congr_fun witness x,
+                       have p := congr_fun h_1 x,
                        tidy,
                      end 
  }

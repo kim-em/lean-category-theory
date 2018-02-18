@@ -23,12 +23,12 @@ instance  DiscreteCategory (α : Type u₁) : category (discrete α) := {
 }
 
 instance EmptyCategory : category pempty := (by apply_instance : category (discrete pempty))
-instance OneCategory : category unit := (by apply_instance : category (discrete unit))
+instance OneCategory : category punit := (by apply_instance : category (discrete punit))
 
 definition EmptyFunctor (C : Type u₂) [category C] : Functor pempty C := ♯
 
 -- FIXME This is really horrible! Please help out. :-)
-definition {u1 v1 u2 v2} Functor.fromFunction {C : Type u₂} [category C] {I : Type u₂} (F : I → C) : Functor (discrete I) C := {
+definition Functor.fromFunction {C : Type u₂} [category C] {I : Type u₁} (F : I → C) : Functor (discrete I) C := {
   onObjects     := F,
   onMorphisms   := λ X Y f, begin cases f, cases f, rw f, exact 𝟙 (F Y) end,
   identities := begin tidy, end,

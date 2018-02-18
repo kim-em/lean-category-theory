@@ -10,10 +10,10 @@ open categories.initial
 
 namespace categories.universal
 
-universes u
-variable {C : Type (u+1)}
+universes u v
+variable {C : Type (max (u+1) v)}
 variable [category C]
-variable {D : Type (u+1)}
+variable {D : Type (max (u+1) v)}
 variable [category D]
 
 structure Continuous (F : Functor C D ) :=

@@ -13,7 +13,6 @@ open categories.util.finite
 
 universe u
 
-set_option pp.universes true
 @[reducible] definition DecidableType := @psigma (Type u) decidable_eq 
 definition FiniteType := Σ X : Type u, Finite X
 
