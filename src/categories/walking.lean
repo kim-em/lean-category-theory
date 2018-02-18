@@ -113,7 +113,7 @@ inductive WalkingParallelPair : Type u₁
 open WalkingParallelPair
 
 open tactic
-private meta def induction_WalkingParallelPair : tactic unit :=
+meta def induction_WalkingParallelPair : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := induction h >> skip | _ := failed end))
 

@@ -4,14 +4,9 @@
 import ...functor
 import ...types
 import algebra.group
-import tactic.finish
 
 namespace categories.examples.groups
-
-
 open categories
-
-
 
 universe u₁
 
@@ -23,7 +18,7 @@ meta def is_group_hom_obviously := `[unfold is_group_hom, obviously]
 
 structure GroupHomomorphism (G H : Group.{u₁}) : Type (u₁+1) := -- Notice that we push this up one universe level, because our categories expect Obj and Hom at the same universe level.
   (map: G.1 → H.1)
-  (is_group_hom : is_group_hom map . is_group_hom_obviously) -- we need `by exactI` here to get the group instances.
+  (is_group_hom : is_group_hom map . is_group_hom_obviously)
 
 instance GroupHomomorphism_to_map {G H : Group} : has_coe_to_fun (GroupHomomorphism G H) :=
 {F   := λ f, Π x : G.1, H.1,

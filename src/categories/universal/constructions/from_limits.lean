@@ -39,6 +39,8 @@ variable {C : Type (u₁+1)}
 variable [category C]
 
 -- PROJECT this construction is unpleasant
+local attribute [tidy] induction_WalkingParallelPair
+
 instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
   equalizer := λ X Y f g, let lim := limitCone (ParallelPair_functor f g) in {
     equalizer     := lim.terminal_object.cone_point,
@@ -52,17 +54,11 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
     map           := begin
                        -- PROJECT this is really ugly! Those inductions should work better...
                        tidy,
-                       induction j,
-                       tidy,
                        exact k ≫ f,
-                       induction j,
-                       induction k_1,
                        tidy,
                        induction f_1,
+                       induction f_1,
                        tidy,
-                       induction k_1,
-                       tidy,
-                       induction f_1
                      end,
     factorisation := ♯,
     uniqueness    := begin
