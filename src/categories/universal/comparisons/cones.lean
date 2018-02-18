@@ -32,11 +32,6 @@ definition comma_Cone_to_Cone {J C : Category} {F : Functor J C} (cone : (comma.
 definition comma_ConeMorphism_to_ConeMorphism {J C : Category} {F : Functor J C} {X Y : (comma.Cones F).Obj} (f : (comma.Cones F).Hom X Y) : ConeMorphism (comma_Cone_to_Cone X) (comma_Cone_to_Cone Y) := 
 {
   cone_morphism      := f.val.1,
-  commutativity := λ j : J.Obj, begin
-                                  tidy, -- (This tidy relies on the fact we allow a little bit of looping; no looping actually happens, but our mechanism for detecting looping gets confused.)
-                                  let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f_property,
-                                  tidy
-                                end
 }
 
 definition Cone_to_comma_Cone {J C : Category} {F : Functor J C} (cone : Cone F) : (comma.Cones F).Obj := 

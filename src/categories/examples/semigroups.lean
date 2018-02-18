@@ -101,15 +101,6 @@ instance Semigroups_has_BinaryProducts : has_BinaryProducts CategoryOfSemigroups
     map                 := λ _ f g, {
       map := λ x, (f.map x, g.map x)
    },
-    uniqueness          := λ _ f g w₁ w₂, begin
-                                             tidy,
-                                             have p := congr_arg semigroup_morphism.map w₁,
-                                             have p' := congr_fun p x,
-                                             exact p',
-                                             have q := congr_arg semigroup_morphism.map w₂,
-                                             have q' := congr_fun q x,
-                                             exact q',
-                                          end
  }
 }
 
@@ -150,18 +141,7 @@ instance Semigroups_has_Equalizers : has_Equalizers CategoryOfSemigroups := {
   equalizer := λ X Y f g, {
     equalizer := ⟨ _, semigroup_equalizer f g ⟩,
     inclusion := {map := λ x, x.val},
-    map       := λ _ h w, {map := λ x, ⟨ h.map x, begin
-                                                    tidy, 
-                                                    have p := congr_arg semigroup_morphism.map w,
-                                                    have p' := congr_fun p x,
-                                                    exact p', 
-                                                  end ⟩},
-    uniqueness := λ r h k w, begin 
-                               tidy, 
-                               have p := congr_arg semigroup_morphism.map w,
-                               have p' := congr_fun p x,
-                               exact p'
-                             end,
+    map       := λ _ h w, {map := λ x, ⟨ h.map x, ♯ ⟩},
  }
 }
 
