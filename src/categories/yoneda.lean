@@ -119,30 +119,27 @@ refine {
 tidy {hints:=[9, 7, 6, 6, 7, 6, 9, 10, 9, 7, 6, 6, 7, 9, 10, 9, 7, 6, 6, 7, 6, 7, 6, 6, 7, 9, 10, 6, 7, 6, 6, 7, 6, 7, 6, 6, 7, 9, 10, 6, 7, 6, 6, 7, 6, 9, 10]}
 end
 
--- theorem YonedaEmbedding (C : Type u₁) [category C] : Embedding (Yoneda C) :=
--- begin
---   unfold Embedding,
---   fsplit,
---   {
---     -- Show it is full
---     fsplit,
---     {
---         tidy,
---         exact (f.components X).down (𝟙 X)
---    },
---     {
---         tidy,
---         have q := congr_fun (congr_arg ulift.down (f.naturality x)) (𝟙 X),
---         tidy,
---    }
---  },
---   {
---     -- Show it is faithful
---     tidy,
---     have q := congr_fun p X,
---     have q' := congr_fun q (𝟙 X),
---     tidy,
---  }
--- end
+theorem YonedaFull (C : Type u₁) [category C] : Full (Yoneda C) := {
+    preimage := λ X Y f, (f.components X).down (𝟙 X),
+    witness := λ X Y f, begin tidy, have p := congr_fun (congr_arg ulift.down (f.naturality x)) (𝟙 X), tidy, end -- PROJECT a pure rewriting proof?
+}
+
+theorem YonedaFaithful (C : Type u₁) [category C] : Faithful (Yoneda C) := {
+    injectivity := λ X Y f g w, begin 
+                                  -- PROJECT automation
+                                  dsimp_all', 
+                                  have p := congr_arg NaturalTransformation.components w, 
+                                  have p' := congr_fun p X, 
+                                  dsimp_all', 
+                                  have p'' := congr_arg ulift.down p',
+                                  dsimp_all',
+                                  resetI,
+                                  have p''' := congr_fun p'' (𝟙 X),
+                                  dsimp_all',
+                                  simp_at_each,
+                                  exact p''',
+                                end
+}
+
 
 end categories.yoneda

@@ -34,11 +34,21 @@ variables {F G H : Functor C D}
   (X : C)
    : (α.morphism.components X) ≫ (α.inverse.components X) = 𝟙 (F.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
+@[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1_assoc
+  (α : NaturalIsomorphism F G)
+  (X : C) (Z : D) (f : Hom (F.onObjects X) Z)
+   : (α.morphism.components X) ≫ (α.inverse.components X) ≫ f = f
+   := ♯ 
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2
   (α : NaturalIsomorphism F G)
   (X : C)
    : (α.inverse.components X) ≫ (α.morphism.components X) = 𝟙 (G.onObjects X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_2
+@[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2_assoc
+  (α : NaturalIsomorphism F G)
+  (X : C) (Z : D) (f : Hom (G.onObjects X) Z)
+   : (α.inverse.components X) ≫ (α.morphism.components X) ≫ f = f
+   := ♯
 
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_1 
   (α : NaturalIsomorphism F G)
@@ -62,9 +72,7 @@ definition NaturalIsomorphism.from_components
     inverse   := {
       components := λ X, (components X).inverse,
       naturality := λ X Y f, begin
-                               let p := congr_arg (λ f : Hom (F.onObjects X) (G.onObjects Y), (components X).inverse ≫ (f ≫ (components Y).inverse)) (eq.symm (naturality f)),
-                               simp at p,
-                               rewrite ← category.associativity at p,
+                               let p := congr_arg (λ f, (components X).inverse ≫ (f ≫ (components Y).inverse)) (eq.symm (naturality f)),
                                simp at p,
                                exact p,
                              end
@@ -116,6 +124,12 @@ definition NaturalIsomorphism.components {F G : Functor C D} (α : NaturalIsomor
  Isomorphism (F.onObjects X) (G.onObjects X) := {
     morphism := α.morphism.components X,
     inverse := α.inverse.components X
+}
+
+definition NaturalIsomorphism.reverse {F G : Functor C D} (α : NaturalIsomorphism F G) :
+ NaturalIsomorphism G F := {
+    morphism := α.inverse,
+    inverse := α.morphism
 }
 
 end categories.natural_transformation

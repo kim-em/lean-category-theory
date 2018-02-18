@@ -23,6 +23,9 @@ make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
 attribute [simp,ematch] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
 
+@[simp,ematch] lemma Isomorphism.witness_1_assoc_lemma (I : Isomorphism X Y) (f : Hom X Z) : I.morphism ≫ I.inverse ≫ f = f := ♯
+@[simp,ematch] lemma Isomorphism.witness_2_assoc_lemma (I : Isomorphism X Y) (f : Hom Y Z) : I.inverse ≫ I.morphism ≫ f = f := ♯
+
 instance Isomorphism_coercion_to_morphism : has_coe (Isomorphism X Y) (Hom X Y) :=
   {coe := Isomorphism.morphism}
 
@@ -56,6 +59,31 @@ definition Isomorphism.reverse (I : Isomorphism X Y) : Isomorphism Y X := {
   morphism  := I.inverse,
   inverse   := I.morphism
 }
+
+@[simp] lemma Isomorphism.cancel_morphism_left (I : Isomorphism X Y) (f g : Hom Y Z) : I.morphism ≫ f = I.morphism ≫ g ↔ f = g :=
+begin
+tidy,
+have h := congr_arg (λ h, I.inverse ≫ h) a,
+tidy,
+end
+@[simp] lemma Isomorphism.cancel_morphism_right (I : Isomorphism X Y) (f g : Hom Z X) : f ≫ I.morphism = g ≫ I.morphism ↔ f = g :=
+begin
+tidy,
+have h := congr_arg (λ h, h ≫ I.inverse) a,
+tidy,
+end
+@[simp] lemma Isomorphism.cancel_inverse_left (I : Isomorphism X Y) (f g : Hom X Z) : I.inverse ≫ f = I.inverse ≫ g ↔ f = g :=
+begin
+tidy,
+have h := congr_arg (λ h, I.morphism ≫ h) a,
+tidy,
+end
+@[simp] lemma Isomorphism.cancel_inverse_right (I : Isomorphism X Y) (f g : Hom Z Y) : f ≫ I.inverse = g ≫ I.inverse ↔ f = g :=
+begin
+tidy,
+have h := congr_arg (λ h, h ≫ I.morphism) a,
+tidy,
+end
 
 structure is_Isomorphism (morphism : Hom X Y) :=
 (inverse : Hom Y X)
