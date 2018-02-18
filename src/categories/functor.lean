@@ -38,7 +38,6 @@ variable {D : Type u₂}
 variable [category D]
 variable {E : Type u₃}
 variable [category E]
-variables {X Y : C}
 
 -- We define a coercion so that we can write `F X` for the functor `F` applied to the object `X`.
 -- One can still write out `onObjects F X` when needed.
@@ -53,13 +52,13 @@ definition FunctorComposition (F : Functor C D) (G : Functor D E) : Functor C E 
 }
 
 -- Functors preserve isomorphisms
-definition Functor.onIsomorphisms (F : Functor C D) (g : Isomorphism X Y) : Isomorphism (F.onObjects X) (F.onObjects Y) :=
+definition Functor.onIsomorphisms (F : Functor C D) {X Y : C} (g : Isomorphism X Y) : Isomorphism (F.onObjects X) (F.onObjects Y) :=
 {
     morphism := F.onMorphisms g.morphism,
     inverse := F.onMorphisms g.inverse,
 }
 
 class ReflectsIsomorphisms (F : Functor C D) :=
-  (reflects : Π (f : Hom X Y) (w : is_Isomorphism (F.onMorphisms f)), is_Isomorphism f)
+  (reflects : Π {X Y : C} (f : Hom X Y) (w : is_Isomorphism (F.onMorphisms f)), is_Isomorphism f)
 
 end categories.functor
