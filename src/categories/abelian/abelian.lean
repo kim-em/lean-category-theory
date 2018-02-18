@@ -21,15 +21,15 @@ structure KernelImageCokernelDecomposition {C : Type u} [category C] [ZeroObject
   (cokernel                : Cokernel f)
   (cokernel_of_kernel      : Cokernel (kernel.inclusion) )
   (kernel_of_cokernel      : Kernel (cokernel.projection))
-  (image_well_defined      : Isomorphism C cokernel_of_kernel.coequalizer kernel_of_cokernel.equalizer)
-  (composition_is_morphism : cokernel_of_kernel.projection >> image_well_defined.morphism >> kernel_of_cokernel.inclusion = f)
+  (image_well_defined      : Isomorphism cokernel_of_kernel.coequalizer kernel_of_cokernel.equalizer)
+  (composition_is_morphism : cokernel_of_kernel.projection ≫ image_well_defined.morphism ≫ kernel_of_cokernel.inclusion = f)
 
-structure Abelian (C : Type u) [ZeroObject C] := 
+structure Abelian (C : Type u) [category C] [ZeroObject C] := 
   (decomposition : ∀ {X Y : C} (f : Hom X Y), KernelImageCokernelDecomposition f)
 
 -- This is the usual definition
 
-structure Abelian' (C : Type u) [ZeroObject C] :=
+structure Abelian' (C : Type u) [category C] [ZeroObject C] :=
   (kernel   : ∀ {X Y : C} (f : Hom X Y), Kernel f  )
   (cokernel : ∀ {X Y : C} (f : Hom X Y), Cokernel f)
   (monics_are_regular : ∀ {X Y : C} {f : Hom X Y} (m : Monic f), RegularMonic f)

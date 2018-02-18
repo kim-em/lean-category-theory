@@ -51,7 +51,7 @@ instance TerminalObject_coercion_to_object : has_coe (TerminalObject C) C :=
 
 structure is_terminal (X : C) :=
   (morphism_to_terminal_object_from : ∀ Y : C, Hom Y X)
-  (uniqueness_of_morphisms_to_terminal_object : ∀ Y : C, ∀ f g : Hom Y X, f = g . obviously)
+  (uniqueness_of_morphisms_to_terminal_object : ∀ Y : C, ∀ f g : Hom Y X, f = g) -- FIXME putting ' . obviously' here causes Lean to hang
 
 lemma TerminalObjects_are_unique (X Y : TerminalObject C) : @Isomorphism C _ X Y := ♯
 

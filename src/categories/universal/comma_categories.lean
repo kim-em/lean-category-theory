@@ -7,7 +7,6 @@ import .initial
 
 open categories
 open categories.isomorphism
-open categories.graphs
 open categories.functor
 open categories.natural_transformation
 open categories.functor_categories
@@ -74,14 +73,14 @@ definition CommaCategory_projection_transformation
    }
 
 
-definition ObjectAsFunctor (X : C) : Functor (DiscreteCategory unit) C :=
+definition ObjectAsFunctor (X : C) : Functor unit C :=
 {
   onObjects     := λ _, X,
   onMorphisms   := λ _ _ _, 𝟙 X
 }
 
-definition SliceCategory   (X : C.Obj) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)
-definition CosliceCategory (X : C.Obj) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
+definition SliceCategory   (X : C) := CommaCategory (IdentityFunctor C) (ObjectAsFunctor X)
+definition CosliceCategory (X : C) := CommaCategory (ObjectAsFunctor X) (IdentityFunctor C)
 
 -- In Cones, we have
 --   A = C

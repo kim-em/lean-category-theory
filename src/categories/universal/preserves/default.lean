@@ -13,11 +13,11 @@ open categories.types
 
 namespace categories.universal
 
-universes u₁ u₂ u₃ u₄ u₅ u₆
+universes u₁ u₂ 
 
-variable {A : Type u₁}
+variable {A : Type (u₁+1)}
 variable [category A]
-variable {B : Type u₁}
+variable {B : Type (u₁+2)}
 variable [category B]
 
 class PreservesLimits (F : Functor A B) :=

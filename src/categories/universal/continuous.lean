@@ -11,9 +11,9 @@ open categories.initial
 namespace categories.universal
 
 universes u
-variable {C : Type u}
+variable {C : Type (u+1)}
 variable [category C]
-variable {D : Type u}
+variable {D : Type (u+1)}
 variable [category D]
 
 structure Continuous (F : Functor C D ) :=

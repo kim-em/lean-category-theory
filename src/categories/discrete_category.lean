@@ -14,18 +14,21 @@ open categories.functor
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition  DiscreteCategory (α : Type u₁) : category α := {
+definition discrete (α : Type u₁) := α
+
+instance  DiscreteCategory (α : Type u₁) : category (discrete α) := {
   Hom            := λ X Y, ulift (plift (X = Y)),
   identity       := ♯,
   compose        := ♯
 }
 
-definition EmptyCategory := DiscreteCategory (pempty.{u₁})
+instance EmptyCategory : category pempty := (by apply_instance : category (discrete pempty))
+instance OneCategory : category unit := (by apply_instance : category (discrete unit))
 
-definition EmptyFunctor (C : Type u₂) [category C] : @Functor _ EmptyCategory.{u₁} C _ := ♯
+definition EmptyFunctor (C : Type u₂) [category C] : Functor pempty C := ♯
 
 -- FIXME This is really horrible! Please help out. :-)
-definition {u1 v1 u2 v2} Functor.fromFunction {C : Type u₂} [category C] {I : Type u₂} (F : I → C) : @Functor _ (DiscreteCategory I) C _ := {
+definition {u1 v1 u2 v2} Functor.fromFunction {C : Type u₂} [category C] {I : Type u₂} (F : I → C) : Functor (discrete I) C := {
   onObjects     := F,
   onMorphisms   := λ X Y f, begin cases f, cases f, rw f, exact 𝟙 (F Y) end,
   identities := begin tidy, end,
