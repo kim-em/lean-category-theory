@@ -14,12 +14,20 @@ open categories.functor
 
 universes u v
 
-@[reducible] instance CategoryOfTypes : category (Type u) :=
+instance CategoryOfTypes : category (Type u) :=
 {
     Hom := λ a b, ulift.{u+1} (a → b),
     identity := λ a, ulift.up id,
     compose  := λ _ _ _ f g, ulift.up (g.down ∘ f.down)
 }
+
+@[simp] lemma Functor_to_Types_functoriality {C : Type v} [category C] (F : Functor C (Type u)) {X Y Z : C} (f : Hom X Y) (g : Hom Y Z) (a : F.onObjects X) :
+(F.onMorphisms (f ≫ g)).down a = (F.onMorphisms g).down ((F.onMorphisms f).down a) :=
+begin
+have p := F.functoriality_lemma f g,
+have p' := congr_arg ulift.down p,
+tidy
+end
 
 @[applicable] lemma ulift_equal {α : Type v}
   (X Y : ulift.{u v} α)
