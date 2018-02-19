@@ -105,6 +105,9 @@ variable [category C]
 definition Cone (F : Functor J C)   := (comma (DiagonalFunctor.{j u₁} J C) (ObjectAsFunctor F))
 definition Cocone (F : Functor J C) := (comma (ObjectAsFunctor F)          (DiagonalFunctor.{j u₁} J C))
 
+@[simp] lemma Cone_comma_unit (F : Functor J C) (X : Cone F) : X.1.2 = punit.star := ♯ 
+@[simp] lemma Cocone_comma_unit (F : Functor J C) (X : Cocone F) : X.1.1 = punit.star := ♯ 
+
 instance Cones   (F : Functor J C) : category (Cone F)   := begin unfold Cone, apply_instance end
 instance Cocones (F : Functor J C) : category (Cocone F) := begin unfold Cocone, apply_instance end
 
@@ -112,12 +115,12 @@ definition Limit   (F: Functor J C) := TerminalObject (Cone   F)
 definition Colimit (F: Functor J C) := InitialObject  (Cocone F)
 
 -- TODO clean this up: WalkingPair and WalkingParallelPair should just have different object types
-definition BinaryProduct   (α β : C)                  := @Limit  _ WalkingPair _ _ (Pair_functor α β)
-definition BinaryCoproduct (α β : C)                  := @Colimit _ WalkingPair _ _ (Pair_functor α β)
+definition BinaryProduct   (α β : C)                  := Limit   (Pair_functor α β)
+definition BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
 definition Product         {I : Type u₁} (X : I → C) := Limit   (Functor.fromFunction X)
 definition Coproduct       {I : Type u₁} (X : I → C) := Colimit (Functor.fromFunction X)
-definition Equalizer       {α β : C} (f g : Hom α β)  := @Limit   _ WalkingParallelPair _ _ (ParallelPair_functor f g)
-definition Coequalizer     {α β : C} (f g : Hom α β)  := @Colimit _ WalkingParallelPair _ _ (ParallelPair_functor f g)
+definition Equalizer       {α β : C} (f g : Hom α β)  := Limit   (ParallelPair_functor f g)
+definition Coequalizer     {α β : C} (f g : Hom α β)  := Colimit (ParallelPair_functor f g)
 
 end categories.comma
 

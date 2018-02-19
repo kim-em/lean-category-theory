@@ -58,7 +58,7 @@ private meta def induction_WalkingPair : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingPair) := induction h >> skip | _ := failed end))
 
-local attribute [tidy] induction_WalkingPair
+attribute [tidy] induction_WalkingPair
 
 instance decidable_eq_WalkingPair : decidable_eq WalkingPair := ♯
 
@@ -117,7 +117,7 @@ meta def induction_WalkingParallelPair : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := induction h >> skip | _ := failed end))
 
-local attribute [tidy] induction_WalkingParallelPair
+attribute [tidy] induction_WalkingParallelPair
 
 instance decidable_eq_WalkingParallelPair : decidable_eq WalkingParallelPair := ♯
 

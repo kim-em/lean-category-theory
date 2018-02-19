@@ -21,10 +21,10 @@ variable {C : Type (u₁+1)}
 variable [category C]
 
 instance Coequalizers_from_Colimits [Cocomplete C] : has_Coequalizers C :=
-{coequalizer := λ _ _ f g, Coequalizer_from_Equalizer_in_Opposite (@equalizer (Cᵒᵖ) _ _ _ f g)}
+{coequalizer := λ _ _ f g, Coequalizer_from_Equalizer_in_Opposite (@equalizer (Cᵒᵖ) _ _ _ _ f g)}
 
-instance Coproducts_from_Colimits [Cocomplete C] : has_CoproductsC := {
-  coproduct := λ _ F, Coproduct_from_Product_in_Opposite (@product (Cᵒᵖ) (@universal.Products_from_Limits (Cᵒᵖ) (universal.opposites.Opposite_Complete_of_Cocomplete)) _ F)
+instance Coproducts_from_Colimits [Cocomplete C] : has_Coproducts C := {
+  coproduct := λ _ F, Coproduct_from_Product_in_Opposite (@product (Cᵒᵖ) _ (@universal.Products_from_Limits (Cᵒᵖ) _ (universal.opposites.Opposite_Complete_of_Cocomplete)) _ F)
 }
 
 end categories.universal

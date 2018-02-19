@@ -8,7 +8,7 @@ open categories.functor
 
 namespace categories
 
-universes u₁ u₂ v₁ v₂ w wc wd
+universes u₁ u₂ w wc wd
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
@@ -25,7 +25,14 @@ instance FullSubcategory (Z : C → Type u₁) : category (Σ X : C, Z X) := {
   compose        := λ _ _ _ f g, f ≫ g
 }
 
-instance FullSubcategory' (Z : C → Sort u₁) : category (psigma Z) := {
+-- TODO remove?
+instance FullSubcategory' (Z : C → Sort u₁) : category (Σ' X : C, Z X) := {
+  Hom := λ X Y, Hom X.1 Y.1,
+  identity       := by tidy,
+  compose        := λ _ _ _ f g, f ≫ g
+}
+
+instance FullSubcategory'' (Z : C → Prop) : category {X : C // Z X} := {
   Hom := λ X Y, Hom X.1 Y.1,
   identity       := by tidy,
   compose        := λ _ _ _ f g, f ≫ g
@@ -35,6 +42,7 @@ definition FullSubcategoryInclusion {Z : C → Type u₁} : Functor (Σ X : C, Z
   onObjects := λ X, X.1,
   onMorphisms := λ _ _ f, f
 }
+-- PROJECT, also Prop version, and show these are fully faithful
 
 definition Functor_restricts_to_FullSubcategory 
   (F : Functor C D) 

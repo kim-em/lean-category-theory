@@ -68,6 +68,8 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                          cone_maps := λ j : WalkingParallelPair, a ≫ (lim.terminal_object.cone_maps j),
                          commutativity := begin
                                             tidy,
+                                            induction f_1,
+                                            induction f_1,
                                             {
                                               have c := lim.terminal_object.commutativity,
                                               dsimp at c,
@@ -85,8 +87,9 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        -- finally, take care of those placeholders
                        tidy,
                        have c := lim.terminal_object.commutativity,
+                       dsimp at c,
                        rw ← @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,
-                       repeat {rw ← C.associativity},
+                       repeat {rw ← category.associativity},
                        rw witness, 
                      end
  }                       
@@ -103,12 +106,12 @@ instance Products_from_Limits [Complete C] : has_Products C := {
                                                 have p := lim_F.uniqueness_of_morphisms_to_terminal_object, 
                                                 have q := p _ (ConeMorphism_from_map_to_limit f)
                                                   {cone_morphism := g, commutativity := begin tidy, simp *, end}, -- (`simp *` isn't good in tidy; it's really slow)
-                                                exact congr_arg ConeMorphism.cone_morphism q, -- PROJECT surely this line can be automated: if you know a = b, you know a.x = b.x
+                                                tidy,
                                               end,
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from {
                                               cone_point := Z, 
                                               cone_maps := i, 
-                                              commutativity := ♯ 
+                                              commutativity := begin tidy, induction f, induction f, induction f, tidy, end -- gross
                                            }).cone_morphism
                  }
 }

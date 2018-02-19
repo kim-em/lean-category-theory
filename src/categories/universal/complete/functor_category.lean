@@ -128,6 +128,20 @@ begin
  tidy,
 end
 
+@[simp] lemma cone_commutativity_in_FunctorCategory_assoc
+(F : Functor J (Functor C D))
+(X : C)
+(j k : J)
+(f : Hom j k) 
+(Y : Cone F)
+(Z : D)
+(z : Hom ((F.onObjects k).onObjects X) Z)
+ : ((Y.cone_maps j).components X) ≫ ((F.onMorphisms f).components X) ≫ z = (Y.cone_maps k).components X ≫ z := 
+begin
+ rw ← category.associativity,
+ simp
+end
+
 @[simp] lemma cone_morphism_commutativity_in_FunctorCategory
 (F : Functor J (Functor C D))
 (X : C)
@@ -147,11 +161,11 @@ local attribute [reducible] universal.lemmas.limit_functoriality.morphism_to_ter
 private definition morphism_to_LimitObject_in_FunctorCategory [cmp : Complete D] {F : Functor J (Functor C D)} (Y : Cone F) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
       cone_morphism := {
         components := begin
-                         tidy {hints:=[7, 6, 7, 9, 22, 24]},  -- this will use morphism_to_terminal_object_cone_point
+                         tidy {hints:=[7, 6, 7, 9, 23, 25]},  -- this will use morphism_to_terminal_object_cone_point
                          exact (Y.cone_maps j).components X, 
                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
                        end,
-        naturality := by tidy {hints:=[9, 7, 6, 7, 9, 22, 18, 9, 10, 9, 10, 14]} 
+        naturality := begin tidy {hints:=[9, 7, 6, 7, 9, 23, 19, 9, 10, 9, 10]}, end
      },
       commutativity := by tidy {hints:=[9, 7, 6, 7, 9, 10]} 
    }
@@ -172,10 +186,15 @@ begin
 end
 
 instance Limits_in_FunctorCategory [cmp : Complete D] : Complete (Functor C D) := {
-  limitCone := λ J F, {
+  limitCone := λ J _ F, 
+  begin
+  resetI,
+  exact {
     terminal_object                            := LimitObject_in_FunctorCategory F,
     morphism_to_terminal_object_from           := λ Y, morphism_to_LimitObject_in_FunctorCategory Y
  }
+ end
 }
 
+end
 end categories.universal

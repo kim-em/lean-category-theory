@@ -32,6 +32,12 @@ structure ConeMorphism (X Y : Cone F) : Type (max u v) :=
 make_lemma ConeMorphism.commutativity
 attribute [simp,ematch] ConeMorphism.commutativity_lemma
 
+@[simp,ematch] def ConeMorphism.commutativity_lemma_assoc {X Y : Cone F} (c : ConeMorphism X Y) (j : J) {Z : C} (z : Hom (F.onObjects j) Z): c.cone_morphism ≫ Y.cone_maps j ≫ z = X.cone_maps j ≫ z :=
+begin
+rw ← category.associativity,
+simp,
+end
+
 @[applicable] lemma ConeMorphism_componentwise_equal
   {X Y : Cone F}
   {f g : ConeMorphism X Y}
@@ -72,6 +78,13 @@ structure CoconeMorphism (X Y : Cocone F) : Type (max u v) :=
 
 make_lemma CoconeMorphism.commutativity
 attribute [simp,ematch] CoconeMorphism.commutativity_lemma
+
+@[simp,ematch] def CoconeMorphism.commutativity_lemma_assoc {X Y : Cocone F} (c : CoconeMorphism X Y) (j : J) {Z : C} (z : Hom Y.cocone_point Z): (X.cocone_maps j) ≫ c.cocone_morphism ≫ z = (Y.cocone_maps j) ≫ z :=
+begin
+rw ← category.associativity,
+simp,
+end
+
 
 @[applicable] lemma CoconeMorphism_componentwise_equal
   {X Y : Cocone F}
