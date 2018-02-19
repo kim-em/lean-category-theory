@@ -19,10 +19,10 @@ open categories.types
 namespace categories.universal
 
 universes u₁ u₂ 
-variable {C : Type (u₁+1)}
+variable {C : Type (u₁+2)}
 variable [category C]
 
-class Complete (C : Type (u₁+1)) [category C] := 
+class Complete (C : Type (u₁+2)) [category C] := 
   (limitCone : Π {J : Type (u₁+1)} [category J] (F : Functor J C), LimitCone F)
 
 variable {J : Type (u₁+1)}
@@ -31,7 +31,7 @@ variable [category J]
 definition limitCone [Complete C] (F : Functor J C) := Complete.limitCone F
 definition limit     [Complete C] (F : Functor J C) := (Complete.limitCone F).terminal_object.cone_point
 
-class Cocomplete (C : Type (u₁+1)) [category C] := 
+class Cocomplete (C : Type (u₁+2)) [category C] := 
   (colimitCocone : Π {J : Type (u₁+1)} [category J] (F : Functor J C), ColimitCocone F)
 
 definition colimitCocone [Cocomplete C] (F : Functor J C) := Cocomplete.colimitCocone F

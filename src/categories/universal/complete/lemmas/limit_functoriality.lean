@@ -17,9 +17,9 @@ open categories.universal
 namespace categories.universal.lemmas.limit_functoriality
 
 universe u
-variable {J : Type u}
+variable {J : Type (u+1)}
 variable [category J]
-variable {C : Type (u+1)}
+variable {C : Type (u+2)}
 variable [category C]
 variable {F : Functor J C}
 variable {L : LimitCone F}

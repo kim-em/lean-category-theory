@@ -39,10 +39,11 @@ end
 section
 variable {J : Type (u₁+1)}
 variable [category J]
-variable {C : Type (u₁+1)}
+variable {C : Type (u₁+2)}
 variable [category C]
-variable {D : Type (u₁+1)}
+variable {D : Type (u₁+2)}
 variable [category D]
+
 private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : Functor J (Functor C D)) : Cone F := {     
   cone_point    := {
     onObjects     := λ c, functorial_Limit.onObjects (evaluate_Functor_to_FunctorCategory F c),
@@ -190,7 +191,7 @@ instance Limits_in_FunctorCategory [cmp : Complete D] : Complete (Functor C D) :
   begin
   resetI,
   exact {
-    terminal_object                            := LimitObject_in_FunctorCategory F,
+    terminal_object                            := @LimitObject_in_FunctorCategory J _ C _ _ _ _ F,
     morphism_to_terminal_object_from           := λ Y, morphism_to_LimitObject_in_FunctorCategory Y
  }
  end

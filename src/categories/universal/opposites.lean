@@ -63,14 +63,18 @@ instance Opposite_has_Products_of_has_Coproducts     [has_Coproducts C]   : has_
 instance Opposite_has_Equalizers_of_has_Coequalizers [has_Coequalizers C] : has_Equalizers (Cᵒᵖ) := sorry
 instance Opposite_has_Coproducts_of_has_Products     [has_Products C]     : has_Coproducts (Cᵒᵖ) := sorry
 instance Opposite_has_Coequalizers_of_has_Equalizers [has_Equalizers C]   : has_Coequalizers (Cᵒᵖ) := sorry
+end
+
+section
+variable {C : Type (u₁+2)}
+variable [category C]
 
 instance Opposite_Complete_of_Cocomplete [Cocomplete C]            : Complete (Cᵒᵖ) := sorry
 instance Opposite_Cocomplete_of_Complete [Complete C]              : Cocomplete (Cᵒᵖ) := sorry
 
 -- It doesn't make sense to have instances here; too many loops!
-def Cocomplete_of_Opposite_Complete (C : Type (u₁+1)) [category C] [Complete (Cᵒᵖ)]   : Cocomplete C := sorry
-def Complete_of_Opposite_Cocomplete (C : Type (u₁+1)) [category C] [Cocomplete (Cᵒᵖ)] : Complete C := sorry
-
+def Cocomplete_of_Opposite_Complete (C : Type (u₁+2)) [category C] [Complete (Cᵒᵖ)]   : Cocomplete C := sorry
+def Complete_of_Opposite_Cocomplete (C : Type (u₁+2)) [category C] [Cocomplete (Cᵒᵖ)] : Complete C := sorry
 end
 
 

@@ -18,7 +18,7 @@ namespace categories.comma
 universes j u₁ u₂ u₃
 
 -- The diagonal functor sends X to the constant functor that sends everything to X.
-definition DiagonalFunctor (J : Type j) [category J] (C : Type u₁) [category C] : Functor C (Functor J C) :=
+definition DiagonalFunctor (J : Type (j+1)) [category J] (C : Type (u₁+1)) [category C] : Functor C (Functor J C) :=
 {
   onObjects     := λ X : C, {
     onObjects     := λ _, X,
@@ -32,11 +32,11 @@ definition DiagonalFunctor (J : Type j) [category J] (C : Type u₁) [category C
 section
 local attribute [ematch] subtype.property
 
-variable {A : Type u₁}
+variable {A : Type (u₁+1)}
 variable [category A]
-variable {B : Type u₂}
+variable {B : Type (u₂+1)}
 variable [category B]
-variable {C : Type u₃}
+variable {C : Type (u₃+1)}
 variable [category C]
 
 definition comma (S : Functor A C) (T : Functor B C) := Σ p : A × B, Hom (S.onObjects p.1) (T.onObjects p.2)
@@ -97,9 +97,9 @@ end
 --   A = C
 --   B = .
 --   C = FunctorCategory J C
-variable {J : Type j}
+variable {J : Type (j+1)}
 variable [category J]
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
 
 definition Cone (F : Functor J C)   := (comma (DiagonalFunctor.{j u₁} J C) (ObjectAsFunctor F))

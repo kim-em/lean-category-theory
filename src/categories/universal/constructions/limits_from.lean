@@ -18,7 +18,7 @@ open categories.util.finite
 namespace categories.universal
 
 universes u₁
-variable {C : Type (u₁+1)}
+variable {C : Type (u₁+2)}
 variable [category C]
 
 instance Limits_from_Products_and_Equalizers [has_Products C] [has_Equalizers C] : Complete C := {
@@ -26,7 +26,7 @@ instance Limits_from_Products_and_Equalizers [has_Products C] [has_Equalizers C]
     begin
     resetI,
     exact 
-    let product_over_objects   := product (F.onObjects) in
+    let product_over_objects   := product.{u₁+1} (F.onObjects) in
     let product_over_morphisms := product (λ f : (Σ s : J, Σ t : J, Hom s t), F.onObjects f.2.1) in -- TODO this would be cleaner as a sigma over J × J
     let source    := product_over_morphisms.map (λ f, (product_over_objects.projection f.1) ≫ (F.onMorphisms f.2.2))  in
     let target    := product_over_morphisms.map (λ f, product_over_objects.projection f.2.1) in

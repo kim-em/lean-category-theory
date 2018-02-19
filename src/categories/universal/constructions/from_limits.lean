@@ -20,9 +20,9 @@ namespace categories.universal
 universes u₁ u₂ u₃ u₄
 
 section
-variable {J : Type u₁}
+variable {J : Type (u₁+1)}
 variable [category J]
-variable {C : Type u₂}
+variable {C : Type (u₂+1)}
 variable [category C]
 variables {F : Functor J C} {L : LimitCone F} {Z : C} 
 
@@ -35,7 +35,7 @@ private definition ConeMorphism_from_map_to_limit (f : Hom Z L.terminal_object.c
 }
 end
 
-variable {C : Type (u₁+1)}
+variable {C : Type (u₁+2)}
 variable [category C]
 
 -- PROJECT this construction is unpleasant
@@ -96,7 +96,7 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
 }
 
 instance Products_from_Limits [Complete C] : has_Products C := {
-    product := λ {I : Type u₁} (F : I → C), 
+    product := λ {I : Type (u₁+1)} (F : I → C), 
                  let lim_F := limitCone (Functor.fromFunction F) in
                   {
                     product       := lim_F.terminal_object.cone_point,

@@ -84,7 +84,7 @@ instance WalkingPair_category : category WalkingPair := {
 
 local attribute [applicable] category.identity
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
 
 @[simp] lemma Hom_1_2 : Hom _1 _2 = pempty := begin dunfold Hom, tidy, end
@@ -135,7 +135,7 @@ instance : category WalkingParallelPair := {
                     end
 }
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
 
 -- this style is obscene. FIXME learn to use match statements  (or rather, to automatically unfold them)
