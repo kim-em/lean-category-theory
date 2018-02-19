@@ -14,10 +14,20 @@ open categories.functor_categories
 
 namespace categories.adjunctions
 
+universes u₁ u₂ u₃
+
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+variable {E : Type u₃}
+variable [category E]
+
+
 -- EXERCISE an adjunction F ⊢ G gives an adjunction F^* ⊢ G^*
 -- cf Leinster 2.2.14
--- definition pullback_adjunction {C D : Category} {L : Functor C D} {R : Functor D C} (A : Adjunction L R) (E : Category)
---   : Adjunction (whisker_on_left_functor E L) (whisker_on_left_functor E R) := {
+-- definition pullback_adjunction {L : Functor C D} {R : Functor D C} (A : Adjunction L R) 
+--   : Adjunction (whisker_on_left_functor L E) (whisker_on_left_functor R E) := {
 --     unit       := sorry,
 --     counit     := sorry,
 --     triangle_1 := sorry,

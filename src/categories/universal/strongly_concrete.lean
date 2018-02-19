@@ -13,14 +13,15 @@ open categories.types
 
 namespace categories.universal
 
-universes u₁ u₂ -- parameterising the category
-universes u₃    -- parameterising Types
-universes u₄ u₅ -- parameterising index categories for limits
+universes u₁
+variable (C : Type (u₁+1))
+variable [category C]
 
-class StronglyConcrete (C : Category.{u₁ u₂}) extends Concrete.{u₁ u₂ u₃} C := 
-  (reflects_isos    : ReflectsIsomorphisms F . obviously)
-  (preserves_limits : PreservesLimits.{u₁ u₂ u₃+1 u₃ u₄ u₅} F)
+class StronglyConcrete [Concrete C] :=
+  (reflects_isos    : ReflectsIsomorphisms (FibreFunctor C))
+  (preserves_limits : PreservesLimits (FibreFunctor C))
 
+-- PROJECT
 -- instance Types_StronglyConcrete : StronglyConcrete CategoryOfTypes := {
 --     F := IdentityFunctor CategoryOfTypes,
 --     w := sorry,

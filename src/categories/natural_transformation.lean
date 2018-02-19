@@ -10,25 +10,33 @@ open categories.functor
 
 namespace categories.natural_transformation
 
-structure {u1 v1 u2 v2} NaturalTransformation {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F G : Functor C D) :=
-  (components: Π X : C.Obj, D.Hom (F.onObjects X) (G.onObjects X))
-  (naturality: ∀ {X Y : C.Obj} (f : C.Hom X Y),
-     D.compose (F.onMorphisms f) (components Y) = D.compose (components X) (G.onMorphisms f) . obviously)
+universes u v w
+variable {C : Type u}
+variable [category C]
+variable {D : Type v}
+variable [category D]
+variable {E : Type w}
+variable [category E]
+
+structure NaturalTransformation (F G : Functor C D) :=
+  (components: Π X : C, Hom (F.onObjects X) (G.onObjects X))
+  (naturality: ∀ {X Y : C} (f : Hom X Y),
+     (F.onMorphisms f) ≫ (components Y) = (components X) ≫ (G.onMorphisms f) . obviously)
 
 make_lemma NaturalTransformation.naturality
 attribute [simp,ematch] NaturalTransformation.naturality_lemma
 
+variables {F G H: Functor C D}
+
 -- This defines a coercion so we can write `α X` for `components α X`.
-instance NaturalTransformation_to_components {C D : Category} {F G : Functor C D} : has_coe_to_fun (NaturalTransformation F G) :=
-{F   := λ f, Π X : C.Obj, D.Hom (F X) (G X),
+instance NaturalTransformation_to_components : has_coe_to_fun (NaturalTransformation F G) :=
+{F   := λ f, Π X : C, Hom (F.onObjects X) (G.onObjects X),
   coe := NaturalTransformation.components}
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
-@[applicable] lemma {u1 v1 u2 v2} NaturalTransformations_componentwise_equal
-  {C : Category.{u1 v1}} {D : Category.{u2 v2}} 
-  {F G : Functor C D}
+@[applicable] lemma NaturalTransformations_componentwise_equal
   (α β : NaturalTransformation F G)
-  (w : ∀ X : C.Obj, α.components X = β.components X) : α = β :=
+  (w : ∀ X : C, α.components X = β.components X) : α = β :=
   begin
     induction α with α_components α_naturality,
     induction β with β_components β_naturality,
@@ -36,52 +44,44 @@ instance NaturalTransformation_to_components {C D : Category} {F G : Functor C D
     subst hc
   end
 
-definition {u1 v1 u2 v2} IdentityNaturalTransformation {C : Category.{u1 v1}} {D : Category.{u2 v2}} (F : Functor C D) : NaturalTransformation F F :=
+definition IdentityNaturalTransformation (F : Functor C D) : NaturalTransformation F F :=
 {
-    components := λ X, D.identity (F.onObjects X)
+    components := λ X, 𝟙 (F.onObjects X)
 }
 
-definition {u1 v1 u2 v2} vertical_composition_of_NaturalTransformations
-  {C : Category.{u1 v1}} {D : Category.{u2 v2}} 
-  {F G H : Functor C D}
+definition vertical_composition_of_NaturalTransformations
   (α : NaturalTransformation F G)
   (β : NaturalTransformation G H) : NaturalTransformation F H :=
 {
-    components := λ X, D.compose (α.components X) (β.components X)
+    components := λ X, (α.components X) ≫ (β.components X)
 }
 
 notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
 
 open categories.functor
 
-@[simp] lemma {u1 v1 u2 v2 u3 v3} FunctorComposition.onObjects {C : Category.{u1 v1}} {D : Category.{u2 v2}} {E : Category.{u3 v3}}
-  {F : Functor C D}
-  {G : Functor D E}
-  (X : C.Obj) : (FunctorComposition F G).onObjects X = G.onObjects (F.onObjects X) := ♯
+@[simp] lemma FunctorComposition.onObjects (F : Functor C D) (G : Functor D E) (X : C) : (FunctorComposition F G).onObjects X = G.onObjects (F.onObjects X) := ♯
 
-definition {u1 v1 u2 v2 u3 v3} horizontal_composition_of_NaturalTransformations
-  {C : Category.{u1 v1}} {D : Category.{u2 v2}} {E : Category.{u3 v3}}
+definition horizontal_composition_of_NaturalTransformations
   {F G : Functor C D}
   {H I : Functor D E}
   (α : NaturalTransformation F G)
   (β : NaturalTransformation H I) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
 {
-    components := λ X : C.Obj, E.compose (β.components (F.onObjects X)) (I.onMorphisms (α.components X)),
-    naturality := begin dsimp', intros, simp, rewrite_search_using `ematch end
+    components := λ X : C, (β.components (F.onObjects X)) ≫ (I.onMorphisms (α.components X)),
+    -- naturality := begin tidy, rewrite_search_using `ematch {max_steps:=7} end
 }
 
 notation α `∘ₕ` β := horizontal_composition_of_NaturalTransformations α β
 
-definition {u1 v1 u2 v2 u3 v3} whisker_on_left
-  {C : Category.{u1 v1}} {D : Category.{u2 v2}} {E : Category.{u3 v3}}
+definition whisker_on_left
   (F : Functor C D)
   {G H : Functor D E}
   (α : NaturalTransformation G H) :
   NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
   (IdentityNaturalTransformation F) ∘ₕ α
 
-definition {u1 v1 u2 v2 u3 v3} whisker_on_right
-  {C : Category.{u1 v1}} {D : Category.{u2 v2}} {E : Category.{u3 v3}}
+definition whisker_on_right
   {F G : Functor C D}
   (α : NaturalTransformation F G)
   (H : Functor D E) :

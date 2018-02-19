@@ -11,12 +11,17 @@ open categories.types
 open categories.functor
 open categories.equivalence
 
-class {u v w} Concrete (C : Category.{u v}) := 
-  (F : Functor C CategoryOfTypes.{w})
-  (w : Faithful F . obviously)
+universe u
 
-instance Types_Concrete : Concrete CategoryOfTypes := {
-    F := IdentityFunctor CategoryOfTypes
+-- TODO is this usable?
+class Concrete (C : Type (u+1)) [category C] := 
+  (fibre_functor : Functor C (Type u))
+  (faithfulness : Faithful fibre_functor . obviously)
+
+definition FibreFunctor (C : Type (u+1)) [category C] [concrete : Concrete C] := concrete.fibre_functor
+
+instance Types_Concrete : Concrete (Type u) := {
+    fibre_functor := IdentityFunctor (Type u)
 }
 
 end categories

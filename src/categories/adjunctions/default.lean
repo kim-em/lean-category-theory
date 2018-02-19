@@ -14,16 +14,24 @@ open categories.types
 
 namespace categories.adjunctions
 
-structure Adjunction {C D : Category} (L : Functor C D) (R : Functor D C) :=
+universes u₁ u₂
+
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+
+-- TODO think again about whether we should specify the conditions here in terms of natural transformations or components
+structure Adjunction (L : Functor C D) (R : Functor D C) :=
   (unit       : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
   (counit     : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D))
-  (triangle_1 : ∀ X : D.Obj, C.compose (unit.components (R.onObjects X)) (R.onMorphisms (counit.components X)) = C.identity (R.onObjects X))
-  (triangle_2 : ∀ X : C.Obj, D.compose (L.onMorphisms (unit.components X)) (counit.components (L.onObjects X)) = D.identity (L.onObjects X))
+  (triangle_1 : ∀ X : D, (unit.components (R.onObjects X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R.onObjects X))
+  (triangle_2 : ∀ X : C, (L.onMorphisms (unit.components X)) ≫ (counit.components (L.onObjects X)) = 𝟙 (L.onObjects X))
 
 attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
 @[applicable] lemma Adjunctions_pointwise_equal
-  {C D : Category} (L : Functor C D) (R : Functor D C)
+  (L : Functor C D) (R : Functor D C)
   (A B : Adjunction L R)
   (w1 : A.unit = B.unit) (w2 : A.counit = B.counit) : A = B :=
   begin
@@ -53,10 +61,9 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
 -- TODO automation
 @[simp,ematch] lemma Adjunction.unit_naturality
-  {C D : Category} 
   {L : Functor C D} {R : Functor D C} 
   (A : Adjunction L R) 
-  {X Y : C.Obj} (f : C.Hom X Y) : C.compose (A.unit.components X) (R.onMorphisms (L.onMorphisms f)) = C.compose f (A.unit.components Y) :=
+  {X Y : C} (f : Hom X Y) : (A.unit.components X) ≫  (R.onMorphisms (L.onMorphisms f)) = f ≫ (A.unit.components Y) :=
   begin
   tidy,
   erw A.unit.naturality,
@@ -64,10 +71,9 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
   end
 
 @[simp,ematch] lemma Adjunction.counit_naturality
-  {C D : Category} 
   {L : Functor C D} {R : Functor D C} 
   (A : Adjunction L R) 
-  {X Y : D.Obj} (f : D.Hom X Y) : D.compose (L.onMorphisms (R.onMorphisms f)) (A.counit.components Y) = D.compose (A.counit.components X) f :=
+  {X Y : D} (f : Hom X Y) : (L.onMorphisms (R.onMorphisms f)) ≫ (A.counit.components Y) = (A.counit.components X) ≫ f :=
   begin
   tidy,
   erw A.counit.naturality,

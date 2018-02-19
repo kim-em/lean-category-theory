@@ -13,53 +13,55 @@ open categories.functor_categories
 
 namespace categories.idempotent_completion
 
-structure Idempotent (C : Category) :=
-   (object : C.Obj)
-   (idempotent : C.Hom object object)
-   (witness : C.compose idempotent idempotent = idempotent)
+universes u u₁ u₂
 
-attribute [simp,ematch] Idempotent.witness
+structure Idempotent (C : Type u) [category C] :=
+   (object : C)
+   (idempotent : Hom object object)
+   (witness : idempotent ≫ idempotent = idempotent . obviously)
+
+make_lemma Idempotent.witness
+attribute [simp,ematch] Idempotent.witness_lemma
 
 local attribute [ematch] subtype.property
 
-definition IdempotentCompletion (C: Category) : Category :=
-{
-  Obj            := Idempotent C,
-  Hom            := λ X Y, {f : C.Hom X.object Y.object // C.compose X.idempotent f = f ∧ C.compose f Y.idempotent = f},
-  identity       := λ X, ⟨ X.idempotent, ♮ ⟩,
-  compose        := λ X Y Z f g, ⟨ C.compose f.val g.val, ♮ ⟩
+structure Idempotent_morphism {C : Type u} [category C] (X Y : Idempotent C) :=
+(morphism : Hom X.object Y.object)
+(left : X.idempotent ≫ morphism = morphism . obviously)
+(right : morphism ≫ Y.idempotent = morphism . obviously)
+
+make_lemma Idempotent_morphism.left
+make_lemma Idempotent_morphism.right
+attribute [simp,ematch] Idempotent_morphism.left_lemma Idempotent_morphism.right_lemma
+
+@[applicable] lemma NaturalTransformations_componentwise_equal
+  {C : Type u} [category C] (X Y : Idempotent C)
+  (f g : Idempotent_morphism X Y)
+  (w : f.morphism = g.morphism) : f = g :=
+  begin
+    induction f,
+    induction g,
+    tidy
+  end
+
+
+instance IdempotentCompletion (C : Type u) [category C]  : category (Idempotent C) := {
+  Hom            := Idempotent_morphism,
+  identity       := λ X, ⟨ X.idempotent ⟩,
+  compose        := λ X Y Z f g, ⟨ f.morphism ≫ g.morphism ⟩
 }
 
-definition functor_to_IdempotentCompletion (C : Category) : Functor C (IdempotentCompletion C) := {
-  onObjects     := λ X, ⟨ X, C.identity X, ♮ ⟩,
+definition functor_to_IdempotentCompletion (C : Type u) [category C] : Functor C (Idempotent C) := {
+  onObjects     := λ X, ⟨ X, 𝟙 X ⟩,
   onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩
 }
 
 -- -- PROJECT
--- definition IdempotentCompletion_functorial (C D : Category) : Functor (FunctorCategory C D) (FunctorCategory (IdempotentCompletion C) (IdempotentCompletion D)) := {
---   onObjects     := λ F, {
---     onObjects     := λ X, ⟨ F.onObjects X.object, F.onMorphisms X.idempotent, ♯ ⟩ ,
---     onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val), ♯ ⟩,
---     identities    := ♯,
---     functoriality := ♯
---  },
---   onMorphisms   := λ F G τ, {
---     components := λ X, ⟨ τ.components X.object, 
---                          begin 
---                            tidy, 
---                           --  have p := τ.naturality,
---                            sorry, sorry
---                          end
---                        ⟩,
---     naturality := ♯
---  },
---   identities    := sorry, -- we've made a mistake somewhere..
---   functoriality := sorry
---}
+-- definition IdempotentCompletion_functorial (C : Type u) [category C] (D : Type u) [category D] : Functor (Functor C D) (Functor (Idempotent C) (Idempotent D)) := {
 
 open categories.equivalence
 
--- lemma embedding_in_IdempotentCompletition (C: Category) : Embedding (functor_to_IdempotentCompletion C) :=
+-- lemma embedding_in_IdempotentCompletition (C : Type u) [category C]  : Embedding (functor_to_IdempotentCompletion C) :=
 -- begin
 --   unfold Embedding,
 --   split,
@@ -75,15 +77,29 @@ open categories.equivalence
 --   end
 -- end
 
-definition restrict_Functor_from_IdempotentCompletion {C D : Category} (F : Functor (IdempotentCompletion C) D) : Functor C D :=
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+
+definition restrict_Functor_from_IdempotentCompletion (F : Functor (Idempotent C) D) : Functor C D :=
   FunctorComposition (functor_to_IdempotentCompletion C) F
 
-private def IdempotentCompletion_idempotent_functor (C : Category) : Functor (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
+@[simp] private lemma double_idempotent_morphism_left (X Y : Idempotent (Idempotent C))
+(f : Hom X Y)
+: (X.idempotent).morphism ≫ (f.morphism).morphism = (f.morphism).morphism :=
+congr_arg Idempotent_morphism.morphism f.left
+@[simp] private lemma double_idempotent_morphism_right (X Y : Idempotent (Idempotent C))
+(f : Hom X Y)
+:(f.morphism).morphism ≫ (Y.idempotent).morphism = (f.morphism).morphism :=
+congr_arg Idempotent_morphism.morphism f.right
+
+private def IdempotentCompletion_idempotent_functor (C : Type u) [category C] : Functor (Idempotent (Idempotent C)) (Idempotent C) :=
 {
-    onObjects     := λ X, ⟨ X.object.object, X.idempotent.val, begin induction X, tidy end ⟩,
-    onMorphisms   := λ X Y f, ⟨ f.val.val, ♯ ⟩
+    onObjects     := λ X, ⟨ X.object.object, X.idempotent.morphism, congr_arg Idempotent_morphism.morphism X.witness ⟩, -- PROJECT think about automation here
+    onMorphisms   := λ X Y f, ⟨ f.morphism.morphism, ♯ ⟩
 }
-private def IdempotentCompletion_idempotent_inverse (C : Category) : Functor (IdempotentCompletion C) (IdempotentCompletion (IdempotentCompletion C)) :=
+private def IdempotentCompletion_idempotent_inverse (C : Type u) [category C] : Functor (Idempotent C) (Idempotent (Idempotent C)) :=
 {
     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
     onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩
@@ -91,7 +107,7 @@ private def IdempotentCompletion_idempotent_inverse (C : Category) : Functor (Id
 
 -- PROJECT prove these lemmas about idempotent completion
 
--- lemma IdempotentCompletion_idempotent (C : Category) :
+-- lemma IdempotentCompletion_idempotent (C : Type u) [category C] :
 --   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 -- {
 --   functor := IdempotentCompletion_idempotent_functor C,
@@ -101,29 +117,31 @@ private def IdempotentCompletion_idempotent_inverse (C : Category) : Functor (Id
 --}
 
 -- Oh, I guess I had originally intended that this should use the previous results... oh well.
-definition extend_Functor_to_IdempotentCompletion {C D : Category} (F : Functor C (IdempotentCompletion D)) : 
-  Functor (IdempotentCompletion C) (IdempotentCompletion D) :=
+definition extend_Functor_to_IdempotentCompletion (F : Functor C (Idempotent D)) : 
+  Functor (Idempotent C) (Idempotent D) :=
 {
   onObjects     := λ X, let FX := F.onObjects X.object in
                          ⟨ FX.object, 
-                           (F.onMorphisms X.idempotent).val, 
+                           (F.onMorphisms X.idempotent).morphism, 
                            begin 
                              have p := F.functoriality X.idempotent X.idempotent, 
-                             have p' := congr_arg subtype.val p, 
+                             have p' := congr_arg Idempotent_morphism.morphism p, 
                              tidy, 
                            end
                          ⟩,
-  onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.val).val, 
+  onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.morphism).morphism, 
                               begin 
-                                tidy, 
-                                have p := F.functoriality X.idempotent f_val, 
-                                have p' := congr_arg subtype.val p, 
-                                rewrite f_property_left at p', 
-                                exact eq.symm p', 
                                 -- tidy, 
-                                have p := F.functoriality f_val Y.idempotent, 
-                                have p' := congr_arg subtype.val p, 
-                                rewrite f_property_right at p', 
+                                have p := F.functoriality X.idempotent f.morphism, 
+                                have p' := congr_arg Idempotent_morphism.morphism p, 
+                                rewrite f.left_lemma at p', 
+                                exact eq.symm p', 
+                              end,
+                              begin
+                                -- tidy, 
+                                have p := F.functoriality f.morphism Y.idempotent, 
+                                have p' := congr_arg Idempotent_morphism.morphism p, 
+                                rewrite f.right_lemma at p', 
                                 exact eq.symm p',
                               end ⟩
 }

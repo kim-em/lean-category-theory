@@ -18,13 +18,20 @@ open categories.opposites
 
 namespace categories.adjunctions
 
-definition HomAdjunction {C D : Category} (L : Functor C D) (R : Functor D C) :=
+universes u
+
+variable {C : Type u}
+variable [category C]
+variable {D : Type u}
+variable [category D]
+
+definition HomAdjunction (L : Functor C D) (R : Functor D C) :=
   NaturalIsomorphism
     (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
-    (FunctorComposition (IdentityFunctor (Opposite C) × R) (HomPairing C))
+    (FunctorComposition (IdentityFunctor (Cᵒᵖ) × R) (HomPairing C))
 
-definition mate {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C.Obj} {Y : D.Obj} (f : D.Hom (L.onObjects X) Y) : C.Hom X (R.onObjects Y)
-  := (A.morphism).components (X, Y) f
+definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : Hom (L.onObjects X) Y) : Hom X (R.onObjects Y)
+  := ((A.morphism).components (X, Y)).down f
 
 -- PROJECT lemmas about mates.
 

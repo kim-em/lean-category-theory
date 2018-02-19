@@ -3,40 +3,44 @@
 -- Authors: Scott Morrison
 
 import ..category
+import ..graphs
 
 open categories
 open categories.graphs
 
 namespace categories.examples.graphs
 
-@[applicable] private lemma {u1 v1 u2 v2} GraphHomomorphisms_pointwise_equal
-  {C : Graph.{u1 v1}}
-  {D : Graph.{u2 v2}} 
-  {F G : GraphHomomorphism C D} 
-  (objectWitness : ∀ X : C.Obj, F.onObjects X = G.onObjects X) 
-  (morphismWitness : ∀ X Y : C.Obj, ∀ f : C.Hom X Y, ⟦ F.onMorphisms f ⟧ = G.onMorphisms f) : F = G :=
+universe u₁
+
+definition Graph := Σ α : Type u₁, graph α
+
+instance graph_from_Graph (G : Graph) : graph G.1 := G.2
+
+structure GraphHomomorphism (G H : Graph.{u₁}) : Type (u₁+1) := 
+(map : @graph_homomorphism G.1 G.2 H.1 H.2)
+
+@[applicable] lemma graph_homomorphisms_pointwise_equal
+  {G H : Graph}
+  {p q : GraphHomomorphism G H} 
+  (vertexWitness : ∀ X : G.1, p.map.onVertices X = q.map.onVertices X) 
+  (edgeWitness : ∀ X Y : G.1, ∀ f : edges X Y, ⟦ p.map.onEdges f ⟧ = q.map.onEdges f) : p = q :=
 begin
-  induction F with F_onObjects F_onMorphisms,
-  induction G with G_onObjects G_onMorphisms,
-  have h_objects : F_onObjects = G_onObjects, exact funext objectWitness,
-  subst h_objects,
-  have h_morphisms : @F_onMorphisms = @G_onMorphisms, 
-  apply funext, intro X, apply funext, intro Y, apply funext, intro f,
-  exact morphismWitness X Y f,
-  subst h_morphisms
+  induction p,
+  induction q,
+  have h : p = q, by tidy,
+  subst h
 end
 
-definition CategoryOfGraphs : Category := {
-    Obj := Graph,
-    Hom := GraphHomomorphism,
-    identity := λ G, {
-        onObjects   := id,
-        onMorphisms := λ _ _ f, f
-   },
-    compose := λ _ _ _ f g, {
-        onObjects   := λ x, g.onObjects (f.onObjects x),
-        onMorphisms := λ _ _ e, g.onMorphisms (f.onMorphisms e)
-   }
+instance CategoryOfGraphs : category Graph := {
+  Hom := GraphHomomorphism,
+  identity := λ G, ⟨ {
+      onVertices   := id,
+      onEdges := λ _ _ f, f
+  } ⟩,
+  compose := λ G H K f g, ⟨ {
+      onVertices := λ v, g.map.onVertices (f.map.onVertices v),
+      onEdges    := λ v w e, g.map.onEdges (f.map.onEdges e)
+  } ⟩
 }
 
 end categories.examples.graphs

@@ -9,77 +9,70 @@ open categories.natural_transformation
 
 namespace categories.products
 
-@[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_identities
-  {C : Category.{u1 v1}}
-  {D : Category.{u2 v2}}
-  {E : Category.{u3 v3}}
+universes u₁ u₂ u₃
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+variable {E : Type u₃}
+variable [category E]
+
+@[simp] lemma Bifunctor_identities
   (F : Functor (C × D) E)
-  (X : C.Obj)
-  (Y : D.Obj)
-  : @Functor.onMorphisms _ _ F (X, Y) (X, Y) (C.identity X, D.identity Y) = E.identity (F.onObjects (X, Y))
+  (X : C)
+  (Y : D)
+  : @Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F.onObjects (X, Y))
   := F.identities (X, Y)
 
-@[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_left_identity
-  {C : Category.{u1 v1}}
-  {D : Category.{u2 v2}}
-  {E : Category.{u3 v3}}
+@[simp] lemma Bifunctor_left_identity
   (F : Functor (C × D) E)
-  (W : C.Obj)
-  {X Y Z : D.Obj}
-  (f : D.Hom X Y)
-  (g : D.Hom Y Z)
-  : @Functor.onMorphisms _ _ F (W, X) (W, Z) (C.identity W, D.compose f g) =
-      E.compose (@Functor.onMorphisms _ _ F (W, X) (W, Y) (C.identity W, f)) (@Functor.onMorphisms _ _ F (W, Y) (W, Z) (C.identity W, g)) :=
+  (W : C)
+  {X Y Z : D}
+  (f : Hom X Y)
+  (g : Hom Y Z)
+  : @Functor.onMorphisms _ _ _ _ F (W, X) (W, Z) (𝟙 W, f ≫ g) =
+      (@Functor.onMorphisms _ _ _ _ F (W, X) (W, Y) (𝟙 W, f)) ≫ (@Functor.onMorphisms _ _ _ _ F (W, Y) (W, Z) (𝟙 W, g)) :=
 begin
-  have p := @Functor.functoriality _ _ F (W, X) (W, Y) (W, Z) (C.identity W, f) (C.identity W, g),
+  have p := @Functor.functoriality _ _ _ _ F (W, X) (W, Y) (W, Z) (𝟙 W, f) (𝟙 W, g),
   tidy,
 end
 
-@[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_right_identity
-  {C : Category.{u1 v1}}
-  {D : Category.{u2 v2}}
-  {E : Category.{u3 v3}}
+@[simp] lemma Bifunctor_right_identity
   (F : Functor (C × D) E)
-  (X Y Z : C.Obj)
-  {W : D.Obj}
-  (f : C.Hom X Y)
-  (g : C.Hom Y Z)
-  : @Functor.onMorphisms _ _ F (X, W) (Z, W) (C.compose f g, D.identity W) =
-      E.compose (@Functor.onMorphisms _ _ F (X, W) (Y, W) (f, D.identity W)) (@Functor.onMorphisms _ _ F (Y, W) (Z, W) (g, D.identity W)) :=
+  (X Y Z : C)
+  {W : D}
+  (f : Hom X Y)
+  (g : Hom Y Z)
+  : @Functor.onMorphisms _ _ _ _ F (X, W) (Z, W) (f ≫ g, 𝟙 W) =
+      (@Functor.onMorphisms _ _ _ _ F (X, W) (Y, W) (f, 𝟙 W)) ≫ (@Functor.onMorphisms _ _ _ _ F (Y, W) (Z, W) (g, 𝟙 W)) :=
 begin
-  have p := @Functor.functoriality _ _ F (X, W) (Y, W) (Z, W) (f, D.identity W) (g, D.identity W),
+  have p := @Functor.functoriality _ _ _ _ F (X, W) (Y, W) (Z, W) (f, 𝟙 W) (g, 𝟙 W),
   tidy
 end
 
-@[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_diagonal_identities_1
-  {C : Category.{u1 v1}}
-  {D : Category.{u2 v2}}
-  {E : Category.{u3 v3}}
+@[simp] lemma Bifunctor_diagonal_identities_1
   (F : Functor (C × D) E)
-  (X X' : C.Obj)
-  (f : C.Hom X X')
-  (Y Y' : D.Obj)
-  (g : D.Hom Y Y')
-  : E.compose (@Functor.onMorphisms _ _ F (X, Y) (X, Y') (C.identity X, g)) (@Functor.onMorphisms _ _ F (X, Y') (X', Y') (f, D.identity Y')) =
-   @Functor.onMorphisms _ _ F (X, Y) (X', Y') (f, g) :=
+  (X X' : C)
+  (f : Hom X X')
+  (Y Y' : D)
+  (g : Hom Y Y')
+  : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y') (𝟙 X, g)) ≫ (@Functor.onMorphisms _ _ _ _ F (X, Y') (X', Y') (f, 𝟙 Y')) =
+   @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
 begin
-  have p := eq.symm (@Functor.functoriality _ _ F (X, Y) (X, Y') (X', Y') (C.identity X, g) (f, D.identity Y')),
+  have p := eq.symm (@Functor.functoriality _ _ _ _ F (X, Y) (X, Y') (X', Y') (𝟙 X, g) (f, 𝟙 Y')),
   tidy,
 end
 
-@[simp] lemma {u1 v1 u2 v2 u3 v3} Bifunctor_diagonal_identities_2
-  {C : Category.{u1 v1}}
-  {D : Category.{u2 v2}}
-  {E : Category.{u3 v3}}
+@[simp] lemma Bifunctor_diagonal_identities_2
   (F : Functor (C × D) E)
-  (X X' : C.Obj)
-  (f : C.Hom X X')
-  (Y Y' : D.Obj)
-  (g : D.Hom Y Y')
-  : E.compose (@Functor.onMorphisms _ _ F (X, Y) (X', Y) (f, D.identity Y)) (@Functor.onMorphisms _ _ F (X', Y) (X', Y') (C.identity X', g)) =
-   @Functor.onMorphisms _ _ F (X, Y) (X', Y') (f, g) :=
+  (X X' : C)
+  (f : Hom X X')
+  (Y Y' : D)
+  (g : Hom Y Y')
+  : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y) (f, 𝟙 Y)) ≫ (@Functor.onMorphisms _ _ _ _ F (X', Y) (X', Y') (𝟙 X', g)) =
+   @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
 begin
-  have p := eq.symm (@Functor.functoriality _ _ F (X, Y) (X', Y) (X', Y') (f, D.identity Y) (C.identity X', g)),
+  have p := eq.symm (@Functor.functoriality _ _ _ _ F (X, Y) (X', Y) (X', Y') (f, 𝟙 Y) (𝟙 X', g)),
   tidy,
 end
 

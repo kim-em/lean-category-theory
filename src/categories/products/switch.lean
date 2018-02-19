@@ -10,16 +10,21 @@ open categories.natural_transformation
 
 namespace categories.products
 
-local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+universes u₁ u₂ 
 
-definition SwitchProductCategory (C D : Category) : Functor (C × D) (D × C) :=
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+
+variable (C : Type u₁)
+variable [category C]
+variable (D : Type u₂)
+variable [category D]
+
+definition SwitchProductCategory : Functor (C × D) (D × C) :=
 {
-  onObjects     := λ X, (X.snd, X.fst),
-  onMorphisms   := λ _ _ f, (f.snd, f.fst)
+  onObjects     := λ X, (X.2, X.1),
+  onMorphisms   := λ _ _ f, (f.2, f.1)
 }
 
-definition SwitchSymmetry
-  (C D : Category)
-    : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) := ♯
+definition SwitchSymmetry : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) := ♯
         
 end categories.products

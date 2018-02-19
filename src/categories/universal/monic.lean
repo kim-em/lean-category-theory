@@ -11,32 +11,33 @@ open categories.isomorphism
 
 namespace categories
 
-structure RegularMonic {C : Category} {X Y : C.Obj} (f : C.Hom X Y) :=
-  (Z : C.Obj)
-  (a b : C.Hom Y Z)
+universe u
+variable {C : Type u}
+variable [category C]
+variables {X Y Z : C}
+
+structure RegularMonic (f : Hom X Y) :=
+  (Z : C)
+  (a b : Hom Y Z)
   (e : Equalizer a b)
-  (i : Isomorphism C e.equalizer X)
-  (w : e.inclusion = C.compose i.morphism f)
+  (i : Isomorphism e.equalizer X)
+  (w : e.inclusion = i.morphism ≫ f)
 
 -- EXERCISE
 -- lemma SplitMonic_implies_RegularMonic
---   {C : Category} 
---   {X Y : C.Obj} 
---   {f : C.Hom X Y} 
+--   {f : Hom X Y} 
 --   (s : SplitMonic f) : RegularMonic f := sorry
 
 -- EXERCISE
 -- lemma RegularMonic_implies_Monic
---   {C : Category} 
---   {X Y : C.Obj} 
---   {f : C.Hom X Y} 
+--   {f : Hom X Y} 
 --   (s : RegularMonic f) : Monic f := sorry
 
-structure RegularEpic {C : Category} {Y Z : C.Obj} (f : C.Hom Y Z) :=
-  (X : C.Obj)
-  (a b : C.Hom X Y)
+structure RegularEpic (f : Hom Y Z) :=
+  (X : C)
+  (a b : Hom X Y)
   (c : Coequalizer a b)
-  (i : Isomorphism C c.coequalizer Z)
-  (w : c.projection = C.compose f i.inverse)
+  (i : Isomorphism c.coequalizer Z)
+  (w : c.projection = f ≫ i.inverse)
 
 end categories

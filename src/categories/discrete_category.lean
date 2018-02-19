@@ -4,32 +4,35 @@
 
 import .category
 import .functor
+import tidy.its
 
 namespace categories
 
+universes u₁ u₂ 
+
 open categories.functor
-open plift -- we first plift propositional equality to Type 0,
-open ulift -- then ulift up to Type v
 
-local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition {u v} DiscreteCategory (α : Type u) : Category.{u v} :=
-{
-  Obj            := α,
+definition discrete (α : Type u₁) := α
+
+instance  DiscreteCategory (α : Type u₁) : category (discrete α) := {
   Hom            := λ X Y, ulift (plift (X = Y)),
   identity       := ♯,
   compose        := ♯
 }
 
-definition {u v} EmptyCategory := DiscreteCategory.{u v} (ulift empty)
+instance EmptyCategory : category pempty := (by apply_instance : category (discrete pempty))
+instance OneCategory : category punit := (by apply_instance : category (discrete punit))
 
-definition {u1 v1 u2 v2} EmptyFunctor (C : Category.{u2 v2}) : Functor EmptyCategory.{u1 v1} C := ♯
+definition EmptyFunctor (C : Type u₂) [category C] : Functor pempty C := ♯
 
-open tactic
-
-definition {u1 v1 u2 v2} Functor.fromFunction {C : Category.{u1 v1}} {I : Type u2} (F : I → C.Obj) : Functor (DiscreteCategory.{u2 v2} I) C := {
+-- FIXME This is really horrible! Please help out. :-)
+definition Functor.fromFunction {C : Type u₂} [category C] {I : Type u₁} (F : I → C) : Functor (discrete I) C := {
   onObjects     := F,
-  onMorphisms   := ♯
+  onMorphisms   := λ X Y f, begin cases f, cases f, rw f, exact 𝟙 (F Y) end,
+  identities := begin tidy, end,
+  functoriality:= begin tidy, cases f, cases f, induction f, cases g, cases g, induction g, tidy, end
 }
 
 end categories

@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import categories.universal.instances
+import categories.universal.cones
 import categories.yoneda
 
 open categories
@@ -13,16 +13,21 @@ open categories.types
 
 namespace categories.universal
 
-universes u₁ u₂ u₃ u₄ u₅ u₆
+universes u v w
 
-class PreservesLimits {A : Category.{u₁ u₂}} {B : Category.{u₃ u₄}} (F : Functor A B) :=
-(preserves : Π {I : Category.{u₅ u₆}} (D : Functor I A) (q : LimitCone D), @is_terminal (Cones (FunctorComposition D F)) (F.onCones q.terminal_object))
+variable {A : Type u}
+variable [category A]
+variable {B : Type v}
+variable [category B]
 
-theorem HomFunctorPreservesLimits {A : Category} (a : A.Obj) : PreservesLimits ((CoYoneda A).onObjects a) := {
+class PreservesLimits (F : Functor A B) :=
+(preserves : Π {I : Type w} [category I] (D : Functor I A) (q : LimitCone D), @is_terminal (Cone (FunctorComposition D F)) _ (F.onCones q.terminal_object))
+
+theorem HomFunctorPreservesLimits (a : A) : PreservesLimits ((CoYoneda A).onObjects a) := {
     preserves := λ I D q, sorry
 }
 
-definition RepresentableFunctorPreservesLimits {A : Category} (F : Functor A CategoryOfTypes) [Representable F] : PreservesLimits F := sorry
+definition RepresentableFunctorPreservesLimits (F : Functor A (Type u)) [Representable F] : PreservesLimits F := sorry
 attribute [instance] RepresentableFunctorPreservesLimits
 
 end categories.universal

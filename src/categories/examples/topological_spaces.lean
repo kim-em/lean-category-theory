@@ -12,45 +12,41 @@ namespace categories.examples.topological_spaces
 
 universe variables u₁ u₂ u₃
 
-structure morphism {α : Type u₁} {β : Type u₂} (t : topological_space α) (s : topological_space β) :=
-(map : α → β)
-(continuity : continuous map)
+local attribute [class] continuous
+local attribute [instance] continuous_id
 
-@[applicable] lemma morphism_pointwise_equality
-  {α : Type u₁} {β : Type u₂} {s : topological_space α} {t: topological_space β}
-  (f g : morphism s t)
-  (w : ∀ x : α, f.map x = g.map x) : f = g :=
-begin
-    induction f with fc,
-    induction g with gc,
-    have hc : fc = gc := funext w,
-    subst hc
-end
+-- TODO mathlib
+instance continuous_compose {α} [topological_space α] {β} [topological_space β] {γ} [topological_space γ] (f : α → β) [cf: continuous f] (g : β → γ) [cg: continuous g] : continuous (g ∘ f) :=
+continuous.comp cf cg
 
-instance morphism_to_map {α : Type u₁} {β : Type u₂} {s : topological_space α} {t : topological_space β} : has_coe_to_fun (morphism s t) :=
-{F   := λ f, Π x : α, β,
-coe := morphism.map}
+def Top : Type (u₁+1) := Σ α : Type u₁, topological_space α
 
-def compose {α : Type u₁} {β : Type u₂} {γ : Type u₃} {s : topological_space α} {t : topological_space β} {u : topological_space γ}
-(f: morphism s t) (g: morphism t u)  : morphism s u :=
-{ 
-  map        := λ x, g (f x),
-  continuity := continuous.comp f.continuity g.continuity
-}
+instance (X : Top) : topological_space X.1 := X.2
 
-local notation g ∘ f := compose f g
-local attribute [simp] compose
+def continuous_map (X Y : Top.{u₁}) : Type (u₁+1) := Σ f : X.1 → Y.1, ulift.{u₁+1} (plift (continuous f))
 
-def identity {α : Type u₁} (t : topological_space α) : morphism t t := ⟨ id, continuous_id ⟩
+instance continuous_id {X Y : Top} (f : continuous_map X Y) : continuous f.1 := f.2.down.down
 
-@[simp] lemma id_value {α : Type u₁} (t : topological_space α) (x : α) : identity t x = x := rfl
+@[applicable] lemma sigmas_equal
+  {α : Type u₁} (Z : α → Type u₂)
+  (X Y : Σ a : α, Z a)
+  (w1 : X.1 = Y.1)
+  (w2 : @eq.rec_on _ X.1 _ _ w1 X.2 = Y.2) : X = Y :=
+  begin
+    induction X,
+    induction Y,
+    dsimp at w1,
+    dsimp at w2,
+    induction w1,
+    induction w2,
+    refl,
+  end
 
-def Top : Category.{u₁+1 u₁} :=
+instance : category Top :=
 {
-  Obj            := Σ α : Type u₁, topological_space α,
-  Hom            := λ X Y, morphism X.2 Y.2,
-  identity       := λ X, identity X.2,
-  compose        := λ _ _ _ f g, compose f g
+  Hom            := continuous_map,
+  identity       := λ X, ⟨ id, begin split, split, exact continuous_id end ⟩, -- FIXME
+  compose        := λ _ _ _ f g, ⟨ g.1 ∘ f.1, begin split, split, exact continuous.comp f.2.down.down g.2.down.down end ⟩ 
 }
 
 structure OpenSet {α : Type u₁} (X : topological_space α) := 
@@ -73,18 +69,14 @@ instance OpenSet.has_mem {α : Type u₁} {X : topological_space α} : has_mem �
 local attribute [applicable] set.subset.refl
 local attribute [applicable] topological_space.is_open_inter
 
-def OpenSets {α : Type u₁} (X : topological_space α) : Category.{u₁ u₂} :=
+instance category_of_open_sets {α : Type u₁} (X : topological_space α) : category (OpenSet X) :=
 {
-  Obj            := OpenSet X,
   Hom            := λ U V, ulift (plift (U ⊆ V)),
   identity       := ♯,
   compose        := λ _ _ _ f g, begin tidy, apply set.subset.trans f g end
 }
 
-instance topological_space.OpenSets.has_inter {α : Type u₁} (X : topological_space α)  : has_inter ((OpenSets X).Obj)  := OpenSet.has_inter 
-instance topological_space.OpenSets.has_subset {α : Type u₁} (X : topological_space α) : has_subset ((OpenSets X).Obj) := OpenSet.has_subset
-instance topological_space.OpenSets.has_mem {α : Type u₁} (X : topological_space α) : has_mem α ((OpenSets X).Obj) := OpenSet.has_mem
 
-definition Neighbourhoods {α} (X : topological_space α) (x : α) : Category := FullSubcategory (OpenSets X) (λ U, x ∈ U)
+definition Neighbourhoods {α} [X : topological_space α] (x : α) : category { U : OpenSet X | x ∈ U } := by apply_instance
 
 end categories.examples.topological_spaces

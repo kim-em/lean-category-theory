@@ -20,6 +20,7 @@ class Finite (α : Type u) :=
   (bijection : Bijection α (fin cardinality)) -- TODO this should just assert the existence of a bijection
 
 @[applicable] definition empty_exfalso (x : false) : empty := begin exfalso, trivial end
+@[applicable] definition pempty_exfalso (x : false) : pempty := begin exfalso, trivial end
 
 -- PROJECT improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
 instance empty_is_Finite : Finite empty := {
@@ -31,6 +32,25 @@ instance empty_is_Finite : Finite empty := {
                  intros,
                  induction a,
                  apply empty_exfalso,
+                 cases a_is_lt,
+                 dsimp,
+                 intros, 
+                 induction u,
+                 dsimp,
+                 intros,
+                 induction v,
+                 cases v_is_lt,
+              end
+} 
+instance pempty_is_Finite : Finite pempty := {
+  cardinality := 0,
+  bijection := begin
+                 fsplit, 
+                 intros,
+                 induction a,
+                 intros,
+                 induction a,
+                 apply pempty_exfalso,
                  cases a_is_lt,
                  dsimp,
                  intros, 
@@ -66,6 +86,8 @@ attribute [instance] Finite_has_decidable_eq
 
 def empty_function           {α : Sort u} : empty → α := ♯
 def empty_dependent_function {Z : empty → Sort u} : Π i : empty, Z i := ♯
+def pempty_function           {α : Sort u} : pempty.{v} → α := ♯
+def pempty_dependent_function {Z : pempty.{v} → Sort u} : Π i : pempty, Z i := ♯
 
 open Two
 

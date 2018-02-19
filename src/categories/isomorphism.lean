@@ -7,30 +7,36 @@ import .category
 open categories
 
 namespace categories.isomorphism
+universes u
 
-structure Isomorphism (C: Category) (X Y : C.Obj) :=
-  (morphism : C.Hom X Y)
-  (inverse : C.Hom Y X)
-  (witness_1 : C.compose morphism inverse = C.identity X . obviously)
-  (witness_2 : C.compose inverse morphism = C.identity Y . obviously)
+variable {C : Type u}
+variable [category C]
+variables {X Y Z : C}
+
+structure Isomorphism (X Y : C) :=
+(morphism : Hom X Y)
+(inverse : Hom Y X)
+(witness_1 : morphism ≫ inverse = 𝟙 X . obviously)
+(witness_2 : inverse ≫ morphism = 𝟙 Y . obviously)
 
 make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
 attribute [simp,ematch] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
 
-instance Isomorphism_coercion_to_morphism {C : Category} {X Y : C.Obj} : has_coe (Isomorphism C X Y) (C.Hom X Y) :=
+@[simp,ematch] lemma Isomorphism.witness_1_assoc_lemma (I : Isomorphism X Y) (f : Hom X Z) : I.morphism ≫ I.inverse ≫ f = f := ♯
+@[simp,ematch] lemma Isomorphism.witness_2_assoc_lemma (I : Isomorphism X Y) (f : Hom Y Z) : I.inverse ≫ I.morphism ≫ f = f := ♯
+
+instance Isomorphism_coercion_to_morphism : has_coe (Isomorphism X Y) (Hom X Y) :=
   {coe := Isomorphism.morphism}
 
-definition IsomorphismComposition {C : Category} {X Y Z : C.Obj} (α : Isomorphism C X Y) (β : Isomorphism C Y Z) : Isomorphism C X Z :=
+definition IsomorphismComposition (α : Isomorphism X Y) (β : Isomorphism Y Z) : Isomorphism X Z :=
 {
-  morphism := C.compose α.morphism β.morphism,
-  inverse := C.compose β.inverse α.inverse
+  morphism := α.morphism ≫ β.morphism,
+  inverse := β.inverse ≫ α.inverse
 }
 
-@[applicable] lemma {u1 v1} Isomorphism_pointwise_equal
-  {C : Category.{u1 v1}}
-  {X Y : C.Obj}
-  (α β : Isomorphism C X Y)
+@[applicable] lemma Isomorphism_pointwise_equal
+  (α β : Isomorphism X Y)
   (w : α.morphism = β.morphism) : α = β :=
   begin
     induction α with f g wα1 wα2,
@@ -38,35 +44,60 @@ definition IsomorphismComposition {C : Category} {X Y Z : C.Obj} (α : Isomorphi
     simp at w,    
     have p : g = k,
       begin
-        -- PROJECT why can't we automate this?
+        -- PROJECT why can't we automate this? -- why doesn't rewrite search work?
         tidy,
-        rewrite ← C.left_identity k,
+        resetI,
+        rewrite ← @category.left_identity C _ _ _ k,
         rewrite ← wα2,
-        rewrite C.associativity,
+        rewrite category.associativity,
         simp *,
       end,
     smt_eblast
   end
 
-definition Isomorphism.reverse {C : Category} {X Y : C.Obj} (I : Isomorphism C X Y) : Isomorphism C Y X :=
-  {
-    morphism  := I.inverse,
-    inverse   := I.morphism
- }
+definition Isomorphism.reverse (I : Isomorphism X Y) : Isomorphism Y X := {
+  morphism  := I.inverse,
+  inverse   := I.morphism
+}
 
-structure is_Isomorphism {C : Category} {X Y : C.Obj} (morphism : C.Hom X Y) :=
-  (inverse : C.Hom Y X)
-  (witness_1 : C.compose morphism inverse = C.identity X . obviously)
-  (witness_2 : C.compose inverse morphism = C.identity Y . obviously)
+@[simp] lemma Isomorphism.cancel_morphism_left (I : Isomorphism X Y) (f g : Hom Y Z) : I.morphism ≫ f = I.morphism ≫ g ↔ f = g :=
+begin
+tidy,
+have h := congr_arg (λ h, I.inverse ≫ h) a,
+tidy,
+end
+@[simp] lemma Isomorphism.cancel_morphism_right (I : Isomorphism X Y) (f g : Hom Z X) : f ≫ I.morphism = g ≫ I.morphism ↔ f = g :=
+begin
+tidy,
+have h := congr_arg (λ h, h ≫ I.inverse) a,
+tidy,
+end
+@[simp] lemma Isomorphism.cancel_inverse_left (I : Isomorphism X Y) (f g : Hom X Z) : I.inverse ≫ f = I.inverse ≫ g ↔ f = g :=
+begin
+tidy,
+have h := congr_arg (λ h, I.morphism ≫ h) a,
+tidy,
+end
+@[simp] lemma Isomorphism.cancel_inverse_right (I : Isomorphism X Y) (f g : Hom Z Y) : f ≫ I.inverse = g ≫ I.inverse ↔ f = g :=
+begin
+tidy,
+have h := congr_arg (λ h, h ≫ I.morphism) a,
+tidy,
+end
+
+structure is_Isomorphism (morphism : Hom X Y) :=
+(inverse : Hom Y X)
+(witness_1 : morphism ≫ inverse = 𝟙 X . obviously)
+(witness_2 : inverse ≫ morphism = 𝟙 Y . obviously)
 
 make_lemma is_Isomorphism.witness_1
 make_lemma is_Isomorphism.witness_2
 attribute [simp,ematch] is_Isomorphism.witness_1_lemma is_Isomorphism.witness_2_lemma
 
-instance is_Isomorphism_coercion_to_morphism {C : Category} {X Y : C.Obj} (f : C.Hom X Y): has_coe (is_Isomorphism f) (C.Hom X Y) :=
+instance is_Isomorphism_coercion_to_morphism (f : Hom X Y): has_coe (is_Isomorphism f) (Hom X Y) :=
   {coe := λ _, f}
 
-definition Epimorphism {C : Category} {X Y : C.Obj} (f : C.Hom X Y) := Π {Z : C.Obj} (g h : C.Hom Y Z) (w : C.compose f g = C.compose f h), g = h
-definition Monomorphism {C : Category} {X Y : C.Obj} (f : C.Hom X Y) := Π {Z : C.Obj} (g h : C.Hom Z X) (w : C.compose g f = C.compose h f), g = h
+definition Epimorphism (f : Hom X Y) := Π (g h : Hom Y Z) (w : f ≫ g = f ≫ h), g = h
+definition Monomorphism (f : Hom X Y) := Π (g h : Hom Z X) (w : g ≫ f = h ≫ f), g = h
 
 end categories.isomorphism

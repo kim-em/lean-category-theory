@@ -4,15 +4,19 @@
 
 import .functor
 import .graphs
+import .graphs.category
 
 open categories
 
 namespace categories.graphs
 
-definition PathCategory (G : Graph) : Category :=
+universes u₁ u₂
+
+def Path (C : Type u₁) : Type u₁ := C
+
+instance PathCategory (C : Type u₁) [graph C] : category (Path C) :=
 {
-  Obj            := G.Obj,
-  Hom            := λ x y, path x y,
+  Hom            := λ x y : C, path x y,
   identity       := λ x, path.nil x,
   compose        := λ _ _ _ f g, concatenate_paths f g,
   right_identity := begin
@@ -43,18 +47,22 @@ definition PathCategory (G : Graph) : Category :=
 
 open categories.functor
 
+variable {G : Type u₁}
+variable [graph G]
+variable {C : Type u₂}
+variable [category C]
+
+
 definition {u v} path_to_morphism
-  {G : Graph.{u v}}
-  {C : Category.{u v}}
-  (H : GraphHomomorphism G C.graph)
-  : Π {X Y : G.Obj}, path X Y → C.Hom (H.onObjects X) (H.onObjects Y) 
-| ._ ._ (path.nil Z)              := C.identity (H.onObjects Z)
-| ._ ._ (@path.cons ._ _ _ _ e p) := C.compose (H.onMorphisms e) (path_to_morphism p)
+  (H : graph_homomorphism G C)
+  : Π {X Y : G}, path X Y → Hom (H.onVertices X) (H.onVertices Y) 
+| ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
+| ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) ≫ (path_to_morphism p)
  
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
-definition Functor.from_GraphHomomorphism {G : Graph} {C : Category} (H : GraphHomomorphism G C.graph) : Functor (PathCategory G) C :=
+definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) C :=
 {
-  onObjects     := H.onObjects,
+  onObjects     := H.onVertices,
   onMorphisms   := λ _ _ f, path_to_morphism H f,
   functoriality := begin
                      -- PROJECT automation
@@ -74,8 +82,5 @@ definition Functor.from_GraphHomomorphism {G : Graph} {C : Category} (H : GraphH
                     }
                    end
 }
-
-instance GraphHomomorphism_to_Functor_coercion {G : Graph} {C : Category}: has_coe (GraphHomomorphism G C.graph) (Functor (PathCategory G) C) :=
-  {coe := Functor.from_GraphHomomorphism}
 
 end categories.graphs

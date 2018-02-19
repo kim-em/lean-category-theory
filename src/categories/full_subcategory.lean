@@ -8,31 +8,48 @@ open categories.functor
 
 namespace categories
 
-universes u₁ u₂ v₁ v₂ w wc wd
+universes u₁ u₂ w wc wd
 
-local attribute [applicable] Category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition FullSubcategory (C : Category.{u₁ u₂}) (Z : C.Obj → Sort w) : Category.{(max u₁ w) u₂} :=
-{
-  Obj := Σ X : C.Obj, plift (Z X),
-  Hom := λ X Y, C.Hom X.1 Y.1,
+variable {C : Type u₁}
+variable [category C]
+variable {D : Type u₂}
+variable [category D]
+
+
+
+instance FullSubcategory (Z : C → Type u₁) : category (Σ X : C, Z X) := {
+  Hom := λ X Y, Hom X.1 Y.1,
   identity       := by tidy,
-  compose        := λ _ _ _ f g, C.compose f g
+  compose        := λ _ _ _ f g, f ≫ g
 }
 
-definition FullSubcategoryInclusion {C : Category} {Z : C.Obj → Sort} : Functor (FullSubcategory C Z) C := {
+-- TODO remove?
+instance FullSubcategory' (Z : C → Sort u₁) : category (Σ' X : C, Z X) := {
+  Hom := λ X Y, Hom X.1 Y.1,
+  identity       := by tidy,
+  compose        := λ _ _ _ f g, f ≫ g
+}
+
+instance FullSubcategory'' (Z : C → Prop) : category {X : C // Z X} := {
+  Hom := λ X Y, Hom X.1 Y.1,
+  identity       := by tidy,
+  compose        := λ _ _ _ f g, f ≫ g
+}
+
+definition FullSubcategoryInclusion {Z : C → Type u₁} : Functor (Σ X : C, Z X) C := {
   onObjects := λ X, X.1,
   onMorphisms := λ _ _ f, f
 }
+-- PROJECT, also Prop version, and show these are fully faithful
 
 definition Functor_restricts_to_FullSubcategory 
-  {C : Category.{u₁ v₁}} 
-  {D : Category.{u₂ v₂}} 
   (F : Functor C D) 
-  (ZC : C.Obj → Sort wc)
-  (ZD : D.Obj → Sort wd)
-  (w : ∀ {X : C.Obj} (z : ZC X), ZD (F.onObjects X)) : Functor (FullSubcategory C ZC) (FullSubcategory D ZD) := {
-    onObjects     := λ X, ⟨ F.onObjects X.1, ⟨ w X.2.down ⟩  ⟩,
+  (ZC : C → Type u₁)
+  (ZD : D → Type u₂)
+  (w : ∀ {X : C} (z : ZC X), ZD (F.onObjects X)) : Functor (Σ X : C, ZC X) (Σ Y : D, ZD Y) := {
+    onObjects     := λ X, ⟨ F.onObjects X.1, w X.2 ⟩,
     onMorphisms   := λ _ _ f, F.onMorphisms f
  }
 
