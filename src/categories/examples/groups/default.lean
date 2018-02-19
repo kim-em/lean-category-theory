@@ -2,15 +2,13 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 import ...functor
-import ...types
-import algebra.group
 
 namespace categories.examples.groups
 open categories
 
 universe u₁
 
-definition Group := Σ α : Type u₁, group α
+definition Group : Type (u₁+1) := Σ α : Type u₁, group α
 
 instance group_from_Group (G : Group) : group G.1 := G.2
 
@@ -20,9 +18,8 @@ structure GroupHomomorphism (G H : Group.{u₁}) : Type (u₁+1) := -- Notice th
   (map: G.1 → H.1)
   (is_group_hom : is_group_hom map . is_group_hom_obviously)
 
-instance GroupHomomorphism_to_map {G H : Group} : has_coe_to_fun (GroupHomomorphism G H) :=
-{F   := λ f, Π x : G.1, H.1,
-  coe := GroupHomomorphism.map}
+local attribute [class] is_group_hom
+instance is_group_hom_from_GroupHomomorphism (G H : Group.{u₁}) (f : GroupHomomorphism G H) : is_group_hom f.map := f.is_group_hom
 
 open tactic
 meta def simplify_proof (tac : tactic unit) : tactic unit :=
@@ -39,7 +36,7 @@ end
 
 -- set_option pp.all true
 @[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom
-@[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma' (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f(x * y) = f(x) * f(y) := begin dsimp [coe_fn,has_coe_to_fun.coe], simp, end
+-- @[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma' (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f(x * y) = f(x) * f(y) := begin dsimp [coe_fn,has_coe_to_fun.coe], simp, end
 
 definition GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G := ⟨ id ⟩
 
@@ -47,7 +44,7 @@ definition GroupHomomorphism.composition
   {G H K : Group}
   (f: GroupHomomorphism G H) (g: GroupHomomorphism H K) : GroupHomomorphism G K :=
 {
-  map := λ x, g (f x),
+  map := λ x, g.map (f.map x),
   is_group_hom := begin
                     unfold is_group_hom, 
                     dsimp, 
@@ -59,7 +56,7 @@ definition GroupHomomorphism.composition
 @[applicable] lemma GroupHomomorphism_pointwise_equality
   {G H : Group}
   (f g : GroupHomomorphism G H)
-  (w : ∀ x : G.1, f x = g x) : f = g :=
+  (w : ∀ x : G.1, f.map x = g.map x) : f = g :=
 begin
     induction f with fc,
     induction g with gc,
@@ -71,15 +68,6 @@ instance CategoryOfGroups : category Group := {
     Hom := GroupHomomorphism,
     identity := GroupHomomorphism.identity,
     compose  := @GroupHomomorphism.composition
-}
-
-open categories.functor
-open categories.types
-
-definition ForgetfulFunctor_Groups_to_Types : Functor Group (Type u₁) :=
-{
-  onObjects     := λ s, s.1,
-  onMorphisms   := λ s t, λ f, ulift.up f.map,
 }
 
 end categories.examples.groups

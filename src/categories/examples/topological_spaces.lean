@@ -23,10 +23,19 @@ def Top : Type (u₁+1) := Σ α : Type u₁, topological_space α
 
 instance (X : Top) : topological_space X.1 := X.2
 
-def continuous_map (X Y : Top.{u₁}) : Type (u₁+1) := Σ f : X.1 → Y.1, ulift.{u₁+1} (plift (continuous f))
+def continuous_map (X Y : Top.{u₁}) : Type (u₁+1) := { f : ulift.{u₁+1} (X.1 → Y.1) // continuous f.down }
 
-instance continuous_id {X Y : Top} (f : continuous_map X Y) : continuous f.1 := f.2.down.down
+instance continuous_id {X Y : Top} (f : continuous_map X Y) : continuous f.val.down := f.property
 
+@[applicable] lemma ulifts_equal
+  {α : Type u₁} (X Y : ulift.{u₂} α)
+  (w : X.down = Y.down) : X = Y :=
+  begin
+  induction X,
+  induction Y,
+  dsimp at w,
+  rw w,
+  end
 @[applicable] lemma sigmas_equal
   {α : Type u₁} (Z : α → Type u₂)
   (X Y : Σ a : α, Z a)
@@ -45,8 +54,8 @@ instance continuous_id {X Y : Top} (f : continuous_map X Y) : continuous f.1 := 
 instance : category Top :=
 {
   Hom            := continuous_map,
-  identity       := λ X, ⟨ id, begin split, split, exact continuous_id end ⟩, -- FIXME
-  compose        := λ _ _ _ f g, ⟨ g.1 ∘ f.1, begin split, split, exact continuous.comp f.2.down.down g.2.down.down end ⟩ 
+  identity       := λ X, ⟨ ulift.up id, continuous_id ⟩,
+  compose        := λ _ _ _ f g, ⟨ ulift.up (g.val.down ∘ f.val.down), continuous.comp f.property g.property ⟩ 
 }
 
 structure OpenSet {α : Type u₁} (X : topological_space α) := 
