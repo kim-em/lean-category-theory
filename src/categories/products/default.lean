@@ -12,13 +12,13 @@ namespace categories.products
 
 universes u₁ u₂ u₃ u₄
 
-variable {A : Type u₁}
+variable {A : Type (u₁+1)}
 variable [category A]
-variable {B : Type u₂}
+variable {B : Type (u₂+1)}
 variable [category B]
-variable {C : Type u₃}
+variable {C : Type (u₃+1)}
 variable [category C]
-variable {D : Type u₄}
+variable {D : Type (u₄+1)}
 variable [category D]
 
 instance ProductCategory : category (C × D) := {

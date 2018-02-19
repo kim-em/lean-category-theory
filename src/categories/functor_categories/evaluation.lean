@@ -14,9 +14,9 @@ namespace categories.functor_categories
 
 universes u₁ u₂
 
-variable (C : Type u₁)
+variable (C : Type (u₁+1))
 variable [category C]
-variable (D : Type u₂)
+variable (D : Type (u₂+1))
 variable [category D]
 
 definition Evaluation : Functor ((Functor C D) × C) D := {

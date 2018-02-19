@@ -11,14 +11,14 @@ open categories.functor
 namespace categories.natural_transformation
 
 universes u v w
-variable {C : Type u}
+variable {C : Type (u+1)}
 variable [category C]
-variable {D : Type v}
+variable {D : Type (v+1)}
 variable [category D]
-variable {E : Type w}
+variable {E : Type (w+1)}
 variable [category E]
 
-structure NaturalTransformation (F G : Functor C D) :=
+structure NaturalTransformation (F G : Functor C D) : Type ((max u v)+1) :=
   (components: Π X : C, Hom (F.onObjects X) (G.onObjects X))
   (naturality: ∀ {X Y : C} (f : Hom X Y),
      (F.onMorphisms f) ≫ (components Y) = (components X) ≫ (G.onMorphisms f) . obviously)

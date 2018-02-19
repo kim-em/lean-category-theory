@@ -12,8 +12,8 @@ open categories.initial
 namespace categories.universal
 
 universes u v w
-variables {J : Type u} [category J]
-variables {C : Type v} [category C] {D : Type w} [category D]
+variables {J : Type (u+1)} [category J]
+variables {C : Type (v+1)} [category C] {D : Type (w+1)} [category D]
 
 structure Cone (F : Functor J C) :=
   (cone_point    : C)
@@ -120,8 +120,8 @@ end categories.universal
 namespace categories.functor
 
 universes u v w
-variables {J : Type u} [category J]
-variables {C : Type v} [category C] {D : Type w} [category D]
+variables {J : Type (u+1)} [category J]
+variables {C : Type (v+1)} [category C] {D : Type (w+1)} [category D]
 variable {F : Functor J C}
 
 open categories.universal

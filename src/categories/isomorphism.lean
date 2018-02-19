@@ -9,7 +9,7 @@ open categories
 namespace categories.isomorphism
 universes u
 
-variable {C : Type u}
+variable {C : Type (u+1)}
 variable [category C]
 variables {X Y Z : C}
 

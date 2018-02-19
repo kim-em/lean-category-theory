@@ -10,13 +10,20 @@ open categories.types
 
 universes u v
 
+@[simp] private lemma functor_identities (F : Functor (Type u) (Type v)) (α : Type u) (x : F.onObjects α) : F.onMorphisms id x = x := 
+begin
+have p := Functor_to_Types_identities F x,
+tidy,
+end
+
 instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor (F.onObjects) := {
-    map := λ _ _ f, (F.onMorphisms (ulift.up f)).down,
+    map := λ _ _ f, F.onMorphisms f,
     id_map := ♯,
     map_comp := begin 
                  tidy, 
-                 have p := Functor_to_Types_functoriality F (ulift.up g) (ulift.up h) x,
-                 rw p,
+                 have p := Functor_to_Types_functoriality F g h x,
+                 rw ← p,
+                 tidy,
                 end
 }
 
@@ -24,6 +31,6 @@ local attribute [simp] functor.id_map
 
 definition Functor_of_functor (g : Type u → Type v) [functor g] : Functor (Type u) (Type v) := {
     onObjects := g,
-    onMorphisms := λ X Y f, ulift.up (λ z : g X, (has_map.map f.down) z),
+    onMorphisms := λ X Y f z, (has_map.map f) z,
     functoriality := begin tidy, rw ← functor.map_comp, end
 }

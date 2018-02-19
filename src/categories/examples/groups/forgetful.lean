@@ -10,35 +10,11 @@ open categories.yoneda
 
 universes u₁ u₂
 
-definition ForgetfulFunctor_Groups_to_Types : Functor.{(u₁+1) (u₁+2)} Group (Type (u₁+1)) :=
+definition ForgetfulFunctor_Groups_to_Types : Functor Group (Type u₁) :=
 {
-  onObjects     := λ s, ulift.{u₁+1} s.1,
-  onMorphisms   := λ s t, λ f, ulift.up (λ x, ulift.up (f.map x.down)),
+  onObjects     := λ s, s.1,
+  onMorphisms   := λ s t f x, f.map x,
 }
-
--- -- yuck
--- @[simp] private lemma monoid_pow_add {α} [monoid α] (a : α) (x y : ℕ) : monoid.pow a (nat.add x y) = monoid.mul (monoid.pow a x) (monoid.pow a y) :=
--- begin
--- have p : (nat.add x y) = x + y, by unfold has_add.add,
--- rw p,
--- rw pow_add,
--- refl,
--- end
-
--- -- yuck
--- @[simp] private lemma monoid_pow_nat {α} [m : monoid α] (f : monoid_morphism ℕ_as_monoid_under_addition m) (n : ℕ): monoid.pow (f.map 1) n = f.map n :=
--- begin
--- induction n,
--- {tidy, erw f.unital_lemma,},
--- {
---   unfold monoid.pow,
---   have p : nat.succ n_n = 1 + n_n, by simp,
---   rw p,
---   erw f.multiplicative_lemma,
---   rw n_ih,
---   refl,
--- }
--- end
 
 instance ulift_group {α : Type u₁} [group α] : group (ulift.{u₂} α) := 
 begin
@@ -69,15 +45,15 @@ instance exponentiation_is_hom (G : Group) (g : G.1) : is_group_hom (λ (n : uli
 @[simp] lemma hom_exponentiation (G : Group) (f : ulift ℤ → G.1) [is_group_hom f] (n : ℤ) : gpow (f (ulift.up int.one)) n = f (ulift.up n) := sorry
 
 -- set_option trace.class_instances true
-instance Groups_ForgetfulFunctor_Representable : @Representable.{u₁+1} Group _ (ForgetfulFunctor_Groups_to_Types.{u₁}) := {
+instance Groups_ForgetfulFunctor_Representable : @Representable.{u₁} Group _ (ForgetfulFunctor_Groups_to_Types.{u₁}) := {
   c := ⟨ ulift ℤ, by apply_instance ⟩,
   Φ := {
     morphism := {
-      components := λ G, ulift.up (λ g, ⟨λ n, gpow g.down n.down, begin tidy, apply_instance end⟩),
+      components := λ G g, ⟨λ n, gpow g n.down, begin tidy, apply_instance end⟩,
       naturality := sorry
    },
     inverse := {
-      components := λ G, ulift.up (λ f, ulift.up (f.map (ulift.up (1 : ℤ))))
+      components := λ G f, f.map (ulift.up (1 : ℤ))
    }
  }
 }

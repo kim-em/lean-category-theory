@@ -15,7 +15,7 @@ open categories.util.finite
 namespace categories.universal
 
 universes u₁ u₂
-variables {C : Type u₁}
+variables {C : Type (u₁+1)}
 variables [category C]
 variables {X Y : C}
 

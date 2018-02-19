@@ -14,7 +14,7 @@ instance group_from_Group (G : Group) : group G.1 := G.2
 
 meta def is_group_hom_obviously := `[unfold is_group_hom, obviously]
 
-structure GroupHomomorphism (G H : Group.{u₁}) : Type (u₁+1) := -- Notice that we push this up one universe level, because our categories expect Obj and Hom at the same universe level.
+structure GroupHomomorphism (G H : Group.{u₁}) : Type u₁ := -- Notice that we push this up one universe level, because our categories expect Obj and Hom at the same universe level.
   (map: G.1 → H.1)
   (is_group_hom : is_group_hom map . is_group_hom_obviously)
 

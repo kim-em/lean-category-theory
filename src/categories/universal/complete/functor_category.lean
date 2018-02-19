@@ -15,11 +15,11 @@ namespace categories.universal
 
 universes j u₁ u₂
 section
-variable {J : Type j}
+variable {J : Type (j+1)}
 variable [category J]
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
-variable {D : Type u₂}
+variable {D : Type (u₂+1)}
 variable [category D]
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory (F : Functor J (Functor C D)) (c : C) : Functor J D := {
@@ -37,7 +37,7 @@ variable [category D]
 end
 
 section
-variable {J : Type u₁}
+variable {J : Type (u₁+1)}
 variable [category J]
 variable {C : Type (u₁+1)}
 variable [category C]

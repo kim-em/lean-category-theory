@@ -15,9 +15,9 @@ namespace categories.opposites
 
 universes u₁ u₂
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
-variable {D : Type u₂}
+variable {D : Type (u₂+1)}
 variable [category D]
 
 def op (C : Type u₁) : Type u₁ := C
@@ -34,9 +34,9 @@ definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=  {
   onMorphisms   := λ X Y f, F.onMorphisms f
 }
 
-definition HomPairing (C : Type u₁) [category C]: Functor.{u₁ (u₁+1)} (Cᵒᵖ × C) (Type u₁) := { 
+definition HomPairing (C : Type (u₁+1)) [category C]: Functor.{u₁ u₁} (Cᵒᵖ × C) (Type u₁) := { 
   onObjects     := λ p, @Hom C _ p.1 p.2,
-  onMorphisms   := λ X Y f, ⟨λ h, f.1 ≫ h ≫ f.2⟩
+  onMorphisms   := λ X Y f, λ h, f.1 ≫ h ≫ f.2
 }
 
 -- PROJECT prove C^op^op is C

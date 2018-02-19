@@ -29,18 +29,3 @@ do l ← local_context,
    at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(Two) := induction h >> skip | _ := failed end))
 
 instance Two_decidable : decidable_eq Two := ♯
-
-definition Two.choice {α : Type u} (a b : α) : Two.{u} → α 
-| _0 := a
-| _1 := b
-
-@[simp] lemma Two.choice_0 {α : Type u} (a b : α) : Two.choice a b _0 = a := by refl
-@[simp] lemma Two.choice_1 {α : Type u} (a b : α) : Two.choice a b _1 = b := by refl
-
-definition Two.split_choice {Z : Two.{u} → Type u} (f : Z _0) (g : Z _1) : Π i : Two, Z i
-| _0 := f
-| _1 := g
-definition Two.dependent_choice {α : Type u} {Z : α → Type u} {a b : α} (f : Z a) (g : Z b) : Π i : Two.{u}, Z (Two.choice a b i) 
-| _0 := f
-| _1 := g
-

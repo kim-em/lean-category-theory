@@ -17,7 +17,7 @@ namespace categories.universal
 universes u v w
 
 section
-variable (C : Type u)
+variable (C : Type (u+1))
 variable [category C]
 
 class has_InitialObject :=
@@ -26,7 +26,7 @@ class has_InitialObject :=
 class has_BinaryProducts :=
   (binary_product : Π X Y : C, BinaryProduct X Y)
 class has_FiniteProducts :=
-  (product : Π {I : Type u} [Finite I] (f : I → C), Product f)
+  (product : Π {I : Type (u+1)} [Finite I] (f : I → C), Product f)
 
 class has_TerminalObject :=
   (terminal_object : TerminalObject C)
@@ -34,7 +34,7 @@ class has_TerminalObject :=
 class has_BinaryCoproducts :=
   (binary_coproduct : Π X Y : C, BinaryCoproduct X Y)
 class has_FiniteCoproducts :=
-  (coproduct : Π {I : Type u} [Finite I] (f : I → C), Coproduct f)
+  (coproduct : Π {I : Type (u+1)} [Finite I] (f : I → C), Coproduct f)
 
 class has_Equalizers :=
   (equalizer : Π {X Y : C} (f g : Hom X Y), Equalizer f g)
@@ -43,18 +43,17 @@ class has_Coequalizers :=
 
 definition initial_object [has_InitialObject C] : C := has_InitialObject.initial_object C
 definition terminal_object [has_TerminalObject C] : C := has_TerminalObject.terminal_object C
-
 end
 
 section
-variable {C : Type u}
+variable {C : Type (u+1)}
 variable [category C]
 
 definition binary_product [has_BinaryProducts C] (X Y : C) := has_BinaryProducts.binary_product X Y
-definition finite_product [has_FiniteProducts C] {I : Type u} [fin : Finite I] (f : I → C) := @has_FiniteProducts.product C _ _ I fin f
+definition finite_product [has_FiniteProducts C] {I : Type (u+1)} [fin : Finite I] (f : I → C) := @has_FiniteProducts.product C _ _ I fin f
 
 definition binary_coproduct [has_BinaryCoproducts C] (X Y : C) := has_BinaryCoproducts.binary_coproduct X Y
-definition finite_coproduct [has_FiniteCoproducts C] {I : Type u} [fin : Finite I] (f : I → C) := @has_FiniteCoproducts.coproduct C _ _ I fin f
+definition finite_coproduct [has_FiniteCoproducts C] {I : Type (u+1)} [fin : Finite I] (f : I → C) := @has_FiniteCoproducts.coproduct C _ _ I fin f
 
 definition equalizer [has_Equalizers C] {X Y : C} (f g : Hom X Y) := has_Equalizers.equalizer f g
 definition coequalizer [has_Coequalizers C] {X Y : C} (f g : Hom X Y) := has_Coequalizers.coequalizer f g
@@ -66,7 +65,6 @@ variable [category C]
 
 class has_Products :=
   (product : Π {I : Type u} (f : I → C), Product f)
-
 class has_Coproducts :=
   (coproduct : Π {I : Type u} (f : I → C), Coproduct f)
 end
@@ -77,12 +75,6 @@ variable [category C]
 
 definition product [has_Products C] {I : Type u} (F : I → C) := has_Products.product F
 definition coproduct [has_Coproducts C] {I : Type u} (F : I → C) := has_Coproducts.coproduct F
-
-end
-
-section
-variable (C : Type u)
-variable [category C]
 
 instance FiniteProducts_give_a_TerminalObject [has_FiniteProducts C] : has_TerminalObject C := {
   terminal_object :=
@@ -101,11 +93,18 @@ instance FiniteCoproducts_give_an_InitialObject [has_FiniteCoproducts C] : has_I
  }
 }
 
-set_option pp.universes true
+definition Two.choice {α : Type u} (a b : α) : Two.{v} → α 
+| Two._0 := a
+| Two._1 := b
+
+definition Two.dependent_choice {α : Type u} {Z : α → Type v} {a b : α} (f : Z a) (g : Z b) : Π i : Two.{u}, Z (Two.choice a b i) 
+| Two._0 := f
+| Two._1 := g
+
 instance BinaryProducts_from_FiniteProducts [has_FiniteProducts C] : has_BinaryProducts C := {
   binary_product := λ X Y : C,
-    let F := Two.choice.{u} X Y in
-    let p := finite_product F in {
+    let F := Two.choice.{u+1 u+1} X Y in
+    let p := @finite_product.{u} C _ _ Two _ F in {
       product             := p.product,
       left_projection     := p.projection Two._0,
       right_projection    := p.projection Two._1,

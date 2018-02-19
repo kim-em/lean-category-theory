@@ -20,7 +20,7 @@ namespace categories.universal.opposites
 universes u₁ u₂ u₃
 
 section
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
 variables {X Y : C}
 variables {f g : Hom X Y}
@@ -46,9 +46,9 @@ def BinaryProduct_from_BinaryCoproduct_in_Opposite (p : @BinaryCoproduct (Cᵒ�
 end
 
 section
-variable {J : Type u₁}
+variable {J : Type (u₁+1)}
 variable [category J]
-variable {C : Type u₂}
+variable {C : Type (u₂+1)}
 variable [category C]
 
 def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) := sorry

@@ -8,7 +8,7 @@ namespace categories
 
 universes u v
 
-class category (Obj : Type u) :=
+class category (Obj : Type (u+1)) :=
   (Hom : Obj → Obj → Type u)
   (identity : Π X : Obj, Hom X X)
   (compose  : Π {X Y Z : Obj}, Hom X Y → Hom Y Z → Hom X Z)
@@ -17,7 +17,7 @@ class category (Obj : Type u) :=
   (associativity  : ∀ {W X Y Z : Obj} (f : Hom W X) (g : Hom X Y) (h : Hom Y Z),
     compose (compose f g) h = compose f (compose g h) . obviously)
 
-variable {C : Type u}
+variable {C : Type (u+1)}
 variables {W X Y Z : C}
 variable [category C]
 

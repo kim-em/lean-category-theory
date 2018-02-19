@@ -25,40 +25,40 @@ namespace categories.yoneda
 
 universes u₁ u₂
 
-definition YonedaEvaluation (C : Type u₁) [category C]
-  : Functor.{(u₁+1) (u₁+2)} ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type (u₁+1))
-  := FunctorComposition (Evaluation (Cᵒᵖ) (Type u₁)) (UniverseLift)
+definition YonedaEvaluation (C : Type (u₁+1)) [category C]
+  : Functor ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type (u₁+1)) 
+  := FunctorComposition (Evaluation (Cᵒᵖ) (Type u₁)) UniverseLift
 
-definition Yoneda (C : Type u₁) [category C] : Functor.{u₁ (u₁+1)} C (Functor (Cᵒᵖ) (Type u₁)) := {
+definition Yoneda (C : Type (u₁+1)) [category C] : Functor C (Functor (Cᵒᵖ) (Type u₁)) := {
     onObjects := λ X, {
         onObjects     := λ Y, @Hom C _ Y X,
-        onMorphisms   := λ Y Y' f, ulift.up (λ g, f ≫ g)
+        onMorphisms   := λ Y Y' f g, f ≫ g
    },
     onMorphisms   := λ X X' f, {
-        components := λ Y, ulift.up (λ g, g ≫ f)
+        components := λ Y g, g ≫ f
    }
 }
 
-definition YonedaPairing (C : Type u₁) [category C] 
-  : Functor.{(u₁+1) (u₁+2)} ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type (u₁+1)) 
+definition YonedaPairing (C : Type (u₁+1)) [category C] 
+  : Functor ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type (u₁+1)) 
   := FunctorComposition
       (FunctorComposition
         (ProductFunctor (IdentityFunctor _) (OppositeFunctor (Yoneda C)))
         (SwitchProductCategory _ _))
       (HomPairing (Functor (Cᵒᵖ) (Type u₁))) 
 
-definition CoYoneda (C : Type u₁) [category C] : Functor.{u₁ (u₁+1)} (Cᵒᵖ) (Functor C (Type u₁)) := {
+definition CoYoneda (C : Type (u₁+1)) [category C] : Functor (Cᵒᵖ) (Functor C (Type u₁)) := {
     onObjects := λ X, {
         onObjects     := λ Y, @Hom C _ X Y,
-        onMorphisms   := λ Y Y' f, ulift.up (λ g, g ≫ f)
+        onMorphisms   := λ Y Y' f g, g ≫ f
    },
     onMorphisms   := λ X X' f, {
-        components := λ Y, ulift.up (λ g, f ≫ g)
+        components := λ Y g, f ≫ g
    }
 }
 
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
 
 class Representable (F : Functor C (Type u₁)) := 
@@ -71,75 +71,46 @@ class Representable (F : Functor C (Type u₁)) :=
    {F G : Functor (Cᵒᵖ) (Type u₁)}
    (τ : NaturalTransformation F G)
    (Z : F.onObjects Y) :
-     (G.onMorphisms f).down ((τ.components Y).down Z) = (τ.components X).down ((F.onMorphisms f).down Z) := eq.symm (congr_fun (congr_arg ulift.down (τ.naturality f)) Z)
+     (G.onMorphisms f) ((τ.components Y) Z) = (τ.components X) ((F.onMorphisms f) Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
--- @[simp] private lemma YonedaLemma_aux_2
---   {D : Type u₂}
---   [category D]
---   {X : (Cᵒᵖ)}
---   {F : Functor (Cᵒᵖ) D} : (F.onMorphisms (@categories.category.identity.{u₁} C _ X)) = 𝟙 (F.onObjects X) :=
---   begin
---   have h : (@categories.category.identity.{u₁} C _ X) = (@categories.category.identity.{u₁} (categories.opposites.op.{u₁} C)
---              (@categories.opposites.Opposite.{u₁} C _)
---              X), by tidy,
---   rw h,
---   simp,
---   end
-
-
--- set_option pp.all true
--- @[simp] private lemma YonedaLemma_aux_2
---   {X_snd : (Cᵒᵖ)}
---   {X_fst : Functor (Cᵒᵖ) (Type u₁)}
---   (x : X_fst.onObjects X_snd) : (X_fst.onMorphisms (@categories.category.identity.{u₁} C _ X_snd)).down x  = x :=
---   begin
---   have h : (@categories.category.identity.{u₁} C _ X_snd) = (@categories.category.identity.{u₁} (categories.opposites.op.{u₁} C)
---              (@categories.opposites.Opposite.{u₁} C _inst_1)
---              X_snd), by tidy,
---   rw h,
---   simp,
---   end
-
-theorem YonedaLemma (C : Type u₁) [category C]: NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+theorem YonedaLemma (C : Type (u₁+1)) [category C] : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
 refine {
   morphism := {
-    components := λ F, ulift.up (λ x, ulift.up ((x.components F.2).down (𝟙 F.2))),
+    components := λ F x, ulift.up ((x.components F.2) (𝟙 F.2)),
     naturality := _,
   },
   inverse := {
-    components := λ F, ulift.up (λ x, { 
-      components := λ X, ulift.up (λ a, (F.1.onMorphisms a).down x.down), 
-      naturality := _ }),
+    components := λ F x, { 
+      components := λ X a, (F.1.onMorphisms a) x.down, 
+      naturality := _ },
     naturality := _
   },
   witness_1 := _,
   witness_2 := _
 },
-tidy {hints:=[9, 7, 6, 6, 7, 6, 9, 10, 9, 7, 6, 6, 7, 9, 10, 9, 7, 6, 6, 7, 6, 7, 6, 6, 7, 9, 10, 6, 7, 6, 6, 7, 6, 7, 6, 6, 7, 9, 10, 6, 7, 6, 6, 7, 6, 9, 10]}
+tidy {hints:=[9, 7, 6, 7, 6, 9, 10, 9, 7, 6, 7, 10, 3, 9, 7, 6, 7, 6, 7, 6, 7, 9, 10, 3, 6, 7, 6, 7, 6, 7, 6, 7, 9, 10, 6, 7, 6, 7, 6, 9, 10, 3]}
 end
 
-theorem YonedaFull (C : Type u₁) [category C] : Full (Yoneda C) := {
-    preimage := λ X Y f, (f.components X).down (𝟙 X),
-    witness := λ X Y f, begin tidy, have p := congr_fun (congr_arg ulift.down (f.naturality x)) (𝟙 X), tidy, end -- PROJECT a pure rewriting proof?
+theorem YonedaFull (C : Type (u₁+1)) [category C] : Full (Yoneda C) := {
+    preimage := λ X Y f, (f.components X) (𝟙 X),
+    witness := λ X Y f, begin tidy, have p := congr_fun (f.naturality x) (𝟙 X), tidy, end -- PROJECT a pure rewriting proof?
 }
 
-theorem YonedaFaithful (C : Type u₁) [category C] : Faithful (Yoneda C) := {
+theorem YonedaFaithful (C : Type (u₁+1)) [category C] : Faithful (Yoneda C) := {
     injectivity := λ X Y f g w, begin 
                                   -- PROJECT automation
                                   dsimp_all', 
                                   have p := congr_arg NaturalTransformation.components w, 
                                   have p' := congr_fun p X, 
                                   dsimp_all', 
-                                  have p'' := congr_arg ulift.down p',
-                                  dsimp_all',
                                   resetI,
-                                  have p''' := congr_fun p'' (𝟙 X),
+                                  have p'' := congr_fun p' (𝟙 X),
                                   dsimp_all',
                                   simp_at_each,
-                                  exact p''',
+                                  exact p'',
                                 end
 }
 
-
+-- FIXME split this file
 end categories.yoneda

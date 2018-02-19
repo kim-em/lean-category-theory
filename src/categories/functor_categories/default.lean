@@ -13,14 +13,14 @@ namespace categories.functor_categories
 
 universes u₁ u₂ u₃
 
-instance FunctorCategory (C : Type u₁) [category C] (D : Type u₂) [category D] : category (Functor C D):=
+instance FunctorCategory (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] : category.{(max u₁ u₂)+1} (Functor C D) :=
 {
   Hom := λ F G, NaturalTransformation F G,
   identity := λ F, IdentityNaturalTransformation F,
   compose  := @vertical_composition_of_NaturalTransformations C _ D _
 }
 
-definition whiskering_on_left (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] : Functor (Functor C D) (Functor (Functor D E) (Functor C E)) :=
+definition whiskering_on_left (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E] : Functor (Functor C D) (Functor (Functor D E) (Functor C E)) :=
 {
   onObjects     := λ F, {
     onObjects     := λ G, FunctorComposition F G,
@@ -34,11 +34,11 @@ definition whiskering_on_left (C : Type u₁) [category C] (D : Type u₂) [cate
 }
 
 definition whisker_on_left_functor
-  {C : Type u₁} [category C] {D : Type u₂} [category D] (F : Functor C D) (E : Type u₃) [category E] :
+  {C : Type (u₁+1)} [category C] {D : Type (u₂+1)} [category D] (F : Functor C D) (E : Type (u₃+1)) [category E] :
   Functor (Functor D E) (Functor C E) :=
   (whiskering_on_left C D E).onObjects F
 
-definition whiskering_on_right (C : Type u₁) [category C] (D : Type u₂) [category D] (E : Type u₃) [category E] :
+definition whiskering_on_right (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E] :
     Functor (Functor D E) (Functor (Functor C D) (Functor C E)) :=
 {
   onObjects     := λ H, {
@@ -52,15 +52,15 @@ definition whiskering_on_right (C : Type u₁) [category C] (D : Type u₂) [cat
  }
 }
 
-definition whisker_on_right_functor (C : Type u₁) [category C] {D : Type u₂} [category D] {E : Type u₃} [category E] (H : Functor D E) :
+definition whisker_on_right_functor (C : Type (u₁+1)) [category C] {D : Type (u₂+1)} [category D] {E : Type (u₃+1)} [category E] (H : Functor D E) :
   Functor (Functor C D) (Functor C E) :=
 (whiskering_on_right C D E).onObjects H
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
-variable {D : Type u₂}
+variable {D : Type (u₂+1)}
 variable [category D]
-variable {E : Type u₃}
+variable {E : Type (u₃+1)}
 variable [category E]
 
 @[ematch] lemma NaturalTransformation_to_FunctorCategory.components_naturality

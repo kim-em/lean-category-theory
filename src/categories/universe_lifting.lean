@@ -11,10 +11,10 @@ namespace categories
 
 universes u₁ u₂
 
-variable (C : Type u₁)
+variable (C : Type (u₁+1))
 variable [category C]
 
-instance universe_lift : category (ulift.{u₂} C) := {
+instance universe_lift : category (ulift.{(u₂+1)} C) := {
     Hom := λ X Y, ulift (Hom X.down Y.down),
     identity := λ X, ulift.up (𝟙 X.down),
     compose := λ _ _ _ f g, ulift.up (f.down ≫ g.down) 
@@ -22,6 +22,6 @@ instance universe_lift : category (ulift.{u₂} C) := {
 
 local attribute [applicable] category.identity
 
-definition universe_lift.equivalence : Equivalence C (ulift.{u₂} C) := ♯
+definition universe_lift.equivalence : Equivalence C (ulift.{(u₂+1)} C) := ♯
 
 end categories
