@@ -8,22 +8,22 @@ namespace categories.graphs
 
 universes u₁ u₂
 
-class graph (vertices : Type u₁) :=
+class graph (vertices : Type (u₁+1)) :=
   (edges : vertices → vertices → Type u₁)
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variables {W X Y Z : C}
 variable [graph C]
 
 def edges : C → C → Type u₁ := graph.edges
 
-structure graph_homomorphism (G : Type u₁) [graph G] (H : Type u₂) [graph H] := 
+structure graph_homomorphism (G : Type (u₁+1)) [graph G] (H : Type (u₂+1)) [graph H] := 
   (onVertices : G → H)
   (onEdges    : ∀ {X Y : G}, edges X Y → edges (onVertices X) (onVertices Y))
 
-variable {G : Type u₁}
+variable {G : Type (u₁+1)}
 variable [graph G]
-variable {H : Type u₂}
+variable {H : Type (u₂+1)}
 variable [graph H]
 
 @[applicable] lemma graph_homomorphisms_pointwise_equal
@@ -41,14 +41,14 @@ begin
   subst h_edges
 end
 
-inductive path : G → G → Type u₁
+inductive path : G → G → Type (u₁+1)
 | nil  : Π (h : G), path h h
 | cons : Π {h s t : G} (e : edges h s) (l : path s t), path h t
 
 notation a :: b := path.cons a b
 notation `p[` l:(foldr `, ` (h t, path.cons h t) path.nil _ `]`) := l
 
-inductive path_of_paths : G → G → Type u₁ 
+inductive path_of_paths : G → G → Type (u₁+1)
 | nil  : Π (h : G), path_of_paths h h
 | cons : Π {h s t : G} (e : path h s) (l : path_of_paths s t), path_of_paths h t
 

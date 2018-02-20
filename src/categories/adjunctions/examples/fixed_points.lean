@@ -17,15 +17,15 @@ namespace categories.adjunctions
 
 universe u
 
-variable {C : Type u}
+variable {C : Type (u+1)}
 variable [category C]
-variable {D : Type u}
+variable {D : Type (u+1)}
 variable [category D]
 
 -- EXERCISE
 -- cf Leinster 2.2.11
 definition left_fixed_points  {L : Functor C D} {R : Functor D C} (A : Adjunction L R)
-  : category (Σ X : C, is_Isomorphism (A.unit X)) := by apply_instance
+  : category (Σ X : C, is_Isomorphism (A.unit X)) := categories.FullSubcategory.{u} (λ X : C, is_Isomorphism (A.unit X)) --by apply_instance
 definition right_fixed_points {L : Functor C D} {R : Functor D C} (A : Adjunction L R)
   : category (Σ X : D, is_Isomorphism (A.counit X)) := by apply_instance
 

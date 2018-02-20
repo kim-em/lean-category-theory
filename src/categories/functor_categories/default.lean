@@ -13,7 +13,7 @@ namespace categories.functor_categories
 
 universes u₁ u₂ u₃
 
-instance FunctorCategory (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] : category.{(max u₁ u₂)+1} (Functor C D) :=
+instance FunctorCategory (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] : category.{(max (u₁+1) u₂)} (Functor C D) :=
 {
   Hom := λ F G, NaturalTransformation F G,
   identity := λ F, IdentityNaturalTransformation F,

@@ -20,9 +20,9 @@ namespace categories.adjunctions
 
 universes u
 
-variable {C : Type u}
+variable {C : Type (u+1)}
 variable [category C]
-variable {D : Type u}
+variable {D : Type (u+1)}
 variable [category D]
 
 definition HomAdjunction (L : Functor C D) (R : Functor D C) :=
@@ -31,7 +31,7 @@ definition HomAdjunction (L : Functor C D) (R : Functor D C) :=
     (FunctorComposition (IdentityFunctor (Cᵒᵖ) × R) (HomPairing C))
 
 definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : Hom (L.onObjects X) Y) : Hom X (R.onObjects Y)
-  := ((A.morphism).components (X, Y)).down f
+  := ((A.morphism).components (X, Y)) f
 
 -- PROJECT lemmas about mates.
 

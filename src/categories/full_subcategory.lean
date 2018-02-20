@@ -19,18 +19,18 @@ variable [category D]
 
 
 
-instance FullSubcategory (Z : C → Type (u₁+1)) : category (Σ X : C, Z X) := {
+instance FullSubcategory (Z : C → Type u₁) : category (Σ X : C, Z X) := {
   Hom := λ X Y, Hom X.1 Y.1,
   identity       := by tidy,
   compose        := λ _ _ _ f g, f ≫ g
 }
 
--- TODO remove?
-instance FullSubcategory' (Z : C → Sort u₁) : category (Σ' X : C, Z X) := {
-  Hom := λ X Y, Hom X.1 Y.1,
-  identity       := by tidy,
-  compose        := λ _ _ _ f g, f ≫ g
-}
+-- -- TODO remove?
+-- instance FullSubcategory' (Z : C → Sort u₁) : category (Σ' X : C, Z X) := {
+--   Hom := λ X Y, Hom X.1 Y.1,
+--   identity       := by tidy,
+--   compose        := λ _ _ _ f g, f ≫ g
+-- }
 
 instance FullSubcategory'' (Z : C → Prop) : category {X : C // Z X} := {
   Hom := λ X Y, Hom X.1 Y.1,
@@ -38,7 +38,7 @@ instance FullSubcategory'' (Z : C → Prop) : category {X : C // Z X} := {
   compose        := λ _ _ _ f g, f ≫ g
 }
 
-definition FullSubcategoryInclusion {Z : C → Type (u₁+1)} : Functor (Σ X : C, Z X) C := {
+definition FullSubcategoryInclusion {Z : C → Type u₁} : Functor (Σ X : C, Z X) C := {
   onObjects := λ X, X.1,
   onMorphisms := λ _ _ f, f
 }
@@ -46,8 +46,8 @@ definition FullSubcategoryInclusion {Z : C → Type (u₁+1)} : Functor (Σ X : 
 
 definition Functor_restricts_to_FullSubcategory 
   (F : Functor C D) 
-  (ZC : C → Type (u₁+1))
-  (ZD : D → Type (u₂+1))
+  (ZC : C → Type u₁)
+  (ZD : D → Type u₂)
   (w : ∀ {X : C} (z : ZC X), ZD (F.onObjects X)) : Functor (Σ X : C, ZC X) (Σ Y : D, ZD Y) := {
     onObjects     := λ X, ⟨ F.onObjects X.1, w X.2 ⟩,
     onMorphisms   := λ _ _ f, F.onMorphisms f

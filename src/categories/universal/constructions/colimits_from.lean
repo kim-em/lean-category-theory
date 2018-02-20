@@ -17,7 +17,7 @@ open categories.universal.opposites
 namespace categories.universal
 
 universes u₁
-variable {C : Type (u₁+1)}
+variable {C : Type (u₁+2)}
 variable [category C]
 
 instance Colimits_from_Coproducts_and_Coequalizers [has_Coproducts C] [has_Coequalizers C] : Cocomplete C := 

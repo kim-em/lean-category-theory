@@ -14,8 +14,7 @@ namespace categories.natural_transformation
 
 universes u₁ u₂ u₃
 
-variables (C : Type u₁) (D : Type u₂) (E : Type u₃)
-variables [category C] [category D] [category E]
+variables (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E]
 
 theorem Currying_for_functors :
   Equivalence (Functor C (Functor D E)) (Functor (C × D) E) := 

@@ -12,7 +12,7 @@ namespace categories.functor
 
 universes u₁ u₂ u₃ 
 
-structure Functor (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] : Type ((max u₁ u₂)+2) :=
+structure Functor (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] : Type ((max (u₁+1) u₂)+1) :=
   (onObjects   : C → D)
   (onMorphisms : Π {X Y : C},
                 Hom X Y → Hom (onObjects X) (onObjects Y))
@@ -20,9 +20,6 @@ structure Functor (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category
     onMorphisms (𝟙 X) = 𝟙 (onObjects X) . obviously)
   (functoriality : ∀ {X Y Z : C} (f : Hom X Y) (g : Hom Y Z),
     onMorphisms (f ≫ g) = (onMorphisms f) ≫ (onMorphisms g) . obviously)
-
-set_option pp.universes true
-#print Functor
 
 make_lemma Functor.identities
 make_lemma Functor.functoriality

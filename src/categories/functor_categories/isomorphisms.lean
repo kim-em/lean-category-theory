@@ -13,13 +13,13 @@ namespace categories.functor_categories
 
 universes u₁ u₂ u₃ u₄
 
-variable {B : Type u₁}
+variable {B : Type (u₁+1)}
 variable [category B]
-variable {C : Type u₁}
+variable {C : Type (u₂+1)}
 variable [category C]
-variable {D : Type u₁}
+variable {D : Type (u₃+1)}
 variable [category D]
-variable {E : Type u₁}
+variable {E : Type (u₄+1)}
 variable [category E]
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
@@ -29,6 +29,8 @@ definition FunctorComposition_associator
   (G : Functor C D)
   (H : Functor D E)
 : NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := ♯
+
+-- PROJECT pentagon
 
 definition FunctorComposition_left_unitor (F : Functor C D)
 : NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := ♯

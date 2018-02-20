@@ -5,6 +5,7 @@
 import .functor
 import .graphs
 import .graphs.category
+import .universe_lifting
 
 open categories
 
@@ -12,12 +13,12 @@ namespace categories.graphs
 
 universes u₁ u₂
 
-def Path (C : Type u₁) : Type u₁ := C
+@[reducible] def Path (C : Type (u₁+1)) : Type (u₁+2) := ulift.{u₁+2} C
 
-instance PathCategory (C : Type u₁) [graph C] : category (Path C) :=
+instance PathCategory (C : Type (u₁+1)) [graph C] : category (Path C) :=
 {
-  Hom            := λ x y : C, path x y,
-  identity       := λ x, path.nil x,
+  Hom            := λ x y : Path C, path x.down y.down,
+  identity       := λ x, path.nil x.down,
   compose        := λ _ _ _ f g, concatenate_paths f g,
   right_identity := begin
                       tidy,
@@ -47,40 +48,40 @@ instance PathCategory (C : Type u₁) [graph C] : category (Path C) :=
 
 open categories.functor
 
-variable {G : Type u₁}
+variable {G : Type (u₁+1)}
 variable [graph G]
-variable {C : Type u₂}
+variable {C : Type (u₂+1)}
 variable [category C]
 
 
-definition {u v} path_to_morphism
+definition path_to_morphism
   (H : graph_homomorphism G C)
   : Π {X Y : G}, path X Y → Hom (H.onVertices X) (H.onVertices Y) 
 | ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
 | ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) ≫ (path_to_morphism p)
  
--- PROJECT obtain this as the left adjoint to the forgetful functor.
-definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) C :=
+@[simp] lemma  path_to_morphism.comp   (H : graph_homomorphism G C) {X Y Z : G} (f : path X Y) (g : path Y Z): path_to_morphism H (graphs.concatenate_paths f g) = path_to_morphism H f ≫ path_to_morphism H g :=
+begin
+induction f,
 {
-  onObjects     := H.onVertices,
-  onMorphisms   := λ _ _ f, path_to_morphism H f,
-  functoriality := begin
-                     -- PROJECT automation
-                     tidy,
-                     induction f,
-                     {
-                       unfold concatenate_paths,
-                       unfold path_to_morphism,
-                       tidy,
-                    },
-                     {
-                      let p := f_ih g,
-                      unfold concatenate_paths,
-                      unfold path_to_morphism,
-                      tidy,
-                      begin[smt] eblast end,
-                    }
-                   end
+    unfold concatenate_paths,
+    unfold path_to_morphism,
+    tidy,
+},
+{
+  let p := f_ih g,
+  unfold concatenate_paths,
+  unfold path_to_morphism,
+  tidy,
+  begin[smt] eblast end,
+}
+end
+
+-- PROJECT obtain this as the left adjoint to the forgetful functor.
+definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) (ulift.{u₁+2} C) :=
+{
+  onObjects     := λ X, ulift.up (H.onVertices X.down),
+  onMorphisms   := λ _ _ f, ulift.up (path_to_morphism H f),
 }
 
 end categories.graphs

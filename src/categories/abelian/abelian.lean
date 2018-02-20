@@ -9,6 +9,7 @@ open categories
 open categories.initial
 open categories.universal
 open categories.isomorphism
+open categories.universal.monic
 
 namespace categories.abelian
 

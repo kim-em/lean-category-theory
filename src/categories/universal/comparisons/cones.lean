@@ -20,9 +20,9 @@ open categories.universal
 namespace categories.universal
 
 universes u j
-variable {J : Type j}
+variable {J : Type (j+1)}
 variable [category J]
-variable {C : Type u}
+variable {C : Type (u+2)}
 variable [category C]
 variable {F : Functor J C}
 

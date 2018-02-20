@@ -3,13 +3,13 @@
 -- Authors: Scott Morrison
 
 import .universal
-import ..monic
+import ..abelian.monic
 
 open categories
 open categories.universal
 open categories.isomorphism
 
-namespace categories
+namespace categories.universal.monic
 
 universe u
 variable {C : Type (u+1)}
@@ -40,4 +40,4 @@ structure RegularEpic (f : Hom Y Z) :=
   (i : Isomorphism c.coequalizer Z)
   (w : c.projection = f ≫ i.inverse)
 
-end categories
+end categories.universal.monic

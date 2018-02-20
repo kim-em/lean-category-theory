@@ -18,7 +18,7 @@ variable [category D]
 variable {E : Type (w+1)}
 variable [category E]
 
-structure NaturalTransformation (F G : Functor C D) : Type ((max u v)+1) :=
+structure NaturalTransformation (F G : Functor C D) : Type (max (u+1) v) :=
   (components: Π X : C, Hom (F.onObjects X) (G.onObjects X))
   (naturality: ∀ {X Y : C} (f : Hom X Y),
      (F.onMorphisms f) ≫ (components Y) = (components X) ≫ (G.onMorphisms f) . obviously)

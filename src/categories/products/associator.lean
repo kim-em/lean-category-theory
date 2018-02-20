@@ -33,5 +33,6 @@ definition ProductCategoryInverseAssociator : Functor (C × (D × E)) ((C × D) 
 }
 
 -- TODO prove the equivalence, now
+-- TODO pentagon natural transformation? satisfying?
 
 end categories.products

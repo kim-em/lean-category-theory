@@ -12,7 +12,7 @@ namespace categories.examples.graphs
 
 universe u₁
 
-definition Graph := Σ α : Type u₁, graph α
+definition Graph := Σ α : Type (u₁+1), graph α
 
 instance graph_from_Graph (G : Graph) : graph G.1 := G.2
 

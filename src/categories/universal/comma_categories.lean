@@ -36,10 +36,10 @@ variable {A : Type (u₁+1)}
 variable [category A]
 variable {B : Type (u₂+1)}
 variable [category B]
-variable {C : Type (u₃+1)}
+variable {C : Type (u₃+2)}
 variable [category C]
 
-definition comma (S : Functor A C) (T : Functor B C) := Σ p : A × B, Hom (S.onObjects p.1) (T.onObjects p.2)
+definition comma (S : Functor A C) (T : Functor B C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, Hom (S.onObjects p.1) (T.onObjects p.2)
 
 structure comma_morphism {S : Functor A C} {T : Functor B C} (p q : comma S T) : Type (max u₁ u₂ u₃) :=
 (left : Hom p.1.1 q.1.1)
@@ -99,11 +99,11 @@ end
 --   C = FunctorCategory J C
 variable {J : Type (j+1)}
 variable [category J]
-variable {C : Type (u₁+1)}
+variable {C : Type (u₁+2)}
 variable [category C]
 
-definition Cone (F : Functor J C)   := (comma (DiagonalFunctor.{j u₁} J C) (ObjectAsFunctor F))
-definition Cocone (F : Functor J C) := (comma (ObjectAsFunctor F)          (DiagonalFunctor.{j u₁} J C))
+definition Cone (F : Functor J C)   := (comma (DiagonalFunctor.{j (u₁+1)} J C) (ObjectAsFunctor F))
+definition Cocone (F : Functor J C) := (comma (ObjectAsFunctor F)          (DiagonalFunctor.{j (u₁+1)} J C))
 
 @[simp] lemma Cone_comma_unit (F : Functor J C) (X : Cone F) : X.1.2 = punit.star := ♯ 
 @[simp] lemma Cocone_comma_unit (F : Functor J C) (X : Cocone F) : X.1.1 = punit.star := ♯ 
@@ -117,8 +117,8 @@ definition Colimit (F: Functor J C) := InitialObject  (Cocone F)
 -- TODO clean this up: WalkingPair and WalkingParallelPair should just have different object types
 definition BinaryProduct   (α β : C)                  := Limit   (Pair_functor α β)
 definition BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
-definition Product         {I : Type u₁} (X : I → C) := Limit   (Functor.fromFunction X)
-definition Coproduct       {I : Type u₁} (X : I → C) := Colimit (Functor.fromFunction X)
+definition Product         {I : Type (u₁+1)} (X : I → C) := Limit   (Functor.fromFunction X)
+definition Coproduct       {I : Type (u₁+1)} (X : I → C) := Colimit (Functor.fromFunction X)
 definition Equalizer       {α β : C} (f g : Hom α β)  := Limit   (ParallelPair_functor f g)
 definition Coequalizer     {α β : C} (f g : Hom α β)  := Colimit (ParallelPair_functor f g)
 

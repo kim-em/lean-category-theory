@@ -13,9 +13,9 @@ namespace categories.equivalence
 
 universes u₁ u₂
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
-variable {D : Type u₂}
+variable {D : Type (u₂+1)}
 variable [category D]
 
 

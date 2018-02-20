@@ -18,8 +18,8 @@ local attribute [applicable] category.identity -- This says that whenever there 
 
 -- Is there any point defining these separately (rather than as the functor category from the walking arrow)?
 
-definition arrow (C : Type u₁) [category C] := Σ (p : C × C), Hom p.1 p.2
-structure arrow_hom {C : Type u₁} [category C] (X Y : arrow C) :=
+definition arrow (C : Type (u₁+1)) [category C] := Σ (p : C × C), Hom p.1 p.2
+structure arrow_hom {C : Type (u₁+1)} [category C] (X Y : arrow C) :=
 (morphism : Hom X.1.1 Y.1.1 × Hom X.1.2 Y.1.2 )
 (commutativity : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously)
 
@@ -27,7 +27,7 @@ make_lemma arrow_hom.commutativity
 attribute [ematch] arrow_hom.commutativity_lemma
 
 @[applicable] lemma arrow_hom_equal
-  {C : Type u₁} [category C] (f g : arrow C)
+  {C : Type (u₁+1)} [category C] (f g : arrow C)
   (α β : arrow_hom f g)
   (w : α.morphism = β.morphism) : α = β :=
   begin
@@ -37,15 +37,15 @@ attribute [ematch] arrow_hom.commutativity_lemma
   end
 
 
-instance Arrows (C : Type u₁) [category C] : category (arrow C):= {
+instance Arrows (C : Type (u₁+1)) [category C] : category (arrow C):= {
   Hom := arrow_hom,
   identity       := by tidy,
   compose        := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ 
 }
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
-variable {D : Type u₂}
+variable {D : Type (u₂+1)}
 variable [category D]
 
 definition Functor.onArrows : Functor (Functor C D) (Functor (arrow C) (arrow D)) := {

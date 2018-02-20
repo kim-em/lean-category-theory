@@ -16,11 +16,11 @@ namespace categories.adjunctions
 
 universes u₁ u₂ u₃
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
-variable {D : Type u₂}
+variable {D : Type (u₂+1)}
 variable [category D]
-variable {E : Type u₃}
+variable {E : Type (u₃+1)}
 variable [category E]
 
 

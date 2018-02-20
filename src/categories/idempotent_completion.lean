@@ -15,7 +15,7 @@ namespace categories.idempotent_completion
 
 universes u u₁ u₂
 
-structure Idempotent (C : Type u) [category C] :=
+structure Idempotent (C : Type (u+1)) [category C] :=
    (object : C)
    (idempotent : Hom object object)
    (witness : idempotent ≫ idempotent = idempotent . obviously)
@@ -25,7 +25,7 @@ attribute [simp,ematch] Idempotent.witness_lemma
 
 local attribute [ematch] subtype.property
 
-structure Idempotent_morphism {C : Type u} [category C] (X Y : Idempotent C) :=
+structure Idempotent_morphism {C : Type (u+1)} [category C] (X Y : Idempotent C) :=
 (morphism : Hom X.object Y.object)
 (left : X.idempotent ≫ morphism = morphism . obviously)
 (right : morphism ≫ Y.idempotent = morphism . obviously)
@@ -34,8 +34,8 @@ make_lemma Idempotent_morphism.left
 make_lemma Idempotent_morphism.right
 attribute [simp,ematch] Idempotent_morphism.left_lemma Idempotent_morphism.right_lemma
 
-@[applicable] lemma NaturalTransformations_componentwise_equal
-  {C : Type u} [category C] (X Y : Idempotent C)
+@[applicable] lemma Idempotent_morphisms_equal
+  {C : Type (u+1)} [category C] (X Y : Idempotent C)
   (f g : Idempotent_morphism X Y)
   (w : f.morphism = g.morphism) : f = g :=
   begin
@@ -45,13 +45,13 @@ attribute [simp,ematch] Idempotent_morphism.left_lemma Idempotent_morphism.right
   end
 
 
-instance IdempotentCompletion (C : Type u) [category C]  : category (Idempotent C) := {
+instance IdempotentCompletion (C : Type (u+1)) [category C]  : category (Idempotent C) := {
   Hom            := Idempotent_morphism,
   identity       := λ X, ⟨ X.idempotent ⟩,
   compose        := λ X Y Z f g, ⟨ f.morphism ≫ g.morphism ⟩
 }
 
-definition functor_to_IdempotentCompletion (C : Type u) [category C] : Functor C (Idempotent C) := {
+definition functor_to_IdempotentCompletion (C : Type (u+1)) [category C] : Functor C (Idempotent C) := {
   onObjects     := λ X, ⟨ X, 𝟙 X ⟩,
   onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩
 }
@@ -77,9 +77,9 @@ open categories.equivalence
 --   end
 -- end
 
-variable {C : Type u₁}
+variable {C : Type (u₁+1)}
 variable [category C]
-variable {D : Type u₂}
+variable {D : Type (u₂+1)}
 variable [category D]
 
 definition restrict_Functor_from_IdempotentCompletion (F : Functor (Idempotent C) D) : Functor C D :=
@@ -94,12 +94,12 @@ congr_arg Idempotent_morphism.morphism f.left
 :(f.morphism).morphism ≫ (Y.idempotent).morphism = (f.morphism).morphism :=
 congr_arg Idempotent_morphism.morphism f.right
 
-private def IdempotentCompletion_idempotent_functor (C : Type u) [category C] : Functor (Idempotent (Idempotent C)) (Idempotent C) :=
+private def IdempotentCompletion_idempotent_functor (C : Type (u+1)) [category C] : Functor (Idempotent (Idempotent C)) (Idempotent C) :=
 {
     onObjects     := λ X, ⟨ X.object.object, X.idempotent.morphism, congr_arg Idempotent_morphism.morphism X.witness ⟩, -- PROJECT think about automation here
     onMorphisms   := λ X Y f, ⟨ f.morphism.morphism, ♯ ⟩
 }
-private def IdempotentCompletion_idempotent_inverse (C : Type u) [category C] : Functor (Idempotent C) (Idempotent (Idempotent C)) :=
+private def IdempotentCompletion_idempotent_inverse (C : Type (u+1)) [category C] : Functor (Idempotent C) (Idempotent (Idempotent C)) :=
 {
     onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
     onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩
