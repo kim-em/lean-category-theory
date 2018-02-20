@@ -17,7 +17,7 @@ variables {C : Type (v+1)} [category C] {D : Type (w+1)} [category D]
 
 structure Cone (F : Functor J C) :=
   (cone_point    : C)
-  (cone_maps     : Π j : J, Hom cone_point (F.onObjects j))
+  (cone_maps     : Π j : J, Hom cone_point (F j))
   (commutativity : Π {j k : J}, Π f : Hom j k, (cone_maps j) ≫ (F.onMorphisms f) = cone_maps k . obviously)
 
 make_lemma Cone.commutativity
@@ -32,7 +32,7 @@ structure ConeMorphism (X Y : Cone F) : Type (max u v) :=
 make_lemma ConeMorphism.commutativity
 attribute [simp,ematch] ConeMorphism.commutativity_lemma
 
-@[simp,ematch] def ConeMorphism.commutativity_lemma_assoc {X Y : Cone F} (c : ConeMorphism X Y) (j : J) {Z : C} (z : Hom (F.onObjects j) Z): c.cone_morphism ≫ Y.cone_maps j ≫ z = X.cone_maps j ≫ z :=
+@[simp,ematch] def ConeMorphism.commutativity_lemma_assoc {X Y : Cone F} (c : ConeMorphism X Y) (j : J) {Z : C} (z : Hom (F j) Z): c.cone_morphism ≫ Y.cone_maps j ≫ z = X.cone_maps j ≫ z :=
 begin
 rw ← category.associativity,
 simp,
@@ -56,7 +56,7 @@ instance Cones (F : Functor J C) : category (Cone F) := {
 
 definition Cones_functoriality (F : Functor J C) (G : Functor C D) : Functor (Cone F) (Cone (FunctorComposition F G)) := {
   onObjects     := λ X, {
-    cone_point    := G.onObjects X.cone_point,
+    cone_point    := G X.cone_point,
     cone_maps     := λ j, G.onMorphisms (X.cone_maps j)
  },
   onMorphisms   := λ X Y f, {
@@ -66,7 +66,7 @@ definition Cones_functoriality (F : Functor J C) (G : Functor C D) : Functor (Co
 
 structure Cocone (F : Functor J C) :=
   (cocone_point  : C)
-  (cocone_maps   : Π j : J, Hom (F.onObjects j) cocone_point)
+  (cocone_maps   : Π j : J, Hom (F j) cocone_point)
   (commutativity : Π {j k : J}, Π f : Hom j k, (F.onMorphisms f) ≫ (cocone_maps k) = cocone_maps j . obviously)
 
 make_lemma Cocone.commutativity
@@ -104,7 +104,7 @@ instance Cocones (F : Functor J C) : category (Cocone F) := {
 
 definition Cocones_functoriality (F : Functor J C) (G : Functor C D) : Functor (Cocone F) (Cocone (FunctorComposition F G)) := {
   onObjects     := λ X, {
-    cocone_point    := G.onObjects X.cocone_point,
+    cocone_point    := G X.cocone_point,
     cocone_maps     := λ j, G.onMorphisms (X.cocone_maps j)
  },
   onMorphisms   := λ X Y f, {
@@ -127,8 +127,8 @@ variable {F : Functor J C}
 open categories.universal
 
 definition Functor.onCones (G : Functor C D) (c : Cone F) : Cone (FunctorComposition F G) := 
-(Cones_functoriality F G).onObjects c
+(Cones_functoriality F G) c
 definition Functor.onCocones (G : Functor C D) (c : Cocone F) : Cocone (FunctorComposition F G) := 
-(Cocones_functoriality F G).onObjects c
+(Cocones_functoriality F G) c
 
 end categories.functor

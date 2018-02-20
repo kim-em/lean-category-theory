@@ -47,7 +47,7 @@ instance Functor_to_onObjects : has_coe_to_fun (Functor C D) :=
 
 definition FunctorComposition (F : Functor C D) (G : Functor D E) : Functor C E :=
 {
-  onObjects     := λ X, G.onObjects (F.onObjects X),
+  onObjects     := λ X, G (F X),
   onMorphisms   := λ _ _ f, G.onMorphisms (F.onMorphisms f)
 }
 

@@ -20,7 +20,7 @@ variable [category D]
 
 
 lemma Equivalences_are_EssentiallySurjective (e : Equivalence C D) : EssentiallySurjective (e.functor) :=
-  λ Y : D, ⟨ e.inverse.onObjects Y, e.isomorphism_2.components Y ⟩
+  λ Y : D, ⟨ e.inverse Y, e.isomorphism_2.components Y ⟩
 
 lemma Equivalences_are_Faithful (e : Equivalence C D) : Faithful (e.functor) := {
     injectivity := λ X Y f g w, begin  
@@ -51,10 +51,10 @@ lemma Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : Functor C
     },
     isomorphism_1 := {
         morphism := {
-            components := λ X, full.preimage (es (F.onObjects X)).2.morphism
+            components := λ X, full.preimage (es (F X)).2.morphism
         },
         inverse := {
-            components := λ X, full.preimage (es (F.onObjects X)).2.inverse
+            components := λ X, full.preimage (es (F X)).2.inverse
         }
     },
     isomorphism_2 := {

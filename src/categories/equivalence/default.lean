@@ -98,8 +98,8 @@ end
 -- }
 
 structure Full (F : Functor C D) :=
-  (preimage : ∀ {X Y : C} (f : Hom (F.onObjects X) (F.onObjects Y)), Hom X Y)
-  (witness  : ∀ {X Y : C} (f : Hom (F.onObjects X) (F.onObjects Y)), F.onMorphisms (preimage f) = f . obviously)
+  (preimage : ∀ {X Y : C} (f : Hom (F X) (F Y)), Hom X Y)
+  (witness  : ∀ {X Y : C} (f : Hom (F X) (F Y)), F.onMorphisms (preimage f) = f . obviously)
 
 attribute [semiapplicable] Full.preimage
 make_lemma Full.witness
@@ -113,6 +113,6 @@ attribute [semiapplicable] Faithful.injectivity_lemma
 
 definition Embedding (F : Functor C D) := (Full F) × (Faithful F)
 
-definition EssentiallySurjective (F : Functor C D) := Π d : D, Σ c : C, Isomorphism (F.onObjects c) d
+definition EssentiallySurjective (F : Functor C D) := Π d : D, Σ c : C, Isomorphism (F c) d
 
 end categories.equivalence

@@ -30,7 +30,7 @@ instance Opposite : category (Cᵒᵖ) :=
   identity := λ X, 𝟙 X }
 
 definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=  {
-  onObjects     := λ X, F.onObjects X,
+  onObjects     := λ X, F X,
   onMorphisms   := λ X Y f, F.onMorphisms f
 }
 
@@ -43,24 +43,13 @@ definition HomPairing (C : Type (u₁+1)) [category C]: Functor.{u₁ u₁} (C�
 -- definition OppositeOpposite (C : Category) : Equivalence (Opposite (Opposite C)) C := sorry
 -- PROJECT opposites preserve products, functors, slices.
 
--- @[simp,ematch] lemma ContravariantFunctor.functoriality
---   (F : Functor (Cᵒᵖ) D)
---   (X Y Z : C)
---   (f : Hom X Y) (g : Hom Y Z) :
---     F.onMorphisms ((f ≫ g) : Hom X Z) = (F.onMorphisms g) ≫ (F.onMorphisms f) := begin erw F.functoriality, end -- TODO automate?
-
--- @[simp,ematch] lemma ContravariantFunctor.identities
---   (F : Functor (Cᵒᵖ) D)
---   (X : C) :
---     F.onMorphisms (𝟙 X) = 𝟙 (F.onObjects X) := ♮
-
 @[simp,ematch] lemma ContravariantFunctor.functoriality
   (F : Functor (Cᵒᵖ) D)
   (X Y Z : (Cᵒᵖ))
   (f : Hom X Y) (g : Hom Y Z) :
-    F.onMorphisms ((@categories.category.compose C _ _ _ _ g f) : Hom X Z) = (F.onMorphisms f) ≫ (F.onMorphisms g) := by erw F.functoriality
+    F.onMorphisms ((@categories.category.compose C _ _ _ _ g f) : Hom X Z) = (F.onMorphisms f) ≫ (F.onMorphisms g) := begin erw F.functoriality, end
 
 @[simp,ematch] lemma ContravariantFunctor.identities
-  (F : Functor (Cᵒᵖ) D) (X : (Cᵒᵖ)) : (F.onMorphisms (@categories.category.identity.{u₁} C _ X)) = 𝟙 (F.onObjects X) := by erw F.identities 
+  (F : Functor (Cᵒᵖ) D) (X : (Cᵒᵖ)) : (F.onMorphisms (@categories.category.identity.{u₁} C _ X)) = 𝟙 (F X) := begin erw F.identities, tidy, end
 
 end categories.opposites

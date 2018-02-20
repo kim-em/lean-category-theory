@@ -23,7 +23,7 @@ variable [category B]
 class PreservesLimits (F : Functor A B) :=
 (preserves : Π {I : Type (w+1)} [category I] (D : Functor I A) (q : LimitCone D), @is_terminal (Cone (FunctorComposition D F)) _ (F.onCones q.terminal_object))
 
-theorem HomFunctorPreservesLimits (a : A) : PreservesLimits ((CoYoneda A).onObjects a) := {
+theorem HomFunctorPreservesLimits (a : A) : PreservesLimits ((CoYoneda A) a) := {
     preserves := λ I D q, sorry
 }
 

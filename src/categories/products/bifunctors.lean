@@ -21,7 +21,7 @@ variable [category E]
   (F : Functor (C × D) E)
   (X : C)
   (Y : D)
-  : @Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F.onObjects (X, Y))
+  : @Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F (X, Y))
   := F.identities (X, Y)
 
 @[simp] lemma Bifunctor_left_identity

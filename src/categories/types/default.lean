@@ -21,13 +21,13 @@ instance CategoryOfTypes : category (Type u) :=
     compose  := λ _ _ _ f g, g ∘ f
 }
 
-@[simp] lemma Functor_to_Types_functoriality {C : Type (v+1)} [category C] (F : Functor C (Type u)) {X Y Z : C} (f : Hom X Y) (g : Hom Y Z) (a : F.onObjects X) :
+@[simp] lemma Functor_to_Types_functoriality {C : Type (v+1)} [category C] (F : Functor C (Type u)) {X Y Z : C} (f : Hom X Y) (g : Hom Y Z) (a : F X) :
 (F.onMorphisms (f ≫ g)) a = (F.onMorphisms g) ((F.onMorphisms f) a) :=
 begin
 have p := F.functoriality_lemma f g,
 tidy
 end
-@[simp] lemma Functor_to_Types_identities {C : Type (v+1)} [category C] (F : Functor C (Type u)) {X : C} (a : F.onObjects X) :
+@[simp] lemma Functor_to_Types_identities {C : Type (v+1)} [category C] (F : Functor C (Type u)) {X : C} (a : F X) :
 (F.onMorphisms (𝟙 X)) a = a :=
 begin
 have p := F.identities_lemma X,

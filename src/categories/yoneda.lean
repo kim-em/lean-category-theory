@@ -63,14 +63,14 @@ variable [category C]
 
 class Representable (F : Functor C (Type u₁)) := 
   (c : C)
-  (Φ : NaturalIsomorphism F ((CoYoneda C).onObjects c))
+  (Φ : NaturalIsomorphism F ((CoYoneda C) c))
 
 @[simp] private lemma YonedaLemma_aux_1
    {X Y : C}
    (f : Hom X Y)
    {F G : Functor (Cᵒᵖ) (Type u₁)}
    (τ : NaturalTransformation F G)
-   (Z : F.onObjects Y) :
+   (Z : F Y) :
      (G.onMorphisms f) ((τ.components Y) Z) = (τ.components X) ((F.onMorphisms f) Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
 theorem YonedaLemma (C : Type (u₁+1)) [category C] : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 

@@ -19,7 +19,7 @@ variable {E : Type (w+1)}
 variable [category E]
 
 structure NaturalTransformation (F G : Functor C D) : Type (max (u+1) v) :=
-  (components: Π X : C, Hom (F.onObjects X) (G.onObjects X))
+  (components: Π X : C, Hom (F X) (G X))
   (naturality: ∀ {X Y : C} (f : Hom X Y),
      (F.onMorphisms f) ≫ (components Y) = (components X) ≫ (G.onMorphisms f) . obviously)
 
@@ -28,10 +28,11 @@ attribute [simp,ematch] NaturalTransformation.naturality_lemma
 
 variables {F G H: Functor C D}
 
+-- Unfortunately this coercion is not reliable enough to be usable.
 -- This defines a coercion so we can write `α X` for `components α X`.
-instance NaturalTransformation_to_components : has_coe_to_fun (NaturalTransformation F G) :=
-{F   := λ f, Π X : C, Hom (F.onObjects X) (G.onObjects X),
-  coe := NaturalTransformation.components}
+-- instance NaturalTransformation_to_components : has_coe_to_fun (NaturalTransformation F G) :=
+-- {F   := λ f, Π X : C, Hom (F.onObjects X) (G.onObjects X),
+--   coe := NaturalTransformation.components}
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
 @[applicable] lemma NaturalTransformations_componentwise_equal
@@ -46,7 +47,7 @@ instance NaturalTransformation_to_components : has_coe_to_fun (NaturalTransforma
 
 definition IdentityNaturalTransformation (F : Functor C D) : NaturalTransformation F F :=
 {
-    components := λ X, 𝟙 (F.onObjects X)
+    components := λ X, 𝟙 (F X)
 }
 
 definition vertical_composition_of_NaturalTransformations
@@ -60,7 +61,7 @@ notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
 
 open categories.functor
 
-@[simp] lemma FunctorComposition.onObjects (F : Functor C D) (G : Functor D E) (X : C) : (FunctorComposition F G).onObjects X = G.onObjects (F.onObjects X) := ♯
+@[simp] lemma FunctorComposition.onObjects (F : Functor C D) (G : Functor D E) (X : C) : (FunctorComposition F G) X = G (F X) := ♯
 
 definition horizontal_composition_of_NaturalTransformations
   {F G : Functor C D}
@@ -68,7 +69,7 @@ definition horizontal_composition_of_NaturalTransformations
   (α : NaturalTransformation F G)
   (β : NaturalTransformation H I) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
 {
-    components := λ X : C, (β.components (F.onObjects X)) ≫ (I.onMorphisms (α.components X)),
+    components := λ X : C, (β.components (F X)) ≫ (I.onMorphisms (α.components X)),
     -- naturality := begin tidy, rewrite_search_using `ematch {max_steps:=7} end
 }
 

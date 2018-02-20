@@ -39,7 +39,7 @@ variable [category B]
 variable {C : Type (u₃+2)}
 variable [category C]
 
-definition comma (S : Functor A C) (T : Functor B C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, Hom (S.onObjects p.1) (T.onObjects p.2)
+definition comma (S : Functor A C) (T : Functor B C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, Hom (S p.1) (T p.2)
 
 structure comma_morphism {S : Functor A C} {T : Functor B C} (p q : comma S T) : Type (max u₁ u₂ u₃) :=
 (left : Hom p.1.1 q.1.1)
@@ -61,7 +61,7 @@ attribute [ematch] comma_morphism.condition_lemma
 
 instance CommaCategory (S : Functor A C) (T : Functor B C) : category (comma S T) := {
   Hom      := λ p q, comma_morphism p q,
-  identity := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, ♮ ⟩,
+  identity := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, ♯ ⟩,
   compose  := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, ♯ ⟩
 }
 

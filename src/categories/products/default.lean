@@ -51,7 +51,7 @@ definition RightProjection : Functor (C × D) D :=
 
 definition ProductFunctor (F : Functor A B) (G : Functor C D) : Functor (A × C) (B × D) :=
 {
-  onObjects     := λ X, (F.onObjects X.1, G.onObjects X.2),
+  onObjects     := λ X, (F X.1, G X.2),
   onMorphisms   := λ _ _ f, (F.onMorphisms f.1, G.onMorphisms f.2)
 }
 

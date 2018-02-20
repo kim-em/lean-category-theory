@@ -30,7 +30,7 @@ definition HomAdjunction (L : Functor C D) (R : Functor D C) :=
     (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
     (FunctorComposition (IdentityFunctor (Cᵒᵖ) × R) (HomPairing C))
 
-definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : Hom (L.onObjects X) Y) : Hom X (R.onObjects Y)
+definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : Hom (L X) Y) : Hom X (R Y)
   := ((A.morphism).components (X, Y)) f
 
 -- PROJECT lemmas about mates.

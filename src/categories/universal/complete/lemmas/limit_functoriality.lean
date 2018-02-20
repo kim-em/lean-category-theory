@@ -44,7 +44,7 @@ variable {Y : Cocone F}
 
 @[applicable,reducible] definition morphism_to_terminal_object_cone_point 
   {Z : C}
-  (cone_maps : Π j : J, Hom Z (F.onObjects j)) 
+  (cone_maps : Π j : J, Hom Z (F j)) 
   (commutativity : Π j k : J, Π f : Hom j k, (cone_maps j) ≫ (F.onMorphisms f) = cone_maps k)
    : Hom Z L.terminal_object.cone_point :=
 begin
@@ -73,7 +73,7 @@ end
 
 @[applicable] definition morphism_from_initial_object_cocone_point 
   {Z : C}
-  (cocone_maps : Π j : J, Hom (F.onObjects j) Z) 
+  (cocone_maps : Π j : J, Hom (F j) Z) 
   (commutativity : Π j k : J, Π f : Hom j k, (F.onMorphisms f) ≫ (cocone_maps k) = cocone_maps j)
    : Hom M.initial_object.cocone_point Z :=
 begin

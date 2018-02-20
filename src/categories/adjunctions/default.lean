@@ -25,8 +25,8 @@ variable [category D]
 structure Adjunction (L : Functor C D) (R : Functor D C) :=
   (unit       : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
   (counit     : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D))
-  (triangle_1 : ∀ X : D, (unit.components (R.onObjects X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R.onObjects X))
-  (triangle_2 : ∀ X : C, (L.onMorphisms (unit.components X)) ≫ (counit.components (L.onObjects X)) = 𝟙 (L.onObjects X))
+  (triangle_1 : ∀ X : D, (unit.components (R X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R X))
+  (triangle_2 : ∀ X : C, (L.onMorphisms (unit.components X)) ≫ (counit.components (L X)) = 𝟙 (L X))
 
 attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 

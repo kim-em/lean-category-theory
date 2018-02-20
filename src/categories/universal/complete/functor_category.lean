@@ -23,13 +23,13 @@ variable {D : Type (u₂+1)}
 variable [category D]
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory (F : Functor J (Functor C D)) (c : C) : Functor J D := {
-  onObjects     := λ j, (F.onObjects j).onObjects c,
+  onObjects     := λ j, (F j) c,
   onMorphisms   := λ _ _ f, (F.onMorphisms f).components c
 }
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory_on_Morphism (F : Functor J (Functor C D)) {c c' : C} (f : Hom c c')
   : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
-    components := λ j, (F.onObjects j).onMorphisms f
+    components := λ j, (F j).onMorphisms f
  }
 
 -- PROJECT do this properly, as
@@ -46,7 +46,7 @@ variable [category D]
 
 private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : Functor J (Functor C D)) : Cone F := {     
   cone_point    := {
-    onObjects     := λ c, functorial_Limit.onObjects (evaluate_Functor_to_FunctorCategory F c),
+    onObjects     := λ c, functorial_Limit.onObjects (evaluate_Functor_to_FunctorCategory F c), -- TODO why doesn't the coercion work here?
     onMorphisms   := λ _ _ f, functorial_Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
  },
   cone_maps     := λ j, {
@@ -60,10 +60,10 @@ private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : Functo
 (X : C)
 (j : J)
 (Y Z : Cone F)
-(φ φ' : ConeMorphism Y Z)
-(f : Hom ((Z.cone_point).onObjects X) ((F.onObjects j).onObjects X))
+(φ ψ : ConeMorphism Y Z)
+(f : Hom ((Z.cone_point) X) ((F j) X))
 (w : f = ((Z.cone_maps j).components X))
- : ((φ.cone_morphism).components X) ≫ f = ((φ'.cone_morphism).components X) ≫ f := 
+ : ((φ.cone_morphism).components X) ≫ f = ((ψ.cone_morphism).components X) ≫ f := 
 begin
   rewrite w,
   simp,
@@ -80,7 +80,7 @@ private definition morphism_to_LimitObject_in_FunctorCategory [cmp : Complete D]
                          exact (Y.cone_maps j).components X, 
                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
                        end,
-        naturality := begin tidy {hints:=[9, 7, 6, 7, 9, 23, 19, 9, 10, 9, 10]}, end
+        naturality := begin tidy {hints:=[9, 7, 6, 7, 9, 23, 19, 9, 10, 3, 9, 10, 3]}, end
      },
       commutativity := by tidy {hints:=[9, 7, 6, 7, 9, 10]} 
    }
@@ -89,10 +89,10 @@ private definition morphism_to_LimitObject_in_FunctorCategory [cmp : Complete D]
 instance Limits_in_FunctorCategory [cmp : Complete D] : Complete (Functor C D) := {
   limitCone := λ J _ F, 
   begin
-  resetI,
+  resetI, -- FIXME why do we need this?
   exact {
-    terminal_object                            := @LimitObject_in_FunctorCategory J _ C _ _ _ _ F,
-    morphism_to_terminal_object_from           := λ Y, morphism_to_LimitObject_in_FunctorCategory Y
+    terminal_object                            := LimitObject_in_FunctorCategory F,
+    morphism_to_terminal_object_from           := morphism_to_LimitObject_in_FunctorCategory
  }
  end
 }

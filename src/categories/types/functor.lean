@@ -10,13 +10,13 @@ open categories.types
 
 universes u v
 
-@[simp] private lemma functor_identities (F : Functor (Type u) (Type v)) (α : Type u) (x : F.onObjects α) : F.onMorphisms id x = x := 
+@[simp] private lemma functor_identities (F : Functor (Type u) (Type v)) (α : Type u) (x : F α) : F.onMorphisms id x = x := 
 begin
 have p := Functor_to_Types_identities F x,
 tidy,
 end
 
-instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor (F.onObjects) := {
+instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F := {
     map := λ _ _ f, F.onMorphisms f,
     id_map := ♯,
     map_comp := begin 

@@ -36,7 +36,7 @@ definition whiskering_on_left (C : Type (u₁+1)) [category C] (D : Type (u₂+1
 definition whisker_on_left_functor
   {C : Type (u₁+1)} [category C] {D : Type (u₂+1)} [category D] (F : Functor C D) (E : Type (u₃+1)) [category E] :
   Functor (Functor D E) (Functor C E) :=
-  (whiskering_on_left C D E).onObjects F
+  (whiskering_on_left C D E) F
 
 definition whiskering_on_right (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E] :
     Functor (Functor D E) (Functor (Functor C D) (Functor C E)) :=
@@ -47,14 +47,14 @@ definition whiskering_on_right (C : Type (u₁+1)) [category C] (D : Type (u₂+
  },
   onMorphisms   := λ G H τ, {
     components := λ F, {
-      components := λ c, τ.components (F.onObjects c)
+      components := λ c, τ.components (F c)
    }
  }
 }
 
 definition whisker_on_right_functor (C : Type (u₁+1)) [category C] {D : Type (u₂+1)} [category D] {E : Type (u₃+1)} [category E] (H : Functor D E) :
   Functor (Functor C D) (Functor C E) :=
-(whiskering_on_right C D E).onObjects H
+(whiskering_on_right C D E) H
 
 variable {C : Type (u₁+1)}
 variable [category C]
@@ -69,8 +69,8 @@ variable [category E]
   (X : C)
   {Y Z : D}
   (f : Hom Y Z)
-    : ((F.onObjects X).onMorphisms f) ≫ ((T.components X).components Z) =
-    ((T.components X).components Y) ≫ ((G.onObjects X).onMorphisms f) :=
+    : ((F X).onMorphisms f) ≫ ((T.components X).components Z) =
+    ((T.components X).components Y) ≫ ((G X).onMorphisms f) :=
 begin
   exact (T.components _).naturality _
 end
