@@ -21,12 +21,14 @@ variable {E : Type (w+1)}
 variable [category E]
 
 structure NaturalTransformation (F G : Functor C D) : Type (max (u+1) v) :=
-  (components: Π X : C, Hom (F X) (G X))
-  (naturality: ∀ {X Y : C} (f : Hom X Y),
+  (components: Π X : C, (F X) ⟶ (G X))
+  (naturality: ∀ {X Y : C} (f : X ⟶ Y),
      (F &> f) ≫ (components Y) = (components X) ≫ (G &> f) . obviously)
 
 make_lemma NaturalTransformation.naturality
 attribute [simp,ematch] NaturalTransformation.naturality_lemma
+
+infixr ` ⟹ `:50  := NaturalTransformation             -- type as \==>
 
 variables {F G H: Functor C D}
 
@@ -38,7 +40,7 @@ variables {F G H: Functor C D}
 
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
 @[applicable] lemma NaturalTransformations_componentwise_equal
-  (α β : NaturalTransformation F G)
+  (α β : F ⟹ G)
   (w : ∀ X : C, α.components X = β.components X) : α = β :=
   begin
     induction α with α_components α_naturality,
@@ -47,48 +49,49 @@ variables {F G H: Functor C D}
     subst hc
   end
 
-definition IdentityNaturalTransformation (F : Functor C D) : NaturalTransformation F F :=
-{
+definition IdentityNaturalTransformation (F : Functor C D) : F ⟹ F := {
     components := λ X, 𝟙 (F X)
 }
 
-definition vertical_composition_of_NaturalTransformations
-  (α : NaturalTransformation F G)
-  (β : NaturalTransformation G H) : NaturalTransformation F H :=
-{
+definition vertical_composition_of_NaturalTransformations (α : F ⟹ G) (β : G ⟹ H) : F ⟹ H := {
     components := λ X, (α.components X) ≫ (β.components X)
 }
 
-notation α `∘̬` β := vertical_composition_of_NaturalTransformations α β
+notation α `⊟` β:80 := vertical_composition_of_NaturalTransformations α β
 
 open categories.functor
 
-@[simp] lemma FunctorComposition.onObjects (F : Functor C D) (G : Functor D E) (X : C) : (FunctorComposition F G) X = G (F X) := ♯
+@[simp] lemma FunctorComposition.onObjects (F : Functor C D) (G : Functor D E) (X : C) : (F ⋙ G) X = G (F X) := ♯
 
 definition horizontal_composition_of_NaturalTransformations
   {F G : Functor C D}
   {H I : Functor D E}
-  (α : NaturalTransformation F G)
-  (β : NaturalTransformation H I) : NaturalTransformation (FunctorComposition F H) (FunctorComposition G I) :=
+  (α : F ⟹ G)
+  (β : H ⟹ I) : (F ⋙ H) ⟹ (G ⋙ I) :=
 {
     components := λ X : C, (β.components (F X)) ≫ (I &> (α.components X)),
     -- naturality := begin tidy, rewrite_search_using `ematch {max_steps:=7} end
 }
 
-notation α `∘ₕ` β := horizontal_composition_of_NaturalTransformations α β
+notation α `◫` β:80 := horizontal_composition_of_NaturalTransformations α β
 
 definition whisker_on_left
   (F : Functor C D)
   {G H : Functor D E}
-  (α : NaturalTransformation G H) :
-  NaturalTransformation (FunctorComposition F G) (FunctorComposition F H) :=
-  (IdentityNaturalTransformation F) ∘ₕ α
+  (α : G ⟹ H) :
+  (F ⋙ G) ⟹ (F ⋙ H) :=
+  (IdentityNaturalTransformation F) ◫ α
 
 definition whisker_on_right
   {F G : Functor C D}
-  (α : NaturalTransformation F G)
+  (α : F ⟹ G)
   (H : Functor D E) :
-  NaturalTransformation (FunctorComposition F H) (FunctorComposition G H) :=
-  α ∘ₕ (IdentityNaturalTransformation H)
+  (F ⋙ H) ⟹ (G ⋙ H) :=
+  α ◫ (IdentityNaturalTransformation H)
+
+@[ematch] lemma NaturalTransformation.exchange
+ {F G H : Functor C D}
+ {I J K : Functor D E}
+ (α : F ⟹ G) (β : G ⟹ H) (γ : I ⟹ J) (δ : J ⟹ K) : ((α ⊟ β) ◫ (γ ⊟ δ)) = ((α ◫ γ) ⊟ (β ◫ δ)) := ♯ 
 
 end categories.natural_transformation

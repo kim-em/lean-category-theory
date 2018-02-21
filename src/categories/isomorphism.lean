@@ -14,8 +14,8 @@ variable [category C]
 variables {X Y Z : C}
 
 structure Isomorphism (X Y : C) :=
-(morphism : Hom X Y)
-(inverse : Hom Y X)
+(morphism : X ⟶ Y)
+(inverse : Y ⟶ X)
 (witness_1 : morphism ≫ inverse = 𝟙 X . obviously)
 (witness_2 : inverse ≫ morphism = 𝟙 Y . obviously)
 
@@ -23,20 +23,22 @@ make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
 attribute [simp,ematch] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
 
-@[simp,ematch] lemma Isomorphism.witness_1_assoc_lemma (I : Isomorphism X Y) (f : Hom X Z) : I.morphism ≫ I.inverse ≫ f = f := ♯
-@[simp,ematch] lemma Isomorphism.witness_2_assoc_lemma (I : Isomorphism X Y) (f : Hom Y Z) : I.inverse ≫ I.morphism ≫ f = f := ♯
+infixr ` ≅ `:10  := Isomorphism             -- type as \cong
 
-instance Isomorphism_coercion_to_morphism : has_coe (Isomorphism X Y) (Hom X Y) :=
+@[simp,ematch] lemma Isomorphism.witness_1_assoc_lemma (I : X ≅ Y) (f : X ⟶ Z) : I.morphism ≫ I.inverse ≫ f = f := ♯
+@[simp,ematch] lemma Isomorphism.witness_2_assoc_lemma (I : X ≅ Y) (f : Y ⟶ Z) : I.inverse ≫ I.morphism ≫ f = f := ♯
+
+instance Isomorphism_coercion_to_morphism : has_coe (X ≅ Y) (X ⟶ Y) :=
   {coe := Isomorphism.morphism}
 
-definition IsomorphismComposition (α : Isomorphism X Y) (β : Isomorphism Y Z) : Isomorphism X Z :=
+definition IsomorphismComposition (α : X ≅ Y) (β : Y ≅ Z) : X ≅ Z :=
 {
   morphism := α.morphism ≫ β.morphism,
   inverse := β.inverse ≫ α.inverse
 }
 
 @[applicable] lemma Isomorphism_pointwise_equal
-  (α β : Isomorphism X Y)
+  (α β : X ≅ Y)
   (w : α.morphism = β.morphism) : α = β :=
   begin
     induction α with f g wα1 wα2,
@@ -55,38 +57,38 @@ definition IsomorphismComposition (α : Isomorphism X Y) (β : Isomorphism Y Z) 
     smt_eblast
   end
 
-definition Isomorphism.reverse (I : Isomorphism X Y) : Isomorphism Y X := {
+definition Isomorphism.reverse (I : X ≅ Y) : Y ≅ X := {
   morphism  := I.inverse,
   inverse   := I.morphism
 }
 
-@[simp] lemma Isomorphism.cancel_morphism_left (I : Isomorphism X Y) (f g : Hom Y Z) : I.morphism ≫ f = I.morphism ≫ g ↔ f = g :=
+@[simp] lemma Isomorphism.cancel_morphism_left (I : X ≅ Y) (f g : Y ⟶ Z) : I.morphism ≫ f = I.morphism ≫ g ↔ f = g :=
 begin
 tidy,
 have h := congr_arg (λ h, I.inverse ≫ h) a,
 tidy,
 end
-@[simp] lemma Isomorphism.cancel_morphism_right (I : Isomorphism X Y) (f g : Hom Z X) : f ≫ I.morphism = g ≫ I.morphism ↔ f = g :=
+@[simp] lemma Isomorphism.cancel_morphism_right (I : X ≅ Y) (f g : Z ⟶ X) : f ≫ I.morphism = g ≫ I.morphism ↔ f = g :=
 begin
 tidy,
 have h := congr_arg (λ h, h ≫ I.inverse) a,
 tidy,
 end
-@[simp] lemma Isomorphism.cancel_inverse_left (I : Isomorphism X Y) (f g : Hom X Z) : I.inverse ≫ f = I.inverse ≫ g ↔ f = g :=
+@[simp] lemma Isomorphism.cancel_inverse_left (I : X ≅ Y) (f g : X ⟶ Z) : I.inverse ≫ f = I.inverse ≫ g ↔ f = g :=
 begin
 tidy,
 have h := congr_arg (λ h, I.morphism ≫ h) a,
 tidy,
 end
-@[simp] lemma Isomorphism.cancel_inverse_right (I : Isomorphism X Y) (f g : Hom Z Y) : f ≫ I.inverse = g ≫ I.inverse ↔ f = g :=
+@[simp] lemma Isomorphism.cancel_inverse_right (I : X ≅ Y) (f g : Z ⟶ Y) : f ≫ I.inverse = g ≫ I.inverse ↔ f = g :=
 begin
 tidy,
 have h := congr_arg (λ h, h ≫ I.morphism) a,
 tidy,
 end
 
-structure is_Isomorphism (morphism : Hom X Y) :=
-(inverse : Hom Y X)
+structure is_Isomorphism (morphism : X ⟶ Y) :=
+(inverse : Y ⟶ X)
 (witness_1 : morphism ≫ inverse = 𝟙 X . obviously)
 (witness_2 : inverse ≫ morphism = 𝟙 Y . obviously)
 
@@ -94,10 +96,10 @@ make_lemma is_Isomorphism.witness_1
 make_lemma is_Isomorphism.witness_2
 attribute [simp,ematch] is_Isomorphism.witness_1_lemma is_Isomorphism.witness_2_lemma
 
-instance is_Isomorphism_coercion_to_morphism (f : Hom X Y): has_coe (is_Isomorphism f) (Hom X Y) :=
+instance is_Isomorphism_coercion_to_morphism (f : X ⟶ Y): has_coe (is_Isomorphism f) (X ⟶ Y) :=
   {coe := λ _, f}
 
-definition Epimorphism (f : Hom X Y) := Π (g h : Hom Y Z) (w : f ≫ g = f ≫ h), g = h
-definition Monomorphism (f : Hom X Y) := Π (g h : Hom Z X) (w : g ≫ f = h ≫ f), g = h
+definition Epimorphism (f : X ⟶ Y) := Π (g h : Hom Y Z) (w : f ≫ g = f ≫ h), g = h
+definition Monomorphism (f : X ⟶ Y) := Π (g h : Hom Z X) (w : g ≫ f = h ≫ f), g = h
 
 end categories.isomorphism

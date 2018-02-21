@@ -15,10 +15,10 @@ universes u₁ u₂ u₃
 structure Functor (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] : Type ((max (u₁+1) u₂)+1) :=
   (onObjects   : C → D)
   (onMorphisms : Π {X Y : C},
-                Hom X Y → Hom (onObjects X) (onObjects Y))
+                 (X ⟶ Y) → ((onObjects X) ⟶ (onObjects Y)))
   (identities : ∀ (X : C),
     onMorphisms (𝟙 X) = 𝟙 (onObjects X) . obviously)
-  (functoriality : ∀ {X Y Z : C} (f : Hom X Y) (g : Hom Y Z),
+  (functoriality : ∀ {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z),
     onMorphisms (f ≫ g) = (onMorphisms f) ≫ (onMorphisms g) . obviously)
 
 make_lemma Functor.identities
@@ -53,6 +53,8 @@ definition FunctorComposition (F : Functor C D) (G : Functor D E) : Functor C E 
   onMorphisms   := λ _ _ f, G &> (F &> f)
 }
 
+infixr ` ⋙ `:80 := FunctorComposition
+
 -- Functors preserve isomorphisms
 definition Functor.onIsomorphisms (F : Functor C D) {X Y : C} (g : Isomorphism X Y) : Isomorphism (F.onObjects X) (F.onObjects Y) :=
 {
@@ -61,6 +63,6 @@ definition Functor.onIsomorphisms (F : Functor C D) {X Y : C} (g : Isomorphism X
 }
 
 class ReflectsIsomorphisms (F : Functor C D) :=
-  (reflects : Π {X Y : C} (f : Hom X Y) (w : is_Isomorphism (F &> f)), is_Isomorphism f)
+  (reflects : Π {X Y : C} (f : X ⟶ Y) (w : is_Isomorphism (F &> f)), is_Isomorphism f)
 
 end categories.functor

@@ -61,8 +61,7 @@ end ProductFunctor
 
 definition ProductNaturalTransformation
   {F G : Functor A B} {H I : Functor C D} 
-  (α : NaturalTransformation F G) (β : NaturalTransformation H I) : 
-    NaturalTransformation (F × H) (G × I) :=
+  (α : F ⟹ G) (β : H ⟹ I) : (F × H) ⟹ (G × I) :=
 {
   components := λ X, (α.components X.1, β.components X.2)
 }
