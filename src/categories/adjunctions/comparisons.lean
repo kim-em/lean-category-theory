@@ -30,7 +30,7 @@
 -- {
 --   components := λ P, 
 --     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
---     λ f, (A.unit.components P.1) ≫ (R.onMorphisms f)
+--     λ f, (A.unit.components P.1) ≫ (R &> f)
 -- }
 
 -- private definition Adjunction_to_HomAdjunction_inverse {L : Functor C D} {R : Functor D C} (A : Adjunction L R) 
@@ -39,7 +39,7 @@
 -- {
 --   components := λ P, 
 --     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
---     λ f, (L.onMorphisms f) ≫ (A.counit.components P.2)
+--     λ f, (L &> f) ≫ (A.counit.components P.2)
 -- }
 
 -- definition Adjunction_to_HomAdjunction  {L : Functor C D} {R : Functor D C} (A : Adjunction L R) : HomAdjunction L R := 
@@ -52,11 +52,11 @@
 --   {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
 --   {X Y : C} (f : Hom X Y)
 --     : (((A.morphism).components (X, L X)) (𝟙 (L X))) ≫ 
---       (R.onMorphisms (L.onMorphisms f))
---       = ((A.morphism).components (X, L Y)) (L.onMorphisms f) :=
+--       (R &> (L &> f))
+--       = ((A.morphism).components (X, L Y)) (L &> f) :=
 -- begin
---   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.morphism (X, L X) (X, L Y) (𝟙 X, L.onMorphisms f),
---   have q := congr_fun p (L.onMorphisms (𝟙 X)),
+--   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.morphism (X, L X) (X, L Y) (𝟙 X, L &> f),
+--   have q := congr_fun p (L &> (𝟙 X)),
 --   tidy,
 -- end
 
@@ -64,21 +64,21 @@
 --   {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
 --   {X Y : C} (f : Hom X Y)
 --     : f ≫ (((A.morphism).components (Y, L Y)) (𝟙 (L Y)))
---       = ((A.morphism).components (X, L Y)) (L.onMorphisms f) :=
+--       = ((A.morphism).components (X, L Y)) (L &> f) :=
 -- begin
 --   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.morphism (Y, L Y) (X, L Y) (f, 𝟙 (L Y)),
---   have q := congr_fun p (L.onMorphisms (𝟙 Y)),
+--   have q := congr_fun p (L &> (𝟙 Y)),
 --   tidy,
 -- end
 
 -- @[simp] lemma mate_of_R
 --   {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
 --   {X Y : D} (f : Hom X Y)
---     : (L.onMorphisms (R.onMorphisms f)) ≫ (((A.inverse).components (R Y, Y)) (𝟙 (R Y)))
---       = ((A.inverse).components (R X, Y)) (R.onMorphisms f) :=
+--     : (L &> (R &> f)) ≫ (((A.inverse).components (R Y, Y)) (𝟙 (R Y)))
+--       = ((A.inverse).components (R X, Y)) (R &> f) :=
 -- begin
---   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.inverse (R Y, Y) (R X, Y) (R.onMorphisms f, 𝟙 Y),
---   have q := congr_fun p (R.onMorphisms (𝟙 Y)),
+--   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.inverse (R Y, Y) (R X, Y) (R &> f, 𝟙 Y),
+--   have q := congr_fun p (R &> (𝟙 Y)),
 --   tidy,
 -- end
 
@@ -86,10 +86,10 @@
 --   {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
 --   {X Y : D} (f : Hom X Y)
 --     : (((A.inverse).components (R X, X)) (𝟙 (R X))) ≫ f = 
---     ((A.inverse).components (R X, Y)) (R.onMorphisms f) :=
+--     ((A.inverse).components (R X, Y)) (R &> f) :=
 -- begin
 --   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.inverse (R X, X) (R X, Y) (𝟙 (R X), f),
---   have q := congr_fun p (R.onMorphisms (𝟙 X)),
+--   have q := congr_fun p (R &> (𝟙 X)),
 --   tidy,
 -- end
 
@@ -104,7 +104,7 @@
 -- -- {C D : Category} {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
 -- -- (X : C.Obj)
 -- -- (Y : D.Obj)
--- -- : ∀ f : C.Hom X (R Y), C.compose f (C.compose ((unit_from_HomAdjunction A).components (R Y)) (R.onMorphisms ((counit_from_HomAdjunction A).components Y))) = f :=
+-- -- : ∀ f : C.Hom X (R Y), C.compose f (C.compose ((unit_from_HomAdjunction A).components (R Y)) (R &> ((counit_from_HomAdjunction A).components Y))) = f :=
 -- -- begin
 -- --   intro f,
 -- --   rewrite ← C.associativity,

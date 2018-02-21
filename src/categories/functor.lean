@@ -26,7 +26,7 @@ make_lemma Functor.functoriality
 attribute [simp,ematch] Functor.identities_lemma
 attribute [simp,ematch] Functor.functoriality_lemma
 
-infixr ` &> `:80 := Functor.onMorphisms -- type as \gg
+infixr ` &> `:80 := Functor.onMorphisms
 
 definition IdentityFunctor (C) [category C] : Functor C C :=
 {
@@ -56,8 +56,8 @@ definition FunctorComposition (F : Functor C D) (G : Functor D E) : Functor C E 
 -- Functors preserve isomorphisms
 definition Functor.onIsomorphisms (F : Functor C D) {X Y : C} (g : Isomorphism X Y) : Isomorphism (F.onObjects X) (F.onObjects Y) :=
 {
-    morphism := F.onMorphisms g.morphism,
-    inverse := F.onMorphisms g.inverse,
+    morphism := F &> g.morphism,
+    inverse := F &> g.inverse,
 }
 
 class ReflectsIsomorphisms (F : Functor C D) :=

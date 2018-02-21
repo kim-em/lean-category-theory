@@ -54,7 +54,7 @@
 --   (i j : C.I) 
 --   {D : Category}
 --   (F : PresheafOf D X) : D.Hom (F.onObjects (C.U i)) (F.onObjects ((C.U i) ∩ (C.U j))) := 
--- F.onMorphisms (ulift.up (plift.up (intersection_inclusion_1 i j)))
+-- F &> (ulift.up (plift.up (intersection_inclusion_1 i j)))
 
 -- private definition restriction_to_intersection_2
 --   {α} {X : topological_space α} 
@@ -62,7 +62,7 @@
 --   (i j : C.I) 
 --   {D : Category}
 --   (F : PresheafOf D X) : D.Hom (F.onObjects (C.U j)) (F.onObjects ((C.U i) ∩ (C.U j))) := 
--- F.onMorphisms (ulift.up (plift.up (intersection_inclusion_2 i j)))
+-- F &> (ulift.up (plift.up (intersection_inclusion_2 i j)))
 
 -- structure CompatibleSections {α} {X : topological_space α} (covering : OpenCovering X) (F : Presheaf X) := 
 --   (sections      : Π i : covering.I, F.onObjects (covering.U i))
@@ -70,7 +70,7 @@
 
 -- structure Gluing {α} {X : topological_space α} {U : OpenCovering X} {F : Presheaf X} (s : CompatibleSections U F) :=
 --   (section_     : F.onObjects U.union)
---   (restrictions : ∀ i : U.I, F.onMorphisms (ulift.up (plift.up (U.union_inclusion i))) section_ = s.sections i)
+--   (restrictions : ∀ i : U.I, F &> (ulift.up (plift.up (U.union_inclusion i))) section_ = s.sections i)
 
 -- structure Sheaf {α} (X : topological_space α) :=
 --   (presheaf        : Presheaf X)

@@ -24,12 +24,12 @@ variable [category D]
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory (F : Functor J (Functor C D)) (c : C) : Functor J D := {
   onObjects     := λ j, (F j) c,
-  onMorphisms   := λ _ _ f, (F.onMorphisms f).components c
+  onMorphisms   := λ _ _ f, (F &> f).components c
 }
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory_on_Morphism (F : Functor J (Functor C D)) {c c' : C} (f : Hom c c')
   : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
-    components := λ j, (F j).onMorphisms f
+    components := λ j, (F j) &> f
  }
 
 -- PROJECT do this properly, as
@@ -47,7 +47,7 @@ variable [category D]
 private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : Functor J (Functor C D)) : Cone F := {     
   cone_point    := {
     onObjects     := λ c, functorial_Limit.onObjects (evaluate_Functor_to_FunctorCategory F c), -- TODO why doesn't the coercion work here?
-    onMorphisms   := λ _ _ f, functorial_Limit.onMorphisms (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
+    onMorphisms   := λ _ _ f, functorial_Limit &> (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
  },
   cone_maps     := λ j, {
     components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,

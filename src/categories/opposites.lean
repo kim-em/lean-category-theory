@@ -31,7 +31,7 @@ instance Opposite : category (Cᵒᵖ) :=
 
 definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=  {
   onObjects     := λ X, F X,
-  onMorphisms   := λ X Y f, F.onMorphisms f
+  onMorphisms   := λ X Y f, F &> f
 }
 
 definition HomPairing (C : Type (u₁+1)) [category C]: Functor.{u₁ u₁} (Cᵒᵖ × C) (Type u₁) := { 
@@ -47,9 +47,9 @@ definition HomPairing (C : Type (u₁+1)) [category C]: Functor.{u₁ u₁} (C�
   (F : Functor (Cᵒᵖ) D)
   (X Y Z : (Cᵒᵖ))
   (f : Hom X Y) (g : Hom Y Z) :
-    F.onMorphisms ((@categories.category.compose C _ _ _ _ g f) : Hom X Z) = (F.onMorphisms f) ≫ (F.onMorphisms g) := begin erw F.functoriality, end
+    F &> ((@categories.category.compose C _ _ _ _ g f) : Hom X Z) = (F &> f) ≫ (F &> g) := begin erw F.functoriality, end
 
 @[simp,ematch] lemma ContravariantFunctor.identities
-  (F : Functor (Cᵒᵖ) D) (X : (Cᵒᵖ)) : (F.onMorphisms (@categories.category.identity.{u₁} C _ X)) = 𝟙 (F X) := begin erw F.identities, tidy, end
+  (F : Functor (Cᵒᵖ) D) (X : (Cᵒᵖ)) : (F &> (@categories.category.identity.{u₁} C _ X)) = 𝟙 (F X) := begin erw F.identities, tidy, end
 
 end categories.opposites

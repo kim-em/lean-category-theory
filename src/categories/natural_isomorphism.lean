@@ -54,17 +54,17 @@ variables {F G H : Functor C D}
   (α : NaturalIsomorphism F G)
   {X Y : C}
   (f : Hom X Y)
-   : (α.inverse.components X) ≫ (F.onMorphisms f) ≫ (α.morphism.components Y) = G.onMorphisms f := ♯
+   : (α.inverse.components X) ≫ (F &> f) ≫ (α.morphism.components Y) = G &> f := ♯
 
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
   (α : NaturalIsomorphism F G)
   {X Y : C}
   (f : Hom X Y)
-   : (α.morphism.components X) ≫ (G.onMorphisms f) ≫ (α.inverse.components Y) = F.onMorphisms f := ♯
+   : (α.morphism.components X) ≫ (G &> f) ≫ (α.inverse.components Y) = F &> f := ♯
 
 definition NaturalIsomorphism.from_components
   (components : ∀ X : C, Isomorphism (F X) (G X))
-  (naturality : ∀ {X Y : C} (f : Hom X Y), (F.onMorphisms f) ≫ (components Y).morphism = (components X).morphism ≫ (G.onMorphisms f)) : NaturalIsomorphism F G :=
+  (naturality : ∀ {X Y : C} (f : Hom X Y), (F &> f) ≫ (components Y).morphism = (components X).morphism ≫ (G &> f)) : NaturalIsomorphism F G :=
   {
     morphism  := {
       components := λ X, (components X).morphism,

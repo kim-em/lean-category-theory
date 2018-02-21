@@ -23,7 +23,7 @@ definition Uncurry_Functors :
     {
       onObjects     := λ (F : Functor C (Functor D E)), {
         onObjects     := λ X, (F X.1) X.2,
-        onMorphisms   := λ X Y f, ((F.onMorphisms f.1).components X.2) ≫ ((F Y.1).onMorphisms f.2)
+        onMorphisms   := λ X Y f, ((F &> f.1).components X.2) ≫ ((F Y.1) &> f.2)
      },
       onMorphisms   := λ F G (T : NaturalTransformation F G), {
         components := λ X, (T.components _).components _
@@ -36,7 +36,7 @@ definition Curry_Functors :
       onObjects     := λ F: Functor (C × D) E, {
         onObjects     := λ X, {
           onObjects     := λ Y, F (X, Y),
-          onMorphisms   := λ Y Y' g, F.onMorphisms (𝟙 X, g)
+          onMorphisms   := λ Y Y' g, F &> (𝟙 X, g)
        },
         onMorphisms   := λ X X' f, {
           components := λ Y, F.onMorphisms (f, 𝟙 Y)

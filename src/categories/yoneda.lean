@@ -71,7 +71,7 @@ class Representable (F : Functor C (Type u₁)) :=
    {F G : Functor (Cᵒᵖ) (Type u₁)}
    (τ : NaturalTransformation F G)
    (Z : F Y) :
-     (G.onMorphisms f) ((τ.components Y) Z) = (τ.components X) ((F.onMorphisms f) Z) := eq.symm (congr_fun (τ.naturality f) Z)
+     (G &> f) ((τ.components Y) Z) = (τ.components X) ((F &> f) Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
 theorem YonedaLemma (C : Type (u₁+1)) [category C] : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
 begin
@@ -82,7 +82,7 @@ refine {
   },
   inverse := {
     components := λ F x, { 
-      components := λ X a, (F.1.onMorphisms a) x.down, 
+      components := λ X a, (F.1 &> a) x.down, 
       naturality := _ },
     naturality := _
   },

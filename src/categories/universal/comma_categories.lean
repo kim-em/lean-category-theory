@@ -44,7 +44,7 @@ definition comma (S : Functor A C) (T : Functor B C) : Type ((max u₁ u₂ u₃
 structure comma_morphism {S : Functor A C} {T : Functor B C} (p q : comma S T) : Type (max u₁ u₂ u₃) :=
 (left : Hom p.1.1 q.1.1)
 (right : Hom p.1.2 q.1.2)
-(condition : (S.onMorphisms left) ≫ q.2 = p.2 ≫ (T.onMorphisms right) . obviously)
+(condition : (S &> left) ≫ q.2 = p.2 ≫ (T &> right) . obviously)
 
 make_lemma comma_morphism.condition
 attribute [ematch] comma_morphism.condition_lemma

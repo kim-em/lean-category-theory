@@ -42,13 +42,13 @@ definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C :=
   isomorphism_2 := e.isomorphism_1
 }
 
-@[simp,ematch] lemma Equivalence.onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : Hom X Y) : e.functor.onMorphisms (e.inverse.onMorphisms f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := 
+@[simp,ematch] lemma Equivalence.onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : Hom X Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := 
 begin
 tidy,
 erw e.isomorphism_2.naturality_2,
 tidy,
 end
-@[simp,ematch] lemma Equivalence.onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : Hom X Y) : e.inverse.onMorphisms (e.functor.onMorphisms f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := 
+@[simp,ematch] lemma Equivalence.onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : Hom X Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := 
 begin
 tidy,
 erw e.isomorphism_1.naturality_2,
@@ -57,7 +57,7 @@ end
 
 -- -- TODO this should have 3 relatives.
 -- @[simp,ematch] lemma Equivalence.naturality_2 (e : Equivalence C D) {X Y : D} (f : Hom X Y)
---   :      e.functor.onMorphisms (e.inverse.onMorphisms f) ≫ ((e.isomorphism_2).morphism).components Y =
+--   :      e.functor &> (e.inverse &> f) ≫ ((e.isomorphism_2).morphism).components Y =
 --          ((e.isomorphism_2).morphism).components X ≫ f :=
 -- begin
 -- erw ← ((e.isomorphism_2).morphism).naturality,
@@ -99,14 +99,14 @@ end
 
 structure Full (F : Functor C D) :=
   (preimage : ∀ {X Y : C} (f : Hom (F X) (F Y)), Hom X Y)
-  (witness  : ∀ {X Y : C} (f : Hom (F X) (F Y)), F.onMorphisms (preimage f) = f . obviously)
+  (witness  : ∀ {X Y : C} (f : Hom (F X) (F Y)), F &> (preimage f) = f . obviously)
 
 attribute [semiapplicable] Full.preimage
 make_lemma Full.witness
 attribute [simp,ematch] Full.witness_lemma
 
 class Faithful (F : Functor C D) :=
-  (injectivity : ∀ {X Y : C} (f g : Hom X Y) (p : F.onMorphisms f = F.onMorphisms g), f = g) -- FIXME writing '. obviously' here causes Lean to hang
+  (injectivity : ∀ {X Y : C} (f g : Hom X Y) (p : F &> f = F &> g), f = g) -- FIXME writing '. obviously' here causes Lean to hang
 
 make_lemma Faithful.injectivity
 attribute [semiapplicable] Faithful.injectivity_lemma

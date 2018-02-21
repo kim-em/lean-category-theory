@@ -28,7 +28,7 @@ instance Limits_from_Products_and_Equalizers [has_Products C] [has_Equalizers C]
     exact 
     let product_over_objects   := product F in
     let product_over_morphisms := product (λ f : (Σ s : J, Σ t : J, Hom s t), F f.2.1) in -- TODO this would be cleaner as a sigma over J × J
-    let source    := product_over_morphisms.map (λ f, (product_over_objects.projection f.1) ≫ (F.onMorphisms f.2.2))  in
+    let source    := product_over_morphisms.map (λ f, (product_over_objects.projection f.1) ≫ (F &> f.2.2))  in
     let target    := product_over_morphisms.map (λ f, product_over_objects.projection f.2.1) in
     let equalizer := equalizer source target in {
       terminal_object     := {

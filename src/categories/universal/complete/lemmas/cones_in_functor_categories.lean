@@ -28,7 +28,7 @@ variable [category D]
   {G : Functor J D}
   {L : LimitCone G}
   (cone_maps : Π j : J, Hom Z (G j)) 
-  (commutativity : Π j k : J, Π f : Hom j k, (cone_maps j) ≫ (G.onMorphisms f) = cone_maps k)
+  (commutativity : Π j k : J, Π f : Hom j k, (cone_maps j) ≫ (G &> f) = cone_maps k)
   (f g : Hom Z L.terminal_object.cone_point)
   (commutativity_f : Π j : J, f ≫ (L.terminal_object.cone_maps j) = cone_maps j)
   (commutativity_g : Π j : J, g ≫ (L.terminal_object.cone_maps j) = cone_maps j)
@@ -56,8 +56,8 @@ lemma bifunctor_naturality
 (f : Hom X Y)
 (j k : J)
 (g : Hom j k)
-  : ((F j).onMorphisms f) ≫ ((F.onMorphisms g).components Y)
-  = ((F.onMorphisms g).components X) ≫ ((F k).onMorphisms f) := ♯
+  : ((F j) &> f) ≫ ((F &> g).components Y)
+  = ((F &> g).components X) ≫ ((F k) &> f) := ♯
 
 @[simp] lemma cone_in_functor_category 
 (F : Functor J (Functor C D))
@@ -66,9 +66,9 @@ lemma bifunctor_naturality
 (j k : J)
 (g : Hom j k)
 (cone : Cone F)
-: ((cone.cone_maps j).components X) ≫ ((F j).onMorphisms f) ≫ 
-      ((F.onMorphisms g).components Y) =
-    ((cone.cone_maps k).components X) ≫ ((F k).onMorphisms f) :=
+: ((cone.cone_maps j).components X) ≫ ((F j) &> f) ≫ 
+      ((F &> g).components Y) =
+    ((cone.cone_maps k).components X) ≫ ((F k) &> f) :=
 begin
   have p := cone.commutativity g,
   have p' := congr_arg NaturalTransformation.components p,
@@ -82,8 +82,8 @@ end
 (f : Hom X Y)
 (j : J)
 (cone : universal.Cone F)
-  : ((cone.cone_point).onMorphisms f) ≫ ((cone.cone_maps j).components Y) =
-    ((cone.cone_maps j).components X) ≫ ((F j).onMorphisms f) := ♯
+  : ((cone.cone_point) &> f) ≫ ((cone.cone_maps j).components Y) =
+    ((cone.cone_maps j).components X) ≫ ((F j) &> f) := ♯
 
 @[simp] lemma cone_commutativity_in_FunctorCategory
 (F : Functor J (Functor C D))
@@ -91,7 +91,7 @@ end
 (j k : J)
 (f : Hom j k) 
 (Y : Cone F)
- : ((Y.cone_maps j).components X) ≫ ((F.onMorphisms f).components X) = (Y.cone_maps k).components X := 
+ : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) = (Y.cone_maps k).components X := 
 begin
  have p := Y.commutativity f,
  have p' := congr_arg NaturalTransformation.components p,
@@ -106,7 +106,7 @@ end
 (Y : Cone F)
 (Z : D)
 (z : Hom ((F k) X) Z)
- : ((Y.cone_maps j).components X) ≫ ((F.onMorphisms f).components X) ≫ z = (Y.cone_maps k).components X ≫ z := 
+ : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) ≫ z = (Y.cone_maps k).components X ≫ z := 
 begin
  rw ← category.associativity,
  simp

@@ -50,7 +50,7 @@ definition Functor_restricts_to_FullSubcategory
   (ZD : D → Type u₂)
   (w : ∀ {X : C} (z : ZC X), ZD (F X)) : Functor (Σ X : C, ZC X) (Σ Y : D, ZD Y) := {
     onObjects     := λ X, ⟨ F X.1, w X.2 ⟩,
-    onMorphisms   := λ _ _ f, F.onMorphisms f
+    onMorphisms   := λ _ _ f, F &> f
  }
 
 end categories

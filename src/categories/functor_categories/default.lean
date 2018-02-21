@@ -28,7 +28,7 @@ definition whiskering_on_left (C : Type (u₁+1)) [category C] (D : Type (u₂+1
  },
   onMorphisms   := λ F G τ, {
     components := λ H, {
-      components := λ c, H.onMorphisms (τ.components c)
+      components := λ c, H &> (τ.components c)
    }
  }
 }
@@ -69,8 +69,8 @@ variable [category E]
   (X : C)
   {Y Z : D}
   (f : Hom Y Z)
-    : ((F X).onMorphisms f) ≫ ((T.components X).components Z) =
-    ((T.components X).components Y) ≫ ((G X).onMorphisms f) :=
+    : ((F X) &> f) ≫ ((T.components X).components Z) =
+    ((T.components X).components Y) ≫ ((G X) &> f) :=
 begin
   exact (T.components _).naturality _
 end
@@ -81,8 +81,8 @@ end
   (Z : D)
   {X Y : C}
   (f : Hom X Y)
-  : ((F.onMorphisms f).components Z) ≫ ((T.components Y).components Z) =
-    ((T.components X).components Z) ≫ ((G.onMorphisms f).components Z) :=
+  : ((F &> f).components Z) ≫ ((T.components Y).components Z) =
+    ((T.components X).components Z) ≫ ((G &> f).components Z) :=
 begin
   have p := T.naturality _,
   have q := congr_arg NaturalTransformation.components p,

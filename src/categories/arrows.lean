@@ -50,8 +50,8 @@ variable [category D]
 
 definition Functor.onArrows : Functor (Functor C D) (Functor (arrow C) (arrow D)) := {
   onObjects := λ F, {
-    onObjects     := λ X, ⟨ (F X.1.1, F X.1.2), F.onMorphisms X.2 ⟩,
-    onMorphisms   := λ X Y f, ⟨ (F.onMorphisms f.morphism.1, F.onMorphisms f.morphism.2) ⟩
+    onObjects     := λ X, ⟨ (F X.1.1, F X.1.2), F &> X.2 ⟩,
+    onMorphisms   := λ X Y f, ⟨ (F &> f.morphism.1, F &> f.morphism.2) ⟩
   },
   onMorphisms := λ F G τ, {
     components := λ X, ⟨ (τ.components X.1.1, τ.components X.1.2) ⟩ 

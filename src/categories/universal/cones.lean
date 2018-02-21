@@ -18,7 +18,7 @@ variables {C : Type (v+1)} [category C] {D : Type (w+1)} [category D]
 structure Cone (F : Functor J C) :=
   (cone_point    : C)
   (cone_maps     : Π j : J, Hom cone_point (F j))
-  (commutativity : Π {j k : J}, Π f : Hom j k, (cone_maps j) ≫ (F.onMorphisms f) = cone_maps k . obviously)
+  (commutativity : Π {j k : J}, Π f : Hom j k, (cone_maps j) ≫ (F &> f) = cone_maps k . obviously)
 
 make_lemma Cone.commutativity
 attribute [simp,ematch] Cone.commutativity_lemma
@@ -57,17 +57,17 @@ instance Cones (F : Functor J C) : category (Cone F) := {
 definition Cones_functoriality (F : Functor J C) (G : Functor C D) : Functor (Cone F) (Cone (FunctorComposition F G)) := {
   onObjects     := λ X, {
     cone_point    := G X.cone_point,
-    cone_maps     := λ j, G.onMorphisms (X.cone_maps j)
+    cone_maps     := λ j, G &> (X.cone_maps j)
  },
   onMorphisms   := λ X Y f, {
-    cone_morphism := G.onMorphisms f.cone_morphism
+    cone_morphism := G &> f.cone_morphism
  }
 }
 
 structure Cocone (F : Functor J C) :=
   (cocone_point  : C)
   (cocone_maps   : Π j : J, Hom (F j) cocone_point)
-  (commutativity : Π {j k : J}, Π f : Hom j k, (F.onMorphisms f) ≫ (cocone_maps k) = cocone_maps j . obviously)
+  (commutativity : Π {j k : J}, Π f : Hom j k, (F &> f) ≫ (cocone_maps k) = cocone_maps j . obviously)
 
 make_lemma Cocone.commutativity
 attribute [simp,ematch] Cocone.commutativity_lemma
@@ -105,10 +105,10 @@ instance Cocones (F : Functor J C) : category (Cocone F) := {
 definition Cocones_functoriality (F : Functor J C) (G : Functor C D) : Functor (Cocone F) (Cocone (FunctorComposition F G)) := {
   onObjects     := λ X, {
     cocone_point    := G X.cocone_point,
-    cocone_maps     := λ j, G.onMorphisms (X.cocone_maps j)
+    cocone_maps     := λ j, G &> (X.cocone_maps j)
  },
   onMorphisms   := λ X Y f, {
-    cocone_morphism := G.onMorphisms f.cocone_morphism
+    cocone_morphism := G &> f.cocone_morphism
  }
 }
 

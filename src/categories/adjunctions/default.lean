@@ -25,8 +25,8 @@ variable [category D]
 structure Adjunction (L : Functor C D) (R : Functor D C) :=
   (unit       : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
   (counit     : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D))
-  (triangle_1 : ∀ X : D, (unit.components (R X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R X))
-  (triangle_2 : ∀ X : C, (L.onMorphisms (unit.components X)) ≫ (counit.components (L X)) = 𝟙 (L X))
+  (triangle_1 : ∀ X : D, (unit.components (R X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R X)) -- FIXME why can't we use notation here?
+  (triangle_2 : ∀ X : C, (L &> (unit.components X)) ≫ (counit.components (L X)) = 𝟙 (L X))
 
 attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
@@ -63,7 +63,7 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 @[simp,ematch] lemma Adjunction.unit_naturality
   {L : Functor C D} {R : Functor D C} 
   (A : Adjunction L R) 
-  {X Y : C} (f : Hom X Y) : (A.unit.components X) ≫  (R.onMorphisms (L.onMorphisms f)) = f ≫ (A.unit.components Y) :=
+  {X Y : C} (f : Hom X Y) : (A.unit.components X) ≫ (R.onMorphisms (L &> f)) = f ≫ (A.unit.components Y) := -- FIXME failed notation here?
   begin
   tidy,
   erw A.unit.naturality,
@@ -73,7 +73,7 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 @[simp,ematch] lemma Adjunction.counit_naturality
   {L : Functor C D} {R : Functor D C} 
   (A : Adjunction L R) 
-  {X Y : D} (f : Hom X Y) : (L.onMorphisms (R.onMorphisms f)) ≫ (A.counit.components Y) = (A.counit.components X) ≫ f :=
+  {X Y : D} (f : Hom X Y) : (L &> (R &> f)) ≫ (A.counit.components Y) = (A.counit.components X) ≫ f :=
   begin
   tidy,
   erw A.counit.naturality,
