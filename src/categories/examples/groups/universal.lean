@@ -12,9 +12,6 @@ open categories.universal
 
 universe u
 
-@[applicable] lemma punit_equality
-  (a b : punit.{u}): a = b := ♯
-
 instance : group punit := 
 begin
 refine {
