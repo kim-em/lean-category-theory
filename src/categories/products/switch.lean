@@ -19,12 +19,12 @@ variable [category C]
 variable (D : Type (u₂+1))
 variable [category D]
 
-definition SwitchProductCategory : Functor (C × D) (D × C) :=
+definition SwitchProductCategory : (C × D) ↝ (D × C) :=
 {
   onObjects     := λ X, (X.2, X.1),
   onMorphisms   := λ _ _ f, (f.2, f.1)
 }
 
-definition SwitchSymmetry : NaturalIsomorphism (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) (IdentityFunctor (C × D)) := ♯
+definition SwitchSymmetry : ((SwitchProductCategory C D) ⋙ (SwitchProductCategory D C)) ⇔ 1 := ♯
         
 end categories.products

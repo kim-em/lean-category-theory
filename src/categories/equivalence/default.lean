@@ -15,10 +15,10 @@ namespace categories.equivalence
 universes u₁ u₂ u₃
 
 structure Equivalence (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] :=
-  (functor : Functor C D)
-  (inverse : Functor D C)
-  (isomorphism_1 : NaturalIsomorphism (FunctorComposition functor inverse) (IdentityFunctor C))
-  (isomorphism_2 : NaturalIsomorphism (FunctorComposition inverse functor) (IdentityFunctor D))
+  (functor : C ↝ D)
+  (inverse : D ↝ C)
+  (isomorphism_1 : (functor ⋙ inverse) ⇔ 1)
+  (isomorphism_2 : (inverse ⋙ functor) ⇔ 1)
 
 variable {C : Type (u₁+1)}
 variable [category C]
@@ -54,16 +54,6 @@ tidy,
 erw e.isomorphism_1.naturality_2,
 tidy,
 end
-
--- -- TODO this should have 3 relatives.
--- @[simp,ematch] lemma Equivalence.naturality_2 (e : Equivalence C D) {X Y : D} (f : Hom X Y)
---   :      e.functor &> (e.inverse &> f) ≫ ((e.isomorphism_2).morphism).components Y =
---          ((e.isomorphism_2).morphism).components X ≫ f :=
--- begin
--- erw ← ((e.isomorphism_2).morphism).naturality,
--- refl,
--- end
-
 
 
 -- FIXME restore this

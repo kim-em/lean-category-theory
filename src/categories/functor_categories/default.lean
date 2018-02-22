@@ -13,17 +13,15 @@ namespace categories.functor_categories
 
 universes u₁ u₂ u₃
 
-instance FunctorCategory (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] : category.{(max (u₁+1) u₂)} (Functor C D) :=
-{
-  Hom := λ F G, NaturalTransformation F G,
-  identity := λ F, IdentityNaturalTransformation F,
-  compose  := @vertical_composition_of_NaturalTransformations C _ D _
+instance FunctorCategory (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] : category.{(max (u₁+1) u₂)} (C ↝ D) := {
+  Hom := λ F G, F ⟹ G,
+  identity := λ F, 1,
+  compose  := λ _ _ _ α β, α ⊟ β
 }
 
-definition whiskering_on_left (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E] : Functor (Functor C D) (Functor (Functor D E) (Functor C E)) :=
-{
+definition whiskering_on_left (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E] : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) := {
   onObjects     := λ F, {
-    onObjects     := λ G, FunctorComposition F G,
+    onObjects     := λ G, F ⋙ G,
     onMorphisms   := λ _ _ α, whisker_on_left F α
  },
   onMorphisms   := λ F G τ, {
@@ -33,9 +31,8 @@ definition whiskering_on_left (C : Type (u₁+1)) [category C] (D : Type (u₂+1
  }
 }
 
-definition whisker_on_left_functor
-  {C : Type (u₁+1)} [category C] {D : Type (u₂+1)} [category D] (F : Functor C D) (E : Type (u₃+1)) [category E] :
-  Functor (Functor D E) (Functor C E) :=
+definition whisker_on_left_functor {C : Type (u₁+1)} [category C] {D : Type (u₂+1)} [category D] (F : Functor C D) (E : Type (u₃+1)) [category E] : 
+    Functor (Functor D E) (Functor C E) :=
   (whiskering_on_left C D E) F
 
 definition whiskering_on_right (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E] :

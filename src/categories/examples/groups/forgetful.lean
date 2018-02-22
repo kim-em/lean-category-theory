@@ -10,7 +10,7 @@ open categories.yoneda
 
 universes u₁ u₂
 
-definition ForgetfulFunctor_Groups_to_Types : Functor Group (Type u₁) :=
+definition ForgetfulFunctor_Groups_to_Types : Group ↝ (Type u₁) :=
 {
   onObjects     := λ s, s.1,
   onMorphisms   := λ s t f x, f.map x,

@@ -25,6 +25,8 @@ attribute [simp,ematch] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
 
 infixr ` ≅ `:10  := Isomorphism             -- type as \cong
 
+-- These lemmas are quite common, to help us avoid having to much around with associativity.
+-- If anyone has a suggestion for automating them away, I would be very appreciative.
 @[simp,ematch] lemma Isomorphism.witness_1_assoc_lemma (I : X ≅ Y) (f : X ⟶ Z) : I.morphism ≫ I.inverse ≫ f = f := ♯
 @[simp,ematch] lemma Isomorphism.witness_2_assoc_lemma (I : X ≅ Y) (f : Y ⟶ Z) : I.inverse ≫ I.morphism ≫ f = f := ♯
 

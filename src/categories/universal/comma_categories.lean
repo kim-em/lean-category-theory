@@ -18,7 +18,7 @@ namespace categories.comma
 universes j u₁ u₂ u₃
 
 -- The diagonal functor sends X to the constant functor that sends everything to X.
-definition DiagonalFunctor (J : Type (j+1)) [category J] (C : Type (u₁+1)) [category C] : Functor C (Functor J C) :=
+definition DiagonalFunctor (J : Type (j+1)) [category J] (C : Type (u₁+1)) [category C] : C ↝ (J ↝ C) :=
 {
   onObjects     := λ X : C, {
     onObjects     := λ _, X,
@@ -39,9 +39,9 @@ variable [category B]
 variable {C : Type (u₃+2)}
 variable [category C]
 
-definition comma (S : Functor A C) (T : Functor B C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, Hom (S p.1) (T p.2)
+definition comma (S : A ↝ C) (T : B ↝ C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, Hom (S p.1) (T p.2)
 
-structure comma_morphism {S : Functor A C} {T : Functor B C} (p q : comma S T) : Type (max u₁ u₂ u₃) :=
+structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (max u₁ u₂ u₃) :=
 (left : Hom p.1.1 q.1.1)
 (right : Hom p.1.2 q.1.2)
 (condition : (S &> left) ≫ q.2 = p.2 ≫ (T &> right) . obviously)
@@ -50,7 +50,7 @@ make_lemma comma_morphism.condition
 attribute [ematch] comma_morphism.condition_lemma
 
 @[applicable] lemma comma_morphism_equal
-  {S : Functor A C} {T : Functor B C} {p q : comma S T} (f g : comma_morphism p q)
+  {S : A ↝ C} {T : B ↝ C} {p q : comma S T} (f g : comma_morphism p q)
   (wl : f.left = g.left) (wr : f.right = g.right) : f = g :=
   begin
     induction f,
@@ -59,38 +59,40 @@ attribute [ematch] comma_morphism.condition_lemma
   end
 
 
-instance CommaCategory (S : Functor A C) (T : Functor B C) : category (comma S T) := {
+instance CommaCategory (S : A ↝ C) (T : B ↝ C) : category (comma S T) := {
   Hom      := λ p q, comma_morphism p q,
   identity := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, ♯ ⟩,
   compose  := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, ♯ ⟩
 }
 
 -- cf Leinster Remark 2.3.2
-definition CommaCategory_left_projection (S : Functor A C) (T : Functor B C) : Functor (comma S T) A := {
+definition CommaCategory_left_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ A := {
   onObjects     := λ X, X.1.1,
   onMorphisms   := λ _ _ f, f.left
 }
 
-definition CommaCategory_right_projection (S : Functor A C) (T : Functor B C) : Functor (comma S T) B := {
+definition CommaCategory_right_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ B := {
   onObjects     := λ X, X.1.2,
   onMorphisms   := λ _ _ f, f.right
 }
 
 definition CommaCategory_projection_transformation
-  (S : Functor A C) (T : Functor B C)
-    : NaturalTransformation (FunctorComposition (CommaCategory_left_projection S T) S) (FunctorComposition (CommaCategory_right_projection S T) T) := {
+  (S : A ↝ C) (T : B ↝ C)
+    : ((CommaCategory_left_projection S T) ⋙ S) ⟹ ((CommaCategory_right_projection S T) ⋙ T) := {
       components := λ X, X.2
    }
 
 
-definition ObjectAsFunctor (X : C) : Functor punit C :=
-{
+definition ObjectAsFunctor (X : C) : punit ↝ C := {
   onObjects     := λ _, X,
   onMorphisms   := λ _ _ _, 𝟙 X
 }
 
-definition SliceCategory   (X : C) : category (comma (IdentityFunctor C) (ObjectAsFunctor X)) := by apply_instance
-definition CosliceCategory (X : C) : category (comma (ObjectAsFunctor X) (IdentityFunctor C)) := by apply_instance
+instance : has_coe C (punit ↝ C) :=
+{ coe := ObjectAsFunctor }
+
+definition SliceCategory   (X : C) : category (comma (1 : C ↝ C) (X : punit ↝ C)) := by apply_instance
+definition CosliceCategory (X : C) : category (comma (X : punit ↝ C) (1 : C ↝ C)) := by apply_instance
 end
 
 -- In Cones, we have
@@ -102,10 +104,10 @@ variable [category J]
 variable {C : Type (u₁+2)}
 variable [category C]
 
-definition Cone (F : Functor J C)   := (comma (DiagonalFunctor.{j (u₁+1)} J C) (ObjectAsFunctor F))
-definition Cocone (F : Functor J C) := (comma (ObjectAsFunctor F)          (DiagonalFunctor.{j (u₁+1)} J C))
+definition Cone   (F : Functor J C) := (comma (DiagonalFunctor.{j (u₁+1)} J C) (ObjectAsFunctor F))
+definition Cocone (F : Functor J C) := (comma (ObjectAsFunctor F)              (DiagonalFunctor.{j (u₁+1)} J C))
 
-@[simp] lemma Cone_comma_unit (F : Functor J C) (X : Cone F) : X.1.2 = punit.star := ♯ 
+@[simp] lemma Cone_comma_unit   (F : Functor J C) (X : Cone F) : X.1.2 = punit.star := ♯ 
 @[simp] lemma Cocone_comma_unit (F : Functor J C) (X : Cocone F) : X.1.1 = punit.star := ♯ 
 
 instance Cones   (F : Functor J C) : category (Cone F)   := begin unfold Cone, apply_instance end

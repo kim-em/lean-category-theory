@@ -18,7 +18,7 @@ variables (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E :
 local attribute [applicable] category.identity -- this is usually a bad idea, but just what we needed here
 
 definition Curry_Uncurry_to_identity
-    : NaturalTransformation (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) (IdentityFunctor _) := ♯ 
+    : ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) ⟹ 1 := ♯ 
 
 definition identity_to_Curry_Uncurry
     : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) := ♯ 

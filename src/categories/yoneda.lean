@@ -26,8 +26,8 @@ namespace categories.yoneda
 universes u₁ u₂
 
 definition YonedaEvaluation (C : Type (u₁+1)) [category C]
-  : Functor ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type (u₁+1)) 
-  := FunctorComposition (Evaluation (Cᵒᵖ) (Type u₁)) UniverseLift
+  : (((Cᵒᵖ) ↝ (Type u₁)) × (Cᵒᵖ)) ↝ (Type (u₁+1)) 
+  := (Evaluation (Cᵒᵖ) (Type u₁)) ⋙ UniverseLift
 
 definition Yoneda (C : Type (u₁+1)) [category C] : Functor C (Functor (Cᵒᵖ) (Type u₁)) := {
     onObjects := λ X, {
@@ -40,14 +40,12 @@ definition Yoneda (C : Type (u₁+1)) [category C] : Functor C (Functor (Cᵒᵖ
 }
 
 definition YonedaPairing (C : Type (u₁+1)) [category C] 
-  : Functor ((Functor (Cᵒᵖ) (Type u₁)) × (Cᵒᵖ)) (Type (u₁+1)) 
-  := FunctorComposition
-      (FunctorComposition
-        (ProductFunctor (IdentityFunctor _) (OppositeFunctor (Yoneda C)))
-        (SwitchProductCategory _ _))
-      (HomPairing (Functor (Cᵒᵖ) (Type u₁))) 
+  : (((Cᵒᵖ) ↝ (Type u₁)) × (Cᵒᵖ)) ↝ (Type (u₁+1)) 
+  := (ProductFunctor (IdentityFunctor _) (OppositeFunctor (Yoneda C))) ⋙ 
+      (SwitchProductCategory _ _) ⋙ 
+       (HomPairing ((Cᵒᵖ) ↝ (Type u₁))) 
 
-definition CoYoneda (C : Type (u₁+1)) [category C] : Functor (Cᵒᵖ) (Functor C (Type u₁)) := {
+definition CoYoneda (C : Type (u₁+1)) [category C] : (Cᵒᵖ) ↝ (C ↝ (Type u₁)) := {
     onObjects := λ X, {
         onObjects     := λ Y, @Hom C _ X Y,
         onMorphisms   := λ Y Y' f g, g ≫ f
@@ -61,19 +59,19 @@ definition CoYoneda (C : Type (u₁+1)) [category C] : Functor (Cᵒᵖ) (Functo
 variable {C : Type (u₁+1)}
 variable [category C]
 
-class Representable (F : Functor C (Type u₁)) := 
+class Representable (F : C ↝ (Type u₁)) := 
   (c : C)
-  (Φ : NaturalIsomorphism F ((CoYoneda C) c))
+  (Φ : F ⇔ ((CoYoneda C) c))
 
 @[simp] private lemma YonedaLemma_aux_1
    {X Y : C}
    (f : Hom X Y)
    {F G : Functor (Cᵒᵖ) (Type u₁)}
-   (τ : NaturalTransformation F G)
+   (τ : F ⟹ G)
    (Z : F Y) :
      (G &> f) ((τ.components Y) Z) = (τ.components X) ((F &> f) Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
-theorem YonedaLemma (C : Type (u₁+1)) [category C] : NaturalIsomorphism (YonedaPairing C) (YonedaEvaluation C) := 
+theorem YonedaLemma (C : Type (u₁+1)) [category C] : (YonedaPairing C) ⇔ (YonedaEvaluation C) := 
 begin
 refine {
   morphism := {

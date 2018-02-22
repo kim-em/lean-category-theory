@@ -22,34 +22,34 @@ variable {D : Type (u₄+1)}
 variable [category D]
 
 instance ProductCategory : category (C × D) := {
-    Hom      := (λ X Y : C × D, Hom (X.1) (Y.1) × Hom (X.2) (Y.2)),
+    Hom      := λ X Y, ((X.1) ⟶ (Y.1)) × ((X.2) ⟶ (Y.2)),
     identity := λ X, ⟨ 𝟙 (X.1), 𝟙 (X.2) ⟩,
     compose  := λ _ _ _ f g, (f.1 ≫ g.1, f.2 ≫ g.2)
  }
 
-definition RightInjectionAt (Z : D) : Functor C (C × D) := {
+definition RightInjectionAt (Z : D) : C ↝ (C × D) := {
   onObjects     := λ X, (X, Z),
   onMorphisms   := λ X Y f, (f, 𝟙 Z)
 }
 
-definition LeftInjectionAt (Z : C) : Functor D (C × D) := {
+definition LeftInjectionAt (Z : C) : D ↝ (C × D) := {
   onObjects     := λ X, (Z, X),
   onMorphisms   := λ X Y f, (𝟙 Z, f)
 }
 
-definition LeftProjection : Functor (C × D) C := 
+definition LeftProjection : (C × D) ↝ C := 
 {
   onObjects     := λ X, X.1,
   onMorphisms   := λ X Y f, f.1
 }
 
-definition RightProjection : Functor (C × D) D := 
+definition RightProjection : (C × D) ↝ D := 
 {
   onObjects     := λ X, X.2,
   onMorphisms   := λ X Y f, f.2
 }
 
-definition ProductFunctor (F : Functor A B) (G : Functor C D) : Functor (A × C) (B × D) :=
+definition ProductFunctor (F : A ↝ B) (G : C ↝ D) : (A × C) ↝ (B × D) :=
 {
   onObjects     := λ X, (F X.1, G X.2),
   onMorphisms   := λ _ _ f, (F &> f.1, G &> f.2)
@@ -60,7 +60,7 @@ namespace ProductFunctor
 end ProductFunctor
 
 definition ProductNaturalTransformation
-  {F G : Functor A B} {H I : Functor C D} 
+  {F G : A ↝ B} {H I : C ↝ D} 
   (α : F ⟹ G) (β : H ⟹ I) : (F × H) ⟹ (G × I) :=
 {
   components := λ X, (α.components X.1, β.components X.2)

@@ -19,18 +19,20 @@ variable [category C]
 variable {D : Type (u₂+1)}
 variable [category D]
 
-definition NaturalIsomorphism (F G : Functor C D) := Isomorphism F G
+definition NaturalIsomorphism (F G : C ↝ D) := F ≅ G
+
+infix ` ⇔ `:10 := NaturalIsomorphism
 
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.
 -- Somehow we want the definition above to be more transparent?
-instance NaturalIsomorphism_coercion_to_NaturalTransformation (F G : Functor C D) : has_coe (NaturalIsomorphism F G) (NaturalTransformation F G) :=
+instance NaturalIsomorphism_coercion_to_NaturalTransformation (F G : C ↝ D) : has_coe (F ⇔ G) (F ⟹ G) :=
   {coe := Isomorphism.morphism}
 
-variables {F G H : Functor C D}
+variables {F G H : C ↝ D}
 
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1
-  (α : NaturalIsomorphism F G)
+  (α : F ⇔ G)
   (X : C)
    : (α.morphism.components X) ≫ (α.inverse.components X) = 𝟙 (F X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
@@ -100,7 +102,7 @@ infix `≅ₙ`:50 := NaturalIsomorphism'
 
 open NaturalTransformation
 
-definition is_NaturalIsomorphism  (α : NaturalTransformation F G) := @is_Isomorphism (Functor C D) _ F G α
+definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) _ F G α
 
 @[ematch] lemma is_NaturalIsomorphism_componentwise_witness_1
   (α : NaturalTransformation F G)
@@ -116,18 +118,16 @@ definition is_NaturalIsomorphism  (α : NaturalTransformation F G) := @is_Isomor
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_2
 
 
-lemma IdentityNaturalTransformation_is_NaturalIsomorphism (F : Functor C D) : is_NaturalIsomorphism (IdentityNaturalTransformation F) := {
-    inverse := IdentityNaturalTransformation F
+lemma IdentityNaturalTransformation_is_NaturalIsomorphism (F : C ↝ D) : is_NaturalIsomorphism (1 : F ⟹ F) := {
+    inverse := 1
 }
 
-definition NaturalIsomorphism.components {F G : Functor C D} (α : NaturalIsomorphism F G) (X : C) :
- Isomorphism (F X) (G X) := {
+definition NaturalIsomorphism.components {F G : C ↝ D} (α : F ⇔ G) (X : C) : (F X) ≅ (G X) := {
     morphism := α.morphism.components X,
     inverse := α.inverse.components X
 }
 
-definition NaturalIsomorphism.reverse {F G : Functor C D} (α : NaturalIsomorphism F G) :
- NaturalIsomorphism G F := {
+definition NaturalIsomorphism.reverse {F G : C ↝ D} (α : F ⇔ G) : G ⇔ F := {
     morphism := α.inverse,
     inverse := α.morphism
 }

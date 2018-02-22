@@ -25,17 +25,16 @@ variable [category E]
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 definition FunctorComposition_associator
-  (F : Functor B C)
-  (G : Functor C D)
-  (H : Functor D E)
-: NaturalIsomorphism (FunctorComposition (FunctorComposition F G) H) (FunctorComposition F (FunctorComposition G H)) := ♯
+  (F : B ↝ C)
+  (G : C ↝ D)
+  (H : D ↝ E)
+: ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := ♯
 
 -- PROJECT pentagon
+definition FunctorComposition_left_unitor (F : C ↝ D)
+: (1 ⋙ F) ⇔ F := ♯
 
-definition FunctorComposition_left_unitor (F : Functor C D)
-: NaturalIsomorphism (FunctorComposition (IdentityFunctor C) F) F := ♯
-
-definition FunctorComposition_right_unitor (F : Functor C D)
-: NaturalIsomorphism (FunctorComposition F (IdentityFunctor D)) F := ♯
+definition FunctorComposition_right_unitor (F : C ↝ D)
+: (F ⋙ 1) ⇔ F := ♯
 
 end categories.functor_categories

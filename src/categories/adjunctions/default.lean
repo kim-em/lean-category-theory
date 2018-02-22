@@ -22,17 +22,18 @@ variable {D : Type (u₂+1)}
 variable [category D]
 
 -- TODO think again about whether we should specify the conditions here in terms of natural transformations or components
-structure Adjunction (L : Functor C D) (R : Functor D C) :=
-  (unit       : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
-  (counit     : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D))
+structure Adjunction (L : C ↝ D) (R : D ↝ C) :=
+  (unit       : 1 ⟹ (L ⋙ R))
+  (counit     : (R ⋙ L) ⟹ 1)
   (triangle_1 : ∀ X : D, (unit.components (R X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R X)) -- FIXME why can't we use notation here?
   (triangle_2 : ∀ X : C, (L &> (unit.components X)) ≫ (counit.components (L X)) = 𝟙 (L X))
 
 attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
+infix ` ⊣ `:50 := Adjunction
+
 @[applicable] lemma Adjunctions_pointwise_equal
-  (L : Functor C D) (R : Functor D C)
-  (A B : Adjunction L R)
+  (L : C ↝ D) (R : D ↝ C) (A B : L ⊣ R) 
   (w1 : A.unit = B.unit) (w2 : A.counit = B.counit) : A = B :=
   begin
     induction A,
@@ -61,9 +62,8 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
 -- TODO automation
 @[simp,ematch] lemma Adjunction.unit_naturality
-  {L : Functor C D} {R : Functor D C} 
-  (A : Adjunction L R) 
-  {X Y : C} (f : Hom X Y) : (A.unit.components X) ≫ (R.onMorphisms (L &> f)) = f ≫ (A.unit.components Y) := -- FIXME failed notation here?
+  {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) 
+  {X Y : C} (f : X ⟶ Y) : (A.unit.components X) ≫ (R.onMorphisms (L &> f)) = f ≫ (A.unit.components Y) := -- FIXME failed notation here?
   begin
   tidy,
   erw A.unit.naturality,
@@ -71,9 +71,9 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
   end
 
 @[simp,ematch] lemma Adjunction.counit_naturality
-  {L : Functor C D} {R : Functor D C} 
-  (A : Adjunction L R) 
-  {X Y : D} (f : Hom X Y) : (L &> (R &> f)) ≫ (A.counit.components Y) = (A.counit.components X) ≫ f :=
+  {L : C ↝ D} {R : D ↝ C} 
+  (A : L ⊣ R) 
+  {X Y : D} (f : X ⟶ Y) : (L &> (R &> f)) ≫ (A.counit.components Y) = (A.counit.components X) ≫ f :=
   begin
   tidy,
   erw A.counit.naturality,

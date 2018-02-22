@@ -49,8 +49,12 @@ variables {F G H: Functor C D}
     subst hc
   end
 
-definition IdentityNaturalTransformation (F : Functor C D) : F ⟹ F := {
+definition IdentityNaturalTransformation (F : C ↝ D) : F ⟹ F := {
     components := λ X, 𝟙 (F X)
+}
+
+instance (F : C ↝ D) : has_one (F ⟹ F) := {
+  one := IdentityNaturalTransformation F
 }
 
 definition vertical_composition_of_NaturalTransformations (α : F ⟹ G) (β : G ⟹ H) : F ⟹ H := {
@@ -61,11 +65,11 @@ notation α `⊟` β:80 := vertical_composition_of_NaturalTransformations α β
 
 open categories.functor
 
-@[simp] lemma FunctorComposition.onObjects (F : Functor C D) (G : Functor D E) (X : C) : (F ⋙ G) X = G (F X) := ♯
+@[simp] lemma FunctorComposition.onObjects (F : C ↝ D) (G : D ↝ E) (X : C) : (F ⋙ G) X = G (F X) := ♯
 
 definition horizontal_composition_of_NaturalTransformations
-  {F G : Functor C D}
-  {H I : Functor D E}
+  {F G : C ↝ D}
+  {H I : D ↝ E}
   (α : F ⟹ G)
   (β : H ⟹ I) : (F ⋙ H) ⟹ (G ⋙ I) :=
 {
@@ -76,22 +80,22 @@ definition horizontal_composition_of_NaturalTransformations
 notation α `◫` β:80 := horizontal_composition_of_NaturalTransformations α β
 
 definition whisker_on_left
-  (F : Functor C D)
-  {G H : Functor D E}
+  (F : C ↝ D)
+  {G H : D ↝ E}
   (α : G ⟹ H) :
   (F ⋙ G) ⟹ (F ⋙ H) :=
-  (IdentityNaturalTransformation F) ◫ α
+  1 ◫ α
 
 definition whisker_on_right
-  {F G : Functor C D}
+  {F G : C ↝ D}
   (α : F ⟹ G)
   (H : Functor D E) :
   (F ⋙ H) ⟹ (G ⋙ H) :=
-  α ◫ (IdentityNaturalTransformation H)
+  α ◫ 1
 
 @[ematch] lemma NaturalTransformation.exchange
- {F G H : Functor C D}
- {I J K : Functor D E}
+ {F G H : C ↝ D}
+ {I J K : D ↝ E}
  (α : F ⟹ G) (β : G ⟹ H) (γ : I ⟹ J) (δ : J ⟹ K) : ((α ⊟ β) ◫ (γ ⊟ δ)) = ((α ◫ γ) ⊟ (β ◫ δ)) := ♯ 
 
 end categories.natural_transformation
