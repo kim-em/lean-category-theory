@@ -21,7 +21,7 @@ variable [category D]
 
 definition NaturalIsomorphism (F G : C ↝ D) := F ≅ G
 
-infix ` ⇔ `:10 := NaturalIsomorphism
+infix ` ⇔ `:10 := NaturalIsomorphism -- type as \<=>
 
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.
@@ -91,14 +91,14 @@ attribute [reducible] NaturalIsomorphism
 
 -- TODO is this actually used?
 -- New type for isomorphisms in functor categories. This specialisation helps type inference.
-structure NaturalIsomorphism' (F G : Functor C D) :=
-  mkNatIso :: (iso : Isomorphism F G)
+-- structure NaturalIsomorphism' (F G : Functor C D) :=
+--   mkNatIso :: (iso : Isomorphism F G)
 
-infix `≅ₙ`:50 := NaturalIsomorphism'
+-- infix `≅ₙ`:50 := NaturalIsomorphism'
 
-@[trans] definition NaturalIsomorphismComposition
-  (α : F ≅ₙ G) (β : G ≅ₙ H) : F ≅ₙ H :=
-  NaturalIsomorphism'.mkNatIso (vertical_composition_of_NaturalIsomorphisms α.iso β.iso)
+-- @[trans] definition NaturalIsomorphismComposition
+--   (α : F ≅ₙ G) (β : G ≅ₙ H) : F ≅ₙ H :=
+--   NaturalIsomorphism'.mkNatIso (vertical_composition_of_NaturalIsomorphisms α.iso β.iso)
 
 open NaturalTransformation
 

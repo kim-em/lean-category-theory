@@ -27,7 +27,7 @@ notation `𝟙` := category.identity   -- type as \b1
 infixr ` ≫ `:80 := category.compose -- type as \gg
 infixr ` ⟶ `:10  := Hom             -- type as \h
 
-instance : has_one (X ⟶ X) := {
+instance category.has_one : has_one (X ⟶ X) := {
   one := 𝟙 X
 }
 instance category.has_one' : has_one (category.Hom X X) := {

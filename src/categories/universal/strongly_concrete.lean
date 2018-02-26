@@ -5,6 +5,7 @@
 import .instances
 import .preserves
 import ..concrete
+import ..functor.isomorphism
 
 open categories
 open categories.functor

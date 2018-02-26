@@ -24,10 +24,11 @@ def op (C : Type u₁) : Type u₁ := C
 
 notation C `ᵒᵖ` := op C
 
-instance Opposite : category (Cᵒᵖ) :=
-{ Hom := λ X Y : C, Hom Y X,
+instance Opposite : category (Cᵒᵖ) := { 
+  Hom := λ X Y : C, Hom Y X,
   compose  := λ _ _ _ f g, g ≫ f,
-  identity := λ X, 𝟙 X }
+  identity := λ X, 𝟙 X 
+}
 
 definition OppositeFunctor (F : Functor C D) : Functor (Cᵒᵖ) (Dᵒᵖ) :=  {
   onObjects     := λ X, F X,

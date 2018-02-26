@@ -6,7 +6,6 @@ import ..natural_transformation
 import ..products
 
 open categories
-open categories.isomorphism
 open categories.functor
 open categories.natural_transformation
 
@@ -19,7 +18,7 @@ variable [category C]
 variable (D : Type (u₂+1))
 variable [category D]
 
-definition Evaluation : Functor ((Functor C D) × C) D := {
+definition Evaluation : ((C ↝ D) × C) ↝ D := {
   onObjects     := λ p, p.1 p.2,
   onMorphisms   := λ x y f, (x.1 &> f.2) ≫ (f.1.components y.2)
 }
