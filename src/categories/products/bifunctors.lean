@@ -34,7 +34,7 @@ variable [category E]
       (@Functor.onMorphisms _ _ _ _ F (W, X) (W, Y) (𝟙 W, f)) ≫ (@Functor.onMorphisms _ _ _ _ F (W, Y) (W, Z) (𝟙 W, g)) :=
 begin
   have p := @Functor.functoriality _ _ _ _ F (W, X) (W, Y) (W, Z) (𝟙 W, f) (𝟙 W, g),
-  tidy,
+  tidy {trace_result:=tt}, -- TODO
 end
 
 @[simp] lemma Bifunctor_right_identity

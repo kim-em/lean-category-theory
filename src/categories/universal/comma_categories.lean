@@ -3,6 +3,7 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import ..walking
+import ..discrete_category
 import .initial
 
 open categories

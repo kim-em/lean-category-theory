@@ -1,14 +1,23 @@
--- class X (α : Type).
--- structure Y (α β) [X α] [X β] := (f : α → α)
--- @[ematch] theorem T (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x := sorry
--- example (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x :=
--- begin [smt] ematch end -- doesn't work
+class X (α : Type).
+structure Y (α β) [X α] [X β] := (f : α → α)
+@[ematch] theorem T (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x := sorry
+example (α β) [X α] [X β] (F : Y α β) (x : α) : F.f x = x :=
+begin
+success_if_fail { begin [smt] 
+  ematch, -- doesn't work
+end },
+sorry
+end
 
--- structure Y' (α /-β-/) [X α] /-[X β]-/ := (f : α → α)
--- @[ematch] theorem T' (α /-β-/) [X α] /-[X β]-/(F : Y' α /-β-/) (x : α) : F.f x = x := sorry
--- example (α /-β-/) [X α] /-[X β]-/ (F : Y' α /-β-/) (x : α) : F.f x = x :=
--- begin [smt] ematch end -- works!
+-- Quoth @gebner:
+-- @semorrison It seems like the computed pattern for the hinst_lemma is wrong (it requires that both typeclass instances are defeq):
+set_option pp.all true
+#eval hinst_lemma.mk_from_decl ``T >>= tactic.trace
 
+structure Y' (α /-β-/) [X α] /-[X β]-/ := (f : α → α)
+@[ematch] theorem T' (α /-β-/) [X α] /-[X β]-/(F : Y' α /-β-/) (x : α) : F.f x = x := sorry
+example (α /-β-/) [X α] /-[X β]-/ (F : Y' α /-β-/) (x : α) : F.f x = x :=
+begin [smt] ematch end -- works!
 
 universes u v u1 v1 u2 v2 u3 v3
 

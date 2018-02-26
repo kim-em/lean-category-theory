@@ -27,19 +27,23 @@ notation `𝟙` := category.identity   -- type as \b1
 infixr ` ≫ `:80 := category.compose -- type as \gg
 infixr ` ⟶ `:10  := Hom             -- type as \h
 
-instance category.has_one : has_one (X ⟶ X) := {
-  one := 𝟙 X
-}
-instance category.has_one' : has_one (category.Hom X X) := {
-  one := 𝟙 X
-}
 
 -- We now provide lemmas for the fields of category, that use `Hom`.
 @[simp] def category.left_identity_lemma (f : X ⟶ Y) : 𝟙 X ≫ f = f := by rw category.left_identity
 @[simp] def category.right_identity_lemma (f : X ⟶ Y) : f ≫ 𝟙 Y = f := by rw category.right_identity
 @[simp,ematch] def category.associativity_lemma (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z) : (f ≫ g) ≫ h = f ≫ (g ≫ h) := by rw category.associativity
 
-@[ematch] lemma category.identity_idempotent (X : C) : 𝟙 X ≫ 𝟙 X = 𝟙 X := by simp
+instance category.has_one : has_one (X ⟶ X) := {
+  one := 𝟙 X
+}
+instance category.has_one' : has_one (category.Hom X X) := {
+  one := 𝟙 X
+}
+@[simp] def category.left_identity_lemma' (f : X ⟶ Y) : 1 ≫ f = f := begin unfold has_one.one, simp end
+@[simp] def category.right_identity_lemma' (f : X ⟶ Y) : f ≫ 1 = f := begin unfold has_one.one, simp end
+
+@[simp,ematch] lemma category.identity_idempotent (X : C) : 𝟙 X ≫ 𝟙 X = 𝟙 X := by simp
+@[simp,ematch] lemma category.identity_idempotent' (X : C) : (1 : X ⟶ X) ≫ (1 : X ⟶ X) = (1 : X ⟶ X) := begin unfold has_one.one, simp end
 
 @[simp] def category.cancel_left (f g : X ⟶ Y) : (∀ {Z : C} (h : Y ⟶ Z), f ≫ h = g ≫ h) ↔ f = g :=
 begin
