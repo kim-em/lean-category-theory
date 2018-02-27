@@ -110,5 +110,4 @@ theorem YonedaFaithful (C : Type (u₁+1)) [category C] : Faithful (Yoneda C) :=
                                 end
 }
 
--- FIXME split this file
 end categories.yoneda
