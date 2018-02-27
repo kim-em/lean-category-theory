@@ -66,6 +66,12 @@ instance WalkingPair_category : category WalkingPair := {
 
 local attribute [applicable] category.identity
 
+private meta def case_bash : tactic unit :=
+do l ← local_context,
+   at_least_one (l.reverse.map (λ h, cases h >> skip))
+local attribute [tidy] case_bash
+
+
 variable {C : Type (u₁+1)}
 variable [category C]
 
@@ -83,8 +89,8 @@ attribute [reducible] Pair_functor.onMorphisms._match_1
 definition Pair_functor (α β : C) : Functor WalkingPair.{u₁+1} C := {
   onObjects     := Pair_functor.onObjects α β,
   onMorphisms   := Pair_functor.onMorphisms α β,
-  functoriality := 
-  begin dsimp, intros, cases X; cases Y; cases Z; cases f; cases g, tidy, end,
+  -- functoriality := 
+  -- begin dsimp, intros, cases X; cases Y; cases Z; cases f; cases g, tidy, end,
 }
 
 
@@ -99,11 +105,9 @@ definition Pair_functor' (α β : C) : Functor WalkingPair.{u₁+1} C := {
                    | _1, _1, _ := 𝟙 α 
                    | _2, _2, _ := 𝟙 β
                    end,
-  functoriality := begin tidy, all_goals { cases f; cases g }, erw category.identity_idempotent, refl, erw category.identity_idempotent, refl end 
+  functoriality := begin tidy,  erw category.identity_idempotent, refl, erw category.identity_idempotent, refl end 
 }
 end
-
-set_option pp.all true
 
 
 
@@ -114,6 +118,15 @@ inductive WalkingParallelPair : Type u₁
 
 open WalkingParallelPair
 
+open tactic
+private meta def induction_WalkingParallelPair : tactic unit :=
+do l ← local_context,
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := cases h >> skip | _ := failed end))
+attribute [tidy] induction_WalkingParallelPair
+
+local attribute [tidy] case_bash
+
+
 instance : category WalkingParallelPair := {
   Hom := λ X Y, match X, Y with
          | _1, _1 := punit
@@ -121,14 +134,13 @@ instance : category WalkingParallelPair := {
          | _1, _2 := Two
          | _2, _1 := pempty
          end,
-  identity       := begin intros, cases X, split, split, end,
-  compose        := begin
-                      intros X Y Z f g, cases X ; cases Y ; cases Z, 
-                      exact punit.star, exact g, exact punit.star, exact f, cases f, exact punit.star, cases g, exact punit.star
-                    end,
-  left_identity := begin dsimp, intros, cases X; cases Y; simp, any_goals { apply punits_equal }, cases f, end,
-  right_identity := begin dsimp, intros, cases X; cases Y; simp, any_goals { apply punits_equal }, cases f, end,
-  associativity := begin dsimp, intros, cases W; cases X; cases Y; cases Z; simp, cases g, cases f, cases f, cases h, end                  
+  identity       := by tidy,
+  compose        := λ X Y Z f g, match X, Y, Z, f, g with
+                    | _1, _1, _1, _, _ := punit.star
+                    | _2, _2, _2, _, _ := punit.star
+                    | _1, _1, _2, _, h := h
+                    | _1, _2, _2, h, _ := h
+                    end
 }
 
 variable {C : Type (u₁+1)}
@@ -147,8 +159,7 @@ definition ParallelPair_functor {α β : C} (f g : Hom α β) : Functor WalkingP
                    | _1, _2, Two._0 := f
                    | _1, _2, Two._1 := g
                    end,
-  identities := begin dsimp, intros, cases X; unfold ParallelPair_functor._match_2; refl, end,
-  functoriality := begin dsimp, intros, cases X; cases Y; cases Z; simp; cases f_1; cases g_1; unfold ParallelPair_functor._match_2, any_goals { rw category.identity_idempotent' }, any_goals { erw category.left_identity_lemma' }, any_goals { erw category.right_identity_lemma' }, end
+  functoriality := begin tidy, repeat { erw category.left_identity_lemma' }, repeat { erw category.right_identity_lemma' },  end, 
 }
 end
 
