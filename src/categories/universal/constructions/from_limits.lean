@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison
 
 import ..complete
-import ..opposites
 import categories.walking
 import tidy.its
 
@@ -39,8 +38,12 @@ variable {C : Type (u₁+2)}
 variable [category C]
 
 -- PROJECT this construction is unpleasant
+open tactic
+meta def induction_WalkingParallelPair : tactic unit :=
+do l ← local_context,
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := induction h >> skip | _ := failed end))
 local attribute [tidy] induction_WalkingParallelPair
-
+local attribute [reducible] ParallelPair_functor._match_2
 instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
   equalizer := λ X Y f g, let lim := limitCone (ParallelPair_functor f g) in {
     equalizer     := lim.terminal_object.cone_point,
@@ -56,8 +59,8 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        tidy,
                        exact k ≫ f,
                        tidy,
-                       induction f_1,
-                       induction f_1,
+                       cases f_1,
+                       cases f_1,
                        tidy,
                      end,
     factorisation := ♯,
@@ -68,8 +71,8 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                          cone_maps := λ j : WalkingParallelPair, a ≫ (lim.terminal_object.cone_maps j),
                          commutativity := begin
                                             tidy,
-                                            induction f_1,
-                                            induction f_1,
+                                            cases f_1,
+                                            cases f_1,
                                             {
                                               have c := lim.terminal_object.commutativity,
                                               dsimp at c,

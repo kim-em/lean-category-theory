@@ -105,7 +105,7 @@ theorem YonedaFaithful (C : Type (u₁+1)) [category C] : Faithful (Yoneda C) :=
                                   resetI,
                                   have p'' := congr_fun p' (𝟙 X),
                                   dsimp_all',
-                                  simp_at_each,
+                                  simp at p'',
                                   exact p'',
                                 end
 }

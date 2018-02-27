@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison
 
 import ..complete
-import ..opposites
 import categories.walking
 import tidy.its
 

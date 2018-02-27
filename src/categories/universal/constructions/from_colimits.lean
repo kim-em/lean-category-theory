@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison
 
 import .from_limits
+import ..opposites
 
 open categories
 open categories.functor
