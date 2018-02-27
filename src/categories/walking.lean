@@ -14,6 +14,7 @@ namespace categories.walking
 
 universes u₁ u₂
 
+-- move to lean-tidy
 instance subsingleton_pempty : subsingleton pempty :=
 begin
 tidy,
@@ -23,16 +24,8 @@ begin
 tidy,
 end
 
-instance unit_or_empty_subsingleton {α : Type u₁} [decidable_eq α] {a b : α} : subsingleton (ite (a = b) punit pempty) :=
-begin
-by_cases a = b,
-rw h,
-simp,
-apply_instance,
-rw if_neg h,
-apply_instance,
-end
-local attribute [applicable] subsingleton.elim
+attribute [applicable] subsingleton.elim
+--
 
 section
 inductive WalkingPair : Type u₁
@@ -41,50 +34,42 @@ inductive WalkingPair : Type u₁
 
 open WalkingPair
 
-@[simp] lemma WalkingPair_1_eq_2_eq_false : (_1 = _2) ↔ false :=
-by tidy
 
-@[simp] lemma WalkingPair_2_eq_1_eq_false : (_2 = _1) ↔ false :=
-by tidy
-
-@[simp] lemma WalkingPair_1_eq_1_eq_false : (_1 = _1) ↔ true :=
-by tidy
-
-@[simp] lemma WalkingPair_2_eq_2_eq_false : (_2 = _2) ↔ true :=
-by tidy
 
 
 open tactic
 private meta def induction_WalkingPair : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingPair) := induction h >> skip | _ := failed end))
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingPair) := cases h >> skip | _ := failed end))
 
 attribute [tidy] induction_WalkingPair
 
 instance decidable_eq_WalkingPair : decidable_eq WalkingPair := ♯
--- instance fintype_WalkingPair : fintype WalkingPair := sorry
-
-instance WalkingPair_category : category WalkingPair := {
-  Hom := λ X Y, match X, Y with
-                | _1, _1 := punit
-                | _2, _2 := punit
-                | _ , _  := pempty
-                end,
-  identity       := begin intros, cases X, split, split, end,
-  compose        := begin
-                      intros X Y Z f g, cases X; cases Y; cases Z; cases f; cases g; exact punit.star
-                    end,
-  left_identity := begin dsimp, intros, cases X; cases Y; cases f; apply punits_equal end,  -- PROJECT these boring proofs should be handled by dec_trivial
-  right_identity := begin dsimp, intros, cases X; cases Y; cases f; apply punits_equal end,
-  associativity := begin dsimp, intros, cases W; cases X; cases Y; cases Z; cases f; cases g; cases h; apply punits_equal end,
+instance fintype_WalkingPair : fintype WalkingPair := {
+  elems := [_1, _2].to_finset,
+  complete := begin intros, cases x; simp end
 }
 
+@[reducible] def WalkingPair.hom : WalkingPair → WalkingPair → Type u₁ 
+| _1 _1 := punit
+| _2 _2 := punit
+| _  _  := pempty
+attribute [reducible] WalkingPair.hom._main
+
+instance (X Y : WalkingPair) : decidable_eq (WalkingPair.hom X Y) := λ f g, begin cases X; cases Y; cases f; cases g; simp; apply_instance end
+
+instance WalkingPair_category : category WalkingPair := {
+  Hom := WalkingPair.hom,
+  identity       := by tidy,
+  compose        := by tidy
+}
 
 local attribute [applicable] category.identity
 
 variable {C : Type (u₁+1)}
 variable [category C]
 
+-- PROJECT improve automation
 definition Pair_functor (α β : C) : Functor WalkingPair C := {
   onObjects     := λ X, match X with
                    | _1 := α
@@ -94,7 +79,6 @@ definition Pair_functor (α β : C) : Functor WalkingPair C := {
                    | _1, _1, _ := 1
                    | _2, _2, _ := 1
                    end,
-  identities := begin dsimp, intros, cases X; refl, end,
   functoriality := begin dsimp, intros, cases X; cases Y; cases Z; cases f; cases g; unfold Pair_functor._match_2; simp, end,
 }
 end
