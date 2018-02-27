@@ -76,15 +76,12 @@ local attribute [reducible] universal.lemmas.limit_functoriality.morphism_to_ter
 private definition morphism_to_LimitObject_in_FunctorCategory [cmp : Complete D] {F : Functor J (Functor C D)} (Y : Cone F) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
       cone_morphism := {
         components := begin
-                         tidy {hints:=[7, 6, 7, 9, 23, 25]},  -- this will use morphism_to_terminal_object_cone_point
+                         tidy,  -- this will use morphism_to_terminal_object_cone_point
                          exact (Y.cone_maps j).components X, 
                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
-                       end,
-        naturality := begin tidy {hints:=[9, 7, 6, 7, 9, 23, 19, 9, 10, 3, 9, 10, 3]}, end
-     },
-      commutativity := by tidy {hints:=[9, 7, 6, 7, 9, 10]} 
+                       end
+     }
    }
-
 
 instance Limits_in_FunctorCategory [cmp : Complete D] : Complete (Functor C D) := {
   limitCone := λ J _ F, 

@@ -69,21 +69,21 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        let Z_cone : Cone (ParallelPair_functor f g) := {
                          cone_point := Z,
                          cone_maps := λ j : WalkingParallelPair, a ≫ (lim.terminal_object.cone_maps j),
-                         commutativity := begin
-                                            tidy,
-                                            cases f_1,
-                                            cases f_1,
-                                            {
-                                              have c := lim.terminal_object.commutativity,
-                                              dsimp at c,
-                                              erw @c WalkingParallelPair._1 WalkingParallelPair._2 Two._0,
-                                           },
-                                            {
-                                              have c := lim.terminal_object.commutativity,
-                                              dsimp at c,
-                                              erw @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,
-                                           },
-                                          end
+                        --  commutativity := begin
+                        --                     tidy,
+                        --                     cases f_1,
+                        --                     cases f_1,
+                        --                     {
+                        --                       have c := lim.terminal_object.commutativity,
+                        --                       dsimp at c,
+                        --                       erw @c WalkingParallelPair._1 WalkingParallelPair._2 Two._0,
+                        --                    },
+                        --                     {
+                        --                       have c := lim.terminal_object.commutativity,
+                        --                       dsimp at c,
+                        --                       erw @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,
+                        --                    },
+                        --                   end
                       },
                        have p := lim.uniqueness_of_morphisms_to_terminal_object Z_cone ⟨ a, _ ⟩ ⟨ b, _ ⟩,
                        exact congr_arg ConeMorphism.cone_morphism p,

@@ -21,12 +21,12 @@ definition Curry_Uncurry_to_identity
     : ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) ⟹ 1 := ♯ 
 
 definition identity_to_Curry_Uncurry
-    : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Uncurry_Functors C D E) (Curry_Functors C D E)) := ♯ 
+    : 1 ⟹ ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) := ♯ 
 
 definition Uncurry_Curry_to_identity
-    : NaturalTransformation (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) (IdentityFunctor _) := ♯ 
+    : ((Curry_Functors C D E) ⋙ (Uncurry_Functors C D E)) ⟹ 1 := ♯ 
      
 definition identity_to_Uncurry_Curry
-    : NaturalTransformation (IdentityFunctor _) (FunctorComposition (Curry_Functors C D E) (Uncurry_Functors C D E)) := ♯ 
+    : 1 ⟹ ((Curry_Functors C D E) ⋙ (Uncurry_Functors C D E)) := ♯ 
 
 end categories.natural_transformation

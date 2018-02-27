@@ -159,7 +159,7 @@ definition ParallelPair_functor {α β : C} (f g : Hom α β) : Functor WalkingP
                    | _1, _2, Two._0 := f
                    | _1, _2, Two._1 := g
                    end,
-  functoriality := begin tidy, repeat { erw category.left_identity_lemma' }, repeat { erw category.right_identity_lemma' }, tidy end, 
+  functoriality := begin tidy, repeat { erw category.left_identity_lemma' }, repeat { erw category.right_identity_lemma' } end, 
 }
 end
 

@@ -32,7 +32,11 @@ definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F :=
   cone_maps     := λ j : J, (cone.2).components j,
   commutativity := λ (j k : J) (f : Hom j k), 
                       begin
-                        its eq.symm ((cone.2).naturality f),
+                      -- tidy,
+                      have p := eq.symm (cone.2.naturality_lemma f), -- PROJECT think about automation here?
+                      dsimp_all',
+                      simp at p,
+                      assumption,                    
                       end
 }
 
@@ -50,7 +54,8 @@ definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F :=
 ⟨ (cone.cone_point, ♯), {
     components := λ j, cone.cone_maps j,
     naturality := λ _ _ f, begin
-                            its eq.symm (cone.commutativity f) 
+                            its eq.symm (cone.commutativity f),
+                            tidy,
                           end
  } ⟩
 

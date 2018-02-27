@@ -17,7 +17,7 @@ universes u₁ u₂ u₃
 variables (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E]
 
 theorem Currying_for_functors :
-  Equivalence (Functor C (Functor D E)) (Functor (C × D) E) := 
+  Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) := 
   {
     functor := Uncurry_Functors C D E,
     inverse := Curry_Functors C D E,
