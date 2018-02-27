@@ -69,19 +69,43 @@ local attribute [applicable] category.identity
 variable {C : Type (u₁+1)}
 variable [category C]
 
+@[reducible] def Pair_functor.onObjects (α β : C) : WalkingPair → C
+| _1 := α
+| _2 := β 
+attribute [reducible] Pair_functor.onObjects._main
+@[reducible] def Pair_functor.onMorphisms (α β : C) (X Y : WalkingPair) (f : X ⟶ Y) : (Pair_functor.onObjects α β X) ⟶ (Pair_functor.onObjects α β Y) :=
+match X, Y, f with
+| _1, _1, _ := 𝟙 α 
+| _2, _2, _ := 𝟙 β
+end
+attribute [reducible] Pair_functor.onMorphisms._match_1
+
+definition Pair_functor (α β : C) : Functor WalkingPair.{u₁+1} C := {
+  onObjects     := Pair_functor.onObjects α β,
+  onMorphisms   := Pair_functor.onMorphisms α β,
+  functoriality := 
+  begin dsimp, intros, cases X; cases Y; cases Z; cases f; cases g, tidy, end,
+}
+
+
+
 -- PROJECT improve automation
-definition Pair_functor (α β : C) : Functor WalkingPair C := {
-  onObjects     := λ X, match X with
-                   | _1 := α
+definition Pair_functor' (α β : C) : Functor WalkingPair.{u₁+1} C := {
+  onObjects     := λ X, match X with 
+                   | _1 := α 
                    | _2 := β
                    end,
   onMorphisms   := λ X Y f, match X, Y, f with
-                   | _1, _1, _ := 1
-                   | _2, _2, _ := 1
+                   | _1, _1, _ := 𝟙 α 
+                   | _2, _2, _ := 𝟙 β
                    end,
-  functoriality := begin dsimp, intros, cases X; cases Y; cases Z; cases f; cases g; unfold Pair_functor._match_2; simp, end,
+  functoriality := begin tidy, all_goals { cases f; cases g }, erw category.identity_idempotent, refl, erw category.identity_idempotent, refl end 
 }
 end
+
+set_option pp.all true
+
+
 
 section
 inductive WalkingParallelPair : Type u₁
