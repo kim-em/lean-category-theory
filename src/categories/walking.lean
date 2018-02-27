@@ -44,11 +44,19 @@ do l ← local_context,
 
 attribute [tidy] induction_WalkingPair
 
+
+
 instance decidable_eq_WalkingPair : decidable_eq WalkingPair := ♯
 instance fintype_WalkingPair : fintype WalkingPair := {
   elems := [_1, _2].to_finset,
-  complete := begin intros, cases x; simp end
+  complete := begin intros, cases x; simp end -- TODO try again with by tidy after demoting dsimp', which seems to get stuck here
 }
+
+private meta def case_bash : tactic unit :=
+do l ← local_context,
+   at_least_one (l.reverse.map (λ h, cases h >> skip))
+local attribute [tidy] case_bash
+
 
 @[reducible] def WalkingPair.hom : WalkingPair → WalkingPair → Type u₁ 
 | _1 _1 := punit
@@ -56,7 +64,7 @@ instance fintype_WalkingPair : fintype WalkingPair := {
 | _  _  := pempty
 attribute [reducible] WalkingPair.hom._main
 
-instance (X Y : WalkingPair) : decidable_eq (WalkingPair.hom X Y) := λ f g, begin cases X; cases Y; cases f; cases g; simp; apply_instance end
+instance (X Y : WalkingPair) : decidable_eq (WalkingPair.hom X Y) := by tidy 
 
 instance WalkingPair_category : category WalkingPair := {
   Hom := WalkingPair.hom,
@@ -65,12 +73,6 @@ instance WalkingPair_category : category WalkingPair := {
 }
 
 local attribute [applicable] category.identity
-
-private meta def case_bash : tactic unit :=
-do l ← local_context,
-   at_least_one (l.reverse.map (λ h, cases h >> skip))
-local attribute [tidy] case_bash
-
 
 variable {C : Type (u₁+1)}
 variable [category C]
@@ -89,8 +91,6 @@ attribute [reducible] Pair_functor.onMorphisms._match_1
 definition Pair_functor (α β : C) : Functor WalkingPair.{u₁+1} C := {
   onObjects     := Pair_functor.onObjects α β,
   onMorphisms   := Pair_functor.onMorphisms α β,
-  -- functoriality := 
-  -- begin dsimp, intros, cases X; cases Y; cases Z; cases f; cases g, tidy, end,
 }
 
 
@@ -159,7 +159,7 @@ definition ParallelPair_functor {α β : C} (f g : Hom α β) : Functor WalkingP
                    | _1, _2, Two._0 := f
                    | _1, _2, Two._1 := g
                    end,
-  functoriality := begin tidy, repeat { erw category.left_identity_lemma' }, repeat { erw category.right_identity_lemma' },  end, 
+  functoriality := begin tidy, repeat { erw category.left_identity_lemma' }, repeat { erw category.right_identity_lemma' }, tidy end, 
 }
 end
 
