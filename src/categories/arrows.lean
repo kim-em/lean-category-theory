@@ -18,9 +18,9 @@ local attribute [applicable] category.identity -- This says that whenever there 
 
 -- Is there any point defining these separately (rather than as the functor category from the walking arrow)?
 
-definition arrow (C : Type (u₁+1)) [category C] := Σ (p : C × C), Hom p.1 p.2
+definition arrow (C : Type (u₁+1)) [category C] := Σ (p : C × C), p.1 ⟶ p.2
 structure arrow_hom {C : Type (u₁+1)} [category C] (X Y : arrow C) :=
-(morphism : Hom X.1.1 Y.1.1 × Hom X.1.2 Y.1.2 )
+(morphism : (X.1.1 ⟶ Y.1.1) × (X.1.2 ⟶ Y.1.2))
 (commutativity : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously)
 
 make_lemma arrow_hom.commutativity

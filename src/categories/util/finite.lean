@@ -15,6 +15,8 @@ structure Bijection (U : Type u) (V : Type v) := -- TODO this should use equiv
   (witness_1 : ∀ u : U, inverse (morphism u) = u . obviously)
   (witness_2 : ∀ v : V, morphism (inverse v) = v . obviously)
 
+-- FIXME rip out Finite in favour of whatever is in mathlib
+
 class Finite (α : Type u) :=
   (cardinality : nat)
   (bijection : Bijection α (fin cardinality)) -- TODO this should just assert the existence of a bijection

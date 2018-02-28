@@ -27,12 +27,9 @@ instance OneCategory : category punit := (by apply_instance : category (discrete
 
 definition EmptyFunctor (C : Type (u₂+1)) [category C] : pempty ↝ C := ♯
 
--- FIXME This is really horrible! Please help out. :-)
 definition Functor.fromFunction {C : Type (u₂+1)} [category C] {I : Type (u₁+1)} (F : I → C) : (discrete I) ↝ C := {
   onObjects     := F,
-  onMorphisms   := λ X Y f, begin cases f, cases f, rw f, exact 𝟙 (F Y) end,
-  identities := begin tidy, end,
-  functoriality:= begin tidy, cases f, cases f, induction f, cases g, cases g, induction g, tidy, end
+  onMorphisms   := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end,
 }
 
 end categories

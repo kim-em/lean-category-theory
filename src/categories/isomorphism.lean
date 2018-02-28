@@ -101,7 +101,7 @@ attribute [simp,ematch] is_Isomorphism.witness_1_lemma is_Isomorphism.witness_2_
 instance is_Isomorphism_coercion_to_morphism (f : X ⟶ Y): has_coe (is_Isomorphism f) (X ⟶ Y) :=
   {coe := λ _, f}
 
-definition Epimorphism (f : X ⟶ Y) := Π (g h : Hom Y Z) (w : f ≫ g = f ≫ h), g = h
-definition Monomorphism (f : X ⟶ Y) := Π (g h : Hom Z X) (w : g ≫ f = h ≫ f), g = h
+definition Epimorphism (f : X ⟶ Y) := Π (g h : Y ⟶ Z) (w : f ≫ g = f ≫ h), g = h
+definition Monomorphism (f : X ⟶ Y) := Π (g h : Z ⟶ X) (w : g ≫ f = h ≫ f), g = h
 
 end categories.isomorphism

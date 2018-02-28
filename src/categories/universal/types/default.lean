@@ -71,8 +71,6 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
     witness       := begin tidy, apply quotient.sound, apply eqv_gen.rel, existsi x, simp, end,
     map           := begin
                        tidy, 
-                       unfold categories.Hom,
-                       tidy,
                        induction a, 
                        exact k a, 
                        induction a_p, 

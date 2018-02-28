@@ -56,7 +56,7 @@ variable [category C]
 
 definition path_to_morphism
   (H : graph_homomorphism G C)
-  : Π {X Y : G}, path X Y → Hom (H.onVertices X) (H.onVertices Y) 
+  : Π {X Y : G}, path X Y → ((H.onVertices X) ⟶ (H.onVertices Y))
 | ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
 | ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) ≫ (path_to_morphism p)
  

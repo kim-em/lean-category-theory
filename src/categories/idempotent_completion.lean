@@ -17,7 +17,7 @@ universes u u₁ u₂
 
 structure Idempotent (C : Type (u+1)) [category C] :=
    (object : C)
-   (idempotent : Hom object object)
+   (idempotent : object ⟶ object)
    (witness : idempotent ≫ idempotent = idempotent . obviously)
 
 make_lemma Idempotent.witness
@@ -26,7 +26,7 @@ attribute [simp,ematch] Idempotent.witness_lemma
 local attribute [ematch] subtype.property
 
 structure Idempotent_morphism {C : Type (u+1)} [category C] (X Y : Idempotent C) :=
-(morphism : Hom X.object Y.object)
+(morphism : X.object ⟶ Y.object)
 (left : X.idempotent ≫ morphism = morphism . obviously)
 (right : morphism ≫ Y.idempotent = morphism . obviously)
 
@@ -85,13 +85,11 @@ variable [category D]
 definition restrict_Functor_from_IdempotentCompletion (F : Functor (Idempotent C) D) : Functor C D :=
   FunctorComposition (functor_to_IdempotentCompletion C) F
 
-@[simp] private lemma double_idempotent_morphism_left (X Y : Idempotent (Idempotent C))
-(f : Hom X Y)
-: (X.idempotent).morphism ≫ (f.morphism).morphism = (f.morphism).morphism :=
+@[simp] private lemma double_idempotent_morphism_left (X Y : Idempotent (Idempotent C)) (f : X ⟶ Y)
+  : (X.idempotent).morphism ≫ (f.morphism).morphism = (f.morphism).morphism :=
 congr_arg Idempotent_morphism.morphism f.left
-@[simp] private lemma double_idempotent_morphism_right (X Y : Idempotent (Idempotent C))
-(f : Hom X Y)
-:(f.morphism).morphism ≫ (Y.idempotent).morphism = (f.morphism).morphism :=
+@[simp] private lemma double_idempotent_morphism_right (X Y : Idempotent (Idempotent C)) (f : X ⟶ Y)
+  : (f.morphism).morphism ≫ (Y.idempotent).morphism = (f.morphism).morphism :=
 congr_arg Idempotent_morphism.morphism f.right
 
 private def IdempotentCompletion_idempotent_functor (C : Type (u+1)) [category C] : Functor (Idempotent (Idempotent C)) (Idempotent C) :=

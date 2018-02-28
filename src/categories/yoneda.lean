@@ -31,7 +31,7 @@ definition YonedaEvaluation (C : Type (u₁+1)) [category C]
 
 definition Yoneda (C : Type (u₁+1)) [category C] : Functor C (Functor (Cᵒᵖ) (Type u₁)) := {
     onObjects := λ X, {
-        onObjects     := λ Y, @Hom C _ Y X,
+        onObjects     := λ Y, @category.Hom C _ Y X,
         onMorphisms   := λ Y Y' f g, f ≫ g
    },
     onMorphisms   := λ X X' f, {
@@ -47,7 +47,7 @@ definition YonedaPairing (C : Type (u₁+1)) [category C]
 
 definition CoYoneda (C : Type (u₁+1)) [category C] : (Cᵒᵖ) ↝ (C ↝ (Type u₁)) := {
     onObjects := λ X, {
-        onObjects     := λ Y, @Hom C _ X Y,
+        onObjects     := λ Y, @category.Hom C _ X Y,
         onMorphisms   := λ Y Y' f g, g ≫ f
    },
     onMorphisms   := λ X X' f, {
@@ -65,8 +65,8 @@ class Representable (F : C ↝ (Type u₁)) :=
 
 @[simp] private lemma YonedaLemma_aux_1
    {X Y : C}
-   (f : Hom X Y)
-   {F G : Functor (Cᵒᵖ) (Type u₁)}
+   (f : X ⟶ Y)
+   {F G : (Cᵒᵖ) ↝ (Type u₁)}
    (τ : F ⟹ G)
    (Z : F Y) :
      (G &> f) ((τ.components Y) Z) = (τ.components X) ((F &> f) Z) := eq.symm (congr_fun (τ.naturality f) Z)
@@ -87,7 +87,7 @@ refine {
   witness_1 := _,
   witness_2 := _
 },
-tidy {hints:=[8, 6, 5, 6, 5, 8, 9, 8, 6, 5, 6, 9, 2, 8, 6, 5, 6, 5, 6, 5, 6, 8, 9, 2, 5, 6, 5, 6, 5, 6, 5, 6, 8, 9, 5, 6, 5, 6, 5, 8, 9, 2]}
+tidy {hints:=[8, 6, 5, 6, 5, 10, 8, 11, 11, 9, 14, 12, 8, 6, 5, 6, 10, 8, 11, 14, 12, 2, 8, 6, 5, 6, 5, 6, 5, 6, 8, 11, 11, 9, 14, 12, 2, 5, 6, 5, 6, 5, 6, 5, 6, 8, 14, 12, 5, 6, 5, 6, 5, 8, 10, 8, 14, 12, 2]}
 end
 
 theorem YonedaFull (C : Type (u₁+1)) [category C] : Full (Yoneda C) := {

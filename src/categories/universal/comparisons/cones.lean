@@ -30,7 +30,7 @@ definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F :=
 {
   cone_point    := cone.1.1,
   cone_maps     := λ j : J, (cone.2).components j,
-  commutativity := λ (j k : J) (f : Hom j k), 
+  commutativity := λ (j k : J) (f : j ⟶ k), 
                       begin
                       -- tidy,
                       have p := eq.symm (cone.2.naturality_lemma f), -- PROJECT think about automation here?
@@ -40,7 +40,7 @@ definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F :=
                       end
 }
 
-definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : Hom X Y) : ConeMorphism (comma_Cone_to_Cone X) (comma_Cone_to_Cone Y) := 
+definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
 {
   cone_morphism      := f.left,
   commutativity := λ j : J, begin
@@ -59,22 +59,22 @@ definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F :=
                           end
  } ⟩
 
-definition ConeMorphism_to_comma_ConeMorphism {X Y : Cone F} (f : ConeMorphism X Y) : Hom (Cone_to_comma_Cone X) (Cone_to_comma_Cone Y) := 
+definition ConeMorphism_to_comma_ConeMorphism {X Y : Cone F} (f : ConeMorphism X Y) : (Cone_to_comma_Cone X) ⟶ (Cone_to_comma_Cone Y) := 
   { left := f.cone_morphism, right := ♯ }
 
-definition comma_Cones_to_Cones (F : Functor J C) : Functor (comma.Cone F) (Cone F) := {
+definition comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (Cone F) := {
     onObjects     := comma_Cone_to_Cone,
-    onMorphisms   := λ _ _ f, comma_ConeMorphism_to_ConeMorphism f
+    onMorphisms   := λ X Y f, comma_ConeMorphism_to_ConeMorphism f,
  }
 
-definition Cones_to_comma_Cones (F : Functor J C) : Functor (Cone F) (comma.Cone F) := {
+definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) := {
     onObjects     := Cone_to_comma_Cone,
-    onMorphisms   := λ _ _ f, ConeMorphism_to_comma_ConeMorphism f
+    onMorphisms   := λ X Y f, ConeMorphism_to_comma_ConeMorphism f
  }
 
 local attribute [applicable] category.identity
 
-definition Cones_agree (F : Functor J C) : Equivalence (comma.Cone F) (Cone F) := {
+definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := {
   functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F,
   isomorphism_1 := ♯,

@@ -37,9 +37,9 @@ class has_FiniteCoproducts :=
   (coproduct : Π {I : Type (u+1)} [Finite I] (f : I → C), Coproduct f)
 
 class has_Equalizers :=
-  (equalizer : Π {X Y : C} (f g : Hom X Y), Equalizer f g)
+  (equalizer : Π {X Y : C} (f g : X ⟶ Y), Equalizer f g)
 class has_Coequalizers :=
-  (coequalizer : Π {X Y : C} (f g : Hom X Y), Coequalizer f g)
+  (coequalizer : Π {X Y : C} (f g : X ⟶ Y), Coequalizer f g)
 
 definition initial_object [has_InitialObject C] : C := has_InitialObject.initial_object C
 definition terminal_object [has_TerminalObject C] : C := has_TerminalObject.terminal_object C
@@ -55,8 +55,8 @@ definition finite_product [has_FiniteProducts C] {I : Type (u+1)} [fin : Finite 
 definition binary_coproduct [has_BinaryCoproducts C] (X Y : C) := has_BinaryCoproducts.binary_coproduct X Y
 definition finite_coproduct [has_FiniteCoproducts C] {I : Type (u+1)} [fin : Finite I] (f : I → C) := @has_FiniteCoproducts.coproduct C _ _ I fin f
 
-definition equalizer [has_Equalizers C] {X Y : C} (f g : Hom X Y) := has_Equalizers.equalizer f g
-definition coequalizer [has_Coequalizers C] {X Y : C} (f g : Hom X Y) := has_Coequalizers.coequalizer f g
+definition equalizer [has_Equalizers C] {X Y : C} (f g : X ⟶ Y) := has_Equalizers.equalizer f g
+definition coequalizer [has_Coequalizers C] {X Y : C} (f g : X ⟶ Y) := has_Coequalizers.coequalizer f g
 end
 
 section

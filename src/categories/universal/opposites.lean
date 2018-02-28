@@ -23,7 +23,7 @@ section
 variable {C : Type (u₁+1)}
 variable [category C]
 variables {X Y : C}
-variables {f g : Hom X Y}
+variables {f g : X ⟶ Y}
 
 def InitialObject_in_Opposite (i : InitialObject (Cᵒᵖ)) : TerminalObject C := {
   terminal_object := i.initial_object,

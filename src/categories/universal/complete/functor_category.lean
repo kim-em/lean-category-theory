@@ -22,12 +22,12 @@ variable [category C]
 variable {D : Type (u₂+1)}
 variable [category D]
 
-@[reducible] private definition evaluate_Functor_to_FunctorCategory (F : Functor J (Functor C D)) (c : C) : Functor J D := {
+@[reducible] private definition evaluate_Functor_to_FunctorCategory (F : J ↝ (C ↝ D)) (c : C) : J ↝ D := {
   onObjects     := λ j, (F j) c,
   onMorphisms   := λ _ _ f, (F &> f).components c
 }
 
-@[reducible] private definition evaluate_Functor_to_FunctorCategory_on_Morphism (F : Functor J (Functor C D)) {c c' : C} (f : Hom c c')
+@[reducible] private definition evaluate_Functor_to_FunctorCategory_on_Morphism (F : J ↝ (C ↝ D)) {c c' : C} (f : c ⟶ c')
   : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
     components := λ j, (F j) &> f
  }
@@ -44,7 +44,7 @@ variable [category C]
 variable {D : Type (u₁+2)}
 variable [category D]
 
-private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : Functor J (Functor C D)) : Cone F := {     
+private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : J ↝ (C ↝ D)) : Cone F := {     
   cone_point    := {
     onObjects     := λ c, functorial_Limit.onObjects (evaluate_Functor_to_FunctorCategory F c), -- TODO why doesn't the coercion work here?
     onMorphisms   := λ _ _ f, functorial_Limit &> (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
@@ -55,14 +55,7 @@ private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : Functo
 }
 
 -- This would be a bit dangerous, but we just use it in the next construction.
-@[applicable] lemma cone_morphism_comparison
-(F : Functor J (Functor C D))
-(X : C)
-(j : J)
-(Y Z : Cone F)
-(φ ψ : ConeMorphism Y Z)
-(f : Hom ((Z.cone_point) X) ((F j) X))
-(w : f = ((Z.cone_maps j).components X))
+@[applicable] lemma cone_morphism_comparison (F : J ↝ (C ↝ D)) (X : C) (j : J) (Y Z : Cone F) (φ ψ : ConeMorphism Y Z) (f : ((Z.cone_point) X) ⟶ ((F j) X)) (w : f = ((Z.cone_maps j).components X))
  : ((φ.cone_morphism).components X) ≫ f = ((ψ.cone_morphism).components X) ≫ f := 
 begin
   rewrite w,

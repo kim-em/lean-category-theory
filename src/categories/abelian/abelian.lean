@@ -17,7 +17,7 @@ namespace categories.abelian
 
 universe u
 
-structure KernelImageCokernelDecomposition {C : Type (u+1)} [category C] [ZeroObject C] {X Y : C} (f : Hom X Y) :=
+structure KernelImageCokernelDecomposition {C : Type (u+1)} [category C] [ZeroObject C] {X Y : C} (f : X ⟶ Y) :=
   (kernel                  : Kernel f  )
   (cokernel                : Cokernel f)
   (cokernel_of_kernel      : Cokernel (kernel.inclusion) )
@@ -26,15 +26,15 @@ structure KernelImageCokernelDecomposition {C : Type (u+1)} [category C] [ZeroOb
   (composition_is_morphism : cokernel_of_kernel.projection ≫ image_well_defined.morphism ≫ kernel_of_cokernel.inclusion = f)
 
 structure Abelian (C : Type (u+1)) [category C] [ZeroObject C] := 
-  (decomposition : ∀ {X Y : C} (f : Hom X Y), KernelImageCokernelDecomposition f)
+  (decomposition : ∀ {X Y : C} (f : X ⟶ Y), KernelImageCokernelDecomposition f)
 
 -- This is the usual definition
 
 structure Abelian' (C : Type (u+1)) [category C] [ZeroObject C] :=
-  (kernel   : ∀ {X Y : C} (f : Hom X Y), Kernel f  )
-  (cokernel : ∀ {X Y : C} (f : Hom X Y), Cokernel f)
-  (monics_are_regular : ∀ {X Y : C} {f : Hom X Y} (m : Monic f), RegularMonic f)
-  (epics_are_regular  : ∀ {X Y : C} {f : Hom X Y} (m : Epic f ), RegularEpic f )
+  (kernel   : ∀ {X Y : C} (f : X ⟶ Y), Kernel f  )
+  (cokernel : ∀ {X Y : C} (f : X ⟶ Y), Cokernel f)
+  (monics_are_regular : ∀ {X Y : C} {f : X ⟶ Y} (m : Monic f), RegularMonic f)
+  (epics_are_regular  : ∀ {X Y : C} {f : X ⟶ Y} (m : Epic f ), RegularEpic f )
   
 -- PROJECT show these definitions are equivalent
 

@@ -13,16 +13,16 @@ variable {C : Type (u+1)}
 variable [category C]
 variables {X Y Z : C}
 
-structure Monic (f : Hom Y Z) :=
-  (witness : ∀ {X : C} {a b : Hom X Y} (p : a ≫ f = b ≫ f), a = b)
-structure Epic (f : Hom X Y) :=
-  (witness : ∀ {Z : C} {a b : Hom Y Z} (p : f ≫ a = f ≫ b), a = b)
+structure Monic (f : Y ⟶ Z) :=
+  (witness : ∀ {X : C} {a b : X ⟶ Y} (p : a ≫ f = b ≫ f), a = b)
+structure Epic (f : X ⟶ Y) :=
+  (witness : ∀ {Z : C} {a b : Y ⟶ Z} (p : f ≫ a = f ≫ b), a = b)
 
-structure SplitMonic (f : Hom Y Z) :=
-  (right_inverse : Hom Z Y)
+structure SplitMonic (f : Y ⟶ Z) :=
+  (right_inverse : Z ⟶ Y)
   (evidence      : f ≫ right_inverse = 𝟙 Y)
 
-lemma SplitMonic_implies_Monic {f : Hom Y Z} (m : SplitMonic f) : Monic f := {
+lemma SplitMonic_implies_Monic {f : Y ⟶ Z} (m : SplitMonic f) : Monic f := {
     witness := λ _ a b p, begin
                             have e := congr_arg (λ g, g ≫ m.right_inverse) p,
                             simp at e,

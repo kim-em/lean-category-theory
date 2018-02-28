@@ -25,11 +25,11 @@ variable {C : Type (u₂+1)}
 variable [category C]
 variables {F : Functor J C} {L : LimitCone F} {Z : C} 
 
-private definition Cone_from_map_to_limit (f : Hom Z L.terminal_object.cone_point) : Cone F := {
+private definition Cone_from_map_to_limit (f : Z ⟶ L.terminal_object.cone_point) : Cone F := {
   cone_point    := Z,
   cone_maps     := λ j, f ≫ (L.terminal_object.cone_maps j)
 }
-private definition ConeMorphism_from_map_to_limit (f : Hom Z L.terminal_object.cone_point) : ConeMorphism (Cone_from_map_to_limit f) L.terminal_object := {
+private definition ConeMorphism_from_map_to_limit (f : Z ⟶ L.terminal_object.cone_point) : ConeMorphism (Cone_from_map_to_limit f) L.terminal_object := {
   cone_morphism := f
 }
 end
@@ -69,21 +69,6 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        let Z_cone : Cone (ParallelPair_functor f g) := {
                          cone_point := Z,
                          cone_maps := λ j : WalkingParallelPair, a ≫ (lim.terminal_object.cone_maps j),
-                        --  commutativity := begin
-                        --                     tidy,
-                        --                     cases f_1,
-                        --                     cases f_1,
-                        --                     {
-                        --                       have c := lim.terminal_object.commutativity,
-                        --                       dsimp at c,
-                        --                       erw @c WalkingParallelPair._1 WalkingParallelPair._2 Two._0,
-                        --                    },
-                        --                     {
-                        --                       have c := lim.terminal_object.commutativity,
-                        --                       dsimp at c,
-                        --                       erw @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,
-                        --                    },
-                        --                   end
                       },
                        have p := lim.uniqueness_of_morphisms_to_terminal_object Z_cone ⟨ a, _ ⟩ ⟨ b, _ ⟩,
                        exact congr_arg ConeMorphism.cone_morphism p,
@@ -113,8 +98,7 @@ instance Products_from_Limits [Complete C] : has_Products C := {
                                               end,
                     map           := λ Z i, (lim_F.morphism_to_terminal_object_from {
                                               cone_point := Z, 
-                                              cone_maps := i, 
-                                              commutativity := begin tidy, induction f, induction f, induction f, tidy, end -- gross
+                                              cone_maps := i
                                            }).cone_morphism
                  }
 }

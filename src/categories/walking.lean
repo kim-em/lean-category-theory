@@ -148,7 +148,7 @@ variable [category C]
 
 
 
-definition ParallelPair_functor {α β : C} (f g : Hom α β) : Functor WalkingParallelPair C := {
+definition ParallelPair_functor {α β : C} (f g : α ⟶ β) : Functor WalkingParallelPair C := {
   onObjects     := λ X, match X with
                    | _1 := α
                    | _2 := β

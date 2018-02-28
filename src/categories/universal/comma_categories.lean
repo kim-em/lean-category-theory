@@ -40,11 +40,11 @@ variable [category B]
 variable {C : Type (u₃+2)}
 variable [category C]
 
-definition comma (S : A ↝ C) (T : B ↝ C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, Hom (S p.1) (T p.2)
+definition comma (S : A ↝ C) (T : B ↝ C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, (S p.1) ⟶ (T p.2)
 
 structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (max u₁ u₂ u₃) :=
-(left : Hom p.1.1 q.1.1)
-(right : Hom p.1.2 q.1.2)
+(left : p.1.1 ⟶ q.1.1)
+(right : p.1.2 ⟶ q.1.2)
 (condition : (S &> left) ≫ q.2 = p.2 ≫ (T &> right) . obviously)
 
 make_lemma comma_morphism.condition
@@ -117,13 +117,12 @@ instance Cocones (F : Functor J C) : category (Cocone F) := begin unfold Cocone,
 definition Limit   (F: Functor J C) := TerminalObject (Cone   F)
 definition Colimit (F: Functor J C) := InitialObject  (Cocone F)
 
--- TODO clean this up: WalkingPair and WalkingParallelPair should just have different object types
 definition BinaryProduct   (α β : C)                  := Limit   (Pair_functor α β)
 definition BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
 definition Product         {I : Type (u₁+1)} (X : I → C) := Limit   (Functor.fromFunction X)
 definition Coproduct       {I : Type (u₁+1)} (X : I → C) := Colimit (Functor.fromFunction X)
-definition Equalizer       {α β : C} (f g : Hom α β)  := Limit   (ParallelPair_functor f g)
-definition Coequalizer     {α β : C} (f g : Hom α β)  := Colimit (ParallelPair_functor f g)
+definition Equalizer       {α β : C} (f g : α ⟶ β)  := Limit   (ParallelPair_functor f g)
+definition Coequalizer     {α β : C} (f g : α ⟶ β)  := Colimit (ParallelPair_functor f g)
 
 end categories.comma
 

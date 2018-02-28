@@ -25,12 +25,12 @@ variable [category C]
 variable {D : Type (u+1)}
 variable [category D]
 
-definition HomAdjunction (L : Functor C D) (R : Functor D C) :=
+definition HomAdjunction (L : C ↝ D) (R : D ↝ C) :=
     ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D))
       ⇔ 
     ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C))
 
-definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : Hom (L X) Y) : Hom X (R Y)
+definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)
   := ((A.morphism).components (X, Y)) f
 
 -- PROJECT lemmas about mates.

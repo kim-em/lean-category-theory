@@ -16,11 +16,11 @@ variable {C : Type (u+1)}
 variable [category C]
 variables {X Y Z : C}
 
-structure RegularMonic (f : Hom X Y) :=
+structure RegularMonic (f : X ⟶ Y) :=
   (Z : C)
-  (a b : Hom Y Z)
+  (a b : Y ⟶ Z)
   (e : Equalizer a b)
-  (i : Isomorphism e.equalizer X)
+  (i : e.equalizer ≅ X)
   (w : e.inclusion = i.morphism ≫ f)
 
 -- EXERCISE
@@ -33,11 +33,11 @@ structure RegularMonic (f : Hom X Y) :=
 --   {f : Hom X Y} 
 --   (s : RegularMonic f) : Monic f := sorry
 
-structure RegularEpic (f : Hom Y Z) :=
+structure RegularEpic (f : Y ⟶ Z) :=
   (X : C)
-  (a b : Hom X Y)
+  (a b : X ⟶ Y)
   (c : Coequalizer a b)
-  (i : Isomorphism c.coequalizer Z)
+  (i : c.coequalizer ≅ Z)
   (w : c.projection = f ≫ i.inverse)
 
 end categories.universal.monic

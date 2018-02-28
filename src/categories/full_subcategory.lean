@@ -19,21 +19,14 @@ variable [category D]
 
 
 
-instance FullSubcategory (Z : C → Type u₁) : category (Σ X : C, Z X) := {
-  Hom := λ X Y, Hom X.1 Y.1,
+instance SigmaCategory (Z : C → Type u₁) : category (Σ X : C, Z X) := {
+  Hom := λ X Y, X.1 ⟶ Y.1,
   identity       := by tidy,
   compose        := λ _ _ _ f g, f ≫ g
 }
 
--- -- TODO remove?
--- instance FullSubcategory' (Z : C → Sort u₁) : category (Σ' X : C, Z X) := {
---   Hom := λ X Y, Hom X.1 Y.1,
---   identity       := by tidy,
---   compose        := λ _ _ _ f g, f ≫ g
--- }
-
-instance FullSubcategory'' (Z : C → Prop) : category {X : C // Z X} := {
-  Hom := λ X Y, Hom X.1 Y.1,
+instance FullSubcategory (Z : C → Prop) : category {X : C // Z X} := {
+  Hom := λ X Y, X.1 ⟶ Y.1,
   identity       := by tidy,
   compose        := λ _ _ _ f g, f ≫ g
 }

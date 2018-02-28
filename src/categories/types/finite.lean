@@ -16,8 +16,8 @@ universe u
 definition DecidableType := Σ X : Type u, decidable_eq X
 definition FiniteType := Σ X : Type u, Finite X
 
-instance CategoryOfDecidableTypes : category DecidableType := categories.FullSubcategory decidable_eq -- TODO by apply_instance?
-instance CategoryOfFiniteTypes : category FiniteType := categories.FullSubcategory Finite
+instance CategoryOfDecidableTypes : category DecidableType := categories.SigmaCategory decidable_eq -- TODO by apply_instance?
+instance CategoryOfFiniteTypes : category FiniteType := categories.SigmaCategory Finite
 
 -- PROJECT we could construct an embedding of Finite into Decidable?
 

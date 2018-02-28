@@ -25,11 +25,11 @@ variable [category D]
 
 @[applicable] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
   {Z : D}
-  {G : Functor J D}
+  {G : J ↝ D}
   {L : LimitCone G}
-  (cone_maps : Π j : J, Hom Z (G j)) 
-  (commutativity : Π j k : J, Π f : Hom j k, (cone_maps j) ≫ (G &> f) = cone_maps k)
-  (f g : Hom Z L.terminal_object.cone_point)
+  (cone_maps : Π j : J, Z ⟶ (G j)) 
+  (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (G &> f) = cone_maps k)
+  (f g : Z ⟶ L.terminal_object.cone_point)
   (commutativity_f : Π j : J, f ≫ (L.terminal_object.cone_maps j) = cone_maps j)
   (commutativity_g : Π j : J, g ≫ (L.terminal_object.cone_maps j) = cone_maps j)
    : f = g :=
@@ -51,20 +51,20 @@ begin
 end
 
 lemma bifunctor_naturality  
-(F : Functor J (Functor C D))
+(F : J ↝ (C ↝ D))
 (X Y : C)
-(f : Hom X Y)
+(f : X ⟶ Y)
 (j k : J)
-(g : Hom j k)
+(g : j ⟶ k)
   : ((F j) &> f) ≫ ((F &> g).components Y)
   = ((F &> g).components X) ≫ ((F k) &> f) := ♯
 
 @[simp] lemma cone_in_functor_category 
-(F : Functor J (Functor C D))
+(F : J ↝ (C ↝ D))
 (X Y : C)
-(f : Hom X Y)
+(f : X ⟶ Y)
 (j k : J)
-(g : Hom j k)
+(g : j ⟶ k)
 (cone : Cone F)
 : ((cone.cone_maps j).components X) ≫ ((F j) &> f) ≫ 
       ((F &> g).components Y) =
@@ -77,19 +77,19 @@ begin
 end
 
 @[simp] lemma cone_in_functor_category_naturality
-(F : Functor J (Functor C D))
+(F : J ↝ (C ↝ D))
 (X Y : C)
-(f : Hom X Y)
+(f : X ⟶ Y)
 (j : J)
 (cone : universal.Cone F)
   : ((cone.cone_point) &> f) ≫ ((cone.cone_maps j).components Y) =
     ((cone.cone_maps j).components X) ≫ ((F j) &> f) := ♯
 
 @[simp] lemma cone_commutativity_in_FunctorCategory
-(F : Functor J (Functor C D))
+(F : J ↝ (C ↝ D))
 (X : C)
 (j k : J)
-(f : Hom j k) 
+(f : j ⟶ k) 
 (Y : Cone F)
  : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) = (Y.cone_maps k).components X := 
 begin
@@ -99,13 +99,13 @@ begin
 end
 
 @[simp] lemma cone_commutativity_in_FunctorCategory_assoc
-(F : Functor J (Functor C D))
+(F : J ↝ (C ↝ D))
 (X : C)
 (j k : J)
-(f : Hom j k) 
+(f : j ⟶ k) 
 (Y : Cone F)
 (Z : D)
-(z : Hom ((F k) X) Z)
+(z : ((F k) X) ⟶ Z)
  : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) ≫ z = (Y.cone_maps k).components X ≫ z := 
 begin
  rw ← category.associativity,
@@ -113,7 +113,7 @@ begin
 end
 
 @[simp] lemma cone_morphism_commutativity_in_FunctorCategory
-(F : Functor J (Functor C D))
+(F : J ↝ (C ↝ D))
 (X : C)
 (j : J)
 (Y Z : Cone F)
