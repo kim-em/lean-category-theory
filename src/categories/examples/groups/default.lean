@@ -21,22 +21,7 @@ structure GroupHomomorphism (G H : Group.{u₁}) : Type u₁ := -- Notice that w
 local attribute [class] is_group_hom
 instance is_group_hom_from_GroupHomomorphism (G H : Group.{u₁}) (f : GroupHomomorphism G H) : is_group_hom f.map := f.is_group_hom
 
-open tactic
-meta def simplify_proof (tac : tactic unit) : tactic unit :=
-λ s,
-  let tac1 : tactic expr := do
-    tac,
-    r ← result,
-    lems ← simp_lemmas.mk_default,
-    lems.dsimplify [] r in
-match tac1 s with
-| result.success r s' := (result >>= unify r) s
-| result.exception msg e s' := result.exception msg e s'
-end
-
--- set_option pp.all true
 @[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom
--- @[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma' (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f(x * y) = f(x) * f(y) := begin dsimp [coe_fn,has_coe_to_fun.coe], simp, end
 
 definition GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G := ⟨ id ⟩
 
@@ -45,7 +30,7 @@ definition GroupHomomorphism.composition
   (f: GroupHomomorphism G H) (g: GroupHomomorphism H K) : GroupHomomorphism G K :=
 {
   map := λ x, g.map (f.map x),
-  is_group_hom := begin
+  is_group_hom := begin 
                     unfold is_group_hom, 
                     dsimp, 
                     intros, 
