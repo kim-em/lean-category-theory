@@ -9,10 +9,12 @@ end },
 sorry
 end
 
+
+
 -- Quoth @gebner:
 -- @semorrison It seems like the computed pattern for the hinst_lemma is wrong (it requires that both typeclass instances are defeq):
 set_option pp.all true
-#eval hinst_lemma.mk_from_decl ``T >>= tactic.trace
+#eval hinst_lemma.mk_from_decl ``T >>= tactic.trace -- [Lean] [T, patterns: {{@Y.f ?x_0 ?x_1 ?x_2 ?x_2 ?x_4 ?x_5}}]
 
 structure Y' (α /-β-/) [X α] /-[X β]-/ := (f : α → α)
 @[ematch] theorem T' (α /-β-/) [X α] /-[X β]-/(F : Y' α /-β-/) (x : α) : F.f x = x := sorry
