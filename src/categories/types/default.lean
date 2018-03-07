@@ -21,17 +21,17 @@ instance CategoryOfTypes : category (Type u) :=
     compose  := λ _ _ _ f g, g ∘ f
 }
 
-@[simp] lemma Functor_to_Types_functoriality {C : Type (v+1)} [category C] (F : Functor C (Type u)) {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (a : F X) :
-(F &> (f ≫ g)) a = (F &> g) ((F &> f) a) :=
+variables {C : Type (v+1)} [category C] (F : Functor C (Type u)) {X Y Z : C} 
+
+@[simp] lemma Functor_to_Types_functoriality (f : X ⟶ Y) (g : Y ⟶ Z) (a : F X) :(F &> (f ≫ g)) a = (F &> g) ((F &> f) a) :=
 begin
-have p := F.functoriality_lemma f g,
-tidy
+  have p := F.functoriality_lemma f g,
+  tidy
 end
-@[simp] lemma Functor_to_Types_identities {C : Type (v+1)} [category C] (F : Functor C (Type u)) {X : C} (a : F X) :
-(F &> (𝟙 X)) a = a :=
+@[simp] lemma Functor_to_Types_identities (a : F X) : (F &> (𝟙 X)) a = a :=
 begin
-have p := F.identities_lemma X,
-tidy
+  have p := F.identities_lemma X,
+  tidy
 end
 
 definition UniverseLift : Functor (Type u) (Type (u+1)) := {

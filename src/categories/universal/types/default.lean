@@ -74,13 +74,9 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
                        induction a, 
                        exact k a, 
                        induction a_p, 
-                       tidy, 
-                       induction a_p_a, 
-                       induction a_p_a_h, 
-                       rw ← a_p_a_h_left, 
-                       rw ← a_p_a_h_right,
-                       exact congr_fun w a_p_a_w,
-                       obviously,
+                       tidy,  -- TODO I'm confused why this can't be changed to obviously
+                       rw a_p_ih_a, 
+                       rw a_p_ih_a_1,
                      end,
     factorisation := ♯,
     uniqueness    := begin

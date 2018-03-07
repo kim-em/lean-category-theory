@@ -50,7 +50,6 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
     inclusion     := lim.terminal_object.cone_maps WalkingParallelPair._1,
     witness       := let commutativity := @Cone.commutativity_lemma _ _ _ _ _ lim.terminal_object WalkingParallelPair._1 WalkingParallelPair._2 in 
                      begin
-                       dsimp,
                        erw commutativity Two._0,
                        erw commutativity Two._1,
                      end,
