@@ -73,7 +73,6 @@ end
     ((T.components X).components Z) ≫ ((G &> f).components Z) :=
 begin
   have p := T.naturality _,
-  have q := congr_arg NaturalTransformation.components p,
   tidy,
 end
 end

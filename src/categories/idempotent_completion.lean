@@ -124,6 +124,7 @@ definition extend_Functor_to_IdempotentCompletion (F : Functor C (Idempotent D))
                            begin 
                              have p := F.functoriality X.idempotent X.idempotent, 
                              have p' := congr_arg Idempotent_morphism.morphism p, 
+                             have p'' := eq.symm p', -- TODO solve_by_elim should know about eq.symm
                              tidy, 
                            end
                          ⟩,

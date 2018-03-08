@@ -60,7 +60,8 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        tidy,
                        cases f_1,
                        cases f_1,
-                       tidy,
+                       tidy, 
+                       exact eq.symm w -- TODO solve_by_elim
                      end,
     factorisation := ♯,
     uniqueness    := begin
@@ -73,6 +74,7 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        exact congr_arg ConeMorphism.cone_morphism p,
                        -- finally, take care of those placeholders
                        tidy,
+                       exact eq.symm witness, -- TODO
                        have c := lim.terminal_object.commutativity,
                        dsimp at c,
                        rw ← @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,

@@ -8,13 +8,6 @@ namespace categories.types
 
 universe u
 
-@[simp] lemma funext_simp {α β} {f g : α → β} : (f = g) = ∀ a : α, f a = g a :=
-begin
-apply propext,
-split,
-{ intro w, intro, rw w },
-{ intro w, apply funext, assumption }
-end 
 instance Types_has_Products : has_Products (Type u) := {
   product := λ I φ, {
     product       := Π i : I, φ i,
