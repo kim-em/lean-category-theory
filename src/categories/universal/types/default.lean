@@ -1,23 +1,25 @@
 import ...types
 import ..instances
 import ...transport
-
+import tactic.finish
 open categories.universal
 open categories.isomorphism
 namespace categories.types
 
 universe u
 
+@[simp] lemma funext_simp {α β} {f g : α → β} : (f = g) = ∀ a : α, f a = g a :=
+begin
+apply propext,
+split,
+{ intro w, intro, rw w },
+{ intro w, apply funext, assumption }
+end 
 instance Types_has_Products : has_Products (Type u) := {
   product := λ I φ, {
     product       := Π i : I, φ i,
     projection    := λ i x, x i,
     map           := λ Z f z i, f i z, 
-    uniqueness    := begin
-                       tidy,
-                       have p := witness x_1,
-                       tidy,
-                     end
  }
 }
 
@@ -26,11 +28,6 @@ instance Types_has_Coproducts : has_Coproducts (Type u) := {
     coproduct     := Σ i : I, φ i,
     inclusion     := λ i x, ⟨ i, x ⟩,
     map           := λ Z f p, f p.1 p.2, 
-    uniqueness    := begin
-                       tidy,
-                       have p := witness x_fst,
-                       tidy
-                     end
  }
 }
 
@@ -58,7 +55,7 @@ instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u)  := {
     left_inclusion     := sum.inl,
     right_inclusion    := sum.inr,
     map                 := λ _ f g z, sum.cases_on z f g,
-    uniqueness          := λ Z f g lw rw, begin tidy, induction x, tidy, end
+    uniqueness          := λ Z f g lw rw, begin tidy, induction x, obviously, obviously, end
  }
 }
 
@@ -74,11 +71,10 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
                        induction a, 
                        exact k a, 
                        induction a_p, 
-                       tidy,  -- TODO I'm confused why this can't be changed to obviously
-                       rw a_p_ih_a, 
-                       rw a_p_ih_a_1,
+                       tidy,
+                       obviously,
+                       obviously, 
                      end,
-    factorisation := ♯,
     uniqueness    := begin
                        tidy,
                        induction x,
