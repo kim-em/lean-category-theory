@@ -64,7 +64,7 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
 {coequalizer := λ α β f g,
   {
     coequalizer   := quotient (eqv_gen.setoid (λ x y, ∃ a : α, f a = x ∧ g a = y)),
-    projection    := λ x, begin apply quotient.mk, exact x end,
+    projection    := λ x, begin apply quotient.mk, exact x end, -- FIXME rip out auto_cast, and just write ⟦ x ⟧ here
     witness       := begin tidy, apply quotient.sound, apply eqv_gen.rel, existsi x, simp, end,
     map           := begin
                        tidy, 
@@ -72,14 +72,16 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
                        exact k a, 
                        induction a_p, 
                        tidy,
-                       obviously,
+                       obviously, -- FIXME you shouldn't have to call obviously twice
                        obviously, 
                      end,
+    factorisation := ♯,
     uniqueness    := begin
                        tidy,
                        induction x,
-                       have p := congr_fun witness x,
-                       tidy,
+                       erw witness x, -- TODO is erw necessary here? why?
+                       obviously,
+                       apply proof_irrel, -- FIXME make proof_irrel applicable.
                      end 
  }
 }
