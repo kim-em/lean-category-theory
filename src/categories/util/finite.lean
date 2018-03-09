@@ -25,44 +25,44 @@ class Finite (α : Type u) :=
 @[applicable] definition pempty_exfalso (x : false) : pempty := begin exfalso, trivial end
 
 -- PROJECT improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
-instance empty_is_Finite : Finite empty := {
-  cardinality := 0,
-  bijection := begin
-                 fsplit, 
-                 intros,
-                 induction a,
-                 intros,
-                 induction a,
-                 apply empty_exfalso,
-                 cases a_is_lt,
-                 dsimp,
-                 intros, 
-                 induction u,
-                 dsimp,
-                 intros,
-                 induction v,
-                 cases v_is_lt,
-              end
-} 
-instance pempty_is_Finite : Finite pempty := {
-  cardinality := 0,
-  bijection := begin
-                 fsplit, 
-                 intros,
-                 induction a,
-                 intros,
-                 induction a,
-                 apply pempty_exfalso,
-                 cases a_is_lt,
-                 dsimp,
-                 intros, 
-                 induction u,
-                 dsimp,
-                 intros,
-                 induction v,
-                 cases v_is_lt,
-              end
-} 
+-- instance empty_is_Finite : Finite empty := {
+--   cardinality := 0,
+--   bijection := begin
+--                  fsplit, 
+--                  intros,
+--                  induction a,
+--                  intros,
+--                  induction a,
+--                  apply empty_exfalso,
+--                  cases a_is_lt,
+--                  dsimp,
+--                  intros, 
+--                  induction u,
+--                  dsimp,
+--                  intros,
+--                  induction v,
+--                  cases v_is_lt,
+--               end
+-- } 
+-- instance pempty_is_Finite : Finite pempty := {
+--   cardinality := 0,
+--   bijection := begin
+--                  fsplit, 
+--                  intros,
+--                  induction a,
+--                  intros,
+--                  induction a,
+--                  apply pempty_exfalso,
+--                  cases a_is_lt,
+--                  dsimp,
+--                  intros, 
+--                  induction u,
+--                  dsimp,
+--                  intros,
+--                  induction v,
+--                  cases v_is_lt,
+--               end
+-- } 
 
 definition decidable_via_isomorphism {α : Type u} {β : Type v} [dec : decidable_eq β] (iso : Bijection α β) : decidable_eq α :=
 begin
