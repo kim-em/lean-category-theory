@@ -65,7 +65,6 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
                        exact k a, 
                        induction a_p, 
                        tidy,
-                       obviously, 
                      end,
     factorisation := ♯,
     uniqueness    := begin

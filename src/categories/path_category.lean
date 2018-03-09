@@ -63,14 +63,10 @@ definition path_to_morphism
 begin
 induction f,
 {
-    -- unfold concatenate_paths,
-    -- unfold path_to_morphism,
-    tidy,
+  tidy,
 },
 {
   let p := f_ih g,
-  -- unfold concatenate_paths,
-  -- unfold path_to_morphism,
   tidy,
 }
 end
