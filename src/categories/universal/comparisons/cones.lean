@@ -32,22 +32,18 @@ definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F :=
   cone_maps     := λ j : J, (cone.2).components j,
   commutativity := λ (j k : J) (f : j ⟶ k), 
                       begin
-                      -- tidy,
-                      have p := eq.symm (cone.2.naturality_lemma f), -- PROJECT think about automation here?
-                      dsimp_all',
-                      simp at p,
-                      assumption,                    
+                        -- have p := eq.symm (cone.2.naturality_lemma f), 
+                        obviously -- TODO so we can just remove commutativity
                       end
 }
 
 definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
 {
-  cone_morphism      := f.left,
+  cone_morphism := f.left,
   commutativity := λ j : J, begin
-                                  tidy, -- (This tidy relies on the fact we allow a little bit of looping; no looping actually happens, but our mechanism for detecting looping gets confused.)
-                                  let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f.condition,
-                                  tidy
-                                end
+                              let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f.condition,
+                              tidy
+                            end
 }
 
 definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F := 

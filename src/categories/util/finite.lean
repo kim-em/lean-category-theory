@@ -108,7 +108,10 @@ instance Two_is_Finite : Finite Two := {
     inverse  := λ n, match n.1, to_as_true n.2 with
                        | 0, _ := _0
                        | 1, _ := _1 
-                     end
+                     end,
+    -- FIXME these are lame proofs, but tidy loops because unfold_projs is stupid
+    witness_1 := begin intros, cases u, tidy, end,
+    witness_2 := begin intros, cases v, cases v_is_lt, { tidy }, cases v_is_lt_a, { tidy }, cases v_is_lt_a_a, end,
    }
  }
 

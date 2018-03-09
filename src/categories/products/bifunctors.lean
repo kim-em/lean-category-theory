@@ -41,7 +41,7 @@ end
   : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y') (𝟙 X, g)) ≫ (@Functor.onMorphisms _ _ _ _ F (X, Y') (X', Y') (f, 𝟙 Y')) =
    @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
 begin
-  have p := eq.symm (@Functor.functoriality _ _ _ _ F (X, Y) (X, Y') (X', Y') (𝟙 X, g) (f, 𝟙 Y')),
+  have p := (@Functor.functoriality _ _ _ _ F (X, Y) (X, Y') (X', Y') (𝟙 X, g) (f, 𝟙 Y')),
   tidy,
 end
 
@@ -49,7 +49,7 @@ end
   : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y) (f, 𝟙 Y)) ≫ (@Functor.onMorphisms _ _ _ _ F (X', Y) (X', Y') (𝟙 X', g)) =
    @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
 begin
-  have p := eq.symm (@Functor.functoriality _ _ _ _ F (X, Y) (X', Y) (X', Y') (f, 𝟙 Y) (𝟙 X', g)),
+  have p := (@Functor.functoriality _ _ _ _ F (X, Y) (X', Y) (X', Y') (f, 𝟙 Y) (𝟙 X', g)),
   tidy,
 end
 

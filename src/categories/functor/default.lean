@@ -31,7 +31,7 @@ definition IdentityFunctor (C) [category C] : C ↝ C := {
   onMorphisms   := λ _ _ f, f
 }
 
-instance  (C) [category C] : has_one (C ↝ C) := {
+instance (C) [category C] : has_one (C ↝ C) := {
   one := IdentityFunctor C
 }
 

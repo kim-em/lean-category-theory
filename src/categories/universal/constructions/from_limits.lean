@@ -42,8 +42,11 @@ open tactic
 meta def induction_WalkingParallelPair : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := induction h >> skip | _ := failed end))
+
 local attribute [tidy] induction_WalkingParallelPair
+local attribute [reducible] ParallelPair_functor._match_1
 local attribute [reducible] ParallelPair_functor._match_2
+
 instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
   equalizer := λ X Y f g, let lim := limitCone (ParallelPair_functor f g) in {
     equalizer     := lim.terminal_object.cone_point,
@@ -61,7 +64,6 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        cases f_1,
                        cases f_1,
                        tidy, 
-                       exact eq.symm w -- TODO solve_by_elim
                      end,
     factorisation := ♯,
     uniqueness    := begin
@@ -74,7 +76,6 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        exact congr_arg ConeMorphism.cone_morphism p,
                        -- finally, take care of those placeholders
                        tidy,
-                       exact eq.symm witness, -- TODO
                        have c := lim.terminal_object.commutativity,
                        dsimp at c,
                        rw ← @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,

@@ -27,8 +27,7 @@ structure GraphHomomorphism (G H : Graph.{u₁}) : Type (u₁+1) :=
 begin
   induction p,
   induction q,
-  have h : p = q, by tidy,
-  subst h
+  tidy,
 end
 
 instance CategoryOfGraphs : category Graph := {

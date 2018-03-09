@@ -26,11 +26,11 @@ instance PathCategory (C : Type (u₁+1)) [graph C] : category (Path C) :=
                       {
                         -- when f is nil
                         trivial,
-                     },
+                      },
                       {
                         -- when f is cons
                         exact congr_arg (λ p, path.cons f_e p) f_ih
-                     }
+                      }
                     end,
   associativity  := begin
                       tidy,
@@ -38,11 +38,11 @@ instance PathCategory (C : Type (u₁+1)) [graph C] : category (Path C) :=
                       {
                         -- when f is nil
                         trivial,
-                     },
+                      },
                       {
                         -- when f is cons
                         exact congr_arg (λ p, path.cons f_e p) (f_ih g)
-                     }
+                      }
                     end
 }
 
@@ -53,27 +53,25 @@ variable [graph G]
 variable {C : Type (u₂+1)}
 variable [category C]
 
-
 definition path_to_morphism
   (H : graph_homomorphism G C)
   : Π {X Y : G}, path X Y → ((H.onVertices X) ⟶ (H.onVertices Y))
 | ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
 | ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) ≫ (path_to_morphism p)
  
-@[simp] lemma  path_to_morphism.comp   (H : graph_homomorphism G C) {X Y Z : G} (f : path X Y) (g : path Y Z): path_to_morphism H (graphs.concatenate_paths f g) = path_to_morphism H f ≫ path_to_morphism H g :=
+@[simp] lemma path_to_morphism.comp   (H : graph_homomorphism G C) {X Y Z : G} (f : path X Y) (g : path Y Z): path_to_morphism H (graphs.concatenate_paths f g) = path_to_morphism H f ≫ path_to_morphism H g :=
 begin
 induction f,
 {
-    unfold concatenate_paths,
-    unfold path_to_morphism,
+    -- unfold concatenate_paths,
+    -- unfold path_to_morphism,
     tidy,
 },
 {
   let p := f_ih g,
-  unfold concatenate_paths,
-  unfold path_to_morphism,
+  -- unfold concatenate_paths,
+  -- unfold path_to_morphism,
   tidy,
-  begin[smt] eblast end,
 }
 end
 

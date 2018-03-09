@@ -21,7 +21,7 @@ by contradiction
 by contradiction
 
 -- TODO move to lean-tidy
-@[applicable] definition decidable_true  : decidable true  := is_true  begin trivial end
+@[applicable] definition decidable_true  : decidable true  := is_true  ♯ 
 @[applicable] definition decidable_false : decidable false := is_false ♯ 
 
 @[tidy] meta def induction_Two : tactic unit :=

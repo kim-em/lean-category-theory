@@ -73,10 +73,9 @@ definition NaturalIsomorphism.from_components
    },
     inverse   := {
       components := λ X, (components X).inverse,
-      naturality := λ X Y f, begin
+      naturality := λ X Y f, begin 
                                let p := congr_arg (λ f, (components X).inverse ≫ (f ≫ (components Y).inverse)) (eq.symm (naturality f)),
-                               simp at p,
-                               exact p,
+                               tidy,
                              end
    }
  }

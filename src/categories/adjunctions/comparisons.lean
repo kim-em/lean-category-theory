@@ -1,55 +1,56 @@
 -- FIXME restore
 
--- -- Copyright (c) 2017 Scott Morrison. All rights reserved.
--- -- Released under Apache 2.0 license as described in the file LICENSE.
--- -- Authors: Stephen Morgan, Scott Morrison
+-- Copyright (c) 2017 Scott Morrison. All rights reserved.
+-- Released under Apache 2.0 license as described in the file LICENSE.
+-- Authors: Stephen Morgan, Scott Morrison
 
--- import ..adjunctions
--- import .hom_adjunction
+import ..adjunctions
+import .hom_adjunction
 
--- open categories
--- open categories.functor
--- open categories.natural_transformation
--- open categories.products
--- open categories.opposites
--- open categories.isomorphism
--- open categories.types
+open categories
+open categories.functor
+open categories.natural_transformation
+open categories.products
+open categories.opposites
+open categories.isomorphism
+open categories.types
 
--- namespace categories.adjunctions
+namespace categories.adjunctions
 
--- universes u
+universes u
 
--- variable {C : Type (u+1)}
--- variable [category C]
--- variable {D : Type (u+1)}
--- variable [category D]
+variable {C : Type (u+1)}
+variable [category C]
+variable {D : Type (u+1)}
+variable [category D]
+variables {L : C ↝ D} {R : D ↝ C} 
 
--- private definition Adjunction_to_HomAdjunction_morphism {L : Functor C D} {R : Functor D C} (A : Adjunction L R) 
---   : NaturalTransformation (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D))
---                           (FunctorComposition (IdentityFunctor (Cᵒᵖ) × R) (HomPairing C)) := 
--- {
---   components := λ P, 
---     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
---     λ f, (A.unit.components P.1) ≫ (R &> f)
--- }
+private definition Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
+  : ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D)) ⟹ 
+                          ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C)) := 
+{
+  components := λ P, 
+    -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
+    λ f, (A.unit.components P.1) ≫ (R &> f)
+}
 
--- private definition Adjunction_to_HomAdjunction_inverse {L : Functor C D} {R : Functor D C} (A : Adjunction L R) 
---   : NaturalTransformation (FunctorComposition (IdentityFunctor (Cᵒᵖ) × R) (HomPairing C))
---                           (FunctorComposition (OppositeFunctor L × IdentityFunctor D) (HomPairing D)) :=
+-- private definition Adjunction_to_HomAdjunction_inverse (A : L ⊣ R) 
+--   : ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C)) ⟹ 
+--                           ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D)) :=
 -- {
 --   components := λ P, 
 --     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
 --     λ f, (L &> f) ≫ (A.counit.components P.2)
 -- }
 
--- definition Adjunction_to_HomAdjunction  {L : Functor C D} {R : Functor D C} (A : Adjunction L R) : HomAdjunction L R := 
+-- definition Adjunction_to_HomAdjunction (A : L ⊣ R) : HomAdjunction L R := 
 -- {
 --     morphism  := Adjunction_to_HomAdjunction_morphism A,
 --     inverse   := Adjunction_to_HomAdjunction_inverse A
 --  }
 
 -- @[simp] lemma mate_of_L
---   {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+--   (A : HomAdjunction L R)
 --   {X Y : C} (f : Hom X Y)
 --     : (((A.morphism).components (X, L X)) (𝟙 (L X))) ≫ 
 --       (R &> (L &> f))
@@ -61,7 +62,7 @@
 -- end
 
 -- @[simp] lemma mate_of_L'
---   {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+--   (A : HomAdjunction L R)
 --   {X Y : C} (f : Hom X Y)
 --     : f ≫ (((A.morphism).components (Y, L Y)) (𝟙 (L Y)))
 --       = ((A.morphism).components (X, L Y)) (L &> f) :=
@@ -72,7 +73,7 @@
 -- end
 
 -- @[simp] lemma mate_of_R
---   {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+--   (A : HomAdjunction L R)
 --   {X Y : D} (f : Hom X Y)
 --     : (L &> (R &> f)) ≫ (((A.inverse).components (R Y, Y)) (𝟙 (R Y)))
 --       = ((A.inverse).components (R X, Y)) (R &> f) :=
@@ -83,7 +84,7 @@
 -- end
 
 -- @[simp] lemma mate_of_R'
---   {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R)
+--   (A : HomAdjunction L R)
 --   {X Y : D} (f : Hom X Y)
 --     : (((A.inverse).components (R X, X)) (𝟙 (R X))) ≫ f = 
 --     ((A.inverse).components (R X, Y)) (R &> f) :=
@@ -93,10 +94,10 @@
 --   tidy,
 -- end
 
--- private definition unit_from_HomAdjunction {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R) := {
+-- private definition unit_from_HomAdjunction (A : HomAdjunction L R) : (1 C) ⟹ (L ⋙ R) := {
 --     components := λ X : C, (A.morphism.components (X, L X)) (𝟙 (L X))
 --  }
--- private definition counit_from_HomAdjunction {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D) := {
+-- private definition counit_from_HomAdjunction (A : HomAdjunction L R) : (R ⋙ L) ⟹ (1 D) := {
 --     components := λ X : D, (A.inverse.components (R X, X)) (𝟙 (R X))
 --  }
 
@@ -151,4 +152,4 @@
 -- --                end
 -- --}
 
--- end categories.adjunctions
+end categories.adjunctions

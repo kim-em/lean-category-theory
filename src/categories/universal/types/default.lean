@@ -1,7 +1,7 @@
 import ...types
 import ..instances
 import ...transport
-import tactic.finish
+
 open categories.universal
 open categories.isomorphism
 namespace categories.types
@@ -48,7 +48,7 @@ instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u)  := {
     left_inclusion     := sum.inl,
     right_inclusion    := sum.inr,
     map                 := λ _ f g z, sum.cases_on z f g,
-    uniqueness          := λ Z f g lw rw, begin tidy, induction x, obviously, obviously, end
+    uniqueness          := λ Z f g lw rw, begin tidy, induction x, obviously, end
  }
 }
 
@@ -65,7 +65,6 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
                        exact k a, 
                        induction a_p, 
                        tidy,
-                       obviously, -- FIXME you shouldn't have to call obviously twice
                        obviously, 
                      end,
     factorisation := ♯,
@@ -74,7 +73,6 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
                        induction x,
                        erw witness x, -- TODO is erw necessary here? why?
                        obviously,
-                       apply proof_irrel, -- FIXME make proof_irrel applicable.
                      end 
  }
 }

@@ -31,7 +31,7 @@ definition GroupHomomorphism.composition
 {
   map := λ x, g.map (f.map x),
   is_group_hom := begin 
-                    unfold is_group_hom, 
+                    unfold is_group_hom, --tidy {trace_result := tt}, --FIXME move simp before unfold_projs? remove unfold_projs??
                     dsimp, 
                     intros, 
                     simp,
@@ -45,8 +45,7 @@ definition GroupHomomorphism.composition
 begin
     induction f with fc,
     induction g with gc,
-    have hc : fc = gc := funext w,
-    subst hc
+    tidy,
 end
 
 instance CategoryOfGroups : category Group := {
