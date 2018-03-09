@@ -48,7 +48,7 @@ instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u)  := {
     left_inclusion     := sum.inl,
     right_inclusion    := sum.inr,
     map                 := λ _ f g z, sum.cases_on z f g,
-    uniqueness          := λ Z f g lw rw, begin tidy, induction x, obviously, end
+    uniqueness          := λ Z f g lw rw, begin tidy, induction x, obviously, obviously, end -- FIXME huh?
  }
 }
 
@@ -72,6 +72,7 @@ instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
                        induction x,
                        erw witness x, -- TODO is erw necessary here? why?
                        obviously,
+                       tidy,  -- FIXME huh?
                      end 
  }
 }
