@@ -12,8 +12,8 @@ universes u v
 
 @[simp] private lemma functor_identities (F : Functor (Type u) (Type v)) (α : Type u) (x : F α) : (F &> id) x = x := 
 begin
-have p := Functor_to_Types_identities F x,
-tidy,
+    have p := Functor_to_Types.identities F x,
+    tidy,
 end
 
 instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F := {
@@ -21,7 +21,7 @@ instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F := {
     id_map := ♯,
     map_comp := begin 
                  tidy, 
-                 have p := Functor_to_Types_functoriality F g h x,
+                 have p := Functor_to_Types.functoriality F g h x,
                  rw ← p,
                  tidy,
                 end

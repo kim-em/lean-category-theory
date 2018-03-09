@@ -5,6 +5,7 @@
 import ..category
 import ..isomorphism
 import ..functor
+import ..natural_transformation
 
 namespace categories.types
 
@@ -12,7 +13,7 @@ open categories
 open categories.isomorphism
 open categories.functor
 
-universes u v
+universes u v w
 
 instance CategoryOfTypes : category (Type u) :=
 {
@@ -21,18 +22,30 @@ instance CategoryOfTypes : category (Type u) :=
     compose  := λ _ _ _ f g, g ∘ f
 }
 
-variables {C : Type (v+1)} [category C] (F : Functor C (Type u)) {X Y Z : C} 
+variables {C : Type (v+1)} [category C] (F G H: Functor C (Type u)) {X Y Z : C} 
+variables (σ : F ⟹ G) (τ : G ⟹ H) 
 
-@[simp] lemma Functor_to_Types_functoriality (f : X ⟶ Y) (g : Y ⟶ Z) (a : F X) :(F &> (f ≫ g)) a = (F &> g) ((F &> f) a) :=
+@[simp] lemma Functor_to_Types.functoriality (f : X ⟶ Y) (g : Y ⟶ Z) (a : F X) : (F &> (f ≫ g)) a = (F &> g) ((F &> f) a) :=
 begin
   have p := F.functoriality_lemma f g,
   tidy
 end
-@[simp] lemma Functor_to_Types_identities (a : F X) : (F &> (𝟙 X)) a = a :=
+@[simp] lemma Functor_to_Types.identities (a : F X) : (F &> (𝟙 X)) a = a :=
 begin
   have p := F.identities_lemma X,
   tidy
-end
+end.
+@[ematch] lemma Functor_to_Types.naturality (f : X ⟶ Y) (x : F X) : σ.components Y ((F &> f) x) = (G &> f) (σ.components X x) := 
+begin
+  have p := σ.naturality_lemma f,
+  tidy,
+end.
+@[simp] lemma Functor_to_Types.vertical_composition (x : F X) : (σ ⊟ τ).components X x = τ.components X (σ.components X x) := ♯ 
+
+-- TODO
+-- variables {D : Type (w+1)} [category D] (I J : D ↝ C) (ρ : I ⟹ J) {W : D}
+-- @[simp] lemma Functor_to_Types.horizontal_composition (x : (I ⋙ F) W) : (ρ ◫ σ).components W x = sorry := ♯ 
+
 
 definition UniverseLift : Functor (Type u) (Type (u+1)) := {
     onObjects := λ X, ulift.{u+1} X,

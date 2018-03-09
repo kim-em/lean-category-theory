@@ -71,24 +71,16 @@ class Representable (F : C ↝ (Type u₁)) :=
    (Z : F Y) :
      (G &> f) ((τ.components Y) Z) = (τ.components X) ((F &> f) Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
-theorem YonedaLemma (C : Type (u₁+1)) [category C] : (YonedaPairing C) ⇔ (YonedaEvaluation C) := 
-begin
-refine {
+theorem YonedaLemma (C : Type (u₁+1)) [category C] : (YonedaPairing C) ⇔ (YonedaEvaluation C) := {
   morphism := {
     components := λ F x, ulift.up ((x.components F.2) (𝟙 F.2)),
-    naturality := _,
   },
   inverse := {
     components := λ F x, { 
       components := λ X a, (F.1 &> a) x.down, 
-      naturality := _ },
-    naturality := _
+    },
   },
-  witness_1 := _,
-  witness_2 := _
-},
-tidy {hints:=[4, 3, 4, 3, 5, 7, 9, 7, 10, 5, 7, 8, 9, 7, 10, 15, 11, 4, 3, 4, 9, 7, 10, 15, 11, 0, 4, 3, 4, 3, 4, 3, 4, 5, 7, 10, 5, 7, 8, 9, 7, 10, 15, 11, 0, 3, 4, 3, 4, 3, 4, 3, 4, 5, 7, 15, 11, 3, 4, 3, 4, 3, 5, 7, 9, 7, 15, 11, 0]}
-end
+}.
 
 theorem YonedaFull (C : Type (u₁+1)) [category C] : Full (Yoneda C) := {
     preimage := λ X Y f, (f.components X) (𝟙 X),

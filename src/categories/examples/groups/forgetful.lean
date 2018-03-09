@@ -4,6 +4,7 @@ import ...yoneda
 import algebra.group_power
 
 namespace categories.examples.groups
+open categories
 open categories.functor
 open categories.types
 open categories.yoneda
@@ -37,8 +38,6 @@ begin
   } ; intros ; simp
 end
 
-#eval groups.integers_as_group.one
-
 -- TODO fix inconsistent naming of monoid.pow and gpow in mathlib
 local attribute [class] is_group_hom
 instance exponentiation_is_hom (G : Group) (g : G.1) : is_group_hom (λ (n : ulift ℤ), gpow g (n.down)) := sorry
@@ -46,7 +45,6 @@ instance exponentiation_is_hom (G : Group) (g : G.1) : is_group_hom (λ (n : uli
 
 @[simp] lemma monoid_pow_one {G} [group G] (x : G) : monoid.pow x 1 = x := begin sorry, end
 
--- set_option trace.class_instances true
 instance Groups_ForgetfulFunctor_Representable : @Representable.{u₁} Group _ (ForgetfulFunctor_Groups_to_Types.{u₁}) := {
   c := ⟨ ulift ℤ, by apply_instance ⟩,
   Φ := {
@@ -55,8 +53,9 @@ instance Groups_ForgetfulFunctor_Representable : @Representable.{u₁} Group _ (
       naturality := sorry
    },
     inverse := {
-      components := λ G f, f.map (ulift.up (1 : ℤ))
-   }
+      components := λ G f, f.map (ulift.up (1 : ℤ)),
+   },
+   witness_2 := sorry,
  }
 }
 

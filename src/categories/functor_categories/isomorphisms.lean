@@ -28,7 +28,7 @@ definition FunctorComposition_associator
   (F : B ↝ C)
   (G : C ↝ D)
   (H : D ↝ E)
-: ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := ♯
+: ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := ♯ -- FIXME this is incredibly slow. I wonder if I can make split invoke auto_param tactics, so that reducible_abstract gets applied appropriately?
 
 -- PROJECT pentagon
 definition FunctorComposition_left_unitor (F : C ↝ D)
