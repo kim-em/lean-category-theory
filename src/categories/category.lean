@@ -25,7 +25,6 @@ notation `𝟙` := category.identity   -- type as \b1
 infixr ` ≫ `:80 := category.compose -- type as \gg
 infixr ` ⟶ `:10  := category.Hom             -- type as \h
 
-set_option pp.all true
 -- We now provide lemmas for the fields of category, without the auto_param junk
 make_lemma category.left_identity
 make_lemma category.right_identity
