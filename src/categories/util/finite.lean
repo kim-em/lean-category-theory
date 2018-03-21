@@ -24,12 +24,14 @@ class Finite (α : Type u) :=
 @[applicable] definition empty_exfalso (x : false) : empty := begin exfalso, trivial end
 @[applicable] definition pempty_exfalso (x : false) : pempty := begin exfalso, trivial end
 @[simp] lemma lt_zero_eq_false (n : ℕ) : n < 0 = false := ♯
+
+-- set_option pp.all true
 -- PROJECT improve automation here. We run into a problem that dsimp and unfold_projections just switch back and forth.
 instance empty_is_Finite : Finite empty := {
   cardinality := 0,
   bijection := {
     morphism := ♯,
-    inverse := begin  intros, apply empty_exfalso, cases a, /-simp at a_is_lt, -/tidy {max_steps:=10,trace_result:=tt}, end,
+    inverse := begin  intros, apply empty_exfalso, cases a, /-simp at a_is_lt, -/ unfold_projs at *, dsimp at *,tidy {max_steps:=10,trace_result:=tt}, end,
   }
 } 
 instance pempty_is_Finite : Finite pempty := {

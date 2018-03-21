@@ -8,7 +8,7 @@ namespace categories
 
 universes u v
 
-class category (Obj : Type (u+1)) :=
+class category (Obj : Type (u+1)) : Type (u+1) :=
   (Hom : Obj → Obj → Type u)
   (identity : Π X : Obj, Hom X X)
   (compose  : Π {X Y Z : Obj}, Hom X Y → Hom Y Z → Hom X Z)
