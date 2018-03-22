@@ -31,7 +31,7 @@ instance empty_is_Finite : Finite empty := {
   cardinality := 0,
   bijection := {
     morphism := ♯,
-    inverse := begin  intros, apply empty_exfalso, cases a, /-simp at a_is_lt, -/ unfold_projs at *, dsimp at *,tidy {max_steps:=10,trace_result:=tt}, end,
+    inverse := begin  intros, apply empty_exfalso, cases a, rw lt_zero_eq_false at a_is_lt, tidy end,
   }
 } 
 instance pempty_is_Finite : Finite pempty := {
