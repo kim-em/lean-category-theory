@@ -50,6 +50,7 @@ begin
   exact congr_arg ConeMorphism.cone_morphism (L.uniqueness_of_morphisms_to_terminal_object cone cone_morphism_f cone_morphism_g), 
 end
 
+-- TODO find a better home
 lemma bifunctor_naturality  
 (F : J ↝ (C ↝ D))
 (X Y : C)
@@ -58,6 +59,9 @@ lemma bifunctor_naturality
 (g : j ⟶ k)
   : ((F j) &> f) ≫ ((F &> g).components Y)
   = ((F &> g).components X) ≫ ((F k) &> f) := ♯
+
+-- TODO find a better home
+lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@category.compose (C ↝ D) _ _ _ _ α β).components X = (α.components X) ≫ (β.components X) := ♯ 
 
 @[simp] lemma cone_in_functor_category 
 (F : J ↝ (C ↝ D))
@@ -74,7 +78,9 @@ begin
   have p' := congr_arg NaturalTransformation.components p,
   have p'' := congr_fun p' X,
   rw ← p'',
-  obviously,
+  rw bifunctor_naturality,
+  rw NaturalTransformation.composition_components,
+  simp
 end
 
 @[simp] lemma cone_in_functor_category_naturality

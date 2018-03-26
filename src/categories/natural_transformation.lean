@@ -41,7 +41,7 @@ variables {F G H: Functor C D}
 -- We'll want to be able to prove that two natural transformations are equal if they are componentwise equal.
 @[applicable] lemma NaturalTransformations_componentwise_equal
   (α β : F ⟹ G)
-  (w : ∀ X : C, α.components X = β.components X . obviously) : α = β :=
+  (w : ∀ X : C, α.components X = β.components X) : α = β :=
   begin
     induction α with α_components α_naturality,
     induction β with β_components β_naturality,
