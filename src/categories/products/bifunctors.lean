@@ -25,32 +25,36 @@ variable [category E]
   : @Functor.onMorphisms _ _ _ _ F (W, X) (W, Z) (𝟙 W, f ≫ g) =
       (@Functor.onMorphisms _ _ _ _ F (W, X) (W, Y) (𝟙 W, f)) ≫ (@Functor.onMorphisms _ _ _ _ F (W, Y) (W, Z) (𝟙 W, g)) :=
 begin
-  have p := @Functor.functoriality _ _ _ _ F (W, X) (W, Y) (W, Z) (𝟙 W, f) (𝟙 W, g),
-  tidy
+  rw ← Functor.functoriality,
+  dsimp [products.ProductCategory],
+  simp,
 end
 
 @[simp] lemma Bifunctor_right_identity (F : (C × D) ↝ E) (X Y Z : C) (W : D) (f : X ⟶ Y) (g : Y ⟶ Z)
   : @Functor.onMorphisms _ _ _ _ F (X, W) (Z, W) (f ≫ g, 𝟙 W) =
       (@Functor.onMorphisms _ _ _ _ F (X, W) (Y, W) (f, 𝟙 W)) ≫ (@Functor.onMorphisms _ _ _ _ F (Y, W) (Z, W) (g, 𝟙 W)) :=
 begin
-  have p := @Functor.functoriality _ _ _ _ F (X, W) (Y, W) (Z, W) (f, 𝟙 W) (g, 𝟙 W),
-  tidy
+  rw ← Functor.functoriality,
+  dsimp [products.ProductCategory],
+  simp,
 end
 
 @[simp] lemma Bifunctor_diagonal_identities_1 (F : (C × D) ↝ E) (X X' : C) (f : X ⟶ X') (Y Y' : D) (g : Y ⟶ Y')
   : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y') (𝟙 X, g)) ≫ (@Functor.onMorphisms _ _ _ _ F (X, Y') (X', Y') (f, 𝟙 Y')) =
    @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
 begin
-  have p := (@Functor.functoriality _ _ _ _ F (X, Y) (X, Y') (X', Y') (𝟙 X, g) (f, 𝟙 Y')),
-  tidy,
+  rw ← Functor.functoriality,
+  dsimp [products.ProductCategory],
+  simp,
 end
 
 @[simp] lemma Bifunctor_diagonal_identities_2 (F : (C × D) ↝ E) (X X' : C) (f : X ⟶ X') (Y Y' : D) (g : Y ⟶ Y')
   : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y) (f, 𝟙 Y)) ≫ (@Functor.onMorphisms _ _ _ _ F (X', Y) (X', Y') (𝟙 X', g)) =
    @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
 begin
-  have p := (@Functor.functoriality _ _ _ _ F (X, Y) (X', Y) (X', Y') (f, 𝟙 Y) (𝟙 X', g)),
-  tidy,
+  rw ← Functor.functoriality,
+  dsimp [products.ProductCategory],
+  simp,
 end
 
 end categories.products

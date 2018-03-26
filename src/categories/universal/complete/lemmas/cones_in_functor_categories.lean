@@ -73,6 +73,7 @@ begin
   have p := cone.commutativity g,
   have p' := congr_arg NaturalTransformation.components p,
   have p'' := congr_fun p' X,
+  rw ← p'',
   obviously,
 end
 
@@ -95,6 +96,7 @@ end
 begin
  have p := Y.commutativity f,
  have p' := congr_arg NaturalTransformation.components p,
+ rw ← p',
  tidy,
 end
 
