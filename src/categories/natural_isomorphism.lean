@@ -77,7 +77,7 @@ definition NaturalIsomorphism.from_components
                                let p := congr_arg (λ f, (components X).inverse ≫ (f ≫ (components Y).inverse)) (eq.symm (naturality f)),
                                tidy,
                              end
-   }
+   },
  }
 
 definition vertical_composition_of_NaturalIsomorphisms 

@@ -20,7 +20,7 @@ variable [category D]
 variable {E : Type (w+1)}
 variable [category E]
 
-structure NaturalTransformation (F G : Functor C D) : Type ((max u v)+1) /-(max (u+1) v)-/ :=
+structure NaturalTransformation (F G : Functor C D) : Type /-((max u v)+1)-/ (max (u+1) v) :=
   (components: Π X : C, (F X) ⟶ (G X))
   (naturality: ∀ {X Y : C} (f : X ⟶ Y),
      (F &> f) ≫ (components Y) = (components X) ≫ (G &> f) . obviously)
