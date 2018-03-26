@@ -11,26 +11,22 @@ open categories.types
 universes u v
 
 @[simp] private lemma functor_identities (F : Functor (Type u) (Type v)) (α : Type u) (x : F α) : (F &> id) x = x := 
-begin
-    have p := Functor_to_Types.identities F x,
-    tidy,
-end
+ Functor_to_Types.identities F x
 
-instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F := {
+instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F.onObjects := {
     map := λ _ _ f, F &> f,
+}
+instance lawful_functor_of_Functor (F : Functor (Type u) (Type v)) : is_lawful_functor (F.onObjects) := {
     id_map := ♯,
-    map_comp := begin 
-                 tidy, 
-                 have p := Functor_to_Types.functoriality F g h x,
-                 rw ← p,
-                 tidy,
-                end
+    comp_map := begin -- FIXME why does tidy fail?
+                  tidy, 
+                  have p := Functor_to_Types.functoriality F g h x,
+                  exact p,
+                end 
 }
 
-local attribute [simp] functor.id_map
-
-definition Functor_of_functor (g : Type u → Type v) [functor g] : Functor (Type u) (Type v) := {
+definition Functor_of_functor (g : Type u → Type v) [functor g] [is_lawful_functor g] : Functor (Type u) (Type v) := {
     onObjects := g,
-    onMorphisms := λ X Y f z, (has_map.map f) z,
-    functoriality := begin tidy, rw ← functor.map_comp, end
+    onMorphisms := λ X Y f z, (functor.map f) z,
+    functoriality := begin tidy, rw ← is_lawful_functor.comp_map, end
 }
