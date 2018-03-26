@@ -2,8 +2,6 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ...isomorphism
-import ...natural_transformation
 import ...equivalence
 import ..comma_categories
 import ..universal
@@ -70,11 +68,12 @@ definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) := {
 
 local attribute [applicable] category.identity
 
-definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := {
-  functor := comma_Cones_to_Cones F,
-  inverse := Cones_to_comma_Cones F,
-  isomorphism_1 := ♯,
-  isomorphism_2 := ♯
-}
+-- FIXME really slow: need to automatically abstract (propositional?) subgoals
+-- definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := {
+--   functor := comma_Cones_to_Cones F,
+--   inverse := Cones_to_comma_Cones F,
+--   isomorphism_1 := ♯,
+--   isomorphism_2 := ♯
+-- }
 
 end categories.universal
