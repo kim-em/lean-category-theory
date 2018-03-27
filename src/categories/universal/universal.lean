@@ -71,14 +71,17 @@ attribute [applicable] Product.uniqueness_lemma
 structure Coequalizer (f g : X ⟶ Y) :=
   (coequalizer   : C)
   (projection    : Y ⟶ coequalizer)
-  (witness       : f ≫ projection = g ≫ projection)
   (map           : ∀ {Z : C} (k : Y ⟶ Z) (w : f ≫ k = g ≫ k), coequalizer ⟶ Z)
-  (factorisation : ∀ {Z : C} (k : Y ⟶ Z) (w : f ≫ k = g ≫ k), projection ≫ (map k w) = k)
-  (uniqueness    : ∀ {Z : C} (a b : coequalizer ⟶ Z) (witness : projection ≫ a = projection ≫ b), a = b)
+  (witness       : f ≫ projection = g ≫ projection . obviously)
+  (factorisation : ∀ {Z : C} (k : Y ⟶ Z) (w : f ≫ k = g ≫ k), projection ≫ (map k w) = k . obviously)
+  (uniqueness    : ∀ {Z : C} (a b : coequalizer ⟶ Z) (witness : projection ≫ a = projection ≫ b), a = b . obviously)
 
-attribute [simp,ematch] Coequalizer.factorisation
+make_lemma Coequalizer.witness
+make_lemma Coequalizer.factorisation
+make_lemma Coequalizer.uniqueness
+attribute [simp,ematch] Coequalizer.factorisation_lemma
 attribute [applicable] Coequalizer.projection Coequalizer.map
-attribute [applicable] Coequalizer.uniqueness
+attribute [applicable] Coequalizer.uniqueness_lemma
 
 definition Cokernel [Z : ZeroObject C] (f : X ⟶ Y) := Coequalizer f (Z.zero_morphism X Y)
 

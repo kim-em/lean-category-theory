@@ -23,7 +23,7 @@ structure GraphHomomorphism (G H : Graph.{u₁}) : Type (u₁+1) :=
   {G H : Graph}
   {p q : GraphHomomorphism G H} 
   (vertexWitness : ∀ X : G.1, p.map.onVertices X = q.map.onVertices X) 
-  (edgeWitness : ∀ X Y : G.1, ∀ f : edges X Y, ⟦ p.map.onEdges f ⟧ = q.map.onEdges f) : p = q :=
+  (edgeWitness : ∀ X Y : G.1, ∀ f : edges X Y, ⟬ p.map.onEdges f ⟭ = q.map.onEdges f) : p = q :=
 begin
   induction p,
   induction q,

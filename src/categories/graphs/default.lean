@@ -29,7 +29,7 @@ variable [graph H]
 @[applicable] lemma graph_homomorphisms_pointwise_equal
   {p q : graph_homomorphism G H} 
   (vertexWitness : ∀ X : G, p.onVertices X = q.onVertices X) 
-  (edgeWitness : ∀ X Y : G, ∀ f : edges X Y, ⟦ p.onEdges f ⟧ = q.onEdges f) : p = q :=
+  (edgeWitness : ∀ X Y : G, ∀ f : edges X Y, ⟬ p.onEdges f ⟭ = q.onEdges f) : p = q :=
 begin
   induction p with p_onVertices p_onEdges,
   induction q with q_onVertices q_onEdges,

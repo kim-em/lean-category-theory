@@ -29,7 +29,7 @@ infixr ` ⟶ `:10  := category.Hom             -- type as \h
 make_lemma category.left_identity
 make_lemma category.right_identity
 make_lemma category.associativity
-attribute [simp] category.left_identity_lemma category.right_identity_lemma category.associativity_lemma 
+attribute [simp,ematch] category.left_identity_lemma category.right_identity_lemma category.associativity_lemma 
 attribute [ematch] category.associativity_lemma 
 -- @[simp] def category.left_identity_lemma (f : X ⟶ Y) : 𝟙 X ≫ f = f := by rw category.left_identity
 -- @[simp] def category.right_identity_lemma (f : X ⟶ Y) : f ≫ 𝟙 Y = f := by rw category.right_identity

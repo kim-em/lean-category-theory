@@ -40,7 +40,7 @@ variables {F G H : C ↝ D}
   (α : F ⇔ G)
   (X : C) (Z : D) (f : (F X) ⟶ Z)
    : (α.morphism.components X) ≫ (α.inverse.components X) ≫ f = f
-   := begin rw ← category.associativity, simp end -- FIXME why doesn't by obviously work here?
+   := by obviously
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2
   (α : F ⇔ G)
   (X : C)
@@ -50,7 +50,7 @@ variables {F G H : C ↝ D}
   (α : F ⇔ G)
   (X : C) (Z : D) (f : (G X) ⟶ Z)
    : (α.inverse.components X) ≫ (α.morphism.components X) ≫ f = f
-   := begin rw ← category.associativity, simp end -- FIXME why doesn't by obviously work here?
+   := by obviously
 
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_1 
   (α : F ⇔ G)
