@@ -44,27 +44,17 @@ lemma Equivalences_are_Full (e : Equivalence C D) : Full (e.functor) := {
 section
 private meta def faithfulness := `[apply faithful.injectivity] -- This is a bit dicey.
 local attribute [tidy] faithfulness
-lemma Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : Functor C D) [full : Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : is_Equivalence' F := {
-    inverse := {
-        onObjects := λ X, (es X).1,
-        onMorphisms := λ X Y f, full.preimage ((es X).2.morphism ≫ f ≫ (es Y).2.inverse)
-    },
-    isomorphism_1 := {
-        morphism := {
-            components := λ X, full.preimage (es (F X)).2.morphism
-        },
-        inverse := {
-            components := λ X, full.preimage (es (F X)).2.inverse
-        }
-    },
-    isomorphism_2 := {
-        morphism := {
-            components := λ Y, (es Y).2.morphism
-        },
-        inverse := {
-            components := λ Y, (es Y).2.inverse
-        },
-    }
+
+-- TODO: weirdly, failing to name `faithful` causes an error.
+definition Fully_Faithful_EssentiallySurjective_Functor_inverse (F : Functor C D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : Functor D C := {
+    onObjects := λ X, (es X).1,
+    onMorphisms := λ X Y f, preimage F ((es X).2.morphism ≫ f ≫ (es Y).2.inverse)
+}
+
+lemma Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : Functor C D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : is_Equivalence' F := {
+    inverse := Fully_Faithful_EssentiallySurjective_Functor_inverse F,
+    isomorphism_1 := NaturalIsomorphism.from_components (λ X, preimage_iso F (es (F X)).2) (by obviously), 
+    isomorphism_2 := NaturalIsomorphism.from_components (λ Y, (es Y).2)                    (by obviously), 
 }
 end
 

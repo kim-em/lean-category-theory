@@ -18,10 +18,9 @@ instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F.onObject
 }
 instance lawful_functor_of_Functor (F : Functor (Type u) (Type v)) : is_lawful_functor (F.onObjects) := {
     id_map := ♯,
-    comp_map := begin -- FIXME why does tidy fail?
+    comp_map := begin 
                   tidy, 
-                  have p := Functor_to_Types.functoriality F g h x,
-                  exact p,
+                  apply Functor_to_Types.functoriality -- TODO automate
                 end 
 }
 
