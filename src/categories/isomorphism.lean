@@ -56,7 +56,7 @@ definition IsomorphismComposition (α : X ≅ Y) (β : Y ≅ Z) : X ≅ Z :=
         rewrite category.associativity,
         simp *,
       end,
-    smt_eblast
+    obviously
   end
 
 definition Isomorphism.reverse (I : X ≅ Y) : Y ≅ X := {
