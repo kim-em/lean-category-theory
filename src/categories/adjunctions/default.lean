@@ -25,8 +25,10 @@ variable [category D]
 structure Adjunction (L : C ↝ D) (R : D ↝ C) :=
   (unit       : 1 ⟹ (L ⋙ R))
   (counit     : (R ⋙ L) ⟹ 1)
-  (triangle_1 : ∀ X : D, (unit.components (R X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R X)) -- FIXME why can't we use notation here?
+  (triangle_1 : ∀ X : D, (unit.components (R X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R X))
   (triangle_2 : ∀ X : C, (L &> (unit.components X)) ≫ (counit.components (L X)) = 𝟙 (L X))
+  -- (Triangle_1 : (whisker_on_left R unit) ⊟ (whisker_on_right counit R) = 1) -- we'd need unitors and associators here
+
 
 attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
@@ -60,25 +62,17 @@ infix ` ⊣ `:50 := Adjunction
 --   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
 --   = IdentityNaturalTransformation L
 
--- TODO automation
-@[simp,ematch] lemma Adjunction.unit_naturality
-  {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) 
-  {X Y : C} (f : X ⟶ Y) : (A.unit.components X) ≫ (R.onMorphisms (L &> f)) = f ≫ (A.unit.components Y) := -- FIXME failed notation here?
-  begin
-  tidy,
-  erw A.unit.naturality,
-  tidy,
-  end
+@[simp,ematch] lemma Adjunction.unit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : C} (f : X ⟶ Y) : (A.unit.components X) ≫ (R.onMorphisms (L &> f)) = f ≫ (A.unit.components Y) := 
+begin
+  have := A.unit.naturality,
+  obviously,
+end
 
-@[simp,ematch] lemma Adjunction.counit_naturality
-  {L : C ↝ D} {R : D ↝ C} 
-  (A : L ⊣ R) 
-  {X Y : D} (f : X ⟶ Y) : (L &> (R &> f)) ≫ (A.counit.components Y) = (A.counit.components X) ≫ f :=
-  begin
-  tidy,
-  erw A.counit.naturality,
-  tidy,
-  end
+@[simp,ematch] lemma Adjunction.counit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : D} (f : X ⟶ Y) : (L &> (R &> f)) ≫ (A.counit.components Y) = (A.counit.components X) ≫ f :=
+begin
+  have := A.counit.naturality,
+  obviously,
+end
 
 -- PROJECT examples
 -- PROJECT existence in terms of initial objects in comma categories

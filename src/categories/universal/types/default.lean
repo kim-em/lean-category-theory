@@ -24,7 +24,7 @@ instance Types_has_Coproducts : has_Coproducts (Type u) := {
  }
 }
 
-instance Types_has_Equalizers : has_Equalizers (Type u)  := {
+instance Types_has_Equalizers : has_Equalizers (Type u) := {
   equalizer := λ α β f g, {
     equalizer     := {x : α // f x = g x},
     inclusion     := λ x, x.val,
@@ -32,8 +32,8 @@ instance Types_has_Equalizers : has_Equalizers (Type u)  := {
  }
 }
 
--- Even though this can be automatically generated, this is a much cleaner version.
-instance Types_has_BinaryProducts : has_BinaryProducts (Type u)  := {
+-- Even though this can be automatically generated from `Types_has_Products`, this is a cleaner version.
+instance Types_has_BinaryProducts : has_BinaryProducts (Type u) := {
   binary_product := λ X Y, {
     product             := X × Y,
     left_projection     := prod.fst,
@@ -42,38 +42,29 @@ instance Types_has_BinaryProducts : has_BinaryProducts (Type u)  := {
  }
 }
 
-instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u)  := {
+instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u) := {
   binary_coproduct := λ X Y, {
     coproduct           := X ⊕ Y,
     left_inclusion     := sum.inl,
     right_inclusion    := sum.inr,
     map                 := λ _ f g z, sum.cases_on z f g,
-    uniqueness          := λ Z f g lw rw, begin tidy, induction x, obviously, obviously, end -- FIXME huh?
+    uniqueness          := λ Z f g lw rw, begin tidy, cases x; obviously end 
  }
 }
 
+-- TODO move to lean-tidy? This all seems generally applicable.
+local attribute [applicable] quotient.mk quotient.sound eqv_gen.rel
+open tactic
+@[tidy] meta def quotient_induction : tactic unit :=
+do l ← local_context,
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(quotient _) := induction h >> skip | `(eqv_gen _ _ _) := induction h >> skip | _ := failed end))
 
-instance Types_has_Coequalizers : has_Coequalizers (Type u)  :=
-{coequalizer := λ α β f g,
+instance Types_has_Coequalizers : has_Coequalizers (Type u) := {
+  coequalizer := λ α β f g,
   {
     coequalizer   := quotient (eqv_gen.setoid (λ x y, ∃ a : α, f a = x ∧ g a = y)),
-    projection    := λ x, begin apply quotient.mk, exact x end, -- FIXME rip out auto_cast, and just write ⟦ x ⟧ here
-    witness       := begin tidy, apply quotient.sound, apply eqv_gen.rel, existsi x, simp, end,
-    map           := begin
-                       tidy, 
-                       induction a, 
-                       exact k a, 
-                       induction a_p, 
-                       tidy,
-                     end,
-    factorisation := ♯,
-    uniqueness    := begin
-                       tidy,
-                       induction x,
-                       erw witness x, -- TODO is erw necessary here? why?
-                       obviously,
-                       tidy,  -- FIXME huh?
-                     end 
+    projection    := by obviously,
+    map           := by obviously,
  }
 }
 

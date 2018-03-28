@@ -40,7 +40,7 @@ variables {F G H : C ↝ D}
   (α : F ⇔ G)
   (X : C) (Z : D) (f : (F X) ⟶ Z)
    : (α.morphism.components X) ≫ (α.inverse.components X) ≫ f = f
-   := begin rw ← category.associativity, simp end
+   := by obviously
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2
   (α : F ⇔ G)
   (X : C)
@@ -50,7 +50,7 @@ variables {F G H : C ↝ D}
   (α : F ⇔ G)
   (X : C) (Z : D) (f : (G X) ⟶ Z)
    : (α.inverse.components X) ≫ (α.morphism.components X) ≫ f = f
-   := begin rw ← category.associativity, simp end
+   := by obviously
 
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_1 
   (α : F ⇔ G)
@@ -77,7 +77,7 @@ definition NaturalIsomorphism.from_components
                                let p := congr_arg (λ f, (components X).inverse ≫ (f ≫ (components Y).inverse)) (eq.symm (naturality f)),
                                tidy,
                              end
-   }
+   },
  }
 
 definition vertical_composition_of_NaturalIsomorphisms 

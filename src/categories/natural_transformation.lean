@@ -20,8 +20,7 @@ variable [category D]
 variable {E : Type (w+1)}
 variable [category E]
 
--- the universe level could be reduced to `max (u+1) v`, but this makes later things messy.
-structure NaturalTransformation (F G : Functor C D) : Type ((max u v)+1) :=
+structure NaturalTransformation (F G : Functor C D) : Type /-((max u v)+1)-/ (max (u+1) v) :=
   (components: Π X : C, (F X) ⟶ (G X))
   (naturality: ∀ {X Y : C} (f : X ⟶ Y),
      (F &> f) ≫ (components Y) = (components X) ≫ (G &> f) . obviously)
@@ -69,93 +68,6 @@ open categories.functor
 @[simp] lemma FunctorComposition.onObjects (F : C ↝ D) (G : D ↝ E) (X : C) : (F ⋙ G) X = G (F X) := ♯
 @[simp] lemma FunctorComposition.onMorphisms (F : C ↝ D) (G : D ↝ E) (X Y: C) (f : X ⟶ Y) : (F ⋙ G) &> f = G.onMorphisms (F &> f) := ♯
 
--- lemma foo   {F G : C ↝ D}
---   {H I : D ↝ E}
---   (α : F ⟹ G)
---   (β : H ⟹ I) (X Y : C)
--- (f : X ⟶ Y): (H &> F &> f) ≫ (H &> α.components Y) ≫ β.components (G.onObjects Y) = (H &> α.components X ≫ G &> f) ≫ β.components (G.onObjects Y) :=
--- begin
---   rw ← category.associativity_lemma,
---   rw ← Functor.functoriality_lemma,
---   rw NaturalTransformation.naturality_lemma,
--- end
--- -- lemma foo'   {F G : C ↝ D}
--- --   {H I : D ↝ E}
--- --   (α : F ⟹ G)
--- --   (β : H ⟹ I) (X Y : C)
--- -- (f : X ⟶ Y): ((H &> F &> f) ≫ H &> α.components Y) ≫ β.components (G.onObjects Y) =
--- --     (H &> (F &> f) ≫ α.components Y) ≫ β.components (G.onObjects Y) :=
--- -- begin
--- --   rewrite_search_using `ematch,
--- -- end
-
--- -- -- @[ematch] lemma bar : [1] = [2] := sorry
--- -- -- example : [[1],[1]] = [[2],[2]] :=
--- -- -- begin rewrite_search_using `ematch, end
-
--- -- -- set_option trace.kabstract true
--- -- @[ematch] lemma baz (l : list ℕ) : 1 :: l = 2 :: l := sorry
--- -- example : [1, 1, 2] = [2, 1, 2] :=
--- -- begin 
--- -- rw [baz] {occs:=occurrences.pos [1]},
--- -- end
--- -- example : [1, 1, 2] = [1, 2, 2] :=
--- -- begin 
--- -- rw [baz] {occs:=occurrences.pos [2]},
--- -- end
--- -- example : [1, 1, 2] = [2, 1, 2] :=
--- -- begin 
--- -- conv { congr, rw [baz] },
--- -- end
--- -- example : [1, 1, 2] = [1, 2, 2] :=
--- -- begin 
--- -- conv { congr, congr, skip, rw [baz] },
--- -- end
--- -- example : [1, 1, 2] = [1, 2, 2] :=
--- -- begin 
--- -- conv in (1 :: _) {  },
--- -- end
-
--- -- lemma foo''   {F G : C ↝ D}
--- --   {H I : D ↝ E}
--- --   (α : F ⟹ G)
--- --   (β : H ⟹ I) (X Y : C)
--- -- (f : X ⟶ Y): (H &> (F &> f) ≫ α.components Y) ≫ β.components (G.onObjects Y) =
--- --     (H &> α.components X ≫ G &> f) ≫ β.components (G.onObjects Y) :=
--- -- begin
--- --   rewrite_search_using `ematch {max_steps:=20},
--- -- end
-
--- lemma foo'''   {F G : C ↝ D}
---   {H I : D ↝ E}
---   (α : F ⟹ G)
---   (β : H ⟹ I) (X Y : C)
--- (f : X ⟶ Y): ((H &> F &> f) ≫ H &> α.components Y) ≫ β.components (G.onObjects Y) =
---     (H &> α.components X ≫ G &> f) ≫ β.components (G.onObjects Y) :=
--- begin
---   conv {
---     to_rhs,
---     -- rw ← NaturalTransformation.naturality_lemma,
---     -- rw NaturalTransformation.naturality_lemma,
---     -- rw NaturalTransformation.naturality_lemma,
---     tactic.target >>= all_rewrites_using `ematch >>= tactic.trace,
---   },
---   rewrite_search_using `ematch {max_steps:=20},
---   sorry
--- end
--- #print foo'''
--- lemma foo''''   {F G : C ↝ D}
---   {H I : D ↝ E}
---   (α : F ⟹ G)
---   (β : H ⟹ I) (X Y : C)
--- (f : X ⟶ Y): (H &> (F &> f) ≫ α.components Y) ≫ β.components (G.onObjects Y) =
---     (H &> α.components X ≫ G &> f) ≫ β.components (G.onObjects Y) :=
--- begin
-
---   -- tactic.target >>= all_rewrites_using `ematch >>= tactic.trace,
---   rewrite_search_using `ematch {max_steps:=20},
--- end
-
 definition horizontal_composition_of_NaturalTransformations
   {F G : C ↝ D}
   {H I : D ↝ E}
@@ -163,10 +75,6 @@ definition horizontal_composition_of_NaturalTransformations
   (β : H ⟹ I) : (F ⋙ H) ⟹ (G ⋙ I) :=
 {
     components := λ X : C, (β.components (F X)) ≫ (I &> (α.components X)),
-    -- naturality := begin tidy {hints:=[4,10,14]},
-    --                rewrite_search_using `ematch {max_steps:=50,trace:=tt},
-    --               sorry
-    --              end
 }
 
 notation α `◫` β:80 := horizontal_composition_of_NaturalTransformations α β

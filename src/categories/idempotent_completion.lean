@@ -53,7 +53,7 @@ instance IdempotentCompletion (C : Type (u+1)) [category C]  : category (Idempot
 
 definition functor_to_IdempotentCompletion (C : Type (u+1)) [category C] : Functor C (Idempotent C) := {
   onObjects     := λ X, ⟨ X, 𝟙 X ⟩,
-  onMorphisms   := λ _ _ f, ⟨ f, ♮ ⟩
+  onMorphisms   := λ _ _ f, ⟨ f, ♯ ⟩
 }
 
 -- -- PROJECT
@@ -99,7 +99,7 @@ private def IdempotentCompletion_idempotent_functor (C : Type (u+1)) [category C
 }
 private def IdempotentCompletion_idempotent_inverse (C : Type (u+1)) [category C] : Functor (Idempotent C) (Idempotent (Idempotent C)) :=
 {
-    onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♮ ⟩, ♯ ⟩,
+    onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♯ ⟩, ♯ ⟩,
     onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩
 }
 

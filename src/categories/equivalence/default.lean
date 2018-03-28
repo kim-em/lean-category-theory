@@ -30,12 +30,11 @@ variable [category E]
 definition is_Equivalence (F : Functor C D) := {e : Equivalence C D // e.functor = F} -- TODO yuck!
 structure is_Equivalence' (F : Functor C D) := 
   (inverse : Functor D C)
-  (isomorphism_1 : NaturalIsomorphism (FunctorComposition F inverse) (IdentityFunctor C))
-  (isomorphism_2 : NaturalIsomorphism (FunctorComposition inverse F) (IdentityFunctor D))
+  (isomorphism_1 : (F ⋙ inverse) ⇔ 1)
+  (isomorphism_2 : (inverse ⋙ F) ⇔ 1)
 
 
-definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C :=
-{
+definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C := {
   functor := e.inverse,
   inverse := e.functor,
   isomorphism_1 := e.isomorphism_2,
@@ -87,7 +86,7 @@ end
 --     ).iso
 -- }
 
-structure Full (F : C ↝ D) :=
+class Full (F : C ↝ D) :=
   (preimage : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), X ⟶ Y)
   (witness  : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), F &> (preimage f) = f . obviously)
 
@@ -95,14 +94,25 @@ attribute [semiapplicable] Full.preimage
 make_lemma Full.witness
 attribute [simp,ematch] Full.witness_lemma
 
+definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y := Full.preimage f
+@[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : F &> preimage F f = f := begin unfold preimage, obviously end
+
 class Faithful (F : C ↝ D) :=
   (injectivity : ∀ {X Y : C} (f g : X ⟶ Y) (p : F &> f = F &> g), f = g) -- FIXME writing '. obviously' here causes Lean to hang
 
 make_lemma Faithful.injectivity
 attribute [semiapplicable] Faithful.injectivity_lemma
 
+definition preimage_iso (F : C ↝ D) [Full F] [Faithful F] {X Y : C} (f : (F X) ≅ (F Y)) : X ≅ Y := {
+  morphism := preimage F f.morphism,
+  inverse  := preimage F f.inverse,
+  witness_1 := begin apply @Faithful.injectivity _ _ _ _ F, tidy, end,
+  witness_2 := begin apply @Faithful.injectivity _ _ _ _ F, tidy, end,
+}
+
 definition Embedding (F : C ↝ D) := (Full F) × (Faithful F)
 
 definition EssentiallySurjective (F : C ↝ D) := Π d : D, Σ c : C, Isomorphism (F c) d
+attribute [class] EssentiallySurjective
 
 end categories.equivalence

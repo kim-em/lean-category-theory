@@ -55,7 +55,7 @@ private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : J ↝ 
 }
 
 -- This would be a bit dangerous, but we just use it in the next construction.
-@[applicable] lemma cone_morphism_comparison (F : J ↝ (C ↝ D)) (X : C) (j : J) (Y Z : Cone F) (φ ψ : ConeMorphism Y Z) (f : ((Z.cone_point) X) ⟶ ((F j) X)) (w : f = ((Z.cone_maps j).components X))
+@[applicable] private lemma cone_morphism_comparison (F : J ↝ (C ↝ D)) (X : C) (j : J) (Y Z : Cone F) (φ ψ : ConeMorphism Y Z) (f : ((Z.cone_point) X) ⟶ ((F j) X)) (w : f = ((Z.cone_maps j).components X))
  : ((φ.cone_morphism).components X) ≫ f = ((ψ.cone_morphism).components X) ≫ f := 
 begin
   rewrite w,
@@ -77,14 +77,13 @@ private definition morphism_to_LimitObject_in_FunctorCategory [cmp : Complete D]
    }
 
 instance Limits_in_FunctorCategory [cmp : Complete D] : Complete (Functor C D) := {
-  limitCone := λ J _ F, 
-  begin
-  resetI, -- FIXME why do we need this?
-  exact {
-    terminal_object                            := LimitObject_in_FunctorCategory F,
-    morphism_to_terminal_object_from           := morphism_to_LimitObject_in_FunctorCategory
- }
- end
+  limitCone := λ J _ F, begin
+                          resetI, 
+                          exact {
+                            terminal_object                            := @LimitObject_in_FunctorCategory J _ C _ D _ _ F,
+                            morphism_to_terminal_object_from           := morphism_to_LimitObject_in_FunctorCategory
+                          }
+                        end
 }
 
 end
