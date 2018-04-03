@@ -19,7 +19,7 @@ class Finite (α : Type u) :=
 
 @[applicable] definition empty_exfalso (x : false) : empty := begin exfalso, trivial end
 @[applicable] definition pempty_exfalso (x : false) : pempty := begin exfalso, trivial end
-@[simp] lemma lt_zero_eq_false (n : ℕ) : n < 0 = false := ♯
+@[simp] lemma lt_zero_eq_false (n : ℕ) : n < 0 = false := by obviously
 
 -- TODO move to lean-tidy?
 local attribute [applicable] quot.mk
@@ -63,10 +63,10 @@ attribute [instance] Finite_has_decidable_eq
 -- PROJECT etc.
 -- instance Finite_product {α β : Type} [Finite α] [Finite β] : Finite (α × β) := sorry
 
-def empty_function           {α : Sort u} : empty → α := ♯
-def empty_dependent_function {Z : empty → Sort u} : Π i : empty, Z i := ♯
-def pempty_function           {α : Sort u} : pempty.{v} → α := ♯
-def pempty_dependent_function {Z : pempty.{v} → Sort u} : Π i : pempty, Z i := ♯
+def empty_function           {α : Sort u} : empty → α := by obviously
+def empty_dependent_function {Z : empty → Sort u} : Π i : empty, Z i := by obviously
+def pempty_function           {α : Sort u} : pempty.{v} → α := by obviously
+def pempty_dependent_function {Z : pempty.{v} → Sort u} : Π i : pempty, Z i := by obviously
 
 open Two
 
@@ -79,8 +79,8 @@ instance Two_is_Finite : Finite Two := {
     apply quot.mk, 
     refine { 
       to_fun := λ n, match n with
-                        | _0 := ⟨ 0, ♯ ⟩
-                        | _1 := ⟨ 1, ♯ ⟩
+                        | _0 := ⟨ 0, by obviously ⟩
+                        | _1 := ⟨ 1, by obviously ⟩
                       end,
       inv_fun  := λ n, match n.1, to_as_true n.2 with
                         | 0, _ := _0

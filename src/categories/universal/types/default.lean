@@ -28,7 +28,7 @@ instance Types_has_Equalizers : has_Equalizers (Type u) := {
   equalizer := λ α β f g, {
     equalizer     := {x : α // f x = g x},
     inclusion     := λ x, x.val,
-    map           := λ γ k h g, ⟨ k g, ♯ ⟩
+    map           := λ γ k h g, ⟨ k g, by obviously ⟩
  }
 }
 

@@ -53,7 +53,7 @@ instance IdempotentCompletion (C : Type (u+1)) [category C]  : category (Idempot
 
 definition functor_to_IdempotentCompletion (C : Type (u+1)) [category C] : Functor C (Idempotent C) := {
   onObjects     := λ X, ⟨ X, 𝟙 X ⟩,
-  onMorphisms   := λ _ _ f, ⟨ f, ♯ ⟩
+  onMorphisms   := λ _ _ f, ⟨ f, by obviously ⟩
 }
 
 -- -- PROJECT
@@ -95,12 +95,12 @@ congr_arg Idempotent_morphism.morphism f.right
 private def IdempotentCompletion_idempotent_functor (C : Type (u+1)) [category C] : Functor (Idempotent (Idempotent C)) (Idempotent C) :=
 {
     onObjects     := λ X, ⟨ X.object.object, X.idempotent.morphism, congr_arg Idempotent_morphism.morphism X.witness ⟩, -- PROJECT think about automation here
-    onMorphisms   := λ X Y f, ⟨ f.morphism.morphism, ♯ ⟩
+    onMorphisms   := λ X Y f, ⟨ f.morphism.morphism, by obviously ⟩
 }
 private def IdempotentCompletion_idempotent_inverse (C : Type (u+1)) [category C] : Functor (Idempotent C) (Idempotent (Idempotent C)) :=
 {
-    onObjects     := λ X, ⟨ X, ⟨ X.idempotent, ♯ ⟩, ♯ ⟩,
-    onMorphisms   := λ X Y f, ⟨ f, ♯ ⟩
+    onObjects     := λ X, ⟨ X, ⟨ X.idempotent, by obviously ⟩, by obviously ⟩,
+    onMorphisms   := λ X Y f, ⟨ f, by obviously ⟩
 }
 
 -- PROJECT prove these lemmas about idempotent completion

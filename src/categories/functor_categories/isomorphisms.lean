@@ -28,7 +28,7 @@ local attribute [applicable] category.identity -- This says that whenever there 
 --   (F : B ↝ C)
 --   (G : C ↝ D)
 --   (H : D ↝ E)
--- : ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := ♯ -- FIXME this is incredibly slow. I need to work out how to checkpoint and use abstract more often.
+-- : ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := by obviously -- FIXME this is incredibly slow. I need to work out how to checkpoint and use abstract more often.
 
 -- set_option pp.proofs true
 -- #print FunctorComposition_associator
@@ -43,6 +43,6 @@ definition FunctorComposition_left_unitor (F : C ↝ D)
 -- #print FunctorComposition_left_unitor._aux_3 -- TODO can we stick a `simplify_proof` inside `tidy`?
 
 definition FunctorComposition_right_unitor (F : C ↝ D)
-: (F ⋙ 1) ⇔ F := ♯
+: (F ⋙ 1) ⇔ F := by obviously
 
 end categories.functor_categories

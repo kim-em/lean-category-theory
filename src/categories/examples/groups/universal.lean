@@ -36,7 +36,7 @@ local attribute [tidy] unfold_is_group_hom
 instance Groups_has_TerminalObject : has_TerminalObject Group := {
   terminal_object := {
     terminal_object := ⟨ punit, by apply_instance ⟩,
-    morphism_to_terminal_object_from := ♯
+    morphism_to_terminal_object_from := by obviously
  }
 }
 
@@ -125,7 +125,7 @@ variables {α : Type u} [group α] {β : Type u} [group β] {γ : Type u} [group
 -- begin
 -- refine {
 --   one := ⟨ 1, sorry ⟩,
---   mul := λ p q, ⟨ (p.val) * (q.val), ♯ ⟩,
+--   mul := λ p q, ⟨ (p.val) * (q.val), by obviously ⟩,
 --   inv := λ p, ⟨ (p.val)⁻¹, sorry ⟩,
 --   .. 
 -- },

@@ -62,8 +62,8 @@ attribute [ematch] comma_morphism.condition_lemma
 
 instance CommaCategory (S : A ↝ C) (T : B ↝ C) : category (comma S T) := {
   Hom      := λ p q, comma_morphism p q,
-  identity := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, ♯ ⟩,
-  compose  := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, ♯ ⟩
+  identity := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, by obviously ⟩,
+  compose  := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, by obviously ⟩
 }
 
 -- cf Leinster Remark 2.3.2
@@ -108,8 +108,8 @@ variable [category C]
 definition Cone   (F : Functor J C) := (comma (DiagonalFunctor.{j (u₁+1)} J C) (ObjectAsFunctor F))
 definition Cocone (F : Functor J C) := (comma (ObjectAsFunctor F)              (DiagonalFunctor.{j (u₁+1)} J C))
 
-@[simp] lemma Cone_comma_unit   (F : Functor J C) (X : Cone F) : X.1.2 = punit.star := ♯ 
-@[simp] lemma Cocone_comma_unit (F : Functor J C) (X : Cocone F) : X.1.1 = punit.star := ♯ 
+@[simp] lemma Cone_comma_unit   (F : Functor J C) (X : Cone F) : X.1.2 = punit.star := by obviously 
+@[simp] lemma Cocone_comma_unit (F : Functor J C) (X : Cocone F) : X.1.1 = punit.star := by obviously 
 
 instance Cones   (F : Functor J C) : category (Cone F)   := begin unfold Cone, apply_instance end
 instance Cocones (F : Functor J C) : category (Cocone F) := begin unfold Cocone, apply_instance end

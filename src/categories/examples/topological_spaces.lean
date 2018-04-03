@@ -42,7 +42,7 @@ attribute [applicable] OpenSet.is_open
 local attribute [applicable] topological_space.is_open_inter
 
 instance OpenSet.has_inter {α : Type u₁} {X : topological_space α} : has_inter (OpenSet X) := {
-  inter := λ U V, ⟨ U.underlying_set ∩ V.underlying_set, ♯ ⟩ 
+  inter := λ U V, ⟨ U.underlying_set ∩ V.underlying_set, by obviously ⟩ 
 }
 instance OpenSet.has_subset {α : Type u₁} {X : topological_space α} : has_subset (OpenSet X) := {
   subset := λ U V, U.underlying_set ⊆ V.underlying_set
@@ -57,7 +57,7 @@ local attribute [applicable] topological_space.is_open_inter
 instance category_of_open_sets {α : Type u₁} (X : topological_space α) : category (OpenSet X) :=
 {
   Hom            := λ U V, ulift (plift (U ⊆ V)),
-  identity       := ♯,
+  identity       := by obviously,
   compose        := λ _ _ _ f g, begin tidy, apply set.subset.trans f g end
 }
 

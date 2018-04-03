@@ -65,7 +65,7 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        cases f_1,
                        tidy, 
                      end,
-    factorisation := ♯,
+    factorisation := by obviously,
     uniqueness    := begin
                        tidy,
                        let Z_cone : Cone (ParallelPair_functor f g) := {
