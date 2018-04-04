@@ -52,8 +52,6 @@ instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u) := {
  }
 }
 
--- TODO move to lean-tidy? This all seems generally applicable.
-local attribute [applicable] quotient.mk quotient.sound eqv_gen.rel
 open tactic
 @[tidy] meta def quotient_induction : tactic unit :=
 do l ← local_context,
