@@ -24,6 +24,12 @@ variable [category E]
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
+definition FunctorComposition_left_unitor (F : C ↝ D)
+: (1 ⋙ F) ⇔ F := by obviously
+
+definition FunctorComposition_right_unitor (F : C ↝ D)
+: (F ⋙ 1) ⇔ F := ♯
+
 -- definition FunctorComposition_associator
 --   (F : B ↝ C)
 --   (G : C ↝ D)
@@ -34,15 +40,5 @@ local attribute [applicable] category.identity -- This says that whenever there 
 -- #print FunctorComposition_associator
 
 -- PROJECT pentagon
-definition FunctorComposition_left_unitor (F : C ↝ D)
-: (1 ⋙ F) ⇔ F := by obviously
-
--- set_option pp.proofs true
--- #print FunctorComposition_left_unitor
--- #print FunctorComposition_left_unitor._aux_5
--- #print FunctorComposition_left_unitor._aux_3 -- TODO can we stick a `simplify_proof` inside `tidy`?
-
-definition FunctorComposition_right_unitor (F : C ↝ D)
-: (F ⋙ 1) ⇔ F := ♯
 
 end categories.functor_categories
