@@ -14,24 +14,20 @@ universe u
 
 instance : group punit := 
 begin
-refine {
-    one := punit.star,
-    mul := λ x y, punit.star,
-    ..
-},
-tidy,
+  refine {
+      one := punit.star,
+      mul := λ x y, punit.star,
+      ..
+  },
+  tidy,
 end
 
 local attribute [class] is_group_hom -- TODO mathlib this?
 
-instance maps_to_punit_hom {Z : Type u} [group Z] (f : Z → punit) : is_group_hom f :=
-begin
-unfold is_group_hom,
-tidy,
-end
-
 private meta def unfold_is_group_hom := `[unfold is_group_hom]
 local attribute [tidy] unfold_is_group_hom
+
+instance maps_to_punit_hom {Z : Type u} [group Z] (f : Z → punit) : is_group_hom f := by obviously
 
 instance Groups_has_TerminalObject : has_TerminalObject Group := {
   terminal_object := {

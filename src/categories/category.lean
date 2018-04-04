@@ -31,9 +31,6 @@ make_lemma category.right_identity
 make_lemma category.associativity
 attribute [simp,ematch] category.left_identity_lemma category.right_identity_lemma category.associativity_lemma 
 attribute [ematch] category.associativity_lemma 
--- @[simp] def category.left_identity_lemma (f : X ⟶ Y) : 𝟙 X ≫ f = f := by rw category.left_identity
--- @[simp] def category.right_identity_lemma (f : X ⟶ Y) : f ≫ 𝟙 Y = f := by rw category.right_identity
--- @[simp,ematch] def category.associativity_lemma (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z) : (f ≫ g) ≫ h = f ≫ (g ≫ h) := by rw category.associativity
 
 instance category.has_one : has_one (X ⟶ X) := {
   one := 𝟙 X
@@ -44,6 +41,6 @@ instance category.has_one : has_one (X ⟶ X) := {
 
 -- TODO are these used?
 @[simp,ematch] lemma category.identity_idempotent (X : C) : 𝟙 X ≫ 𝟙 X = 𝟙 X := by simp
-@[simp,ematch] lemma category.identity_idempotent' (X : C) : (1 : X ⟶ X) ≫ (1 : X ⟶ X) = (1 : X ⟶ X) := begin unfold has_one.one, simp end
+-- @[simp,ematch] lemma category.identity_idempotent' (X : C) : (1 : X ⟶ X) ≫ (1 : X ⟶ X) = (1 : X ⟶ X) := begin unfold has_one.one, simp end
 
 end categories

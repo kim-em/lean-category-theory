@@ -13,7 +13,6 @@ open categories.equivalence
 
 universe u
 
--- TODO is this usable?
 class Concrete (C : Type (u+1)) [category C] := 
   (fibre_functor : C ↝ (Type u))
   (faithfulness : Faithful fibre_functor . obviously)

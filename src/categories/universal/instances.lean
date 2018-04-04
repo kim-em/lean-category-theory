@@ -111,7 +111,7 @@ instance BinaryProducts_from_FiniteProducts [has_FiniteProducts C] : has_BinaryP
       map                 := λ _ f g, p.map (Two.dependent_choice f g),
       left_factorisation  := λ _ f g, p.factorisation (Two.dependent_choice f g) Two._0,
       right_factorisation := λ _ f g, p.factorisation (Two.dependent_choice f g) Two._1,
-      uniqueness          := λ _ f g u v, p.uniqueness f g (λ X, begin cases X, exact u, exact v, end) -- TODO how would we write this without going into tactic mode?
+      uniqueness          := λ _ f g u v, p.uniqueness f g (λ X, begin cases X, exact u, exact v, end) 
    }
 }
 

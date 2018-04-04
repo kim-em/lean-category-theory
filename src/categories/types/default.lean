@@ -25,8 +25,8 @@ instance CategoryOfTypes : category (Type u) :=
 variables {C : Type (v+1)} [category C] (F G H: Functor C (Type u)) {X Y Z : C} 
 variables (σ : F ⟹ G) (τ : G ⟹ H) 
 
-@[simp] lemma Functor_to_Types.functoriality (f : X ⟶ Y) (g : Y ⟶ Z) (a : F X) : (F &> (f ≫ g)) a = (F &> g) ((F &> f) a) := by obviously
-@[simp] lemma Functor_to_Types.identities (a : F X) : (F &> (𝟙 X)) a = a := by obviously
+@[simp,ematch] lemma Functor_to_Types.functoriality (f : X ⟶ Y) (g : Y ⟶ Z) (a : F X) : (F &> (f ≫ g)) a = (F &> g) ((F &> f) a) := by obviously
+@[simp,ematch] lemma Functor_to_Types.identities (a : F X) : (F &> (𝟙 X)) a = a := by obviously
 
 @[ematch] lemma Functor_to_Types.naturality (f : X ⟶ Y) (x : F X) : σ.components Y ((F &> f) x) = (G &> f) (σ.components X x) := 
 begin 

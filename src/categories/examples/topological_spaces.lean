@@ -12,10 +12,10 @@ namespace categories.examples.topological_spaces
 
 universe variables u₁ u₂ u₃
 
+-- TODO mathlib
 local attribute [class] continuous
 local attribute [instance] continuous_id
 
--- TODO mathlib
 instance continuous_compose {α} [topological_space α] {β} [topological_space β] {γ} [topological_space γ] (f : α → β) [cf: continuous f] (g : β → γ) [cg: continuous g] : continuous (g ∘ f) :=
 continuous.comp cf cg
 
@@ -24,6 +24,8 @@ def Top : Type (u₁+1) := Σ α : Type u₁, topological_space α
 instance (X : Top) : topological_space X.1 := X.2
 
 def continuous_map (X Y : Top.{u₁}) : Type u₁ := { f : X.1 → Y.1 // continuous f }
+
+instance {X Y} (f : continuous_map X Y) : continuous f.1 := f.2
 
 instance continuous_id {X Y : Top} (f : continuous_map X Y) : continuous f.val := f.property
 
