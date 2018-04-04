@@ -27,6 +27,16 @@ variables (σ : F ⟹ G) (τ : G ⟹ H)
 
 @[simp] lemma Functor_to_Types.functoriality (f : X ⟶ Y) (g : Y ⟶ Z) (a : F X) : (F &> (f ≫ g)) a = (F &> g) ((F &> f) a) := by obviously
 @[simp] lemma Functor_to_Types.identities (a : F X) : (F &> (𝟙 X)) a = a := by obviously
+
+-- TODO this is evil; have solve_by_elim fake it
+@[simp] private lemma funext_simp {α : Type u} {Z : α → Type v} {f g : Π a : α, Z a} : (f = g) = ∀ a : α, f a = g a :=
+begin
+  apply propext,
+  split,
+  { intro w, intro, rw w },
+  { intro w, apply funext, assumption }
+end 
+
 @[ematch] lemma Functor_to_Types.naturality (f : X ⟶ Y) (x : F X) : σ.components Y ((F &> f) x) = (G &> f) (σ.components X x) := 
 begin 
   have p := σ.naturality_lemma f,

@@ -68,12 +68,12 @@ definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) := {
 
 local attribute [applicable] category.identity
 
--- FIXME really slow: need to automatically abstract (propositional?) subgoals
--- definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := {
---   functor := comma_Cones_to_Cones F,
---   inverse := Cones_to_comma_Cones F,
---   isomorphism_1 := by obviously,
---   isomorphism_2 := by obviously
--- }
+-- TODO really slow: need to automatically abstract (propositional?) subgoals
+definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := {
+  functor := comma_Cones_to_Cones F,
+  inverse := Cones_to_comma_Cones F,
+  isomorphism_1 := by obviously,
+  isomorphism_2 := by obviously
+}
 
 end categories.universal

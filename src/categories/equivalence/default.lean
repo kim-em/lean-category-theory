@@ -43,47 +43,24 @@ definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C := {
 
 @[simp,ematch] lemma Equivalence.onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := 
 begin
-tidy,
-erw e.isomorphism_2.naturality_2,
-tidy,
+  tidy,
+  erw e.isomorphism_2.naturality_2,
+  tidy,
 end
 @[simp,ematch] lemma Equivalence.onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := 
 begin
-tidy,
-erw e.isomorphism_1.naturality_2,
-tidy,
+  tidy,
+  erw e.isomorphism_1.naturality_2,
+  tidy,
 end
 
-
--- FIXME restore this
--- definition EquivalenceComposition
---   (e : Equivalence C D)
---   (f : Equivalence D E)
---    : Equivalence C E := {
---   functor := FunctorComposition e.functor f.functor,
---   inverse := FunctorComposition f.inverse e.inverse,
---   isomorphism_1 := 
---     (
---       calc
---              FunctorComposition e.functor (FunctorComposition (FunctorComposition f.functor f.inverse) e.inverse)
---           ≅ₙ FunctorComposition e.functor e.inverse
---            : NaturalIsomorphism'.mkNatIso
---                (Functor.onIsomorphisms (whisker_on_right_functor C e.inverse)
---                  (Functor.onIsomorphisms (whisker_on_left_functor e.functor D) f.isomorphism_1))
---       ... ≅ₙ IdentityFunctor C
---            : NaturalIsomorphism'.mkNatIso e.isomorphism_1
---     ).iso,
---   isomorphism_2 :=
---     (
---       calc
---             FunctorComposition f.inverse (FunctorComposition (FunctorComposition e.inverse e.functor) f.functor)
---           ≅ₙ FunctorComposition f.inverse f.functor
---            : NaturalIsomorphism'.mkNatIso
---                (Functor.onIsomorphisms (whisker_on_right_functor E f.functor)
---                  (Functor.onIsomorphisms (whisker_on_left_functor f.inverse D) e.isomorphism_2))
---       ... ≅ₙ IdentityFunctor E
---            : NaturalIsomorphism'.mkNatIso f.isomorphism_2
---     ).iso
+-- PROJECT a good way to do this?
+-- definition EquivalenceComposition (e : Equivalence C D) (f : Equivalence D E) : Equivalence C E := 
+-- {
+--     functor := e.functor ⋙ f.functor,
+--     inverse := f.inverse ⋙ e.inverse,
+--     isomorphism_1 := sorry,
+--     isomorphism_2 := sorry
 -- }
 
 class Full (F : C ↝ D) :=
@@ -98,7 +75,7 @@ definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y
 @[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : F &> preimage F f = f := begin unfold preimage, obviously end
 
 class Faithful (F : C ↝ D) :=
-  (injectivity : ∀ {X Y : C} (f g : X ⟶ Y) (p : F &> f = F &> g), f = g) -- FIXME writing '. obviously' here causes Lean to hang
+  (injectivity : ∀ {X Y : C} (f g : X ⟶ Y) (p : F &> f = F &> g), f = g)
 
 make_lemma Faithful.injectivity
 attribute [semiapplicable] Faithful.injectivity_lemma
