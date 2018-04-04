@@ -26,7 +26,7 @@ class has_InitialObject :=
 class has_BinaryProducts :=
   (binary_product : Π X Y : C, BinaryProduct X Y)
 class has_FiniteProducts :=
-  (product : Π {I : Type (u+1)} [Finite I] (f : I → C), Product f)
+  (product : Π {I : Type (u+1)} [fintype I] (f : I → C), Product f)
 
 class has_TerminalObject :=
   (terminal_object : TerminalObject C)
@@ -34,7 +34,7 @@ class has_TerminalObject :=
 class has_BinaryCoproducts :=
   (binary_coproduct : Π X Y : C, BinaryCoproduct X Y)
 class has_FiniteCoproducts :=
-  (coproduct : Π {I : Type (u+1)} [Finite I] (f : I → C), Coproduct f)
+  (coproduct : Π {I : Type (u+1)} [fintype I] (f : I → C), Coproduct f)
 
 class has_Equalizers :=
   (equalizer : Π {X Y : C} (f g : X ⟶ Y), Equalizer f g)
@@ -50,10 +50,10 @@ variable {C : Type (u+1)}
 variable [category C]
 
 definition binary_product [has_BinaryProducts C] (X Y : C) := has_BinaryProducts.binary_product X Y
-definition finite_product [has_FiniteProducts C] {I : Type (u+1)} [fin : Finite I] (f : I → C) := @has_FiniteProducts.product C _ _ I fin f
+definition finite_product [has_FiniteProducts C] {I : Type (u+1)} [fin : fintype I] (f : I → C) := @has_FiniteProducts.product C _ _ I fin f
 
 definition binary_coproduct [has_BinaryCoproducts C] (X Y : C) := has_BinaryCoproducts.binary_coproduct X Y
-definition finite_coproduct [has_FiniteCoproducts C] {I : Type (u+1)} [fin : Finite I] (f : I → C) := @has_FiniteCoproducts.coproduct C _ _ I fin f
+definition finite_coproduct [has_FiniteCoproducts C] {I : Type (u+1)} [fin : fintype I] (f : I → C) := @has_FiniteCoproducts.coproduct C _ _ I fin f
 
 definition equalizer [has_Equalizers C] {X Y : C} (f g : X ⟶ Y) := has_Equalizers.equalizer f g
 definition coequalizer [has_Coequalizers C] {X Y : C} (f g : X ⟶ Y) := has_Coequalizers.coequalizer f g

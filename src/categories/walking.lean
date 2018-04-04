@@ -14,28 +14,12 @@ namespace categories.walking
 
 universes u₁ u₂
 
--- move to lean-tidy
-instance subsingleton_pempty : subsingleton pempty :=
-begin
-  tidy,
-end
-instance subsingleton_punit : subsingleton punit :=
-begin
-  tidy,
-end
-
-attribute [applicable] subsingleton.elim
---
-
 section
 inductive WalkingPair : Type u₁
 | _1
 | _2
 
 open WalkingPair
-
-
-
 
 open tactic
 private meta def induction_WalkingPair : tactic unit :=
