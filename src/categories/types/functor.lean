@@ -17,7 +17,7 @@ instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F.onObject
     map := λ _ _ f, F &> f,
 }
 instance lawful_functor_of_Functor (F : Functor (Type u) (Type v)) : is_lawful_functor (F.onObjects) := {
-    id_map := ♯,
+    id_map := by obviously,
     comp_map := begin 
                   tidy, 
                   apply Functor_to_Types.functoriality -- TODO automate

@@ -46,7 +46,7 @@ attribute [tidy] induction_WalkingPair
 
 
 
-instance decidable_eq_WalkingPair : decidable_eq WalkingPair := ♯
+instance decidable_eq_WalkingPair : decidable_eq WalkingPair := by obviously
 instance fintype_WalkingPair : fintype WalkingPair := {
   elems := [_1, _2].to_finset,
   complete := begin intros, cases x; simp end -- TODO try again with by tidy after demoting dsimp', which seems to get stuck here

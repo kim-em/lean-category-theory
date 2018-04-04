@@ -25,6 +25,6 @@ definition SwitchProductCategory : (C × D) ↝ (D × C) :=
   onMorphisms   := λ _ _ f, (f.2, f.1)
 }
 
-definition SwitchSymmetry : ((SwitchProductCategory C D) ⋙ (SwitchProductCategory D C)) ⇔ 1 := ♯
+definition SwitchSymmetry : ((SwitchProductCategory C D) ⋙ (SwitchProductCategory D C)) ⇔ 1 := by obviously
         
 end categories.products

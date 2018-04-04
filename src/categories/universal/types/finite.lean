@@ -10,7 +10,7 @@ namespace categories.types
 --     product       := ⟨ (Π i : I, (φ i).1), sorry ⟩,
 --     projection    := λ i x, x i,
 --     map           := λ Z f z i, f i z, 
---     factorisation := ♯,
+--     factorisation := by obviously,
 --     uniqueness    := begin
 --                        tidy,
 --                        have p := witness x_1,
@@ -24,7 +24,7 @@ namespace categories.types
 --     coproduct     := ⟨ (Σ i : I, (φ i).1), sorry ⟩, 
 --     inclusion     := λ i x, ⟨ i, x ⟩ ,
 --     map           := λ Z f p, f p.1 p.2, 
---     factorisation := ♯,
+--     factorisation := by obviously,
 --     uniqueness    := begin
 --                        tidy,
 --                        have p := witness fst,
@@ -38,14 +38,14 @@ namespace categories.types
 --   {
 --     equalizer     := ⟨ {x : α.1 // f x = g x}, sorry ⟩,
 --     inclusion     := λ x, x.val,
---     witness       := ♯,
+--     witness       := by obviously,
 --     map           := begin
 --                        tidy,
 --                        exact k a
 --                        tidy,
 --                     end,
---     factorisation := ♯,
---     uniqueness    := ♯
+--     factorisation := by obviously,
+--     uniqueness    := by obviously
 --  }
 --}
 -- attribute [instance] FiniteTypes_has_Equalizers

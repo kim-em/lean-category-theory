@@ -41,8 +41,8 @@
 -- -- PROJECT these lemmas are already marked as simp. Why aren't they successfully used by tidy?
 -- local attribute [applicable] set.inter_subset_left set.inter_subset_right
 
--- private definition intersection_inclusion_1 {α} {X : topological_space α} {C : OpenCovering X} (i j : C.I) : (C.U i ∩ C.U j) ⊆ (C.U i) := ♯ 
--- private definition intersection_inclusion_2 {α} {X : topological_space α} {C : OpenCovering X} (i j : C.I) : (C.U i ∩ C.U j) ⊆ (C.U j) := ♯
+-- private definition intersection_inclusion_1 {α} {X : topological_space α} {C : OpenCovering X} (i j : C.I) : (C.U i ∩ C.U j) ⊆ (C.U i) := by obviously 
+-- private definition intersection_inclusion_2 {α} {X : topological_space α} {C : OpenCovering X} (i j : C.I) : (C.U i ∩ C.U j) ⊆ (C.U j) := by obviously
 
 -- -- we need to give instance resolution a little help, realising that the opposite category has the same objects.
 -- private definition opposite_has_inter {C : Category} [w : has_inter C.Obj] : has_inter ((Opposite C).Obj) := w

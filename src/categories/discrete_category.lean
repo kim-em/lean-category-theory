@@ -18,14 +18,14 @@ definition discrete (α : Type u₁) := α
 
 instance  DiscreteCategory (α : Type (u₁+1)) : category (discrete α) := {
   Hom            := λ X Y, ulift (plift (X = Y)),
-  identity       := ♯,
-  compose        := ♯
+  identity       := by obviously,
+  compose        := by obviously
 }
 
 instance EmptyCategory : category pempty := (by apply_instance : category (discrete pempty))
 instance OneCategory : category punit := (by apply_instance : category (discrete punit))
 
-definition EmptyFunctor (C : Type (u₂+1)) [category C] : pempty ↝ C := ♯
+definition EmptyFunctor (C : Type (u₂+1)) [category C] : pempty ↝ C := by obviously
 
 definition Functor.fromFunction {C : Type (u₂+1)} [category C] {I : Type (u₁+1)} (F : I → C) : (discrete I) ↝ C := {
   onObjects     := F,

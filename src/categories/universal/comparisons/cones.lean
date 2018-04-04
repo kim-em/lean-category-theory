@@ -45,7 +45,7 @@ definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.
 }
 
 definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F := 
-⟨ (cone.cone_point, ♯), {
+⟨ (cone.cone_point, by obviously), {
     components := λ j, cone.cone_maps j,
     naturality := λ _ _ f, begin
                             its eq.symm (cone.commutativity f),
@@ -54,7 +54,7 @@ definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F :=
  } ⟩
 
 definition ConeMorphism_to_comma_ConeMorphism {X Y : Cone F} (f : ConeMorphism X Y) : (Cone_to_comma_Cone X) ⟶ (Cone_to_comma_Cone Y) := 
-  { left := f.cone_morphism, right := ♯ }
+  { left := f.cone_morphism, right := by obviously }
 
 definition comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (Cone F) := {
     onObjects     := comma_Cone_to_Cone,
@@ -72,8 +72,8 @@ local attribute [applicable] category.identity
 -- definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := {
 --   functor := comma_Cones_to_Cones F,
 --   inverse := Cones_to_comma_Cones F,
---   isomorphism_1 := ♯,
---   isomorphism_2 := ♯
+--   isomorphism_1 := by obviously,
+--   isomorphism_2 := by obviously
 -- }
 
 end categories.universal

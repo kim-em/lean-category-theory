@@ -27,8 +27,8 @@ infixr ` ≅ `:10  := Isomorphism             -- type as \cong
 
 -- These lemmas are quite common, to help us avoid having to much around with associativity.
 -- If anyone has a suggestion for automating them away, I would be very appreciative.
-@[simp,ematch] lemma Isomorphism.witness_1_assoc_lemma (I : X ≅ Y) (f : X ⟶ Z) : I.morphism ≫ I.inverse ≫ f = f := ♯
-@[simp,ematch] lemma Isomorphism.witness_2_assoc_lemma (I : X ≅ Y) (f : Y ⟶ Z) : I.inverse ≫ I.morphism ≫ f = f := ♯
+@[simp,ematch] lemma Isomorphism.witness_1_assoc_lemma (I : X ≅ Y) (f : X ⟶ Z) : I.morphism ≫ I.inverse ≫ f = f := by obviously
+@[simp,ematch] lemma Isomorphism.witness_2_assoc_lemma (I : X ≅ Y) (f : Y ⟶ Z) : I.inverse ≫ I.morphism ≫ f = f := by obviously
 
 instance Isomorphism_coercion_to_morphism : has_coe (X ≅ Y) (X ⟶ Y) :=
   {coe := Isomorphism.morphism}

@@ -21,11 +21,11 @@ by contradiction
 by contradiction
 
 -- TODO move to lean-tidy
-@[applicable] definition decidable_true  : decidable true  := is_true  ♯ 
-@[applicable] definition decidable_false : decidable false := is_false ♯ 
+@[applicable] definition decidable_true  : decidable true  := is_true  (by obviously)
+@[applicable] definition decidable_false : decidable false := is_false (by obviously) 
 
 @[tidy] meta def induction_Two : tactic unit :=
 do l ← local_context,
    at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(Two) := cases h >> skip | _ := failed end))
 
-instance Two_decidable : decidable_eq Two := ♯
+instance Two_decidable : decidable_eq Two := by obviously

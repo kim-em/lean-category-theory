@@ -41,7 +41,7 @@ instance Limits_from_Products_and_Equalizers [has_Products C] [has_Equalizers C]
       morphism_to_terminal_object_from := λ cone : Cone F, {
         cone_morphism := /- we need a morphism from the tip of f to the equalizer -/
                          equalizer.map
-                           (product_over_objects.map cone.cone_maps) ♯
+                           (product_over_objects.map cone.cone_maps) (by obviously)
      }
    }
    end

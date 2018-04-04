@@ -56,13 +56,13 @@ variables {F G H : C ↝ D}
   (α : F ⇔ G)
   {X Y : C}
   (f : X ⟶ Y)
-   : (α.inverse.components X) ≫ (F &> f) ≫ (α.morphism.components Y) = G &> f := ♯
+   : (α.inverse.components X) ≫ (F &> f) ≫ (α.morphism.components Y) = G &> f := by obviously
 
 @[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
   (α : F ⇔ G)
   {X Y : C}
   (f : X ⟶ Y)
-   : (α.morphism.components X) ≫ (G &> f) ≫ (α.inverse.components Y) = F &> f := ♯
+   : (α.morphism.components X) ≫ (G &> f) ≫ (α.inverse.components Y) = F &> f := by obviously
 
 definition NaturalIsomorphism.from_components
   (components : ∀ X : C, (F X) ≅ (G X))

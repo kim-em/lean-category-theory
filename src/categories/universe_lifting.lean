@@ -22,6 +22,6 @@ instance universe_lift : category (ulift.{(u₂+1)} C) := {
 
 local attribute [applicable] category.identity
 
-definition universe_lift.equivalence : Equivalence C (ulift.{(u₂+1)} C) := ♯
+definition universe_lift.equivalence : Equivalence C (ulift.{(u₂+1)} C) := by obviously
 
 end categories
