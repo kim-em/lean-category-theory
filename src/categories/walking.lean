@@ -17,11 +17,11 @@ universes u₁ u₂
 -- move to lean-tidy
 instance subsingleton_pempty : subsingleton pempty :=
 begin
-tidy,
+  tidy,
 end
 instance subsingleton_punit : subsingleton punit :=
 begin
-tidy,
+  tidy,
 end
 
 attribute [applicable] subsingleton.elim
@@ -49,7 +49,7 @@ attribute [tidy] induction_WalkingPair
 instance decidable_eq_WalkingPair : decidable_eq WalkingPair := by obviously
 instance fintype_WalkingPair : fintype WalkingPair := {
   elems := [_1, _2].to_finset,
-  complete := begin intros, cases x; simp end -- TODO try again with by tidy after demoting dsimp', which seems to get stuck here
+  complete := by tidy,
 }
 
 private meta def case_bash : tactic unit :=
@@ -93,9 +93,6 @@ definition Pair_functor (α β : C) : Functor WalkingPair.{u₁+1} C := {
   onMorphisms   := Pair_functor.onMorphisms α β,
 }
 
-
-
--- PROJECT improve automation
 definition Pair_functor' (α β : C) : Functor WalkingPair.{u₁+1} C := {
   onObjects     := λ X, match X with 
                    | _1 := α 
@@ -105,11 +102,8 @@ definition Pair_functor' (α β : C) : Functor WalkingPair.{u₁+1} C := {
                    | _1, _1, _ := 𝟙 α 
                    | _2, _2, _ := 𝟙 β
                    end,
-  functoriality := begin tidy,  erw category.identity_idempotent, refl, erw category.identity_idempotent, refl end 
 }
 end
-
-
 
 section
 inductive WalkingParallelPair : Type u₁
@@ -159,7 +153,6 @@ definition ParallelPair_functor {α β : C} (f g : α ⟶ β) : Functor WalkingP
                    | _1, _2, Two._0 := f
                    | _1, _2, Two._1 := g
                    end,
-  functoriality := begin tidy, repeat { erw category.left_identity_lemma' }, repeat { erw category.right_identity_lemma' } end, 
 }
 end
 

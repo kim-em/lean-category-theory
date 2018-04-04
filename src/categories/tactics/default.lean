@@ -7,6 +7,18 @@ import tidy.its
 import tidy.auto_cast
 import tidy.make_lemma
 
+
+universes u v
+
+-- TODO this is evil; have solve_by_elim fake it. It is needed in types/default.lean and functor_categories/default.lean
+@[simp] private lemma funext_simp {α : Type u} {Z : α → Type v} {f g : Π a : α, Z a} : (f = g) = ∀ a : α, f a = g a :=
+begin
+  apply propext,
+  split,
+  { intro w, intro, rw w },
+  { intro w, apply funext, assumption }
+end 
+
 open tactic
 
 meta def trace_goal_type : tactic unit :=
