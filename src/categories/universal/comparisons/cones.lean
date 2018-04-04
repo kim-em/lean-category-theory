@@ -27,12 +27,7 @@ variable {F : Functor J C}
 definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F := 
 {
   cone_point    := cone.1.1,
-  cone_maps     := λ j : J, (cone.2).components j,
-  commutativity := λ (j k : J) (f : j ⟶ k), 
-                      begin
-                        -- have p := eq.symm (cone.2.naturality_lemma f), 
-                        obviously -- TODO so we can just remove commutativity
-                      end
+  cone_maps     := λ j : J, (cone.2).components j
 }
 
 definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 

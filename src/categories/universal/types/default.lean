@@ -24,14 +24,6 @@ instance Types_has_Coproducts : has_Coproducts (Type u) := {
  }
 }
 
-instance Types_has_Equalizers : has_Equalizers (Type u) := {
-  equalizer := λ α β f g, {
-    equalizer     := {x : α // f x = g x},
-    inclusion     := λ x, x.val,
-    map           := λ γ k h g, ⟨ k g, by obviously ⟩
- }
-}
-
 -- Even though this can be automatically generated from `Types_has_Products`, this is a cleaner version.
 instance Types_has_BinaryProducts : has_BinaryProducts (Type u) := {
   binary_product := λ X Y, {
@@ -49,6 +41,14 @@ instance Types_has_BinaryCoproducts : has_BinaryCoproducts (Type u) := {
     right_inclusion    := sum.inr,
     map                 := λ _ f g z, sum.cases_on z f g,
     uniqueness          := λ Z f g lw rw, begin tidy, cases x; obviously end 
+ }
+}
+
+instance Types_has_Equalizers : has_Equalizers (Type u) := {
+  equalizer := λ α β f g, {
+    equalizer     := {x : α // f x = g x},
+    inclusion     := λ x, x.val,
+    map           := λ γ k h g, ⟨ k g, by obviously ⟩
  }
 }
 
