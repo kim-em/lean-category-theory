@@ -84,7 +84,7 @@ definition vertical_composition_of_NaturalIsomorphisms
   (α : F ⇔ G)
   (β : G ⇔ H)
    : F ⇔ H :=
-  IsomorphismComposition α β
+  Isomorphism.comp α β
 
 attribute [reducible] NaturalIsomorphism
 
