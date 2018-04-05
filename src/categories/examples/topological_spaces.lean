@@ -27,8 +27,6 @@ def continuous_map (X Y : Top.{u₁}) : Type u₁ := { f : X.1 → Y.1 // contin
 
 instance {X Y} (f : continuous_map X Y) : continuous f.1 := f.2
 
-instance continuous_id {X Y : Top} (f : continuous_map X Y) : continuous f.val := f.property
-
 instance : category Top :=
 {
   Hom            := continuous_map,
