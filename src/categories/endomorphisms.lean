@@ -24,12 +24,13 @@ begin
   },
   tidy, -- FIXME why does obviously fail?
 end
+
 instance {X : C} : group (Aut X) :=
 begin
   refine {
      one := Isomorphism.id X,
      inv := Isomorphism.reverse,
-     mul := λ x y, x ≫ y,
+     mul := Isomorphism.comp,
      ..
   },
   tidy,
