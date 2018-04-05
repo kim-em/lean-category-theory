@@ -33,11 +33,17 @@ infixr ` ≅ `:10  := Isomorphism             -- type as \cong
 instance Isomorphism_coercion_to_morphism : has_coe (X ≅ Y) (X ⟶ Y) :=
   {coe := Isomorphism.morphism}
 
-definition IsomorphismComposition (α : X ≅ Y) (β : Y ≅ Z) : X ≅ Z :=
-{
+definition Isomorphism.id (X : C) : X ≅ X := {
+  morphism := 1,
+  inverse := 1
+}
+
+definition Isomorphism.comp (α : X ≅ Y) (β : Y ≅ Z) : X ≅ Z := {
   morphism := α.morphism ≫ β.morphism,
   inverse := β.inverse ≫ α.inverse
 }
+
+infixr ` ≫ `:80 := Isomorphism.comp -- type as \gg
 
 @[applicable] lemma Isomorphism_pointwise_equal
   (α β : X ≅ Y)
