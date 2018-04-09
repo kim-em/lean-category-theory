@@ -1,8 +1,9 @@
 [package]
 name = "lean-category-theory"
 version = "0.1"
-lean_version = "master"
+lean_version = "nightly-2018-04-06"
 path = "src"
 
 [dependencies]
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "e4f3481cc048a1d0a145afa08fbccb99367dcff0"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "42861ccfe675271456cf36f1354e9441e51f3efc"}
+lean-category-theory-pr = {git = "https://github.com/semorrison/lean-category-theory-pr", rev = "accea2dd9fb650da3da1edeb4dbcfd698c712234"}
