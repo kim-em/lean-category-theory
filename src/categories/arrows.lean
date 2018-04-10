@@ -24,7 +24,7 @@ structure arrow_hom {C : Type (u₁+1)} [category C] (X Y : arrow C) :=
 (commutativity : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously)
 
 make_lemma arrow_hom.commutativity
-attribute [ematch] arrow_hom.commutativity_lemma
+attribute [search] arrow_hom.commutativity_lemma
 
 @[applicable] lemma arrow_hom_equal
   {C : Type (u₁+1)} [category C] (f g : arrow C)

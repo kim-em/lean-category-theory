@@ -30,7 +30,7 @@ structure Equalizer (f g : X ⟶ Y) :=
 make_lemma Equalizer.witness
 make_lemma Equalizer.factorisation
 make_lemma Equalizer.uniqueness
-attribute [simp,ematch] Equalizer.factorisation_lemma
+attribute [simp,search] Equalizer.factorisation_lemma
 attribute [applicable] Equalizer.inclusion Equalizer.map
 attribute [applicable] Equalizer.uniqueness_lemma
 
@@ -51,7 +51,7 @@ structure BinaryProduct (X Y : C) :=
 make_lemma BinaryProduct.left_factorisation
 make_lemma BinaryProduct.right_factorisation
 make_lemma BinaryProduct.uniqueness
-attribute [simp,ematch] BinaryProduct.left_factorisation_lemma BinaryProduct.right_factorisation_lemma
+attribute [simp,search] BinaryProduct.left_factorisation_lemma BinaryProduct.right_factorisation_lemma
 attribute [applicable] BinaryProduct.left_projection BinaryProduct.right_projection BinaryProduct.map
 attribute [applicable] BinaryProduct.uniqueness_lemma
 
@@ -64,7 +64,7 @@ structure Product {I : Type u₂} (F : I → C) :=
 
 make_lemma Product.factorisation
 make_lemma Product.uniqueness
-attribute [simp,ematch] Product.factorisation_lemma
+attribute [simp,search] Product.factorisation_lemma
 attribute [applicable] Product.projection Product.map
 attribute [applicable] Product.uniqueness_lemma
 
@@ -79,7 +79,7 @@ structure Coequalizer (f g : X ⟶ Y) :=
 make_lemma Coequalizer.witness
 make_lemma Coequalizer.factorisation
 make_lemma Coequalizer.uniqueness
-attribute [simp,ematch] Coequalizer.factorisation_lemma
+attribute [simp,search] Coequalizer.factorisation_lemma
 attribute [applicable] Coequalizer.projection Coequalizer.map
 attribute [applicable] Coequalizer.uniqueness_lemma
 
@@ -99,7 +99,7 @@ structure BinaryCoproduct (X Y : C) :=
 make_lemma BinaryCoproduct.left_factorisation
 make_lemma BinaryCoproduct.right_factorisation
 make_lemma BinaryCoproduct.uniqueness
-attribute [simp,ematch] BinaryCoproduct.left_factorisation_lemma BinaryCoproduct.right_factorisation_lemma
+attribute [simp,search] BinaryCoproduct.left_factorisation_lemma BinaryCoproduct.right_factorisation_lemma
 attribute [applicable] BinaryCoproduct.left_inclusion BinaryCoproduct.right_inclusion BinaryCoproduct.map
 attribute [applicable] BinaryCoproduct.uniqueness_lemma
 

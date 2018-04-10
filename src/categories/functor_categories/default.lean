@@ -25,7 +25,7 @@ end
 section
 variables {C : Type (u₁+1)} [category C] {D : Type (u₂+1)} [category D] {E : Type (u₃+1)} [category E]
 
-@[ematch] lemma NaturalTransformation_to_FunctorCategory.components_naturality
+@[search] lemma NaturalTransformation_to_FunctorCategory.components_naturality
   {F G : C ↝ (D ↝ E)} (T : F ⟹ G) (X : C) {Y Z : D} (f : Y ⟶ Z)
     : ((F X) &> f) ≫ ((T.components X).components Z) =
     ((T.components X).components Y) ≫ ((G X) &> f) :=
@@ -33,7 +33,7 @@ begin
   exact (T.components _).naturality _
 end
 
-@[ematch] lemma NaturalTransformation_to_FunctorCategory.naturality_components
+@[search] lemma NaturalTransformation_to_FunctorCategory.naturality_components
   {F G : C ↝ (D ↝ E)} (T : F ⟹ G) (Z : D) {X Y : C} (f : X ⟶ Y)
   : ((F &> f).components Z) ≫ ((T.components Y).components Z) =
     ((T.components X).components Z) ≫ ((G &> f).components Z) :=

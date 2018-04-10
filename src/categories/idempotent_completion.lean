@@ -21,9 +21,9 @@ structure Idempotent (C : Type (u+1)) [category C] :=
    (witness : idempotent ≫ idempotent = idempotent . obviously)
 
 make_lemma Idempotent.witness
-attribute [simp,ematch] Idempotent.witness_lemma
+attribute [simp,search] Idempotent.witness_lemma
 
-local attribute [ematch] subtype.property
+local attribute [search] subtype.property
 
 structure Idempotent_morphism {C : Type (u+1)} [category C] (X Y : Idempotent C) :=
 (morphism : X.object ⟶ Y.object)
@@ -32,7 +32,7 @@ structure Idempotent_morphism {C : Type (u+1)} [category C] (X Y : Idempotent C)
 
 make_lemma Idempotent_morphism.left
 make_lemma Idempotent_morphism.right
-attribute [simp,ematch] Idempotent_morphism.left_lemma Idempotent_morphism.right_lemma
+attribute [simp,search] Idempotent_morphism.left_lemma Idempotent_morphism.right_lemma
 
 @[applicable] lemma Idempotent_morphisms_equal
   {C : Type (u+1)} [category C] (X Y : Idempotent C)

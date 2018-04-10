@@ -3,8 +3,9 @@
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
 import .category
-
+import .functor
 open categories
+open categories.functor
 
 namespace categories.isomorphism
 universes u
@@ -21,14 +22,14 @@ structure Isomorphism (X Y : C) :=
 
 make_lemma Isomorphism.witness_1
 make_lemma Isomorphism.witness_2
-attribute [simp,ematch] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
+attribute [simp,search] Isomorphism.witness_1_lemma Isomorphism.witness_2_lemma
 
 infixr ` ≅ `:10  := Isomorphism             -- type as \cong
 
 -- These lemmas are quite common, to help us avoid having to muck around with associativity.
 -- If anyone has a suggestion for automating them away, I would be very appreciative.
-@[simp,ematch] lemma Isomorphism.witness_1_assoc_lemma (I : X ≅ Y) (f : X ⟶ Z) : I.morphism ≫ I.inverse ≫ f = f := by obviously
-@[simp,ematch] lemma Isomorphism.witness_2_assoc_lemma (I : X ≅ Y) (f : Y ⟶ Z) : I.inverse ≫ I.morphism ≫ f = f := by obviously
+@[simp,search] lemma Isomorphism.witness_1_assoc_lemma (I : X ≅ Y) (f : X ⟶ Z) : I.morphism ≫ I.inverse ≫ f = f := by obviously
+@[simp,search] lemma Isomorphism.witness_2_assoc_lemma (I : X ≅ Y) (f : Y ⟶ Z) : I.inverse ≫ I.morphism ≫ f = f := by obviously
 
 instance Isomorphism_coercion_to_morphism : has_coe (X ≅ Y) (X ⟶ Y) :=
   {coe := Isomorphism.morphism}
@@ -54,12 +55,10 @@ infixr ` ≫ `:80 := Isomorphism.comp -- type as \gg
     simp at w,    
     have p : g = k,
       begin
-        -- PROJECT why can't we automate this? -- why doesn't rewrite search work?
         tidy,
-        resetI,
-        rewrite ← @category.left_identity C _ _ _ k,
-        rewrite ← wα2,
-        obviously,
+        -- PROJECT rewrite_search can't do this rewrite!
+        rewrite ← category.left_identity_lemma C k,
+        rewrite_search_using `search,
       end,
     obviously
   end
@@ -101,7 +100,7 @@ structure is_Isomorphism (morphism : X ⟶ Y) :=
 
 make_lemma is_Isomorphism.witness_1
 make_lemma is_Isomorphism.witness_2
-attribute [simp,ematch] is_Isomorphism.witness_1_lemma is_Isomorphism.witness_2_lemma
+attribute [simp,search] is_Isomorphism.witness_1_lemma is_Isomorphism.witness_2_lemma
 
 instance is_Isomorphism_coercion_to_morphism (f : X ⟶ Y): has_coe (is_Isomorphism f) (X ⟶ Y) :=
   {coe := λ _, f}

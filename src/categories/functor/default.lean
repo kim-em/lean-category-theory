@@ -21,8 +21,8 @@ structure Functor (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category
 
 make_lemma Functor.identities
 make_lemma Functor.functoriality
-attribute [simp,ematch] Functor.identities_lemma
-attribute [simp,ematch] Functor.functoriality_lemma
+attribute [simp,search] Functor.identities_lemma
+attribute [simp,search] Functor.functoriality_lemma
 
 infixr ` &> `:80 := Functor.onMorphisms -- switch to ▹?
 infixr ` ↝ `:70 := Functor -- type as \lea 

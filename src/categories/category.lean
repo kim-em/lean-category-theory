@@ -6,7 +6,18 @@ import .tactics
 
 namespace categories
 
-universes u v
+universe u
+
+/-
+-- The universe annotations may be suprising here!
+-- Note that we ask the Obj : Type (u+1), while Hom X Y : Type u.
+-- This is motivated by:
+-- 1. As `category` is a class, we want all universe levels to be determined by its parameters.
+--    (Thus we want to avoid independent universe levels for Obj and Hom.)
+-- 2. The basic example of category is the category of types and functions.
+--    This example matches the definition here.
+-- 3. It so far doesn't seem to cause any problems!
+-/
 
 class category (Obj : Type (u+1)) : Type (u+1) :=
   (Hom : Obj → Obj → Type u)
@@ -29,8 +40,8 @@ infixr ` ⟶ `:10  := category.Hom             -- type as \h
 make_lemma category.left_identity
 make_lemma category.right_identity
 make_lemma category.associativity
-attribute [simp,ematch] category.left_identity_lemma category.right_identity_lemma category.associativity_lemma 
-attribute [ematch] category.associativity_lemma 
+attribute [simp,search] category.left_identity_lemma category.right_identity_lemma category.associativity_lemma 
+attribute [search] category.associativity_lemma 
 
 instance category.has_one : has_one (X ⟶ X) := {
   one := 𝟙 X
@@ -38,9 +49,5 @@ instance category.has_one : has_one (X ⟶ X) := {
 
 @[simp] def category.left_identity_lemma' (f : X ⟶ Y) : 1 ≫ f = f := begin unfold has_one.one, simp end
 @[simp] def category.right_identity_lemma' (f : X ⟶ Y) : f ≫ 1 = f := begin unfold has_one.one, simp end
-
--- TODO are these used?
-@[simp,ematch] lemma category.identity_idempotent (X : C) : 𝟙 X ≫ 𝟙 X = 𝟙 X := by simp
--- @[simp,ematch] lemma category.identity_idempotent' (X : C) : (1 : X ⟶ X) ≫ (1 : X ⟶ X) = (1 : X ⟶ X) := begin unfold has_one.one, simp end
 
 end categories

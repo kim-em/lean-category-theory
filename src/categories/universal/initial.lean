@@ -21,7 +21,7 @@ structure InitialObject (C : Type (u+1)) [category C] :=
 
 attribute [applicable] InitialObject.morphism_from_initial_object_to
 make_lemma InitialObject.uniqueness_of_morphisms_from_initial_object
-attribute [applicable,ematch] InitialObject.uniqueness_of_morphisms_from_initial_object_lemma
+attribute [applicable,search] InitialObject.uniqueness_of_morphisms_from_initial_object_lemma
 
 structure TerminalObject (C : Type (u+1)) [category C]  :=
   (terminal_object                            : C)
@@ -30,7 +30,7 @@ structure TerminalObject (C : Type (u+1)) [category C]  :=
 
 attribute [applicable] TerminalObject.morphism_to_terminal_object_from
 make_lemma TerminalObject.uniqueness_of_morphisms_to_terminal_object
-attribute [applicable,ematch] TerminalObject.uniqueness_of_morphisms_to_terminal_object_lemma
+attribute [applicable,search] TerminalObject.uniqueness_of_morphisms_to_terminal_object_lemma
 
 variables {C : Type (u+1)} [category C]
 
@@ -42,7 +42,7 @@ structure is_initial (X : C) :=
   (uniqueness_of_morphisms_from_initial_object : ∀ Y : C, ∀ f g : X ⟶ Y, f = g)
 
 -- We can't mark this as applicable, because that might generate goals that an object is initial!
--- attribute [ematch] is_initial.uniqueness_of_morphisms_from_initial_object
+-- attribute [search] is_initial.uniqueness_of_morphisms_from_initial_object
 
 lemma InitialObjects_are_unique (X Y : InitialObject C) : @Isomorphism C _ X Y := by obviously
 

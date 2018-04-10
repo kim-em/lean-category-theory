@@ -45,13 +45,13 @@ definition HomPairing (C : Type (u₁+1)) [category C]: Functor.{u₁ u₁} (C�
 -- definition OppositeOpposite (C : Category) : Equivalence (Opposite (Opposite C)) C := sorry
 -- PROJECT opposites preserve products, functors, slices.
 
-@[simp,ematch] lemma ContravariantFunctor.functoriality
+@[simp,search] lemma ContravariantFunctor.functoriality
   (F : (Cᵒᵖ) ↝ D)
   (X Y Z : (Cᵒᵖ))
   (f : X ⟶ Y) (g : Y ⟶ Z) :
-    F &> ((@categories.category.compose C _ _ _ _ g f) : X ⟶ Z) = (F &> f) ≫ (F &> g) := begin erw F.functoriality, end
+    F &> ((@categories.category.compose C _ _ _ _ g f) : X ⟶ Z) = (F &> f) ≫ (F &> g) := by obviously
 
-@[simp,ematch] lemma ContravariantFunctor.identities
-  (F : (Cᵒᵖ) ↝ D) (X : (Cᵒᵖ)) : (F &> (@categories.category.identity.{u₁} C _ X)) = 𝟙 (F X) := begin erw F.identities, tidy, end
+@[simp,search] lemma ContravariantFunctor.identities
+  (F : (Cᵒᵖ) ↝ D) (X : (Cᵒᵖ)) : (F &> (@categories.category.identity.{u₁} C _ X)) = 𝟙 (F X) := by obviously
 
 end categories.opposites

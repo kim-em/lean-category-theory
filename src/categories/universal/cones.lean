@@ -21,7 +21,7 @@ structure Cone (F : J ↝ C) :=
   (commutativity : Π {j k : J}, Π f : j ⟶ k, (cone_maps j) ≫ (F &> f) = cone_maps k . obviously)
 
 make_lemma Cone.commutativity
-attribute [simp,ematch] Cone.commutativity_lemma
+attribute [simp,search] Cone.commutativity_lemma
 
 variable {F : J ↝ C}
 
@@ -30,9 +30,9 @@ structure ConeMorphism (X Y : Cone F) : Type (max u v) :=
   (commutativity : Π j : J, cone_morphism ≫ (Y.cone_maps j) = (X.cone_maps j) . obviously)
 
 make_lemma ConeMorphism.commutativity
-attribute [simp,ematch] ConeMorphism.commutativity_lemma
+attribute [simp,search] ConeMorphism.commutativity_lemma
 
-@[simp,ematch] def ConeMorphism.commutativity_lemma_assoc {X Y : Cone F} (c : ConeMorphism X Y) (j : J) {Z : C} (z : (F j) ⟶ Z): c.cone_morphism ≫ Y.cone_maps j ≫ z = X.cone_maps j ≫ z :=
+@[simp,search] def ConeMorphism.commutativity_lemma_assoc {X Y : Cone F} (c : ConeMorphism X Y) (j : J) {Z : C} (z : (F j) ⟶ Z): c.cone_morphism ≫ Y.cone_maps j ≫ z = X.cone_maps j ≫ z :=
 begin
 rw ← category.associativity,
 simp,
@@ -70,16 +70,16 @@ structure Cocone (F : Functor J C) :=
   (commutativity : Π {j k : J}, Π f : j ⟶ k, (F &> f) ≫ (cocone_maps k) = cocone_maps j . obviously)
 
 make_lemma Cocone.commutativity
-attribute [simp,ematch] Cocone.commutativity_lemma
+attribute [simp,search] Cocone.commutativity_lemma
 
 structure CoconeMorphism (X Y : Cocone F) : Type (max u v) :=
   (cocone_morphism      : X.cocone_point ⟶ Y.cocone_point)
   (commutativity : Π j : J, (X.cocone_maps j) ≫ cocone_morphism = (Y.cocone_maps j) . obviously)
 
 make_lemma CoconeMorphism.commutativity
-attribute [simp,ematch] CoconeMorphism.commutativity_lemma
+attribute [simp,search] CoconeMorphism.commutativity_lemma
 
-@[simp,ematch] def CoconeMorphism.commutativity_lemma_assoc {X Y : Cocone F} (c : CoconeMorphism X Y) (j : J) {Z : C} (z : Y.cocone_point ⟶ Z): (X.cocone_maps j) ≫ c.cocone_morphism ≫ z = (Y.cocone_maps j) ≫ z :=
+@[simp,search] def CoconeMorphism.commutativity_lemma_assoc {X Y : Cocone F} (c : CoconeMorphism X Y) (j : J) {Z : C} (z : Y.cocone_point ⟶ Z): (X.cocone_maps j) ≫ c.cocone_morphism ≫ z = (Y.cocone_maps j) ≫ z :=
 begin
 rw ← category.associativity,
 simp,

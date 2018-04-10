@@ -22,7 +22,7 @@ begin
     mul := λ x y, x ≫ y,
     ..
   },
-  tidy, -- FIXME why does obviously fail?
+  obviously,
 end
 
 instance {X : C} : group (Aut X) :=
@@ -33,5 +33,5 @@ begin
      mul := Isomorphism.comp,
      ..
   },
-  tidy,
+  obviously,
 end
