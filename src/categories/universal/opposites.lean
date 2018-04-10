@@ -37,7 +37,17 @@ def TerminalObject_in_Opposite (t : TerminalObject (Cᵒᵖ)) : InitialObject C 
   uniqueness_of_morphisms_from_initial_object := t.uniqueness_of_morphisms_to_terminal_object
 }
 
-def Coequalizer_from_Equalizer_in_Opposite         (e : @Equalizer (Cᵒᵖ) _ Y X f g)   : Coequalizer f g := sorry
+
+-- this type checks.....................
+def Coequalizer_from_Equalizer_in_Opposite         (e : @Equalizer (Cᵒᵖ) _ Y X f g)   : Coequalizer f g := {
+  coequalizer := e.equalizer,
+  projection := e.inclusion,
+  map := e.map,
+  witness := e.witness,
+  factorisation := e.factorisation,
+  uniqueness := e.uniqueness
+}
+
 def Equalizer_from_Coequalizer_in_Opposite         (e : @Coequalizer (Cᵒᵖ) _ Y X f g) : Equalizer f g := sorry
 def Coproduct_from_Product_in_Opposite             {I: Type u₃} {F : I → C}   (p : @Product (Cᵒᵖ) _ _ F)         : Coproduct F := sorry
 def Product_from_Coproduct_in_Opposite             {I: Type u₃} {F : I → C}   (p : @Coproduct (Cᵒᵖ) _ _ F)       : Product F := sorry
