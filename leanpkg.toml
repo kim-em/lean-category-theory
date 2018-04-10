@@ -5,4 +5,4 @@ lean_version = "master"
 path = "src"
 
 [dependencies]
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "e4f3481cc048a1d0a145afa08fbccb99367dcff0"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "5e6dfc4ad3da21847b0f2aa786fe119372fc9863"}
