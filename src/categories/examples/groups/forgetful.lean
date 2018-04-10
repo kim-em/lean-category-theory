@@ -40,7 +40,9 @@ end
 
 -- TODO fix inconsistent naming of monoid.pow and gpow in mathlib
 local attribute [class] is_group_hom
-instance exponentiation_is_hom (G : Group) (g : G.1) : is_group_hom (λ (n : ulift ℤ), gpow g (n.down)) := sorry
+set_option pp.all true
+instance exponentiation_is_hom (G : Group) (g : G.1) : is_group_hom (λ (n : ℤ), gpow g n) := λ a b, begin intros, funext, dsimp, /- rewrite gpow_add, -/ sorry end
+instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : ulift ℤ), gpow g (n.down)) := λ a b, begin intros, funext, cases a, cases b, dsimp, sorry end
 @[simp] lemma hom_exponentiation (G : Group) (f : ulift ℤ → G.1) [is_group_hom f] (n : ℤ) : gpow (f (ulift.up int.one)) n = f (ulift.up n) := sorry
 
 @[simp] lemma monoid_pow_one {G} [group G] (x : G) : monoid.pow x 1 = x := begin sorry, end

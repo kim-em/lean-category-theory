@@ -51,11 +51,15 @@ definition Fully_Faithful_EssentiallySurjective_Functor_inverse (F : Functor C D
     onMorphisms := λ X Y f, preimage F ((es X).2.morphism ≫ f ≫ (es Y).2.inverse)
 }
 
-lemma Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : Functor C D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : is_Equivalence' F := {
+lemma Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : Functor C D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : is_Equivalence F := {
     inverse := Fully_Faithful_EssentiallySurjective_Functor_inverse F,
     isomorphism_1 := NaturalIsomorphism.from_components (λ X, preimage_iso F (es (F X)).2) (by obviously), 
     isomorphism_2 := NaturalIsomorphism.from_components (λ Y, (es Y).2)                    (by obviously), 
 }
 end
+
+-- TODO
+instance (F : Functor C D) [is_Equivalence F] : Full F     := sorry
+instance (F : Functor C D) [is_Equivalence F] : Faithful F := sorry
 
 end categories.equivalence

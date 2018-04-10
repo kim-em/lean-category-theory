@@ -32,4 +32,6 @@ lemma SplitMonic_implies_Monic {f : Y ⟶ Z} (m : SplitMonic f) : Monic f := {
                           end
 } 
 
+-- PROJECT SplitEpic
+
 end categories
