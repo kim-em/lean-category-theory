@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .functor
-import .util.finite
+import categories.functor
+import categories.util.finite
 import data.fintype
 
 open categories

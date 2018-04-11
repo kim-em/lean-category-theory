@@ -2,9 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .category
-import .equivalence
-import .functor
+import categories.category
+import categories.equivalence
+import categories.functor
 
 open categories
 open categories.functor

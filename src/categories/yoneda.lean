@@ -2,14 +2,14 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .natural_transformation
-import .isomorphism
-import .opposites
-import .equivalence
-import .products.switch
-import .types
-import .functor_categories.evaluation
-import .universe_lifting
+import categories.natural_transformation
+import categories.isomorphism
+import categories.opposites
+import categories.equivalence
+import categories.products.switch
+import categories.types
+import categories.functor_categories.evaluation
+import categories.universe_lifting
 
 open categories
 open categories.functor

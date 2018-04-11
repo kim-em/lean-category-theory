@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ...adjunctions
-import ...full_subcategory
+import categories.adjunctions
+import categories.full_subcategory
 
 open categories
 open categories.functor

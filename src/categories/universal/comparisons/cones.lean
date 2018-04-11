@@ -2,9 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ...equivalence
-import ..comma_categories
-import ..universal
+import categories.equivalence
+import categories.universal.comma_categories
+import categories.universal.universal
 
 import tidy.its
 

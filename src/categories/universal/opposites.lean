@@ -2,11 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ..opposites
-import ..equivalence
-import .cones
-import .universal
-import .complete
+import categories.opposites
+import categories.equivalence
+import categories.universal.cones
+import categories.universal.universal
+import categories.universal.complete
 
 open categories
 open categories.functor

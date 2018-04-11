@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan and Scott Morrison
 
-import ..category
-import ..graphs
+import categories.category
+import categories.graphs
 
 namespace categories
 

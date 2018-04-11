@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ..complete
+import categories.universal.complete
 import categories.walking
 import tidy.its
 

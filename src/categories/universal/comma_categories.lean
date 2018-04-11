@@ -2,9 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ..walking
-import ..discrete_category
-import .initial
+import categories.walking
+import categories.discrete_category
+import categories.universal.initial
 
 open categories
 open categories.isomorphism

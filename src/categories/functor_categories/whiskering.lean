@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ..functor_categories
+import categories.functor_categories
 
 open categories
 open categories.functor

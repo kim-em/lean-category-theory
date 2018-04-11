@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ..natural_transformation
-import ..products
+import categories.natural_transformation
+import categories.products
 
 open categories
 open categories.functor

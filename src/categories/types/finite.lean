@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ..types
-import ..full_subcategory
+import categories.types
+import categories.full_subcategory
 
 namespace categories.types
 

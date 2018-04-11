@@ -1,4 +1,4 @@
-import .category
+import categories.category
 
 open categories
 

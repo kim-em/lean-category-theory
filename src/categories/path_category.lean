@@ -2,10 +2,10 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan and Scott Morrison
 
-import .functor
-import .graphs
-import .graphs.category
-import .universe_lifting
+import categories.functor
+import categories.graphs
+import categories.graphs.category
+import categories.universe_lifting
 
 open categories
 

@@ -2,10 +2,10 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .instances
-import .preserves
-import ..concrete
-import ..functor.isomorphism
+import categories.universal.instances
+import categories.universal.preserves
+import categories.concrete
+import categories.functor.isomorphism
 
 open categories
 open categories.functor

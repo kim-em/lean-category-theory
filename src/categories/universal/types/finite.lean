@@ -1,5 +1,5 @@
-import ...types.finite
-import ..instances
+import categories.types.finite
+import categories.universal.instances
 
 open categories.universal
 open categories.isomorphism

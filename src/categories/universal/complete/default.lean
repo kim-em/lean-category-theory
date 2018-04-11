@@ -2,10 +2,10 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ..instances
-import ...discrete_category
-import ...opposites
-import .lemmas.limit_functoriality
+import categories.universal.instances
+import categories.discrete_category
+import categories.opposites
+import categories.universal.complete.lemmas.limit_functoriality
 
 open categories
 open categories.functor

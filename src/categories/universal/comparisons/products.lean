@@ -2,11 +2,11 @@
 -- -- Released under Apache 2.0 license as described in the file LICENSE.
 -- -- Authors: Scott Morrison
 
--- import ...isomorphism
--- import ...natural_transformation
--- import ...equivalence
--- import ..comma_categories
--- import ..universal
+-- import categories.isomorphism
+-- import categories.natural_transformation
+-- import categories.equivalence
+-- import categories.universal.comma_categories
+-- import categories.universal.universal
 
 -- open categories
 -- open categories.functor

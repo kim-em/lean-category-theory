@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Patrick Massot, Scott Morrison
 
-import ..full_subcategory
+import categories.full_subcategory
 import analysis.topology.topological_space
 import analysis.topology.continuity
 

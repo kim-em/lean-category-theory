@@ -1,9 +1,10 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
-import ..groups
-import ...universal.instances
-import ...universal.strongly_concrete
+
+import categories.examples.groups
+import categories.universal.instances
+import categories.universal.strongly_concrete
 
 namespace categories.examples.groups
 

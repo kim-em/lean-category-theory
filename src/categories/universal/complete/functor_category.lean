@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .lemmas.cones_in_functor_categories
+import categories.universal.complete.lemmas.cones_in_functor_categories
 
 open categories
 open categories.functor

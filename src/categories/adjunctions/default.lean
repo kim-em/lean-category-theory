@@ -2,9 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import ..natural_transformation
-import ..opposites
-import ..types
+import categories.natural_transformation
+import categories.opposites
+import categories.types
 import tidy.its
 
 open categories

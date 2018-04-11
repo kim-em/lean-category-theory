@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .from_limits
-import ..opposites
+import categories.universal.constructions.from_limits
+import categories.universal.opposites
 
 open categories
 open categories.functor

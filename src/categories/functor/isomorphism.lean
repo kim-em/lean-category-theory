@@ -1,5 +1,5 @@
-import ..functor
-import ..isomorphism
+import categories.functor
+import categories.isomorphism
 
 open categories
 open categories.isomorphism

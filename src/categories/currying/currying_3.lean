@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import .currying_2
+import categories.currying.currying_2
 
 open categories
 open categories.isomorphism
