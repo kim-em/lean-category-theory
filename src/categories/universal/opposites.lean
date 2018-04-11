@@ -37,22 +37,30 @@ def TerminalObject_in_Opposite (t : TerminalObject (Cᵒᵖ)) : InitialObject C 
   uniqueness_of_morphisms_from_initial_object := t.uniqueness_of_morphisms_to_terminal_object
 }
 
+-- TODO: why can't we use tactics for witness factorisation and uniqueness?
+def Coequalizer_from_Equalizer_in_Opposite         (e : @Equalizer (Cᵒᵖ) _ Y X f g)   : Coequalizer f g :=
+  ⟨e.equalizer, e.inclusion, e.map, e.witness, e.factorisation, e.uniqueness⟩
 
--- this type checks.....................
-def Coequalizer_from_Equalizer_in_Opposite         (e : @Equalizer (Cᵒᵖ) _ Y X f g)   : Coequalizer f g := {
-  coequalizer := e.equalizer,
-  projection := e.inclusion,
-  map := e.map,
-  witness := e.witness,
-  factorisation := e.factorisation,
-  uniqueness := e.uniqueness
-}
 
-def Equalizer_from_Coequalizer_in_Opposite         (e : @Coequalizer (Cᵒᵖ) _ Y X f g) : Equalizer f g := sorry
-def Coproduct_from_Product_in_Opposite             {I: Type u₃} {F : I → C}   (p : @Product (Cᵒᵖ) _ _ F)         : Coproduct F := sorry
-def Product_from_Coproduct_in_Opposite             {I: Type u₃} {F : I → C}   (p : @Coproduct (Cᵒᵖ) _ _ F)       : Product F := sorry
-def BinaryCoproduct_from_BinaryProduct_in_Opposite (p : @BinaryProduct (Cᵒᵖ) _ X Y)   : BinaryCoproduct X Y := sorry
-def BinaryProduct_from_BinaryCoproduct_in_Opposite (p : @BinaryCoproduct (Cᵒᵖ) _ X Y) : BinaryProduct X Y := sorry
+def Equalizer_from_Coequalizer_in_Opposite         (e : @Coequalizer (Cᵒᵖ) _ Y X f g) : Equalizer f g :=
+  ⟨e.coequalizer, e.projection, e.map, e.witness, e.factorisation, e.uniqueness⟩
+
+
+def Coproduct_from_Product_in_Opposite             {I: Type u₃} {F : I → C}   (p : @Product (Cᵒᵖ) _ _ F)         : Coproduct F :=
+  ⟨p.product, p.projection, p.map, p.factorisation ,p.uniqueness⟩
+
+
+def Product_from_Coproduct_in_Opposite             {I: Type u₃} {F : I → C}   (p : @Coproduct (Cᵒᵖ) _ _ F)       : Product F :=
+  ⟨p.coproduct, p.inclusion, p.map, p.factorisation ,p.uniqueness⟩
+
+
+def BinaryCoproduct_from_BinaryProduct_in_Opposite (p : @BinaryProduct (Cᵒᵖ) _ X Y)   : BinaryCoproduct X Y :=
+  ⟨p.product, p.left_projection, p.right_projection, p.map, p.left_factorisation, p.right_factorisation, p.uniqueness⟩
+
+
+
+def BinaryProduct_from_BinaryCoproduct_in_Opposite (p : @BinaryCoproduct (Cᵒᵖ) _ X Y) : BinaryProduct X Y :=
+  ⟨p.coproduct, p.left_inclusion, p.right_inclusion, p.map, p.left_factorisation, p.right_factorisation, p.uniqueness⟩
 end
 
 section
@@ -61,7 +69,11 @@ variable [category J]
 variable {C : Type (u₂+1)}
 variable [category C]
 
-def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) := sorry
+def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) :=
+  ⟨sorry, sorry, sorry, sorry⟩
+
+
+
 def Cocones_in_Opposite (F : Functor J C) : Equivalence (Cocone (OppositeFunctor F)) (Cone F) := sorry
 end
 
