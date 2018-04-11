@@ -69,8 +69,13 @@ variable [category J]
 variable {C : Type (u₂+1)}
 variable [category C]
 
+
+-- seems like a solid amount of data needed here.
 def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) :=
-  ⟨sorry, sorry, sorry, sorry⟩
+  ⟨ ⟨λ cone,⟨cone.cone_point,cone.cone_maps,sorry⟩,sorry,sorry,sorry⟩         -- functor Cone (OppositeFunctor F) → Cocone F
+  , sorry
+  , sorry
+  , sorry⟩
 
 
 
@@ -81,7 +86,7 @@ section
 variable {C : Type (u₁+1)}
 variable [category C]
 
-instance Opposite_has_Products_of_has_Coproducts     [has_Coproducts C]   : has_Products (Cᵒᵖ) := sorry
+instance Opposite_has_Products_of_has_Coproducts     [has_Coproducts C]   : has_Products (Cᵒᵖ) := ⟨sorry⟩
 instance Opposite_has_Equalizers_of_has_Coequalizers [has_Coequalizers C] : has_Equalizers (Cᵒᵖ) := sorry
 instance Opposite_has_Coproducts_of_has_Products     [has_Products C]     : has_Coproducts (Cᵒᵖ) := sorry
 instance Opposite_has_Coequalizers_of_has_Equalizers [has_Equalizers C]   : has_Coequalizers (Cᵒᵖ) := sorry
