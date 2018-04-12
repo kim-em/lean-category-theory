@@ -1,6 +1,6 @@
 -- Copyright (c) 2018 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
--- Authors: Scott Morrison
+-- Authors: Scott Morrison, Daniel Barter
 
 import categories.opposites
 import categories.equivalence
@@ -70,14 +70,17 @@ variable {C : Type (u₂+1)}
 variable [category C]
 
 
--- seems like a solid amount of data needed here.
+-- Question: what is the name for the tactic that does intro until failure. Something like repeat intro
 def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) :=
-  ⟨ ⟨λ cone,⟨cone.cone_point,cone.cone_maps,sorry⟩,sorry,sorry,sorry⟩         -- functor Cone (OppositeFunctor F) → Cocone F
+  ⟨ ⟨λ cone,⟨cone.cone_point, cone.cone_maps, begin intro,intro,intro,exact (cone.commutativity f) end⟩  -- should just be a dependent function, but can't figure out syntax
+    , begin intro,intro,intro, all_goals {sorry} end
+    , sorry
+    , sorry
+    ⟩         -- functor Cone (OppositeFunctor F) → Cocone F
   , sorry
   , sorry
-  , sorry⟩
-
-
+  , sorry
+  ⟩
 
 def Cocones_in_Opposite (F : Functor J C) : Equivalence (Cocone (OppositeFunctor F)) (Cone F) := sorry
 end
