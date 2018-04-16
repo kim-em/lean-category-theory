@@ -16,10 +16,10 @@ variable [category C]
 variable {D : Type ((max u v)+1)}
 variable [category D]
 
-structure Continuous (F : Functor C D) :=
+structure Continuous (F : C ↝ D) :=
   (preserves_limits : ∀ {J : Type (u+1)} [category J] (G : Functor J C) (L : LimitCone G), is_terminal ((Cones_functoriality G F) L.terminal_object))
 
-structure Cocontinuous (F : Functor C D) :=
+structure Cocontinuous (F : C ↝ D) :=
   (preserves_colimits : ∀ {J : Type (u+1)} [category J] (G : Functor J C) (L : ColimitCocone G), is_initial ((Cocones_functoriality G F) L.initial_object))
 
 
