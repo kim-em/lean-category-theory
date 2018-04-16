@@ -2,8 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import ..tactics
-import .Two
+import categories.tactics
+import categories.util.Two
 import data.quot
 import data.equiv
 import data.fintype

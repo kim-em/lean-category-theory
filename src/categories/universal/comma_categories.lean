@@ -31,7 +31,7 @@ definition DiagonalFunctor (J : Type (j+1)) [category J] (C : Type (u₁+1)) [ca
 }
 
 section
-local attribute [search] subtype.property
+local attribute [ematch] subtype.property
 
 variable {A : Type (u₁+1)}
 variable [category A]
@@ -48,7 +48,7 @@ structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (m
 (condition : (S &> left) ≫ q.2 = p.2 ≫ (T &> right) . obviously)
 
 make_lemma comma_morphism.condition
-attribute [search] comma_morphism.condition_lemma
+attribute [ematch] comma_morphism.condition_lemma
 
 @[applicable] lemma comma_morphism_equal
   {S : A ↝ C} {T : B ↝ C} {p q : comma S T} (f g : comma_morphism p q)

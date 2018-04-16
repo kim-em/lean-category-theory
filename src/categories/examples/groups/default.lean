@@ -22,7 +22,7 @@ structure GroupHomomorphism (G H : Group.{u₁}) : Type u₁ :=
 local attribute [class] is_group_hom
 instance is_group_hom_from_GroupHomomorphism (G H : Group.{u₁}) (f : GroupHomomorphism G H) : is_group_hom f.map := f.is_group_hom
 
-@[simp,search] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom
+@[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom
 
 definition GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G := ⟨ id ⟩
 

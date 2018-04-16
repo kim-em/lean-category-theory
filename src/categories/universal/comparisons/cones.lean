@@ -4,7 +4,7 @@
 
 import categories.equivalence
 import categories.universal.comma_categories
-import categories.universal.universal
+import categories.universal
 
 import tidy.its
 

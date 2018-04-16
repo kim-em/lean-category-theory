@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import categories.universal.universal
+import categories.universal
 import categories.abelian.monic
 
 open categories

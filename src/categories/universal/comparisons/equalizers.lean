@@ -6,7 +6,7 @@
 -- import categories.natural_transformation
 -- import categories.equivalence
 -- import categories.universal.comma_categories
--- import categories.universal.universal
+-- import categories.universal
 
 -- open categories
 -- open categories.functor

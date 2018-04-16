@@ -4,8 +4,8 @@
 
 import categories.opposites
 import categories.equivalence
+import categories.universal
 import categories.universal.cones
-import categories.universal.universal
 import categories.universal.complete
 
 open categories

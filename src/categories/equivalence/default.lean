@@ -33,9 +33,9 @@ definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C := {
   isomorphism_2 := e.isomorphism_1
 }
 
-@[simp,search] lemma Equivalence.onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := 
+@[simp,ematch] lemma Equivalence.onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := 
 by obviously
-@[simp,search] lemma Equivalence.onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := 
+@[simp,ematch] lemma Equivalence.onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := 
 by obviously
 
 -- PROJECT a good way to do this?
@@ -53,7 +53,7 @@ class Full (F : C ↝ D) :=
 
 attribute [semiapplicable] Full.preimage
 make_lemma Full.witness
-attribute [simp,search] Full.witness_lemma
+attribute [simp,ematch] Full.witness_lemma
 
 definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y := Full.preimage f
 @[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : F &> preimage F f = f := begin unfold preimage, obviously end

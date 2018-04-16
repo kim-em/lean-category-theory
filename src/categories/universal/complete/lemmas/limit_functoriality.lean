@@ -37,7 +37,7 @@ variable {Y : Cocone F}
     exact congr_arg ConeMorphism.cone_morphism q,
   end
 
-@[simp,search] private lemma morphism_to_terminal_object_composed_with_cone_map
+@[simp,ematch] private lemma morphism_to_terminal_object_composed_with_cone_map
   {j : J}
     : (L.morphism_to_terminal_object_from X).cone_morphism ≫ (L.terminal_object.cone_maps j) = X.cone_maps j :=
   (L.morphism_to_terminal_object_from X).commutativity j
@@ -66,7 +66,7 @@ end
     exact congr_arg CoconeMorphism.cocone_morphism q,
   end
 
-@[simp,search] private lemma cocone_map_composed_with_morphism_from_initial_object
+@[simp,ematch] private lemma cocone_map_composed_with_morphism_from_initial_object
   {j : J}
     : (M.initial_object.cocone_maps j) ≫ (M.morphism_from_initial_object_to Y).cocone_morphism = Y.cocone_maps j :=
   (M.morphism_from_initial_object_to Y).commutativity j

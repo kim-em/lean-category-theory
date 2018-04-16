@@ -31,34 +31,34 @@ instance NaturalIsomorphism_coercion_to_NaturalTransformation (F G : C ↝ D) : 
 
 variables {F G H : C ↝ D}
 
-@[simp,search] lemma NaturalIsomorphism.componentwise_witness_1
+@[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1
   (α : F ⇔ G)
   (X : C)
    : (α.morphism.components X) ≫ (α.inverse.components X) = 𝟙 (F X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
-@[simp,search] lemma NaturalIsomorphism.componentwise_witness_1_assoc
+@[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1_assoc
   (α : F ⇔ G)
   (X : C) (Z : D) (f : (F X) ⟶ Z)
    : (α.morphism.components X) ≫ (α.inverse.components X) ≫ f = f
    := by obviously
-@[simp,search] lemma NaturalIsomorphism.componentwise_witness_2
+@[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2
   (α : F ⇔ G)
   (X : C)
    : (α.inverse.components X) ≫ (α.morphism.components X) = 𝟙 (G X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_2
-@[simp,search] lemma NaturalIsomorphism.componentwise_witness_2_assoc
+@[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2_assoc
   (α : F ⇔ G)
   (X : C) (Z : D) (f : (G X) ⟶ Z)
    : (α.inverse.components X) ≫ (α.morphism.components X) ≫ f = f
    := by obviously
 
-@[search] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_1 
+@[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_1 
   (α : F ⇔ G)
   {X Y : C}
   (f : X ⟶ Y)
    : (α.inverse.components X) ≫ (F &> f) ≫ (α.morphism.components Y) = G &> f := by obviously
 
-@[search] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
+@[ematch] lemma {u1 v1 u2 v2} NaturalIsomorphism.naturality_2 
   (α : F ⇔ G)
   {X Y : C}
   (f : X ⟶ Y)
@@ -92,13 +92,13 @@ open NaturalTransformation
 
 definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) _ F G α
 
-@[search] lemma is_NaturalIsomorphism_componentwise_witness_1
+@[ematch] lemma is_NaturalIsomorphism_componentwise_witness_1
   (α : F ⟹ G)
   (w : is_NaturalIsomorphism α)
   (X : C)
    : (α.components X) ≫ (w.inverse.components X) = 𝟙 (F X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_1
-@[search] lemma is_NaturalIsomorphism_componentwise_witness_2
+@[ematch] lemma is_NaturalIsomorphism_componentwise_witness_2
   (α : F ⟹ G)
   (w : is_NaturalIsomorphism α)
   (X : C)
