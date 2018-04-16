@@ -13,6 +13,8 @@ open categories.types
 
 -- TODO: really here we should be proving that Isomorphism in the category of types is the same notion as equiv.
 
+namespace categories.types
+
 definition Bijection (α β : Type u) := Isomorphism α β 
 
 @[simp] definition Bijection.witness_1 {α β : Type u} (iso : Bijection α β) (x : α) : iso.inverse (iso.morphism x) = x :=
@@ -37,3 +39,5 @@ begin
   have p := h.witness_2, unfold_projs at p,
   exact congr_fun p x,
 end
+
+end categories.types
