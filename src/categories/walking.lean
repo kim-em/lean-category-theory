@@ -21,10 +21,13 @@ inductive WalkingPair : Type u₁
 
 open WalkingPair
 
+section
 open tactic
-private meta def induction_WalkingPair : tactic unit :=
+@[tidy] private meta def induction_WalkingPair : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingPair) := cases h >> skip | _ := failed end))
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingPair) := cases h >> skip | _ := failed end)),
+   skip
+end
 
 attribute [tidy] induction_WalkingPair
 
@@ -36,11 +39,15 @@ instance fintype_WalkingPair : fintype WalkingPair := {
   complete := by tidy,
 }
 
+section
+open tactic
 private meta def case_bash : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, cases h >> skip))
-local attribute [tidy] case_bash
+   at_least_one (l.reverse.map (λ h, cases h >> skip)),
+   skip
 
+local attribute [tidy] case_bash
+end
 
 @[reducible] def WalkingPair.hom : WalkingPair → WalkingPair → Type u₁ 
 | _1 _1 := punit
@@ -96,11 +103,15 @@ inductive WalkingParallelPair : Type u₁
 
 open WalkingParallelPair
 
+section
 open tactic
 private meta def induction_WalkingParallelPair : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := cases h >> skip | _ := failed end))
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := cases h >> skip | _ := failed end)),
+   skip
+   
 attribute [tidy] induction_WalkingParallelPair
+end
 
 local attribute [tidy] case_bash
 

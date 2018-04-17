@@ -38,10 +38,13 @@ variable {C : Type (u₁+2)}
 variable [category C]
 
 -- PROJECT this construction is unpleasant
+section
 open tactic
 meta def induction_WalkingParallelPair : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := induction h >> skip | _ := failed end))
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := induction h >> skip | _ := failed end)),
+   skip
+end
 
 local attribute [tidy] induction_WalkingParallelPair
 local attribute [reducible] ParallelPair_functor._match_1
