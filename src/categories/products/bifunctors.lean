@@ -19,7 +19,7 @@ variable {E : Type (u₃+1)}
 variable [category E]
 
 @[simp] lemma Bifunctor_identities (F : (C × D) ↝ E) (X : C) (Y : D)
-  : @Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F (X, Y))
+  : @Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F +> (X, Y))
   := F.identities (X, Y)
 
 @[simp] lemma Bifunctor_left_identity (F : (C × D) ↝ E) (W : C) {X Y Z : D} (f : X ⟶ Y) (g : Y ⟶ Z)

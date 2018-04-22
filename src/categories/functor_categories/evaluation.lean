@@ -19,7 +19,7 @@ variable (D : Type (u₂+1))
 variable [category D]
 
 definition Evaluation : ((C ↝ D) × C) ↝ D := {
-  onObjects     := λ p, p.1 p.2,
+  onObjects     := λ p, p.1 +> p.2,
   onMorphisms   := λ x y f, (x.1 &> f.2) ≫ (f.1.components y.2)
 }
 

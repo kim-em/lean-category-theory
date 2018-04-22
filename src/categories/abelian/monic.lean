@@ -26,7 +26,7 @@ lemma SplitMonic_implies_Monic {f : Y ⟶ Z} (m : SplitMonic f) : Monic f := {
     witness := λ _ a b p, begin
                             have e := congr_arg (λ g, g ≫ m.right_inverse) p,
                             simp at e,
-                            repeat_at_least_once {rewrite m.evidence at e},
+                            rw m.evidence at e,
                             simp at e,
                             exact e
                           end

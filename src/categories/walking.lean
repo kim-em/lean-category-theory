@@ -33,13 +33,12 @@ attribute [tidy] induction_WalkingPair
 
 
 
-instance decidable_eq_WalkingPair : decidable_eq WalkingPair := by obviously
+instance decidable_eq_WalkingPair : decidable_eq WalkingPair := by dsimp [decidable_eq, decidable_rel]; obviously
 instance fintype_WalkingPair : fintype WalkingPair := {
   elems := [_1, _2].to_finset,
   complete := by tidy,
 }
 
-section
 open tactic
 private meta def case_bash : tactic unit :=
 do l ← local_context,
@@ -47,7 +46,6 @@ do l ← local_context,
    skip
 
 local attribute [tidy] case_bash
-end
 
 @[reducible] def WalkingPair.hom : WalkingPair → WalkingPair → Type u₁ 
 | _1 _1 := punit
@@ -55,7 +53,7 @@ end
 | _  _  := pempty
 attribute [reducible] WalkingPair.hom._main
 
-instance (X Y : WalkingPair) : decidable_eq (WalkingPair.hom X Y) := by tidy 
+instance (X Y : WalkingPair) : decidable_eq (WalkingPair.hom X Y) := by dsimp [decidable_eq, decidable_rel]; obviously
 
 instance WalkingPair_category : category WalkingPair := {
   Hom := WalkingPair.hom,

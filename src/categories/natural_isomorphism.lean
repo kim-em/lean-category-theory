@@ -34,21 +34,21 @@ variables {F G H : C ↝ D}
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1
   (α : F ⇔ G)
   (X : C)
-   : (α.morphism.components X) ≫ (α.inverse.components X) = 𝟙 (F X)
+   : (α.morphism.components X) ≫ (α.inverse.components X) = 𝟙 (F +> X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_1
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1_assoc
   (α : F ⇔ G)
-  (X : C) (Z : D) (f : (F X) ⟶ Z)
+  (X : C) (Z : D) (f : (F +> X) ⟶ Z)
    : (α.morphism.components X) ≫ (α.inverse.components X) ≫ f = f
    := by obviously
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2
   (α : F ⇔ G)
   (X : C)
-   : (α.inverse.components X) ≫ (α.morphism.components X) = 𝟙 (G X)
+   : (α.inverse.components X) ≫ (α.morphism.components X) = 𝟙 (G +> X)
    := congr_arg (λ β, NaturalTransformation.components β X) α.witness_2
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2_assoc
   (α : F ⇔ G)
-  (X : C) (Z : D) (f : (G X) ⟶ Z)
+  (X : C) (Z : D) (f : (G +> X) ⟶ Z)
    : (α.inverse.components X) ≫ (α.morphism.components X) ≫ f = f
    := by obviously
 
@@ -65,26 +65,17 @@ variables {F G H : C ↝ D}
    : (α.morphism.components X) ≫ (G &> f) ≫ (α.inverse.components Y) = F &> f := by obviously
 
 definition NaturalIsomorphism.from_components
-  (components : ∀ X : C, (F X) ≅ (G X))
+  (components : ∀ X : C, (F +> X) ≅ (G +> X))
   (naturality : ∀ {X Y : C} (f : X ⟶ Y), (F &> f) ≫ (components Y).morphism = (components X).morphism ≫ (G &> f)) : NaturalIsomorphism F G :=
-  {
-    morphism  := {
-      components := λ X, (components X).morphism,
-   },
-    inverse   := {
-      components := λ X, (components X).inverse,
-      naturality := λ X Y f, begin 
-                               let p := congr_arg (λ f, (components X).inverse ≫ (f ≫ (components Y).inverse)) (eq.symm (naturality f)),
-                               tidy,
-                             end
-   },
- }
+{ morphism  := { components := λ X, (components X).morphism, },
+  inverse   := { components := λ X, (components X).inverse,
+                 naturality := λ X Y f, begin 
+                                          let p := congr_arg (λ f, (components X).inverse ≫ (f ≫ (components Y).inverse)) (eq.symm (naturality f)),
+                                          tidy,
+                                        end } }
 
-definition vertical_composition_of_NaturalIsomorphisms 
-  (α : F ⇔ G)
-  (β : G ⇔ H)
-   : F ⇔ H :=
-  Isomorphism.comp α β
+definition vertical_composition_of_NaturalIsomorphisms (α : F ⇔ G) (β : G ⇔ H) : F ⇔ H :=
+Isomorphism.comp α β
 
 attribute [reducible] NaturalIsomorphism
 
@@ -96,7 +87,7 @@ definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) _ 
   (α : F ⟹ G)
   (w : is_NaturalIsomorphism α)
   (X : C)
-   : (α.components X) ≫ (w.inverse.components X) = 𝟙 (F X)
+   : (α.components X) ≫ (w.inverse.components X) = 𝟙 (F +> X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_1
 @[ematch] lemma is_NaturalIsomorphism_componentwise_witness_2
   (α : F ⟹ G)
@@ -110,7 +101,7 @@ lemma IdentityNaturalTransformation_is_NaturalIsomorphism (F : C ↝ D) : is_Nat
     inverse := 1
 }
 
-definition NaturalIsomorphism.components {F G : C ↝ D} (α : F ⇔ G) (X : C) : (F X) ≅ (G X) := {
+definition NaturalIsomorphism.components {F G : C ↝ D} (α : F ⇔ G) (X : C) : (F +> X) ≅ (G +> X) := {
     morphism := α.morphism.components X,
     inverse := α.inverse.components X
 }

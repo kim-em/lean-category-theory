@@ -10,7 +10,7 @@ open categories.types
 
 universes u v
 
-@[simp] private lemma functor_identities (F : Functor (Type u) (Type v)) (α : Type u) (x : F α) : (F &> id) x = x := by obviously
+@[simp] private lemma functor_identities (F : Functor (Type u) (Type v)) (α : Type u) (x : F +> α) : (F &> id) x = x := by obviously
 
 instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F.onObjects := {
     map := λ _ _ f, F &> f,

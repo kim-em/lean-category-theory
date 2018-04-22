@@ -3,6 +3,7 @@
 -- Authors: Stephen Morgan and Scott Morrison
 
 import categories.tactics
+import tidy.auto_cast
 
 namespace categories.graphs
 
