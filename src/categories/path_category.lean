@@ -15,7 +15,7 @@ universes u₁ u₂
 
 @[reducible] def Path (C : Type (u₁+1)) : Type (u₁+2) := ulift.{u₁+2} C
 
-instance PathCategory (C : Type (u₁+1)) [graph C] : category (Path C) :=
+@[reducible] instance PathCategory (C : Type (u₁+1)) [graph C] : category (Path C) :=
 {
   Hom            := λ x y : Path C, path x.down y.down,
   identity       := λ x, path.nil x.down,
@@ -23,26 +23,12 @@ instance PathCategory (C : Type (u₁+1)) [graph C] : category (Path C) :=
   right_identity := begin
                       tidy,
                       induction f,
-                      {
-                        -- when f is nil
-                        trivial,
-                      },
-                      {
-                        -- when f is cons
-                        exact congr_arg (λ p, path.cons f_e p) f_ih
-                      }
+                      obviously,                      
                     end,
   associativity  := begin
                       tidy,
                       induction f,
-                      {
-                        -- when f is nil
-                        trivial,
-                      },
-                      {
-                        -- when f is cons
-                        exact congr_arg (λ p, path.cons f_e p) (f_ih g)
-                      }
+                      obviously,                    
                     end
 }
 
@@ -61,20 +47,13 @@ definition path_to_morphism
  
 @[simp] lemma path_to_morphism.comp   (H : graph_homomorphism G C) {X Y Z : G} (f : path X Y) (g : path Y Z): path_to_morphism H (graphs.concatenate_paths f g) = path_to_morphism H f ≫ path_to_morphism H g :=
 begin
-induction f,
-{
-  tidy,
-},
-{
-  let p := f_ih g,
-  tidy,
-}
+  induction f,
+  obviously,
 end
 
--- FIXME
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
--- definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) (ulift.{u₁+2} C) :=
--- { onObjects     := λ X, ulift.up (H.onVertices X.down),
---   onMorphisms   := λ _ _ f, ulift.up (path_to_morphism H f), }
+definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) (ulift.{u₁+2} C) :=
+{ onObjects     := λ X, ulift.up (H.onVertices X.down),
+  onMorphisms   := λ _ _ f, ulift.up (path_to_morphism H f), }
 
 end categories.graphs

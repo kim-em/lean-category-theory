@@ -82,6 +82,7 @@ attribute [reducible] NaturalIsomorphism
 open NaturalTransformation
 
 definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) _ F G α
+attribute [class] is_NaturalIsomorphism
 
 @[ematch] lemma is_NaturalIsomorphism_componentwise_witness_1
   (α : F ⟹ G)
@@ -96,15 +97,19 @@ definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) _ 
    : (w.inverse.components X) ≫ (α.components X) = 𝟙 (G +> X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_2
 
-
-lemma IdentityNaturalTransformation_is_NaturalIsomorphism (F : C ↝ D) : is_NaturalIsomorphism (1 : F ⟹ F) := {
+instance (F : C ↝ D) : is_NaturalIsomorphism (1 : F ⟹ F) := {
     inverse := 1
 }
 
-@[reducible] definition NaturalIsomorphism.components {F G : C ↝ D} (α : F ⇔ G) (X : C) : (F +> X) ≅ (G +> X) := {
-    morphism := α.morphism.components X,
-    inverse := α.inverse.components X
-}
+instance NaturalIsomorphism.morphism.is_NaturalIsomorphism {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.morphism) := by sorry
+instance NaturalIsomorphism.inverse.is_NaturalIsomorphism  {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.inverse) := by sorry
+
+@[reducible] definition NaturalIsomorphism.components {F G : C ↝ D} (α : F ⇔ G) (X : C) : (F +> X) ≅ (G +> X) := 
+{ morphism := α.morphism.components X,
+  inverse := α.inverse.components X }
+
+instance NaturalIsomorphism.morphisms.components.is_Isomorphism {F G : C ↝ D} (α : F ⇔ G) (X : C) : is_Isomorphism (α.morphism.components X) := by sorry
+instance NaturalIsomorphism.inverse.components.is_Isomorphism   {F G : C ↝ D} (α : F ⇔ G) (X : C) : is_Isomorphism (α.inverse.components X) := by sorry
 
 @[reducible] definition NaturalIsomorphism.reverse {F G : C ↝ D} (α : F ⇔ G) : G ⇔ F := {
     morphism := α.inverse,

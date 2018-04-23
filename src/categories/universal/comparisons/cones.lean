@@ -14,6 +14,7 @@ open categories.natural_transformation
 open categories.isomorphism
 open categories.equivalence
 open categories.universal
+open categories.comma
 
 namespace categories.universal
 
@@ -24,6 +25,16 @@ variable {C : Type (u+2)}
 variable [category C]
 variable {F : Functor J C}
 
+local attribute [tidy] dsimp_all'
+
+@[simp] lemma comma.Cone.commutativity (F : Functor J C) (X : C) (cone : (DiagonalFunctor J C +> X) ⟶ (ObjectAsFunctor F) +> punit.star) {j k : J} (f : j ⟶ k) : cone.components j ≫ (F &> f) = cone.components k := 
+begin
+  have p := (cone.naturality f).symm,
+  dsimp [ObjectAsFunctor, DiagonalFunctor] at p,
+  simp at p,
+  exact p
+end
+
 definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F := 
 { cone_point    := cone.1.1,
   cone_maps     := λ j : J, (cone.2).components j }
@@ -33,7 +44,6 @@ definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.
   commutativity := λ j : J, begin
                               let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f.condition,
                               tidy,
-                              sorry -- FIXME
                             end }
 
 definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F := 
@@ -42,7 +52,6 @@ definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F :=
     naturality := λ _ _ f, begin
                             its eq.symm (cone.commutativity f),
                             tidy,
-                            sorry -- FIXME
                           end
  } ⟩
 
@@ -59,12 +68,11 @@ definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) :=
 
 local attribute [applicable] category.identity
 
--- FIXME
 -- TODO really slow: need to automatically abstract (propositional?) subgoals
--- definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 
--- { functor := comma_Cones_to_Cones F,
---   inverse := Cones_to_comma_Cones F,
---   isomorphism_1 := by obviously,
---   isomorphism_2 := by obviously }
+definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 
+{ functor := comma_Cones_to_Cones F,
+  inverse := Cones_to_comma_Cones F,
+  isomorphism_1 := by obviously,
+  isomorphism_2 := by obviously }
 
 end categories.universal

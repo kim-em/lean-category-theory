@@ -26,17 +26,15 @@ variable [category C]
 variable {D : Type (u₂+1)}
 variable [category D]
 
-definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C := {
+@[reducible] definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C := {
   functor := e.inverse,
   inverse := e.functor,
   isomorphism_1 := e.isomorphism_2,
   isomorphism_2 := e.isomorphism_1
 }
 
-@[simp,ematch] lemma Equivalence.onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := 
-by obviously
-@[simp,ematch] lemma Equivalence.onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := 
-by obviously
+@[simp,ematch] lemma Equivalence.onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := by obviously
+@[simp,ematch] lemma Equivalence.onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := by obviously
 
 -- PROJECT a good way to do this?
 -- definition EquivalenceComposition (e : Equivalence C D) (f : Equivalence D E) : Equivalence C E := 

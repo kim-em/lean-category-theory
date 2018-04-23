@@ -44,11 +44,12 @@ variable [category C]
 variable {D : Type (u₁+2)}
 variable [category D]
 
+local attribute [tidy] dsimp_all'
+
 private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : J ↝ (C ↝ D)) : Cone F := {     
   cone_point    := {
     onObjects     := λ c, functorial_Limit +> (evaluate_Functor_to_FunctorCategory F c), 
     onMorphisms   := λ _ _ f, functorial_Limit &> (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
-    identities := sorry -- FIXME
  },
   cone_maps     := λ j, {
     components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,
