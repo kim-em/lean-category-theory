@@ -23,66 +23,63 @@ variable {D : Type (u+1)}
 variable [category D]
 variables {L : C ↝ D} {R : D ↝ C} 
 
-private definition Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
+@[reducible] private definition Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
   : ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D)) ⟹ 
                           ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C)) := 
-{
-  components := λ P, 
+{ components := λ P, 
     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
-    λ f, (A.unit.components P.1) ≫ (R &> f)
-}
+    λ f, (A.unit.components P.1) ≫ (R &> f) }
 
-private definition Adjunction_to_HomAdjunction_inverse (A : L ⊣ R) 
+@[reducible] private definition Adjunction_to_HomAdjunction_inverse (A : L ⊣ R) 
   : ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C)) ⟹ 
                           ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D)) :=
-{
-  components := λ P, 
+{ components := λ P, 
     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
-    λ f, (L &> f) ≫ (A.counit.components P.2)
-}
+    λ f, (L &> f) ≫ (A.counit.components P.2) }
 
 definition Adjunction_to_HomAdjunction (A : L ⊣ R) : HomAdjunction L R := 
-{
-    morphism  := Adjunction_to_HomAdjunction_morphism A,
-    inverse   := Adjunction_to_HomAdjunction_inverse A
- }
+{ morphism  := Adjunction_to_HomAdjunction_morphism A,
+  inverse   := Adjunction_to_HomAdjunction_inverse A }
 
-@[simp] lemma mate_of_L (A : HomAdjunction L R) {X Y : C} (f : X ⟶ Y) : (((A.morphism).components (X, L X)) (𝟙 (L X))) ≫ 
-      (R &> (L &> f))
-      = ((A.morphism).components (X, L Y)) (L &> f) :=
-begin
-  have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.morphism (X, L X) (X, L Y) (𝟙 X, L &> f),
-  have q := congr_fun p (L &> (𝟙 X)),
-  tidy,
-end
+-- FIXME
 
-@[simp] lemma mate_of_L' (A : HomAdjunction L R) {X Y : C} (f : X ⟶ Y) : f ≫ (((A.morphism).components (Y, L Y)) (𝟙 (L Y)))
-      = ((A.morphism).components (X, L Y)) (L &> f) :=
-begin
-  have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.morphism (Y, L Y) (X, L Y) (f, 𝟙 (L Y)),
-  have q := congr_fun p (L &> (𝟙 Y)),
-  tidy,
-end
+-- @[simp] lemma mate_of_L (A : HomAdjunction L R) {X Y : C} (f : X ⟶ Y) : (((A.morphism).components (X, L +> X)) (𝟙 (L +> X))) ≫ 
+--       (R &> (L &> f))
+--       = ((A.morphism).components (X, L +> Y)) (L &> f) :=
+-- begin
+--   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.morphism (X, L +> X) (X, L +> Y) (𝟙 X, L &> f),
+--   have q := congr_fun p (L &> (𝟙 X)),
+--   clear p,
+--   tidy,
+-- end
 
-@[simp] lemma mate_of_R (A : HomAdjunction L R) {X Y : D} (f : X ⟶ Y) : (L &> (R &> f)) ≫ (((A.inverse).components (R Y, Y)) (𝟙 (R Y)))
-      = ((A.inverse).components (R X, Y)) (R &> f) :=
-begin
-  have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.inverse (R Y, Y) (R X, Y) (R &> f, 𝟙 Y),
-  have q := congr_fun p (R &> (𝟙 Y)),
-  tidy,
-end
+-- @[simp] lemma mate_of_L' (A : HomAdjunction L R) {X Y : C} (f : X ⟶ Y) : f ≫ (((A.morphism).components (Y, L +> Y)) (𝟙 (L +> Y)))
+--       = ((A.morphism).components (X, L +> Y)) (L &> f) :=
+-- begin
+--   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.morphism (Y, L +> Y) (X, L +> Y) (f, 𝟙 (L +> Y)),
+--   have q := congr_fun p (L &> (𝟙 Y)),
+--   tidy,
+-- end
 
-@[simp] lemma mate_of_R' (A : HomAdjunction L R) {X Y : D} (f : X ⟶ Y) : (((A.inverse).components (R X, X)) (𝟙 (R X))) ≫ f = 
-    ((A.inverse).components (R X, Y)) (R &> f) :=
-begin
-  have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.inverse (R X, X) (R X, Y) (𝟙 (R X), f),
-  have q := congr_fun p (R &> (𝟙 X)),
-  tidy,
-end
+-- @[simp] lemma mate_of_R (A : HomAdjunction L R) {X Y : D} (f : X ⟶ Y) : (L &> (R &> f)) ≫ (((A.inverse).components (R +> Y, Y)) (𝟙 (R +> Y)))
+--       = ((A.inverse).components (R +> X, Y)) (R &> f) :=
+-- begin
+--   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.inverse (R +> Y, Y) (R +> X, Y) (R &> f, 𝟙 Y),
+--   have q := congr_fun p (R &> (𝟙 Y)),
+--   tidy,
+-- end
 
-private definition counit_from_HomAdjunction (A : HomAdjunction L R) : (R ⋙ L) ⟹ 1 := {
-    components := λ X : D, (A.inverse.components (R X, X)) (𝟙 (R X))
- }
+-- @[simp] lemma mate_of_R' (A : HomAdjunction L R) {X Y : D} (f : X ⟶ Y) : (((A.inverse).components (R +> X, X)) (𝟙 (R +> X))) ≫ f = 
+--     ((A.inverse).components (R X, Y)) (R &> f) :=
+-- begin
+--   have p := @NaturalTransformation.naturality _ _ _ _ _ _ A.inverse (R +> X, X) (R +> X, Y) (𝟙 (R +> X), f),
+--   have q := congr_fun p (R &> (𝟙 X)),
+--   tidy,
+-- end
+
+-- private definition counit_from_HomAdjunction (A : HomAdjunction L R) : (R ⋙ L) ⟹ 1 := {
+--     components := λ X : D, (A.inverse.components (R +> X, X)) (𝟙 (R +> X))
+--  }
 -- TODO
 -- private definition unit_from_HomAdjunction (A : HomAdjunction L R) : 1 ⟹ (L ⋙ R) := {
 --     components := λ X : C, (A.morphism.components (X, L X)) (𝟙 (L X)),

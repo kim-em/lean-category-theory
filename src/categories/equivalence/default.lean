@@ -48,15 +48,15 @@ by obviously
 -- }
 
 class Full (F : C ↝ D) :=
-  (preimage : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), X ⟶ Y)
-  (witness  : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), F &> (preimage f) = f . obviously)
+  (preimage : ∀ {X Y : C} (f : (F +> X) ⟶ (F +> Y)), X ⟶ Y)
+  (witness  : ∀ {X Y : C} (f : (F +> X) ⟶ (F +> Y)), F &> (preimage f) = f . obviously)
 
 attribute [semiapplicable] Full.preimage
 make_lemma Full.witness
 attribute [simp,ematch] Full.witness_lemma
 
-definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y := Full.preimage f
-@[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : F &> preimage F f = f := begin unfold preimage, obviously end
+definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F +> X ⟶ F +> Y) : X ⟶ Y := Full.preimage f
+@[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F +> X ⟶ F +> Y) : F &> preimage F f = f := begin unfold preimage, obviously end
 
 class Faithful (F : C ↝ D) :=
   (injectivity : ∀ {X Y : C} (f g : X ⟶ Y) (p : F &> f = F &> g), f = g)
@@ -64,7 +64,7 @@ class Faithful (F : C ↝ D) :=
 make_lemma Faithful.injectivity
 attribute [semiapplicable] Faithful.injectivity_lemma
 
-definition preimage_iso (F : C ↝ D) [Full F] [Faithful F] {X Y : C} (f : (F X) ≅ (F Y)) : X ≅ Y := {
+definition preimage_iso (F : C ↝ D) [Full F] [Faithful F] {X Y : C} (f : (F +> X) ≅ (F +> Y)) : X ≅ Y := {
   morphism  := preimage F f.morphism,
   inverse   := preimage F f.inverse,
   witness_1 := begin apply @Faithful.injectivity _ _ _ _ F, tidy, end,
@@ -76,7 +76,7 @@ definition preimage_iso (F : C ↝ D) [Full F] [Faithful F] {X Y : C} (f : (F X)
 
 definition Embedding (F : C ↝ D) := (Full F) × (Faithful F)
 
-definition EssentiallySurjective (F : C ↝ D) := Π d : D, Σ c : C, Isomorphism (F c) d
+definition EssentiallySurjective (F : C ↝ D) := Π d : D, Σ c : C, Isomorphism (F +> c) d
 attribute [class] EssentiallySurjective
 
 class is_Equivalence (F : Functor C D) := 

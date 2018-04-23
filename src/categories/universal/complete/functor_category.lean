@@ -23,13 +23,13 @@ variable {D : Type (u₂+1)}
 variable [category D]
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory (F : J ↝ (C ↝ D)) (c : C) : J ↝ D := {
-  onObjects     := λ j, (F j) c,
+  onObjects     := λ j, (F +> j) +> c,
   onMorphisms   := λ _ _ f, (F &> f).components c
 }
 
 @[reducible] private definition evaluate_Functor_to_FunctorCategory_on_Morphism (F : J ↝ (C ↝ D)) {c c' : C} (f : c ⟶ c')
   : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
-    components := λ j, (F j) &> f
+    components := λ j, (F +> j) &> f
  }
 
 -- PROJECT do this properly, as
@@ -46,8 +46,9 @@ variable [category D]
 
 private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : J ↝ (C ↝ D)) : Cone F := {     
   cone_point    := {
-    onObjects     := λ c, functorial_Limit.onObjects (evaluate_Functor_to_FunctorCategory F c), -- TODO why doesn't the coercion work here?
+    onObjects     := λ c, functorial_Limit +> (evaluate_Functor_to_FunctorCategory F c), 
     onMorphisms   := λ _ _ f, functorial_Limit &> (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
+    identities := sorry -- FIXME
  },
   cone_maps     := λ j, {
     components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,
@@ -55,7 +56,7 @@ private definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : J ↝ 
 }
 
 -- This would be a bit dangerous, but we just use it in the next construction.
-@[applicable] private lemma cone_morphism_comparison (F : J ↝ (C ↝ D)) (X : C) (j : J) (Y Z : Cone F) (φ ψ : ConeMorphism Y Z) (f : ((Z.cone_point) X) ⟶ ((F j) X)) (w : f = ((Z.cone_maps j).components X))
+@[applicable] private lemma cone_morphism_comparison (F : J ↝ (C ↝ D)) (X : C) (j : J) (Y Z : Cone F) (φ ψ : ConeMorphism Y Z) (f : ((Z.cone_point) +> X) ⟶ ((F +> j) +> X)) (w : f = ((Z.cone_maps j).components X))
  : ((φ.cone_morphism).components X) ≫ f = ((ψ.cone_morphism).components X) ≫ f := 
 begin
   rewrite w,

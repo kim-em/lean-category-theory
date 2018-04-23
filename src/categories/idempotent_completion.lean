@@ -118,12 +118,13 @@ private def IdempotentCompletion_idempotent_inverse (C : Type (u+1)) [category C
 definition extend_Functor_to_IdempotentCompletion (F : Functor C (Idempotent D)) : 
   Functor (Idempotent C) (Idempotent D) :=
 {
-  onObjects     := λ X, let FX := F X.object in
+  onObjects     := λ X, let FX := F +> X.object in
                          ⟨ FX.object, 
                            (F &> X.idempotent).morphism, 
                            begin 
                              have p := F.functoriality X.idempotent X.idempotent, 
-                             tidy, 
+                             have p' := congr_arg Idempotent_morphism.morphism p,
+                             tidy,
                            end
                          ⟩,
   onMorphisms   := λ X Y f, ⟨ (F &> f.morphism).morphism, 

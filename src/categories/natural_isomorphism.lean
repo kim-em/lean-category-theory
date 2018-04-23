@@ -93,7 +93,7 @@ definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) _ 
   (α : F ⟹ G)
   (w : is_NaturalIsomorphism α)
   (X : C)
-   : (w.inverse.components X) ≫ (α.components X) = 𝟙 (G X)
+   : (w.inverse.components X) ≫ (α.components X) = 𝟙 (G +> X)
    := congr_arg (λ β, NaturalTransformation.components β X) w.witness_2
 
 
@@ -101,12 +101,12 @@ lemma IdentityNaturalTransformation_is_NaturalIsomorphism (F : C ↝ D) : is_Nat
     inverse := 1
 }
 
-definition NaturalIsomorphism.components {F G : C ↝ D} (α : F ⇔ G) (X : C) : (F +> X) ≅ (G +> X) := {
+@[reducible] definition NaturalIsomorphism.components {F G : C ↝ D} (α : F ⇔ G) (X : C) : (F +> X) ≅ (G +> X) := {
     morphism := α.morphism.components X,
     inverse := α.inverse.components X
 }
 
-definition NaturalIsomorphism.reverse {F G : C ↝ D} (α : F ⇔ G) : G ⇔ F := {
+@[reducible] definition NaturalIsomorphism.reverse {F G : C ↝ D} (α : F ⇔ G) : G ⇔ F := {
     morphism := α.inverse,
     inverse := α.morphism
 }

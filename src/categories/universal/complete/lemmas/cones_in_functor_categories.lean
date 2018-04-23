@@ -27,7 +27,7 @@ variable [category D]
   {Z : D}
   {G : J ↝ D}
   {L : LimitCone G}
-  (cone_maps : Π j : J, Z ⟶ (G j)) 
+  (cone_maps : Π j : J, Z ⟶ (G +> j)) 
   (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (G &> f) = cone_maps k)
   (f g : Z ⟶ L.terminal_object.cone_point)
   (commutativity_f : Π j : J, f ≫ (L.terminal_object.cone_maps j) = cone_maps j)
@@ -57,8 +57,8 @@ lemma bifunctor_naturality
 (f : X ⟶ Y)
 (j k : J)
 (g : j ⟶ k)
-  : ((F j) &> f) ≫ ((F &> g).components Y)
-  = ((F &> g).components X) ≫ ((F k) &> f) := by obviously
+  : ((F +> j) &> f) ≫ ((F &> g).components Y)
+  = ((F &> g).components X) ≫ ((F +> k) &> f) := by obviously
 
 -- TODO find a better home
 lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@category.compose (C ↝ D) _ _ _ _ α β).components X = (α.components X) ≫ (β.components X) := by obviously 
@@ -70,9 +70,9 @@ lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹
 (j k : J)
 (g : j ⟶ k)
 (cone : Cone F)
-: ((cone.cone_maps j).components X) ≫ ((F j) &> f) ≫ 
+: ((cone.cone_maps j).components X) ≫ ((F +> j) &> f) ≫ 
       ((F &> g).components Y) =
-    ((cone.cone_maps k).components X) ≫ ((F k) &> f) :=
+    ((cone.cone_maps k).components X) ≫ ((F +> k) &> f) :=
 begin
   have p := cone.commutativity g,
   have p' := congr_arg NaturalTransformation.components p,
@@ -90,7 +90,7 @@ end
 (j : J)
 (cone : universal.Cone F)
   : ((cone.cone_point) &> f) ≫ ((cone.cone_maps j).components Y) =
-    ((cone.cone_maps j).components X) ≫ ((F j) &> f) := by obviously
+    ((cone.cone_maps j).components X) ≫ ((F +> j) &> f) := by obviously
 
 @[simp] lemma cone_commutativity_in_FunctorCategory
 (F : J ↝ (C ↝ D))
@@ -113,7 +113,7 @@ end
 (f : j ⟶ k) 
 (Y : Cone F)
 (Z : D)
-(z : ((F k) X) ⟶ Z)
+(z : ((F +> k) +> X) ⟶ Z)
  : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) ≫ z = (Y.cone_maps k).components X ≫ z := 
 begin
  rw ← category.associativity,

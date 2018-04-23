@@ -40,7 +40,7 @@ variable [category B]
 variable {C : Type (u₃+2)}
 variable [category C]
 
-definition comma (S : A ↝ C) (T : B ↝ C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, (S p.1) ⟶ (T p.2)
+definition comma (S : A ↝ C) (T : B ↝ C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, (S +> p.1) ⟶ (T +> p.2)
 
 structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (max u₁ u₂ u₃) :=
 (left : p.1.1 ⟶ q.1.1)
@@ -84,10 +84,9 @@ definition CommaCategory_projection_transformation
    }
 
 
-definition ObjectAsFunctor (X : C) : punit ↝ C := {
-  onObjects     := λ _, X,
-  onMorphisms   := λ _ _ _, 𝟙 X
-}
+definition ObjectAsFunctor (X : C) : punit ↝ C := 
+{ onObjects     := λ _, X,
+  onMorphisms   := λ _ _ _, 𝟙 X }
 
 instance : has_coe C (punit ↝ C) :=
 { coe := ObjectAsFunctor }

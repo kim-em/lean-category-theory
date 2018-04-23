@@ -25,8 +25,8 @@ variable [category D]
 structure Adjunction (L : C ↝ D) (R : D ↝ C) :=
   (unit       : 1 ⟹ (L ⋙ R))
   (counit     : (R ⋙ L) ⟹ 1)
-  (triangle_1 : ∀ X : D, (unit.components (R X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R X))
-  (triangle_2 : ∀ X : C, (L &> (unit.components X)) ≫ (counit.components (L X)) = 𝟙 (L X))
+  (triangle_1 : ∀ X : D, (unit.components (R +> X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R +> X))
+  (triangle_2 : ∀ X : C, (L &> (unit.components X)) ≫ (counit.components (L +> X)) = 𝟙 (L +> X))
   -- (Triangle_1 : (whisker_on_left R unit) ⊟ (whisker_on_right counit R) = 1) -- we'd need unitors and associators here
 
 

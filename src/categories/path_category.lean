@@ -71,11 +71,10 @@ induction f,
 }
 end
 
+-- FIXME
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
-definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) (ulift.{u₁+2} C) :=
-{
-  onObjects     := λ X, ulift.up (H.onVertices X.down),
-  onMorphisms   := λ _ _ f, ulift.up (path_to_morphism H f),
-}
+-- definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) (ulift.{u₁+2} C) :=
+-- { onObjects     := λ X, ulift.up (H.onVertices X.down),
+--   onMorphisms   := λ _ _ f, ulift.up (path_to_morphism H f), }
 
 end categories.graphs

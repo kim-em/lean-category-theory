@@ -25,11 +25,11 @@ variable {C : Type (u₂+1)}
 variable [category C]
 variables {F : Functor J C} {L : LimitCone F} {Z : C} 
 
-private definition Cone_from_map_to_limit (f : Z ⟶ L.terminal_object.cone_point) : Cone F := {
+@[reducible] private definition Cone_from_map_to_limit (f : Z ⟶ L.terminal_object.cone_point) : Cone F := {
   cone_point    := Z,
   cone_maps     := λ j, f ≫ (L.terminal_object.cone_maps j)
 }
-private definition ConeMorphism_from_map_to_limit (f : Z ⟶ L.terminal_object.cone_point) : ConeMorphism (Cone_from_map_to_limit f) L.terminal_object := {
+@[reducible] private definition ConeMorphism_from_map_to_limit (f : Z ⟶ L.terminal_object.cone_point) : ConeMorphism (Cone_from_map_to_limit f) L.terminal_object := {
   cone_morphism := f
 }
 end
@@ -47,15 +47,17 @@ do l ← local_context,
 end
 
 local attribute [tidy] induction_WalkingParallelPair
+local attribute [reducible] ParallelPair_functor
 local attribute [reducible] ParallelPair_functor._match_1
 local attribute [reducible] ParallelPair_functor._match_2
+local attribute [reducible] eq.mpr
 
 instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
   equalizer := λ X Y f g, let lim := limitCone (ParallelPair_functor f g) in {
     equalizer     := lim.terminal_object.cone_point,
     inclusion     := lim.terminal_object.cone_maps WalkingParallelPair._1,
     witness       := let commutativity := @Cone.commutativity_lemma _ _ _ _ _ lim.terminal_object WalkingParallelPair._1 WalkingParallelPair._2 in 
-                     begin
+                     begin 
                        erw commutativity Two._0,
                        erw commutativity Two._1,
                      end,
@@ -64,9 +66,8 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        tidy,
                        exact k ≫ f,
                        tidy,
-                       cases f_1,
-                       cases f_1,
-                       tidy, 
+                       cases f_1, 
+                       obviously,
                      end,
     factorisation := by obviously,
     uniqueness    := begin
@@ -79,6 +80,7 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        exact congr_arg ConeMorphism.cone_morphism p,
                        -- finally, take care of those placeholders
                        tidy,
+                       exact witness.symm, -- TODO why doesn't tidy handle this?
                        have c := lim.terminal_object.commutativity,
                        dsimp at c,
                        rw ← @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,

@@ -30,7 +30,7 @@ definition HomAdjunction (L : C ↝ D) (R : D ↝ C) :=
       ⇔ 
     ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C))
 
-definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)
+definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : (L +> X) ⟶ Y) : X ⟶ (R +> Y)
   := ((A.morphism).components (X, Y)) f
 
 -- PROJECT lemmas about mates.

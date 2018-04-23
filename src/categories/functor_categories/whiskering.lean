@@ -18,7 +18,7 @@ variables (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E :
 definition whiskering_on_left : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) := {
   onObjects     := λ F, {
     onObjects     := λ G, F ⋙ G,
-    onMorphisms   := λ _ _ α, whisker_on_left F α
+    onMorphisms   := λ _ _ α, 1 ◫ α 
  },
   onMorphisms   := λ F G τ, {
     components := λ H, {
@@ -30,24 +30,24 @@ definition whiskering_on_left : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) := {
 definition whiskering_on_right : (D ↝ E) ↝ ((C ↝ D) ↝ (C ↝ E)) :=
 {
   onObjects     := λ H, {
-    onObjects     := λ F, FunctorComposition F H,
-    onMorphisms   := λ _ _ α, whisker_on_right α H,
+    onObjects     := λ F, F ⋙ H,
+    onMorphisms   := λ _ _ α, α ◫ 1,
  },
   onMorphisms   := λ G H τ, {
     components := λ F, {
-      components := λ c, τ.components (F c)
+      components := λ c, τ.components (F +> c)
    }
  }
 }
 
-definition whisker_on_left_functor {C : Type (u₁+1)} [category C] {D : Type (u₂+1)} [category D] (F : Functor C D) (E : Type (u₃+1)) [category E] : 
-    Functor (Functor D E) (Functor C E) :=
-  (whiskering_on_left C D E) F
+definition whisker_on_left_functor {C : Type (u₁+1)} [category C] {D : Type (u₂+1)} [category D] (F : C ↝ D) (E : Type (u₃+1)) [category E] : 
+    (D ↝ E) ↝ (C ↝ E) :=
+  (whiskering_on_left C D E) +> F
 
 
-definition whisker_on_right_functor (C : Type (u₁+1)) [category C] {D : Type (u₂+1)} [category D] {E : Type (u₃+1)} [category E] (H : Functor D E) :
-  Functor (Functor C D) (Functor C E) :=
-(whiskering_on_right C D E) H
+definition whisker_on_right_functor (C : Type (u₁+1)) [category C] {D : Type (u₂+1)} [category D] {E : Type (u₃+1)} [category E] (H : D ↝ E) :
+  (C ↝ D) ↝ (C ↝ E) :=
+(whiskering_on_right C D E) +> H
 
 end
 end categories.functor_categories

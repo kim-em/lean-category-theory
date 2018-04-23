@@ -61,36 +61,30 @@ variable [category C]
 
 class Representable (F : C ↝ (Type u₁)) := 
   (c : C)
-  (Φ : F ⇔ ((CoYoneda C) c))
+  (Φ : F ⇔ ((CoYoneda C) +> c))
 
 @[simp] private lemma YonedaLemma_aux_1
    {X Y : C}
    (f : X ⟶ Y)
    {F G : (Cᵒᵖ) ↝ (Type u₁)}
    (τ : F ⟹ G)
-   (Z : F Y) :
+   (Z : F +> Y) :
      (G &> f) ((τ.components Y) Z) = (τ.components X) ((F &> f) Z) := eq.symm (congr_fun (τ.naturality f) Z)
 
-theorem YonedaLemma (C : Type (u₁+1)) [category C] : (YonedaPairing C) ⇔ (YonedaEvaluation C) := {
-  morphism := {
-    components := λ F x, ulift.up ((x.components F.2) (𝟙 F.2)),
-  },
-  inverse := {
-    components := λ F x, { 
-      components := λ X a, (F.1 &> a) x.down, 
-    },
-  },
-}.
+local attribute [tidy] dsimp_all'
 
-theorem YonedaFull (C : Type (u₁+1)) [category C] : Full (Yoneda C) := {
-    preimage := λ X Y f, (f.components X) (𝟙 X),
-    witness := λ X Y f, begin tidy, have p := congr_fun (f.naturality x) (𝟙 X), tidy, end -- PROJECT a pure rewriting proof?
-}
+theorem YonedaLemma (C : Type (u₁+1)) [category C] : (YonedaPairing C) ⇔ (YonedaEvaluation C) := 
+{ morphism := { components := λ F x, ulift.up ((x.components F.2) (𝟙 F.2)) },
+  inverse  := { components := λ F x, { components := λ X a, (F.1 &> a) x.down } } }.
+
+theorem YonedaFull (C : Type (u₁+1)) [category C] : Full (Yoneda C) := 
+{ preimage := λ X Y f, (f.components X) (𝟙 X),
+  witness := λ X Y f, begin tidy, have p := congr_fun (f.naturality x) (𝟙 X), tidy, end } -- PROJECT a pure rewriting proof?
 
 theorem YonedaFaithful (C : Type (u₁+1)) [category C] : Faithful (Yoneda C) := {
     injectivity := λ X Y f g w, begin 
                                   -- PROJECT automation
-                                  dsimp_all', 
+                                  dsimp_all',
                                   have p := congr_arg NaturalTransformation.components w, 
                                   have p' := congr_fun p X, 
                                   have p'' := congr_fun p' (𝟙 X),

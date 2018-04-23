@@ -25,19 +25,16 @@ variable [category C]
 variable {F : Functor J C}
 
 definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F := 
-{
-  cone_point    := cone.1.1,
-  cone_maps     := λ j : J, (cone.2).components j
-}
+{ cone_point    := cone.1.1,
+  cone_maps     := λ j : J, (cone.2).components j }
 
 definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
-{
-  cone_morphism := f.left,
+{ cone_morphism := f.left,
   commutativity := λ j : J, begin
                               let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f.condition,
-                              tidy
-                            end
-}
+                              tidy,
+                              sorry -- FIXME
+                            end }
 
 definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F := 
 ⟨ (cone.cone_point, by obviously), {
@@ -45,30 +42,29 @@ definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F :=
     naturality := λ _ _ f, begin
                             its eq.symm (cone.commutativity f),
                             tidy,
+                            sorry -- FIXME
                           end
  } ⟩
 
 definition ConeMorphism_to_comma_ConeMorphism {X Y : Cone F} (f : ConeMorphism X Y) : (Cone_to_comma_Cone X) ⟶ (Cone_to_comma_Cone Y) := 
-  { left := f.cone_morphism, right := by obviously }
+{ left := f.cone_morphism, right := by obviously }
 
-definition comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (Cone F) := {
-    onObjects     := comma_Cone_to_Cone,
-    onMorphisms   := λ X Y f, comma_ConeMorphism_to_ConeMorphism f,
- }
+definition comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (Cone F) := 
+{ onObjects     := comma_Cone_to_Cone,
+  onMorphisms   := λ X Y f, comma_ConeMorphism_to_ConeMorphism f }
 
-definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) := {
-    onObjects     := Cone_to_comma_Cone,
-    onMorphisms   := λ X Y f, ConeMorphism_to_comma_ConeMorphism f
- }
+definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) := 
+{ onObjects     := Cone_to_comma_Cone,
+  onMorphisms   := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
 
 local attribute [applicable] category.identity
 
+-- FIXME
 -- TODO really slow: need to automatically abstract (propositional?) subgoals
-definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := {
-  functor := comma_Cones_to_Cones F,
-  inverse := Cones_to_comma_Cones F,
-  isomorphism_1 := by obviously,
-  isomorphism_2 := by obviously
-}
+-- definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 
+-- { functor := comma_Cones_to_Cones F,
+--   inverse := Cones_to_comma_Cones F,
+--   isomorphism_1 := by obviously,
+--   isomorphism_2 := by obviously }
 
 end categories.universal
