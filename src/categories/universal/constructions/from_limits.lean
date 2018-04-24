@@ -47,6 +47,8 @@ do l ← local_context,
 end
 
 local attribute [tidy] induction_WalkingParallelPair
+
+-- TODO Avoid these.
 local attribute [reducible] ParallelPair_functor
 local attribute [reducible] ParallelPair_functor._match_1
 local attribute [reducible] ParallelPair_functor._match_2
