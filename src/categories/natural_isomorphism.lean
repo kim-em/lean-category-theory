@@ -115,9 +115,8 @@ instance NaturalIsomorphism.morphisms.components.is_Isomorphism {F G : C ↝ D} 
 instance NaturalIsomorphism.inverse.components.is_Isomorphism   {F G : C ↝ D} (α : F ⇔ G) (X : C) : is_Isomorphism (α.inverse.components X) := 
 { inverse := α.morphism.components X }
 
-@[reducible] definition NaturalIsomorphism.reverse {F G : C ↝ D} (α : F ⇔ G) : G ⇔ F := {
-    morphism := α.inverse,
-    inverse := α.morphism
-}
+@[reducible] definition NaturalIsomorphism.reverse {F G : C ↝ D} (α : F ⇔ G) : G ⇔ F := 
+{ morphism := α.inverse,
+  inverse := α.morphism }
 
 end categories.natural_transformation

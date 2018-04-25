@@ -5,7 +5,6 @@
 import categories.natural_transformation
 import categories.opposites
 import categories.types
-import tidy.its
 
 open categories
 open categories.functor

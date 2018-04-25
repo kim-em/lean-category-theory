@@ -4,7 +4,6 @@
 
 import categories.universal.complete
 import categories.walking
-import tidy.its
 
 open categories
 open categories.functor

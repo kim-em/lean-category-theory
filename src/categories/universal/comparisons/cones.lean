@@ -6,8 +6,6 @@ import categories.equivalence
 import categories.universal.comma_categories
 import categories.universal
 
-import tidy.its
-
 open categories
 open categories.functor
 open categories.natural_transformation
@@ -50,7 +48,7 @@ definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F :=
 ⟨ (cone.cone_point, by obviously), {
     components := λ j, cone.cone_maps j,
     naturality := λ _ _ f, begin
-                            its eq.symm (cone.commutativity f),
+                            convert eq.symm (cone.commutativity f),
                             tidy,
                           end
  } ⟩

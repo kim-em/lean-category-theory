@@ -13,22 +13,20 @@ definition Group : Type (u₁+1) := Σ α : Type u₁, group α
 
 instance group_from_Group (G : Group) : group G.1 := G.2
 
-meta def is_group_hom_obviously := `[unfold is_group_hom, obviously]
-
 structure GroupHomomorphism (G H : Group.{u₁}) : Type u₁ :=
   (map: G.1 → H.1)
-  (is_group_hom : is_group_hom map . is_group_hom_obviously)
+  (is_group_hom : is_group_hom map . obviously)
 
 local attribute [class] is_group_hom
 instance is_group_hom_from_GroupHomomorphism (G H : Group.{u₁}) (f : GroupHomomorphism G H) : is_group_hom f.map := f.is_group_hom
 
-@[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom
+@[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom.mul
 
-definition GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G := ⟨ id ⟩
+definition GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G :=
+{ map := id }
 
-definition GroupHomomorphism.composition {G H K : Group} (f: GroupHomomorphism G H) (g: GroupHomomorphism H K) : GroupHomomorphism G K := {
-  map := λ x, g.map (f.map x),
-}
+definition GroupHomomorphism.composition {G H K : Group} (f: GroupHomomorphism G H) (g: GroupHomomorphism H K) : GroupHomomorphism G K :=
+{ map := λ x, g.map (f.map x) }
 
 @[applicable] lemma GroupHomomorphism_pointwise_equality {G H : Group} (f g : GroupHomomorphism G H) (w : ∀ x : G.1, f.map x = g.map x) : f = g :=
 begin
@@ -37,10 +35,9 @@ begin
     tidy,
 end
 
-instance CategoryOfGroups : category Group := {
-    Hom := GroupHomomorphism,
-    identity := GroupHomomorphism.identity,
-    compose  := @GroupHomomorphism.composition
-}
+instance CategoryOfGroups : category Group := 
+{ Hom := GroupHomomorphism,
+  identity := GroupHomomorphism.identity,
+  compose  := @GroupHomomorphism.composition }
 
 end categories.examples.groups
