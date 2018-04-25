@@ -101,15 +101,19 @@ instance (F : C ↝ D) : is_NaturalIsomorphism (1 : F ⟹ F) := {
     inverse := 1
 }
 
-instance NaturalIsomorphism.morphism.is_NaturalIsomorphism {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.morphism) := by sorry
-instance NaturalIsomorphism.inverse.is_NaturalIsomorphism  {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.inverse) := by sorry
+instance NaturalIsomorphism.morphism.is_NaturalIsomorphism {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.morphism) := 
+{ inverse := α.inverse }
+instance NaturalIsomorphism.inverse.is_NaturalIsomorphism  {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.inverse) := 
+{ inverse := α.morphism }
 
 @[reducible] definition NaturalIsomorphism.components {F G : C ↝ D} (α : F ⇔ G) (X : C) : (F +> X) ≅ (G +> X) := 
 { morphism := α.morphism.components X,
-  inverse := α.inverse.components X }
+  inverse  := α.inverse.components X }
 
-instance NaturalIsomorphism.morphisms.components.is_Isomorphism {F G : C ↝ D} (α : F ⇔ G) (X : C) : is_Isomorphism (α.morphism.components X) := by sorry
-instance NaturalIsomorphism.inverse.components.is_Isomorphism   {F G : C ↝ D} (α : F ⇔ G) (X : C) : is_Isomorphism (α.inverse.components X) := by sorry
+instance NaturalIsomorphism.morphisms.components.is_Isomorphism {F G : C ↝ D} (α : F ⇔ G) (X : C) : is_Isomorphism (α.morphism.components X) := 
+{ inverse := α.inverse.components X }
+instance NaturalIsomorphism.inverse.components.is_Isomorphism   {F G : C ↝ D} (α : F ⇔ G) (X : C) : is_Isomorphism (α.inverse.components X) := 
+{ inverse := α.morphism.components X }
 
 @[reducible] definition NaturalIsomorphism.reverse {F G : C ↝ D} (α : F ⇔ G) : G ⇔ F := {
     morphism := α.inverse,
