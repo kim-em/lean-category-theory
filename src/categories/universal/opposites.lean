@@ -70,17 +70,20 @@ variable {C : Type (u₂+1)}
 variable [category C]
 
 
--- Question: what is the name for the tactic that does intro until failure. Something like repeat intro
-def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) :=
-  ⟨ ⟨λ cone,⟨cone.cone_point, cone.cone_maps, begin intro,intro,intro,exact (cone.commutativity f) end⟩  -- should just be a dependent function, but can't figure out syntax
-    , begin intro,intro,intro, all_goals {sorry} end
-    , sorry
-    , sorry
-    ⟩         -- functor Cone (OppositeFunctor F) → Cocone F
-  , sorry
-  , sorry
-  , sorry
-  ⟩
+def Cones_in_Opposite_functor (F : Functor J C) : (Cone (OppositeFunctor F)) ↝ (Cocone F) := 
+{ onObjects   := λ cone, ⟨cone.cone_point, cone.cone_maps, by obviously⟩,
+  onMorphisms := sorry, }
+
+-- def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) :=
+--   ⟨ ⟨λ cone,⟨cone.cone_point, cone.cone_maps, begin obviously, intro,intro,intro,exact (cone.commutativity f) end⟩  -- should just be a dependent function, but can't figure out syntax
+--     , begin intros, all_goals {sorry} end
+--     , sorry
+--     , sorry
+--     ⟩         -- functor Cone (OppositeFunctor F) → Cocone F
+--   , sorry
+--   , sorry
+--   , sorry
+--   ⟩
 
 def Cocones_in_Opposite (F : Functor J C) : Equivalence (Cocone (OppositeFunctor F)) (Cone F) := sorry
 end
