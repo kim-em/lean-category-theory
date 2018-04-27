@@ -69,14 +69,13 @@ variable [category J]
 variable {C : Type (u₂+1)}
 variable [category C]
 
+def Cones_in_Opposite_functor (F : J ↝ C) : (Cone (OppositeFunctor F))ᵒᵖ ↝ (Cocone F)  := 
+{ onObjects   := λ c, ⟨c.cone_point, c.cone_maps, begin tidy, erw c.commutativity_lemma, end⟩, -- PROJECT (Scott) why can't rewrite_search handle this one?
+  onMorphisms := λ X Y f, ⟨f.cone_morphism, begin tidy, erw f.commutativity_lemma, end⟩ }
 
-def Cones_in_Opposite_functor (F : Functor J C) : (Cone (OppositeFunctor F)) ↝ (Cocone F) := 
-{ onObjects   := λ cone, ⟨cone.cone_point, cone.cone_maps, begin tidy, erw cone.commutativity_lemma, end⟩, -- PROJECT (Scott) why can't rewrite_search handle this one?
-  onMorphisms := sorry, }
+-- def Cones_in_Opposite   (F : J ↝ C) : Equivalence ((Cone (OppositeFunctor F))ᵒᵖ) (Cocone F) := sorry
 
--- def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) := sorry
-
-def Cocones_in_Opposite (F : Functor J C) : Equivalence (Cocone (OppositeFunctor F)) (Cone F) := sorry
+def Cocones_in_Opposite (F : J ↝ C) : Equivalence ((Cocone (OppositeFunctor F))ᵒᵖ) (Cone F) := sorry
 end
 
 section
