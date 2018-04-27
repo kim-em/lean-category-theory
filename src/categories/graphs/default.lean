@@ -61,6 +61,8 @@ definition concatenate_paths : Π {x y z : G}, path x y → path y z → path x 
 | ._ ._ _ (path.nil _)               q := q
 | ._ ._ _ (@path.cons ._ _ _ _ _ e p') q := path.cons e (concatenate_paths p' q)
 
+@[simp] lemma concatenate_paths' {x' x y z : G} (e : edges x' x) (p : path x y) (q : path y z) : concatenate_paths (e :: p) q = e :: (concatenate_paths p q) := by refl
+
 definition concatenate_path_of_paths : Π {x y : G}, path_of_paths x y → path x y
 | ._ ._ (path_of_paths.nil X) := path.nil X
 | ._ ._ (@path_of_paths.cons ._ _ _ _ _ e p') := concatenate_paths e (concatenate_path_of_paths p')

@@ -13,7 +13,7 @@ namespace categories.graphs
 
 universes u₁ u₂
 
-@[reducible] def Path (C : Type (u₁+1)) : Type (u₁+2) := ulift.{u₁+2} C
+def Path (C : Type (u₁+1)) : Type (u₁+2) := ulift.{u₁+2} C
 
 @[reducible] instance PathCategory (C : Type (u₁+1)) [graph C] : category (Path C) :=
 {
@@ -45,7 +45,7 @@ definition path_to_morphism
 | ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
 | ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) ≫ (path_to_morphism p)
  
-@[simp] lemma path_to_morphism.comp   (H : graph_homomorphism G C) {X Y Z : G} (f : path X Y) (g : path Y Z): path_to_morphism H (graphs.concatenate_paths f g) = path_to_morphism H f ≫ path_to_morphism H g :=
+@[simp] lemma path_to_morphism.comp (H : graph_homomorphism G C) {X Y Z : G} (f : path X Y) (g : path Y Z): path_to_morphism H (graphs.concatenate_paths f g) = path_to_morphism H f ≫ path_to_morphism H g :=
 begin
   induction f,
   obviously,

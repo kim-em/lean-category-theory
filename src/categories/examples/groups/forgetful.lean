@@ -42,8 +42,8 @@ end
 -- TODO fix inconsistent naming of monoid.pow and gpow in mathlib
 local attribute [class] is_group_hom
 
-instance exponentiation_is_hom (G : Group) (g : G.1) : is_group_hom (λ (n : ℤ), gpow g n) := λ a b, begin intros, funext, dsimp, /- rewrite gpow_add, -/ sorry end
-instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : ulift ℤ), gpow g (n.down)) := λ a b, begin intros, funext, cases a, cases b, dsimp, sorry end
+instance exponentiation_is_hom (G : Group) (g : G.1) : is_group_hom (λ (n : ℤ), gpow g n) := begin tidy, sorry end
+instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : ulift ℤ), gpow g (n.down)) := begin tidy, sorry end
 @[simp] lemma hom_exponentiation (G : Group) (f : ulift ℤ → G.1) [is_group_hom f] (n : ℤ) : gpow (f (ulift.up int.one)) n = f (ulift.up n) := sorry
 
 @[simp] lemma monoid_pow_one {G} [group G] (x : G) : monoid.pow x 1 = x := begin sorry, end
@@ -52,12 +52,13 @@ instance Groups_ForgetfulFunctor_Representable : @Representable.{u₁} Group _ (
   c := ⟨ ulift ℤ, by apply_instance ⟩,
   Φ := {
     morphism := {
-      components := λ G g, ⟨λ n, gpow g n.down, begin tidy, apply_instance end⟩,
+      components := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
       naturality := sorry
    },
     inverse := {
       components := λ G f, f.map (ulift.up (1 : ℤ)),
    },
+   witness_1 := sorry,
    witness_2 := sorry,
  }
 }

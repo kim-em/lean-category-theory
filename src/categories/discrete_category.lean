@@ -26,6 +26,22 @@ instance OneCategory : category punit := (by apply_instance : category (discrete
 
 definition EmptyFunctor (C : Type (u₂+1)) [category C] : pempty ↝ C := by obviously
 
+-- TODO find a home for these in mathlib. https://leanprover.zulipchat.com/#narrow/stream/113488-general/subject/transport.20through.20trivial.20bundles/near/125769004
+@[simp] lemma plift.rec.constant {α : Sort u₁} {β : Sort u₂} (b : β) : @plift.rec α (λ _, β) (λ _, b) = λ _, b :=
+begin 
+  apply funext,
+  intros,
+  cases x,
+  refl,
+end
+@[simp] lemma ulift.rec.constant {α : Type u₁} {β : Sort u₂} (b : β) : @ulift.rec α (λ _, β) (λ _, b) = λ _, b :=
+begin 
+  apply funext,
+  intros,
+  cases x,
+  refl,
+end
+
 definition Functor.fromFunction {C : Type (u₂+1)} [category C] {I : Type (u₁+1)} (F : I → C) : (discrete I) ↝ C := {
   onObjects     := F,
   onMorphisms   := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end,
