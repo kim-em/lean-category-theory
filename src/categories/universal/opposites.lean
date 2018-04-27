@@ -71,19 +71,10 @@ variable [category C]
 
 
 def Cones_in_Opposite_functor (F : Functor J C) : (Cone (OppositeFunctor F)) ↝ (Cocone F) := 
-{ onObjects   := λ cone, ⟨cone.cone_point, cone.cone_maps, by obviously⟩,
+{ onObjects   := λ cone, ⟨cone.cone_point, cone.cone_maps, begin tidy, erw cone.commutativity_lemma, end⟩, -- PROJECT (Scott) why can't rewrite_search handle this one?
   onMorphisms := sorry, }
 
--- def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) :=
---   ⟨ ⟨λ cone,⟨cone.cone_point, cone.cone_maps, begin obviously, intro,intro,intro,exact (cone.commutativity f) end⟩  -- should just be a dependent function, but can't figure out syntax
---     , begin intros, all_goals {sorry} end
---     , sorry
---     , sorry
---     ⟩         -- functor Cone (OppositeFunctor F) → Cocone F
---   , sorry
---   , sorry
---   , sorry
---   ⟩
+-- def Cones_in_Opposite   (F : Functor J C) : Equivalence (Cone (OppositeFunctor F)) (Cocone F) := sorry
 
 def Cocones_in_Opposite (F : Functor J C) : Equivalence (Cocone (OppositeFunctor F)) (Cone F) := sorry
 end
