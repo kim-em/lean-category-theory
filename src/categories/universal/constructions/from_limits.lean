@@ -63,12 +63,16 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                        erw commutativity Two._1,
                      end,
     map           := begin
-                       -- PROJECT this is really ugly! Those inductions should work better...
-                       tidy,
-                       exact k ≫ f,
-                       tidy,
-                       cases f_1, 
-                       obviously,
+                        -- PROJECT this is really ugly! Those inductions should work better...
+                         tidy {trace_result:=tt}, -- FIXME (need to fix terminal_goal)
+                        ---
+                        ---
+
+                       recover,
+                      --  exact k ≫ f,
+                      --  tidy,
+                      --  cases f_1, 
+                      --  obviously,
                      end,
     factorisation := by obviously,
     uniqueness    := begin
