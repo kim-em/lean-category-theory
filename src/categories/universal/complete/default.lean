@@ -19,27 +19,27 @@ open categories.types
 namespace categories.universal
 
 universes u₁ u₂ 
-variable {C : Type (u₁+2)}
+variable {C : Type (u₁+1)}
 variable [category C]
 
-class Complete (C : Type (u₁+2)) [category C] := 
-  (limitCone : Π {J : Type (u₁+1)} [category J] (F : Functor J C), LimitCone F)
+class Complete (C : Type (u₁+1)) [category C] := 
+  (limitCone : Π {J : Type u₁} [category (small J)] (F : Functor (small J) C), LimitCone F)
 
-variable {J : Type (u₁+1)}
-variable [category J]
+variable {J : Type u₁}
+variable [category (small J)]
 
-definition limitCone [Complete C] (F : Functor J C) := Complete.limitCone F
-definition limit     [Complete C] (F : Functor J C) := (Complete.limitCone F).terminal_object.cone_point
+definition limitCone [Complete C] (F : Functor (small J) C) := Complete.limitCone F
+definition limit     [Complete C] (F : Functor (small J) C) := (Complete.limitCone F).terminal_object.cone_point
 
-class Cocomplete (C : Type (u₁+2)) [category C] := 
-  (colimitCocone : Π {J : Type (u₁+1)} [category J] (F : Functor J C), ColimitCocone F)
+class Cocomplete (C : Type (u₁+1)) [category C] := 
+  (colimitCocone : Π {J : Type u₁} [category (small J)] (F : Functor (small J) C), ColimitCocone F)
 
-definition colimitCocone [Cocomplete C] (F : Functor J C) := Cocomplete.colimitCocone F
-definition colimit       [Cocomplete C] (F : Functor J C) := (Cocomplete.colimitCocone F).initial_object.cocone_point
+definition colimitCocone [Cocomplete C] (F : Functor (small J) C) := Cocomplete.colimitCocone F
+definition colimit       [Cocomplete C] (F : Functor (small J) C) := (Cocomplete.colimitCocone F).initial_object.cocone_point
 
 open categories.universal.lemmas.limit_functoriality
 
-definition functorial_Limit [Complete C] : Functor (Functor J C) C := {
+definition functorial_Limit [Complete C] : Functor (Functor (small J) C) C := {
   onObjects     := λ F, (limitCone F).terminal_object.cone_point,
   onMorphisms   := λ F G τ, let lim_F := (limitCone F) in
                             let lim_G := (limitCone G) in
@@ -51,7 +51,7 @@ definition functorial_Limit [Complete C] : Functor (Functor J C) C := {
 
 open categories.opposites
 
-definition functorial_Colimit [Cocomplete C] : Functor (Functor J C) C := {
+definition functorial_Colimit [Cocomplete C] : Functor (Functor (small J) C) C := {
   onObjects     := λ F, (colimitCocone F).initial_object.cocone_point,
   onMorphisms   := λ F G τ, let colim_F := (colimitCocone F) in
                             let colim_G := (colimitCocone G) in
