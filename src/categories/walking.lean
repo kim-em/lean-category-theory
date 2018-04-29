@@ -2,6 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
+import categories.small_category
 import categories.functor
 import categories.util.finite
 import data.fintype
@@ -32,11 +33,10 @@ end
 attribute [tidy] induction_WalkingPair
 
 
-
 instance decidable_eq_WalkingPair : decidable_eq WalkingPair := by dsimp [decidable_eq, decidable_rel]; obviously
 instance fintype_WalkingPair : fintype WalkingPair := {
   elems := [_1, _2].to_finset,
-  complete := by tidy,
+  complete := sorry  -- FIXME dsimp and unfold_coes loops.
 }
 
 open tactic
@@ -101,6 +101,8 @@ inductive WalkingParallelPair : Type u₁
 
 open WalkingParallelPair
 
+
+
 section
 open tactic
 private meta def induction_WalkingParallelPair : tactic unit :=
@@ -113,6 +115,12 @@ end
 
 local attribute [tidy] case_bash
 
+instance : small.{u₁} WalkingParallelPair :=
+{ model := ulift bool,
+  smallness := { to_fun := λ X, match X with | _1 := ulift.up tt | _2 := ulift.up ff end,
+                 inv_fun := λ X, if X.down then _1 else _2,
+                 left_inv := begin unfold function.left_inverse, tidy, end,
+                 right_inv := begin unfold function.right_inverse, unfold function.left_inverse, tidy, end } }
 
 instance : category WalkingParallelPair := {
   Hom := λ X Y, match X, Y with
@@ -133,9 +141,7 @@ instance : category WalkingParallelPair := {
 variable {C : Type (u₁+1)}
 variable [category C]
 
-
-
-definition ParallelPair_functor {α β : C} (f g : α ⟶ β) : Functor WalkingParallelPair C := {
+definition ParallelPair_functor {α β : C} (f g : α ⟶ β) : WalkingParallelPair ↝ C := {
   onObjects     := λ X, match X with
                    | _1 := α
                    | _2 := β

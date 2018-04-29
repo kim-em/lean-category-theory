@@ -96,7 +96,7 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
 }
 
 instance Products_from_Limits [Complete C] : has_Products C := {
-    product := λ {I : Type (u₁+1)} (F : I → C), 
+    product := λ {I : Type u₁} (F : I → C), 
                  let lim_F := limitCone (Functor.fromFunction F) in
                   {
                     product       := lim_F.terminal_object.cone_point,
