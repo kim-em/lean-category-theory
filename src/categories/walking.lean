@@ -2,7 +2,6 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import categories.small_category
 import categories.functor
 import categories.util.finite
 import data.fintype
@@ -55,13 +54,13 @@ attribute [reducible] WalkingPair.hom._main
 
 instance (X Y : WalkingPair) : decidable_eq (WalkingPair.hom X Y) := by dsimp [decidable_eq, decidable_rel]; obviously
 
-instance WalkingPair_category : category WalkingPair := {
+instance WalkingPair_category : small_category WalkingPair := {
   Hom := WalkingPair.hom,
   identity       := by tidy,
   compose        := by tidy
 }
 
-local attribute [applicable] category.identity
+local attribute [applicable] uv_category.identity
 
 variable {C : Type (u₁+1)}
 variable [category C]
@@ -115,14 +114,7 @@ end
 
 local attribute [tidy] case_bash
 
-instance : small.{u₁} WalkingParallelPair :=
-{ model := ulift bool,
-  smallness := { to_fun := λ X, match X with | _1 := ulift.up tt | _2 := ulift.up ff end,
-                 inv_fun := λ X, if X.down then _1 else _2,
-                 left_inv := begin unfold function.left_inverse, tidy, end,
-                 right_inv := begin unfold function.right_inverse, unfold function.left_inverse, tidy, end } }
-
-instance : category WalkingParallelPair := {
+instance : small_category WalkingParallelPair := {
   Hom := λ X Y, match X, Y with
          | _1, _1 := punit
          | _2, _2 := punit

@@ -10,14 +10,12 @@ namespace categories
 
 universes u₁ u₂ w wc wd
 
-local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 variable {C : Type (u₁+1)}
 variable [category C]
 variable {D : Type (u₂+1)}
 variable [category D]
-
-
 
 instance SigmaCategory (Z : C → Type u₁) : category (Σ X : C, Z X) := {
   Hom := λ X Y, X.1 ⟶ Y.1,

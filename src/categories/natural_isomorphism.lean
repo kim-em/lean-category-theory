@@ -16,7 +16,7 @@ universes u₁ u₂ v₁ v₂
 
 variable {C : Type (u₁+1)}
 variable [category C]
-variable {D : Type (u₂+1)}
+variable {D : Type (u₁+1)}
 variable [category D]
 
 definition NaturalIsomorphism (F G : C ↝ D) := F ≅ G
