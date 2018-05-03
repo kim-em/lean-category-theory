@@ -11,21 +11,27 @@ open categories.natural_transformation
 
 namespace categories.products
 
-universes u₁ u₂ 
+universes u₁ v₁ u₂ v₂ 
 
-local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-variable (C : Type (u₁+1))
-variable [category C]
-variable (D : Type (u₂+1))
-variable [category D]
+variable (C : Type u₁)
+variable [uv_category.{u₁ v₁} C]
+variable (D : Type u₂)
+variable [uv_category.{u₂ v₂} D]
 
-definition SwitchProductCategory : (C × D) ↝ (D × C) :=
-{
-  onObjects     := λ X, (X.2, X.1),
-  onMorphisms   := λ _ _ f, (f.2, f.1)
-}
+definition SwitchProductCategory (C : Type (u₁+1))
+ [category C]
+ (D : Type (u₂+1))
+ [category D] : (C × D) ↝ (D × C) :=
+{ onObjects     := λ X, (X.2, X.1),
+  onMorphisms   := λ _ _ f, (f.2, f.1) }
 
-definition SwitchSymmetry : ((SwitchProductCategory C D) ⋙ (SwitchProductCategory D C)) ⇔ 1 := by obviously
+
+#print IdentityFunctor
+definition SwitchSymmetry  (C : Type (u₁+1))
+ [category C]
+ (D : Type (u₂+1))
+ [category D] : (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) ⇔ sorry := by obviously
         
 end categories.products
