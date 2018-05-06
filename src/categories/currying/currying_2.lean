@@ -15,11 +15,13 @@ universes u₁ u₂ u₃
 
 variables (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E]
 
-local attribute [applicable] category.identity -- this is usually a bad idea, but just what we needed here
-local attribute [tidy] dsimp_all'
+local attribute [applicable] uv_category.identity -- this is usually a bad idea, but just what we needed here
+local attribute [tidy] dsimp_all' -- TODO get rid of this
 
 definition Curry_Uncurry_to_identity
-    : ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) ⟹ 1 := by obviously
+    : 
+    let CDE : Type ((max u₁ u₂ u₃)+1) := (C ↝ (D ↝ E)) in
+    ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) ⟹ (IdentityFunctor CDE) := by obviously
 
 definition identity_to_Curry_Uncurry
     : 1 ⟹ ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) := by obviously 
