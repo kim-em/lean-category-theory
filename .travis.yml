@@ -1,8 +1,6 @@
 install:
-  - LEAN_VERSION="lean-3.4.1"
-  - NIGHTLY="nightly-2018-05-01"
-  - curl https://github.com/leanprover/lean-nightly/releases/download/$NIGHTLY/$LEAN_VERSION-$NIGHTLY-linux.tar.gz -L | tar xz -C ..
-  - export PATH=../$LEAN_VERSION-$NIGHTLY-linux/bin:$PATH
+  - curl https://raw.githubusercontent.com/Kha/elan/master/elan-init.sh -sSf | sh -s -- --default-toolchain none -y
+  - source ~/.elan/env
 
 script:
   - leanpkg test
