@@ -22,7 +22,7 @@ variable [category D]
 variable {E : Type (u₄+1)}
 variable [category E]
 
-local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 definition FunctorComposition_left_unitor (F : C ↝ D) : (1 ⋙ F) ⇔ F := by obviously
 
