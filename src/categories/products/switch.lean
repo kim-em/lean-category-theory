@@ -20,18 +20,10 @@ variable [uv_category.{u₁ v₁} C]
 variable (D : Type u₂)
 variable [uv_category.{u₂ v₂} D]
 
-definition SwitchProductCategory (C : Type (u₁+1))
- [category C]
- (D : Type (u₂+1))
- [category D] : (C × D) ↝ (D × C) :=
+definition SwitchProductCategory (C : Type u₁) [uv_category.{u₁ v₁} C] (D : Type u₂) [uv_category.{u₂ v₂} D] : (C × D) ↝ (D × C) :=
 { onObjects     := λ X, (X.2, X.1),
   onMorphisms   := λ _ _ f, (f.2, f.1) }
 
-
-#print IdentityFunctor
-definition SwitchSymmetry  (C : Type (u₁+1))
- [category C]
- (D : Type (u₂+1))
- [category D] : (FunctorComposition (SwitchProductCategory C D) (SwitchProductCategory D C)) ⇔ sorry := by obviously
+definition SwitchSymmetry (C : Type u₁) [uv_category.{u₁ v₁} C] (D : Type u₂) [uv_category.{u₂ v₂} D] : ((SwitchProductCategory C D) ⋙ (SwitchProductCategory D C)) ⇔ (IdentityFunctor (C × D)) := by obviously
         
 end categories.products
