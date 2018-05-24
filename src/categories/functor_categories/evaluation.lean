@@ -11,12 +11,12 @@ open categories.natural_transformation
 
 namespace categories.functor_categories
 
-universes u₁ u₂
+universes u v
 
-variable (C : Type (u₁+1))
-variable [category C]
-variable (D : Type (u₂+1))
-variable [category D]
+variable (C : Type u)
+variable [small_category C]
+variable (D : Type u)
+variable [small_category D]
 
 definition Evaluation : ((C ↝ D) × C) ↝ D := {
   onObjects     := λ p, p.1 +> p.2,

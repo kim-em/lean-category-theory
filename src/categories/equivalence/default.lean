@@ -13,13 +13,13 @@ open categories.functor_categories
 
 namespace categories.equivalence
 
-universes u₁ u₂
+universes u₁ v₁ u₂ v₂
 
-structure Equivalence (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] :=
+structure Equivalence (C : Type u₁) [uv_category.{u₁ v₁} C] (D : Type u₂) [uv_category.{u₂ v₂} D] :=
   (functor : C ↝ D)
   (inverse : D ↝ C)
-  (isomorphism_1 : (functor ⋙ inverse) ⇔ 1)
-  (isomorphism_2 : (inverse ⋙ functor) ⇔ 1)
+  (isomorphism_1 : (functor ⋙ inverse) ⇔ (IdentityFunctor C))
+  (isomorphism_2 : (inverse ⋙ functor) ⇔ (IdentityFunctor D))
 
 variable {C : Type (u₁+1)}
 variable [category C]
