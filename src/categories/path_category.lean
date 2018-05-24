@@ -13,12 +13,12 @@ namespace categories.graphs
 
 universes u₁ u₂
 
-def Path (C : Type (u₁+1)) : Type (u₁+2) := ulift.{u₁+2} C
+def Path (C : Type u₁) := C
 
-@[reducible] instance PathCategory (C : Type (u₁+1)) [graph C] : category (Path C) :=
+@[reducible] instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
 {
-  Hom            := λ x y : Path C, path x.down y.down,
-  identity       := λ x, path.nil x.down,
+  Hom            := λ x y : C, path x y,
+  identity       := λ x, path.nil x,
   compose        := λ _ _ _ f g, concatenate_paths f g,
   right_identity := begin
                       tidy,
@@ -34,10 +34,10 @@ def Path (C : Type (u₁+1)) : Type (u₁+2) := ulift.{u₁+2} C
 
 open categories.functor
 
-variable {G : Type (u₁+1)}
+variable {G : Type u₁}
 variable [graph G]
-variable {C : Type (u₂+1)}
-variable [category C]
+variable {C : Type u₂}
+variable [small_category C]
 
 definition path_to_morphism
   (H : graph_homomorphism G C)
@@ -52,8 +52,8 @@ begin
 end
 
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
-definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) (ulift.{u₁+2} C) :=
-{ onObjects     := λ X, ulift.up (H.onVertices X.down),
-  onMorphisms   := λ _ _ f, ulift.up (path_to_morphism H f), }
+definition Functor.from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) C :=
+{ onObjects     := λ X, (H.onVertices X),
+  onMorphisms   := λ _ _ f, (path_to_morphism H f) }
 
 end categories.graphs

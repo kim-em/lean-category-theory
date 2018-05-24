@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison
 
 import categories.currying.currying_2
+import categories.equivalence
 
 open categories
 open categories.isomorphism
@@ -12,9 +13,11 @@ open categories.functor_categories
 
 namespace categories.natural_transformation
 
-universes u₁ u₂ u₃
+universes u₁ u₂ v₂ 
 
-variables (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E]
+variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : uv_category.{u₂ v₂} E]
+include ℰ
+
 local attribute [tidy] dsimp_all'
 
 theorem Currying_for_functors :

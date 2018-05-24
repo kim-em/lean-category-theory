@@ -35,7 +35,7 @@ attribute [tidy] induction_WalkingPair
 instance decidable_eq_WalkingPair : decidable_eq WalkingPair := by dsimp [decidable_eq, decidable_rel]; obviously
 instance fintype_WalkingPair : fintype WalkingPair := {
   elems := [_1, _2].to_finset,
-  complete := sorry  -- FIXME dsimp and unfold_coes loops.
+  complete := by obviously
 }
 
 open tactic

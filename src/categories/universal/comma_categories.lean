@@ -19,7 +19,7 @@ namespace categories.comma
 universes j u₁ u₂ u₃
 
 -- The diagonal functor sends X to the constant functor that sends everything to X.
-definition DiagonalFunctor (J : Type (j+1)) [category J] (C : Type (u₁+1)) [category C] : C ↝ (J ↝ C) :=
+definition DiagonalFunctor (J : Type j) [small_category J] (C : Type (u₁+1)) [category C] : C ↝ (J ↝ C) :=
 {
   onObjects     := λ X : C, {
     onObjects     := λ _, X,
@@ -33,14 +33,14 @@ definition DiagonalFunctor (J : Type (j+1)) [category J] (C : Type (u₁+1)) [ca
 section
 local attribute [ematch] subtype.property
 
-variable {A : Type (u₁+1)}
-variable [category A]
-variable {B : Type (u₂+1)}
-variable [category B]
-variable {C : Type (u₃+2)}
+variable {A : Type u₁}
+variable [small_category A]
+variable {B : Type u₂}
+variable [small_category B]
+variable {C : Type (u₃+1)}
 variable [category C]
 
-definition comma (S : A ↝ C) (T : B ↝ C) : Type ((max u₁ u₂ u₃)+1) := Σ p : A × B, (S +> p.1) ⟶ (T +> p.2)
+definition comma (S : A ↝ C) (T : B ↝ C) : Type (max u₁ u₂ u₃) := Σ p : A × B, (S +> p.1) ⟶ (T +> p.2)
 
 structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (max u₁ u₂ u₃) :=
 (left : p.1.1 ⟶ q.1.1)
@@ -59,8 +59,7 @@ attribute [ematch] comma_morphism.condition_lemma
     tidy,
   end
 
-
-instance CommaCategory (S : A ↝ C) (T : B ↝ C) : category (comma S T) := {
+instance CommaCategory (S : A ↝ C) (T : B ↝ C) : small_category (comma S T) := {
   Hom      := λ p q, comma_morphism p q,
   identity := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, by obviously ⟩,
   compose  := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, by obviously ⟩
@@ -99,13 +98,13 @@ end
 --   A = C
 --   B = .
 --   C = FunctorCategory J C
-variable {J : Type (j+1)}
-variable [category J]
-variable {C : Type (u₁+2)}
+variable {J : Type j}
+variable [small_category J]
+variable {C : Type (u₁+1)}
 variable [category C]
 
-definition Cone   (F : Functor J C) := (comma (DiagonalFunctor.{j (u₁+1)} J C) (ObjectAsFunctor F))
-definition Cocone (F : Functor J C) := (comma (ObjectAsFunctor F)              (DiagonalFunctor.{j (u₁+1)} J C))
+definition Cone   (F : Functor J C) := (comma (DiagonalFunctor.{j u₁} J C) (ObjectAsFunctor F))
+definition Cocone (F : Functor J C) := (comma (ObjectAsFunctor F)          (DiagonalFunctor.{j u₁} J C))
 
 @[simp] lemma Cone_comma_unit   (F : Functor J C) (X : Cone F) : X.1.2 = punit.star := by obviously 
 @[simp] lemma Cocone_comma_unit (F : Functor J C) (X : Cocone F) : X.1.1 = punit.star := by obviously 

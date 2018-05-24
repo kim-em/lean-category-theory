@@ -10,13 +10,13 @@ namespace categories
 open categories.graphs
 
 universe u
-variable {C : Type (u+1)}
+variable {C : Type u}
 
-instance category.graph [𝓒 : category C] : graph C := {
-  edges := 𝓒.Hom
+instance category.graph [𝒞 : small_category C] : graph C := {
+  edges := 𝒞.Hom
 }
 
-variable [category C]
+variable [small_category C]
 
 inductive morphism_path : C → C → Type (u+1)
 | nil  : Π (h : C), morphism_path h h

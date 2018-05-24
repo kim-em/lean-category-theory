@@ -10,8 +10,8 @@ open categories.isomorphism
 universes u v
 
 variable {C : Type u}
-variable [C_cat : uv_category.{u v} C]
-include C_cat
+variable [𝒞 : uv_category.{u v} C]
+include 𝒞
 
 def End (X : C) := X ⟶ X
 def Aut (X : C) := X ≅ X

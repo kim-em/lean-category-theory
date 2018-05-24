@@ -14,10 +14,11 @@ namespace categories.natural_transformation
 
 universes u₁ u₂ v₁ v₂
 
-variable {C : Type (u₁+1)}
-variable [category C]
-variable {D : Type (v₁+1)}
-variable [category D]
+variable {C : Type u₁}
+variable [𝒞 : uv_category.{u₁ v₁} C]
+variable {D : Type u₂}
+variable [𝒟 : uv_category.{u₂ v₂} D]
+include 𝒞 𝒟
 
 definition NaturalIsomorphism (F G : C ↝ D) := Isomorphism F G
 
@@ -100,8 +101,8 @@ attribute [class] is_NaturalIsomorphism
    : (w.inverse.components X) ≫ (α.components X) = 𝟙 (G +> X)
    := by obviously
 
-instance (F : C ↝ D) : is_NaturalIsomorphism (1 : F ⟹ F) := {
-    inverse := 1
+instance (F : C ↝ D) : is_NaturalIsomorphism (𝟙 F) := {
+    inverse := 𝟙 F
 }
 
 instance NaturalIsomorphism.morphism.is_NaturalIsomorphism {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.morphism) := 
