@@ -16,14 +16,15 @@ universes u₁ v₁ u₂ v₂
 local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 variable (C : Type u₁)
-variable [uv_category.{u₁ v₁} C]
-variable (D : Type u₂)
-variable [uv_category.{u₂ v₂} D]
+variable [𝒞 : uv_category.{u₁ v₁} C]
+variable (D : Type u₁)
+variable [𝒟 : uv_category.{u₁ v₁} D]
+include 𝒞 𝒟
 
-definition SwitchProductCategory (C : Type u₁) [uv_category.{u₁ v₁} C] (D : Type u₂) [uv_category.{u₂ v₂} D] : (C × D) ↝ (D × C) :=
+definition SwitchProductCategory : (C × D) ↝ (D × C) :=
 { onObjects     := λ X, (X.2, X.1),
   onMorphisms   := λ _ _ f, (f.2, f.1) }
 
-definition SwitchSymmetry (C : Type u₁) [uv_category.{u₁ v₁} C] (D : Type u₂) [uv_category.{u₂ v₂} D] : ((SwitchProductCategory C D) ⋙ (SwitchProductCategory D C)) ⇔ (IdentityFunctor (C × D)) := by obviously
+definition SwitchSymmetry : ((SwitchProductCategory C D) ⋙ (SwitchProductCategory D C)) ⇔ (IdentityFunctor (C × D)) := by obviously
         
 end categories.products

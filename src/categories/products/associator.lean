@@ -10,24 +10,24 @@ open categories.natural_transformation
 
 namespace categories.products
 
-universes u₁ u₂ u₃
+universes u₁
 variable (C : Type (u₁+1))
 variable [category C]
-variable (D : Type (u₂+1))
+variable (D : Type (u₁+1))
 variable [category D]
-variable (E : Type (u₃+1))
+variable (E : Type (u₁+1))
 variable [category E]
 
 -- PROJECT; by aggressively allowing "assumption" we could do this completely automatically
 -- locally tag "assumption" with @[tidy]?
 -- or define an aggressive version of tidy (perhaps "follow_your_nose"?)
-definition ProductCategoryAssociator : Functor ((C × D) × E) (C × (D × E)) :=
+definition ProductCategoryAssociator : ((C × D) × E) ↝ (C × (D × E)) :=
 {
   onObjects     := λ X, (X.1.1, (X.1.2, X.2)),
   onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2))
 }
 
-definition ProductCategoryInverseAssociator : Functor (C × (D × E)) ((C × D) × E) :=
+definition ProductCategoryInverseAssociator : (C × (D × E)) ↝ ((C × D) × E) :=
 {
   onObjects     := λ X, ((X.1, X.2.1), X.2.2),
   onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2)

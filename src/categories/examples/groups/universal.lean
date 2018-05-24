@@ -23,16 +23,14 @@ begin
   tidy,
 end
 
-local attribute [class] is_group_hom -- TODO mathlib this?
-
-private meta def unfold_is_group_hom := `[unfold is_group_hom]
-local attribute [tidy] unfold_is_group_hom
+-- private meta def unfold_is_group_hom := `[unfold is_group_hom]
+-- local attribute [tidy] unfold_is_group_hom
 
 instance maps_to_punit_hom {Z : Type u} [group Z] (f : Z → punit) : is_group_hom f := by obviously
 
 instance Groups_has_TerminalObject : has_TerminalObject Group := {
   terminal_object := {
-    terminal_object := ⟨ punit, by apply_instance ⟩,
+    terminal_object := ⟨ punit, by obviously ⟩,
     morphism_to_terminal_object_from := by obviously
  }
 }

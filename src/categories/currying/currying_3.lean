@@ -15,8 +15,8 @@ namespace categories.natural_transformation
 
 universes u₁ u₂ v₂ 
 
-variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [E_cat : uv_category.{u₂ v₂} E]
-include E_cat
+variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : uv_category.{u₂ v₂} E]
+include ℰ
 
 local attribute [tidy] dsimp_all'
 

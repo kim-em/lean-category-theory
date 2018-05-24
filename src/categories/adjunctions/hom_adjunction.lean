@@ -21,10 +21,10 @@ namespace categories.adjunctions
 universes u v
 
 variable {C : Type u}
-variable [C_cat : uv_category.{u v} C]
+variable [𝒞 : uv_category.{u v} C]
 variable {D : Type u}
-variable [D_cat : uv_category.{u v} D]
-include C_cat D_cat
+variable [𝒟 : uv_category.{u v} D]
+include 𝒞 𝒟
 
 definition HomAdjunction (L : C ↝ D) (R : D ↝ C) :=
     ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D))

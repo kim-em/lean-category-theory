@@ -12,12 +12,12 @@ namespace categories.products
 
 universes u₁ v₁ u₂ v₂
 variable {C : Type u₁}
-variable [C_cat : uv_category.{u₁ v₁} C]
+variable [𝒞 : uv_category.{u₁ v₁} C]
 variable {D : Type u₁}
-variable [D_cat : uv_category.{u₁ v₁} D]
+variable [𝒟 : uv_category.{u₁ v₁} D]
 variable {E : Type u₂}
-variable [E_cat : uv_category.{u₂ v₂} E]
-include C_cat D_cat E_cat
+variable [ℰ : uv_category.{u₂ v₂} E]
+include 𝒞 𝒟 ℰ
 
 @[simp] lemma Bifunctor_identities (F : (C × D) ↝ E) (X : C) (Y : D)
   : @Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F +> (X, Y))

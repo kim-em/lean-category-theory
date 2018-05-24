@@ -15,10 +15,10 @@ namespace categories.natural_transformation
 universes u₁ u₂ v₁ v₂
 
 variable {C : Type u₁}
-variable [C_cat : uv_category.{u₁ v₁} C]
+variable [𝒞 : uv_category.{u₁ v₁} C]
 variable {D : Type u₂}
-variable [D_cat : uv_category.{u₂ v₂} D]
-include C_cat D_cat
+variable [𝒟 : uv_category.{u₂ v₂} D]
+include 𝒞 𝒟
 
 definition NaturalIsomorphism (F G : C ↝ D) := Isomorphism F G
 

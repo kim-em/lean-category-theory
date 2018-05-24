@@ -21,10 +21,8 @@ structure Equivalence (C : Type u₁) [uv_category.{u₁ v₁} C] (D : Type u₂
   (isomorphism_1 : (functor ⋙ inverse) ⇔ (IdentityFunctor C))
   (isomorphism_2 : (inverse ⋙ functor) ⇔ (IdentityFunctor D))
 
-variable {C : Type (u₁+1)}
-variable [category C]
-variable {D : Type (u₂+1)}
-variable [category D]
+variables {C : Type u₁} [𝒞 : uv_category.{u₁ v₁} C] {D : Type u₂} [𝒟 : uv_category.{u₂ v₂} D]
+include 𝒞 𝒟
 
 @[reducible] definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C := {
   functor := e.inverse,
@@ -53,7 +51,7 @@ attribute [semiapplicable] Full.preimage
 make_lemma Full.witness
 attribute [simp,ematch] Full.witness_lemma
 
-definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F +> X ⟶ F +> Y) : X ⟶ Y := Full.preimage f
+definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F +> X ⟶ F +> Y) : X ⟶ Y := @Full.preimage C 𝒞 D 𝒟 F _ _ _ f  --- FIXME why can't I just write `Full.preimage f` here?
 @[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F +> X ⟶ F +> Y) : F &> preimage F f = f := begin unfold preimage, obviously end
 
 class Faithful (F : C ↝ D) :=
@@ -79,8 +77,8 @@ attribute [class] EssentiallySurjective
 
 class is_Equivalence (F : Functor C D) := 
   (inverse       : Functor D C)
-  (isomorphism_1 : (F ⋙ inverse) ⇔ 1)
-  (isomorphism_2 : (inverse ⋙ F) ⇔ 1)
+  (isomorphism_1 : (F ⋙ inverse) ⇔ (IdentityFunctor C))
+  (isomorphism_2 : (inverse ⋙ F) ⇔ (IdentityFunctor D))
 
 instance (e : Equivalence C D) : is_Equivalence e.functor := {
   inverse       := e.inverse,
