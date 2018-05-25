@@ -13,7 +13,7 @@ namespace categories.graphs
 
 universes u₁ u₂
 
-def Path (C : Type u₁) := C
+def Path (C : Type u₁) := C 
 
 @[reducible] instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
 {
@@ -22,7 +22,7 @@ def Path (C : Type u₁) := C
   compose        := λ _ _ _ f g, concatenate_paths f g,
   right_identity := begin
                       tidy,
-                      induction f,
+                      induction f, -- PROJECT think about how to automate an inductive step. When can you be sure it's a good idea?
                       obviously,                      
                     end,
   associativity  := begin
