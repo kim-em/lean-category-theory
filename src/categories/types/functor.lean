@@ -10,28 +10,21 @@ open categories.types
 
 universes u v
 
-@[simp] private lemma functor_identities (F : Functor (Type u) (Type v)) (α : Type u) (x : F +> α) : (F &> id) x = x := by obviously
-
 instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F.onObjects := 
 { map := λ _ _ f, F &> f }
 
 local attribute [tidy] dsimp'
 
+-- TODO yuck, automate
 instance lawful_functor_of_Functor (F : Functor (Type u) (Type v)) : is_lawful_functor (F.onObjects) := 
-begin
-fsplit,
-apply_auto_param,
-intros,
-dsimp',
-simp,
-intros,
-dsimp,
-dsimp {unfold_reducible:=tt},
-dsimp',
-simp,
--- tidy {max_steps:=1,trace_result:=tt},
-sorry,
-end
+{ id_map := by obviously,
+  comp_map := begin
+                intros, 
+                dsimp', 
+                calc (F &> λ (x : α), h (g x)) x = (F &> (g ≫ h)) x      : by obviously
+                                             ... = (F &> h) ((F &> g) x) : by obviously
+              end
+}
 
 attribute [ematch] is_lawful_functor.comp_map
 
