@@ -3,20 +3,20 @@
 -- Authors: Scott Morrison
 
 import categories.natural_transformation
-import categories.equivalence
+import categories.isomorphism
 import categories.products.bifunctors
 
 open categories
 open categories.isomorphism
 open categories.functor
-open categories.equivalence
 open categories.functor_categories
 
 namespace categories.natural_transformation
 
-universes u₁ u₂ u₃
+universes u₁ u₂ v₂ 
 
-variables (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E]
+variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : uv_category.{u₂ v₂} E]
+include ℰ
 
 definition uncurry_functor_objects (F : C ↝ (D ↝ E)) : (C × D) ↝ E := 
 { onObjects     := λ X, (F +> X.1) +> X.2,

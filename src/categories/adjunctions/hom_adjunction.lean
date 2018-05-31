@@ -18,12 +18,13 @@ open categories.opposites
 
 namespace categories.adjunctions
 
-universes u
+universes u v
 
-variable {C : Type (u+1)}
-variable [category C]
-variable {D : Type (u+1)}
-variable [category D]
+variable {C : Type u}
+variable [𝒞 : uv_category.{u v} C]
+variable {D : Type u}
+variable [𝒟 : uv_category.{u v} D]
+include 𝒞 𝒟
 
 definition HomAdjunction (L : C ↝ D) (R : D ↝ C) :=
     ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D))

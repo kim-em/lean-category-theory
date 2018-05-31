@@ -7,10 +7,11 @@ import categories.isomorphism
 open categories
 open categories.isomorphism
 
-universe u
+universes u v
 
-variable {C : Type (u+1)}
-variable [category C]
+variable {C : Type u}
+variable [𝒞 : uv_category.{u v} C]
+include 𝒞
 
 def End (X : C) := X ⟶ X
 def Aut (X : C) := X ≅ X
@@ -28,9 +29,9 @@ end
 instance {X : C} : group (Aut X) :=
 begin
   refine {
-     one := Isomorphism.id X,
-     inv := Isomorphism.reverse,
-     mul := Isomorphism.comp,
+     one := Isomorphism.refl X,
+     inv := Isomorphism.symm,
+     mul := Isomorphism.trans,
      ..
   },
   obviously,

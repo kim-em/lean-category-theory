@@ -17,7 +17,21 @@ instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F.onObject
 
 local attribute [tidy] dsimp'
 
-instance lawful_functor_of_Functor (F : Functor (Type u) (Type v)) : is_lawful_functor (F.onObjects) := by obviously
+instance lawful_functor_of_Functor (F : Functor (Type u) (Type v)) : is_lawful_functor (F.onObjects) := 
+begin
+fsplit,
+apply_auto_param,
+intros,
+dsimp',
+simp,
+intros,
+dsimp,
+dsimp {unfold_reducible:=tt},
+dsimp',
+simp,
+-- tidy {max_steps:=1,trace_result:=tt},
+sorry,
+end
 
 attribute [ematch] is_lawful_functor.comp_map
 

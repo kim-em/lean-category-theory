@@ -10,13 +10,14 @@ open categories.natural_transformation
 
 namespace categories.products
 
-universes u₁ u₂ u₃
-variable {C : Type (u₁+1)}
-variable [category C]
-variable {D : Type (u₂+1)}
-variable [category D]
-variable {E : Type (u₃+1)}
-variable [category E]
+universes u₁ v₁ u₂ v₂
+variable {C : Type u₁}
+variable [𝒞 : uv_category.{u₁ v₁} C]
+variable {D : Type u₁}
+variable [𝒟 : uv_category.{u₁ v₁} D]
+variable {E : Type u₂}
+variable [ℰ : uv_category.{u₂ v₂} E]
+include 𝒞 𝒟 ℰ
 
 @[simp] lemma Bifunctor_identities (F : (C × D) ↝ E) (X : C) (Y : D)
   : @Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F +> (X, Y))
