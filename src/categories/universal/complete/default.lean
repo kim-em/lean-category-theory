@@ -23,12 +23,12 @@ variable {C : Type (u₁+1)}
 variable [category C]
 
 class Complete (C : Type (u₁+1)) [category C] := 
-  (limitCone : Π {J : Type (u₁+1)} [small_category J] (F : J ↝ C), LimitCone F)
+  (limitCone : Π {J : Type u₁} [small_category J] (F : J ↝ C), LimitCone F)
 
 class Cocomplete (C : Type (u₁+1)) [category C] := 
-  (colimitCocone : Π {J : Type (u₁+1)} [small_category J] [category J] (F : J ↝ C), ColimitCocone F)
+  (colimitCocone : Π {J : Type u₁} [small_category J] (F : J ↝ C), ColimitCocone F)
 
-variable {J : Type (u₁+1)}
+variable {J : Type u₁}
 variables [small_category J]
 
 definition limitCone [Complete C] (F : J ↝ C) := Complete.limitCone F

@@ -10,18 +10,17 @@ open categories.initial
 
 namespace categories.universal
 
-universes u v
-variable {C : Type ((max u v)+1)}
+universes u
+variable {C : Type (u+1)}
 variable [category C]
-variable {D : Type ((max u v)+1)}
+variable {D : Type (u+1)}
 variable [category D]
 
 structure Continuous (F : C ↝ D) :=
-  (preserves_limits : ∀ {J : Type (u+1)} [category J] (G : Functor J C) (L : LimitCone G), is_terminal ((Cones_functoriality G F) +> L.terminal_object))
+  (preserves_limits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : LimitCone G), is_terminal ((Cones_functoriality G F) +> L.terminal_object))
 
 structure Cocontinuous (F : C ↝ D) :=
-  (preserves_colimits : ∀ {J : Type (u+1)} [category J] (G : Functor J C) (L : ColimitCocone G), is_initial ((Cocones_functoriality G F) +> L.initial_object))
-
+  (preserves_colimits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : ColimitCocone G), is_initial ((Cocones_functoriality G F) +> L.initial_object))
 
 -- PROJECT right adjoints are continuous
 
