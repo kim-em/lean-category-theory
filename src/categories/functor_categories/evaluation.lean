@@ -13,6 +13,8 @@ namespace categories.functor_categories
 
 universes u v
 
+-- TODO work out universes
+
 variable (C : Type u)
 variable [small_category C]
 variable (D : Type u)

@@ -20,7 +20,7 @@ instance universe_lift : category (ulift.{(u₂+1)} C) := {
     compose := λ _ _ _ f g, ulift.up (f.down ≫ g.down) 
 }
 
-local attribute [applicable] category.identity
+local attribute [applicable] uv_category.identity
 
 definition universe_lift.equivalence : Equivalence C (ulift.{(u₂+1)} C) := by obviously
 
