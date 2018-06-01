@@ -22,9 +22,9 @@ instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) := {
 }
 
 instance EmptyCategory : small_category pempty := (by apply_instance : small_category (discrete pempty))
-instance OneCategory : small_category punit := (by apply_instance : small_category (discrete punit))
+instance OneCategory   : small_category punit := (by apply_instance : small_category (discrete punit))
 
-definition EmptyFunctor (C : Type (u₂+1)) [category C] : pempty ↝ C := by obviously
+definition EmptyFunctor (C : Type (u₂+1)) [large_category C] : pempty ↝ C := by obviously
 
 -- TODO find a home for these in mathlib. https://leanprover.zulipchat.com/#narrow/stream/113488-general/subject/transport.20through.20trivial.20bundles/near/125769004
 @[simp] lemma plift.rec.constant {α : Sort u₁} {β : Sort u₂} (b : β) : @plift.rec α (λ _, β) (λ _, b) = λ _, b :=
@@ -42,7 +42,7 @@ begin
   refl,
 end
 
-definition Functor.fromFunction {C : Type (u₂+1)} [category C] {I : Type (u₁+1)} (F : I → C) : (discrete I) ↝ C := {
+definition Functor.fromFunction {C : Type (u₂+1)} [large_category C] {I : Type (u₁+1)} (F : I → C) : (discrete I) ↝ C := {
   onObjects     := F,
   onMorphisms   := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end,
 }

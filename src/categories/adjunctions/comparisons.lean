@@ -18,9 +18,9 @@ namespace categories.adjunctions
 universes u
 
 variable {C : Type (u+1)}
-variable [category C]
+variable [large_category C]
 variable {D : Type (u+1)}
-variable [category D]
+variable [large_category D]
 variables {L : C ↝ D} {R : D ↝ C} 
 
 local attribute [tidy] dsimp_all'

@@ -16,9 +16,9 @@ namespace categories.adjunctions
 universes u₁ u₂
 
 variable {C : Type (u₁+1)}
-variable [category C]
+variable [large_category C]
 variable {D : Type (u₂+1)}
-variable [category D]
+variable [large_category D]
 
 -- TODO think again about whether we should specify the conditions here in terms of natural transformations or components
 structure Adjunction (L : C ↝ D) (R : D ↝ C) :=

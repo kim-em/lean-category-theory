@@ -10,7 +10,7 @@ universes u v
 
 variable {C : Type (u+1)}
 variables {X Y Z : C}
-variable [category C]
+variable [large_category C]
 
 @[simp] def category.cancel_left (f g : X ⟶ Y) : (∀ {Z : C} (h : Y ⟶ Z), f ≫ h = g ≫ h) ↔ f = g :=
 begin

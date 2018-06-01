@@ -30,7 +30,7 @@ begin
   tidy,
 end
 
-instance CategoryOfGraphs : category Graph := {
+instance CategoryOfGraphs : large_category Graph := {
   Hom := GraphHomomorphism,
   identity := λ G, ⟨ {
       onVertices   := id,

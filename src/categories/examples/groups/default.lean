@@ -35,7 +35,7 @@ begin
     tidy,
 end
 
-instance CategoryOfGroups : category Group := 
+instance CategoryOfGroups : large_category Group := 
 { Hom := GroupHomomorphism,
   identity := GroupHomomorphism.identity,
   compose  := @GroupHomomorphism.composition }
