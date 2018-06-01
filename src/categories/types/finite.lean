@@ -13,6 +13,6 @@ universe u
 
 definition DecidableType := Σ X : Type u, decidable_eq X
 
-instance CategoryOfDecidableTypes : category DecidableType := categories.SigmaCategory decidable_eq -- TODO by apply_instance?
+instance CategoryOfDecidableTypes : large_category DecidableType := large_category_of_uv_category (by unfold DecidableType; apply_instance)
 
 end categories.types

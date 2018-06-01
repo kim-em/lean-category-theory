@@ -8,7 +8,7 @@ open categories.functor
 
 namespace categories
 
-universes u₁ v₁ u₂ v₂
+universes u₁ v₁ u₂ v₂ w₁
 
 local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
@@ -16,7 +16,7 @@ variable {C : Type u₁}
 variable [𝒞 : uv_category.{u₁ v₁} C]
 include 𝒞 
 
-instance SigmaCategory (Z : C → Type u₁) : uv_category.{u₁ v₁} (Σ X : C, Z X) := 
+instance SigmaCategory (Z : C → Type w₁) : uv_category.{(max u₁ w₁) v₁} (Σ X : C, Z X) := 
 { Hom := λ X Y, X.1 ⟶ Y.1,
   identity       := by tidy,
   compose        := λ _ _ _ f g, f ≫ g }

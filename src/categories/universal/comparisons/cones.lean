@@ -17,15 +17,15 @@ open categories.comma
 namespace categories.universal
 
 universes u j
-variable {J : Type (j+1)}
-variable [category J]
-variable {C : Type (u+2)}
-variable [category C]
-variable {F : Functor J C}
+variable {J : Type j}
+variable [small_category J]
+variable {C : Type (u+1)}
+variable [large_category C]
+variable {F : J ↝ C}
 
 local attribute [tidy] dsimp_all'
 
-@[simp] lemma comma.Cone.commutativity (F : Functor J C) (X : C) (cone : (DiagonalFunctor J C +> X) ⟶ (ObjectAsFunctor F) +> punit.star) {j k : J} (f : j ⟶ k) : cone.components j ≫ (F &> f) = cone.components k := 
+@[simp] lemma comma.Cone.commutativity (F : J ↝ C) (X : C) (cone : (DiagonalFunctor J C +> X) ⟶ (ObjectAsFunctor F) +> punit.star) {j k : J} (f : j ⟶ k) : cone.components j ≫ (F &> f) = cone.components k := 
 begin
   have p := (cone.naturality f).symm,
   dsimp [ObjectAsFunctor, DiagonalFunctor] at p,

@@ -17,11 +17,11 @@ namespace categories.adjunctions
 universes u₁ u₂ u₃
 
 variable {C : Type (u₁+1)}
-variable [category C]
+variable [large_category C]
 variable {D : Type (u₂+1)}
-variable [category D]
+variable [large_category D]
 variable {E : Type (u₃+1)}
-variable [category E]
+variable [large_category E]
 
 
 -- EXERCISE an adjunction F ⊢ G gives an adjunction F^* ⊢ G^*

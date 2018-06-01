@@ -25,9 +25,9 @@ variable [large_category D]
 -- EXERCISE
 -- cf Leinster 2.2.11
 definition left_fixed_points  {L : C ↝ D} {R : D ↝ C} (A : Adjunction L R)
-  : large_category (Σ X : C, is_Isomorphism (A.unit.components X)) := by apply_instance
+  : large_category (Σ X : C, is_Isomorphism (A.unit.components X)) := large_category_of_uv_category (by apply_instance)
 definition right_fixed_points {L : C ↝ D} {R : D ↝ C} (A : Adjunction L R)
-  : large_category (Σ X : D, is_Isomorphism (A.counit.components X)) := by apply_instance
+  : large_category (Σ X : D, is_Isomorphism (A.counit.components X)) := large_category_of_uv_category (by apply_instance)
 
 -- Now we need to express the idea that functors restrict to a full subcategory with image in another full subcategory,
 -- and that these restrictions give an equivalence.

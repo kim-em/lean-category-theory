@@ -27,12 +27,10 @@ def continuous_map (X Y : Top.{u₁}) : Type u₁ := { f : X.1 → Y.1 // contin
 
 instance {X Y} (f : continuous_map X Y) : continuous f.1 := f.2
 
-instance : category Top :=
-{
-  Hom            := continuous_map,
+instance : large_category Top :=
+{ Hom            := continuous_map,
   identity       := λ X, ⟨ id, continuous_id ⟩,
-  compose        := λ _ _ _ f g, ⟨ g.val ∘ f.val, continuous.comp f.property g.property ⟩ 
-}
+  compose        := λ _ _ _ f g, ⟨ g.val ∘ f.val, continuous.comp f.property g.property ⟩ }
 
 structure OpenSet {α : Type u₁} (X : topological_space α) : Type (u₁+1) := 
  (underlying_set : set α)
@@ -54,7 +52,7 @@ instance OpenSet.has_mem {α : Type u₁} {X : topological_space α} : has_mem �
 local attribute [applicable] set.subset.refl
 local attribute [applicable] topological_space.is_open_inter
 
-instance category_of_open_sets {α : Type u₁} (X : topological_space α) : category (OpenSet X) :=
+instance category_of_open_sets {α : Type u₁} (X : topological_space α) : large_category (OpenSet X) :=
 {
   Hom            := λ U V, ulift (plift (U ⊆ V)),
   identity       := by obviously,
@@ -62,6 +60,6 @@ instance category_of_open_sets {α : Type u₁} (X : topological_space α) : cat
 }
 
 
-definition Neighbourhoods {α} [X : topological_space α] (x : α) : category { U : OpenSet X | x ∈ U } := by apply_instance
+definition Neighbourhoods {α} [X : topological_space α] (x : α) : large_category { U : OpenSet X | x ∈ U } := large_category_of_uv_category (by apply_instance)
 
 end categories.examples.topological_spaces
