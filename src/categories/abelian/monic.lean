@@ -10,7 +10,7 @@ namespace categories
 
 universe u
 variable {C : Type (u+1)}
-variable [category C]
+variable [large_category C]
 variables {X Y Z : C}
 
 structure Monic (f : Y ⟶ Z) :=

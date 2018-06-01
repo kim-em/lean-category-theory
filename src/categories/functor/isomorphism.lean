@@ -9,9 +9,9 @@ namespace categories.functor
 universes u₁ u₂ 
 
 variable {C : Type (u₁+1)}
-variable [category C]
+variable [large_category C]
 variable {D : Type (u₂+1)}
-variable [category D]
+variable [large_category D]
 
 -- Functors preserve isomorphisms
 -- definition Functor.onIsomorphisms (F : C ↝ D) {X Y : C} (g : X ≅ Y) : (F +> X) ≅ (F +> Y) := {

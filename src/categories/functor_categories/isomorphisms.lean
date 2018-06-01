@@ -14,13 +14,13 @@ namespace categories.functor_categories
 universes u₁ u₂ u₃ u₄
 
 variable {B : Type (u₁+1)}
-variable [category B]
+variable [large_category B]
 variable {C : Type (u₂+1)}
-variable [category C]
+variable [large_category C]
 variable {D : Type (u₃+1)}
-variable [category D]
+variable [large_category D]
 variable {E : Type (u₄+1)}
-variable [category E]
+variable [large_category E]
 
 local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 

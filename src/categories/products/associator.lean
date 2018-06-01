@@ -12,26 +12,22 @@ namespace categories.products
 
 universes u₁
 variable (C : Type (u₁+1))
-variable [category C]
+variable [large_category C]
 variable (D : Type (u₁+1))
-variable [category D]
+variable [large_category D]
 variable (E : Type (u₁+1))
-variable [category E]
+variable [large_category E]
 
 -- PROJECT; by aggressively allowing "assumption" we could do this completely automatically
 -- locally tag "assumption" with @[tidy]?
 -- or define an aggressive version of tidy (perhaps "follow_your_nose"?)
 definition ProductCategoryAssociator : ((C × D) × E) ↝ (C × (D × E)) :=
-{
-  onObjects     := λ X, (X.1.1, (X.1.2, X.2)),
-  onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2))
-}
+{ onObjects     := λ X, (X.1.1, (X.1.2, X.2)),
+  onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2)) }
 
 definition ProductCategoryInverseAssociator : (C × (D × E)) ↝ ((C × D) × E) :=
-{
-  onObjects     := λ X, ((X.1, X.2.1), X.2.2),
-  onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2)
-}
+{ onObjects     := λ X, ((X.1, X.2.1), X.2.2),
+  onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2) }
 
 -- TODO prove the equivalence, now
 -- TODO pentagon natural transformation? satisfying?

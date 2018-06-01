@@ -13,7 +13,7 @@ namespace categories.functor_categories
 universes u₁ u₂ u₃
 
 section
-variables (C : Type (u₁+1)) [category C] (D : Type (u₂+1)) [category D] (E : Type (u₃+1)) [category E]
+variables (C : Type (u₁+1)) [large_category C] (D : Type (u₂+1)) [large_category D] (E : Type (u₃+1)) [large_category E]
 
 definition whiskering_on_left : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) := {
   onObjects     := λ F, {
@@ -40,12 +40,12 @@ definition whiskering_on_right : (D ↝ E) ↝ ((C ↝ D) ↝ (C ↝ E)) :=
  }
 }
 
-definition whisker_on_left_functor {C : Type (u₁+1)} [category C] {D : Type (u₂+1)} [category D] (F : C ↝ D) (E : Type (u₃+1)) [category E] : 
+definition whisker_on_left_functor {C : Type (u₁+1)} [large_category C] {D : Type (u₂+1)} [large_category D] (F : C ↝ D) (E : Type (u₃+1)) [large_category E] : 
     (D ↝ E) ↝ (C ↝ E) :=
   (whiskering_on_left C D E) +> F
 
 
-definition whisker_on_right_functor (C : Type (u₁+1)) [category C] {D : Type (u₂+1)} [category D] {E : Type (u₃+1)} [category E] (H : D ↝ E) :
+definition whisker_on_right_functor (C : Type (u₁+1)) [large_category C] {D : Type (u₂+1)} [large_category D] {E : Type (u₃+1)} [large_category E] (H : D ↝ E) :
   (C ↝ D) ↝ (C ↝ E) :=
 (whiskering_on_right C D E) +> H
 

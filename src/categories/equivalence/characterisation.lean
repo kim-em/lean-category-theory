@@ -14,9 +14,9 @@ namespace categories.equivalence
 universes u₁ u₂
 
 variable {C : Type (u₁+1)}
-variable [category C]
+variable [large_category C]
 variable {D : Type (u₂+1)}
-variable [category D]
+variable [large_category D]
 
 
 lemma Equivalences_are_EssentiallySurjective (e : Equivalence C D) : EssentiallySurjective (e.functor) :=
