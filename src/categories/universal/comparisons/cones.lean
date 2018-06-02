@@ -16,11 +16,11 @@ open categories.comma
 
 namespace categories.universal
 
-universes u j
-variable {J : Type j}
-variable [small_category J]
-variable {C : Type (u+1)}
-variable [large_category C]
+universes u v
+variables {J : Type v} [small_category J]
+variables {C : Type u} [𝒞 : uv_category.{u v} C]
+include 𝒞 
+
 variable {F : J ↝ C}
 
 local attribute [tidy] dsimp_all'

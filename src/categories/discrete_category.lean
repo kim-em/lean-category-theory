@@ -7,7 +7,7 @@ import categories.functor
 
 namespace categories
 
-universes u₁ u₂ 
+universes u₁ v₁ u₂ 
 
 open categories.functor
 
@@ -22,7 +22,12 @@ instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) := {
 }
 
 instance EmptyCategory : small_category pempty := (by apply_instance : small_category (discrete pempty))
-instance OneCategory   : small_category punit := (by apply_instance : small_category (discrete punit))
+instance OneCategory  : uv_category.{u₁ v₁} punit :=
+{ Hom      := λ X Y, punit,
+  identity := by obviously,
+  compose  := by obviously }
+
+-- TODO check we can establish `Equivalence punit (discrete punit)` by obviously
 
 definition EmptyFunctor (C : Type (u₂+1)) [large_category C] : pempty ↝ C := by obviously
 
