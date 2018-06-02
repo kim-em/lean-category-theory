@@ -6,4 +6,4 @@ path = "src"
 
 [dependencies]
 lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "1a6fcb5a3e3794319b1d6903702a3955cd545fe6"}
-lean-category-theory-pr = {git = "https://github.com/semorrison/lean-category-theory-pr", rev = "597a660b77e91740fa216f98a6ce8f386c0eb7e6"}
+lean-category-theory-pr = {git = "https://github.com/semorrison/lean-category-theory-pr", rev = "738a539238e7475a2553a07f2026621ae75fe66e"}
