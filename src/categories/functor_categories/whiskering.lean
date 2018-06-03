@@ -35,8 +35,14 @@ definition whisker_on_left_functor {C : Type u₁} [𝒞 : category.{u₁ v₁} 
     (D ↝ E) ↝ (C ↝ E) :=
   (whiskering_on_left C D E) +> F
 
-definition whisker_on_right_functor (C : Type u₁) [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E](H : D ↝ E) :
+definition whisker_on_right_functor (C : Type u₁) [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E] (H : D ↝ E) :
   (C ↝ D) ↝ (C ↝ E) :=
 (whiskering_on_right C D E) +> H
+
+definition whisker_on_left {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E]  (F : C ↝ D){G H : D ↝ E} (α : G ⟹ H) : (F ⋙ G) ⟹ (F ⋙ H) := 
+  (whisker_on_left_functor F E) &> α
+
+definition whisker_on_right {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E] {G H : C ↝ D} (α : G ⟹ H)  (F : D ↝ E) : (G ⋙ F) ⟹ (H ⋙ F) := 
+  (whisker_on_right_functor C F) &> α
 
 end categories.functor_categories
