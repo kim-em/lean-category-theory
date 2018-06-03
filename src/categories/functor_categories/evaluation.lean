@@ -11,14 +11,16 @@ open categories.natural_transformation
 
 namespace categories.functor_categories
 
-universes u v
+universes u₁ v₁ u₂ v₂
 
--- TODO work out universes
+variable (C : Type u₁)
+variable [𝒞 : uv_category.{u₁ v₁} C]
+variable (D : Type u₂)
+variable [𝒟 : uv_category.{u₂ v₂} D]
+include 𝒞 𝒟 
 
-variable (C : Type u)
-variable [small_category C]
-variable (D : Type u)
-variable [small_category D]
+-- TODO remove, unnecessary
+-- instance : uv_category.{(max u₁ v₁ u₂ v₂) (max u₁ v₁ v₂)} (let E := (C ↝ D) × C in E) := products.ProductCategory.{(max u₁ v₁ u₂ v₂) (max u₁ v₂) u₁ v₁} (C ↝ D) C
 
 definition Evaluation : ((C ↝ D) × C) ↝ D := {
   onObjects     := λ p, p.1 +> p.2,

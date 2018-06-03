@@ -17,8 +17,8 @@ local attribute [applicable] uv_category.identity -- This says that whenever the
 
 variable (C : Type u₁)
 variable [𝒞 : uv_category.{u₁ v₁} C]
-variable (D : Type u₁)
-variable [𝒟 : uv_category.{u₁ v₁} D]
+variable (D : Type u₂)
+variable [𝒟 : uv_category.{u₂ v₂} D]
 include 𝒞 𝒟
 
 definition SwitchProductCategory : (C × D) ↝ (D × C) :=
