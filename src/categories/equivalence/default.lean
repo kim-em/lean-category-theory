@@ -18,8 +18,8 @@ universes u₁ v₁ u₂ v₂
 structure Equivalence (C : Type u₁) [category.{u₁ v₁} C] (D : Type u₂) [category.{u₂ v₂} D] :=
   (functor : C ↝ D)
   (inverse : D ↝ C)
-  (isomorphism_1 : (functor ⋙ inverse) ⇔ (IdentityFunctor C))
-  (isomorphism_2 : (inverse ⋙ functor) ⇔ (IdentityFunctor D))
+  (isomorphism_1 : (functor ⋙ inverse) ⇔ (IdentityFunctor C) . obviously)
+  (isomorphism_2 : (inverse ⋙ functor) ⇔ (IdentityFunctor D) . obviously)
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
