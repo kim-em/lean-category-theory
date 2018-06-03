@@ -40,7 +40,8 @@ definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F :=
 definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
 { cone_morphism := f.left,
   commutativity := λ j : J, begin
-                              let q := congr_arg (λ t : NaturalTransformation _ _, t.components j) f.condition,
+                              -- PROJECT improve automation
+                              let q := congr_arg NaturalTransformation.components f.condition,
                               tidy,
                             end }
 
@@ -64,7 +65,7 @@ definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) :=
 { onObjects     := Cone_to_comma_Cone,
   onMorphisms   := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
 
-local attribute [applicable] category.identity
+local attribute [applicable] uv_category.identity
 
 -- TODO really slow: need to automatically abstract (propositional?) subgoals
 definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 
