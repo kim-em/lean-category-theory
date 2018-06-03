@@ -16,7 +16,7 @@ namespace categories.universal
 
 universes u₁
 variable (C : Type (u₁+1))
-variable [category C]
+variable [large_category C]
 
 class StronglyConcrete [Concrete C] :=
   (reflects_isos    : ReflectsIsomorphisms (FibreFunctor C))

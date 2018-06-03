@@ -13,7 +13,7 @@ namespace categories.universal.monic
 
 universe u
 variable {C : Type (u+1)}
-variable [category C]
+variable [large_category C]
 variables {X Y Z : C}
 
 structure RegularMonic (f : X ⟶ Y) :=

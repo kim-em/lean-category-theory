@@ -20,7 +20,7 @@ universe u
 variable {J : Type u}
 variable [small_category J]
 variable {C : Type (u+1)}
-variable [category C]
+variable [large_category C]
 variable {F : J ↝ C}
 variable {L : LimitCone F}
 variable {X : Cone F}

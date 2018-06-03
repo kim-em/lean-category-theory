@@ -19,15 +19,15 @@ open categories.types
 namespace categories.universal
 
 universes u₁ u₂ 
-variable {C : Type (u₁+1)}
-variable [category C]
 
-class Complete (C : Type (u₁+1)) [category C] := 
+class Complete (C : Type (u₁+1)) [large_category C] := 
   (limitCone : Π {J : Type u₁} [small_category J] (F : J ↝ C), LimitCone F)
 
-class Cocomplete (C : Type (u₁+1)) [category C] := 
+class Cocomplete (C : Type (u₁+1)) [large_category C] := 
   (colimitCocone : Π {J : Type u₁} [small_category J] (F : J ↝ C), ColimitCocone F)
 
+variable {C : Type (u₁+1)}
+variable [large_category C]
 variable {J : Type u₁}
 variables [small_category J]
 

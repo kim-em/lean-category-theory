@@ -17,7 +17,7 @@ namespace categories.abelian
 
 universe u
 
-structure KernelImageCokernelDecomposition {C : Type (u+1)} [category C] [ZeroObject C] {X Y : C} (f : X ⟶ Y) :=
+structure KernelImageCokernelDecomposition {C : Type (u+1)} [large_category C] [ZeroObject C] {X Y : C} (f : X ⟶ Y) :=
   (kernel                  : Kernel f  )
   (cokernel                : Cokernel f)
   (cokernel_of_kernel      : Cokernel (kernel.inclusion) )
@@ -25,12 +25,12 @@ structure KernelImageCokernelDecomposition {C : Type (u+1)} [category C] [ZeroOb
   (image_well_defined      : Isomorphism cokernel_of_kernel.coequalizer kernel_of_cokernel.equalizer)
   (composition_is_morphism : cokernel_of_kernel.projection ≫ image_well_defined.morphism ≫ kernel_of_cokernel.inclusion = f)
 
-class Abelian (C : Type (u+1)) [category C] [ZeroObject C] := 
+class Abelian (C : Type (u+1)) [large_category C] [ZeroObject C] := 
   (decomposition : ∀ {X Y : C} (f : X ⟶ Y), KernelImageCokernelDecomposition f)
 
 -- This is the usual definition
 
-class Abelian' (C : Type (u+1)) [category C] [ZeroObject C] :=
+class Abelian' (C : Type (u+1)) [large_category C] [ZeroObject C] :=
   (kernel   : ∀ {X Y : C} (f : X ⟶ Y), Kernel f  )
   (cokernel : ∀ {X Y : C} (f : X ⟶ Y), Cokernel f)
   (monics_are_regular : ∀ {X Y : C} {f : X ⟶ Y} (m : Monic f), RegularMonic f)
