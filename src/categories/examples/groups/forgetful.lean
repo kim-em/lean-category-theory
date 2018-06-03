@@ -48,19 +48,12 @@ instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : ul
 
 @[simp] lemma monoid_pow_one {G} [group G] (x : G) : monoid.pow x 1 = x := begin sorry, end
 
-instance Groups_ForgetfulFunctor_Representable : @Representable.{u₁} Group _ (ForgetfulFunctor_Groups_to_Types.{u₁}) := {
-  c := ⟨ ulift ℤ, by apply_instance ⟩,
-  Φ := {
-    morphism := {
-      components := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
-      naturality := sorry
-   },
-    inverse := {
-      components := λ G f, f.map (ulift.up (1 : ℤ)),
-   },
-   witness_1 := sorry,
-   witness_2 := sorry,
- }
-}
+instance Groups_ForgetfulFunctor_Representable : Representable (ForgetfulFunctor_Groups_to_Types.{u₁}) := 
+{ c := ⟨ ulift ℤ, by apply_instance ⟩,
+  Φ := { morphism := { components := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
+                        naturality := sorry },
+          inverse := { components := λ G f, f.map (ulift.up (1 : ℤ)), },
+          witness_1 := sorry,
+          witness_2 := sorry, } }
 
 end categories.examples.groups
