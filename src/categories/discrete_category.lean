@@ -11,7 +11,7 @@ universes u₁ v₁ u₂
 
 open categories.functor
 
-local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 definition discrete (α : Type u₁) := α
 
@@ -22,7 +22,7 @@ instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) := {
 }
 
 instance EmptyCategory : small_category pempty := (by apply_instance : small_category (discrete pempty))
-instance OneCategory  : uv_category.{u₁ v₁} punit :=
+instance OneCategory  : category.{u₁ v₁} punit :=
 { Hom      := λ X Y, punit,
   identity := by obviously,
   compose  := by obviously }

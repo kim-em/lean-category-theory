@@ -61,7 +61,7 @@ lemma bifunctor_naturality
   = ((F &> g).components X) ≫ ((F +> k) &> f) := by obviously
 
 -- TODO find a better home
-lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@uv_category.compose (C ↝ D) _ _ _ _ α β).components X = (α.components X) ≫ (β.components X) := by obviously 
+lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@category.compose (C ↝ D) _ _ _ _ α β).components X = (α.components X) ≫ (β.components X) := by obviously 
 
 @[simp] lemma cone_in_functor_category 
 (F : J ↝ (C ↝ D))
@@ -116,7 +116,7 @@ end
 (z : ((F +> k) +> X) ⟶ Z)
  : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) ≫ z = (Y.cone_maps k).components X ≫ z := 
 begin
- rw ← uv_category.associativity,
+ rw ← category.associativity,
  simp
 end
 

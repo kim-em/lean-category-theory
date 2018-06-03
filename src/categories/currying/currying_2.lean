@@ -11,10 +11,10 @@ namespace categories.natural_transformation
 
 universes u₁ u₂ v₂ 
 
-variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : uv_category.{u₂ v₂} E]
+variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : category.{u₂ v₂} E]
 include ℰ
 
-local attribute [applicable] uv_category.identity -- this is usually a bad idea, but just what we needed here
+local attribute [applicable] category.identity -- this is usually a bad idea, but just what we needed here
 local attribute [tidy] dsimp_all' -- TODO get rid of this
 
 definition Curry_Uncurry_to_identity : ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) ⟹ (IdentityFunctor (C ↝ (D ↝ E))) := by obviously

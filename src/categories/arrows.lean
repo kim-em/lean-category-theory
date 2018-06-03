@@ -14,7 +14,7 @@ namespace categories.arrows
 
 universes u₁ u₂
 
-local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 -- Is there any point defining these separately (rather than as the functor category from the walking arrow)?
 

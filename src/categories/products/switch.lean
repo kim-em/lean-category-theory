@@ -13,12 +13,12 @@ namespace categories.products
 
 universes u₁ v₁ u₂ v₂ 
 
-local attribute [applicable] uv_category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 variable (C : Type u₁)
-variable [𝒞 : uv_category.{u₁ v₁} C]
+variable [𝒞 : category.{u₁ v₁} C]
 variable (D : Type u₂)
-variable [𝒟 : uv_category.{u₂ v₂} D]
+variable [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
 definition SwitchProductCategory : (C × D) ↝ (D × C) :=

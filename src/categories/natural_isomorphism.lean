@@ -15,9 +15,9 @@ namespace categories.natural_transformation
 universes u₁ u₂ v₁ v₂
 
 variable {C : Type u₁}
-variable [𝒞 : uv_category.{u₁ v₁} C]
+variable [𝒞 : category.{u₁ v₁} C]
 variable {D : Type u₂}
-variable [𝒟 : uv_category.{u₂ v₂} D]
+variable [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
 definition NaturalIsomorphism (F G : C ↝ D) := Isomorphism F G
@@ -84,7 +84,7 @@ attribute [reducible] NaturalIsomorphism
 
 open NaturalTransformation
 
-definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) (functor_categories.FunctorCategory_uv C D) F G α
+definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) (functor_categories.FunctorCategory C D) F G α
 attribute [class] is_NaturalIsomorphism
 
 -- TODO [is_NaturalIsomorphism α]

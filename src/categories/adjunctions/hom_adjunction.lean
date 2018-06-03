@@ -21,9 +21,9 @@ namespace categories.adjunctions
 universes u v
 
 variable {C : Type u}
-variable [𝒞 : uv_category.{u v} C]
+variable [𝒞 : category.{u v} C]
 variable {D : Type u}
-variable [𝒟 : uv_category.{u v} D]
+variable [𝒟 : category.{u v} D]
 include 𝒞 𝒟
 
 definition HomAdjunction (L : C ↝ D) (R : D ↝ C) :=

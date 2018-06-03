@@ -18,7 +18,7 @@ namespace categories.universal
 
 universes u v
 variables {J : Type v} [small_category J]
-variables {C : Type u} [𝒞 : uv_category.{u v} C]
+variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞 
 
 local attribute [tidy] dsimp_all'
@@ -65,7 +65,7 @@ definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) :=
 { onObjects     := Cone_to_comma_Cone,
   onMorphisms   := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
 
-local attribute [applicable] uv_category.identity
+local attribute [applicable] category.identity
 
 -- TODO really slow: need to automatically abstract (propositional?) subgoals
 definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 

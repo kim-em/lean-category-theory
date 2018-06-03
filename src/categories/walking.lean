@@ -60,10 +60,10 @@ instance WalkingPair_category : small_category WalkingPair :=
   identity       := by tidy,
   compose        := by tidy }
 
-local attribute [applicable] uv_category.identity
+local attribute [applicable] category.identity
 
 variable {C : Type u₁}
-variable [𝒞 : uv_category.{u₁ v₁} C]
+variable [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
 @[reducible] def Pair_functor.onObjects (α β : C) : WalkingPair → C
@@ -129,7 +129,7 @@ instance : small_category WalkingParallelPair :=
                     end }
 
 variable {C : Type u₁}
-variable [uv_category.{u₁ v₁} C]
+variable [category.{u₁ v₁} C]
 
 definition ParallelPair_functor {α β : C} (f g : α ⟶ β) : WalkingParallelPair.{v₁} ↝ C := 
 { onObjects     := λ X, match X with

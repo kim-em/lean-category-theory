@@ -15,13 +15,13 @@ namespace categories.equivalence
 
 universes u₁ v₁ u₂ v₂
 
-structure Equivalence (C : Type u₁) [uv_category.{u₁ v₁} C] (D : Type u₂) [uv_category.{u₂ v₂} D] :=
+structure Equivalence (C : Type u₁) [category.{u₁ v₁} C] (D : Type u₂) [category.{u₂ v₂} D] :=
   (functor : C ↝ D)
   (inverse : D ↝ C)
   (isomorphism_1 : (functor ⋙ inverse) ⇔ (IdentityFunctor C))
   (isomorphism_2 : (inverse ⋙ functor) ⇔ (IdentityFunctor D))
 
-variables {C : Type u₁} [𝒞 : uv_category.{u₁ v₁} C] {D : Type u₂} [𝒟 : uv_category.{u₂ v₂} D]
+variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
 @[reducible] definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C := {

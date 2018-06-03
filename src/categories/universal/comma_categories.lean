@@ -19,14 +19,14 @@ namespace categories.comma
 universes j u₁ v₁ u₂ v₂ u₃ v₃
 
 -- The diagonal functor sends X to the constant functor that sends everything to X.
-definition DiagonalFunctor (J : Type u₁) [uv_category.{u₁ v₁} J] (C : Type u₂) [uv_category.{u₂ v₂} C] : C ↝ (J ↝ C) :=
+definition DiagonalFunctor (J : Type u₁) [category.{u₁ v₁} J] (C : Type u₂) [category.{u₂ v₂} C] : C ↝ (J ↝ C) :=
 { onObjects     := λ X : C, 
     { onObjects     := λ _, X,
       onMorphisms   := λ _ _ _, 𝟙 X },
   onMorphisms   := λ X Y f, 
     { components := λ _, f } }
 
-definition ObjectAsFunctor {C : Type u₃} [uv_category.{u₃ v₃} C] (X : C) : Functor.{u₃ v₃ u₃ v₃} punit C := 
+definition ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : Functor.{u₃ v₃ u₃ v₃} punit C := 
 { onObjects     := λ _, X,
   onMorphisms   := λ _ _ _, 𝟙 X }
 
@@ -34,11 +34,11 @@ section
 local attribute [ematch] subtype.property
 
 variable {A : Type u₁}
-variable [𝒜 : uv_category.{u₁ v₁} A]
+variable [𝒜 : category.{u₁ v₁} A]
 variable {B : Type u₂}
-variable [ℬ : uv_category.{u₂ v₂} B]
+variable [ℬ : category.{u₂ v₂} B]
 variable {C : Type u₃}
-variable [𝒞 : uv_category.{u₃ v₃} C]
+variable [𝒞 : category.{u₃ v₃} C]
 include 𝒜 ℬ 𝒞
 
 definition comma (S : A ↝ C) (T : B ↝ C) : Type (max u₁ u₂ v₃) := Σ p : A × B, (S +> p.1) ⟶ (T +> p.2)
@@ -60,7 +60,7 @@ attribute [ematch] comma_morphism.condition_lemma
     tidy,
   end
 
-instance CommaCategory (S : A ↝ C) (T : B ↝ C) : uv_category.{(max u₁ u₂ v₃) (max v₁ v₂)} (comma S T) :=
+instance CommaCategory (S : A ↝ C) (T : B ↝ C) : category.{(max u₁ u₂ v₃) (max v₁ v₂)} (comma S T) :=
 { Hom      := λ p q, comma_morphism p q,
   identity := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, by obviously ⟩,
   compose  := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, by obviously ⟩ }
@@ -80,8 +80,8 @@ definition CommaCategory_projection_transformation (S : A ↝ C) (T : B ↝ C) :
 { components := λ X, X.2 }
 
 -- Notice that if C is large, these are large, and if C is small, these are small.
-definition SliceCategory   (X : C) : uv_category.{(max u₃ v₃) v₃} (comma (IdentityFunctor C) (ObjectAsFunctor X)) := by apply_instance
-definition CosliceCategory (X : C) : uv_category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (IdentityFunctor C)) := by apply_instance
+definition SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (IdentityFunctor C) (ObjectAsFunctor X)) := by apply_instance
+definition CosliceCategory (X : C) : category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (IdentityFunctor C)) := by apply_instance
 end
 
 -- In Cones, we have
@@ -91,7 +91,7 @@ end
 variable {J : Type v₁}
 variable [small_category J]
 variable {C : Type u₁}
-variable [𝒞 : uv_category.{u₁ v₁} C]
+variable [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
 definition Cone   (F : J ↝ C) := (comma (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C) (ObjectAsFunctor F))
@@ -100,8 +100,8 @@ definition Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                   
 @[simp] lemma Cone_comma_unit   (F : J ↝ C) (X : Cone F)   : X.1.2 = punit.star := by obviously 
 @[simp] lemma Cocone_comma_unit (F : J ↝ C) (X : Cocone F) : X.1.1 = punit.star := by obviously 
 
-instance Cones   (F : J ↝ C) : uv_category (Cone F)   := begin unfold Cone, apply_instance end
-instance Cocones (F : J ↝ C) : uv_category (Cocone F) := begin unfold Cocone, apply_instance end
+instance Cones   (F : J ↝ C) : category (Cone F)   := begin unfold Cone, apply_instance end
+instance Cocones (F : J ↝ C) : category (Cocone F) := begin unfold Cocone, apply_instance end
 
 definition Limit   (F: J ↝ C) := TerminalObject (Cone   F)
 definition Colimit (F: J ↝ C) := InitialObject  (Cocone F)
