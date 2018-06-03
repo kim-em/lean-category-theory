@@ -12,15 +12,17 @@ namespace categories.universal
 
 universes u
 variable {C : Type (u+1)}
-variable [category C]
+variable [large_category C]
 variable {D : Type (u+1)}
-variable [category D]
+variable [large_category D]
+
+-- TODO it would be nice to get rid of these explicit universe levels
 
 structure Continuous (F : C ↝ D) :=
-  (preserves_limits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : LimitCone G), is_terminal ((Cones_functoriality G F) +> L.terminal_object))
+  (preserves_limits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : LimitCone G), is_terminal.{u+1 u} ((Cones_functoriality G F) +> L.terminal_object))
 
 structure Cocontinuous (F : C ↝ D) :=
-  (preserves_colimits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : ColimitCocone G), is_initial ((Cocones_functoriality G F) +> L.initial_object))
+  (preserves_colimits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : ColimitCocone G), is_initial.{u+1 u} ((Cocones_functoriality G F) +> L.initial_object))
 
 -- PROJECT right adjoints are continuous
 
