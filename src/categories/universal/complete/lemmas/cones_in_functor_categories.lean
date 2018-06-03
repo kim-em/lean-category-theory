@@ -16,12 +16,12 @@ namespace categories.universal.lemmas.cones_in_functor_categories
 
 universes j u₁ u₂
 
-variable {J : Type (j+1)}
-variable [category J]
-variable {C : Type (u₁+1)}
-variable [category C]
-variable {D : Type (u₂+1)}
-variable [category D]
+variable {J : Type u₁}
+variable [small_category J]
+variable {C : Type u₁}
+variable [small_category C]
+variable {D : Type (u₁+1)}
+variable [large_category D]
 
 @[applicable] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
   {Z : D}
@@ -61,7 +61,7 @@ lemma bifunctor_naturality
   = ((F &> g).components X) ≫ ((F +> k) &> f) := by obviously
 
 -- TODO find a better home
-lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@category.compose (C ↝ D) _ _ _ _ α β).components X = (α.components X) ≫ (β.components X) := by obviously 
+lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@uv_category.compose (C ↝ D) _ _ _ _ α β).components X = (α.components X) ≫ (β.components X) := by obviously 
 
 @[simp] lemma cone_in_functor_category 
 (F : J ↝ (C ↝ D))
@@ -116,7 +116,7 @@ end
 (z : ((F +> k) +> X) ⟶ Z)
  : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) ≫ z = (Y.cone_maps k).components X ≫ z := 
 begin
- rw ← category.associativity,
+ rw ← uv_category.associativity,
  simp
 end
 

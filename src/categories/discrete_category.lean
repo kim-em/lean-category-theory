@@ -47,7 +47,7 @@ begin
   refl,
 end
 
-definition Functor.fromFunction {C : Type (u₂+1)} [large_category C] {I : Type (u₁+1)} (F : I → C) : (discrete I) ↝ C := {
+definition Functor.fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := {
   onObjects     := F,
   onMorphisms   := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end,
 }

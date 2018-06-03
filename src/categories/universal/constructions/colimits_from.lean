@@ -18,10 +18,10 @@ open categories.universal.opposites
 namespace categories.universal
 
 universes u₁
-variable {C : Type (u₁+2)}
-variable [category C]
+variable {C : Type (u₁+1)}
+variable [large_category C]
 
-instance Colimits_from_Coproducts_and_Coequalizers [has_Coproducts C] [has_Coequalizers C] : Cocomplete C := 
+instance Colimits_from_Coproducts_and_Coequalizers [has_Coproducts C] [has_Coequalizers.{u₁+1 u₁} C] : Cocomplete C := 
 @Cocomplete_of_Opposite_Complete C _ (@universal.Limits_from_Products_and_Equalizers (Cᵒᵖ) _ (universal.opposites.Opposite_has_Products_of_has_Coproducts) (universal.opposites.Opposite_has_Equalizers_of_has_Coequalizers))
 
 end categories.universal

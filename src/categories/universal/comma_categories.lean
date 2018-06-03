@@ -88,27 +88,26 @@ end
 --   A = C
 --   B = .
 --   C = FunctorCategory J C
-variable {J : Type j}
+variable {J : Type v₁}
 variable [small_category J]
-variable {C : Type (u₁+1)}
-variable [large_category C]
+variable {C : Type u₁}
+variable [𝒞 : uv_category.{u₁ v₁} C]
+include 𝒞
 
-definition Cone   (F : J ↝ C) := (comma (DiagonalFunctor.{j j (u₁+1) u₁} J C) (ObjectAsFunctor F))
-definition Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                   (DiagonalFunctor.{j j (u₁+1) u₁} J C))
+definition Cone   (F : J ↝ C) := (comma (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C) (ObjectAsFunctor F))
+definition Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                   (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C))
 
 @[simp] lemma Cone_comma_unit   (F : J ↝ C) (X : Cone F)   : X.1.2 = punit.star := by obviously 
 @[simp] lemma Cocone_comma_unit (F : J ↝ C) (X : Cocone F) : X.1.1 = punit.star := by obviously 
 
-instance Cones   (F : J ↝ C) : category (Cone F)   := begin unfold Cone, apply_instance end
-instance Cocones (F : J ↝ C) : category (Cocone F) := begin unfold Cocone, apply_instance end
+instance Cones   (F : J ↝ C) : uv_category (Cone F)   := begin unfold Cone, apply_instance end
+instance Cocones (F : J ↝ C) : uv_category (Cocone F) := begin unfold Cocone, apply_instance end
 
 definition Limit   (F: J ↝ C) := TerminalObject (Cone   F)
 definition Colimit (F: J ↝ C) := InitialObject  (Cocone F)
 
-definition BinaryProduct   (α β : C)                  := Limit   (Pair_functor α β)
+definition BinaryProduct   (α β : C)                  := Limit   (Pair_functor.{u₁ v₁} α β)
 definition BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
-definition Product         {I : Type (u₁+1)} (X : I → C) := Limit   (Functor.fromFunction X)
-definition Coproduct       {I : Type (u₁+1)} (X : I → C) := Colimit (Functor.fromFunction X)
 definition Equalizer       {α β : C} (f g : α ⟶ β)  := Limit   (ParallelPair_functor f g)
 definition Coequalizer     {α β : C} (f g : α ⟶ β)  := Colimit (ParallelPair_functor f g)
 

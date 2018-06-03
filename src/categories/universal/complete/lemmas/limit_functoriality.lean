@@ -71,7 +71,7 @@ end
     : (M.initial_object.cocone_maps j) ≫ (M.morphism_from_initial_object_to Y).cocone_morphism = Y.cocone_maps j :=
   (M.morphism_from_initial_object_to Y).commutativity j
 
-@[applicable] definition morphism_from_initial_object_cocone_point 
+@[applicable,reducible] definition morphism_from_initial_object_cocone_point 
   {Z : C}
   (cocone_maps : Π j : J, (F +> j) ⟶ Z) 
   (commutativity : Π j k : J, Π f : j ⟶ k, (F &> f) ≫ (cocone_maps k) = cocone_maps j)

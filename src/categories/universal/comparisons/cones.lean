@@ -21,8 +21,6 @@ variables {J : Type v} [small_category J]
 variables {C : Type u} [𝒞 : uv_category.{u v} C]
 include 𝒞 
 
-variable {F : J ↝ C}
-
 local attribute [tidy] dsimp_all'
 
 @[simp] lemma comma.Cone.commutativity (F : J ↝ C) (X : C) (cone : (DiagonalFunctor J C +> X) ⟶ (ObjectAsFunctor F) +> punit.star) {j k : J} (f : j ⟶ k) : cone.components j ≫ (F &> f) = cone.components k := 
@@ -32,6 +30,8 @@ begin
   simp at p,
   exact p
 end
+
+variable {F : J ↝ C}
 
 definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F := 
 { cone_point    := cone.1.1,

@@ -4,6 +4,7 @@
 
 import categories.universal.complete
 import categories.walking
+import tidy.its
 
 open categories
 open categories.functor
@@ -18,10 +19,10 @@ namespace categories.universal
 universes u₁ u₂ u₃ u₄
 
 section
-variable {J : Type (u₁+1)}
-variable [category J]
-variable {C : Type (u₂+1)}
-variable [category C]
+variable {J : Type u₁}
+variable [small_category J]
+variable {C : Type (u₁+1)}
+variable [large_category C]
 variables {F : Functor J C} {L : LimitCone F} {Z : C} 
 
 @[reducible] private definition Cone_from_map_to_limit (f : Z ⟶ L.terminal_object.cone_point) : Cone F := {
@@ -33,8 +34,8 @@ variables {F : Functor J C} {L : LimitCone F} {Z : C}
 }
 end
 
-variable {C : Type (u₁+2)}
-variable [category C]
+variable {C : Type (u₁+1)}
+variable [large_category C]
 
 -- PROJECT this construction is unpleasant
 section
@@ -53,7 +54,7 @@ local attribute [reducible] ParallelPair_functor._match_1
 local attribute [reducible] ParallelPair_functor._match_2
 local attribute [reducible] eq.mpr
 
-instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
+instance Equalizers_from_Limits [Complete C] : has_Equalizers.{u₁+1 u₁} C := {
   equalizer := λ X Y f g, let lim := limitCone (ParallelPair_functor f g) in {
     equalizer     := lim.terminal_object.cone_point,
     inclusion     := lim.terminal_object.cone_maps WalkingParallelPair._1,
@@ -64,33 +65,32 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers C := {
                      end,
     map           := begin
                         -- PROJECT this is really ugly! Those inductions should work better...
-                         tidy {trace_result:=tt}, -- FIXME (need to fix terminal_goal)
-                        ---
-                        ---
-
-                       recover,
-                      --  exact k ≫ f,
-                      --  tidy,
-                      --  cases f_1, 
-                      --  obviously,
+                        tidy, 
+                        swap 2, solve_by_elim,
+                        swap, exact k ≫ f,
+                        cases f_1,
+                        tidy,
                      end,
     factorisation := by obviously,
     uniqueness    := begin
                        tidy,
-                       let Z_cone : Cone (ParallelPair_functor f g) := {
-                         cone_point := Z,
-                         cone_maps := λ j : WalkingParallelPair, a ≫ (lim.terminal_object.cone_maps j),
-                      },
+                       let Z_cone : Cone (ParallelPair_functor f g) := 
+                       { cone_point := Z,
+                         cone_maps := λ j : WalkingParallelPair, a ≫ (lim.terminal_object.cone_maps j), },
                        have p := lim.uniqueness_of_morphisms_to_terminal_object Z_cone ⟨ a, _ ⟩ ⟨ b, _ ⟩,
-                       exact congr_arg ConeMorphism.cone_morphism p,
-                       -- finally, take care of those placeholders
-                       tidy,
-                       exact witness.symm, -- TODO why doesn't tidy handle this?
-                       have c := lim.terminal_object.commutativity,
-                       dsimp at c,
-                       rw ← @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,
-                       repeat {rw ← category.associativity},
-                       rw witness, 
+                       have q := congr_arg ConeMorphism.cone_morphism p,
+                       dsimp at q,
+                       its q,
+                       repeat {sorry}
+                      --  sorry, -- FIXME
+                      --  -- finally, take care of those placeholders
+                      --  tidy, 
+                      --  sorry, -- FIXME: -- exact witness.symm, -- TODO why doesn't tidy handle this?
+                      --  have c := lim.terminal_object.commutativity,
+                      --  dsimp at c,
+                      --  rw ← @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,
+                      --  repeat {rw ← category.associativity},
+                      --  rw witness, 
                      end
  }                       
 }
