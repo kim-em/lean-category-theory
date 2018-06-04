@@ -20,7 +20,7 @@ variable [large_category D]
 
 
 lemma Equivalences_are_EssentiallySurjective (e : Equivalence C D) : EssentiallySurjective (e.functor) :=
-  λ Y : D, ⟨ e.inverse +> Y, e.isomorphism_2.components Y ⟩ -- TODO fix using heterogeneous identities -- wah! This was broken a moment ago...
+  λ Y : D, ⟨ e.inverse +> Y, e.isomorphism_2.components Y ⟩
 
 lemma Equivalences_are_Faithful (e : Equivalence C D) : Faithful (e.functor) := 
 { injectivity := λ X Y f g w, begin  
