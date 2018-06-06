@@ -26,7 +26,7 @@ include 𝒞 𝒟 ℰ
 @[simp] lemma Bifunctor_left_identity (F : (C × D) ↝ E) (W : C) {X Y Z : D} (f : X ⟶ Y) (g : Y ⟶ Z)
   : @Functor.onMorphisms _ _ _ _ F (W, X) (W, Z) (𝟙 W, f ≫ g) =
       (@Functor.onMorphisms _ _ _ _ F (W, X) (W, Y) (𝟙 W, f)) ≫ (@Functor.onMorphisms _ _ _ _ F (W, Y) (W, Z) (𝟙 W, g)) :=
-begin
+begin 
   rw ← Functor.functoriality,
   dsimp [products.ProductCategory],
   simp,

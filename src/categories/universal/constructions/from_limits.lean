@@ -81,6 +81,7 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers.{u₁+1 u₁} C :=
                        have q := congr_arg ConeMorphism.cone_morphism p,
                        dsimp at q,
                        its q,
+                       
                        repeat {sorry}
                       --  sorry, -- FIXME
                       --  -- finally, take care of those placeholders

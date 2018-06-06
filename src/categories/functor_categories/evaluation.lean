@@ -19,9 +19,6 @@ variable (D : Type u₂)
 variable [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟 
 
--- TODO remove, unnecessary
--- instance : category.{(max u₁ v₁ u₂ v₂) (max u₁ v₁ v₂)} (let E := (C ↝ D) × C in E) := products.ProductCategory.{(max u₁ v₁ u₂ v₂) (max u₁ v₂) u₁ v₁} (C ↝ D) C
-
 definition Evaluation : ((C ↝ D) × C) ↝ D := {
   onObjects     := λ p, p.1 +> p.2,
   onMorphisms   := λ x y f, (x.1 &> f.2) ≫ (f.1.components y.2)

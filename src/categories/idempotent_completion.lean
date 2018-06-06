@@ -63,21 +63,7 @@ definition functor_to_IdempotentCompletion (C : Type (u+1)) [large_category C] :
 
 open categories.equivalence
 
--- lemma embedding_in_IdempotentCompletition (C : Type u) [category C]  : Embedding (functor_to_IdempotentCompletion C) :=
--- begin
---   unfold Embedding,
---   split,
---   begin 
---     tidy {trace_result:=tt}, 
---     exact f_val,
---     refl, -- TODO Goals says 'f_val = f_val', but is secretly still '?m_1[C, X, Y, f_1, _] = f_1',
---     -- I posted a gist about this, and ask Mario about it: https://gist.github.com/semorrison/ddee284b92d64c931a21b5853cf6f1e1
---     -- sorry, 
---   end,
---   begin
---     tidy,
---   end
--- end
+lemma embedding_in_IdempotentCompletition (C : Type (u+1)) [large_category C]  : Embedding (functor_to_IdempotentCompletion C) := by obviously
 
 variable {D : Type (u₂+1)}
 variable [large_category D]
