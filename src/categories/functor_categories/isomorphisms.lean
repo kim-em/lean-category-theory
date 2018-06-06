@@ -17,17 +17,19 @@ variable {B : Type u₁}
 variable [ℬ : category.{u₁ v₁} B]
 variable {C : Type u₂}
 variable [𝒞 : category.{u₂ v₂} C]
+include ℬ 𝒞
+
+local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+
+definition FunctorComposition_left_unitor (F : B ↝ C) : (1 ⋙ F) ⇔ F := by obviously
+
+definition FunctorComposition_right_unitor (F : B ↝ C) : (F ⋙ 1) ⇔ F := by obviously
+
 variable {D : Type u₃}
 variable [𝒟 : category.{u₃ v₃} D]
 variable {E : Type u₄}
 variable [ℰ : category.{u₄ v₄} E]
-include ℬ 𝒞 𝒟 ℰ 
-
-local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
-
-definition FunctorComposition_left_unitor (F : C ↝ D) : (1 ⋙ F) ⇔ F := by obviously
-
-definition FunctorComposition_right_unitor (F : C ↝ D) : (F ⋙ 1) ⇔ F := by obviously
+include 𝒟 ℰ 
 
 definition FunctorComposition_associator (F : B ↝ C) (G : C ↝ D) (H : D ↝ E) : ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := by obviously 
 
