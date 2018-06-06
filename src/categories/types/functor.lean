@@ -19,8 +19,7 @@ local attribute [tidy] dsimp'
 instance lawful_functor_of_Functor (F : Functor (Type u) (Type v)) : is_lawful_functor (F.onObjects) := 
 { id_map := by obviously,
   comp_map := begin
-                intros, 
-                dsimp', 
+                tidy,
                 calc (F &> λ (x : α), h (g x)) x = (F &> (g ≫ h)) x      : by obviously
                                              ... = (F &> h) ((F &> g) x) : by obviously
               end

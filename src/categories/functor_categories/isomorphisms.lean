@@ -11,16 +11,17 @@ open categories.natural_transformation
 
 namespace categories.functor_categories
 
-universes u₁ u₂ u₃ u₄
+universes u₁ v₁ u₂ v₂ u₃ v₃ u₄ v₄ 
 
-variable {B : Type (u₁+1)}
-variable [large_category B]
-variable {C : Type (u₂+1)}
-variable [large_category C]
-variable {D : Type (u₃+1)}
-variable [large_category D]
-variable {E : Type (u₄+1)}
-variable [large_category E]
+variable {B : Type u₁}
+variable [ℬ : category.{u₁ v₁} B]
+variable {C : Type u₂}
+variable [𝒞 : category.{u₂ v₂} C]
+variable {D : Type u₃}
+variable [𝒟 : category.{u₃ v₃} D]
+variable {E : Type u₄}
+variable [ℰ : category.{u₄ v₄} E]
+include ℬ 𝒞 𝒟 ℰ 
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
