@@ -21,7 +21,39 @@ include ℬ 𝒞
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition FunctorComposition_left_unitor (F : B ↝ C) : (1 ⋙ F) ⇔ F := by obviously
+definition FunctorComposition_left_unitor (F : B ↝ C) : (1 ⋙ F) ⇔ F := 
+begin
+obviously,
+-- -- obviously'
+-- simplify_proof fsplit,
+-- simplify_proof fsplit,
+-- simplify_proof `[intros],
+-- simplify_proof `[apply categories.category.identity],
+-- { simplify_proof `[apply_auto_param] },
+-- -- obviously',
+-- ---
+-- fsplit,
+-- intros,
+-- apply categories.category.identity,
+-- { apply_auto_param },
+-- ---
+-- ---
+-- apply categories.natural_transformation.NaturalTransformations_componentwise_equal,
+-- intros,
+-- dsimp,
+-- simp,
+-- ---
+-- ---
+-- apply categories.natural_transformation.NaturalTransformations_componentwise_equal,
+-- intros,
+-- dsimp,
+-- simp,
+-- ---
+end
+
+set_option pp.proofs true
+-- set_option pp.implicit true
+#print FunctorComposition_left_unitor
 
 definition FunctorComposition_right_unitor (F : B ↝ C) : (F ⋙ 1) ⇔ F := by obviously
 
