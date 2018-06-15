@@ -5,5 +5,5 @@ lean_version = "3.4.1"
 path = "src"
 
 [dependencies]
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "16cfd0f50fc9b671938e130ade76b513e6b7ea12"}
-lean-category-theory-pr = {git = "https://github.com/semorrison/lean-category-theory-pr", rev = "614ce03acb18d6e279596bc7fed3e652fd34daa5"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "befab893b818db6b29d8a813ab3e3d915a83f559"}
+lean-category-theory-pr = {git = "https://github.com/semorrison/lean-category-theory-pr", rev = "079a52493d0db858040c4353023ca660b06c5842"}
