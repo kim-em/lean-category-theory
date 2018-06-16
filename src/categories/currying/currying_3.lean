@@ -20,7 +20,7 @@ include ℰ
 
 local attribute [tidy] dsimp_all'
 
-theorem Currying_for_functors :
+def Currying_for_functors :
   Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) := 
   {
     functor := Uncurry_Functors C D E,
