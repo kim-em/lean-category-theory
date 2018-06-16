@@ -22,7 +22,7 @@ structure SplitMonic (f : Y ⟶ Z) :=
   (right_inverse : Z ⟶ Y)
   (evidence      : f ≫ right_inverse = 𝟙 Y)
 
-lemma SplitMonic_implies_Monic {f : Y ⟶ Z} (m : SplitMonic f) : Monic f := {
+def SplitMonic_implies_Monic {f : Y ⟶ Z} (m : SplitMonic f) : Monic f := {
     witness := λ _ a b p, begin
                             have e := congr_arg (λ g, g ≫ m.right_inverse) p,
                             simp at e,

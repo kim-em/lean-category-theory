@@ -78,15 +78,15 @@ local attribute [tidy] dsimp_all'
 
 set_option pp.universes true
 
-theorem YonedaLemma (C : Type u₁) [category.{u₁ v₁} C] : (YonedaPairing C) ⇔ (YonedaEvaluation C) := 
+def YonedaLemma (C : Type u₁) [category.{u₁ v₁} C] : (YonedaPairing C) ⇔ (YonedaEvaluation C) := 
 { morphism := { components := λ F x, ulift.up ((x.components F.2) (𝟙 F.2)) },
   inverse  := { components := λ F x, { components := λ X a, (F.1 &> a) x.down } } }.
 
-theorem YonedaFull (C : Type u₁) [category.{u₁ v₁} C] : Full (Yoneda C) := 
+def YonedaFull (C : Type u₁) [category.{u₁ v₁} C] : Full (Yoneda C) := 
 { preimage := λ X Y f, (f.components X) (𝟙 X),
   witness := λ X Y f, begin tidy, have p := congr_fun (f.naturality x) (𝟙 X), tidy, end } -- PROJECT a pure rewriting proof?
 
-theorem YonedaFaithful (C : Type u₁) [category.{u₁ v₁} C]  : Faithful (Yoneda C) := {
+def YonedaFaithful (C : Type u₁) [category.{u₁ v₁} C]  : Faithful (Yoneda C) := {
     injectivity := λ X Y f g w, begin 
                                   -- PROJECT automation
                                   dsimp_all',

@@ -24,12 +24,12 @@ structure RegularMonic (f : X ⟶ Y) :=
   (w : e.inclusion = i.morphism ≫ f)
 
 -- EXERCISE
--- lemma SplitMonic_implies_RegularMonic
+-- def SplitMonic_implies_RegularMonic
 --   {f : Hom X Y} 
 --   (s : SplitMonic f) : RegularMonic f := sorry
 
 -- EXERCISE
--- lemma RegularMonic_implies_Monic
+-- def RegularMonic_implies_Monic
 --   {f : Hom X Y} 
 --   (s : RegularMonic f) : Monic f := sorry
 

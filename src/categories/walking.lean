@@ -3,12 +3,10 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import categories.functor
-import categories.util.finite
 import data.fintype
 
 open categories
 open categories.functor
-open categories.util.finite
 
 namespace categories.walking
 
