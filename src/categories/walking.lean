@@ -4,6 +4,7 @@
 
 import categories.functor
 import data.fintype
+import categories.util.Two
 
 open categories
 open categories.functor

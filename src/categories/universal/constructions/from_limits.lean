@@ -12,7 +12,6 @@ open categories.natural_transformation
 open categories.isomorphism
 open categories.initial
 open categories.walking
-open categories.util.finite
 
 namespace categories.universal
 
@@ -66,10 +65,10 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers.{u₁+1 u₁} C :=
     map           := begin
                         -- PROJECT this is really ugly! Those inductions should work better...
                         tidy, 
-                        swap 2, solve_by_elim,
-                        swap, exact k ≫ f,
-                        cases f_1,
+                        show Z ⟶ Y, exact k ≫ f,
                         tidy,
+                        cases f_1,
+                        tidy
                      end,
     factorisation := by obviously,
     uniqueness    := begin
