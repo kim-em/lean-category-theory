@@ -19,7 +19,7 @@ instance graph_from_Graph (G : Graph) : graph G.1 := G.2
 structure GraphHomomorphism (G H : Graph.{u₁}) : Type (u₁+1) := 
 (map : @graph_homomorphism G.1 G.2 H.1 H.2)
 
-@[applicable] lemma graph_homomorphisms_pointwise_equal
+@[extensionality] lemma graph_homomorphisms_pointwise_equal
   {G H : Graph}
   {p q : GraphHomomorphism G H} 
   (vertexWitness : ∀ X : G.1, p.map.onVertices X = q.map.onVertices X) 

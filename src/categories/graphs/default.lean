@@ -27,7 +27,7 @@ variable [graph G]
 variable {H : Type u₂}
 variable [graph H]
 
-@[applicable] lemma graph_homomorphisms_pointwise_equal
+@[extensionality] lemma graph_homomorphisms_pointwise_equal
   {p q : graph_homomorphism G H} 
   (vertexWitness : ∀ X : G, p.onVertices X = q.onVertices X) 
   (edgeWitness : ∀ X Y : G, ∀ f : edges X Y, ⟬ p.onEdges f ⟭ = q.onEdges f) : p = q :=

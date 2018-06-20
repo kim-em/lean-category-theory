@@ -27,7 +27,7 @@ structure arrow_hom {C : Type (u₁+1)} [large_category C] (X Y : arrow C) :=
 make_lemma arrow_hom.commutativity
 attribute [ematch] arrow_hom.commutativity_lemma
 
-@[applicable] lemma arrow_hom_equal {C : Type (u₁+1)} [large_category C] (f g : arrow C) (α β : arrow_hom f g) (w : α.morphism = β.morphism) : α = β :=
+@[extensionality] lemma arrow_hom_equal {C : Type (u₁+1)} [large_category C] (f g : arrow C) (α β : arrow_hom f g) (w : α.morphism = β.morphism) : α = β :=
 begin
   induction α with α_morphism,
   induction β with β_morphism,

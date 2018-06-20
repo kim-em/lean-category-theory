@@ -36,7 +36,7 @@ make_lemma Idempotent_morphism.left
 make_lemma Idempotent_morphism.right
 attribute [simp,ematch] Idempotent_morphism.left_lemma Idempotent_morphism.right_lemma
 
-@[applicable] lemma Idempotent_morphisms_equal
+@[extensionality] lemma Idempotent_morphisms_equal
   (X Y : Idempotent C)
   (f g : Idempotent_morphism X Y)
   (w : f.morphism = g.morphism) : f = g :=

@@ -51,7 +51,7 @@ structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (m
 make_lemma comma_morphism.condition
 attribute [ematch] comma_morphism.condition_lemma
 
-@[applicable] lemma comma_morphism_equal
+@[extensionality] lemma comma_morphism_equal
   {S : A ↝ C} {T : B ↝ C} {p q : comma S T} (f g : comma_morphism p q)
   (wl : f.left = g.left) (wr : f.right = g.right) : f = g :=
   begin

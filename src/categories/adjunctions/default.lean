@@ -33,7 +33,7 @@ attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
 
 infix ` ⊣ `:50 := Adjunction
 
-@[applicable] lemma Adjunctions_pointwise_equal
+@[extensionality] lemma Adjunctions_pointwise_equal
   (L : C ↝ D) (R : D ↝ C) (A B : L ⊣ R) 
   (w1 : A.unit = B.unit) (w2 : A.counit = B.counit) : A = B :=
   begin

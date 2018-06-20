@@ -28,7 +28,7 @@ definition GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G :=
 definition GroupHomomorphism.composition {G H K : Group} (f: GroupHomomorphism G H) (g: GroupHomomorphism H K) : GroupHomomorphism G K :=
 { map := λ x, g.map (f.map x) }
 
-@[applicable] lemma GroupHomomorphism_pointwise_equality {G H : Group} (f g : GroupHomomorphism G H) (w : ∀ x : G.1, f.map x = g.map x) : f = g :=
+@[extensionality] lemma GroupHomomorphism_pointwise_equality {G H : Group} (f g : GroupHomomorphism G H) (w : ∀ x : G.1, f.map x = g.map x) : f = g :=
 begin
     induction f with fc,
     induction g with gc,
