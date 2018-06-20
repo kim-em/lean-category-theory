@@ -12,7 +12,6 @@ open categories.natural_transformation
 open categories.isomorphism
 open categories.initial
 open categories.walking
-open categories.util.finite
 
 namespace categories.universal
 
