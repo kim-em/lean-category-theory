@@ -11,7 +11,6 @@ open categories.natural_transformation
 open categories.isomorphism
 open categories.initial
 open categories.walking
-open categories.util.finite
 open categories.opposites
 open categories.universal.opposites
 
