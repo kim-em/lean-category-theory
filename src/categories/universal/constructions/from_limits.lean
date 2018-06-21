@@ -41,7 +41,7 @@ section
 open tactic
 meta def induction_WalkingParallelPair : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := induction h >> skip | _ := failed end)),
+   at_least_one (l.reverse.map (λ h, do t ← infer_type h, t ← whnf t, match t with | `(WalkingParallelPair) := induction h >> skip | `(Two) := induction h >> skip | _ := failed end)),
    skip
 end
 
@@ -62,14 +62,7 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers.{u₁+1 u₁} C :=
                        erw commutativity Two._0,
                        erw commutativity Two._1,
                      end,
-    map           := begin
-                        -- PROJECT this is really ugly! Those inductions should work better...
-                        tidy, 
-                        show Z ⟶ Y, exact k ≫ f,
-                        tidy,
-                        cases f_1,
-                        tidy
-                     end,
+    map           := by obviously,
     factorisation := by obviously,
     uniqueness    := begin
                        tidy,
