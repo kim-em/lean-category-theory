@@ -47,12 +47,6 @@ end
 
 local attribute [tidy] induction_WalkingParallelPair
 
--- TODO Avoid these.
-local attribute [reducible] ParallelPair_functor
-local attribute [reducible] ParallelPair_functor._match_1
-local attribute [reducible] ParallelPair_functor._match_2
-local attribute [reducible] eq.mpr
-
 instance Equalizers_from_Limits [Complete C] : has_Equalizers.{u₁+1 u₁} C := {
   equalizer := λ X Y f g, let lim := limitCone (ParallelPair_functor f g) in {
     equalizer     := lim.terminal_object.cone_point,
@@ -71,19 +65,13 @@ instance Equalizers_from_Limits [Complete C] : has_Equalizers.{u₁+1 u₁} C :=
                          cone_maps := λ j : WalkingParallelPair, a ≫ (lim.terminal_object.cone_maps j), },
                        have p := lim.uniqueness_of_morphisms_to_terminal_object Z_cone ⟨ a, _ ⟩ ⟨ b, _ ⟩,
                        have q := congr_arg ConeMorphism.cone_morphism p,
-                       dsimp at q,
-                       its q,
-                       
-                       repeat {sorry}
-                      --  sorry, -- FIXME
-                      --  -- finally, take care of those placeholders
-                      --  tidy, 
-                      --  sorry, -- FIXME: -- exact witness.symm, -- TODO why doesn't tidy handle this?
-                      --  have c := lim.terminal_object.commutativity,
-                      --  dsimp at c,
-                      --  rw ← @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,
-                      --  repeat {rw ← category.associativity},
-                      --  rw witness, 
+                       exact q,
+                       tidy,
+                       have c := lim.terminal_object.commutativity,
+                       dsimp at c,
+                       rw ← @c WalkingParallelPair._1 WalkingParallelPair._2 Two._1,
+                       repeat {rw ← category.associativity},
+                       rw witness,
                      end
  }                       
 }

@@ -51,9 +51,6 @@ local attribute [tidy] case_bash
 | _  _  := pempty
 attribute [reducible] WalkingPair.hom._main
 
--- TODO needed?
--- instance (X Y : WalkingPair) : decidable_eq (WalkingPair.hom X Y) := by dsimp [decidable_eq, decidable_rel]; obviously
-
 instance WalkingPair_category : small_category WalkingPair := 
 { Hom := WalkingPair.hom,
   identity       := by tidy,
