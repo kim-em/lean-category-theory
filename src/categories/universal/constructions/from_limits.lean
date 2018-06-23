@@ -82,17 +82,12 @@ instance Products_from_Limits [Complete C] : has_Products C := {
                   {
                     product       := lim_F.terminal_object.cone_point,
                     projection    := λ i, lim_F.terminal_object.cone_maps i,
-                    uniqueness    := λ Z f g, begin
-                                                intros, 
-                                                have p := lim_F.uniqueness_of_morphisms_to_terminal_object, 
-                                                have q := p _ (ConeMorphism_from_map_to_limit f)
-                                                  {cone_morphism := g, commutativity := begin tidy, simp *, end}, -- (`simp *` isn't good in tidy; it's really slow)
-                                                tidy,
-                                              end,
-                    map           := λ Z i, (lim_F.morphism_to_terminal_object_from {
-                                              cone_point := Z, 
-                                              cone_maps := i
-                                           }).cone_morphism
+                    uniqueness    := λ Z f g _, begin
+                                                  have p := lim_F.uniqueness_of_morphisms_to_terminal_object, 
+                                                  have q := p _ (ConeMorphism_from_map_to_limit f) {cone_morphism := g}, 
+                                                  tidy,
+                                                end,
+                    map           := λ Z i, (lim_F.morphism_to_terminal_object_from { cone_point := Z, cone_maps := i }).cone_morphism
                  }
 }
 

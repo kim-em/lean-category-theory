@@ -5,6 +5,7 @@
 import categories.natural_transformation
 import categories.isomorphism
 import categories.products.bifunctors
+import categories.equivalence
 
 open categories
 open categories.isomorphism

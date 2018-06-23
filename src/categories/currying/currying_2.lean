@@ -19,6 +19,15 @@ local attribute [tidy] dsimp_all' -- TODO get rid of this
 
 definition Curry_Uncurry_to_identity : ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) ⟹ (IdentityFunctor (C ↝ (D ↝ E))) := by obviously
 
+-- set_option pp.proofs true
+-- #print Curry_Uncurry_to_identity
+-- #print Curry_Uncurry_to_identity._aux_10
+-- #print Curry_Uncurry_to_identity._aux_9
+-- #print Curry_Uncurry_to_identity._aux_8
+-- #print Curry_Uncurry_to_identity._aux_7
+-- #print Curry_Uncurry_to_identity._aux_4
+-- #print Curry_Uncurry_to_identity._aux_1
+
 definition identity_to_Curry_Uncurry
     : (IdentityFunctor (C ↝ (D ↝ E))) ⟹ ((Uncurry_Functors C D E) ⋙ (Curry_Functors C D E)) := by obviously 
 

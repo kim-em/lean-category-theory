@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison
 
 import categories.currying.currying_2
-import categories.equivalence
 
 open categories
 open categories.isomorphism

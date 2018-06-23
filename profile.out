@@ -3,3 +3,65 @@ Compiling natural_transformation.lean              0m8.522s
 Compiling products/default.lean                    0m11.250s
 Compiling universal/default.lean                   0m0.023s
 Compiling currying/currying_3.lean                 0m20.892s
+Sat 23 Jun 2018 07:59:45 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling currying/currying_3.lean                 6m21.206s
+Sat 23 Jun 2018 08:15:00 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 5m48.618s
+Compiling currying/currying_1.lean                 0m20.496s
+Compiling currying/currying_2.lean                 0m30.530s
+Compiling currying/currying_3.lean                 0m26.103s
+Sat 23 Jun 2018 08:22:50 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 0m1.068s
+Compiling currying/currying_1.lean                 0m13.100s
+Compiling currying/currying_2.lean                 0m30.755s
+Compiling currying/currying_3.lean                 0m11.048s
+-- Now without making declarations
+Sat 23 Jun 2018 08:25:34 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 0m19.490s
+Compiling currying/currying_1.lean                 0m19.481s
+Compiling currying/currying_2.lean                 0m41.126s
+Compiling currying/currying_3.lean                 0m25.243s
+Sat 23 Jun 2018 08:27:22 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 0m1.031s
+Compiling currying/currying_1.lean                 0m13.204s
+Compiling currying/currying_2.lean                 0m36.138s
+Compiling currying/currying_3.lean                 0m10.776s
+Sat 23 Jun 2018 08:28:31 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 0m1.085s
+Compiling currying/currying_1.lean                 0m12.683s
+Compiling currying/currying_2.lean                 0m36.822s
+Compiling currying/currying_3.lean                 0m10.741s
+Sat 23 Jun 2018 08:29:59 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 5m55.087s
+Compiling currying/currying_1.lean                 0m20.869s
+Compiling currying/currying_2.lean                 0m42.264s
+Compiling currying/currying_3.lean                 0m32.083s
+Sat 23 Jun 2018 08:40:43 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 0m1.135s
+Compiling currying/currying_1.lean                 0m13.873s
+Compiling currying/currying_2.lean                 0m41.246s
+Compiling currying/currying_3.lean                 0m11.998s
+Compiling currying/currying_4.lean                 2m6.647s
+Sat 23 Jun 2018 08:44:13 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 0m1.041s
+Compiling currying/currying_1.lean                 0m14.105s
+Compiling currying/currying_2.lean                 0m40.145s
+Compiling currying/currying_3.lean                 0m11.333s
+Compiling currying/currying_4.lean                 2m0.226s
+-- Turning declarations back on
+Sat 23 Jun 2018 08:48:46 AEST
+Repository at ec63f62d4b19e78887ee2acbaa18a5fd9379b2e9
+Compiling products/bifunctors.lean                 0m17.817s
+Compiling currying/currying_1.lean                 0m20.357s
+Compiling currying/currying_2.lean                 0m49.910s
+Compiling currying/currying_3.lean                 0m11.560s
+Compiling currying/currying_4.lean                 1m27.124s
