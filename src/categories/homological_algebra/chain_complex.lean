@@ -24,9 +24,6 @@ class Ab_category (C: Type u₁) extends category.{u₁ v₁} C := --- we really
 
 class additive_category (C : Type u₁) extends (Ab_category.{u₁ v₁} C), (has_ZeroObject.{u₁ v₁} C), (has_FiniteProducts.{u₁ v₁} C)
 
-#print Ab_category
-#print additive_category
-
 /- Examples -/
 /- Field is not additve, it doesn't have a zero object, or all products. -/
 /- Abelian groups = Z-mod is an additive category. -/
@@ -35,6 +32,7 @@ class additive_category (C : Type u₁) extends (Ab_category.{u₁ v₁} C), (ha
 structure chain_complex (C : Type u₁) [additive_category.{u₁ v₁} C] : Type (max u₁ v₁) :=
   (chain_objects : ℤ → C)
   (differentials : Π n : ℤ, (chain_objects n) ⟶ (chain_objects (n+1)))
+  -- squares to zero!
 
 structure chain_map {C : Type u₁} [additive_category C] (M N : chain_complex C) :=
   (component : Π n : ℤ, M.chain_objects n ⟶ N.chain_objects n)

@@ -37,8 +37,14 @@ variables {F G H : C ↝ D}
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1
   (α : Isomorphism F G)
   (X : C)
-   : (α.morphism.components X) ≫ (α.inverse.components X) = 𝟙 (F +> X)
-   := by obviously
+   : (α.morphism X) ≫ (α.inverse X) = 𝟙 (F +> X)
+   := begin
+        tidy,
+        -- rewrite_search_using `ematch, -- FIXME why does this fail?
+        erw ← FunctorCategory.compose.components,
+        erw α.witness_1_lemma,
+        refl,
+      end
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_1_assoc
   (α : F ⇔ G)
   (X : C) (Z : D) (f : (F +> X) ⟶ Z)
@@ -48,7 +54,12 @@ variables {F G H : C ↝ D}
   (α : F ⇔ G)
   (X : C)
    : (α.inverse.components X) ≫ (α.morphism.components X) = 𝟙 (G +> X)
-   := by obviously
+   := begin
+        -- rewrite_search_using `ematch, -- FIXME why does this fail?
+        erw ← FunctorCategory.compose.components,
+        erw α.witness_2_lemma,
+        refl,
+      end
 @[simp,ematch] lemma NaturalIsomorphism.componentwise_witness_2_assoc
   (α : F ⇔ G)
   (X : C) (Z : D) (f : (G +> X) ⟶ Z)
@@ -93,13 +104,13 @@ attribute [class] is_NaturalIsomorphism
   (w : is_NaturalIsomorphism α)
   (X : C)
    : (α.components X) ≫ (w.inverse.components X) = 𝟙 (F +> X)
-   := by obviously
+   := sorry
 @[simp,ematch] lemma is_NaturalIsomorphism_componentwise_witness_2
   (α : F ⟹ G)
   (w : is_NaturalIsomorphism α)
   (X : C)
    : (w.inverse.components X) ≫ (α.components X) = 𝟙 (G +> X)
-   := by obviously
+   := sorry
 
 instance (F : C ↝ D) : is_NaturalIsomorphism (𝟙 F) := {
     inverse := 𝟙 F
