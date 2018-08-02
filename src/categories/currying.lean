@@ -12,16 +12,9 @@ open categories.functor
 
 namespace categories.currying
 
-universes u₁ u₂ v₂ 
 
-variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : category.{u₂ v₂} E]
-include ℰ
-
-#print Functor.identities_lemma
-
-
-
-
+-- set_option pp.notation false
+-- set_option pp.implicit true
 -- The 'obviously' fields here are only here for studying rewrite_search.
 definition Uncurry_Functors : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
 { onObjects     := λ F, { onObjects     := λ X, (F +> X.1) +> X.2,
@@ -31,8 +24,8 @@ cases X,
 dsimp at *,
 simp at *,
 -- rewrite_search_using `ematch {trace:=tt,trace_rules:=tt},
-perform_nth_rewrite [ProductCategory.identity] 0,
-rw ProductCategory.identity,
+-- perform_nth_rewrite [ProductCategory_uniform.identity] 0,
+rw ProductCategory_uniform.identity,
 rw Functor.identities_lemma,
 refl
  end },
