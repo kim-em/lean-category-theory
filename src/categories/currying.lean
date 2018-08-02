@@ -7,6 +7,8 @@ import categories.equivalence
 
 open categories
 open categories.equivalence
+open categories.products
+open categories.functor
 
 namespace categories.currying
 
@@ -15,13 +17,28 @@ universes u₁ u₂ v₂
 variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : category.{u₂ v₂} E]
 include ℰ
 
+#print Functor.identities_lemma
+
+
+
+
 -- The 'obviously' fields here are only here for studying rewrite_search.
 definition Uncurry_Functors : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
 { onObjects     := λ F, { onObjects     := λ X, (F +> X.1) +> X.2,
-                          onMorphisms   := λ X Y f, ((F &> f.1).components X.2) ≫ ((F +> Y.1) &> f.2),
-                          functoriality := by obviously, },
-  onMorphisms   := λ F G T, { components := λ X, (T.components _).components _,
-                              naturality := begin tidy, rewrite_search_using `ematch {trace:=tt, trace_result:=tt} end } }
+                          onMorphisms   := λ X Y f, ((F &> f.1) X.2) ≫ ((F +> Y.1) &> f.2),
+                          functoriality := sorry, identities := begin intros,
+cases X,
+dsimp at *,
+simp at *,
+-- rewrite_search_using `ematch {trace:=tt,trace_rules:=tt},
+perform_nth_rewrite [ProductCategory.identity] 0,
+rw ProductCategory.identity,
+rw Functor.identities_lemma,
+refl
+ end },
+  onMorphisms   := λ F G T, { components := λ X, (T X.1) X.2,
+                              naturality := sorry -- begin intros, cases f, cases Y, cases X, dsimp at *, simp at *, rewrite_search_using `ematch {trace:=tt, trace_result:=tt} end 
+                              } }
 
 definition Curry_Functors : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) := 
 { onObjects     := λ F, { onObjects     := λ X, { onObjects     := λ Y, F +> (X, Y),
