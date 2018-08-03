@@ -12,6 +12,10 @@ open categories.functor
 
 namespace categories.currying
 
+universes u₁ u₂ v₂ 
+
+variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : category.{u₂ v₂} E]
+include ℰ
 
 -- set_option pp.notation false
 -- set_option pp.implicit true
