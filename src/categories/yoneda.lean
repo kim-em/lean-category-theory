@@ -10,6 +10,7 @@ import categories.products.switch
 import categories.types
 import categories.functor_categories.evaluation
 import categories.universe_lifting
+import tactic.interactive
 
 open categories
 open categories.functor
@@ -34,6 +35,11 @@ instance : category ((Cᵒᵖ) ↝ Type v₁ × (Cᵒᵖ)) := products.ProductCa
 definition YonedaEvaluation 
   : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) 
   := (Evaluation (Cᵒᵖ) (Type v₁)) ⋙ UniverseLift.{v₁ u₁}
+
+-- FIXME hmmm.
+open tactic.interactive
+meta def unfold_coes' := `[unfold_coes]
+local attribute [tidy] unfold_coes'
 
 definition Yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) := 
 { onObjects := λ X, 
