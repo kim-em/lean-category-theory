@@ -1,0 +1,5 @@
+during elaboration of categories.functor_categories.whiskering_on_left, rewrite_search considered 21 expressions, and found a chain of 5 rewrites
+during elaboration of categories.functor_categories.whiskering_on_left, rewrite_search considered 3 expressions, and found a chain of 3 rewrites
+during elaboration of categories.arrows.Arrows, rewrite_search considered 8 expressions, and found a chain of 4 rewrites
+during elaboration of categories.equivalence.Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence, rewrite_search considered 12 expressions, and found a chain of 7 rewrites
+during elaboration of categories.functor_categories.whiskering_on_left, rewrite_search considered 504 expressions, and found a chain of 13 rewrites
