@@ -13,17 +13,12 @@ section
 variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (D : Type u₂) [𝒟 : category.{u₂ v₂} D] (E : Type u₃) [ℰ : category.{u₃ v₃} E]
 include 𝒞 𝒟 ℰ
 
--- FIXME hmmm.
-open tactic.interactive
-meta def unfold_coes' := `[unfold_coes]
-local attribute [tidy] unfold_coes'
-
 definition whiskering_on_left : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) := 
 { onObjects     := λ F, 
     { onObjects     := λ G, F ⋙ G,
       onMorphisms   := λ _ _ α, 1 ◫ α },
   onMorphisms   := λ F G τ, 
-    { components := λ H, { components := λ c, H &> (τ.components c) } }, identities := begin tidy, unfold_coes, simp, rewrite_search_using `ematch end }
+    { components := λ H, { components := λ c, H &> (τ.components c) } } }
 
 definition whiskering_on_right : (D ↝ E) ↝ ((C ↝ D) ↝ (C ↝ E)) :=
 { onObjects     := λ H, 
