@@ -18,8 +18,6 @@ variable {D : Type (u+1)}
 variable [large_category D]
 variables {L : C ↝ D} {R : D ↝ C} 
 
-local attribute [tidy] dsimp_all'
-
 @[reducible] private definition Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
   : ((OppositeFunctor L × Functor.id D) ⋙ (HomPairing D)) ⟹ 
                           ((Functor.id (Cᵒᵖ) × R) ⋙ (HomPairing C)) := 
@@ -37,6 +35,8 @@ local attribute [tidy] dsimp_all'
 definition Adjunction_to_HomAdjunction (A : L ⊣ R) : HomAdjunction L R := 
 { morphism  := Adjunction_to_HomAdjunction_morphism A,
   inverse   := Adjunction_to_HomAdjunction_inverse A }
+
+local attribute [tidy] dsimp_all'
 
 @[simp] lemma mate_of_L (A : HomAdjunction L R) {X Y : C} (f : X ⟶ Y) : (((A.morphism).components (X, L +> X)) (𝟙 (L +> X))) ≫ 
       (R &> (L &> f))
