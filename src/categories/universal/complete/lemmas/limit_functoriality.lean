@@ -4,17 +4,12 @@
 
 import categories.universal.instances
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.functor_categories
-open categories.isomorphism
-open categories.products
-open categories.initial
-open categories.types
-open categories.universal
+open category_theory
+open category_theory.initial
+open category_theory.types
+open category_theory.universal
 
-namespace categories.universal.lemmas.limit_functoriality
+namespace category_theory.universal.lemmas.limit_functoriality
 
 universe u
 variable {J : Type u}
@@ -85,4 +80,4 @@ begin
   exact (M.morphism_from_initial_object_to cocone).cocone_morphism, 
 end
 
-end categories.universal.lemmas.limit_functoriality
+end category_theory.universal.lemmas.limit_functoriality

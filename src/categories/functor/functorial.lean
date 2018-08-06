@@ -5,9 +5,7 @@
 
 import categories.functor
 
-open categories
-
-namespace categories.functor
+namespace category_theory
 
 universes u₁ u₂
 
@@ -30,4 +28,4 @@ instance (F : C ↝ D) : Functorial (F.onObjects) :=
 { onMorphisms := F.onMorphisms }
 
 -- TODO notations?
-end categories.functor
+end category_theory

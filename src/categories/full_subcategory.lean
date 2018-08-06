@@ -4,9 +4,7 @@
 
 import categories.functor
 
-open categories.functor
-
-namespace categories
+namespace category_theory
 
 universes u₁ v₁ u₂ v₂ w₁
 
@@ -49,4 +47,4 @@ definition Functor_restricts_to_FullSubcategory (F : C ↝ D) (ZC : C → Prop) 
   onMorphisms   := λ _ _ f, F &> f }
 
 
-end categories
+end category_theory

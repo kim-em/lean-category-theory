@@ -5,10 +5,9 @@
 import categories.functor
 import categories.isomorphism
 
-open categories
-open categories.isomorphism
+open category_theory
 
-namespace categories.functor
+namespace category_theory
 
 universes u₁ u₂ 
 
@@ -26,4 +25,4 @@ variable [large_category D]
 class ReflectsIsomorphisms (F : C ↝ D) :=
   (reflects : Π {X Y : C} (f : X ⟶ Y) (w : is_Isomorphism (F &> f)), is_Isomorphism f)
 
-end categories.functor  
+end category_theory

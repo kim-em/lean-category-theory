@@ -5,37 +5,17 @@
 import categories.products.bifunctors
 import categories.equivalence
 
-open categories
-open categories.equivalence
-open categories.products
-open categories.functor
-
-namespace categories.currying
+namespace category_theory
 
 universes u₁ u₂ v₂ 
 
 variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : category.{u₂ v₂} E]
 include ℰ
 
--- set_option pp.notation false
--- set_option pp.implicit true
--- The 'obviously' fields here are only here for studying rewrite_search.
 definition Uncurry_Functors : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
 { onObjects     := λ F, { onObjects     := λ X, (F +> X.1) +> X.2,
-                          onMorphisms   := λ X Y f, ((F &> f.1) X.2) ≫ ((F +> Y.1) &> f.2),
-                          functoriality := sorry, identities := begin intros,
-cases X,
-dsimp at *,
-simp at *,
--- rewrite_search_using `ematch {trace:=tt,trace_rules:=tt},
--- perform_nth_rewrite [ProductCategory_uniform.identity] 0,
-rw ProductCategory_uniform.identity,
-rw Functor.identities_lemma,
-refl
- end },
-  onMorphisms   := λ F G T, { components := λ X, (T X.1) X.2,
-                              naturality := sorry -- begin intros, cases f, cases Y, cases X, dsimp at *, simp at *, rewrite_search_using `ematch {trace:=tt, trace_result:=tt} end 
-                              } }
+                          onMorphisms   := λ X Y f, ((F &> f.1) X.2) ≫ ((F +> Y.1) &> f.2) },
+  onMorphisms   := λ F G T, { components := λ X, (T X.1) X.2 } }
 
 definition Curry_Functors : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) := 
 { onObjects     := λ F, { onObjects     := λ X, { onObjects     := λ Y, F +> (X, Y),
@@ -50,4 +30,4 @@ def Currying_for_functors : Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) :=
 { functor := Uncurry_Functors C D E,
   inverse := Curry_Functors C D E }
 
-end categories.currying
+end category_theory

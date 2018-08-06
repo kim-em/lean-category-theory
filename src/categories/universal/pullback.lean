@@ -1,6 +1,6 @@
 import categories.universal
 
-open categories
+open category_theory
 
 universe u₁
 

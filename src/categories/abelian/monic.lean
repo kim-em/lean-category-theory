@@ -4,9 +4,7 @@
 
 import categories.category
 
-open categories
-
-namespace categories
+namespace category_theory
 
 universe u
 variable {C : Type (u+1)}
@@ -34,4 +32,4 @@ def SplitMonic_implies_Monic {f : Y ⟶ Z} (m : SplitMonic f) : Monic f := {
 
 -- PROJECT SplitEpic
 
-end categories
+end category_theory

@@ -5,8 +5,8 @@ import categories.universal.instances
 
 universes u₁ v₁ u₂ v₂
 
-open categories
-open categories.universal
+open category_theory
+open category_theory.universal
 
 class Ab_category (C: Type u₁) extends category.{u₁ v₁} C := --- we really need to setup enriched categories
   (hom_groups : Π X Y : C, comm_group (X ⟶ Y))

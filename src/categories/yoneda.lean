@@ -12,17 +12,10 @@ import categories.functor_categories.evaluation
 import categories.universe_lifting
 import tactic.interactive
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.functor_categories
-open categories.isomorphism
-open categories.equivalence
-open categories.types
-open categories.products
-open categories.opposites
+open category_theory
+open category_theory.types
 
-namespace categories.yoneda
+namespace category_theory.yoneda
 
 universes u₁ v₁ u₂
 
@@ -30,11 +23,11 @@ section
 variables (C : Type u₁) [category.{u₁ v₁} C]
 
 -- FIXME why isn't this already available?
-instance : category ((Cᵒᵖ) ↝ Type v₁ × (Cᵒᵖ)) := products.ProductCategory.{(max u₁ (v₁+1)) (max u₁ v₁) u₁ v₁} (Cᵒᵖ ↝ Type v₁) (Cᵒᵖ)
+instance : category ((Cᵒᵖ) ↝ Type v₁ × (Cᵒᵖ)) := category_theory.ProductCategory.{(max u₁ (v₁+1)) (max u₁ v₁) u₁ v₁} (Cᵒᵖ ↝ Type v₁) (Cᵒᵖ)
 
 definition YonedaEvaluation 
   : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) 
-  := (Evaluation (Cᵒᵖ) (Type v₁)) ⋙ UniverseLift.{v₁ u₁}
+  := (FunctorCategory.Evaluation (Cᵒᵖ) (Type v₁)) ⋙ UniverseLift.{v₁ u₁}
 
 -- FIXME hmmm.
 open tactic.interactive
@@ -50,8 +43,8 @@ definition Yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) :=
 
 -- FIXME typeclass resolution needs some help.
 definition YonedaPairing : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) := 
-let F := (SwitchProductCategory ((Cᵒᵖ) ↝ (Type v₁)) (Cᵒᵖ)) in
-let G := (ProductFunctor (OppositeFunctor (Yoneda C)) (IdentityFunctor ((Cᵒᵖ) ↝ (Type v₁)))) in
+let F := (ProductCategory.switch ((Cᵒᵖ) ↝ (Type v₁)) (Cᵒᵖ)) in
+let G := (ProductFunctor (OppositeFunctor (Yoneda C)) (Functor.id ((Cᵒᵖ) ↝ (Type v₁)))) in
 let H := (HomPairing ((Cᵒᵖ) ↝ (Type v₁))) in
 begin
   letI : category (Cᵒᵖ × (Cᵒᵖ ↝ Type v₁)) := by apply_instance,
@@ -103,4 +96,4 @@ def YonedaFaithful (C : Type u₁) [category.{u₁ v₁} C]  : Faithful (Yoneda 
                                 end
 }
 
-end categories.yoneda
+end category_theory.yoneda

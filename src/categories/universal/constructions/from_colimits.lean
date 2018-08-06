@@ -5,16 +5,12 @@
 import categories.universal.constructions.from_limits
 import categories.universal.opposites
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.isomorphism
-open categories.initial
-open categories.walking
-open categories.opposites
-open categories.universal.opposites
+open category_theory
+open category_theory.initial
+open category_theory.walking
+open category_theory.universal.opposites
 
-namespace categories.universal
+namespace category_theory.universal
 
 universes u₁
 variable {C : Type (u₁+1)}
@@ -27,4 +23,4 @@ instance Coproducts_from_Colimits [Cocomplete C] : has_Coproducts C := {
   coproduct := λ _ F, Coproduct_from_Product_in_Opposite (@product (Cᵒᵖ) _ (@universal.Products_from_Limits (Cᵒᵖ) _ (universal.opposites.Opposite_Complete_of_Cocomplete)) _ F)
 }
 
-end categories.universal
+end category_theory.universal

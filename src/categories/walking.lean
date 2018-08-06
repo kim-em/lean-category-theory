@@ -6,10 +6,9 @@ import categories.functor
 import data.fintype
 import categories.util.Two
 
-open categories
-open categories.functor
+open category_theory
 
-namespace categories.walking
+namespace category_theory.walking
 
 universes u₁ v₁ u₂ v₂
 
@@ -140,5 +139,5 @@ definition ParallelPair_functor {α β : C} (f g : α ⟶ β) : WalkingParallelP
                    end, }
 end
 
-end categories.walking
+end category_theory.walking
 

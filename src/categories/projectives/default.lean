@@ -2,9 +2,8 @@ import ..abelian.abelian
 import categories.universal.instances
 
 
-open categories
-open categories.isomorphism
-open categories.universal
+open category_theory
+open category_theory.universal
 
 universes u v
 

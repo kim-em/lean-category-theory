@@ -3,12 +3,9 @@
 -- Authors: Scott Morrison
 
 import categories.functor_categories
+import tactic.interactive
 
-open categories
-open categories.functor
-open categories.natural_transformation
-
-namespace categories.functor_categories
+namespace category_theory
 
 universes u₁ v₁ u₂ v₂ u₃ v₃
 
@@ -16,12 +13,17 @@ section
 variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (D : Type u₂) [𝒟 : category.{u₂ v₂} D] (E : Type u₃) [ℰ : category.{u₃ v₃} E]
 include 𝒞 𝒟 ℰ
 
+-- FIXME hmmm.
+open tactic.interactive
+meta def unfold_coes' := `[unfold_coes]
+local attribute [tidy] unfold_coes'
+
 definition whiskering_on_left : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) := 
 { onObjects     := λ F, 
     { onObjects     := λ G, F ⋙ G,
       onMorphisms   := λ _ _ α, 1 ◫ α },
   onMorphisms   := λ F G τ, 
-    { components := λ H, { components := λ c, H &> (τ.components c) } } }
+    { components := λ H, { components := λ c, H &> (τ.components c) } }, identities := begin tidy, unfold_coes, simp, rewrite_search_using `ematch end }
 
 definition whiskering_on_right : (D ↝ E) ↝ ((C ↝ D) ↝ (C ↝ E)) :=
 { onObjects     := λ H, 
@@ -45,4 +47,4 @@ definition whisker_on_left {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : 
 definition whisker_on_right {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E] {G H : C ↝ D} (α : G ⟹ H)  (F : D ↝ E) : (G ⋙ F) ⟹ (H ⋙ F) := 
   (whisker_on_right_functor C F) &> α
 
-end categories.functor_categories
+end category_theory

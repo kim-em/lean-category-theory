@@ -4,9 +4,8 @@
 
 import categories.types
 
-open categories
-open categories.functor
-open categories.types
+open category_theory
+open category_theory.types
 
 universes u v
 

@@ -8,15 +8,10 @@ import categories.products
 import categories.isomorphism
 import categories.types
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.products
-open categories.isomorphism
-open categories.types
-open categories.opposites
+open category_theory
+open category_theory.types
 
-namespace categories.adjunctions
+namespace category_theory.adjunctions
 
 universes u v
 
@@ -27,9 +22,9 @@ variable [𝒟 : category.{u v} D]
 include 𝒞 𝒟
 
 definition HomAdjunction (L : C ↝ D) (R : D ↝ C) :=
-    ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D))
+    ((OppositeFunctor L × Functor.id D) ⋙ (HomPairing D))
       ⇔ 
-    ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C))
+    ((Functor.id (Cᵒᵖ) × R) ⋙ (HomPairing C))
 
 definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : (L +> X) ⟶ Y) : X ⟶ (R +> Y)
   := ((A.morphism).components (X, Y)) f
@@ -43,4 +38,4 @@ definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X :
 --   (A : HomAdjunction L R) (B : HomAdjunction L' R')
 --     : HomAdjunction (FunctorComposition L L') (FunctorComposition R' R) := sorry
 
-end categories.adjunctions
+end category_theory.adjunctions

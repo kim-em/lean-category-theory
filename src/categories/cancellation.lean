@@ -4,7 +4,7 @@
 
 import categories.category
 
-namespace categories
+namespace category_theory
 
 universes u v
 
@@ -37,4 +37,4 @@ begin
     { obviously }
 end
 
-end categories
+end category_theory

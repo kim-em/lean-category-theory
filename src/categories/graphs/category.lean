@@ -5,9 +5,9 @@
 import categories.category
 import categories.graphs
 
-namespace categories
+namespace category_theory
 
-open categories.graphs
+open category_theory.graphs
 
 universe u
 variable {C : Type u}
@@ -33,4 +33,4 @@ definition category.compose_path : Π {X Y : C}, morphism_path X Y → (X ⟶ Y)
 | X ._  (morphism_path.nil ._)                 := 𝟙 X
 | _ _   (@morphism_path.cons ._ ._ _ _ ._ e p) := e ≫ (category.compose_path p)
 
-end categories
+end category_theory

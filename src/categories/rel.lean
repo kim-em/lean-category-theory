@@ -1,6 +1,6 @@
 import categories.category
 
-open categories
+namespace category_theory
 
 universe u
 
@@ -9,3 +9,5 @@ definition Rel : large_category (Type u) := {
   identity := λ X, λ x y, x = y,
   compose := λ X Y Z f g x z, ∃ y, f x y ∧ g y z,
 }
+
+end category_theory

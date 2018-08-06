@@ -4,12 +4,9 @@
 
 import categories.equivalence
 
-open categories
-open categories.isomorphism
-open categories.functor
-open categories.natural_transformation
+open category_theory
 
-namespace categories.equivalence
+namespace category_theory.equivalence
 
 universes u₁ u₂
 
@@ -58,4 +55,4 @@ end
 instance (F : Functor C D) [is_Equivalence F] : Full F     := sorry
 instance (F : Functor C D) [is_Equivalence F] : Faithful F := sorry
 
-end categories.equivalence
+end category_theory.equivalence

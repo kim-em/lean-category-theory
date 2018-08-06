@@ -5,9 +5,9 @@
 import categories.types
 import categories.full_subcategory
 
-namespace categories.types
+namespace category_theory.types
 
-open categories
+open category_theory
 
 universe u
 
@@ -15,4 +15,4 @@ definition DecidableType := Σ X : Type u, decidable_eq X
 
 instance CategoryOfDecidableTypes : large_category DecidableType := by unfold DecidableType; apply_instance
 
-end categories.types
+end category_theory.types

@@ -4,8 +4,7 @@
 
 import categories.isomorphism
 
-open categories
-open categories.isomorphism
+namespace category_theory
 
 universes u v
 
@@ -36,3 +35,5 @@ begin
   },
   obviously,
 end
+
+end category_theory

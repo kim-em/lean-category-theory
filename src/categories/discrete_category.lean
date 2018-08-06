@@ -5,11 +5,9 @@
 import categories.category
 import categories.functor
 
-namespace categories
+namespace category_theory
 
 universes u₁ v₁ u₂ 
-
-open categories.functor
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
@@ -47,9 +45,11 @@ begin
   refl,
 end
 
-definition Functor.fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := {
+namespace Functor
+definition fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := {
   onObjects     := F,
   onMorphisms   := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end,
 }
+end Functor
 
-end categories
+end category_theory

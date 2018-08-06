@@ -4,13 +4,8 @@
 
 import categories.adjunctions
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.products
-open categories.isomorphism
-open categories.types
-open categories.functor_categories
+open category_theory
+open category_theory.types
 
 namespace categories.adjunctions
 

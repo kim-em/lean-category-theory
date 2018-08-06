@@ -6,13 +6,12 @@ import categories.abelian.monic
 import categories.universal.monic
 import categories.universal.kernels
 
-open categories
-open categories.initial
-open categories.universal
-open categories.isomorphism
-open categories.universal.monic
+open category_theory
+open category_theory.initial
+open category_theory.universal
+open category_theory.universal.monic
 
-namespace categories.abelian
+namespace category_theory.abelian
 
 -- This is the definition of abelian from Etingof's "Tensor categories"
 
@@ -41,4 +40,4 @@ class Abelian' (C : Type (u+1)) [large_category C] [has_ZeroObject.{u+1 u} C] :=
 
 -- PROJECT define short and long exact sequences, cohomology?
 
-end categories.abelian
+end category_theory.abelian

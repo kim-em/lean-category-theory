@@ -5,11 +5,9 @@
 import categories.products
 import categories.natural_isomorphism
 
-open categories
-open categories.functor
-open categories.natural_transformation
+open category_theory
 
-namespace categories.products
+namespace category_theory.ProductCategory
 
 universes u₁ v₁ u₂ v₂ 
 
@@ -21,10 +19,10 @@ variable (D : Type u₂)
 variable [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-definition SwitchProductCategory : (C × D) ↝ (D × C) :=
+definition switch : (C × D) ↝ (D × C) :=
 { onObjects     := λ X, (X.2, X.1),
   onMorphisms   := λ _ _ f, (f.2, f.1) }
 
-definition SwitchSymmetry : ((SwitchProductCategory C D) ⋙ (SwitchProductCategory D C)) ⇔ (IdentityFunctor (C × D)) := by obviously
+definition symmetry : ((switch C D) ⋙ (switch D C)) ⇔ (Functor.id (C × D)) := by obviously
         
-end categories.products
+end category_theory.ProductCategory

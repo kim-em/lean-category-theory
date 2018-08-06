@@ -5,13 +5,7 @@
 import categories.natural_isomorphism
 import categories.functor.isomorphism
 
-open categories
-open categories.isomorphism
-open categories.functor
-open categories.natural_transformation
-open categories.functor_categories
-
-namespace categories.equivalence
+namespace category_theory
 
 universes u₁ v₁ u₂ v₂
 
@@ -21,18 +15,20 @@ structure Equivalence (C : Type u₁) [category.{u₁ v₁} C] (D : Type u₂) [
   (isomorphism_1 : (functor ⋙ inverse) ⇔ 1 . obviously)
   (isomorphism_2 : (inverse ⋙ functor) ⇔ 1 . obviously)
 
+namespace Equivalence
+
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-@[reducible] definition Equivalence.reverse (e : Equivalence C D) : Equivalence D C := {
+@[reducible] definition reverse (e : Equivalence C D) : Equivalence D C := {
   functor := e.inverse,
   inverse := e.functor,
   isomorphism_1 := e.isomorphism_2,
   isomorphism_2 := e.isomorphism_1
 }
 
-@[simp,ematch] lemma Equivalence.onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := by obviously
-@[simp,ematch] lemma Equivalence.onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := by obviously
+@[simp,ematch] lemma onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := by obviously
+@[simp,ematch] lemma onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := by obviously
 
 -- PROJECT a good way to do this?
 -- definition EquivalenceComposition (e : Equivalence C D) (f : Equivalence D E) : Equivalence C E := 
@@ -42,6 +38,11 @@ include 𝒞 𝒟
 --     isomorphism_1 := sorry,
 --     isomorphism_2 := sorry
 -- }
+end Equivalence
+
+section
+variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
+include 𝒞 𝒟
 
 class Full (F : C ↝ D) :=
   (preimage : ∀ {X Y : C} (f : (F +> X) ⟶ (F +> Y)), X ⟶ Y)
@@ -74,16 +75,22 @@ definition Embedding (F : C ↝ D) := (Full F) × (Faithful F)
 
 definition EssentiallySurjective (F : C ↝ D) := Π d : D, Σ c : C, Isomorphism (F +> c) d
 attribute [class] EssentiallySurjective
+end
+
+section
+
+variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
+include 𝒞 𝒟
 
 class is_Equivalence (F : Functor C D) := 
-  (inverse       : Functor D C)
-  (isomorphism_1 : (F ⋙ inverse) ⇔ (IdentityFunctor C))
-  (isomorphism_2 : (inverse ⋙ F) ⇔ (IdentityFunctor D))
+(inverse       : Functor D C)
+(isomorphism_1 : (F ⋙ inverse) ⇔ (Functor.id C))
+(isomorphism_2 : (inverse ⋙ F) ⇔ (Functor.id D))
 
-instance (e : Equivalence C D) : is_Equivalence e.functor := {
-  inverse       := e.inverse,
+instance (e : Equivalence C D) : is_Equivalence e.functor := 
+{ inverse       := e.inverse,
   isomorphism_1 := e.isomorphism_1,
-  isomorphism_2 := e.isomorphism_2,
-}
+  isomorphism_2 := e.isomorphism_2 }
+end
 
-end categories.equivalence
+end category_theory

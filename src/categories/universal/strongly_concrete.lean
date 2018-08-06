@@ -7,12 +7,11 @@ import categories.universal.preserves
 import categories.concrete
 import categories.functor.isomorphism
 
-open categories
-open categories.functor
-open categories.initial
-open categories.types
+open category_theory
+open category_theory.initial
+open category_theory.types
 
-namespace categories.universal
+namespace category_theory.universal
 
 universes u₁
 variable (C : Type (u₁+1))
@@ -37,4 +36,4 @@ class StronglyConcrete [Concrete C] :=
 --    },
 --}
 
-end categories.universal
+end category_theory.universal

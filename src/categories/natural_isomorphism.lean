@@ -5,12 +5,7 @@
 import categories.isomorphism
 import categories.functor_categories
 
-open categories
-open categories.isomorphism
-open categories.functor
-open categories.functor_categories
-
-namespace categories.natural_transformation
+namespace category_theory
 
 universes u₁ u₂ v₁ v₂
 
@@ -24,17 +19,16 @@ definition NaturalIsomorphism (F G : C ↝ D) := Isomorphism F G
 
 infix ` ⇔ `:10 := NaturalIsomorphism -- type as \<=>
 
+namespace NaturalIsomorphism
+
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.
 -- Somehow we want the definition above to be more transparent?
-instance NaturalIsomorphism_coercion_to_NaturalTransformation (F G : C ↝ D) : has_coe (F ⇔ G) (F ⟹ G) :=
+instance coercion_to_NaturalTransformation (F G : C ↝ D) : has_coe (F ⇔ G) (F ⟹ G) :=
   {coe := λ α, Isomorphism.morphism α}
 
 variables {F G H : C ↝ D}
 
-namespace NaturalIsomorphism
--- set_option pp.universes true
--- set_option pp.notation false
 section 
 variable (α : F ⇔ G)
 @[simp,ematch] lemma componentwise_witness_1 (X : C) : (α.morphism X) ≫ (α.inverse X) = 𝟙 (F +> X) := by obviously
@@ -78,7 +72,9 @@ end NaturalIsomorphism
 
 open NaturalTransformation
 
-definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) (functor_categories.FunctorCategory C D) F G α
+variables {F G : C ↝ D}
+
+definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_Isomorphism (C ↝ D) (category_theory.FunctorCategory C D) F G α
 attribute [class] is_NaturalIsomorphism
 
 namespace is_NaturalIsomorphism
@@ -101,9 +97,13 @@ instance (F : C ↝ D) : is_NaturalIsomorphism (𝟙 F) := {
 }
 end is_NaturalIsomorphism
 
-instance NaturalIsomorphism.morphism.is_NaturalIsomorphism {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.morphism) := 
+namespace NaturalIsomorphism
+
+instance morphism.is_NaturalIsomorphism {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.morphism) := 
 { inverse := α.inverse }
-instance NaturalIsomorphism.inverse.is_NaturalIsomorphism  {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.inverse) := 
+instance inverse.is_NaturalIsomorphism  {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.inverse) := 
 { inverse := α.morphism }
 
-end categories.natural_transformation
+end NaturalIsomorphism
+
+end category_theory

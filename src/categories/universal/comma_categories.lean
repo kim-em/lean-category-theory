@@ -6,15 +6,11 @@ import categories.walking
 import categories.discrete_category
 import categories.universal.initial
 
-open categories
-open categories.isomorphism
-open categories.functor
-open categories.natural_transformation
-open categories.functor_categories
-open categories.initial
-open categories.walking
+open category_theory
+open category_theory.initial
+open category_theory.walking
 
-namespace categories.comma
+namespace category_theory.comma
 
 universes j u₁ v₁ u₂ v₂ u₃ v₃
 
@@ -80,8 +76,8 @@ definition CommaCategory_projection_transformation (S : A ↝ C) (T : B ↝ C) :
 { components := λ X, X.2 }
 
 -- Notice that if C is large, these are large, and if C is small, these are small.
-definition SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (IdentityFunctor C) (ObjectAsFunctor X)) := by apply_instance
-definition CosliceCategory (X : C) : category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (IdentityFunctor C)) := by apply_instance
+definition SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (Functor.id C) (ObjectAsFunctor X)) := by apply_instance
+definition CosliceCategory (X : C) : category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (Functor.id C)) := by apply_instance
 end
 
 -- In Cones, we have
@@ -111,5 +107,5 @@ definition BinaryCoproduct (α β : C)                  := Colimit (Pair_functor
 definition Equalizer       {α β : C} (f g : α ⟶ β)  := Limit   (ParallelPair_functor f g)
 definition Coequalizer     {α β : C} (f g : α ⟶ β)  := Colimit (ParallelPair_functor f g)
 
-end categories.comma
+end category_theory.comma
 

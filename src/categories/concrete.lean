@@ -5,11 +5,9 @@
 import categories.equivalence
 import categories.types
 
-namespace categories
+namespace category_theory
 
-open categories.types
-open categories.functor
-open categories.equivalence
+open category_theory.types
 
 universe u
 
@@ -19,7 +17,7 @@ class Concrete (C : Type (u+1)) [large_category C] :=
 
 definition FibreFunctor (C : Type (u+1)) [large_category C] [concrete : Concrete C] := concrete.fibre_functor
 
-instance Types_Concrete : Concrete (Type u) := 
+instance : Concrete (Type u) := 
 { fibre_functor := 1 }
 
-end categories
+end category_theory

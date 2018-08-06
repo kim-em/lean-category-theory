@@ -4,11 +4,10 @@
 
 import categories.universal
 
-open categories
-open categories.functor
-open categories.initial
+open category_theory
+open category_theory.initial
 
-namespace categories.universal
+namespace category_theory.universal
 
 universes u
 variable {C : Type (u+1)}
@@ -26,5 +25,5 @@ structure Cocontinuous (F : C ↝ D) :=
 
 -- PROJECT right adjoints are continuous
 
-end categories.universal
+end category_theory.universal
 

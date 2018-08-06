@@ -4,12 +4,9 @@
 
 import categories.natural_isomorphism
 
-open categories
-open categories.isomorphism
-open categories.functor
-open categories.natural_transformation
+open category_theory
 
-namespace categories.functor_categories
+namespace category_theory.Functor
 
 universes u₁ v₁ u₂ v₂ u₃ v₃ u₄ v₄ 
 
@@ -21,9 +18,9 @@ include ℬ 𝒞
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition FunctorComposition_left_unitor (F : B ↝ C) : (1 ⋙ F) ⇔ F := by obviously
+definition left_unitor (F : B ↝ C) : (1 ⋙ F) ⇔ F := by obviously
 
-definition FunctorComposition_right_unitor (F : B ↝ C) : (F ⋙ 1) ⇔ F := by obviously
+definition right_unitor (F : B ↝ C) : (F ⋙ 1) ⇔ F := by obviously
 
 variable {D : Type u₃}
 variable [𝒟 : category.{u₃ v₃} D]
@@ -31,8 +28,8 @@ variable {E : Type u₄}
 variable [ℰ : category.{u₄ v₄} E]
 include 𝒟 ℰ 
 
-definition FunctorComposition_associator (F : B ↝ C) (G : C ↝ D) (H : D ↝ E) : ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := by obviously 
+definition associator (F : B ↝ C) (G : C ↝ D) (H : D ↝ E) : ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := by obviously 
 
 -- PROJECT pentagon
 
-end categories.functor_categories
+end category_theory.Functor

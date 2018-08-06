@@ -6,14 +6,11 @@ import categories.universal.complete
 import categories.walking
 import tidy.its
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.isomorphism
-open categories.initial
-open categories.walking
+open category_theory
+open category_theory.initial
+open category_theory.walking
 
-namespace categories.universal
+namespace category_theory.universal
 
 universes u₁ u₂ u₃ u₄
 
@@ -91,4 +88,4 @@ instance Products_from_Limits [Complete C] : has_Products C := {
                  }
 }
 
-end categories.universal
+end category_theory.universal

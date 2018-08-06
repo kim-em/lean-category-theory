@@ -5,7 +5,7 @@
 import categories.tactics
 import tidy.auto_cast
 
-namespace categories.graphs
+namespace category_theory.graphs
 
 universes u₁ u₂
 
@@ -67,4 +67,4 @@ definition concatenate_path_of_paths : Π {x y : G}, path_of_paths x y → path 
 | ._ ._ (path_of_paths.nil X) := path.nil X
 | ._ ._ (@path_of_paths.cons ._ _ _ _ _ e p') := concatenate_paths e (concatenate_path_of_paths p')
 
-end categories.graphs
+end category_theory.graphs

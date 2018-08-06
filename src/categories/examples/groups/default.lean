@@ -4,8 +4,9 @@
 
 import categories.functor
 
-namespace categories.examples.groups
-open categories
+open category_theory
+
+namespace category_theory.examples.groups
 
 universe u₁
 
@@ -40,4 +41,4 @@ instance CategoryOfGroups : large_category Group :=
   identity := GroupHomomorphism.identity,
   compose  := @GroupHomomorphism.composition }
 
-end categories.examples.groups
+end category_theory.examples.groups

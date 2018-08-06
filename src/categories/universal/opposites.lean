@@ -8,14 +8,11 @@ import categories.universal
 import categories.universal.cones
 import categories.universal.complete
 
-open categories
-open categories.functor
-open categories.initial
-open categories.opposites
-open categories.universal
-open categories.equivalence
+open category_theory
+open category_theory.initial
+open category_theory.universal
 
-namespace categories.universal.opposites
+namespace category_theory.universal.opposites
 
 universes u₁ u₂ u₃
 
@@ -99,4 +96,4 @@ def Cocomplete_of_Opposite_Complete (C : Type (u₁+1)) [large_category C] [Comp
 def Complete_of_Opposite_Cocomplete (C : Type (u₁+1)) [large_category C] [Cocomplete (Cᵒᵖ)] : Complete C := sorry
 
 
-end categories.universal.opposites
+end category_theory.universal.opposites

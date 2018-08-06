@@ -5,11 +5,9 @@
 import categories.natural_transformation
 import categories.products
 
-open categories
-open categories.functor
-open categories.natural_transformation
+open category_theory
 
-namespace categories.functor_categories
+namespace category_theory.FunctorCategory
 
 universes u₁ v₁ u₂ v₂
 
@@ -19,9 +17,8 @@ variable (D : Type u₂)
 variable [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟 
 
-definition Evaluation : ((C ↝ D) × C) ↝ D := {
-  onObjects     := λ p, p.1 +> p.2,
-  onMorphisms   := λ x y f, (x.1 &> f.2) ≫ (f.1.components y.2)
-}
+definition Evaluation : ((C ↝ D) × C) ↝ D := 
+{ onObjects     := λ p, p.1 +> p.2,
+  onMorphisms   := λ x y f, (x.1 &> f.2) ≫ (f.1.components y.2) }
 
-end categories.functor_categories
+end category_theory.FunctorCategory

@@ -6,10 +6,10 @@ import categories.examples.groups
 import categories.universal.instances
 import categories.universal.strongly_concrete
 
-namespace categories.examples.groups
+namespace category_theory.examples.groups
 
-open categories
-open categories.universal
+open category_theory
+open category_theory.universal
 
 universe u
 
@@ -147,4 +147,4 @@ variables {α : Type u} [group α] {β : Type u} [group β] {γ : Type u} [group
 -- }
 -- end
 
-end categories.examples.groups
+end category_theory.examples.groups

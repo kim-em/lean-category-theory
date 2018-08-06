@@ -4,11 +4,9 @@
 
 import categories.products
 
-open categories
-open categories.functor
-open categories.natural_transformation
+open category_theory
 
-namespace categories.products
+namespace category_theory.ProductCategory
 
 universes u₁ v₁ u₂ v₂
 variable {C : Type u₁}
@@ -25,38 +23,18 @@ include 𝒞 𝒟 ℰ
 
 @[simp] lemma Bifunctor_left_identity (F : (C × D) ↝ E) (W : C) {X Y Z : D} (f : X ⟶ Y) (g : Y ⟶ Z)
   : @Functor.onMorphisms _ _ _ _ F (W, X) (W, Z) (𝟙 W, f ≫ g) =
-      (@Functor.onMorphisms _ _ _ _ F (W, X) (W, Y) (𝟙 W, f)) ≫ (@Functor.onMorphisms _ _ _ _ F (W, Y) (W, Z) (𝟙 W, g)) :=
-begin 
-  rw ← Functor.functoriality,
-  dsimp [products.ProductCategory],
-  simp,
-end
+      (@Functor.onMorphisms _ _ _ _ F (W, X) (W, Y) (𝟙 W, f)) ≫ (@Functor.onMorphisms _ _ _ _ F (W, Y) (W, Z) (𝟙 W, g)) := by obviously
 
 @[simp] lemma Bifunctor_right_identity (F : (C × D) ↝ E) (X Y Z : C) (W : D) (f : X ⟶ Y) (g : Y ⟶ Z)
   : @Functor.onMorphisms _ _ _ _ F (X, W) (Z, W) (f ≫ g, 𝟙 W) =
-      (@Functor.onMorphisms _ _ _ _ F (X, W) (Y, W) (f, 𝟙 W)) ≫ (@Functor.onMorphisms _ _ _ _ F (Y, W) (Z, W) (g, 𝟙 W)) :=
-begin
-  rw ← Functor.functoriality,
-  dsimp [products.ProductCategory],
-  simp,
-end
+      (@Functor.onMorphisms _ _ _ _ F (X, W) (Y, W) (f, 𝟙 W)) ≫ (@Functor.onMorphisms _ _ _ _ F (Y, W) (Z, W) (g, 𝟙 W)) := by obviously
 
 @[simp] lemma Bifunctor_diagonal_identities_1 (F : (C × D) ↝ E) (X X' : C) (f : X ⟶ X') (Y Y' : D) (g : Y ⟶ Y')
   : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X, Y') (𝟙 X, g)) ≫ (@Functor.onMorphisms _ _ _ _ F (X, Y') (X', Y') (f, 𝟙 Y')) =
-   @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
-begin
-  rw ← Functor.functoriality,
-  dsimp [products.ProductCategory],
-  simp,
-end
+   @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) := by obviously
 
 @[simp] lemma Bifunctor_diagonal_identities_2 (F : (C × D) ↝ E) (X X' : C) (f : X ⟶ X') (Y Y' : D) (g : Y ⟶ Y')
   : (@Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y) (f, 𝟙 Y)) ≫ (@Functor.onMorphisms _ _ _ _ F (X', Y) (X', Y') (𝟙 X', g)) =
-   @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) :=
-begin
-  rw ← Functor.functoriality,
-  dsimp [products.ProductCategory],
-  simp,
-end
+   @Functor.onMorphisms _ _ _ _ F (X, Y) (X', Y') (f, g) := by obviously
 
-end categories.products
+end category_theory.ProductCategory

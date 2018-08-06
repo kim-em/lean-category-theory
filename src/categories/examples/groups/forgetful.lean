@@ -7,11 +7,11 @@ import categories.types
 import categories.yoneda
 import algebra.group_power
 
-namespace categories.examples.groups
-open categories
-open categories.functor
-open categories.types
-open categories.yoneda
+namespace category_theory.examples.groups
+
+open category_theory
+open category_theory.types
+open category_theory.yoneda
 
 universes u₁ u₂
 
@@ -56,4 +56,4 @@ instance Groups_ForgetfulFunctor_Representable : Representable (ForgetfulFunctor
           witness_1 := sorry,
           witness_2 := sorry, } }
 
-end categories.examples.groups
+end category_theory.examples.groups

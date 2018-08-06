@@ -6,14 +6,11 @@ import categories.universal.complete
 import categories.walking
 import tidy.transport
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.isomorphism
-open categories.initial
-open categories.walking
+open category_theory
+open category_theory.initial
+open category_theory.walking
 
-namespace categories.universal
+namespace category_theory.universal
 
 universes u₁ v₁
 variable {C : Type (u₁+1)}
@@ -44,4 +41,4 @@ instance Limits_from_Products_and_Equalizers [has_Products.{u₁} C] [has_Equali
    end
 }
 
-end categories.universal
+end category_theory.universal

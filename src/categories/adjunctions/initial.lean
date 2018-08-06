@@ -5,11 +5,9 @@
 import categories.adjunctions
 import categories.universal.comma_categories
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.comma
-open categories.initial
+open category_theory
+open category_theory.comma
+open category_theory.initial
 
 namespace categories.adjunctions
 

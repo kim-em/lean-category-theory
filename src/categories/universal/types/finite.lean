@@ -1,9 +1,9 @@
 import categories.types.finite
 import categories.universal.instances
 
-open categories.universal
-open categories.isomorphism
-namespace categories.types
+open category_theory.universal
+
+namespace category_theory.types
 
 -- definition {u} FiniteTypes_has_FiniteProducts : has_FiniteProducts CategoryOfFiniteTypes.{u} := {
 --   product := λ I fin φ, {
@@ -50,4 +50,4 @@ namespace categories.types
 --}
 -- attribute [instance] FiniteTypes_has_Equalizers
 
-end categories.types
+end category_theory.types

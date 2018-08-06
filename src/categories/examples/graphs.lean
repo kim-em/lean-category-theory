@@ -5,10 +5,10 @@
 import categories.category
 import categories.graphs
 
-open categories
-open categories.graphs
+open category_theory
+open category_theory.graphs
 
-namespace categories.examples.graphs
+namespace category_theory.examples.graphs
 
 universe u₁
 
@@ -42,4 +42,4 @@ instance CategoryOfGraphs : large_category Graph := {
   } ⟩
 }
 
-end categories.examples.graphs
+end category_theory.examples.graphs

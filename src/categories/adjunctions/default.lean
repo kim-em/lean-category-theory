@@ -6,12 +6,10 @@ import categories.natural_transformation
 import categories.opposites
 import categories.types
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.types
+open category_theory
+open category_theory.types
 
-namespace categories.adjunctions
+namespace category_theory.adjunctions
 
 universes u₁ u₂
 
@@ -82,4 +80,4 @@ end
 -- PROJECT show these are a special case of a duality in a 2-category.
 -- PROJECT adjoints of monoidal functors are (op)lax
 
-end categories.adjunctions
+end category_theory.adjunctions

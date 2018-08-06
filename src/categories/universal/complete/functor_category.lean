@@ -6,7 +6,6 @@
 
 -- open categories
 -- open categories.functor
--- open categories.natural_transformation
 -- open categories.functor_categories
 -- open categories.isomorphism
 -- open categories.initial

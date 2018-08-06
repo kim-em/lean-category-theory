@@ -4,15 +4,11 @@
 
 import categories.universal.complete
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.functor_categories
-open categories.isomorphism
-open categories.initial
-open categories.universal
+open category_theory
+open category_theory.initial
+open category_theory.universal
 
-namespace categories.universal.lemmas.cones_in_functor_categories
+namespace category_theory.universal.lemmas.cones_in_functor_categories
 
 universes j u₁ u₂
 
@@ -134,4 +130,4 @@ begin
 end
 
 
-end categories.universal.lemmas.cones_in_functor_categories
+end category_theory.universal.lemmas.cones_in_functor_categories

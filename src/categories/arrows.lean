@@ -5,14 +5,11 @@
 import categories.natural_transformation
 import categories.functor_categories
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.functor_categories
-
-namespace categories.arrows
-
 universes u₁ u₂
+
+open category_theory
+
+namespace category_theory.arrows
 
 local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
@@ -38,17 +35,23 @@ end
 { Hom := arrow_hom,
   identity       := by tidy,
   compose        := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ }
+end category_theory.arrows
+
+namespace category_theory.Functor
+
+open category_theory.arrows
 
 variable {C : Type (u₁+1)}
 variable [large_category C]
 variable {D : Type (u₂+1)}
 variable [large_category D]
 
-definition Functor.onArrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
+definition onArrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
 { onObjects := λ F, 
     { onObjects     := λ X, ⟨ (F +> X.1.1, F +> X.1.2), F &> X.2 ⟩,
       onMorphisms   := λ X Y f, ⟨ (F &> f.morphism.1, F &> f.morphism.2) ⟩ },
   onMorphisms := λ F G τ, 
     { components := λ X, ⟨ (τ.components X.1.1, τ.components X.1.2) ⟩ } }
 
-end categories.arrows
+end category_theory.Functor
+

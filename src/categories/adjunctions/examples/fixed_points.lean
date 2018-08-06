@@ -5,15 +5,10 @@
 import categories.adjunctions
 import categories.full_subcategory
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.products
-open categories.isomorphism
-open categories.types
-open categories.functor_categories
+open category_theory
+open category_theory.types
 
-namespace categories.adjunctions
+namespace category_theory.adjunctions
 
 universe u
 
@@ -32,4 +27,4 @@ definition right_fixed_points {L : C ↝ D} {R : D ↝ C} (A : Adjunction L R)
 -- Now we need to express the idea that functors restrict to a full subcategory with image in another full subcategory,
 -- and that these restrictions give an equivalence.
 
-end categories.adjunctions
+end category_theory.adjunctions

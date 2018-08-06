@@ -10,7 +10,6 @@
 
 -- open categories
 -- open categories.functor
--- open categories.natural_transformation
 -- open categories.isomorphism
 -- open categories.equivalence
 -- open categories.universal

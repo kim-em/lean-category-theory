@@ -5,11 +5,10 @@
 import categories.universal
 import categories.abelian.monic
 
-open categories
-open categories.universal
-open categories.isomorphism
+open category_theory
+open category_theory.universal
 
-namespace categories.universal.monic
+namespace category_theory.universal.monic
 
 universe u
 variable {C : Type (u+1)}
@@ -40,4 +39,4 @@ structure RegularEpic (f : Y ⟶ Z) :=
   (i : c.coequalizer ≅ Z)
   (w : c.projection = f ≫ i.inverse)
 
-end categories.universal.monic
+end category_theory.universal.monic

@@ -5,11 +5,9 @@
 import categories.products
 import categories.equivalence
 
-open categories
-open categories.functor
-open categories.natural_transformation
+open category_theory
 
-namespace categories.products
+namespace category_theory.ProductCategory
 
 universes u₁ v₁ u₂ v₂ u₃ v₃
 variable (C : Type u₁)
@@ -23,22 +21,20 @@ include 𝒞 𝒟 ℰ
 -- PROJECT; by aggressively allowing "assumption" we could do this completely automatically
 -- locally tag "assumption" with @[tidy]?
 -- or define an aggressive version of tidy (perhaps "follow_your_nose"?)
-definition ProductCategoryAssociator : ((C × D) × E) ↝ (C × (D × E)) :=
+definition associator : ((C × D) × E) ↝ (C × (D × E)) :=
 { onObjects     := λ X, (X.1.1, (X.1.2, X.2)),
   onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2)) }
 
-definition ProductCategoryInverseAssociator : (C × (D × E)) ↝ ((C × D) × E) :=
+definition inverse_associator : (C × (D × E)) ↝ ((C × D) × E) :=
 { onObjects     := λ X, ((X.1, X.2.1), X.2.2),
   onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2) }
 
+local attribute [applicable] category.identity
 
--- TODO prove the equivalence
--- open categories.equivalence
-
--- definition ProductCategoryAssociativity : Equivalence ((C × D) × E) (C × (D × E)) :=
--- { functor := ProductCategoryAssociator C D E,
---   inverse := ProductCategoryInverseAssociator C D E, }
+definition associativity : Equivalence ((C × D) × E) (C × (D × E)) :=
+{ functor := associator C D E,
+  inverse := inverse_associator C D E, }
 
 -- TODO pentagon natural transformation? satisfying?
 
-end categories.products
+end category_theory.ProductCategory

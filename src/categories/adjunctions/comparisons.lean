@@ -5,15 +5,10 @@
 import categories.adjunctions
 import categories.adjunctions.hom_adjunction
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.products
-open categories.opposites
-open categories.isomorphism
-open categories.types
+open category_theory
+open category_theory.types
 
-namespace categories.adjunctions
+namespace category_theory.adjunctions
 
 universes u
 
@@ -26,15 +21,15 @@ variables {L : C ↝ D} {R : D ↝ C}
 local attribute [tidy] dsimp_all'
 
 @[reducible] private definition Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
-  : ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D)) ⟹ 
-                          ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C)) := 
+  : ((OppositeFunctor L × Functor.id D) ⋙ (HomPairing D)) ⟹ 
+                          ((Functor.id (Cᵒᵖ) × R) ⋙ (HomPairing C)) := 
 { components := λ P, 
     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
     λ f, (A.unit.components P.1) ≫ (R &> f) }
 
 @[reducible] private definition Adjunction_to_HomAdjunction_inverse (A : L ⊣ R) 
-  : ((IdentityFunctor (Cᵒᵖ) × R) ⋙ (HomPairing C)) ⟹ 
-                          ((OppositeFunctor L × IdentityFunctor D) ⋙ (HomPairing D)) :=
+  : ((Functor.id (Cᵒᵖ) × R) ⋙ (HomPairing C)) ⟹ 
+                          ((OppositeFunctor L × Functor.id D) ⋙ (HomPairing D)) :=
 { components := λ P, 
     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
     λ f, (L &> f) ≫ (A.counit.components P.2) }
@@ -110,4 +105,4 @@ private definition unit_from_HomAdjunction (A : HomAdjunction L R) : 1 ⟹ (L �
 --                  -- this is just another lemma about mates; perhaps the same as the one we use above.
 --                end }
 
-end categories.adjunctions
+end category_theory.adjunctions

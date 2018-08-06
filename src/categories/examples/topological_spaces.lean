@@ -6,9 +6,9 @@ import categories.full_subcategory
 import analysis.topology.topological_space
 import analysis.topology.continuity
 
-open categories
+open category_theory
 
-namespace categories.examples.topological_spaces
+namespace category_theory.examples.topological_spaces
 
 universe variables u₁ u₂ u₃
 
@@ -62,4 +62,4 @@ instance category_of_open_sets {α : Type u₁} (X : topological_space α) : lar
 
 definition Neighbourhoods {α} [X : topological_space α] (x : α) : large_category { U : OpenSet X | x ∈ U } := by apply_instance
 
-end categories.examples.topological_spaces
+end category_theory.examples.topological_spaces

@@ -6,15 +6,11 @@ import categories.equivalence
 import categories.universal.comma_categories
 import categories.universal
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.isomorphism
-open categories.equivalence
-open categories.universal
-open categories.comma
+open category_theory
+open category_theory.universal
+open category_theory.comma
 
-namespace categories.universal
+namespace category_theory.universal
 
 universes u v
 variables {J : Type v} [small_category J]
@@ -74,4 +70,4 @@ definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) :=
   isomorphism_1 := by obviously,
   isomorphism_2 := by obviously }
 
-end categories.universal
+end category_theory.universal

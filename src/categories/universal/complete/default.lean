@@ -7,16 +7,11 @@ import categories.discrete_category
 import categories.opposites
 import categories.universal.complete.lemmas.limit_functoriality
 
-open categories
-open categories.functor
-open categories.natural_transformation
-open categories.functor_categories
-open categories.isomorphism
-open categories.products
-open categories.initial
-open categories.types
+open category_theory
+open category_theory.initial
+open category_theory.types
 
-namespace categories.universal
+namespace category_theory.universal
 
 universes u₁ u₂ 
 
@@ -37,7 +32,7 @@ definition limit     [Complete C] (F : J ↝ C) := (Complete.limitCone F).termin
 definition colimitCocone [Cocomplete C] (F : J ↝ C) := Cocomplete.colimitCocone F
 definition colimit       [Cocomplete C] (F : J ↝ C) := (Cocomplete.colimitCocone F).initial_object.cocone_point
 
-open categories.universal.lemmas.limit_functoriality
+open category_theory.universal.lemmas.limit_functoriality
 
 definition functorial_Limit [Complete C] : (J ↝ C) ↝ C := {
   onObjects     := λ F, (limitCone F).terminal_object.cone_point,
@@ -49,8 +44,6 @@ definition functorial_Limit [Complete C] : (J ↝ C) ↝ C := {
                              }).cone_morphism
 }
 
-open categories.opposites
-
 definition functorial_Colimit [Cocomplete C] : (J ↝ C) ↝ C := {
   onObjects     := λ F, (colimitCocone F).initial_object.cocone_point,
   onMorphisms   := λ F G τ, let colim_F := (colimitCocone F) in
@@ -61,4 +54,4 @@ definition functorial_Colimit [Cocomplete C] : (J ↝ C) ↝ C := {
                              }).cocone_morphism
 }
 
-end categories.universal
+end category_theory.universal

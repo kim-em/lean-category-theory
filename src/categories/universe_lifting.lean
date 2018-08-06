@@ -4,10 +4,7 @@
 
 import categories.equivalence
 
-open categories.functor
-open categories.equivalence
-
-namespace categories
+namespace category_theory
 
 universes u₁
 
@@ -23,4 +20,4 @@ local attribute [applicable] category.identity
 
 definition universe_lift.equivalence : Equivalence C (ulift.{(u₁+1)} C) := by obviously
 
-end categories
+end category_theory
