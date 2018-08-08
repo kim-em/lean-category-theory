@@ -44,7 +44,7 @@ structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (m
 (right : p.1.2 ⟶ q.1.2)
 (condition : (S &> left) ≫ q.2 = p.2 ≫ (T &> right) . obviously)
 
-make_lemma comma_morphism.condition
+restate_axiom comma_morphism.condition
 attribute [ematch] comma_morphism.condition_lemma
 
 @[extensionality] lemma comma_morphism_equal
