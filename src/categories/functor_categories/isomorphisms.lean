@@ -16,7 +16,7 @@ variable {C : Type u₂}
 variable [𝒞 : category.{u₂ v₂} C]
 include ℬ 𝒞
 
-local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [backwards] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 definition left_unitor (F : B ↝ C) : (1 ⋙ F) ⇔ F := by obviously
 

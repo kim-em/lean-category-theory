@@ -10,14 +10,13 @@ import algebra.group_power
 namespace category_theory.examples.groups
 
 open category_theory
-open category_theory.types
 open category_theory.yoneda
 
 universes u₁ u₂
 
 definition ForgetfulFunctor_Groups_to_Types : Group ↝ (Type u₁) :=
-{ onObjects     := λ s, s.1,
-  onMorphisms   := λ s t f x, f.map x, }
+{ obj := λ s, s.1,
+  map := λ s t f x, f.map x, }
 
 local attribute [ematch] semigroup.mul_assoc
 
@@ -50,10 +49,10 @@ instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : ul
 
 instance Groups_ForgetfulFunctor_Representable : Representable (ForgetfulFunctor_Groups_to_Types.{u₁}) := 
 { c := ⟨ ulift ℤ, by apply_instance ⟩,
-  Φ := { morphism := { components := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
+  Φ := { map := { app := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
                         naturality := sorry },
-          inverse := { components := λ G f, f.map (ulift.up (1 : ℤ)), },
-          witness_1 := sorry,
-          witness_2 := sorry, } }
+          inv := { app := λ G f, f.map (ulift.up (1 : ℤ)), },
+          map_inv_id := sorry,
+          inv_map_id := sorry, } }
 
 end category_theory.examples.groups

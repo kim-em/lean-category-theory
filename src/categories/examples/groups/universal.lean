@@ -30,8 +30,8 @@ instance maps_to_punit_hom {Z : Type u} [group Z] (f : Z → punit) : is_group_h
 
 instance Groups_has_TerminalObject : has_TerminalObject.{u+1 u} Group := {
   terminal_object := {
-    terminal_object := ⟨ punit, by obviously ⟩,
-    morphism_to_terminal_object_from := by obviously
+    obj := ⟨ punit, by obviously ⟩,
+    «from» := by obviously
  }
 }
 

@@ -16,11 +16,11 @@ variable [large_category C]
 variables {X Y Z : C}
 
 structure RegularMonic (f : X ⟶ Y) :=
-  (Z : C)
-  (a b : Y ⟶ Z)
-  (e : Equalizer a b)
-  (i : e.equalizer ≅ X)
-  (w : e.inclusion = i.morphism ≫ f)
+(Z : C)
+(a b : Y ⟶ Z)
+(e : Equalizer a b)
+(i : e.equalizer ≅ X)
+(w : e.inclusion = i.map ≫ f)
 
 -- EXERCISE
 -- def SplitMonic_implies_RegularMonic
@@ -33,10 +33,10 @@ structure RegularMonic (f : X ⟶ Y) :=
 --   (s : RegularMonic f) : Monic f := sorry
 
 structure RegularEpic (f : Y ⟶ Z) :=
-  (X : C)
-  (a b : X ⟶ Y)
-  (c : Coequalizer a b)
-  (i : c.coequalizer ≅ Z)
-  (w : c.projection = f ≫ i.inverse)
+(X : C)
+(a b : X ⟶ Y)
+(c : Coequalizer a b)
+(i : c.coequalizer ≅ Z)
+(w : c.projection = f ≫ i.inv)
 
 end category_theory.universal.monic

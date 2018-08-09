@@ -8,14 +8,14 @@ open category_theory.universal
 universes u v
 
 class projective {C : Type u} [category.{u v} C] (P : C) :=
-(lift : Π M N : C, Π f : M ⟶ N, Π w : Epimorphism f, Π g : P ⟶ N, P ⟶ M)
-(factorisation : Π M N : C, Π f : M ⟶ N, Π w : Epimorphism f, Π g : P ⟶ N, (lift M N f w g) ≫ f = g)
+(lift : Π M N : C, Π f : M ⟶ N, Π w : epi f, Π g : P ⟶ N, P ⟶ M)
+(factorisation : Π M N : C, Π f : M ⟶ N, Π w : epi f, Π g : P ⟶ N, (lift M N f w g) ≫ f = g)
 
 structure projective_cover {C : Type u} [category.{u v} C] (X : C) :=
 (cover : C)
 (map : cover ⟶ X)
 (projectivity: projective cover)
-(surjectivity: Epimorphism map)
+(surjectivity: epi map)
 
 class enough_projectives (C : Type u) [category.{u v} C]  :=
 (cover : Π X : C, projective_cover X)

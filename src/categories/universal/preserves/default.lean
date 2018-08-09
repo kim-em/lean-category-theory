@@ -8,7 +8,6 @@ import categories.yoneda
 open category_theory
 open category_theory.initial
 open category_theory.yoneda
-open category_theory.types
 
 namespace category_theory.universal
 
@@ -19,13 +18,13 @@ variable [large_category A]
 variable {B : Type (u+1)}
 variable [large_category B]
 
-class PreservesLimits (F : Functor A B) :=
-(preserves : Π {I : Type u} [small_category I] (D : I ↝ A) (q : LimitCone D), @is_terminal.{u+1 u} (Cone (D ⋙ F)) _ (F.onCones q.terminal_object))
+class preserves_limits (F : A ↝ B) :=
+(preserves : Π {I : Type u} [small_category I] (D : I ↝ A) (q : LimitCone D), @is_terminal.{u+1 u} (Cone (D ⋙ F)) _ (F.on_cone q.obj))
 
-instance HomFunctorPreservesLimits (a : A) : PreservesLimits ((CoYoneda A) +> a) := {
+instance HomFunctorPreservesLimits (a : A) : preserves_limits ((CoYoneda A) a) := {
     preserves := λ I D q, sorry
 }
 
-instance RepresentableFunctorPreservesLimits (F : A ↝ (Type u)) [Representable F] : PreservesLimits F := sorry
+instance RepresentableFunctorPreservesLimits (F : A ↝ (Type u)) [Representable F] : preserves_limits F := sorry
 
 end category_theory.universal

@@ -2,14 +2,12 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
+import category_theory.products
 import categories.natural_isomorphism
 import categories.opposites
-import categories.products
 import categories.isomorphism
-import categories.types
 
 open category_theory
-open category_theory.types
 
 namespace category_theory.adjunctions
 
@@ -22,12 +20,12 @@ variable [𝒟 : category.{u v} D]
 include 𝒞 𝒟
 
 definition HomAdjunction (L : C ↝ D) (R : D ↝ C) :=
-    ((OppositeFunctor L × Functor.id D) ⋙ (HomPairing D))
+    ((functor.prod L.opposite (functor.id D)) ⋙ (hom_pairing D))
       ⇔ 
-    ((Functor.id (Cᵒᵖ) × R) ⋙ (HomPairing C))
+    (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (hom_pairing C)
 
-definition mate {L : Functor C D} {R : Functor D C} (A : HomAdjunction L R) {X : C} {Y : D} (f : (L +> X) ⟶ Y) : X ⟶ (R +> Y)
-  := ((A.morphism).components (X, Y)) f
+definition mate {L : C ↝ D} {R : D ↝ C} (A : HomAdjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)
+  := ((A.map) (X, Y)) f
 
 -- PROJECT lemmas about mates.
 

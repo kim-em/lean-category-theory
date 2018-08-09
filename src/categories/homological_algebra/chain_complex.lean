@@ -1,6 +1,6 @@
 /- Attempting to "live-formalise", from the PhD students reading group meeting on June 24 2018, starting at the beginning of homological algebra. -/
 
-import categories.category
+import category_theory.category
 import categories.universal.instances
 
 universes u₁ v₁ u₂ v₂
@@ -43,9 +43,9 @@ class abelian_category (C : Type u₁) extends (additive_category.{u₁ v₁} C)
 
 instance category_of_chain_complexes {C : Type u₁} [additive_category.{u₁ v₁} C] : category.{(max u₁ v₁)} (chain_complex C) :=
 { Hom := λ M N, chain_map M N,
-  compose := sorry,
-  identity := sorry,
-  left_identity := sorry, right_identity := sorry, associativity := sorry
+  comp := sorry,
+  id := sorry,
+  id_comp := sorry, comp_id := sorry, assoc := sorry
 }
 
 instance chain_complexes_are_abelian_too (C : Type u₁) [abelian_category.{u₁ v₁} C] : abelian_category (chain_complex C) := sorry

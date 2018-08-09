@@ -2,7 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import categories.functor
+import category_theory.functor
+import categories.tactics.obviously
 
 open category_theory
 
@@ -38,7 +39,7 @@ end
 
 instance CategoryOfGroups : large_category Group := 
 { Hom := GroupHomomorphism,
-  identity := GroupHomomorphism.identity,
-  compose  := @GroupHomomorphism.composition }
+  id := GroupHomomorphism.identity,
+  comp  := @GroupHomomorphism.composition }
 
 end category_theory.examples.groups

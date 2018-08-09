@@ -36,8 +36,8 @@ structure OpenSet {α : Type u₁} (X : topological_space α) : Type (u₁+1) :=
  (underlying_set : set α)
  (is_open : X.is_open underlying_set)
 
-attribute [applicable] OpenSet.is_open
-local attribute [applicable] topological_space.is_open_inter
+attribute [backwards] OpenSet.is_open
+local attribute [backwards] topological_space.is_open_inter
 
 instance OpenSet.has_inter {α : Type u₁} {X : topological_space α} : has_inter (OpenSet X) := {
   inter := λ U V, ⟨ U.underlying_set ∩ V.underlying_set, by obviously ⟩ 
@@ -49,8 +49,8 @@ instance OpenSet.has_mem {α : Type u₁} {X : topological_space α} : has_mem �
   mem := λ a V, a ∈ V.underlying_set
 }
 
-local attribute [applicable] set.subset.refl
-local attribute [applicable] topological_space.is_open_inter
+local attribute [backwards] set.subset.refl
+local attribute [backwards] topological_space.is_open_inter
 
 instance category_of_open_sets {α : Type u₁} (X : topological_space α) : large_category (OpenSet X) :=
 {

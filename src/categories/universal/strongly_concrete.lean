@@ -18,8 +18,8 @@ variable (C : Type (u₁+1))
 variable [large_category C]
 
 class StronglyConcrete [Concrete C] :=
-  (reflects_isos    : ReflectsIsomorphisms (FibreFunctor C))
-  (preserves_limits : PreservesLimits (FibreFunctor C))
+(reflects_isos    : reflects_isos (FibreFunctor C))
+(preserves_limits : preserves_limits (FibreFunctor C))
 
 -- PROJECT
 -- instance Types_StronglyConcrete : StronglyConcrete CategoryOfTypes := {

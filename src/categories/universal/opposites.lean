@@ -22,17 +22,15 @@ variable [large_category C]
 variables {X Y : C}
 variables {f g : X ⟶ Y}
 
-def InitialObject_in_Opposite (i : InitialObject (Cᵒᵖ)) : TerminalObject C := {
-  terminal_object := i.initial_object,
-  morphism_to_terminal_object_from := i.morphism_from_initial_object_to,
-  uniqueness_of_morphisms_to_terminal_object := i.uniqueness_of_morphisms_from_initial_object
-}
+def initial_object_in_opposite (i : initial_object (Cᵒᵖ)) : terminal_object C := 
+{ obj := i.obj,
+  «from» := i.to,
+  uniqueness := i.uniqueness }
 
-def TerminalObject_in_Opposite (t : TerminalObject (Cᵒᵖ)) : InitialObject C := {
-  initial_object := t.terminal_object,
-  morphism_from_initial_object_to := t.morphism_to_terminal_object_from,
-  uniqueness_of_morphisms_from_initial_object := t.uniqueness_of_morphisms_to_terminal_object
-}
+def terminal_object_in_opposite (t : terminal_object (Cᵒᵖ)) : initial_object C := 
+{ obj := t.obj,
+  to := t.«from»,
+  uniqueness := t.uniqueness }
 
 -- TODO: why can't we use tactics for witness factorisation and uniqueness?
 def Coequalizer_from_Equalizer_in_Opposite         (e : @Equalizer.{u₁+1 u₁} (Cᵒᵖ) _ Y X f g)   : Coequalizer f g :=
@@ -66,11 +64,11 @@ variable [small_category J]
 variable {C : Type (u₁+1)}
 variable [large_category C]
 
-def Cones_in_Opposite_functor (F : J ↝ C) : (Cone (OppositeFunctor F))ᵒᵖ ↝ (Cocone F)  := 
-{ onObjects   := λ c, ⟨c.cone_point, c.cone_maps, begin tidy, erw c.commutativity_lemma, end⟩, -- PROJECT (Scott) why can't rewrite_search handle this one?
-  onMorphisms := λ X Y f, ⟨f.cone_morphism, begin tidy, erw f.commutativity_lemma, end⟩ }
+def Cones_in_Opposite_functor (F : J ↝ C) : (Cone (F.opposite))ᵒᵖ ↝ (Cocone F)  := 
+{ obj := λ c, ⟨c.cone_point, c.cone_maps, begin tidy, erw c.commutativity_lemma, end⟩, -- PROJECT (Scott) why can't rewrite_search handle this one?
+  map := λ X Y f, ⟨f.cone_morphism, begin tidy, erw f.commutativity_lemma, end⟩ }
 
-def Cocones_in_Opposite (F : J ↝ C) : Equivalence ((Cocone (OppositeFunctor F))ᵒᵖ) (Cone F) := sorry
+def Cocones_in_Opposite (F : J ↝ C) : Equivalence ((Cocone (F.opposite))ᵒᵖ) (Cone F) := sorry
 end
 
 section

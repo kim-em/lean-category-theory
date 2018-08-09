@@ -2,12 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import categories.natural_transformation
+import category_theory.natural_transformation
 import categories.opposites
 import categories.types
 
 open category_theory
-open category_theory.types
 
 namespace category_theory.adjunctions
 
@@ -20,10 +19,10 @@ variable [large_category D]
 
 -- TODO think again about whether we should specify the conditions here in terms of natural transformations or components
 structure Adjunction (L : C ↝ D) (R : D ↝ C) :=
-  (unit       : 1 ⟹ (L ⋙ R))
-  (counit     : (R ⋙ L) ⟹ 1)
-  (triangle_1 : ∀ X : D, (unit.components (R +> X)) ≫ (R.onMorphisms (counit.components X)) = 𝟙 (R +> X))
-  (triangle_2 : ∀ X : C, (L &> (unit.components X)) ≫ (counit.components (L +> X)) = 𝟙 (L +> X))
+  (unit       : functor.id _ ⟹ (L ⋙ R))
+  (counit     : (R ⋙ L) ⟹ functor.id _)
+  (triangle_1 : ∀ X : D, (unit (R X)) ≫ (R.map (counit X)) = 𝟙 (R X))
+  (triangle_2 : ∀ X : C, (L.map (unit X)) ≫ (counit (L X)) = 𝟙 (L X))
   -- (Triangle_1 : (whisker_on_left R unit) ⊟ (whisker_on_right counit R) = 1) -- we'd need unitors and associators here
 
 
@@ -59,13 +58,13 @@ infix ` ⊣ `:50 := Adjunction
 --   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
 --   = IdentityNaturalTransformation L
 
-@[simp,ematch] lemma Adjunction.unit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : C} (f : X ⟶ Y) : (A.unit.components X) ≫ (R.onMorphisms (L &> f)) = f ≫ (A.unit.components Y) := 
+@[simp,ematch] lemma Adjunction.unit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : C} (f : X ⟶ Y) : (A.unit X) ≫ (R.map (L.map f)) = f ≫ (A.unit Y) := 
 begin
   have := A.unit.naturality,
   obviously,
 end
 
-@[simp,ematch] lemma Adjunction.counit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : D} (f : X ⟶ Y) : (L &> (R &> f)) ≫ (A.counit.components Y) = (A.counit.components X) ≫ f :=
+@[simp,ematch] lemma Adjunction.counit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : D} (f : X ⟶ Y) : (L.map (R.map f)) ≫ (A.counit Y) = (A.counit X) ≫ f :=
 begin
   have := A.counit.naturality,
   obviously,

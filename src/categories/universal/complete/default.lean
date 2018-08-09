@@ -9,7 +9,6 @@ import categories.universal.complete.lemmas.limit_functoriality
 
 open category_theory
 open category_theory.initial
-open category_theory.types
 
 namespace category_theory.universal
 
@@ -27,30 +26,30 @@ variable {J : Type u₁}
 variables [small_category J]
 
 definition limitCone [Complete C] (F : J ↝ C) := Complete.limitCone F
-definition limit     [Complete C] (F : J ↝ C) := (Complete.limitCone F).terminal_object.cone_point
+definition limit     [Complete C] (F : J ↝ C) := (Complete.limitCone F).obj.cone_point
 
 definition colimitCocone [Cocomplete C] (F : J ↝ C) := Cocomplete.colimitCocone F
-definition colimit       [Cocomplete C] (F : J ↝ C) := (Cocomplete.colimitCocone F).initial_object.cocone_point
+definition colimit       [Cocomplete C] (F : J ↝ C) := (Cocomplete.colimitCocone F).obj.cocone_point
 
 open category_theory.universal.lemmas.limit_functoriality
 
 definition functorial_Limit [Complete C] : (J ↝ C) ↝ C := {
-  onObjects     := λ F, (limitCone F).terminal_object.cone_point,
-  onMorphisms   := λ F G τ, let lim_F := (limitCone F) in
+  obj     := λ F, (limitCone F).obj.cone_point,
+  map   := λ F G τ, let lim_F := (limitCone F) in
                             let lim_G := (limitCone G) in
-                              (lim_G.morphism_to_terminal_object_from {
+                              (lim_G.«from» {
                                 cone_point    := _,
-                                cone_maps     := (λ j, (lim_F.terminal_object.cone_maps j) ≫ (τ.components j))
+                                cone_maps     := (λ j, (lim_F.obj.cone_maps j) ≫ (τ j))
                              }).cone_morphism
 }
 
 definition functorial_Colimit [Cocomplete C] : (J ↝ C) ↝ C := {
-  onObjects     := λ F, (colimitCocone F).initial_object.cocone_point,
-  onMorphisms   := λ F G τ, let colim_F := (colimitCocone F) in
+  obj     := λ F, (colimitCocone F).obj.cocone_point,
+  map   := λ F G τ, let colim_F := (colimitCocone F) in
                             let colim_G := (colimitCocone G) in
-                              (colim_F.morphism_from_initial_object_to {
+                              (colim_F.to {
                                 cocone_point    := _,
-                                cocone_maps     := (λ j, (τ.components j) ≫ (colim_G.initial_object.cocone_maps j))
+                                cocone_maps     := (λ j, (τ j) ≫ (colim_G.obj.cocone_maps j))
                              }).cocone_morphism
 }
 

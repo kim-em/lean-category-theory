@@ -6,7 +6,6 @@ import categories.universal.instances
 
 open category_theory
 open category_theory.initial
-open category_theory.types
 open category_theory.universal
 
 namespace category_theory.universal.lemmas.limit_functoriality
@@ -22,62 +21,62 @@ variable {X : Cone F}
 variable {M : ColimitCocone F}
 variable {Y : Cocone F}
 
-@[applicable] private lemma uniqueness_of_morphism_to_limit
-  {g : X.cone_point ⟶ L.terminal_object.cone_point}
-  (w : ∀ j : J, g ≫ ((L.terminal_object).cone_maps j) = X.cone_maps j)
-    : (L.morphism_to_terminal_object_from X).cone_morphism = g :=
+@[backwards] private lemma uniqueness_of_morphism_to_limit
+  {g : X.cone_point ⟶ L.obj.cone_point}
+  (w : ∀ j : J, g ≫ ((L.obj).cone_maps j) = X.cone_maps j)
+    : (L.«from»  X).cone_morphism = g :=
   begin
-    let G : X ⟶ L.terminal_object := ⟨ g, w ⟩,
-    have q := L.uniqueness_of_morphisms_to_terminal_object _ (L.morphism_to_terminal_object_from X) G,
+    let G : X ⟶ L.obj := ⟨ g, w ⟩,
+    have q := L.uniqueness _ (L.«from» X) G,
     exact congr_arg ConeMorphism.cone_morphism q,
   end
 
 @[simp,ematch] private lemma morphism_to_terminal_object_composed_with_cone_map
   {j : J}
-    : (L.morphism_to_terminal_object_from X).cone_morphism ≫ (L.terminal_object.cone_maps j) = X.cone_maps j :=
-  (L.morphism_to_terminal_object_from X).commutativity j
+    : (L.«from» X).cone_morphism ≫ (L.obj.cone_maps j) = X.cone_maps j :=
+  (L.«from» X).commutativity j
 
-@[applicable,reducible] definition morphism_to_terminal_object_cone_point 
+@[backwards,reducible] definition morphism_to_terminal_object_cone_point 
   {Z : C}
-  (cone_maps : Π j : J, Z ⟶ (F +> j)) 
-  (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (F &> f) = cone_maps k)
-   : Z ⟶ L.terminal_object.cone_point :=
+  (cone_maps : Π j : J, Z ⟶ (F j)) 
+  (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (F.map f) = cone_maps k)
+   : Z ⟶ L.obj.cone_point :=
 begin
   let cone : Cone F := {
     cone_point    := Z,
     cone_maps     := cone_maps,
     commutativity := commutativity
  },
-  exact (L.morphism_to_terminal_object_from cone).cone_morphism, 
+  exact (L.«from» cone).cone_morphism, 
 end
 
-@[applicable] private lemma uniqueness_of_morphism_from_colimit
-  {g : M.initial_object.cocone_point ⟶ Y.cocone_point}
-  (w : ∀ j : J, ((M.initial_object).cocone_maps j) ≫ g = Y.cocone_maps j)
-    : (M.morphism_from_initial_object_to Y).cocone_morphism = g :=
+@[backwards] private lemma uniqueness_of_morphism_from_colimit
+  {g : M.obj.cocone_point ⟶ Y.cocone_point}
+  (w : ∀ j : J, ((M.obj).cocone_maps j) ≫ g = Y.cocone_maps j)
+    : (M.to Y).cocone_morphism = g :=
   begin
-    let G : M.initial_object ⟶ Y := ⟨ g, w ⟩,
-    have q := M.uniqueness_of_morphisms_from_initial_object _ (M.morphism_from_initial_object_to Y) G,
+    let G : M.obj ⟶ Y := ⟨ g, w ⟩,
+    have q := M.uniqueness _ (M.to Y) G,
     exact congr_arg CoconeMorphism.cocone_morphism q,
   end
 
 @[simp,ematch] private lemma cocone_map_composed_with_morphism_from_initial_object
   {j : J}
-    : (M.initial_object.cocone_maps j) ≫ (M.morphism_from_initial_object_to Y).cocone_morphism = Y.cocone_maps j :=
-  (M.morphism_from_initial_object_to Y).commutativity j
+    : (M.obj.cocone_maps j) ≫ (M.to Y).cocone_morphism = Y.cocone_maps j :=
+  (M.to Y).commutativity j
 
-@[applicable,reducible] definition morphism_from_initial_object_cocone_point 
+@[backwards,reducible] definition morphism_from_initial_object_cocone_point 
   {Z : C}
-  (cocone_maps : Π j : J, (F +> j) ⟶ Z) 
-  (commutativity : Π j k : J, Π f : j ⟶ k, (F &> f) ≫ (cocone_maps k) = cocone_maps j)
-   : M.initial_object.cocone_point ⟶ Z :=
+  (cocone_maps : Π j : J, (F j) ⟶ Z) 
+  (commutativity : Π j k : J, Π f : j ⟶ k, (F.map f) ≫ (cocone_maps k) = cocone_maps j)
+   : M.obj.cocone_point ⟶ Z :=
 begin
   let cocone : Cocone F := {
     cocone_point  := Z,
     cocone_maps   := cocone_maps,
     commutativity := commutativity
  },
-  exact (M.morphism_from_initial_object_to cocone).cocone_morphism, 
+  exact (M.to cocone).cocone_morphism, 
 end
 
 end category_theory.universal.lemmas.limit_functoriality

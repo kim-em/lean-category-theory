@@ -47,7 +47,7 @@ class Full (F : C ↝ D) :=
 (preimage : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), X ⟶ Y)
 (witness  : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), F.map (preimage f) = f . obviously)
 
-attribute [semiapplicable] Full.preimage
+attribute [backwards_cautiously] Full.preimage
 restate_axiom Full.witness
 attribute [simp,ematch] Full.witness_lemma
 
@@ -58,7 +58,8 @@ class Faithful (F : C ↝ D) :=
   (injectivity : ∀ {X Y : C} (f g : X ⟶ Y) (p : F.map f = F.map g), f = g)
 
 restate_axiom Faithful.injectivity
-attribute [semiapplicable] Faithful.injectivity_lemma
+-- TODO this should just be `forwards`!
+attribute [backwards_cautiously] Faithful.injectivity_lemma
 
 definition preimage_iso (F : C ↝ D) [Full F] [Faithful F] {X Y : C} (f : (F X) ≅ (F Y)) : X ≅ Y := 
 { map := preimage F f.map,

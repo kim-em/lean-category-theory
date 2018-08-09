@@ -28,9 +28,9 @@ end
 instance {X : C} : group (Aut X) :=
 begin
   refine {
-     one := Isomorphism.refl X,
-     inv := Isomorphism.symm,
-     mul := Isomorphism.trans,
+     one := iso.refl X,
+     inv := iso.symm,
+     mul := iso.trans,
      ..
   },
   obviously,

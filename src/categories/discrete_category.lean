@@ -2,28 +2,27 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import categories.category
-import categories.functor
+import category_theory.functor
+import categories.tactics.obviously
 
 namespace category_theory
 
 universes u₁ v₁ u₂ 
 
-local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [backwards] category.id -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 definition discrete (α : Type u₁) := α
 
-instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) := {
-  Hom            := λ X Y, ulift (plift (X = Y)),
-  identity       := by obviously,
-  compose        := by obviously
-}
+instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) := 
+{ Hom  := λ X Y, ulift (plift (X = Y)),
+  id   := by obviously,
+  comp := by obviously }
 
 instance EmptyCategory : small_category pempty := (by apply_instance : small_category (discrete pempty))
 instance OneCategory  : category.{u₁ v₁} punit :=
-{ Hom      := λ X Y, punit,
-  identity := by obviously,
-  compose  := by obviously }
+{ Hom  := λ X Y, punit,
+  id   := by obviously,
+  comp := by obviously }
 
 -- TODO check we can establish `Equivalence punit (discrete punit)` by obviously
 
@@ -45,11 +44,10 @@ begin
   refl,
 end
 
-namespace Functor
-definition fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := {
-  onObjects     := F,
-  onMorphisms   := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end,
-}
-end Functor
+namespace functor
+definition fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := 
+{ obj := F,
+  map := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end }
+end functor
 
 end category_theory

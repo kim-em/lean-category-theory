@@ -19,15 +19,15 @@ variable [small_category C]
 variable {D : Type (u₁+1)}
 variable [large_category D]
 
-@[applicable] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
+@[backwards] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
   {Z : D}
   {G : J ↝ D}
   {L : LimitCone G}
-  (cone_maps : Π j : J, Z ⟶ (G +> j)) 
-  (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (G &> f) = cone_maps k)
-  (f g : Z ⟶ L.terminal_object.cone_point)
-  (commutativity_f : Π j : J, f ≫ (L.terminal_object.cone_maps j) = cone_maps j)
-  (commutativity_g : Π j : J, g ≫ (L.terminal_object.cone_maps j) = cone_maps j)
+  (cone_maps : Π j : J, Z ⟶ (G j)) 
+  (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (G.map f) = cone_maps k)
+  (f g : Z ⟶ L.obj.cone_point)
+  (commutativity_f : Π j : J, f ≫ (L.obj.cone_maps j) = cone_maps j)
+  (commutativity_g : Π j : J, g ≫ (L.obj.cone_maps j) = cone_maps j)
    : f = g :=
 begin
   let cone : Cone G := {
@@ -35,15 +35,15 @@ begin
     cone_maps     := cone_maps,
     commutativity := commutativity
  },
-  let cone_morphism_f : ConeMorphism cone L.terminal_object := {
+  let cone_morphism_f : ConeMorphism cone L.obj := {
     cone_morphism := f,
     commutativity := commutativity_f
  },
-  let cone_morphism_g : ConeMorphism cone L.terminal_object := {
+  let cone_morphism_g : ConeMorphism cone L.obj := {
     cone_morphism := g,
     commutativity := commutativity_g
  },
-  exact congr_arg ConeMorphism.cone_morphism (L.uniqueness_of_morphisms_to_terminal_object cone cone_morphism_f cone_morphism_g), 
+  exact congr_arg ConeMorphism.cone_morphism (L.uniqueness cone cone_morphism_f cone_morphism_g), 
 end
 
 -- TODO find a better home
@@ -53,11 +53,11 @@ lemma bifunctor_naturality
 (f : X ⟶ Y)
 (j k : J)
 (g : j ⟶ k)
-  : ((F +> j) &> f) ≫ ((F &> g).components Y)
-  = ((F &> g).components X) ≫ ((F +> k) &> f) := by obviously
+  : ((F j).map f) ≫ ((F.map g) Y)
+  = ((F.map g) X) ≫ ((F k).map f) := by obviously
 
 -- TODO find a better home
-lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@category.compose (C ↝ D) _ _ _ _ α β).components X = (α.components X) ≫ (β.components X) := by obviously 
+lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@category.comp (C ↝ D) _ _ _ _ α β) X = (α X) ≫ (β X) := by obviously 
 
 @[simp] lemma cone_in_functor_category 
 (F : J ↝ (C ↝ D))
@@ -66,12 +66,12 @@ lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹
 (j k : J)
 (g : j ⟶ k)
 (cone : Cone F)
-: ((cone.cone_maps j).components X) ≫ ((F +> j) &> f) ≫ 
-      ((F &> g).components Y) =
-    ((cone.cone_maps k).components X) ≫ ((F +> k) &> f) :=
+: ((cone.cone_maps j) X) ≫ ((F j).map f) ≫ 
+      ((F.map g) Y) =
+    ((cone.cone_maps k) X) ≫ ((F k).map f) :=
 begin
   have p := cone.commutativity g,
-  have p' := congr_arg NaturalTransformation.components p,
+  have p' := congr_arg nat_trans.app p,
   have p'' := congr_fun p' X,
   rw ← p'',
   rw bifunctor_naturality,

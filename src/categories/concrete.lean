@@ -7,8 +7,6 @@ import categories.types
 
 namespace category_theory
 
-open category_theory.types
-
 universe u
 
 class Concrete (C : Type (u+1)) [large_category C] := 
@@ -18,6 +16,6 @@ class Concrete (C : Type (u+1)) [large_category C] :=
 definition FibreFunctor (C : Type (u+1)) [large_category C] [concrete : Concrete C] := concrete.fibre_functor
 
 instance : Concrete (Type u) := 
-{ fibre_functor := 1 }
+{ fibre_functor := functor.id _ }
 
 end category_theory

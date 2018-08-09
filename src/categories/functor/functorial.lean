@@ -3,7 +3,8 @@
 -- Authors: Scott Morrison
 
 
-import categories.functor
+import category_theory.functor
+import categories.tactics.obviously
 
 namespace category_theory
 
@@ -15,17 +16,17 @@ variable {D : Type (u₂+1)}
 variable [large_category D]
 
 -- TODO this is WIP
-class Functorial (f : C → D) :=
-  (onMorphisms   : Π {X Y : C}, (X ⟶ Y) → ((f X) ⟶ (f Y)))
-  (identities    : ∀ (X : C), onMorphisms (𝟙 X) = 𝟙 (f X) . obviously)
-  (functoriality : ∀ {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z), onMorphisms (f ≫ g) = (onMorphisms f) ≫ (onMorphisms g) . obviously)
+class functorial (f : C → D) :=
+(map   : Π {X Y : C}, (X ⟶ Y) → ((f X) ⟶ (f Y)))
+(map_id    : ∀ (X : C), map (𝟙 X) = 𝟙 (f X) . obviously)
+(map_comp : ∀ {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z), map (f ≫ g) = (map f) ≫ (map g) . obviously)
 
-restate_axiom Functorial.identities
-restate_axiom Functorial.functoriality
-attribute [simp,ematch] Functorial.functoriality_lemma Functorial.identities_lemma
+restate_axiom functorial.map_id
+restate_axiom functorial.map_comp
+attribute [simp,ematch] functorial.map_comp_lemma functorial.map_id_lemma
 
-instance (F : C ↝ D) : Functorial (F.onObjects) := 
-{ onMorphisms := F.onMorphisms }
+instance (F : C ↝ D) : functorial (F.obj) := 
+{ map := F.map }
 
 -- TODO notations?
 end category_theory

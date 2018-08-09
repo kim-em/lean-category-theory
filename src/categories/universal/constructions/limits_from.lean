@@ -21,12 +21,12 @@ instance Limits_from_Products_and_Equalizers [has_Products.{u₁} C] [has_Equali
     begin
     resetI,
     exact 
-    let product_over_objects   := product (λ j : J, F +> j) in
-    let product_over_morphisms := product (λ f : (Σ p : J × J, p.1 ⟶ p.2), F +> f.1.2) in 
-    let source    := product_over_morphisms.map (λ f, (product_over_objects.projection f.1.1) ≫ (F &> f.2))  in
+    let product_over_objects   := product (λ j : J, F j) in
+    let product_over_morphisms := product (λ f : (Σ p : J × J, p.1 ⟶ p.2), F f.1.2) in 
+    let source    := product_over_morphisms.map (λ f, (product_over_objects.projection f.1.1) ≫ (F.map f.2))  in
     let target    := product_over_morphisms.map (λ f, product_over_objects.projection f.1.2) in
     let equalizer := equalizer source target in 
-    { terminal_object     := 
+    { obj     := 
         { cone_point    := equalizer.equalizer,
           cone_maps     := λ j : J, equalizer.inclusion ≫ (product_over_objects.projection j),
           commutativity := λ j k f, begin
@@ -34,7 +34,7 @@ instance Limits_from_Products_and_Equalizers [has_Products.{u₁} C] [has_Equali
                                      tidy,
                                     end
      },
-     morphism_to_terminal_object_from := λ cone : Cone F, 
+     «from» := λ cone : Cone F, 
         { cone_morphism := /- we need a morphism from the tip of f to the equalizer -/
                          equalizer.map
                            (product_over_objects.map (λ j, cone.cone_maps j)) (by obviously), } }

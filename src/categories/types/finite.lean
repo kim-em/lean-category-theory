@@ -11,8 +11,8 @@ open category_theory
 
 universe u
 
-definition DecidableType := Σ X : Type u, decidable_eq X
+definition decidable_type := Σ X : Type u, decidable_eq X
 
-instance CategoryOfDecidableTypes : large_category DecidableType := by unfold DecidableType; apply_instance
+instance : large_category decidable_type := by unfold decidable_type; apply_instance
 
 end category_theory.types

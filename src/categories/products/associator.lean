@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import categories.products
+import category_theory.products
 import categories.equivalence
 
 open category_theory
@@ -22,14 +22,14 @@ include 𝒞 𝒟 ℰ
 -- locally tag "assumption" with @[tidy]?
 -- or define an aggressive version of tidy (perhaps "follow_your_nose"?)
 definition associator : ((C × D) × E) ↝ (C × (D × E)) :=
-{ onObjects     := λ X, (X.1.1, (X.1.2, X.2)),
-  onMorphisms   := λ _ _ f, (f.1.1, (f.1.2, f.2)) }
+{ obj := λ X, (X.1.1, (X.1.2, X.2)),
+  map := λ _ _ f, (f.1.1, (f.1.2, f.2)) }
 
 definition inverse_associator : (C × (D × E)) ↝ ((C × D) × E) :=
-{ onObjects     := λ X, ((X.1, X.2.1), X.2.2),
-  onMorphisms   := λ _ _ f, ((f.1, f.2.1), f.2.2) }
+{ obj := λ X, ((X.1, X.2.1), X.2.2),
+  map := λ _ _ f, ((f.1, f.2.1), f.2.2) }
 
-local attribute [applicable] category.identity
+local attribute [backwards] category.id
 
 definition associativity : Equivalence ((C × D) × E) (C × (D × E)) :=
 { functor := associator C D E,

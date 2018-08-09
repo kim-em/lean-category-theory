@@ -23,7 +23,7 @@ definition Curry_Functors : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) :=
                           onMorphisms   := λ X X' f, { components := λ Y, F.onMorphisms (f, 𝟙 Y) } },
   onMorphisms   := λ F G T, { components := λ X, { components := λ Y, T.components (X, Y) } } }
 
-local attribute [applicable] category.identity -- this is usually a bad idea, but just what we needed here
+local attribute [backwards] category.identity -- this is usually a bad idea, but just what we needed here
 local attribute [tidy] dsimp_all'
 
 def Currying_for_functors : Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) := 

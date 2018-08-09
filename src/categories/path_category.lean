@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan and Scott Morrison
 
-import categories.functor
+import category_theory.functor
 import categories.graphs
 import categories.graphs.category
 import categories.universe_lifting
@@ -22,21 +22,19 @@ namespace category_theory.graphs
 def Path (C : Type u₁) := C 
 
 @[reducible] instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
-{
-  Hom            := λ x y : C, path x y,
-  identity       := λ x, path.nil x,
-  compose        := λ _ _ _ f g, concatenate_paths f g,
-  right_identity := begin
-                      tidy,
-                      induction f, -- PROJECT think about how to automate an inductive step. When can you be sure it's a good idea?
-                      obviously,                      
-                    end,
-  associativity  := begin
-                      tidy,
-                      induction f,
-                      obviously,                    
-                    end
-}
+{ Hom     := λ x y : C, path x y,
+  id      := λ x, path.nil x,
+  comp    := λ _ _ _ f g, concatenate_paths f g,
+  comp_id := begin
+              tidy,
+              induction f, -- PROJECT think about how to automate an inductive step. When can you be sure it's a good idea?
+              obviously,                      
+             end,
+  assoc  := begin
+              tidy,
+              induction f,
+              obviously,                    
+            end }
 
 definition path_to_morphism
   (H : graph_homomorphism G C)
@@ -57,8 +55,8 @@ namespace category_theory.Functor
 open category_theory.graphs
 
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
-definition from_GraphHomomorphism (H : graph_homomorphism G C) : Functor (Path G) C :=
-{ onObjects     := λ X, (H.onVertices X),
-  onMorphisms   := λ _ _ f, (path_to_morphism H f) }
+definition from_GraphHomomorphism (H : graph_homomorphism G C) : (Path G) ↝ C :=
+{ obj := λ X, (H.onVertices X),
+  map := λ _ _ f, (path_to_morphism H f) }
 
 end category_theory.Functor

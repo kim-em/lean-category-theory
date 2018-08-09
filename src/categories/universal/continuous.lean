@@ -18,10 +18,10 @@ variable [large_category D]
 -- TODO it would be nice to get rid of these explicit universe levels
 
 structure Continuous (F : C ↝ D) :=
-  (preserves_limits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : LimitCone G), is_terminal.{u+1 u} ((Cones_functoriality G F) +> L.terminal_object))
+(preserves_limits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : LimitCone G), is_terminal.{u+1 u} ((Cones_functoriality G F) L.obj))
 
 structure Cocontinuous (F : C ↝ D) :=
-  (preserves_colimits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : ColimitCocone G), is_initial.{u+1 u} ((Cocones_functoriality G F) +> L.initial_object))
+(preserves_colimits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : ColimitCocone G), is_initial.{u+1 u} ((Cocones_functoriality G F) L.obj))
 
 -- PROJECT right adjoints are continuous
 

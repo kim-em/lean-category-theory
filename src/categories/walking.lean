@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import categories.functor
+import category_theory.functor
 import data.fintype
 import categories.util.Two
 
@@ -51,11 +51,11 @@ local attribute [tidy] case_bash
 attribute [reducible] WalkingPair.hom._main
 
 instance WalkingPair_category : small_category WalkingPair := 
-{ Hom := WalkingPair.hom,
-  identity       := by tidy,
-  compose        := by tidy }
+{ Hom  := WalkingPair.hom,
+  id   := by tidy,
+  comp := by tidy }
 
-local attribute [applicable] category.identity
+local attribute [backwards] category.id
 
 variable {C : Type u₁}
 variable [𝒞 : category.{u₁ v₁} C]
@@ -73,18 +73,18 @@ end
 attribute [reducible] Pair_functor.onMorphisms._match_1
 
 definition Pair_functor (α β : C) : WalkingPair.{v₁} ↝ C := 
-{ onObjects     := Pair_functor.onObjects α β,
-  onMorphisms   := Pair_functor.onMorphisms α β, }
+{ obj := Pair_functor.onObjects α β,
+  map := Pair_functor.onMorphisms α β, }
 
 definition Pair_functor' (α β : C) : WalkingPair.{v₁} ↝ C := 
-{ onObjects     := λ X, match X with 
-                   | _1 := α 
-                   | _2 := β
-                   end,
-  onMorphisms   := λ X Y f, match X, Y, f with
-                   | _1, _1, _ := 𝟙 α 
-                   | _2, _2, _ := 𝟙 β
-                   end, }
+{ obj := λ X, match X with 
+              | _1 := α 
+              | _2 := β
+              end,
+  map := λ X Y f, match X, Y, f with
+                  | _1, _1, _ := 𝟙 α 
+                  | _2, _2, _ := 𝟙 β
+                  end, }
 end
 
 section
@@ -110,33 +110,33 @@ local attribute [tidy] case_bash
 
 instance : small_category WalkingParallelPair := 
 { Hom := λ X Y, match X, Y with
-         | _1, _1 := punit
-         | _2, _2 := punit
-         | _1, _2 := Two
-         | _2, _1 := pempty
-         end,
-  identity       := by tidy,
-  compose        := λ X Y Z f g, match X, Y, Z, f, g with
-                    | _1, _1, _1, _, _ := punit.star
-                    | _2, _2, _2, _, _ := punit.star
-                    | _1, _1, _2, _, h := h
-                    | _1, _2, _2, h, _ := h
-                    end }
+                | _1, _1 := punit
+                | _2, _2 := punit
+                | _1, _2 := Two
+                | _2, _1 := pempty
+                end,
+  id       := by tidy,
+  comp  := λ X Y Z f g, match X, Y, Z, f, g with
+                        | _1, _1, _1, _, _ := punit.star
+                        | _2, _2, _2, _, _ := punit.star
+                        | _1, _1, _2, _, h := h
+                        | _1, _2, _2, h, _ := h
+                        end }
 
 variable {C : Type u₁}
 variable [category.{u₁ v₁} C]
 
 definition ParallelPair_functor {α β : C} (f g : α ⟶ β) : WalkingParallelPair.{v₁} ↝ C := 
-{ onObjects     := λ X, match X with
-                   | _1 := α
-                   | _2 := β
-                   end,
-  onMorphisms   := λ X Y h, match X, Y, h with
-                   | _1, _1, _ := 𝟙 α
-                   | _2, _2, _ := 𝟙 β
-                   | _1, _2, Two._0 := f
-                   | _1, _2, Two._1 := g
-                   end, }
+{ obj := λ X, match X with
+              | _1 := α
+              | _2 := β
+              end,
+  map := λ X Y h, match X, Y, h with
+                  | _1, _1, _ := 𝟙 α
+                  | _2, _2, _ := 𝟙 β
+                  | _1, _2, Two._0 := f
+                  | _1, _2, Two._1 := g
+                  end, }
 end
 
 end category_theory.walking

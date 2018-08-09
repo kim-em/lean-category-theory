@@ -17,18 +17,18 @@ variable [large_category D]
 
 
 def Equivalences_are_EssentiallySurjective (e : Equivalence C D) : EssentiallySurjective (e.functor) :=
-  λ Y : D, ⟨ e.inverse +> Y, e.isomorphism_2.components Y ⟩
+  λ Y : D, ⟨ e.inverse Y, e.isomorphism_2.components Y ⟩
 
 def Equivalences_are_Faithful (e : Equivalence C D) : Faithful (e.functor) := 
 { injectivity := λ X Y f g w, begin  
-                                    have p := congr_arg (@Functor.onMorphisms _ _ _ _ e.inverse  _ _) w,
+                                    have p := congr_arg (@category_theory.functor.map _ _ _ _ e.inverse  _ _) w,
                                     simp at p,                                     
                                     exact p 
                               end }
 
 
 def Equivalences_are_Full (e : Equivalence C D) : Full (e.functor) := 
-{ preimage := λ X Y f, (e.isomorphism_1.components X).inverse ≫ (e.inverse.onMorphisms f) ≫ (e.isomorphism_1.components Y).morphism,
+{ preimage := λ X Y f, (e.isomorphism_1.components X).inv ≫ (e.inverse.map f) ≫ (e.isomorphism_1.components Y).map,
   witness := λ X Y f, begin
                             apply (Equivalences_are_Faithful e.reverse).injectivity,
                             erw ← e.isomorphism_1.naturality_2,
@@ -41,18 +41,18 @@ private meta def faithfulness := `[apply faithful.injectivity] -- This is a bit 
 local attribute [tidy] faithfulness
 
 -- TODO: weirdly, failing to name `faithful` causes an error.
-definition Fully_Faithful_EssentiallySurjective_Functor_inverse (F : Functor C D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : Functor D C := 
-{ onObjects := λ X, (es X).1,
-  onMorphisms := λ X Y f, preimage F ((es X).2.morphism ≫ f ≫ (es Y).2.inverse) }
+definition Fully_Faithful_EssentiallySurjective_Functor_inverse (F : C ↝ D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : D ↝ C := 
+{ obj := λ X, (es X).1,
+  map := λ X Y f, preimage F ((es X).2.map ≫ f ≫ (es Y).2.inv) }
 
-def Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : Functor C D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : is_Equivalence F := 
+def Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : C ↝ D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : is_Equivalence F := 
 { inverse := Fully_Faithful_EssentiallySurjective_Functor_inverse F,
-  isomorphism_1 := NaturalIsomorphism.from_components (λ X, preimage_iso F (es (F +> X)).2) (by obviously), 
-  isomorphism_2 := NaturalIsomorphism.from_components (λ Y, (es Y).2)                       (by obviously) }
+  isomorphism_1 := NaturalIsomorphism.from_components (λ X, preimage_iso F (es (F X)).2) (by obviously), 
+  isomorphism_2 := NaturalIsomorphism.from_components (λ Y, (es Y).2)                    (by obviously) }
 end
 
 -- TODO
-instance (F : Functor C D) [is_Equivalence F] : Full F     := sorry
-instance (F : Functor C D) [is_Equivalence F] : Faithful F := sorry
+instance (F : C ↝ D) [is_Equivalence F] : Full F     := sorry
+instance (F : C ↝ D) [is_Equivalence F] : Faithful F := sorry
 
 end category_theory.equivalence

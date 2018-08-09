@@ -3,7 +3,7 @@
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
 import categories.isomorphism
-import categories.functor_categories
+import category_theory.functor_category
 
 namespace category_theory
 
@@ -74,28 +74,28 @@ open nat_trans
 
 variables {F G : C ↝ D}
 
-definition is_NaturalIsomorphism  (α : F ⟹ G) := @is_iso (C ↝ D) (category_theory.functor_category C D) F G α
-attribute [class] is_NaturalIsomorphism
+definition is_nat_iso  (α : F ⟹ G) := @is_iso (C ↝ D) (category_theory.functor.category C D) F G α
+attribute [class] is_nat_iso
 
-namespace is_NaturalIsomorphism
--- TODO [is_NaturalIsomorphism α]
-@[simp,ematch] lemma componentwise_witness_1 (α : F ⟹ G) (w : is_NaturalIsomorphism α) (X : C) : (α X) ≫ (w.inv.app X) = 𝟙 (F X)
-   := sorry
-@[simp,ematch] lemma componentwise_witness_2 (α : F ⟹ G) (w : is_NaturalIsomorphism α) (X : C) : (w.inv.app X) ≫ (α X) = 𝟙 (G X)
-   := sorry
+namespace is_nat_iso
+-- TODO [is_nat_iso α]
+@[simp,ematch] lemma map_inv_id_app (α : F ⟹ G) (w : is_nat_iso α) (X : C) : (α X) ≫ (w.inv.app X) = 𝟙 (F X)
+   := by obviously
+@[simp,ematch] lemma inv_map_id_app (α : F ⟹ G) (w : is_nat_iso α) (X : C) : (w.inv.app X) ≫ (α X) = 𝟙 (G X)
+   := by obviously
 
-instance (F : C ↝ D) : is_NaturalIsomorphism (𝟙 F) := 
+instance (F : C ↝ D) : is_nat_iso (𝟙 F) := 
 { inv := 𝟙 F }
 
-end is_NaturalIsomorphism
+end is_nat_iso
 
-namespace NaturalIsomorphism
+namespace nat_iso
 
-instance morphism.is_NaturalIsomorphism {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.map) := 
+instance map.is_nat_iso {F G : C ↝ D} (α : F ⇔ G) : is_nat_iso (α.map) := 
 { inv := α.inv }
-instance inverse.is_NaturalIsomorphism  {F G : C ↝ D} (α : F ⇔ G) : is_NaturalIsomorphism (α.inv) := 
+instance inv.is_nat_iso  {F G : C ↝ D} (α : F ⇔ G) : is_nat_iso (α.inv) := 
 { inv := α.map }
 
-end NaturalIsomorphism
+end nat_iso
 
 end category_theory

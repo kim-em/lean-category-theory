@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import categories.category
+import category_theory.category
 import categories.graphs
 
 open category_theory
@@ -32,11 +32,11 @@ end
 
 instance CategoryOfGraphs : large_category Graph := {
   Hom := GraphHomomorphism,
-  identity := λ G, ⟨ {
+  id := λ G, ⟨ {
       onVertices   := id,
       onEdges := λ _ _ f, f
   } ⟩,
-  compose := λ G H K f g, ⟨ {
+  comp := λ G H K f g, ⟨ {
       onVertices := λ v, g.map.onVertices (f.map.onVertices v),
       onEdges    := λ v w e, g.map.onEdges (f.map.onEdges e)
   } ⟩

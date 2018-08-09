@@ -5,27 +5,26 @@
 import categories.types
 
 open category_theory
-open category_theory.types
 
 universes u v
 
-instance functor_of_Functor (F : Functor (Type u) (Type v)) : functor F.onObjects := 
-{ map := λ _ _ f, F &> f }
+instance functor_of_functor (F : (Type u) ↝ (Type v)) : _root_.functor F.obj := 
+{ map := λ _ _ f, F.map f }
 
 local attribute [tidy] dsimp'
 
 -- TODO yuck, automate
-instance lawful_functor_of_Functor (F : Functor (Type u) (Type v)) : is_lawful_functor (F.onObjects) := 
+instance lawful_functor_of_Functor (F : (Type u) ↝ (Type v)) : is_lawful_functor (F.obj) := 
 { id_map := by obviously,
   comp_map := begin
                 tidy,
-                calc (F &> λ (x : α), h (g x)) x = (F &> (g ≫ h)) x      : by obviously
-                                             ... = (F &> h) ((F &> g) x) : by obviously
+                calc (F.map (λ (x : α), h (g x))) x = (F.map (g ≫ h)) x      : by obviously
+                                                ... = (F.map h) ((F.map g) x) : by obviously
               end
 }
 
 attribute [ematch] is_lawful_functor.comp_map
 
-definition Functor_of_functor (g : Type u → Type v) [functor g] [is_lawful_functor g] : Functor (Type u) (Type v) := 
-{ onObjects := g,
-  onMorphisms := λ X Y f z, f <$> z }
+definition functor_of_functor' (g : Type u → Type v) [functor g] [is_lawful_functor g] : (Type u) ↝ (Type v) := 
+{ obj := g,
+  map := λ X Y f z, f <$> z }

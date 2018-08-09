@@ -2,6 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
+import category_theory.functor_category
 import categories.walking
 import categories.discrete_category
 import categories.universal.initial
@@ -16,15 +17,13 @@ universes j u₁ v₁ u₂ v₂ u₃ v₃
 
 -- The diagonal functor sends X to the constant functor that sends everything to X.
 definition DiagonalFunctor (J : Type u₁) [category.{u₁ v₁} J] (C : Type u₂) [category.{u₂ v₂} C] : C ↝ (J ↝ C) :=
-{ onObjects     := λ X : C, 
-    { onObjects     := λ _, X,
-      onMorphisms   := λ _ _ _, 𝟙 X },
-  onMorphisms   := λ X Y f, 
-    { components := λ _, f } }
+{ obj := λ X, { obj := λ _, X,
+                map := λ _ _ _, 𝟙 X },
+  map := λ X Y f, { app := λ _, f } }
 
-definition ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : Functor.{u₃ v₃ u₃ v₃} punit C := 
-{ onObjects     := λ _, X,
-  onMorphisms   := λ _ _ _, 𝟙 X }
+definition ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{u₃ v₃ u₃ v₃} punit C := 
+{ obj := λ _, X,
+  map := λ _ _ _, 𝟙 X }
 
 section
 local attribute [ematch] subtype.property
@@ -37,12 +36,12 @@ variable {C : Type u₃}
 variable [𝒞 : category.{u₃ v₃} C]
 include 𝒜 ℬ 𝒞
 
-definition comma (S : A ↝ C) (T : B ↝ C) : Type (max u₁ u₂ v₃) := Σ p : A × B, (S +> p.1) ⟶ (T +> p.2)
+definition comma (S : A ↝ C) (T : B ↝ C) : Type (max u₁ u₂ v₃) := Σ p : A × B, (S p.1) ⟶ (T p.2)
 
 structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (max v₁ v₂):=
 (left : p.1.1 ⟶ q.1.1)
 (right : p.1.2 ⟶ q.1.2)
-(condition : (S &> left) ≫ q.2 = p.2 ≫ (T &> right) . obviously)
+(condition : (S.map left) ≫ q.2 = p.2 ≫ (T.map right) . obviously)
 
 restate_axiom comma_morphism.condition
 attribute [ematch] comma_morphism.condition_lemma
@@ -57,23 +56,21 @@ attribute [ematch] comma_morphism.condition_lemma
   end
 
 instance CommaCategory (S : A ↝ C) (T : B ↝ C) : category.{(max u₁ u₂ v₃) (max v₁ v₂)} (comma S T) :=
-{ Hom      := λ p q, comma_morphism p q,
-  identity := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, by obviously ⟩,
-  compose  := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, by obviously ⟩ }
+{ Hom  := λ p q, comma_morphism p q,
+  id   := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, by obviously ⟩,
+  comp := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, by obviously ⟩ }
 
 -- cf Leinster Remark 2.3.2
-definition CommaCategory_left_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ A := {
-  onObjects     := λ X, X.1.1,
-  onMorphisms   := λ _ _ f, f.left
-}
+definition CommaCategory_left_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ A := 
+{ obj := λ X, X.1.1,
+  map := λ _ _ f, f.left }
 
-definition CommaCategory_right_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ B := {
-  onObjects     := λ X, X.1.2,
-  onMorphisms   := λ _ _ f, f.right
-}
+definition CommaCategory_right_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ B := 
+{ obj := λ X, X.1.2,
+  map := λ _ _ f, f.right }
 
 definition CommaCategory_projection_transformation (S : A ↝ C) (T : B ↝ C) : ((CommaCategory_left_projection S T) ⋙ S) ⟹ ((CommaCategory_right_projection S T) ⋙ T) := 
-{ components := λ X, X.2 }
+{ app := λ X, X.2 }
 
 -- Notice that if C is large, these are large, and if C is small, these are small.
 definition SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (Functor.id C) (ObjectAsFunctor X)) := by apply_instance
@@ -91,7 +88,7 @@ variable [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
 definition Cone   (F : J ↝ C) := (comma (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C) (ObjectAsFunctor F))
-definition Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                   (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C))
+definition Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                  (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C))
 
 @[simp] lemma Cone_comma_unit   (F : J ↝ C) (X : Cone F)   : X.1.2 = punit.star := by obviously 
 @[simp] lemma Cocone_comma_unit (F : J ↝ C) (X : Cocone F) : X.1.1 = punit.star := by obviously 

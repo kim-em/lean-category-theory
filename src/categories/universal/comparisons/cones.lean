@@ -61,7 +61,7 @@ definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) :=
 { onObjects     := Cone_to_comma_Cone,
   onMorphisms   := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
 
-local attribute [applicable] category.identity
+local attribute [backwards] category.identity
 
 -- TODO really slow: need to automatically abstract (propositional?) subgoals
 definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 

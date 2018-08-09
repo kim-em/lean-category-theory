@@ -6,7 +6,6 @@ import categories.adjunctions
 import categories.adjunctions.hom_adjunction
 
 open category_theory
-open category_theory.types
 
 namespace category_theory.adjunctions
 
