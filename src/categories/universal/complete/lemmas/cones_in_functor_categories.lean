@@ -72,7 +72,7 @@ lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹
 begin
   have p := cone.commutativity g,
   have p' := congr_arg nat_trans.app p,
-  have p'' := congr_fun p X,
+  have p'' := congr_fun p' X,
   rw ← p'',
   rw bifunctor_naturality,
   rw NaturalTransformation.composition_components,
