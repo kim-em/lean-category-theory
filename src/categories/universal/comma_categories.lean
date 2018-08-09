@@ -73,8 +73,8 @@ definition CommaCategory_projection_transformation (S : A ↝ C) (T : B ↝ C) :
 { app := λ X, X.2 }
 
 -- Notice that if C is large, these are large, and if C is small, these are small.
-definition SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (Functor.id C) (ObjectAsFunctor X)) := by apply_instance
-definition CosliceCategory (X : C) : category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (Functor.id C)) := by apply_instance
+definition SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (functor.id C) (ObjectAsFunctor X)) := by apply_instance
+definition CosliceCategory (X : C) : category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (functor.id C)) := by apply_instance
 end
 
 -- In Cones, we have
@@ -96,8 +96,8 @@ definition Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                  (
 instance Cones   (F : J ↝ C) : category (Cone F)   := begin unfold Cone, apply_instance end
 instance Cocones (F : J ↝ C) : category (Cocone F) := begin unfold Cocone, apply_instance end
 
-definition Limit   (F: J ↝ C) := TerminalObject (Cone   F)
-definition Colimit (F: J ↝ C) := InitialObject  (Cocone F)
+definition Limit   (F: J ↝ C) := terminal_object (Cone   F)
+definition Colimit (F: J ↝ C) := initial_object  (Cocone F)
 
 definition BinaryProduct   (α β : C)                  := Limit   (Pair_functor.{u₁ v₁} α β)
 definition BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
