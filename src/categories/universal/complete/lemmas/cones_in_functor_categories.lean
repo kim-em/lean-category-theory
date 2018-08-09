@@ -72,7 +72,7 @@ lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹
 begin
   have p := cone.commutativity g,
   have p' := congr_arg nat_trans.app p,
-  have p'' := congr_fun p' X,
+  have p'' := congr_fun p X,
   rw ← p'',
   rw bifunctor_naturality,
   rw NaturalTransformation.composition_components,
@@ -85,8 +85,8 @@ end
 (f : X ⟶ Y)
 (j : J)
 (cone : universal.Cone F)
-  : ((cone.cone_point) &> f) ≫ ((cone.cone_maps j).components Y) =
-    ((cone.cone_maps j).components X) ≫ ((F +> j) &> f) := by obviously
+  : ((cone.cone_point).map f) ≫ ((cone.cone_maps j) Y) =
+    ((cone.cone_maps j) X) ≫ ((F j).map f) := by obviously
 
 @[simp] lemma cone_commutativity_in_FunctorCategory
 (F : J ↝ (C ↝ D))
@@ -94,10 +94,10 @@ end
 (j k : J)
 (f : j ⟶ k) 
 (Y : Cone F)
- : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) = (Y.cone_maps k).components X := 
+ : ((Y.cone_maps j) X) ≫ ((F.map f) X) = (Y.cone_maps k) X := 
 begin
  have p := Y.commutativity f,
- have p' := congr_arg NaturalTransformation.components p,
+ have p' := congr_arg nat_trans.app p,
  rw ← p',
  tidy,
 end
@@ -109,12 +109,8 @@ end
 (f : j ⟶ k) 
 (Y : Cone F)
 (Z : D)
-(z : ((F +> k) +> X) ⟶ Z)
- : ((Y.cone_maps j).components X) ≫ ((F &> f).components X) ≫ z = (Y.cone_maps k).components X ≫ z := 
-begin
- rw ← category.associativity,
- simp
-end
+(z : ((F k) X) ⟶ Z)
+ : ((Y.cone_maps j) X) ≫ ((F.map f) X) ≫ z = (Y.cone_maps k) X ≫ z := by obviously
 
 @[simp] lemma cone_morphism_commutativity_in_FunctorCategory
 (F : J ↝ (C ↝ D))
@@ -122,10 +118,10 @@ end
 (j : J)
 (Y Z : Cone F)
 (φ : ConeMorphism Y Z)
- : ((φ.cone_morphism).components X) ≫ ((Z.cone_maps j).components X) = (Y.cone_maps j).components X := 
+ : ((φ.cone_morphism) X) ≫ ((Z.cone_maps j) X) = (Y.cone_maps j) X := 
 begin
   have p := φ.commutativity j,
-  have p' := congr_arg NaturalTransformation.components p,
+  have p' := congr_arg nat_trans.app p,
   exact congr_fun p' X,
 end
 
