@@ -20,8 +20,8 @@ class Functorial (f : C → D) :=
   (identities    : ∀ (X : C), onMorphisms (𝟙 X) = 𝟙 (f X) . obviously)
   (functoriality : ∀ {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z), onMorphisms (f ≫ g) = (onMorphisms f) ≫ (onMorphisms g) . obviously)
 
-make_lemma Functorial.identities
-make_lemma Functorial.functoriality
+restate_axiom Functorial.identities
+restate_axiom Functorial.functoriality
 attribute [simp,ematch] Functorial.functoriality_lemma Functorial.identities_lemma
 
 instance (F : C ↝ D) : Functorial (F.onObjects) := 

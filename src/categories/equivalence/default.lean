@@ -12,23 +12,22 @@ universes u₁ v₁ u₂ v₂
 structure Equivalence (C : Type u₁) [category.{u₁ v₁} C] (D : Type u₂) [category.{u₂ v₂} D] :=
   (functor : C ↝ D)
   (inverse : D ↝ C)
-  (isomorphism_1 : (functor ⋙ inverse) ⇔ 1 . obviously)
-  (isomorphism_2 : (inverse ⋙ functor) ⇔ 1 . obviously)
+  (isomorphism_1 : (functor ⋙ inverse) ⇔ (category_theory.functor.id C) . obviously')
+  (isomorphism_2 : (inverse ⋙ functor) ⇔ (category_theory.functor.id D) . obviously')
 
 namespace Equivalence
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-@[reducible] definition reverse (e : Equivalence C D) : Equivalence D C := {
-  functor := e.inverse,
+@[reducible] definition reverse (e : Equivalence C D) : Equivalence D C := 
+{ functor := e.inverse,
   inverse := e.functor,
   isomorphism_1 := e.isomorphism_2,
-  isomorphism_2 := e.isomorphism_1
-}
+  isomorphism_2 := e.isomorphism_1 }
 
-@[simp,ematch] lemma onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor &> (e.inverse &> f) = (e.isomorphism_2.components X).morphism ≫ f ≫ (e.isomorphism_2.reverse.components Y).morphism := by obviously
-@[simp,ematch] lemma onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse &> (e.functor &> f) = (e.isomorphism_1.components X).morphism ≫ f ≫ (e.isomorphism_1.reverse.components Y).morphism := by obviously
+@[simp,ematch] lemma onMorphisms_1 (e : Equivalence C D) (X Y : D) (f : X ⟶ Y) : e.functor.map (e.inverse.map f) = (e.isomorphism_2.map X) ≫ f ≫ (e.isomorphism_2.inv Y) := by obviously'
+@[simp,ematch] lemma onMorphisms_2 (e : Equivalence C D) (X Y : C) (f : X ⟶ Y) : e.inverse.map (e.functor.map f) = (e.isomorphism_1.map X) ≫ f ≫ (e.isomorphism_1.inv Y) := by obviously'
 
 -- PROJECT a good way to do this?
 -- definition EquivalenceComposition (e : Equivalence C D) (f : Equivalence D E) : Equivalence C E := 
@@ -45,35 +44,34 @@ variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 
 include 𝒞 𝒟
 
 class Full (F : C ↝ D) :=
-  (preimage : ∀ {X Y : C} (f : (F +> X) ⟶ (F +> Y)), X ⟶ Y)
-  (witness  : ∀ {X Y : C} (f : (F +> X) ⟶ (F +> Y)), F &> (preimage f) = f . obviously)
+(preimage : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), X ⟶ Y)
+(witness  : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), F.map (preimage f) = f . obviously)
 
 attribute [semiapplicable] Full.preimage
-make_lemma Full.witness
+restate_axiom Full.witness
 attribute [simp,ematch] Full.witness_lemma
 
-definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F +> X ⟶ F +> Y) : X ⟶ Y := @Full.preimage C 𝒞 D 𝒟 F _ _ _ f  --- FIXME why can't I just write `Full.preimage f` here?
-@[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F +> X ⟶ F +> Y) : F &> preimage F f = f := begin unfold preimage, obviously end
+definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y := @Full.preimage C 𝒞 D 𝒟 F _ _ _ f  --- FIXME why can't I just write `Full.preimage f` here?
+@[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : F.map (preimage F f) = f := begin unfold preimage, obviously' end
 
 class Faithful (F : C ↝ D) :=
-  (injectivity : ∀ {X Y : C} (f g : X ⟶ Y) (p : F &> f = F &> g), f = g)
+  (injectivity : ∀ {X Y : C} (f g : X ⟶ Y) (p : F.map f = F.map g), f = g)
 
-make_lemma Faithful.injectivity
+restate_axiom Faithful.injectivity
 attribute [semiapplicable] Faithful.injectivity_lemma
 
-definition preimage_iso (F : C ↝ D) [Full F] [Faithful F] {X Y : C} (f : (F +> X) ≅ (F +> Y)) : X ≅ Y := {
-  morphism  := preimage F f.morphism,
-  inverse   := preimage F f.inverse,
-  witness_1 := begin apply @Faithful.injectivity _ _ _ _ F, tidy, end,
-  witness_2 := begin apply @Faithful.injectivity _ _ _ _ F, tidy, end,
-}
+definition preimage_iso (F : C ↝ D) [Full F] [Faithful F] {X Y : C} (f : (F X) ≅ (F Y)) : X ≅ Y := 
+{ map := preimage F f.map,
+  inv := preimage F f.inv,
+  map_inv_id := begin apply @Faithful.injectivity _ _ _ _ F, tidy, end,
+  inv_map_id := begin apply @Faithful.injectivity _ _ _ _ F, tidy, end, }
 
 -- TODO
 -- instance (F : C ↝ D) [Faithful F] : ReflectsIsomorphisms F := sorry
 
 definition Embedding (F : C ↝ D) := (Full F) × (Faithful F)
 
-definition EssentiallySurjective (F : C ↝ D) := Π d : D, Σ c : C, Isomorphism (F +> c) d
+definition EssentiallySurjective (F : C ↝ D) := Π d : D, Σ c : C, (F c) ≅ d
 attribute [class] EssentiallySurjective
 end
 
@@ -82,10 +80,10 @@ section
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-class is_Equivalence (F : Functor C D) := 
-(inverse       : Functor D C)
-(isomorphism_1 : (F ⋙ inverse) ⇔ (Functor.id C))
-(isomorphism_2 : (inverse ⋙ F) ⇔ (Functor.id D))
+class is_Equivalence (F : C ↝ D) := 
+(inverse       : D ↝ C)
+(isomorphism_1 : (F ⋙ inverse) ⇔ (functor.id C))
+(isomorphism_2 : (inverse ⋙ F) ⇔ (functor.id D))
 
 instance (e : Equivalence C D) : is_Equivalence e.functor := 
 { inverse       := e.inverse,

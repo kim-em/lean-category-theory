@@ -2,8 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import categories.natural_transformation
-import categories.functor_categories
+import category_theory.natural_transformation
+import category_theory.functor_category
+import tidy.tidy
 
 universes u₁ u₂
 
@@ -11,7 +12,7 @@ open category_theory
 
 namespace category_theory.arrows
 
-local attribute [applicable] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [applicable] category.id -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 -- Is there any point defining these separately (rather than as the functor category from the walking arrow)?
 
@@ -19,12 +20,12 @@ definition arrow (C : Type (u₁+1)) [large_category C] := Σ (p : C × C), p.1 
 
 structure arrow_hom {C : Type (u₁+1)} [large_category C] (X Y : arrow C) :=
 (morphism : (X.1.1 ⟶ Y.1.1) × (X.1.2 ⟶ Y.1.2))
-(commutativity : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously)
+(commutativity : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously')
 
-make_lemma arrow_hom.commutativity
+restate_axiom arrow_hom.commutativity
 attribute [ematch] arrow_hom.commutativity_lemma
 
-@[extensionality] lemma arrow_hom_equal {C : Type (u₁+1)} [large_category C] (f g : arrow C) (α β : arrow_hom f g) (w : α.morphism = β.morphism) : α = β :=
+@[extensionality] lemma ext {C : Type (u₁+1)} [large_category C] (f g : arrow C) (α β : arrow_hom f g) (w : α.morphism = β.morphism) : α = β :=
 begin
   induction α with α_morphism,
   induction β with β_morphism,
@@ -32,9 +33,10 @@ begin
 end
 
 @[reducible] instance Arrows (C : Type (u₁+1)) [large_category C] : large_category (arrow C):=
-{ Hom := arrow_hom,
-  identity       := by tidy,
-  compose        := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ }
+{ Hom  := arrow_hom,
+  id   := by tidy,
+  comp := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ }
+
 end category_theory.arrows
 
 namespace category_theory.Functor
@@ -47,11 +49,11 @@ variable {D : Type (u₂+1)}
 variable [large_category D]
 
 definition onArrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
-{ onObjects := λ F, 
-    { onObjects     := λ X, ⟨ (F +> X.1.1, F +> X.1.2), F &> X.2 ⟩,
-      onMorphisms   := λ X Y f, ⟨ (F &> f.morphism.1, F &> f.morphism.2) ⟩ },
-  onMorphisms := λ F G τ, 
-    { components := λ X, ⟨ (τ.components X.1.1, τ.components X.1.2) ⟩ } }
+{ obj := λ F, 
+    { obj     := λ X, ⟨ (F X.1.1, F X.1.2), F.map X.2 ⟩,
+      map   := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
+  map := λ F G τ, 
+    { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }
 
 end category_theory.Functor
 
