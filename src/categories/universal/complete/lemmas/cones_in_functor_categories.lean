@@ -30,19 +30,9 @@ variable [large_category D]
   (commutativity_g : Π j : J, g ≫ (L.obj.cone_maps j) = cone_maps j)
    : f = g :=
 begin
-  let cone : Cone G := {
-    cone_point    := Z,
-    cone_maps     := cone_maps,
-    commutativity := commutativity
- },
-  let cone_morphism_f : ConeMorphism cone L.obj := {
-    cone_morphism := f,
-    commutativity := commutativity_f
- },
-  let cone_morphism_g : ConeMorphism cone L.obj := {
-    cone_morphism := g,
-    commutativity := commutativity_g
- },
+  let cone : Cone G := { cone_point := Z, cone_maps := cone_maps },
+  let cone_morphism_f : ConeMorphism cone L.obj := { cone_morphism := f },
+  let cone_morphism_g : ConeMorphism cone L.obj := { cone_morphism := g },
   exact congr_arg ConeMorphism.cone_morphism (L.uniqueness cone cone_morphism_f cone_morphism_g), 
 end
 
@@ -56,9 +46,6 @@ lemma bifunctor_naturality
   : ((F j).map f) ≫ ((F.map g) Y)
   = ((F.map g) X) ≫ ((F k).map f) := by obviously
 
--- TODO find a better home
-lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹ G) (β : G ⟹ H) (X : C) : (@category.comp (C ↝ D) _ _ _ _ α β) X = (α X) ≫ (β X) := by obviously 
-
 @[simp] lemma cone_in_functor_category 
 (F : J ↝ (C ↝ D))
 (X Y : C)
@@ -69,15 +56,7 @@ lemma NaturalTransformation.composition_components (F G H : C ↝ D) (α : F ⟹
 : ((cone.cone_maps j) X) ≫ ((F j).map f) ≫ 
       ((F.map g) Y) =
     ((cone.cone_maps k) X) ≫ ((F k).map f) :=
-begin
-  have p := cone.commutativity g,
-  have p' := congr_arg nat_trans.app p,
-  have p'' := congr_fun p' X,
-  rw ← p'',
-  rw bifunctor_naturality,
-  rw NaturalTransformation.composition_components,
-  simp
-end
+by obviously
 
 @[simp] lemma cone_in_functor_category_naturality
 (F : J ↝ (C ↝ D))
@@ -95,12 +74,7 @@ end
 (f : j ⟶ k) 
 (Y : Cone F)
  : ((Y.cone_maps j) X) ≫ ((F.map f) X) = (Y.cone_maps k) X := 
-begin
- have p := Y.commutativity f,
- have p' := congr_arg nat_trans.app p,
- rw ← p',
- tidy,
-end
+by obviously
 
 @[simp] lemma cone_commutativity_in_FunctorCategory_assoc
 (F : J ↝ (C ↝ D))
@@ -119,11 +93,7 @@ end
 (Y Z : Cone F)
 (φ : ConeMorphism Y Z)
  : ((φ.cone_morphism) X) ≫ ((Z.cone_maps j) X) = (Y.cone_maps j) X := 
-begin
-  have p := φ.commutativity j,
-  have p' := congr_arg nat_trans.app p,
-  exact congr_fun p' X,
-end
+by obviously
 
 
 end category_theory.universal.lemmas.cones_in_functor_categories
