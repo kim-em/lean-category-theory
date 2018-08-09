@@ -17,7 +17,6 @@ variables {J : Type v} [small_category J]
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞 
 
-local attribute [tidy] dsimp_all'
 set_option pp.universes true
 @[simp] lemma comma.Cone.commutativity (F : J ↝ C) (X : C) (cone : ((DiagonalFunctor J C) X) ⟶ ((ObjectAsFunctor.{(max u v) v} F).obj punit.star)) {j k : J} (f : j ⟶ k) : cone j ≫ (F.map f) = cone k := 
 by obviously
@@ -28,13 +27,15 @@ definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F :=
 { cone_point    := cone.1.1,
   cone_maps     := λ j : J, (cone.2) j }
 
+section -- PROJECT improve automation here
+local attribute [tidy] dsimp_all'
 definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
 { cone_morphism := f.left,
-  commutativity := λ j : J, begin
-                              -- PROJECT improve automation
+  commutativity := λ j : J, begin                              
                               let q := congr_arg nat_trans.app f.condition,
                               tidy,
                             end }
+end
 
 definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F := 
 ⟨ (cone.cone_point, by obviously), {
