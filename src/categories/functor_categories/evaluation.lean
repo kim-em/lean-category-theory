@@ -11,10 +11,7 @@ namespace category_theory
 
 universes u₁ v₁ u₂ v₂
 
-variable (C : Type u₁)
-variable [𝒞 : category.{u₁ v₁} C]
-variable (D : Type u₂)
-variable [𝒟 : category.{u₂ v₂} D]
+variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (D : Type u₂) [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟 
 
 definition evaluation : ((C ↝ D) × C) ↝ D := 
