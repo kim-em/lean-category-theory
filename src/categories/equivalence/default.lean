@@ -50,8 +50,8 @@ class Full (F : C ↝ D) :=
 attribute [backwards_cautiously] Full.preimage
 restate_axiom Full.witness
 attribute [simp,ematch] Full.witness_lemma
-
-definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y := @Full.preimage C 𝒞 D 𝒟 F _ _ _ f  --- FIXME why can't I just write `Full.preimage f` here?
+set_option pp.universes true
+definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y := Full.preimage.{u₁ v₁ u₂ v₂}  f
 @[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : F.map (preimage F f) = f := begin unfold preimage, obviously' end
 
 class Faithful (F : C ↝ D) :=

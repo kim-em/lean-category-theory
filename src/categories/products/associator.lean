@@ -7,7 +7,7 @@ import categories.equivalence
 
 open category_theory
 
-namespace category_theory.ProductCategory
+namespace category_theory.prod
 
 universes u₁ v₁ u₂ v₂ u₃ v₃
 variable (C : Type u₁)
@@ -37,4 +37,4 @@ definition associativity : Equivalence ((C × D) × E) (C × (D × E)) :=
 
 -- TODO pentagon natural transformation? satisfying?
 
-end category_theory.ProductCategory
+end category_theory.prod
