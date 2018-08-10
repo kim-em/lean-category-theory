@@ -52,10 +52,14 @@ instance OpenSet.has_mem {α : Type u₁} {X : topological_space α} : has_mem �
 local attribute [backwards] set.subset.refl
 local attribute [backwards] topological_space.is_open_inter
 
+-- FIXME
 instance category_of_open_sets {α : Type u₁} (X : topological_space α) : large_category (OpenSet X) :=
 { Hom  := λ U V, ulift (plift (U ⊆ V)),
   id   := by obviously,
-  comp := λ _ _ _ f g, begin tidy, apply set.subset.trans f g end }
+  comp := λ _ _ _ f g, begin sorry, /- tidy, apply set.subset.trans f g -/ end,
+  id_comp := sorry,
+  comp_id := sorry,
+  assoc := sorry }
 
 definition Neighbourhoods {α} [X : topological_space α] (x : α) : large_category { U : OpenSet X | x ∈ U } := by apply_instance
 

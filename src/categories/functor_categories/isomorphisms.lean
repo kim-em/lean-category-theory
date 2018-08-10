@@ -6,7 +6,7 @@ import categories.natural_isomorphism
 
 open category_theory
 
-namespace category_theory.Functor
+namespace category_theory.functor
 
 universes u₁ v₁ u₂ v₂ u₃ v₃ u₄ v₄ 
 
@@ -16,11 +16,11 @@ variable {C : Type u₂}
 variable [𝒞 : category.{u₂ v₂} C]
 include ℬ 𝒞
 
-local attribute [backwards] category.identity -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [backwards] category.id -- This says that whenever there is a goal of the form (X ⟶ X), we can safely complete it with the identity morphism. This isn't universally true.
 
-definition left_unitor (F : B ↝ C) : (1 ⋙ F) ⇔ F := by obviously
+definition left_unitor (F : B ↝ C) : ((functor.id _) ⋙ F) ⇔ F := by obviously
 
-definition right_unitor (F : B ↝ C) : (F ⋙ 1) ⇔ F := by obviously
+definition right_unitor (F : B ↝ C) : (F ⋙ (functor.id _)) ⇔ F := by obviously
 
 variable {D : Type u₃}
 variable [𝒟 : category.{u₃ v₃} D]
@@ -32,4 +32,4 @@ definition associator (F : B ↝ C) (G : C ↝ D) (H : D ↝ E) : ((F ⋙ G) ⋙
 
 -- PROJECT pentagon
 
-end category_theory.Functor
+end category_theory.functor

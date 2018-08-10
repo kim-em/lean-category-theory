@@ -4,7 +4,7 @@
 
 import category_theory.natural_transformation
 import category_theory.functor_category
-import tidy.tidy
+import .tactics.obviously
 
 universes u₁ u₂
 

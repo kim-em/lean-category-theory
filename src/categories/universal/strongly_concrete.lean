@@ -9,7 +9,6 @@ import categories.functor.isomorphism
 
 open category_theory
 open category_theory.initial
-open category_theory.types
 
 namespace category_theory.universal
 

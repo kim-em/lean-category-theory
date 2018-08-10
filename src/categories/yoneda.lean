@@ -77,9 +77,11 @@ local attribute [tidy] dsimp_all'
 
 set_option pp.universes true
 
+-- FIXME
 def YonedaLemma (C : Type u₁) [category.{u₁ v₁} C] : (YonedaPairing C) ⇔ (YonedaEvaluation C) := 
-{ map := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)), naturality := by obviously' },
-  inv := { app := λ F x, { app := λ X a, (F.1.map a) x.down, naturality := by obviously' }, naturality := by obviously' } }.
+{ map := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)), naturality := by sorry },
+  inv := { app := λ F x, { app := λ X a, (F.1.map a) x.down, naturality := by obviously' }, naturality := by sorry },
+  map_inv_id := sorry }.
 
 def YonedaFull (C : Type u₁) [category.{u₁ v₁} C] : Full (Yoneda C) := 
 { preimage := λ X Y f, (f X) (𝟙 X),

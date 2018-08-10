@@ -13,18 +13,17 @@ variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] 
 include ℰ
 
 definition Uncurry_Functors : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
-{ onObjects     := λ F, { onObjects     := λ X, (F +> X.1) +> X.2,
-                          onMorphisms   := λ X Y f, ((F &> f.1) X.2) ≫ ((F +> Y.1) &> f.2) },
-  onMorphisms   := λ F G T, { components := λ X, (T X.1) X.2 } }
+{ obj := λ F, { obj := λ X, (F X.1) X.2,
+                map := λ X Y f, ((F.map f.1) X.2) ≫ ((F Y.1).map f.2) },
+  map := λ F G T, { app := λ X, (T X.1) X.2 } }
 
 definition Curry_Functors : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) := 
-{ onObjects     := λ F, { onObjects     := λ X, { onObjects     := λ Y, F +> (X, Y),
-                                                  onMorphisms   := λ Y Y' g, F &> (𝟙 X, g) },
-                          onMorphisms   := λ X X' f, { components := λ Y, F.onMorphisms (f, 𝟙 Y) } },
-  onMorphisms   := λ F G T, { components := λ X, { components := λ Y, T.components (X, Y) } } }
+{ obj := λ F, { obj := λ X, { obj := λ Y, F (X, Y),
+                              map := λ Y Y' g, F.map (𝟙 X, g) },
+                map := λ X X' f, { app := λ Y, F.map (f, 𝟙 Y) } },
+  map := λ F G T, { app := λ X, { app := λ Y, T (X, Y) } } }
 
-local attribute [backwards] category.identity -- this is usually a bad idea, but just what we needed here
-local attribute [tidy] dsimp_all'
+local attribute [backwards] category.id -- this is usually a bad idea, but just what we needed here
 
 def Currying_for_functors : Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) := 
 { functor := Uncurry_Functors C D E,

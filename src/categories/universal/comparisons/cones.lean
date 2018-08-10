@@ -54,7 +54,7 @@ definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) :=
   map := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
 
 local attribute [backwards] category.id
-
+local attribute [tidy] dsimp_all' -- TODO get rid of this
 definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 
 { functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F }
