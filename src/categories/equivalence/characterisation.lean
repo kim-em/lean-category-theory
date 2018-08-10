@@ -28,7 +28,7 @@ def Equivalences_are_Faithful (e : Equivalence C D) : Faithful (e.functor) :=
 
 
 def Equivalences_are_Full (e : Equivalence C D) : Full (e.functor) := 
-{ preimage := λ X Y f, (e.isomorphism_1.components X).inv ≫ (e.inverse.map f) ≫ (e.isomorphism_1.components Y).map,
+{ preimage := λ X Y f, (e.isomorphism_1.components X).inv ≫ (e.inverse.map f) ≫ (e.isomorphism_1.components Y).hom,
   witness := λ X Y f, begin
                             apply (Equivalences_are_Faithful e.reverse).injectivity,
                             erw ← e.isomorphism_1.naturality_2,
@@ -43,7 +43,7 @@ local attribute [tidy] faithfulness
 -- TODO: weirdly, failing to name `faithful` causes an error.
 definition Fully_Faithful_EssentiallySurjective_Functor_inverse (F : C ↝ D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : D ↝ C := 
 { obj := λ X, (es X).1,
-  map := λ X Y f, preimage F ((es X).2.map ≫ f ≫ (es Y).2.inv) }
+  map := λ X Y f, preimage F ((es X).2.hom ≫ f ≫ (es Y).2.inv) }
 
 def Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : C ↝ D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : is_Equivalence F := 
 { inverse := Fully_Faithful_EssentiallySurjective_Functor_inverse F,

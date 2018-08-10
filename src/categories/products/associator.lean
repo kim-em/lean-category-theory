@@ -31,9 +31,10 @@ definition inverse_associator : (C × (D × E)) ↝ ((C × D) × E) :=
 
 local attribute [backwards] category.id
 
-definition associativity : Equivalence ((C × D) × E) (C × (D × E)) :=
-{ functor := associator C D E,
-  inverse := inverse_associator C D E, }
+-- FIXME looping??
+-- definition associativity : Equivalence ((C × D) × E) (C × (D × E)) :=
+-- { functor := associator C D E,
+--   inverse := inverse_associator C D E, }
 
 -- TODO pentagon natural transformation? satisfying?
 

@@ -25,25 +25,25 @@ namespace NaturalIsomorphism
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.
 -- Somehow we want the definition above to be more transparent?
 instance coercion_to_NaturalTransformation (F G : C ↝ D) : has_coe (F ⇔ G) (F ⟹ G) :=
-  {coe := λ α, iso.map α}
+  {coe := λ α, iso.hom α}
 
 variables {F G H : C ↝ D}
 
 section 
 variable (α : F ⇔ G)
-@[simp,ematch] lemma map_inv_id (X : C) : (α.map X) ≫ (α.inv X) = 𝟙 (F X) := by obviously'
-@[simp,ematch] lemma inv_map_id (X : C) : (α.inv X) ≫ (α.map X) = 𝟙 (G X) := by obviously'
-@[simp,ematch] lemma map_inv_id_assoc {X : C} {Z : D} (f : (F X) ⟶ Z) : (α.map X) ≫ (α.inv X) ≫ f = f := by obviously'
-@[simp,ematch] lemma inv_map_id_assoc {X : C} {Z : D} (f : (G X) ⟶ Z) : (α.inv X) ≫ (α.map X) ≫ f = f := by obviously'
+@[simp,ematch] lemma hom_inv_id (X : C) : (α.hom X) ≫ (α.inv X) = 𝟙 (F X) := by obviously'
+@[simp,ematch] lemma inv_hom_id (X : C) : (α.inv X) ≫ (α.hom X) = 𝟙 (G X) := by obviously'
+@[simp,ematch] lemma hom_inv_id_assoc {X : C} {Z : D} (f : (F X) ⟶ Z) : (α.hom X) ≫ (α.inv X) ≫ f = f := by obviously'
+@[simp,ematch] lemma inv_hom_id_assoc {X : C} {Z : D} (f : (G X) ⟶ Z) : (α.inv X) ≫ (α.hom X) ≫ f = f := by obviously'
 
-@[ematch] lemma {u1 v1 u2 v2} naturality_1 {X Y : C} (f : X ⟶ Y) : (α.inv X) ≫ (F.map f) ≫ (α.map Y) = G.map f := by obviously
-@[ematch] lemma {u1 v1 u2 v2} naturality_2 {X Y : C} (f : X ⟶ Y) : (α.map X) ≫ (G.map f) ≫ (α.inv Y) = F.map f := by obviously
+@[ematch] lemma {u1 v1 u2 v2} naturality_1 {X Y : C} (f : X ⟶ Y) : (α.inv X) ≫ (F.map f) ≫ (α.hom Y) = G.map f := by obviously
+@[ematch] lemma {u1 v1 u2 v2} naturality_2 {X Y : C} (f : X ⟶ Y) : (α.hom X) ≫ (G.map f) ≫ (α.inv Y) = F.map f := by obviously
 end
 
 definition from_components
   (app : ∀ X : C, (F X) ≅ (G X))
-  (naturality : ∀ {X Y : C} (f : X ⟶ Y), (F.map f) ≫ (app Y).map = (app X).map ≫ (G.map f)) : NaturalIsomorphism F G :=
-{ map  := { app := λ X, (app X).map, },
+  (naturality : ∀ {X Y : C} (f : X ⟶ Y), (F.map f) ≫ (app Y).hom = (app X).hom ≫ (G.map f)) : NaturalIsomorphism F G :=
+{ hom  := { app := λ X, (app X).hom, },
   inv  := { app := λ X, (app X).inv,
             naturality := λ X Y f, begin 
                                     let p := congr_arg (λ f, (app X).inv ≫ (f ≫ (app Y).inv)) (eq.symm (naturality f)),
@@ -56,17 +56,17 @@ definition vertical_composition (α : F ⇔ G) (β : G ⇔ H) : F ⇔ H := iso.t
 attribute [reducible] NaturalIsomorphism
 
 @[reducible] definition components (α : F ⇔ G) (X : C) : (F X) ≅ (G X) := 
-{ map := α.map X,
+{ hom := α.hom X,
   inv := α.inv X }
 
-instance morphisms.components.is_Isomorphism (α : F ⇔ G) (X : C) : is_iso (α.map X) := 
+instance hom.app.is_iso (α : F ⇔ G) (X : C) : is_iso (α.hom X) := 
 { inv := α.inv X }
-instance inverse.components.is_Isomorphism   (α : F ⇔ G) (X : C) : is_iso (α.inv X) := 
-{ inv := α.map X }
+instance inv.app.is_iso   (α : F ⇔ G) (X : C) : is_iso (α.inv X) := 
+{ inv := α.hom X }
 
-@[reducible] definition reverse (α : F ⇔ G) : G ⇔ F := 
-{ map := α.inv,
-  inv := α.map }
+@[reducible] definition symm (α : F ⇔ G) : G ⇔ F := 
+{ hom := α.inv,
+  inv := α.hom }
 
 end NaturalIsomorphism
 
@@ -79,9 +79,9 @@ attribute [class] is_nat_iso
 
 namespace is_nat_iso
 -- TODO [is_nat_iso α]
-@[simp,ematch] lemma map_inv_id_app (α : F ⟹ G) (w : is_nat_iso α) (X : C) : (α X) ≫ (w.inv.app X) = 𝟙 (F X)
+@[simp,ematch] lemma hom_inv_id_app (α : F ⟹ G) (w : is_nat_iso α) (X : C) : (α X) ≫ (w.inv.app X) = 𝟙 (F X)
    := by obviously
-@[simp,ematch] lemma inv_map_id_app (α : F ⟹ G) (w : is_nat_iso α) (X : C) : (w.inv.app X) ≫ (α X) = 𝟙 (G X)
+@[simp,ematch] lemma inv_hom_id_app (α : F ⟹ G) (w : is_nat_iso α) (X : C) : (w.inv.app X) ≫ (α X) = 𝟙 (G X)
    := by obviously
 
 instance (F : C ↝ D) : is_nat_iso (𝟙 F) := 
@@ -91,10 +91,10 @@ end is_nat_iso
 
 namespace nat_iso
 
-instance map.is_nat_iso {F G : C ↝ D} (α : F ⇔ G) : is_nat_iso (α.map) := 
+instance hom.is_nat_iso {F G : C ↝ D} (α : F ⇔ G) : is_nat_iso (α.hom) := 
 { inv := α.inv }
 instance inv.is_nat_iso  {F G : C ↝ D} (α : F ⇔ G) : is_nat_iso (α.inv) := 
-{ inv := α.map }
+{ inv := α.hom }
 
 end nat_iso
 

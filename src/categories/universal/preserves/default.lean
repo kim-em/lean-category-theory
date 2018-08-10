@@ -21,7 +21,7 @@ variable [large_category B]
 class preserves_limits (F : A ↝ B) :=
 (preserves : Π {I : Type u} [small_category I] (D : I ↝ A) (q : LimitCone D), @is_terminal.{u+1 u} (Cone (D ⋙ F)) _ (F.on_cone q.obj))
 
-instance HomFunctorPreservesLimits (a : A) : preserves_limits ((CoYoneda A) a) := {
+instance HomFunctorPreservesLimits (a : A) : preserves_limits ((coyoneda A) a) := {
     preserves := λ I D q, sorry
 }
 

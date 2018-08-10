@@ -47,7 +47,7 @@ structure GrothendieckTopology [has_Pullbacks C] :=
 (covers : Π (X : C), set (Cover X))
 (pullback : Π {X : C} (c ∈ covers X) {Y : C} (f : Y ⟶ X), pullback_cover c f ∈ covers Y)
 (cover_of_covers : Π {X : C} (c ∈ covers X) (d : Π (i : Cover.I c), {P | covers (c.U i) P}), covers_of_cover c (λ i, (d i).1) ∈ covers X)
-(isomorphism_cover : Π {Y X : C} (f : Y ≅ X), singleton_cover f.map ∈ covers X)
+(isomorphism_cover : Π {Y X : C} (f : Y ≅ X), singleton_cover f.hom ∈ covers X)
 
 -- example : a topology is a Grothendieck topology
 

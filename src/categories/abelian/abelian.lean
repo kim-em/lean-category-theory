@@ -23,7 +23,7 @@ structure KernelImageCokernelDecomposition {C : Type (u+1)} [large_category C] [
   (cokernel_of_kernel      : Cokernel (kernel.inclusion) )
   (kernel_of_cokernel      : Kernel (cokernel.projection))
   (image_well_defined      : cokernel_of_kernel.cokernel ≅ kernel_of_cokernel.kernel)
-  (composition_is_morphism : cokernel_of_kernel.projection ≫ image_well_defined.map ≫ kernel_of_cokernel.inclusion = f)
+  (composition_is_morphism : cokernel_of_kernel.projection ≫ image_well_defined.hom ≫ kernel_of_cokernel.inclusion = f)
 
 class Abelian (C : Type (u+1)) [large_category C] [has_ZeroObject.{u+1 u} C] := 
   (decomposition : ∀ {X Y : C} (f : X ⟶ Y), KernelImageCokernelDecomposition f)

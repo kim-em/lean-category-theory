@@ -41,13 +41,11 @@ definition yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) :=
   map := λ X X' f, 
     { app := λ Y g, g ≫ f } }
 
--- FIXME typeclass resolution needs some help.
 definition yoneda_pairing : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) := 
 let F := (ProductCategory.switch ((Cᵒᵖ) ↝ (Type v₁)) (Cᵒᵖ)) in
 let G := (functor.prod ((yoneda C).opposite) (functor.id ((Cᵒᵖ) ↝ (Type v₁)))) in
 let H := (hom_pairing ((Cᵒᵖ) ↝ (Type v₁))) in
   (F ⋙ G ⋙ H)      
-
 
 definition coyoneda (C : Type u₁) [category.{u₁ v₁} C] : (Cᵒᵖ) ↝ (C ↝ (Type v₁)) := 
 { obj := λ X, 
@@ -77,9 +75,9 @@ set_option pp.universes true
 
 -- FIXME
 def YonedaLemma (C : Type u₁) [category.{u₁ v₁} C] : (yoneda_pairing C) ⇔ (yoneda_evaluation C) := 
-{ map := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)), naturality := by sorry },
+{ hom := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)), naturality := by sorry },
   inv := { app := λ F x, { app := λ X a, (F.1.map a) x.down }, naturality := by sorry },
-  map_inv_id := sorry }.
+  hom_inv_id := sorry }.
 
 def YonedaFull (C : Type u₁) [category.{u₁ v₁} C] : Full (yoneda C) := 
 { preimage := λ X Y f, (f X) (𝟙 X),

@@ -20,7 +20,7 @@ structure RegularMonic (f : X ⟶ Y) :=
 (a b : Y ⟶ Z)
 (e : Equalizer a b)
 (i : e.equalizer ≅ X)
-(w : e.inclusion = i.map ≫ f)
+(w : e.inclusion = i.hom ≫ f)
 
 -- EXERCISE
 -- def SplitMonic_implies_RegularMonic

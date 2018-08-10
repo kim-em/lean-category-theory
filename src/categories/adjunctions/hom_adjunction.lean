@@ -19,13 +19,13 @@ variable {D : Type u}
 variable [𝒟 : category.{u v} D]
 include 𝒞 𝒟
 
-definition HomAdjunction (L : C ↝ D) (R : D ↝ C) :=
+definition hom_adjunction (L : C ↝ D) (R : D ↝ C) :=
     ((functor.prod L.opposite (functor.id D)) ⋙ (hom_pairing D))
       ⇔ 
     (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (hom_pairing C)
 
-definition mate {L : C ↝ D} {R : D ↝ C} (A : HomAdjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)
-  := ((A.map) (X, Y)) f
+definition mate {L : C ↝ D} {R : D ↝ C} (A : hom_adjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)
+  := ((A.hom) (X, Y)) f
 
 -- PROJECT lemmas about mates.
 
