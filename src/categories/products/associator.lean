@@ -18,16 +18,15 @@ variable (E : Type u₃)
 variable [ℰ : category.{u₃ v₃} E]
 include 𝒞 𝒟 ℰ
 
--- PROJECT; by aggressively allowing "assumption" we could do this completely automatically
--- locally tag "assumption" with @[tidy]?
--- or define an aggressive version of tidy (perhaps "follow_your_nose"?)
-definition associator : ((C × D) × E) ↝ (C × (D × E)) :=
-{ obj := λ X, (X.1.1, (X.1.2, X.2)),
-  map := λ _ _ f, (f.1.1, (f.1.2, f.2)) }
+local attribute [tidy] tactic.assumption
 
-definition inverse_associator : (C × (D × E)) ↝ ((C × D) × E) :=
-{ obj := λ X, ((X.1, X.2.1), X.2.2),
-  map := λ _ _ f, ((f.1, f.2.1), f.2.2) }
+definition associator : ((C × D) × E) ↝ (C × (D × E)) := by obviously
+-- { obj := λ X, (X.1.1, (X.1.2, X.2)),
+--   map := λ _ _ f, (f.1.1, (f.1.2, f.2)) }
+
+definition inverse_associator : (C × (D × E)) ↝ ((C × D) × E) := by obviously
+-- { obj := λ X, ((X.1, X.2.1), X.2.2),
+--   map := λ _ _ f, ((f.1, f.2.1), f.2.2) }
 
 local attribute [backwards] category.id
 

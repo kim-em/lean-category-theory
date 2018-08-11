@@ -7,7 +7,7 @@ import categories.natural_isomorphism
 
 open category_theory
 
-namespace category_theory.ProductCategory
+namespace category_theory.prod
 
 universes u₁ v₁ u₂ v₂ 
 
@@ -23,6 +23,7 @@ definition switch : (C × D) ↝ (D × C) :=
 { obj := λ X, (X.2, X.1),
   map := λ _ _ f, (f.2, f.1) }
 
-definition symmetry : ((switch C D) ⋙ (switch D C)) ⇔ (functor.id (C × D)) := by obviously
+-- FIXME
+-- definition symmetry : ((switch C D) ⋙ (switch D C)) ⇔ (functor.id (C × D)) := by obviously
         
-end category_theory.ProductCategory
+end category_theory.prod
