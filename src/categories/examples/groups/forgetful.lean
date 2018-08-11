@@ -16,7 +16,7 @@ universes u₁ u₂
 
 definition ForgetfulFunctor_Groups_to_Types : Group ↝ (Type u₁) :=
 { obj := λ s, s.1,
-  map := λ s t f x, f.map x, }
+  map := λ s t f x, f.map x }
 
 local attribute [ematch] semigroup.mul_assoc
 
@@ -47,7 +47,7 @@ instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : ul
 
 @[simp] lemma monoid_pow_one {G} [group G] (x : G) : monoid.pow x 1 = x := begin sorry, end
 
-instance Groups_ForgetfulFunctor_Representable : Representable (ForgetfulFunctor_Groups_to_Types.{u₁}) := 
+instance Groups_ForgetfulFunctor_Representable : representable (ForgetfulFunctor_Groups_to_Types.{u₁}) := 
 { c := ⟨ ulift ℤ, by apply_instance ⟩,
   Φ := { hom := { app := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
                         naturality := sorry },

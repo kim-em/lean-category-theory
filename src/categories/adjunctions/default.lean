@@ -57,16 +57,10 @@ infix ` ⊣ `:50 := Adjunction
 --   = IdentityNaturalTransformation L
 
 @[simp,ematch] lemma Adjunction.unit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : C} (f : X ⟶ Y) : (A.unit X) ≫ (R.map (L.map f)) = f ≫ (A.unit Y) := 
-begin
-  have := A.unit.naturality,
-  obviously,
-end
+by obviously
 
 @[simp,ematch] lemma Adjunction.counit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : D} (f : X ⟶ Y) : (L.map (R.map f)) ≫ (A.counit Y) = (A.counit X) ≫ f :=
-begin
-  have := A.counit.naturality,
-  obviously,
-end
+by obviously
 
 -- PROJECT examples
 -- PROJECT existence in terms of initial objects in comma categories

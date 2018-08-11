@@ -13,10 +13,8 @@ namespace category_theory.universal
 
 universes u v w
 
-variable {A : Type (u+1)}
-variable [large_category A]
-variable {B : Type (u+1)}
-variable [large_category B]
+-- TODO think harder about universes here
+variables {A : Type (u+1)} [large_category A] {B : Type (u+1)}  [large_category B]
 
 class preserves_limits (F : A ↝ B) :=
 (preserves : Π {I : Type u} [small_category I] (D : I ↝ A) (q : LimitCone D), @is_terminal.{u+1 u} (Cone (D ⋙ F)) _ (F.on_cone q.obj))
@@ -25,6 +23,6 @@ instance HomFunctorPreservesLimits (a : A) : preserves_limits ((coyoneda A) a) :
     preserves := λ I D q, sorry
 }
 
-instance RepresentableFunctorPreservesLimits (F : A ↝ (Type u)) [Representable F] : preserves_limits F := sorry
+instance RepresentableFunctorPreservesLimits (F : A ↝ (Type u)) [representable F] : preserves_limits F := sorry
 
 end category_theory.universal
