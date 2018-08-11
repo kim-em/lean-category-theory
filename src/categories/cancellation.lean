@@ -9,33 +9,24 @@ namespace category_theory
 
 universes u v
 
-variable {C : Type (u+1)}
-variables {X Y Z : C}
-variable [large_category C]
+variables {C : Type u} {X Y Z : C} [𝒞 : category.{u v} C]
+include 𝒞
 
-@[simp] def cancel_left (f g : X ⟶ Y) : (∀ {Z : C} (h : Y ⟶ Z), f ≫ h = g ≫ h) ↔ f = g :=
+@[forwards] def cancel_left (f g : X ⟶ Y) (h : ∀ {Z : C} (h : Y ⟶ Z), f ≫ h = g ≫ h) : f = g :=
 begin
-    split,
-    { intro w, convert w (𝟙 Y), tidy },
-    { obviously }
+     convert h (𝟙 Y), tidy
 end
-@[simp] def cancel_right (f g : Y ⟶ Z) : (∀ {X : C} (h : X ⟶ Y), h ≫ f = h ≫ g) ↔ f = g :=
+@[forwards] def cancel_right (f g : Y ⟶ Z) (h : ∀ {X : C} (h : X ⟶ Y), h ≫ f = h ≫ g) : f = g :=
 begin
-    split,
-    { intro w, convert w (𝟙 Y), tidy },
-    { obviously }
+    convert h (𝟙 Y), tidy
 end
-@[simp] def identity_if_it_quacks_left (f : X ⟶ X) : (∀ {Y : C} (g : X ⟶ Y), f ≫ g = g) ↔ f = 𝟙 X :=
+@[forwards] def identity_if_it_quacks_left (f : X ⟶ X) (h : ∀ {Y : C} (g : X ⟶ Y), f ≫ g = g) : f = 𝟙 X :=
 begin
-    split,
-    { intro w, convert w (𝟙 X), tidy },
-    { obviously }
+    convert h (𝟙 X), tidy
 end
-@[simp] def identity_if_it_quacks_right (f : X ⟶ X) : (∀ {Y : C} (g : Y ⟶ X), g ≫ f = g) ↔ f = 𝟙 X :=
+@[forwards] def identity_if_it_quacks_right (f : X ⟶ X) (h : ∀ {Y : C} (g : Y ⟶ X), g ≫ f = g) : f = 𝟙 X :=
 begin
-    split,
-    { intro w, convert w (𝟙 X), tidy },
-    { obviously }
+    convert h (𝟙 X), tidy
 end
 
 end category_theory

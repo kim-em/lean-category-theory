@@ -12,6 +12,7 @@ import categories.functor_categories.evaluation
 import categories.universe_lifting
 import tactic.interactive
 import categories.tactics.obviously
+import categories.cancellation
 
 open category_theory
 
@@ -97,14 +98,6 @@ def yoneda_lemma : (yoneda_pairing C) ⇔ (yoneda_evaluation C) :=
 def yoneda_full : Full (yoneda C) := 
 { preimage := λ X Y f, (f X) (𝟙 X) }
 
-def yoneda_faithful : Faithful (yoneda C) := {
-    injectivity := λ X Y f g w, begin 
-                                  -- PROJECT automation: forwards reasoning on quacks
-                                  -- obviously,
-                                  have p := congr_arg (λ T : (yoneda C) X ⟹ (yoneda C) Y, T X) w, 
-                                  have p' := congr_fun p (𝟙 X),
-                                  tidy,
-                                end
-}
+def yoneda_faithful : Faithful (yoneda C) := by obviously
 
 end category_theory.yoneda
