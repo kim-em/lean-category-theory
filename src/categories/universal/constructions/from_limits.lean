@@ -21,11 +21,11 @@ variable {C : Type (u₁+1)}
 variable [large_category C]
 variables {F : J ↝ C} {L : LimitCone F} {Z : C} 
 
-@[reducible] private definition Cone_from_map_to_limit (f : Z ⟶ L.obj.cone_point) : Cone F := {
+private definition Cone_from_map_to_limit (f : Z ⟶ L.obj.cone_point) : Cone F := {
   cone_point    := Z,
   cone_maps     := λ j, f ≫ (L.obj.cone_maps j)
 }
-@[reducible] private definition ConeMorphism_from_map_to_limit (f : Z ⟶ L.obj.cone_point) : ConeMorphism (Cone_from_map_to_limit f) L.obj := {
+private definition ConeMorphism_from_map_to_limit (f : Z ⟶ L.obj.cone_point) : ConeMorphism (Cone_from_map_to_limit f) L.obj := {
   cone_morphism := f
 }
 end

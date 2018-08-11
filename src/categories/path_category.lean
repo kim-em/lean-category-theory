@@ -21,7 +21,7 @@ namespace category_theory.graphs
 
 def Path (C : Type u₁) := C 
 
-@[reducible] instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
+instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
 { Hom     := λ x y : C, path x y,
   id      := λ x, path.nil x,
   comp    := λ _ _ _ f g, concatenate_paths f g,
@@ -42,7 +42,7 @@ definition path_to_morphism
 | ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
 | ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) ≫ (path_to_morphism p)
  
-@[simp] lemma path_to_morphism.comp (H : graph_homomorphism G C) {X Y Z : G} (f : path X Y) (g : path Y Z): path_to_morphism H (graphs.concatenate_paths f g) = path_to_morphism H f ≫ path_to_morphism H g :=
+@[simp] lemma path_to_morphism.comp (H : graph_homomorphism G C) {X Y Z : Path G} (f : X ⟶ Y) (g : Y ⟶ Z) : path_to_morphism H (f ≫ g) = path_to_morphism H f ≫ path_to_morphism H g :=
 begin
   induction f,
   obviously,
@@ -50,7 +50,7 @@ end
 
 end category_theory.graphs
 
-namespace category_theory.Functor
+namespace category_theory.functor
 
 open category_theory.graphs
 
@@ -59,4 +59,4 @@ definition from_GraphHomomorphism (H : graph_homomorphism G C) : (Path G) ↝ C 
 { obj := λ X, (H.onVertices X),
   map := λ _ _ f, (path_to_morphism H f) }
 
-end category_theory.Functor
+end category_theory.functor

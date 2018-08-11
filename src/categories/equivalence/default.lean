@@ -20,7 +20,7 @@ namespace Equivalence
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-@[reducible] definition reverse (e : Equivalence C D) : Equivalence D C := 
+definition symm (e : Equivalence C D) : Equivalence D C := 
 { functor := e.inverse,
   inverse := e.functor,
   isomorphism_1 := e.isomorphism_2,

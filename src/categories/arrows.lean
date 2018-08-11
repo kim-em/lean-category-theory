@@ -32,10 +32,12 @@ begin
   tidy,
 end
 
-@[reducible] instance Arrows (C : Type (u₁+1)) [large_category C] : large_category (arrow C):=
+instance Arrows (C : Type (u₁+1)) [large_category C] : large_category (arrow C):=
 { Hom  := arrow_hom,
   id   := by tidy,
   comp := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ }
+
+@[simp] lemma Arrows_comp {C : Type (u₁+1)} [large_category C] {X Y Z : arrow C} (f : X ⟶ Y) (g : Y ⟶ Z) : f ≫ g = ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ := rfl
 
 end category_theory.arrows
 
@@ -49,11 +51,9 @@ variable {D : Type (u₂+1)}
 variable [large_category D]
 
 definition onArrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
-{ obj := λ F, 
-    { obj     := λ X, ⟨ (F X.1.1, F X.1.2), F.map X.2 ⟩,
-      map   := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
-  map := λ F G τ, 
-    { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }
+{ obj := λ F,     { obj := λ X, ⟨ (F X.1.1, F X.1.2), F.map X.2 ⟩,
+                    map := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
+  map := λ F G τ, { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }
 
 end category_theory.Functor
 

@@ -21,20 +21,18 @@ def Equivalences_are_EssentiallySurjective (e : Equivalence C D) : EssentiallySu
 
 def Equivalences_are_Faithful (e : Equivalence C D) : Faithful (e.functor) := 
 { injectivity := λ X Y f g w, begin  
-                                    have p := congr_arg (@category_theory.functor.map _ _ _ _ e.inverse  _ _) w,
-                                    simp at p,                                     
-                                    exact p 
+                                have p := congr_arg (@category_theory.functor.map _ _ _ _ e.inverse  _ _) w,
+                                simp at p,                                     
+                                exact p 
                               end }
 
 
 def Equivalences_are_Full (e : Equivalence C D) : Full (e.functor) := 
 { preimage := λ X Y f, (e.isomorphism_1.components X).inv ≫ (e.inverse.map f) ≫ (e.isomorphism_1.components Y).hom,
   witness := λ X Y f, begin
-                            apply (Equivalences_are_Faithful e.reverse).injectivity,
-                            erw ← e.isomorphism_1.naturality_2,
-                            obviously,
-                        end }
-
+                        apply (Equivalences_are_Faithful e.symm).injectivity,
+                        obviously,
+                      end }
 
 section
 private meta def faithfulness := `[apply faithful.injectivity] -- This is a bit dicey.
