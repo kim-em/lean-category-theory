@@ -28,13 +28,16 @@ definition LimitObject_in_FunctorCategory [Complete D] (F : J ↝ (C ↝ D)) : C
 
 definition LimitCone_in_FunctorCategory [Complete D] (F : J ↝ (C ↝ D)) : Cone F := 
 { cone_point := LimitObject_in_FunctorCategory F,
-  cone_maps  := λ j, sorry }
+  cone_maps  := λ j, sorry,
+  commutativity := sorry }
 
 instance Limits_in_FunctorCategory [cmp : Complete D] : Complete (C ↝ D) := {
   limitCone := λ J _ F, begin
+                          resetI,
                           exact {
                             obj    := @LimitCone_in_FunctorCategory J _ C _ D _ _ F,
-                            «from» := sorry
+                            «from» := sorry,
+                            uniqueness := sorry
                           }
                         end
 }
