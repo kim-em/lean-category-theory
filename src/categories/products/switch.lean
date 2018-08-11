@@ -11,7 +11,8 @@ namespace category_theory.prod
 
 universes u₁ v₁ u₂ v₂ 
 
-local attribute [backwards] category.id -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+-- TODO remove category_theory. once https://github.com/leanprover/mathlib/pull/248 lands
+local attribute [backwards] category_theory.category.id -- This says that whenever there is a goal of the form `X ⟶ X`, we can safely complete it with the identity morphism. This isn't universally true.
 
 variable (C : Type u₁)
 variable [𝒞 : category.{u₁ v₁} C]
@@ -23,7 +24,6 @@ definition switch : (C × D) ↝ (D × C) :=
 { obj := λ X, (X.2, X.1),
   map := λ _ _ f, (f.2, f.1) }
 
--- FIXME
--- definition symmetry : ((switch C D) ⋙ (switch D C)) ⇔ (functor.id (C × D)) := by obviously
+definition symmetry : ((switch C D) ⋙ (switch D C)) ⇔ (functor.id (C × D)) := by obviously
         
 end category_theory.prod

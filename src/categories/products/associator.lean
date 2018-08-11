@@ -29,6 +29,7 @@ definition inverse_associator : (C × (D × E)) ↝ ((C × D) × E) := by obviou
 -- @[simp] lemma inverse_associator_obj (X) : (inverse_associator C D E) X = ((X.1, X.2.1), X.2.2) := rfl
 -- @[simp] lemma inverse_associator_map {X Y} (f : X ⟶ Y) : (inverse_associator C D E).map f = ((f.1, f.2.1), f.2.2) := rfl
 
+-- TODO remove category_theory. once https://github.com/leanprover/mathlib/pull/248 lands
 local attribute [backwards] category_theory.category.id
 
 definition associativity : Equivalence ((C × D) × E) (C × (D × E)) := --by obviously -- times out
