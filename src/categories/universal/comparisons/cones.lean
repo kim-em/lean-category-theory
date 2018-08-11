@@ -17,7 +17,6 @@ variables {J : Type v} [small_category J]
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞 
 
-set_option pp.universes true
 @[simp] lemma comma.Cone.commutativity (F : J ↝ C) (X : C) (cone : ((DiagonalFunctor J C) X) ⟶ ((ObjectAsFunctor.{(max u v) v} F).obj punit.star)) {j k : J} (f : j ⟶ k) : cone j ≫ (F.map f) = cone k := 
 by obviously
 
@@ -27,23 +26,26 @@ definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F :=
 { cone_point    := cone.1.1,
   cone_maps     := λ j : J, (cone.2) j }
 
+@[simp] lemma comma_Cone_to_Cone_cone_maps  (cone : (comma.Cone F)) (j : J) : (comma_Cone_to_Cone cone).cone_maps j = (cone.2) j := rfl
+
 section -- PROJECT improve automation here
-local attribute [tidy] dsimp_all'
 definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
 { cone_morphism := f.left,
-  commutativity := λ j : J, begin                              
-                              let q := congr_arg nat_trans.app f.condition,
-                              tidy,
+  commutativity := λ j : J, begin                    
+                              let q := congr_arg nat_trans.app f.condition_lemma,
+                              let q' := congr_fun q j,
+                              repeat { erw ← nat_trans.coe_def at q' },
+                              cases f,
+                              obviously,
                             end }
 end
 
 definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F := 
-⟨ (cone.cone_point, by obviously), {
-    app        := λ j, cone.cone_maps j
- } ⟩
+⟨ (cone.cone_point, by obviously), { app := λ j, cone.cone_maps j } ⟩
 
 definition ConeMorphism_to_comma_ConeMorphism {X Y : Cone F} (f : ConeMorphism X Y) : (Cone_to_comma_Cone X) ⟶ (Cone_to_comma_Cone Y) := 
-{ left := f.cone_morphism, right := by obviously }
+{ left := f.cone_morphism, 
+  right := by obviously }
 
 definition comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (Cone F) := 
 { obj := comma_Cone_to_Cone,

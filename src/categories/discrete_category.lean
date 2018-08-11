@@ -4,6 +4,7 @@
 
 import category_theory.functor
 import categories.tactics.obviously
+import categories.equivalence
 
 namespace category_theory
 
@@ -19,12 +20,13 @@ instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) :=
   comp := by obviously }
 
 instance EmptyCategory : small_category pempty := (by apply_instance : small_category (discrete pempty))
+
 instance OneCategory  : category.{u₁ v₁} punit :=
 { Hom  := λ X Y, punit,
   id   := by obviously,
   comp := by obviously }
 
--- TODO check we can establish `Equivalence punit (discrete punit)` by obviously
+example : Equivalence.{u₁ u₁ u₁ u₁} punit (discrete punit) := by obviously
 
 definition EmptyFunctor (C : Type (u₂+1)) [large_category C] : pempty ↝ C := by obviously
 

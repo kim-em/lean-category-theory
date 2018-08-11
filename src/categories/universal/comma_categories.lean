@@ -15,25 +15,28 @@ namespace category_theory.comma
 
 universes j u₁ v₁ u₂ v₂ u₃ v₃
 
+section
+variables (J : Type u₁) [𝒥 : category.{u₁ v₁} J] (C : Type u₂) [𝒞 : category.{u₂ v₂} C] 
+include 𝒥 𝒞
 -- The diagonal functor sends X to the constant functor that sends everything to X.
-definition DiagonalFunctor (J : Type u₁) [category.{u₁ v₁} J] (C : Type u₂) [category.{u₂ v₂} C] : C ↝ (J ↝ C) :=
+definition DiagonalFunctor : C ↝ (J ↝ C) :=
 { obj := λ X, { obj := λ _, X,
                 map := λ _ _ _, 𝟙 X },
   map := λ X Y f, { app := λ _, f } }
+
+@[simp] lemma DiagonalFunctor_map_app {X Y : C} (f : X ⟶ Y) (j : J) : ((DiagonalFunctor J C).map f) j = f := rfl
+end
 
 definition ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{u₃ v₃ u₃ v₃} punit C := 
 { obj := λ _, X,
   map := λ _ _ _, 𝟙 X }
 
+@[simp] lemma ObjectAsFunctor_map {C : Type u₃} [category.{u₃ v₃} C] (X : C) : @category_theory.functor.map _ _ _ _ (ObjectAsFunctor.{u₃ v₃} X) punit.star punit.star punit.star = 𝟙 X := rfl
+
 section
 local attribute [ematch] subtype.property
 
-variable {A : Type u₁}
-variable [𝒜 : category.{u₁ v₁} A]
-variable {B : Type u₂}
-variable [ℬ : category.{u₂ v₂} B]
-variable {C : Type u₃}
-variable [𝒞 : category.{u₃ v₃} C]
+variables {A : Type u₁} [𝒜 : category.{u₁ v₁} A] {B : Type u₂} [ℬ : category.{u₂ v₂} B] {C : Type u₃} [𝒞 : category.{u₃ v₃} C]
 include 𝒜 ℬ 𝒞
 
 definition comma (S : A ↝ C) (T : B ↝ C) : Type (max u₁ u₂ v₃) := Σ p : A × B, (S p.1) ⟶ (T p.2)

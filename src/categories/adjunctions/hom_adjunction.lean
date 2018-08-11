@@ -11,13 +11,11 @@ open category_theory
 
 namespace category_theory.adjunctions
 
-universes u v
+universes u₁ v₁
 
-variable {C : Type u}
-variable [𝒞 : category.{u v} C]
-variable {D : Type u}
-variable [𝒟 : category.{u v} D]
-include 𝒞 𝒟
+-- TODO should we allow different universe levels, at the expense of some lifts?
+variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₁} [𝒟 : category.{u₁ v₁} D]
+include 𝒞 𝒟 
 
 definition hom_adjunction (L : C ↝ D) (R : D ↝ C) :=
     ((functor.prod L.opposite (functor.id D)) ⋙ (hom_pairing D))

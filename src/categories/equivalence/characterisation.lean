@@ -47,8 +47,8 @@ definition Fully_Faithful_EssentiallySurjective_Functor_inverse (F : C ↝ D) [F
 
 def Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : C ↝ D) [Full F] [faithful : Faithful F] [es : EssentiallySurjective F] : is_Equivalence F := 
 { inverse := Fully_Faithful_EssentiallySurjective_Functor_inverse F,
-  isomorphism_1 := NaturalIsomorphism.from_components (λ X, preimage_iso F (es (F X)).2) (by obviously), 
-  isomorphism_2 := NaturalIsomorphism.from_components (λ Y, (es Y).2)                    (by obviously) }
+  isomorphism_1 := NaturalIsomorphism.from_components (λ X, preimage_iso (es (F X)).2) (by obviously), 
+  isomorphism_2 := NaturalIsomorphism.from_components (λ Y, (es Y).2)                  (by obviously) }
 end
 
 -- TODO

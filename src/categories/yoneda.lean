@@ -25,8 +25,8 @@ variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
 -- We need to help typeclass inference with some awkward universe levels here.
-instance instance_1 : category (((Cᵒᵖ) ↝ Type v₁) × (Cᵒᵖ)) := category_theory.prod.category.{(max u₁ (v₁+1)) (max u₁ v₁) u₁ v₁} (Cᵒᵖ ↝ Type v₁) (Cᵒᵖ)
-instance instance_2 : category ((Cᵒᵖ) × ((Cᵒᵖ) ↝ Type v₁)) := category_theory.prod.category.{u₁ v₁ (max u₁ (v₁+1)) (max u₁ v₁)} (Cᵒᵖ) (Cᵒᵖ ↝ Type v₁) 
+instance instance_1 : category (((Cᵒᵖ) ↝ Type v₁) × (Cᵒᵖ)) := category_theory.prod.{(max u₁ (v₁+1)) (max u₁ v₁) u₁ v₁} (Cᵒᵖ ↝ Type v₁) (Cᵒᵖ)
+instance instance_2 : category ((Cᵒᵖ) × ((Cᵒᵖ) ↝ Type v₁)) := category_theory.prod.{u₁ v₁ (max u₁ (v₁+1)) (max u₁ v₁)} (Cᵒᵖ) (Cᵒᵖ ↝ Type v₁) 
 
 definition yoneda_evaluation : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) 
   := (evaluation (Cᵒᵖ) (Type v₁)) ⋙ type_lift.{v₁ u₁}
@@ -35,11 +35,9 @@ definition yoneda_evaluation : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (T
  : ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl
 
 definition yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) := 
-{ obj := λ X, 
-    { obj := λ Y, @category.Hom C _ Y X,
-      map := λ Y Y' f g, f ≫ g },
-  map := λ X X' f, 
-    { app := λ Y g, g ≫ f } }
+{ obj := λ X,      { obj := λ Y, @category.Hom C _ Y X,
+                     map := λ Y Y' f g, f ≫ g },
+  map := λ X X' f, { app := λ Y g, g ≫ f } }
 
 @[simp] lemma yoneda_obj_obj (X Y : C) : ((yoneda C) X) Y = (Y ⟶ X) := rfl
 @[simp] lemma yoneda_obj_map (X : C) {Y Y' : C} (f : Y ⟶ Y') : ((yoneda C) X).map f = λ g, f ≫ g := rfl
@@ -51,16 +49,21 @@ begin
   obviously,
 end
 
+section
+local attribute [forwards] congr_fun
+local attribute [forwards] nat_trans.naturality
 @[simp,ematch] lemma yoneda_aux_2 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) {Z Z' : C} (f : Z ⟶ Z') (h : Z' ⟶ X) : α Z (f ≫ h) = f ≫ α Z' h := 
 begin
-  have p := α.naturality f,
+have p := nat_trans.naturality α,
+  -- have p := α.naturality f,
   obviously,
+end
 end
 
 @[simp,ematch] lemma yoneda_aux_3 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) {Z : C} (f : Z ⟶ X) : f ≫ α X (𝟙 X) = α Z f := by obviously
 
 definition yoneda_pairing : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) := 
-let F := (ProductCategory.switch ((Cᵒᵖ) ↝ (Type v₁)) (Cᵒᵖ)) in
+let F := (prod.switch ((Cᵒᵖ) ↝ (Type v₁)) (Cᵒᵖ)) in
 let G := (functor.prod ((yoneda C).opposite) (functor.id ((Cᵒᵖ) ↝ (Type v₁)))) in
 let H := (hom_pairing ((Cᵒᵖ) ↝ (Type v₁))) in
   (F ⋙ G ⋙ H)      
@@ -76,11 +79,9 @@ let H := (hom_pairing ((Cᵒᵖ) ↝ (Type v₁))) in
 -- (β : (yoneda_pairing C) (F, X)): (F.map f (β.app X h)) = (β.app Y) ((yoneda C X).map f h) := by obviously
 
 definition coyoneda : (Cᵒᵖ) ↝ (C ↝ (Type v₁)) := 
-{ obj := λ X, 
-   { obj := λ Y, @category.Hom C _ X Y,
-     map := λ Y Y' f g, g ≫ f },
-  map := λ X X' f,
-    { app := λ Y g, f ≫ g } }
+{ obj := λ X,      { obj := λ Y, @category.Hom C _ X Y,
+                     map := λ Y Y' f g, g ≫ f },
+  map := λ X X' f, { app := λ Y g, f ≫ g } }
 
 @[simp] lemma coyoneda_obj_obj (X Y : C) : ((coyoneda C) X) Y = (X ⟶ Y) := rfl
 @[simp] lemma coyoneda_obj_map (X : C) {Y Y' : C} (f : Y ⟶ Y') : ((coyoneda C) X).map f = λ g, g ≫ f := rfl

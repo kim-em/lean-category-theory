@@ -55,13 +55,12 @@ definition preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y
 @[simp] lemma image_preimage (F : C ↝ D) [Full F] {X Y : C} (f : F X ⟶ F Y) : F.map (preimage F f) = f := begin unfold preimage, obviously' end
 
 class Faithful (F : C ↝ D) :=
-  (injectivity : ∀ {X Y : C} (f g : X ⟶ Y) (p : F.map f = F.map g), f = g)
+  (injectivity : ∀ {X Y : C} {f g : X ⟶ Y} (p : F.map f = F.map g), f = g)
 
 restate_axiom Faithful.injectivity
--- TODO this should just be `forwards`!
-attribute [backwards_cautiously] Faithful.injectivity_lemma
+attribute [forwards] Faithful.injectivity_lemma
 
-definition preimage_iso (F : C ↝ D) [Full F] [Faithful F] {X Y : C} (f : (F X) ≅ (F Y)) : X ≅ Y := 
+definition preimage_iso {F : C ↝ D} [Full F] [Faithful F] {X Y : C} (f : (F X) ≅ (F Y)) : X ≅ Y := 
 { hom := preimage F f.hom,
   inv := preimage F f.inv,
   hom_inv_id := begin apply @Faithful.injectivity _ _ _ _ F, tidy, end,

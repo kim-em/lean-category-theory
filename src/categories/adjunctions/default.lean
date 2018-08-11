@@ -10,12 +10,10 @@ open category_theory
 
 namespace category_theory.adjunctions
 
-universes u₁ u₂
+universes u₁ v₁ u₂ v₂
 
-variable {C : Type (u₁+1)}
-variable [large_category C]
-variable {D : Type (u₂+1)}
-variable [large_category D]
+variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
+include 𝒞 𝒟 
 
 -- TODO think again about whether we should specify the conditions here in terms of natural transformations or components
 structure Adjunction (L : C ↝ D) (R : D ↝ C) :=

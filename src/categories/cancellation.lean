@@ -20,6 +20,14 @@ end
 begin
     convert h (𝟙 Y), tidy
 end
+@[forwards] def cancel_left' (f g : X ⟶ Y) (w : (λ {Z : C} (h : Y ⟶ Z), f ≫ h) = (λ {Z : C} (h : Y ⟶ Z), g ≫ h)) : f = g :=
+begin
+     convert (congr_fun (congr_fun w Y) (𝟙 Y)), tidy
+end
+@[forwards] def cancel_right' (f g : Y ⟶ Z) (w : (λ {X : C} (h : X ⟶ Y), h ≫ f) = (λ {X : C} (h : X ⟶ Y), h ≫ g)) : f = g :=
+begin
+     convert (congr_fun (congr_fun w Y) (𝟙 Y)), tidy
+end
 @[forwards] def identity_if_it_quacks_left (f : X ⟶ X) (h : ∀ {Y : C} (g : X ⟶ Y), f ≫ g = g) : f = 𝟙 X :=
 begin
     convert h (𝟙 X), tidy
