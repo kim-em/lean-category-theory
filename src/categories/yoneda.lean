@@ -31,9 +31,8 @@ instance instance_2 : category ((Cᵒᵖ) × ((Cᵒᵖ) ↝ Type v₁)) := categ
 definition yoneda_evaluation : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) 
   := (evaluation (Cᵒᵖ) (Type v₁)) ⋙ type_lift.{v₁ u₁}
 
-@[simp] lemma yoneda_evaluation_map 
-(P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ))
-(α : P ⟶ Q) (x : (yoneda_evaluation C) P): ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl
+@[simp] lemma yoneda_evaluation_map_down (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (x : (yoneda_evaluation C) P)
+ : ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl
 
 definition yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) := 
 { obj := λ X, 
@@ -42,7 +41,7 @@ definition yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) :=
   map := λ X X' f, 
     { app := λ Y g, g ≫ f } }
 
-@[simp] lemma yoneda_obj_obj (X Y : C) : ((yoneda C) X) Y = (@category.Hom C _ Y X) := rfl
+@[simp] lemma yoneda_obj_obj (X Y : C) : ((yoneda C) X) Y = (Y ⟶ X) := rfl
 @[simp] lemma yoneda_obj_map (X : C) {Y Y' : C} (f : Y ⟶ Y') : ((yoneda C) X).map f = λ g, f ≫ g := rfl
 @[simp] lemma yoneda_map_app {X X' : C} (f : X ⟶ X') (Y : C) : ((yoneda C).map f) Y = λ g, g ≫ f := rfl
 
@@ -66,6 +65,8 @@ let G := (functor.prod ((yoneda C).opposite) (functor.id ((Cᵒᵖ) ↝ (Type v�
 let H := (hom_pairing ((Cᵒᵖ) ↝ (Type v₁))) in
   (F ⋙ G ⋙ H)      
 
+-- TODO these aren't needed, and can be removed.
+
 -- @[simp] lemma yoneda_pairing_map (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ))
 -- (α : P ⟶ Q)
 -- (β : (yoneda_pairing C) (P.1, P.2)): (yoneda_pairing C).map α β = (yoneda C).map (α.snd) ≫ β ≫ α.fst := rfl
@@ -80,6 +81,11 @@ definition coyoneda : (Cᵒᵖ) ↝ (C ↝ (Type v₁)) :=
      map := λ Y Y' f g, g ≫ f },
   map := λ X X' f,
     { app := λ Y g, f ≫ g } }
+
+@[simp] lemma coyoneda_obj_obj (X Y : C) : ((coyoneda C) X) Y = (X ⟶ Y) := rfl
+@[simp] lemma coyoneda_obj_map (X : C) {Y Y' : C} (f : Y ⟶ Y') : ((coyoneda C) X).map f = λ g, g ≫ f := rfl
+@[simp] lemma coyoneda_map_app {X X' : C} (f : X ⟶ X') (Y : C) : ((coyoneda C).map f) Y = λ g, f ≫ g := rfl
+
 end
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C]
