@@ -61,6 +61,6 @@ instance category_of_open_sets {α : Type u₁} (X : topological_space α) : lar
   comp_id := sorry,
   assoc := sorry }
 
-definition Neighbourhoods {α} [X : topological_space α] (x : α) : large_category { U : OpenSet X | x ∈ U } := by apply_instance
+def Neighbourhoods {α} [X : topological_space α] (x : α) : large_category { U : OpenSet X | x ∈ U } := by apply_instance
 
 end category_theory.examples.topological_spaces

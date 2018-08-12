@@ -25,6 +25,6 @@ instance lawful_functor_of_Functor (F : (Type u) ↝ (Type v)) : is_lawful_funct
 
 attribute [ematch] is_lawful_functor.comp_map
 
-definition functor_of_functor' (g : Type u → Type v) [functor g] [is_lawful_functor g] : (Type u) ↝ (Type v) := 
+def functor_of_functor' (g : Type u → Type v) [functor g] [is_lawful_functor g] : (Type u) ↝ (Type v) := 
 { obj := g,
   map := λ X Y f z, f <$> z }

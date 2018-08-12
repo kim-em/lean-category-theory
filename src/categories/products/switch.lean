@@ -19,10 +19,10 @@ variable (D : Type u₂)
 variable [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-definition switch : (C × D) ↝ (D × C) :=
+def switch : (C × D) ↝ (D × C) :=
 { obj := λ X, (X.2, X.1),
   map := λ _ _ f, (f.2, f.1) }
 
-definition symmetry : ((switch C D) ⋙ (switch D C)) ⇔ (functor.id (C × D)) := by obviously
+def symmetry : ((switch C D) ⋙ (switch D C)) ⇔ (functor.id (C × D)) := by obviously
         
 end category_theory.prod

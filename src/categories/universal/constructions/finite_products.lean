@@ -15,7 +15,7 @@
 -- PROJECT:
 -- open nat
 
--- definition construct_finite_product (C : Category) [has_TerminalObject C] [has_BinaryProducts C]
+-- def construct_finite_product (C : Category) [has_TerminalObject C] [has_BinaryProducts C]
 --   : Π n : nat, Π (I : Type) (fin : Finite I) (p : fin.cardinality = n) (f : I → C.Obj), Product f
 -- | 0        := λ {I : Type} [fin : Finite I] (p : fin.cardinality = 0) (f : I → C.Obj), {
 --                 product       := terminal_object,

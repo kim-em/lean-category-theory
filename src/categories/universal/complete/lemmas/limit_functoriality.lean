@@ -36,7 +36,7 @@ variable {Y : Cocone F}
     : (L.«from» X).cone_morphism ≫ (L.obj.cone_maps j) = X.cone_maps j :=
   (L.«from» X).commutativity j
 
-@[backwards,reducible] definition morphism_to_terminal_object_cone_point 
+@[backwards,reducible] def morphism_to_terminal_object_cone_point 
   {Z : C}
   (cone_maps : Π j : J, Z ⟶ (F j)) 
   (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (F.map f) = cone_maps k)
@@ -65,7 +65,7 @@ end
     : (M.obj.cocone_maps j) ≫ (M.to Y).cocone_morphism = Y.cocone_maps j :=
   (M.to Y).commutativity j
 
-@[backwards,reducible] definition morphism_from_initial_object_cocone_point 
+@[backwards,reducible] def morphism_from_initial_object_cocone_point 
   {Z : C}
   (cocone_maps : Π j : J, (F j) ⟶ Z) 
   (commutativity : Π j k : J, Π f : j ⟶ k, (F.map f) ≫ (cocone_maps k) = cocone_maps j)

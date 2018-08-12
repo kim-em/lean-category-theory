@@ -18,6 +18,6 @@ instance universe_lift : large_category (ulift.{(u₁+1)} C) :=
 
 local attribute [backwards] category.id
 
-definition universe_lift.equivalence : Equivalence C (ulift.{(u₁+1)} C) := by obviously
+def universe_lift.equivalence : Equivalence C (ulift.{(u₁+1)} C) := by obviously
 
 end category_theory

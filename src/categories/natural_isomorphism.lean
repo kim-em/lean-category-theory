@@ -15,7 +15,7 @@ variable {D : Type u₂}
 variable [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-definition NaturalIsomorphism (F G : C ↝ D) := F ≅ G
+def NaturalIsomorphism (F G : C ↝ D) := F ≅ G
 
 infix ` ⇔ `:10 := NaturalIsomorphism -- type as \<=>
 
@@ -23,7 +23,7 @@ namespace NaturalIsomorphism
 
 -- It's a pity we need to separately define this coercion.
 -- Ideally the coercion from Isomorphism along .morphism would just apply here.
--- Somehow we want the definition above to be more transparent?
+-- Somehow we want the def above to be more transparent?
 instance coercion_to_NaturalTransformation (F G : C ↝ D) : has_coe (F ⇔ G) (F ⟹ G) :=
   {coe := λ α, iso.hom α}
 
@@ -40,7 +40,7 @@ variable (α : F ⇔ G)
 @[ematch] lemma {u1 v1 u2 v2} naturality_2 {X Y : C} (f : X ⟶ Y) : (α.hom X) ≫ (G.map f) ≫ (α.inv Y) = F.map f := by obviously
 end
 
-definition from_components
+def from_components
   (app : ∀ X : C, (F X) ≅ (G X))
   (naturality : ∀ {X Y : C} (f : X ⟶ Y), (F.map f) ≫ (app Y).hom = (app X).hom ≫ (G.map f)) : NaturalIsomorphism F G :=
 { hom  := { app := λ X, (app X).hom, },
@@ -50,12 +50,12 @@ definition from_components
                                     tidy,
                                    end } }
 
-definition vertical_composition (α : F ⇔ G) (β : G ⇔ H) : F ⇔ H := iso.trans α β
+def vertical_composition (α : F ⇔ G) (β : G ⇔ H) : F ⇔ H := iso.trans α β
 
 -- TODO why this?
 attribute [reducible] NaturalIsomorphism
 
-@[reducible] definition components (α : F ⇔ G) (X : C) : (F X) ≅ (G X) := 
+@[reducible] def components (α : F ⇔ G) (X : C) : (F X) ≅ (G X) := 
 { hom := α.hom X,
   inv := α.inv X }
 
@@ -64,7 +64,7 @@ instance hom.app.is_iso (α : F ⇔ G) (X : C) : is_iso (α.hom X) :=
 instance inv.app.is_iso   (α : F ⇔ G) (X : C) : is_iso (α.inv X) := 
 { inv := α.hom X }
 
-@[reducible] definition symm (α : F ⇔ G) : G ⇔ F := 
+@[reducible] def symm (α : F ⇔ G) : G ⇔ F := 
 { hom := α.inv,
   inv := α.hom }
 
@@ -74,7 +74,7 @@ open nat_trans
 
 variables {F G : C ↝ D}
 
-definition is_nat_iso  (α : F ⟹ G) := @is_iso (C ↝ D) (category_theory.functor.category C D) F G α
+def is_nat_iso  (α : F ⟹ G) := @is_iso (C ↝ D) (category_theory.functor.category C D) F G α
 attribute [class] is_nat_iso
 
 namespace is_nat_iso

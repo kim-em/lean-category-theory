@@ -15,14 +15,14 @@ include 𝒞 𝒟 ℰ
 
 local attribute [tidy] tactic.assumption
 
-definition associator : ((C × D) × E) ↝ (C × (D × E)) := by obviously
+def associator : ((C × D) × E) ↝ (C × (D × E)) := by obviously
 -- { obj := λ X, (X.1.1, (X.1.2, X.2)),
 --   map := λ _ _ f, (f.1.1, (f.1.2, f.2)) }
 
 -- @[simp] lemma associator_obj (X) : (associator C D E) X = (X.1.1, (X.1.2, X.2)) := rfl
 -- @[simp] lemma associator_map {X Y} (f : X ⟶ Y) : (associator C D E).map f = (f.1.1, (f.1.2, f.2)) := rfl
 
-definition inverse_associator : (C × (D × E)) ↝ ((C × D) × E) := by obviously
+def inverse_associator : (C × (D × E)) ↝ ((C × D) × E) := by obviously
 -- { obj := λ X, ((X.1, X.2.1), X.2.2),
 --   map := λ _ _ f, ((f.1, f.2.1), f.2.2) }
 
@@ -31,7 +31,7 @@ definition inverse_associator : (C × (D × E)) ↝ ((C × D) × E) := by obviou
 
 local attribute [backwards] category.id
 
-definition associativity : Equivalence ((C × D) × E) (C × (D × E)) := --by obviously -- times out
+def associativity : Equivalence ((C × D) × E) (C × (D × E)) := --by obviously -- times out
 { functor := associator C D E,
   inverse := inverse_associator C D E, }
 

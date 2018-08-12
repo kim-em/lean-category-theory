@@ -16,7 +16,7 @@ local attribute [backwards] category.id -- This says that whenever there is a go
 
 -- Is there any point defining these separately (rather than as the functor category from the walking arrow)?
 
-definition arrow (C : Type (u₁+1)) [large_category C] := Σ (p : C × C), p.1 ⟶ p.2
+def arrow (C : Type (u₁+1)) [large_category C] := Σ (p : C × C), p.1 ⟶ p.2
 
 structure arrow_hom {C : Type (u₁+1)} [large_category C] (X Y : arrow C) :=
 (morphism : (X.1.1 ⟶ Y.1.1) × (X.1.2 ⟶ Y.1.2))
@@ -50,7 +50,7 @@ variable [large_category C]
 variable {D : Type (u₂+1)}
 variable [large_category D]
 
-definition onArrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
+def onArrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
 { obj := λ F,     { obj := λ X, ⟨ (F X.1.1, F X.1.2), F.map X.2 ⟩,
                     map := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
   map := λ F G τ, { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }

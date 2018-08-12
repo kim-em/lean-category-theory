@@ -16,13 +16,13 @@ universes u₁
 variable (C : Type (u₁+1))
 variable [large_category C]
 
-class StronglyConcrete [Concrete C] :=
-(reflects_isos    : reflects_isos (FibreFunctor C))
-(preserves_limits : preserves_limits (FibreFunctor C))
+class strongly_concrete [concrete C] :=
+(reflects_isos    : reflects_isos (fibre_functor C))
+(preserves_limits : preserves_limits (fibre_functor C))
 
 -- PROJECT
--- instance Types_StronglyConcrete : StronglyConcrete CategoryOfTypes := {
---     F := IdentityFunctor CategoryOfTypes,
+-- instance type_strongly_concrete : strongly_concrete types := {
+--     F := functor.id types,
 --     w := sorry,
 --     reflects_isos := sorry,
 --     preserves_limits := {

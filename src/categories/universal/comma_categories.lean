@@ -19,7 +19,7 @@ section
 variables (J : Type u₁) [𝒥 : category.{u₁ v₁} J] (C : Type u₂) [𝒞 : category.{u₂ v₂} C] 
 include 𝒥 𝒞
 -- The diagonal functor sends X to the constant functor that sends everything to X.
-definition DiagonalFunctor : C ↝ (J ↝ C) :=
+def DiagonalFunctor : C ↝ (J ↝ C) :=
 { obj := λ X, { obj := λ _, X,
                 map := λ _ _ _, 𝟙 X },
   map := λ X Y f, { app := λ _, f } }
@@ -27,7 +27,7 @@ definition DiagonalFunctor : C ↝ (J ↝ C) :=
 @[simp] lemma DiagonalFunctor_map_app {X Y : C} (f : X ⟶ Y) (j : J) : ((DiagonalFunctor J C).map f) j = f := rfl
 end
 
-definition ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{u₃ v₃ u₃ v₃} punit C := 
+def ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{u₃ v₃ u₃ v₃} punit C := 
 { obj := λ _, X,
   map := λ _ _ _, 𝟙 X }
 
@@ -39,7 +39,7 @@ local attribute [ematch] subtype.property
 variables {A : Type u₁} [𝒜 : category.{u₁ v₁} A] {B : Type u₂} [ℬ : category.{u₂ v₂} B] {C : Type u₃} [𝒞 : category.{u₃ v₃} C]
 include 𝒜 ℬ 𝒞
 
-definition comma (S : A ↝ C) (T : B ↝ C) : Type (max u₁ u₂ v₃) := Σ p : A × B, (S p.1) ⟶ (T p.2)
+def comma (S : A ↝ C) (T : B ↝ C) : Type (max u₁ u₂ v₃) := Σ p : A × B, (S p.1) ⟶ (T p.2)
 
 structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (max v₁ v₂):=
 (left : p.1.1 ⟶ q.1.1)
@@ -64,20 +64,20 @@ instance CommaCategory (S : A ↝ C) (T : B ↝ C) : category.{(max u₁ u₂ v�
   comp := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, by obviously ⟩ }
 
 -- cf Leinster Remark 2.3.2
-definition CommaCategory_left_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ A := 
+def CommaCategory_left_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ A := 
 { obj := λ X, X.1.1,
   map := λ _ _ f, f.left }
 
-definition CommaCategory_right_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ B := 
+def CommaCategory_right_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ B := 
 { obj := λ X, X.1.2,
   map := λ _ _ f, f.right }
 
-definition CommaCategory_projection_transformation (S : A ↝ C) (T : B ↝ C) : ((CommaCategory_left_projection S T) ⋙ S) ⟹ ((CommaCategory_right_projection S T) ⋙ T) := 
+def CommaCategory_projection_transformation (S : A ↝ C) (T : B ↝ C) : ((CommaCategory_left_projection S T) ⋙ S) ⟹ ((CommaCategory_right_projection S T) ⋙ T) := 
 { app := λ X, X.2 }
 
 -- Notice that if C is large, these are large, and if C is small, these are small.
-definition SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (functor.id C) (ObjectAsFunctor X)) := by apply_instance
-definition CosliceCategory (X : C) : category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (functor.id C)) := by apply_instance
+def SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (functor.id C) (ObjectAsFunctor X)) := by apply_instance
+def CosliceCategory (X : C) : category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (functor.id C)) := by apply_instance
 end
 
 -- In Cones, we have
@@ -90,8 +90,8 @@ variable {C : Type u₁}
 variable [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
-definition Cone   (F : J ↝ C) := (comma (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C) (ObjectAsFunctor F))
-definition Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                  (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C))
+def Cone   (F : J ↝ C) := (comma (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C) (ObjectAsFunctor F))
+def Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                  (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C))
 
 @[simp] lemma Cone_comma_unit   (F : J ↝ C) (X : Cone F)   : X.1.2 = punit.star := by obviously 
 @[simp] lemma Cocone_comma_unit (F : J ↝ C) (X : Cocone F) : X.1.1 = punit.star := by obviously 
@@ -99,13 +99,13 @@ definition Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                  (
 instance Cones   (F : J ↝ C) : category (Cone F)   := begin unfold Cone, apply_instance end
 instance Cocones (F : J ↝ C) : category (Cocone F) := begin unfold Cocone, apply_instance end
 
-definition Limit   (F: J ↝ C) := terminal_object (Cone   F)
-definition Colimit (F: J ↝ C) := initial_object  (Cocone F)
+def Limit   (F: J ↝ C) := terminal_object (Cone   F)
+def Colimit (F: J ↝ C) := initial_object  (Cocone F)
 
-definition BinaryProduct   (α β : C)                  := Limit   (Pair_functor.{u₁ v₁} α β)
-definition BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
-definition Equalizer       {α β : C} (f g : α ⟶ β)  := Limit   (ParallelPair_functor f g)
-definition Coequalizer     {α β : C} (f g : α ⟶ β)  := Colimit (ParallelPair_functor f g)
+def BinaryProduct   (α β : C)                  := Limit   (Pair_functor.{u₁ v₁} α β)
+def BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
+def Equalizer       {α β : C} (f g : α ⟶ β)  := Limit   (ParallelPair_functor f g)
+def Coequalizer     {α β : C} (f g : α ⟶ β)  := Colimit (ParallelPair_functor f g)
 
 end category_theory.comma
 

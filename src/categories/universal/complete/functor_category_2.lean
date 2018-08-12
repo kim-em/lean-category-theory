@@ -21,12 +21,12 @@ variable [small_category C]
 variable {D : Type (u₁+1)}
 variable [large_category D]
 
-definition switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D)) := uncurry J C D ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry C J D
+def switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D)) := uncurry J C D ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry C J D
 
-definition LimitObject_in_FunctorCategory [Complete D] (F : J ↝ (C ↝ D)) : C ↝ D := 
+def LimitObject_in_FunctorCategory [Complete D] (F : J ↝ (C ↝ D)) : C ↝ D := 
 (switch_curry.obj F) ⋙ functorial_Limit
 
-definition LimitCone_in_FunctorCategory [Complete D] (F : J ↝ (C ↝ D)) : Cone F := 
+def LimitCone_in_FunctorCategory [Complete D] (F : J ↝ (C ↝ D)) : Cone F := 
 { cone_point := LimitObject_in_FunctorCategory F,
   cone_maps  := λ j, sorry,
   commutativity := sorry }

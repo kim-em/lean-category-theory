@@ -24,21 +24,21 @@ variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₁} [𝒟 
 include 𝒞 𝒟 
 variables {L : C ↝ D} {R : D ↝ C} 
 
-@[reducible] private definition Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
+@[reducible] private def Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
   : ((functor.prod L.opposite (functor.id D)) ⋙ (hom_pairing D)) ⟹ 
                           (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (hom_pairing C) := 
 { app := λ P, 
     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
     λ f, (A.unit P.1) ≫ (R.map f) }
 
-@[reducible] private definition Adjunction_to_HomAdjunction_inverse (A : L ⊣ R) 
+@[reducible] private def Adjunction_to_HomAdjunction_inverse (A : L ⊣ R) 
   : (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (hom_pairing C) ⟹ 
                           ((functor.prod L.opposite (functor.id D)) ⋙ (hom_pairing D)) :=
 { app := λ P, 
     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
     λ f, (L.map f) ≫ (A.counit P.2) }
 
-definition Adjunction_to_HomAdjunction (A : L ⊣ R) : hom_adjunction L R := 
+def Adjunction_to_HomAdjunction (A : L ⊣ R) : hom_adjunction L R := 
 { hom := Adjunction_to_HomAdjunction_morphism A,
   inv := Adjunction_to_HomAdjunction_inverse A }
 
@@ -79,14 +79,14 @@ begin
   obviously',
 end
 
-private definition counit_from_HomAdjunction (A : hom_adjunction L R) : (R ⋙ L) ⟹ (functor.id _) := 
+private def counit_from_HomAdjunction (A : hom_adjunction L R) : (R ⋙ L) ⟹ (functor.id _) := 
 { app := λ X : D, (A.inv (R X, X)) (𝟙 (R X)) }
 
-private definition unit_from_HomAdjunction (A : hom_adjunction L R) : (functor.id _) ⟹ (L ⋙ R) := 
+private def unit_from_HomAdjunction (A : hom_adjunction L R) : (functor.id _) ⟹ (L ⋙ R) := 
 { app := λ X : C, (A.hom (X, L X)) (𝟙 (L X)) }
 
 -- PROJECT
--- definition HomAdjunction_to_Adjunction {L : C ↝ D} {R : D ↝ C} (A : hom_adjunction L R) : L ⊣ R := 
+-- def HomAdjunction_to_Adjunction {L : C ↝ D} {R : D ↝ C} (A : hom_adjunction L R) : L ⊣ R := 
 -- {
 --   unit       := unit_from_HomAdjunction A,
 --   counit     := counit_from_HomAdjunction A,
@@ -102,7 +102,7 @@ private definition unit_from_HomAdjunction (A : hom_adjunction L R) : (functor.i
 --   triangle_2 := sorry
 -- }
 
--- definition Adjunctions_agree (L : C ↝ D) (R : D ↝ C) : equiv (L ⊣ R) (hom_adjunction L R) := 
+-- def Adjunctions_agree (L : C ↝ D) (R : D ↝ C) : equiv (L ⊣ R) (hom_adjunction L R) := 
 -- { to_fun    := Adjunction_to_HomAdjunction,
 --   inv_fun   := HomAdjunction_to_Adjunction,
 --   left_inv  := begin sorry end,

@@ -11,7 +11,7 @@ namespace category_theory.examples.groups
 
 universe u₁
 
-definition Group : Type (u₁+1) := Σ α : Type u₁, group α
+def Group : Type (u₁+1) := Σ α : Type u₁, group α
 
 instance group_from_Group (G : Group) : group G.1 := G.2
 
@@ -24,10 +24,10 @@ instance is_group_hom_from_GroupHomomorphism (G H : Group.{u₁}) (f : GroupHomo
 
 @[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom.mul
 
-definition GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G :=
+def GroupHomomorphism.identity (G : Group) : GroupHomomorphism G G :=
 { map := id }
 
-definition GroupHomomorphism.composition {G H K : Group} (f: GroupHomomorphism G H) (g: GroupHomomorphism H K) : GroupHomomorphism G K :=
+def GroupHomomorphism.composition {G H K : Group} (f: GroupHomomorphism G H) (g: GroupHomomorphism H K) : GroupHomomorphism G K :=
 { map := λ x, g.map (f.map x) }
 
 @[extensionality] lemma GroupHomomorphism_pointwise_equality {G H : Group} (f g : GroupHomomorphism G H) (w : ∀ x : G.1, f.map x = g.map x) : f = g :=

@@ -16,7 +16,7 @@
 
 -- namespace categories.universal
 
--- -- definition comma_Product_to_Product {C : Category} {I : Type} (F : I → C.Obj) (product : comma.Product F) : Product F := {
+-- -- def comma_Product_to_Product {C : Category} {I : Type} (F : I → C.Obj) (product : comma.Product F) : Product F := {
 -- --     product       := product.terminal_object.1,
 -- --     projection    := product.terminal_object.2.2.components,
 -- --     map           := λ Z f, (product.morphism_to_terminal_object_from ⟨ Z, unit.star, ⟨ f ⟩ ⟩).val.1,
@@ -27,9 +27,9 @@
 -- --     uniqueness    := sorry
 -- --}
 
--- -- definition Product_to_comma_Product {C : Category} {I : Type} (F : I → C.Obj) (product : Product F) : comma.Product F := sorry
+-- -- def Product_to_comma_Product {C : Category} {I : Type} (F : I → C.Obj) (product : Product F) : comma.Product F := sorry
 
--- -- definition Products_agree {C : Category} {I : Type} (F : I → C.Obj) : Isomorphism CategoryOfTypes (comma.Product f g) (Product f g) := sorry
+-- -- def Products_agree {C : Category} {I : Type} (F : I → C.Obj) : Isomorphism CategoryOfTypes (comma.Product f g) (Product f g) := sorry
 
 -- -- PROJECT prove products are unique
 

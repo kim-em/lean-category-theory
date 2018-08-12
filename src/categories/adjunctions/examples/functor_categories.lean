@@ -20,7 +20,7 @@ variable [large_category E]
 
 -- EXERCISE an adjunction F ⊢ G gives an adjunction F^* ⊢ G^*
 -- cf Leinster 2.2.14
--- definition pullback_adjunction {L : Functor C D} {R : Functor D C} (A : Adjunction L R) 
+-- def pullback_adjunction {L : Functor C D} {R : Functor D C} (A : Adjunction L R) 
 --   : Adjunction (whisker_on_left_functor L E) (whisker_on_left_functor R E) := {
 --     unit       := sorry,
 --     counit     := sorry,

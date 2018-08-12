@@ -5,7 +5,7 @@ open category_theory.universal
 
 namespace category_theory.types
 
--- definition {u} FiniteTypes_has_FiniteProducts : has_FiniteProducts CategoryOfFiniteTypes.{u} := {
+-- def {u} FiniteTypes_has_FiniteProducts : has_FiniteProducts CategoryOfFiniteTypes.{u} := {
 --   product := λ I fin φ, {
 --     product       := ⟨ (Π i : I, (φ i).1), sorry ⟩,
 --     projection    := λ i x, x i,
@@ -19,7 +19,7 @@ namespace category_theory.types
 --  }
 --}
 
--- definition {u} FiniteTypes_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfFiniteTypes.{u} := {
+-- def {u} FiniteTypes_has_FiniteCoproducts : has_FiniteCoproducts CategoryOfFiniteTypes.{u} := {
 --   coproduct := λ I fin φ, {
 --     coproduct     := ⟨ (Σ i : I, (φ i).1), sorry ⟩, 
 --     inclusion     := λ i x, ⟨ i, x ⟩ ,
@@ -33,7 +33,7 @@ namespace category_theory.types
 --  }
 --}
 
--- definition {u} FiniteTypes_has_Equalizers : has_Equalizers CategoryOfFiniteTypes.{u} :=
+-- def {u} FiniteTypes_has_Equalizers : has_Equalizers CategoryOfFiniteTypes.{u} :=
 -- {equalizer := λ α _ f g,
 --   {
 --     equalizer     := ⟨ {x : α.1 // f x = g x}, sorry ⟩,

@@ -57,13 +57,13 @@ notation a :: b := path_of_paths.cons a b
 notation `pp[` l:(foldr `, ` (h t, path_of_paths.cons h t) path_of_paths.nil _ `]`) := l
 
 -- The pattern matching trick used here was explained by Jeremy Avigad at https://groups.google.com/d/msg/lean-user/JqaI12tdk3g/F9MZDxkFDAAJ
-definition concatenate_paths : Π {x y z : G}, path x y → path y z → path x z
+def concatenate_paths : Π {x y z : G}, path x y → path y z → path x z
 | ._ ._ _ (path.nil _)               q := q
 | ._ ._ _ (@path.cons ._ _ _ _ _ e p') q := path.cons e (concatenate_paths p' q)
 
 @[simp] lemma concatenate_paths' {x' x y z : G} (e : edges x' x) (p : path x y) (q : path y z) : concatenate_paths (e :: p) q = e :: (concatenate_paths p q) := rfl
 
-definition concatenate_path_of_paths : Π {x y : G}, path_of_paths x y → path x y
+def concatenate_path_of_paths : Π {x y : G}, path_of_paths x y → path x y
 | ._ ._ (path_of_paths.nil X) := path.nil X
 | ._ ._ (@path_of_paths.cons ._ _ _ _ _ e p') := concatenate_paths e (concatenate_path_of_paths p')
 

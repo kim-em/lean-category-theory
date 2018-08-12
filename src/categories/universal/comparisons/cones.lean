@@ -22,14 +22,14 @@ by obviously
 
 variable {F : J ↝ C}
 
-definition comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F := 
+def comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F := 
 { cone_point    := cone.1.1,
   cone_maps     := λ j : J, (cone.2) j }
 
 @[simp] lemma comma_Cone_to_Cone_cone_maps  (cone : (comma.Cone F)) (j : J) : (comma_Cone_to_Cone cone).cone_maps j = (cone.2) j := rfl
 
 section -- PROJECT improve automation here
-definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
+def comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
 { cone_morphism := f.left,
   commutativity := λ j : J, begin                    
                               let q := congr_arg nat_trans.app f.condition_lemma,
@@ -40,24 +40,24 @@ definition comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.
                             end }
 end
 
-definition Cone_to_comma_Cone (cone : Cone F) : comma.Cone F := 
+def Cone_to_comma_Cone (cone : Cone F) : comma.Cone F := 
 ⟨ (cone.cone_point, by obviously), { app := λ j, cone.cone_maps j } ⟩
 
-definition ConeMorphism_to_comma_ConeMorphism {X Y : Cone F} (f : ConeMorphism X Y) : (Cone_to_comma_Cone X) ⟶ (Cone_to_comma_Cone Y) := 
+def ConeMorphism_to_comma_ConeMorphism {X Y : Cone F} (f : ConeMorphism X Y) : (Cone_to_comma_Cone X) ⟶ (Cone_to_comma_Cone Y) := 
 { left := f.cone_morphism, 
   right := by obviously }
 
-definition comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (Cone F) := 
+def comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (Cone F) := 
 { obj := comma_Cone_to_Cone,
   map := λ X Y f, comma_ConeMorphism_to_ConeMorphism f }
 
-definition Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) := 
+def Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) := 
 { obj := Cone_to_comma_Cone,
   map := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
 
 local attribute [backwards] category.id
 local attribute [tidy] dsimp_all' -- TODO get rid of this
-definition Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 
+def Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 
 { functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F }
 

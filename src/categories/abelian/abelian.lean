@@ -13,7 +13,7 @@ open category_theory.universal.monic
 
 namespace category_theory.abelian
 
--- This is the definition of abelian from Etingof's "Tensor categories"
+-- This is the def of abelian from Etingof's "Tensor categories"
 
 universe u
 

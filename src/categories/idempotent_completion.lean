@@ -32,15 +32,12 @@ restate_axiom morphism.left
 restate_axiom morphism.right
 attribute [simp,ematch] morphism.left_lemma morphism.right_lemma
 
-@[extensionality] lemma morphisms_equal
-  {X Y : Idempotent C}
-  (f g : morphism X Y)
-  (w : f.morphism = g.morphism) : f = g :=
-  begin
-    induction f,
-    induction g,
-    tidy
-  end
+@[extensionality] lemma ext {X Y : Idempotent C} (f g : morphism X Y) (w : f.morphism = g.morphism) : f = g :=
+begin
+  induction f,
+  induction g,
+  tidy
+end
 
 end Idempotent
 
@@ -51,19 +48,19 @@ instance IdempotentCompletion : large_category (Idempotent C) :=
 
 namespace IdempotentCompletion
 
-definition functor_to_completion (C : Type (u+1)) [large_category C] : C ↝ (Idempotent C) := 
-{ obj     := λ X, ⟨ X, 𝟙 X ⟩,
-  map   := λ _ _ f, ⟨ f, by obviously ⟩ }
+def functor_to_completion (C : Type (u+1)) [large_category C] : C ↝ (Idempotent C) := 
+{ obj := λ X, { object := X, idempotent := 𝟙 X },
+  map := λ _ _ f, { morphism := f } }
 
 -- -- PROJECT
--- definition IdempotentCompletion_functorial (C : Type u) [category C] (D : Type u) [category D] : Functor (Functor C D) (Functor (Idempotent C) (Idempotent D)) := {
+-- def IdempotentCompletion_functorial (C : Type u) [category C] (D : Type u) [category D] : Functor (Functor C D) (Functor (Idempotent C) (Idempotent D)) := {
 
-lemma embedding (C : Type (u+1)) [large_category C]  : Embedding (functor_to_completion C) := by obviously
+lemma embedding (C : Type (u+1)) [large_category C]  : embedding (functor_to_completion C) := by obviously
 
 variable {D : Type (u₂+1)}
 variable [large_category D]
 
-definition restrict_Functor_from (F : (Idempotent C) ↝ D) : C ↝ D :=
+def restrict_Functor_from (F : (Idempotent C) ↝ D) : C ↝ D :=
   (functor_to_completion C) ⋙ F
 
 @[simp] private lemma double_idempotent_morphism_left (X Y : Idempotent (Idempotent C)) (f : X ⟶ Y)
@@ -89,7 +86,7 @@ private def idempotent_inverse (C : Type (u+1)) [large_category C] : (Idempotent
 --   isomorphism_2 := sorry
 --}
 
-definition extend_Functor_to_completion (F : C ↝ (Idempotent D)) : (Idempotent C) ↝ (Idempotent D) :=
+def extend_Functor_to_completion (F : C ↝ (Idempotent D)) : (Idempotent C) ↝ (Idempotent D) :=
 { obj := λ X, { object := (F X.object).object, 
                 idempotent := (F.map X.idempotent).morphism },
   map := λ X Y f, { morphism := (F.map f.morphism).morphism } }

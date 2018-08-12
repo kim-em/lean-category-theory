@@ -25,22 +25,22 @@ variable [large_category C]
 variable {J : Type u₁}
 variables [small_category J]
 
-definition limitCone [Complete C] (F : J ↝ C) := Complete.limitCone F
-definition limit     [Complete C] (F : J ↝ C) := (Complete.limitCone F).obj.cone_point
+def limitCone [Complete C] (F : J ↝ C) := Complete.limitCone F
+def limit     [Complete C] (F : J ↝ C) := (Complete.limitCone F).obj.cone_point
 
-definition colimitCocone [Cocomplete C] (F : J ↝ C) := Cocomplete.colimitCocone F
-definition colimit       [Cocomplete C] (F : J ↝ C) := (Cocomplete.colimitCocone F).obj.cocone_point
+def colimitCocone [Cocomplete C] (F : J ↝ C) := Cocomplete.colimitCocone F
+def colimit       [Cocomplete C] (F : J ↝ C) := (Cocomplete.colimitCocone F).obj.cocone_point
 
 open category_theory.universal.lemmas.limit_functoriality
 
-definition functorial_Limit [Complete C] : (J ↝ C) ↝ C := 
+def functorial_Limit [Complete C] : (J ↝ C) ↝ C := 
 { obj := λ F, (limitCone F).obj.cone_point,
   map := λ F G τ, let lim_F := (limitCone F) in
                   let lim_G := (limitCone G) in
                     (lim_G.«from» { cone_point := _,
                                     cone_maps  := (λ j, (lim_F.obj.cone_maps j) ≫ (τ j)) }).cone_morphism }
 
-definition functorial_Colimit [Cocomplete C] : (J ↝ C) ↝ C := 
+def functorial_Colimit [Cocomplete C] : (J ↝ C) ↝ C := 
 { obj := λ F, (colimitCocone F).obj.cocone_point,
   map := λ F G τ, let colim_F := (colimitCocone F) in
                   let colim_G := (colimitCocone G) in

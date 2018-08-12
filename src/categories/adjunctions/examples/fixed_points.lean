@@ -18,9 +18,9 @@ variable [large_category D]
 
 -- EXERCISE
 -- cf Leinster 2.2.11
-definition left_fixed_points  {L : C ↝ D} {R : D ↝ C} (A : Adjunction L R)
+def left_fixed_points  {L : C ↝ D} {R : D ↝ C} (A : Adjunction L R)
   : large_category (Σ X : C, is_iso (A.unit X)) := by apply_instance
-definition right_fixed_points {L : C ↝ D} {R : D ↝ C} (A : Adjunction L R)
+def right_fixed_points {L : C ↝ D} {R : D ↝ C} (A : Adjunction L R)
   : large_category (Σ X : D, is_iso (A.counit X)) := by apply_instance
 
 -- Now we need to express the idea that functors restrict to a full subcategory with image in another full subcategory,

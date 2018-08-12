@@ -77,7 +77,7 @@ variables {α : Type u} [group α] {β : Type u} [group β] {γ : Type u} [group
 -- }
 -- end
 
--- definition group_product {I : Type u} {f : I → Type v} (s : Π i : I, group (f i)) : group (Π i, f i) := 
+-- def group_product {I : Type u} {f : I → Type v} (s : Π i : I, group (f i)) : group (Π i, f i) := 
 -- begin
 -- refine {
 --   one := λ i, 1,
@@ -88,7 +88,7 @@ variables {α : Type u} [group α] {β : Type u} [group β] {γ : Type u} [group
 -- sorry
 -- end
 
--- definition group_morphism_product
+-- def group_morphism_product
 --   {I : Type u}
 --   {f g : I → Type v}
 --   {s : Π i : I, group (f i)} {t : Π i : I, group (g i)} 
@@ -114,7 +114,7 @@ variables {α : Type u} [group α] {β : Type u} [group β] {γ : Type u} [group
 -- section
 -- variables (f : α → β) [is_group_hom f] (g : α → β) [is_group_hom g]
 
--- definition group_equalizer := {x : α // f x = g x}
+-- def group_equalizer := {x : α // f x = g x}
 
 -- instance : group (group_equalizer f g) := 
 -- begin

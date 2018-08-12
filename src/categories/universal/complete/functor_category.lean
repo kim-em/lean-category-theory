@@ -21,18 +21,18 @@
 -- variable {D : Type (u₁+1)}
 -- variable [large_category D]
 
--- @[reducible] private definition evaluate_Functor_to_FunctorCategory (F : J ↝ (C ↝ D)) (c : C) : J ↝ D := {
+-- @[reducible] private def evaluate_Functor_to_FunctorCategory (F : J ↝ (C ↝ D)) (c : C) : J ↝ D := {
 --   onObjects     := λ j, (F +> j) +> c,
 --   onMorphisms   := λ _ _ f, (F &> f).components c
 -- }
 
--- @[reducible] private definition evaluate_Functor_to_FunctorCategory_on_Morphism (F : J ↝ (C ↝ D)) {c c' : C} (f : c ⟶ c')
+-- @[reducible] private def evaluate_Functor_to_FunctorCategory_on_Morphism (F : J ↝ (C ↝ D)) {c c' : C} (f : c ⟶ c')
 --   : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
 --     components := λ j, (F +> j) &> f
 --  }
 
 -- -- PROJECT do this properly, as
--- -- private definition Switch_Curry : Functor (Functor J (Functor C D)) (Functor C (Functor J D)) := 
+-- -- private def Switch_Curry : Functor (Functor J (Functor C D)) (Functor C (Functor J D)) := 
 -- end
 
 -- section
@@ -45,7 +45,7 @@
 
 -- local attribute [tidy] dsimp_all'
 
--- definition LimitObject_in_FunctorCategory [cmp : Complete D] (F : J ↝ (C ↝ D)) : Cone F := {     
+-- def LimitObject_in_FunctorCategory [cmp : Complete D] (F : J ↝ (C ↝ D)) : Cone F := {     
 --   cone_point    := {
 --     onObjects     := λ c, functorial_Limit +> (evaluate_Functor_to_FunctorCategory F c), 
 --     onMorphisms   := λ X Y f, functorial_Limit &> (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
@@ -86,7 +86,7 @@
 
 -- local attribute [tidy] dsimp'
 
--- private definition morphism_to_LimitObject_in_FunctorCategory [cmp : Complete D] {F : J ↝ (C ↝ D)} (Y : Cone F) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
+-- private def morphism_to_LimitObject_in_FunctorCategory [cmp : Complete D] {F : J ↝ (C ↝ D)} (Y : Cone F) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
 --       cone_morphism := {
 --         components := begin
 --                          tidy {trace_result:=tt},  -- this will use morphism_to_terminal_object_cone_point

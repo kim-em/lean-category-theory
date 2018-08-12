@@ -18,9 +18,9 @@ include ℬ 𝒞
 
 local attribute [backwards] category.id -- This says that whenever there is a goal of the form (X ⟶ X), we can safely complete it with the identity morphism. This isn't universally true.
 
-definition left_unitor (F : B ↝ C) : ((functor.id _) ⋙ F) ⇔ F := by obviously
+def left_unitor (F : B ↝ C) : ((functor.id _) ⋙ F) ⇔ F := by obviously
 
-definition right_unitor (F : B ↝ C) : (F ⋙ (functor.id _)) ⇔ F := by obviously
+def right_unitor (F : B ↝ C) : (F ⋙ (functor.id _)) ⇔ F := by obviously
 
 variable {D : Type u₃}
 variable [𝒟 : category.{u₃ v₃} D]
@@ -28,7 +28,7 @@ variable {E : Type u₄}
 variable [ℰ : category.{u₄ v₄} E]
 include 𝒟 ℰ 
 
-definition associator (F : B ↝ C) (G : C ↝ D) (H : D ↝ E) : ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := by obviously 
+def associator (F : B ↝ C) (G : C ↝ D) (H : D ↝ E) : ((F ⋙ G) ⋙ H) ⇔ (F ⋙ (G ⋙ H)) := by obviously 
 
 -- PROJECT pentagon
 

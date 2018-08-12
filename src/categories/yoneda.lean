@@ -3,16 +3,13 @@
 -- Authors: Scott Morrison
 
 import category_theory.natural_transformation
-import categories.isomorphism
 import categories.opposites
-import categories.equivalence
 import categories.products.switch
 import categories.types
 import categories.functor_categories.evaluation
 import categories.universe_lifting
-import tactic.interactive
-import categories.tactics.obviously
 import categories.cancellation
+import tactic.interactive
 
 open category_theory
 
@@ -28,13 +25,13 @@ include 𝒞
 instance instance_1 : category (((Cᵒᵖ) ↝ Type v₁) × (Cᵒᵖ)) := category_theory.prod.{(max u₁ (v₁+1)) (max u₁ v₁) u₁ v₁} (Cᵒᵖ ↝ Type v₁) (Cᵒᵖ)
 instance instance_2 : category ((Cᵒᵖ) × ((Cᵒᵖ) ↝ Type v₁)) := category_theory.prod.{u₁ v₁ (max u₁ (v₁+1)) (max u₁ v₁)} (Cᵒᵖ) (Cᵒᵖ ↝ Type v₁) 
 
-definition yoneda_evaluation : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) 
+def yoneda_evaluation : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) 
   := (evaluation (Cᵒᵖ) (Type v₁)) ⋙ type_lift.{v₁ u₁}
 
 @[simp] lemma yoneda_evaluation_map_down (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (x : (yoneda_evaluation C) P)
  : ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl
 
-definition yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) := 
+def yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) := 
 { obj := λ X,      { obj := λ Y, @category.Hom C _ Y X,
                      map := λ Y Y' f g, f ≫ g },
   map := λ X X' f, { app := λ Y g, g ≫ f } }
@@ -62,23 +59,15 @@ end
 
 @[simp,ematch] lemma yoneda_aux_3 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) {Z : C} (f : Z ⟶ X) : f ≫ α X (𝟙 X) = α Z f := by obviously
 
-definition yoneda_pairing : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) := 
+def yoneda_pairing : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) := 
 let F := (prod.switch ((Cᵒᵖ) ↝ (Type v₁)) (Cᵒᵖ)) in
 let G := (functor.prod ((yoneda C).opposite) (functor.id ((Cᵒᵖ) ↝ (Type v₁)))) in
 let H := (hom_pairing ((Cᵒᵖ) ↝ (Type v₁))) in
   (F ⋙ G ⋙ H)      
 
--- TODO these aren't needed, and can be removed.
+@[simp] lemma yoneda_pairing_map (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (β : (yoneda_pairing C) (P.1, P.2)): (yoneda_pairing C).map α β = (yoneda C).map (α.snd) ≫ β ≫ α.fst := rfl
 
--- @[simp] lemma yoneda_pairing_map (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ))
--- (α : P ⟶ Q)
--- (β : (yoneda_pairing C) (P.1, P.2)): (yoneda_pairing C).map α β = (yoneda C).map (α.snd) ≫ β ≫ α.fst := rfl
-
--- @[simp] lemma yoneda_pairing_naturality (F : Cᵒᵖ ↝ Type v₁)
--- (X Y : Cᵒᵖ) (f  : X ⟶ Y) (h : X ⟶ X)
--- (β : (yoneda_pairing C) (F, X)): (F.map f (β.app X h)) = (β.app Y) ((yoneda C X).map f h) := by obviously
-
-definition coyoneda : (Cᵒᵖ) ↝ (C ↝ (Type v₁)) := 
+def coyoneda : (Cᵒᵖ) ↝ (C ↝ (Type v₁)) := 
 { obj := λ X,      { obj := λ Y, @category.Hom C _ X Y,
                      map := λ Y Y' f g, g ≫ f },
   map := λ X X' f, { app := λ Y g, f ≫ g } }
@@ -102,9 +91,11 @@ def yoneda_lemma : (yoneda_pairing C) ⇔ (yoneda_evaluation C) :=
 { hom := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)) },
   inv := { app := λ F x, { app := λ X a, (F.1.map a) x.down } } }.
 
-def yoneda_full : Full (yoneda C) := 
+instance yoneda_full : full (yoneda C) := 
 { preimage := λ X Y f, (f X) (𝟙 X) }
 
-def yoneda_faithful : Faithful (yoneda C) := by obviously
+instance yoneda_faithful : faithful (yoneda C) := by obviously
+
+def yoneda_embedding : embedding (yoneda C) := by obviously
 
 end category_theory.yoneda

@@ -33,7 +33,7 @@ structure projective_resolution {C : Type u} [category.{u v} C] [has_ZeroObject.
 
 -- TODO find out why we don't also need universe annotations on `enough_projectives`?
 -- TODO this needs the category to be abelian!
-definition construct_injective_resolution {C : Type u} [category.{u v} C] [has_ZeroObject.{u v} C] [enough_projectives C] (X : C) : projective_resolution X := sorry
+def construct_injective_resolution {C : Type u} [category.{u v} C] [has_ZeroObject.{u v} C] [enough_projectives C] (X : C) : projective_resolution X := sorry
 -- we define the complex inductively, taking the cover of X, then the cover of its kernel, and so on
 
 /-

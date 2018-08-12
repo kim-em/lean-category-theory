@@ -12,12 +12,12 @@ universes u₁ u₂ v₂
 variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : category.{u₂ v₂} E]
 include ℰ
 
-definition uncurry : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
+def uncurry : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
 { obj := λ F, { obj := λ X, (F X.1) X.2,
                 map := λ X Y f, ((F.map f.1) X.2) ≫ ((F Y.1).map f.2) },
   map := λ F G T, { app := λ X, (T X.1) X.2 } }
 
-definition curry : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) := 
+def curry : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) := 
 { obj := λ F, { obj := λ X, { obj := λ Y, F (X, Y),
                               map := λ Y Y' g, F.map (𝟙 X, g) },
                 map := λ X X' f, { app := λ Y, F.map (f, 𝟙 Y) } },

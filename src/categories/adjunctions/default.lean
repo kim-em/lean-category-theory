@@ -38,7 +38,7 @@ infix ` ⊣ `:50 := Adjunction
   end
 
 -- PROJECT: from an adjunction construct the triangles as equations between natural transformations.
--- definition Triangle_1
+-- def Triangle_1
 --   {C D : Category}
 --   {L : Functor C D}
 --   {R : Functor D C}
@@ -47,7 +47,7 @@ infix ` ⊣ `:50 := Adjunction
 --   @vertical_composition_of_NaturalTransformations D C R (FunctorComposition (FunctorComposition R L) R) R ⟦ whisker_on_left R unit ⟧ ⟦ whisker_on_right counit R ⟧
 --   = IdentityNaturalTransformation R
 
--- definition Triangle_2
+-- def Triangle_2
 --   {C D : Category}
 --   {L : Functor C D}
 --   {R : Functor D C}

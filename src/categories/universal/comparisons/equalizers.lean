@@ -16,11 +16,11 @@
 
 -- namespace categories.universal
 
--- -- definition comma_Equalizer_to_Equalizer {C : Category} {X Y : C.Obj} {f g : C.Hom X Y} (equalizer : comma.Equalizer f g) : Equalizer f g := sorry
+-- -- def comma_Equalizer_to_Equalizer {C : Category} {X Y : C.Obj} {f g : C.Hom X Y} (equalizer : comma.Equalizer f g) : Equalizer f g := sorry
 
--- -- definition Equalizer_to_comma_Equalizer {C : Category} {X Y : C.Obj} {f g : C.Hom X Y} (equalizer : Equalizer f g)  : comma.Equalizer f g := sorry
+-- -- def Equalizer_to_comma_Equalizer {C : Category} {X Y : C.Obj} {f g : C.Hom X Y} (equalizer : Equalizer f g)  : comma.Equalizer f g := sorry
 
--- -- definition Equalizers_agree {C : Category} {X Y : C.Obj} (f g : C.Hom X Y) : Isomorphism CategoryOfTypes (comma.Equalizer f g) (Equalizer f g) := sorry
+-- -- def Equalizers_agree {C : Category} {X Y : C.Obj} (f g : C.Hom X Y) : Isomorphism CategoryOfTypes (comma.Equalizer f g) (Equalizer f g) := sorry
 
 -- -- PROJECT prove equalizers are unique
 

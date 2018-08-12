@@ -12,7 +12,7 @@ universes u₁ v₁ u₂
 
 local attribute [backwards] category.id -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
-definition discrete (α : Type u₁) := α
+def discrete (α : Type u₁) := α
 
 instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) := 
 { Hom  := λ X Y, ulift (plift (X = Y)),
@@ -28,7 +28,7 @@ instance OneCategory  : category.{u₁ v₁} punit :=
 
 example : Equivalence.{u₁ u₁ u₁ u₁} punit (discrete punit) := by obviously
 
-definition EmptyFunctor (C : Type (u₂+1)) [large_category C] : pempty ↝ C := by obviously
+def EmptyFunctor (C : Type (u₂+1)) [large_category C] : pempty ↝ C := by obviously
 
 -- TODO find a home for these in mathlib. https://leanprover.zulipchat.com/#narrow/stream/113488-general/subject/transport.20through.20trivial.20bundles/near/125769004
 @[simp] lemma plift.rec.constant {α : Sort u₁} {β : Sort u₂} (b : β) : @plift.rec α (λ _, β) (λ _, b) = λ _, b :=
@@ -47,7 +47,7 @@ begin
 end
 
 namespace functor
-definition fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := 
+def fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := 
 { obj := F,
   map := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end }
 end functor

@@ -36,7 +36,7 @@ instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
               obviously,                    
             end }
 
-definition path_to_morphism
+def path_to_morphism
   (H : graph_homomorphism G C)
   : Π {X Y : G}, path X Y → ((H.onVertices X) ⟶ (H.onVertices Y))
 | ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
@@ -55,7 +55,7 @@ namespace category_theory.functor
 open category_theory.graphs
 
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
-definition from_GraphHomomorphism (H : graph_homomorphism G C) : (Path G) ↝ C :=
+def from_GraphHomomorphism (H : graph_homomorphism G C) : (Path G) ↝ C :=
 { obj := λ X, (H.onVertices X),
   map := λ _ _ f, (path_to_morphism H f) }
 
