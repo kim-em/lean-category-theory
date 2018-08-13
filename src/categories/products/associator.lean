@@ -29,7 +29,7 @@ def inverse_associator : (C × (D × E)) ↝ ((C × D) × E) := by obviously
 -- @[simp] lemma inverse_associator_obj (X) : (inverse_associator C D E) X = ((X.1, X.2.1), X.2.2) := rfl
 -- @[simp] lemma inverse_associator_map {X Y} (f : X ⟶ Y) : (inverse_associator C D E).map f = ((f.1, f.2.1), f.2.2) := rfl
 
-local attribute [backwards] category.id
+local attribute [back] category.id
 
 def associativity : Equivalence ((C × D) × E) (C × (D × E)) := --by obviously -- times out
 { functor := associator C D E,

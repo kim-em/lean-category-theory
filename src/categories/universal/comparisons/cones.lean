@@ -55,7 +55,7 @@ def Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) :=
 { obj := Cone_to_comma_Cone,
   map := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
 
-local attribute [backwards] category.id
+local attribute [back] category.id
 local attribute [tidy] dsimp_all' -- TODO get rid of this
 def Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (Cone F) := 
 { functor := comma_Cones_to_Cones F,

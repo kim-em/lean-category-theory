@@ -55,7 +55,7 @@ instance WalkingPair_category : small_category WalkingPair :=
   id   := by tidy,
   comp := by tidy }
 
-local attribute [backwards] category.id
+local attribute [back] category.id
 
 variable {C : Type u₁}
 variable [𝒞 : category.{u₁ v₁} C]

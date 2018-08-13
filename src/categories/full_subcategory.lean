@@ -9,7 +9,7 @@ namespace category_theory
 
 universes u₁ v₁ u₂ v₂ w₁
 
-local attribute [backwards] category.id -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
+local attribute [back] category.id -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C]
 include 𝒞 

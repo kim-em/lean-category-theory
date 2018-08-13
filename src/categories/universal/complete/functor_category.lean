@@ -73,7 +73,7 @@
 -- }
 
 -- -- This would be a bit dangerous, but we just use it in the next construction.
--- @[backwards] private lemma cone_morphism_comparison (F : J ↝ (C ↝ D)) (X : C) (j : J) (Y Z : Cone F) (φ ψ : ConeMorphism Y Z) (f : ((Z.cone_point) +> X) ⟶ ((F +> j) +> X)) (w : f = ((Z.cone_maps j).components X))
+-- @[back] private lemma cone_morphism_comparison (F : J ↝ (C ↝ D)) (X : C) (j : J) (Y Z : Cone F) (φ ψ : ConeMorphism Y Z) (f : ((Z.cone_point) +> X) ⟶ ((F +> j) +> X)) (w : f = ((Z.cone_maps j).components X))
 --  : ((φ.cone_morphism).components X) ≫ f = ((ψ.cone_morphism).components X) ≫ f := 
 -- begin
 --   rewrite w,

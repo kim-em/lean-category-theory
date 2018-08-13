@@ -47,8 +47,8 @@ begin
 end
 
 section
-local attribute [forwards] congr_fun
-local attribute [forwards] nat_trans.naturality
+local attribute [forward] congr_fun
+local attribute [forward] nat_trans.naturality
 @[simp,ematch] lemma yoneda_aux_2 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) {Z Z' : C} (f : Z ⟶ Z') (h : Z' ⟶ X) : α Z (f ≫ h) = f ≫ α Z' h := 
 begin
 have p := nat_trans.naturality α,

@@ -15,7 +15,7 @@ class full (F : C ↝ D) :=
 (preimage : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), X ⟶ Y)
 (witness  : ∀ {X Y : C} (f : (F X) ⟶ (F Y)), F.map (preimage f) = f . obviously)
 
-attribute [backwards_cautiously] full.preimage
+attribute [back'] full.preimage
 restate_axiom full.witness
 attribute [simp,ematch] full.witness_lemma
 set_option pp.universes true
@@ -26,7 +26,7 @@ class faithful (F : C ↝ D) :=
   (injectivity : ∀ {X Y : C} {f g : X ⟶ Y} (p : F.map f = F.map g), f = g)
 
 restate_axiom faithful.injectivity
-attribute [forwards] faithful.injectivity_lemma
+attribute [forward] faithful.injectivity_lemma
 
 def preimage_iso {F : C ↝ D} [full F] [faithful F] {X Y : C} (f : (F X) ≅ (F Y)) : X ≅ Y := 
 { hom := preimage F f.hom,
@@ -39,6 +39,6 @@ def preimage_iso {F : C ↝ D} [full F] [faithful F] {X Y : C} (f : (F X) ≅ (F
 
 class embedding (F : C ↝ D) extends (full F), (faithful F).
 
-@[backwards] def embedding.ext (F : C ↝ D) (full : full F) (faithful : faithful F) : embedding F := by obviously
+@[back] def embedding.ext (F : C ↝ D) (full : full F) (faithful : faithful F) : embedding F := by obviously
 
 end category_theory

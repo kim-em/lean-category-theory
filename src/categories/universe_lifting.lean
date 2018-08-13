@@ -16,7 +16,7 @@ instance universe_lift : large_category (ulift.{(u₁+1)} C) :=
   id   := λ X, 𝟙 X.down,
   comp := λ _ _ _ f g, f ≫ g }
 
-local attribute [backwards] category.id
+local attribute [back] category.id
 
 def universe_lift.equivalence : Equivalence C (ulift.{(u₁+1)} C) := by obviously
 

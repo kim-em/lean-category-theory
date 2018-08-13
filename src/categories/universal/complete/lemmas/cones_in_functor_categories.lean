@@ -19,7 +19,7 @@ variable [small_category C]
 variable {D : Type (u₁+1)}
 variable [large_category D]
 
-@[backwards] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
+@[back] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
   {Z : D}
   {G : J ↝ D}
   {L : LimitCone G}

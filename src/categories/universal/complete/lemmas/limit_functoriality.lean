@@ -21,7 +21,7 @@ variable {X : Cone F}
 variable {M : ColimitCocone F}
 variable {Y : Cocone F}
 
-@[backwards] private lemma uniqueness_of_morphism_to_limit
+@[back] private lemma uniqueness_of_morphism_to_limit
   {g : X.cone_point ⟶ L.obj.cone_point}
   (w : ∀ j : J, g ≫ ((L.obj).cone_maps j) = X.cone_maps j)
     : (L.«from»  X).cone_morphism = g :=
@@ -36,7 +36,7 @@ variable {Y : Cocone F}
     : (L.«from» X).cone_morphism ≫ (L.obj.cone_maps j) = X.cone_maps j :=
   (L.«from» X).commutativity j
 
-@[backwards,reducible] def morphism_to_terminal_object_cone_point 
+@[back,reducible] def morphism_to_terminal_object_cone_point 
   {Z : C}
   (cone_maps : Π j : J, Z ⟶ (F j)) 
   (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (F.map f) = cone_maps k)
@@ -50,7 +50,7 @@ begin
   exact (L.«from» cone).cone_morphism, 
 end
 
-@[backwards] private lemma uniqueness_of_morphism_from_colimit
+@[back] private lemma uniqueness_of_morphism_from_colimit
   {g : M.obj.cocone_point ⟶ Y.cocone_point}
   (w : ∀ j : J, ((M.obj).cocone_maps j) ≫ g = Y.cocone_maps j)
     : (M.to Y).cocone_morphism = g :=
@@ -65,7 +65,7 @@ end
     : (M.obj.cocone_maps j) ≫ (M.to Y).cocone_morphism = Y.cocone_maps j :=
   (M.to Y).commutativity j
 
-@[backwards,reducible] def morphism_from_initial_object_cocone_point 
+@[back,reducible] def morphism_from_initial_object_cocone_point 
   {Z : C}
   (cocone_maps : Π j : J, (F j) ⟶ Z) 
   (commutativity : Π j k : J, Π f : j ⟶ k, (F.map f) ≫ (cocone_maps k) = cocone_maps j)
