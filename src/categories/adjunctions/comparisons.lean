@@ -36,7 +36,7 @@ variables {L : C ↝ D} {R : D ↝ C}
                           ((functor.prod L.opposite (functor.id D)) ⋙ (hom_pairing D)) :=
 { app := λ P, 
     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
-    λ f, (L.map f) ≫ (A.counit P.2) }
+    λ f, (L.map f) ≫ (A.counit P.2), naturality := by obviously_vis }
 
 def Adjunction_to_HomAdjunction (A : L ⊣ R) : hom_adjunction L R := 
 { hom := Adjunction_to_HomAdjunction_morphism A,
