@@ -24,7 +24,7 @@ def whiskering_on_left : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) :=
 def whiskering_on_right : (D ↝ E) ↝ ((C ↝ D) ↝ (C ↝ E)) :=
 { obj     := λ H, 
     { obj     := λ F, F ⋙ H,
-      map   := λ _ _ α, α ◫ (nat_trans.id _), },
+      map   := λ _ _ α, α ◫ (nat_trans.id _) },
   map   := λ G H τ, 
     { app := λ F, { app := λ c, τ (F c) } } }
 end

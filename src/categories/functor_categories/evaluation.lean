@@ -16,6 +16,7 @@ include 𝒞 𝒟
 
 def evaluation : ((C ↝ D) × C) ↝ D := 
 { obj := λ p, p.1 p.2,
-  map := λ x y f, (x.1.map f.2) ≫ (f.1 y.2) }
+  map := λ x y f, (x.1.map f.2) ≫ (f.1 y.2),
+  map_comp := begin tidy, rewrite_search_using [`ematch] {visualiser :=tt} end }
 
 end category_theory

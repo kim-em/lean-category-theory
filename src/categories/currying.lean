@@ -14,7 +14,7 @@ include ℰ
 
 def uncurry : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
 { obj := λ F, { obj := λ X, (F X.1) X.2,
-                map := λ X Y f, ((F.map f.1) X.2) ≫ ((F Y.1).map f.2) },
+                map := λ X Y f, ((F.map f.1) X.2) ≫ ((F Y.1).map f.2), map_comp := begin tidy, sorry, /- rewrite_search_using [`ematch] -/ /- fails, visiting a vertex twice -/ end },
   map := λ F G T, { app := λ X, (T X.1) X.2 } }
 
 def curry : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) := 
