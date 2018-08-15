@@ -19,7 +19,7 @@ def currying : Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) :=
                      tidy, 
                     --  erw [category.assoc_lemma, category.comp_id_lemma, functor.map_id_lemma], refl,
                      -- 12/6/3 (old) vs 192/128/13 (new)
-                     (do tactic.interactive.rewrite_search_using [`ematch] {trace_summary := tt} >>= tactic.trace)
+                     (do tactic.interactive.rewrite_search_using [`ematch] {trace_summary := tt,trace:=tt} >>= tactic.trace)
                     end },
     naturality := sorry }, naturality := sorry },
     inv := sorry,
