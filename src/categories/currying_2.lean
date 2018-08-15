@@ -30,3 +30,5 @@ def currying : Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) :=
 
 set_option pp.proofs true
 #print currying._proof_1
+
+end category_theory
