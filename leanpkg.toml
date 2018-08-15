@@ -5,5 +5,5 @@ lean_version = "khoek/klean:3.4.3"
 path = "src"
 
 [dependencies]
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "ffcf2fc1acdb9771d020dd8df097570299e66547"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "569819c41abbcba662fc68943b8d34ff4444ab55"}
 lean-category-theory-pr = {git = "https://github.com/semorrison/lean-category-theory-pr", rev = "f3c0582dd295c4ddb98a2efba60938a352f198a8"}
