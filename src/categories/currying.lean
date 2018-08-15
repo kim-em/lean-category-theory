@@ -25,8 +25,8 @@ def curry : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) :=
 
 local attribute [back] category.id -- this is usually a bad idea, but just what we needed here
 
-def currying : Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) := 
-{ functor := uncurry C D E,
-  inverse := curry C D E }
+-- def currying : Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) := 
+-- { functor := uncurry C D E,
+--   inverse := curry C D E }
 
 end category_theory
