@@ -31,7 +31,7 @@ def Equivalences_are_Full (e : Equivalence C D) : full (e.functor) :=
 { preimage := λ X Y f, (e.isomorphism_1.components X).inv ≫ (e.inverse.map f) ≫ (e.isomorphism_1.components Y).hom,
   witness := λ X Y f, begin
                         apply (Equivalences_are_Faithful e.symm).injectivity,
-                        obviously,
+                        obviously_vis,
                       end }
 
 section
