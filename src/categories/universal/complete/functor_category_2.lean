@@ -21,7 +21,7 @@ variable [small_category C]
 variable {D : Type (u₁+1)}
 variable [large_category D]
 
-def switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D)) := uncurry J C D ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry C J D
+def switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D)) := uncurry ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry
 
 def LimitObject_in_FunctorCategory [Complete D] (F : J ↝ (C ↝ D)) : C ↝ D := 
 (switch_curry.obj F) ⋙ functorial_Limit
