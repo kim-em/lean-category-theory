@@ -7,10 +7,10 @@ import categories.equivalence
 
 namespace category_theory
 
-universes u₁ u₂ v₂ 
+universes u₁ v₁ u₂ v₂ u₃ v₃ 
 
-variables {C : Type u₁} [small_category C] {D : Type u₁} [small_category D] {E : Type u₂} [ℰ : category.{u₂ v₂} E]
-include ℰ
+variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E]
+include 𝒞 𝒟 ℰ
 
 def uncurry : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
 { obj := λ F, { obj := λ X, (F X.1) X.2,

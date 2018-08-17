@@ -9,13 +9,13 @@ open category_theory
 
 namespace category_theory.ProductCategory
 
-universes u₁ v₁ u₂ v₂
+universes u₁ v₁ u₂ v₂ u₃ v₃
 variable {C : Type u₁}
 variable [𝒞 : category.{u₁ v₁} C]
-variable {D : Type u₁}
-variable [𝒟 : category.{u₁ v₁} D]
-variable {E : Type u₂}
-variable [ℰ : category.{u₂ v₂} E]
+variable {D : Type u₂}
+variable [𝒟 : category.{u₂ v₂} D]
+variable {E : Type u₃}
+variable [ℰ : category.{u₃ v₃} E]
 include 𝒞 𝒟 ℰ
 
 @[simp] lemma Bifunctor_identities (F : (C × D) ↝ E) (X : C) (Y : D)
