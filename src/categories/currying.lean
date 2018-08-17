@@ -9,7 +9,7 @@ namespace category_theory
 
 universes u₁ u₂ v₂ 
 
-variables (C : Type u₁) [small_category C] (D : Type u₁) [small_category D] (E : Type u₂) [ℰ : category.{u₂ v₂} E]
+variables {C : Type u₁} [small_category C] {D : Type u₁} [small_category D] {E : Type u₂} [ℰ : category.{u₂ v₂} E]
 include ℰ
 
 def uncurry : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
@@ -26,7 +26,7 @@ def curry : ((C × D) ↝ E) ↝ (C ↝ (D ↝ E)) :=
 local attribute [back] category.id -- this is usually a bad idea, but just what we needed here
 
 def currying : Equivalence (C ↝ (D ↝ E)) ((C × D) ↝ E) := 
-{ functor := uncurry C D E,
-  inverse := curry C D E }
+{ functor := uncurry,
+  inverse := curry }
 
 end category_theory
