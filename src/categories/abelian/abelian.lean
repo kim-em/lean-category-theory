@@ -33,8 +33,8 @@ class Abelian (C : Type (u+1)) [large_category C] [has_ZeroObject.{u+1 u} C] :=
 class Abelian' (C : Type (u+1)) [large_category C] [has_ZeroObject.{u+1 u} C] :=
   (kernel   : ∀ {X Y : C} (f : X ⟶ Y), Kernel f  )
   (cokernel : ∀ {X Y : C} (f : X ⟶ Y), Cokernel f)
-  (monics_are_regular : ∀ {X Y : C} {f : X ⟶ Y} (m : Monic f), RegularMonic f)
-  (epics_are_regular  : ∀ {X Y : C} {f : X ⟶ Y} (m : Epic f ), RegularEpic f )
+  (monics_are_regular : ∀ {X Y : C} {f : X ⟶ Y} (m : mono f), RegularMonic f)
+  (epics_are_regular  : ∀ {X Y : C} {f : X ⟶ Y} (m : epi f ), RegularEpic f )
   
 -- PROJECT show these definitions are equivalent
 

@@ -1,9 +1,9 @@
 [package]
 name = "lean-category-theory"
 version = "0.1"
-lean_version = "khoek/klean:3.4.3"
+lean_version = "nightly-2018-06-21"
 path = "src"
 
 [dependencies]
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "f39b14cf66c8d70bfaa8541553ec4cd7a8291cb2"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "be1cbaadd4c2e7d2f30965f9e5aa261664f41b03"}
 lean-category-theory-pr = {git = "https://github.com/semorrison/lean-category-theory-pr", rev = "f3c0582dd295c4ddb98a2efba60938a352f198a8"}
