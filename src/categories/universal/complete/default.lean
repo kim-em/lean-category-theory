@@ -4,7 +4,7 @@
 
 import categories.universal.instances
 import categories.discrete_category
-import categories.opposites
+import category_theory.opposites
 import categories.universal.complete.lemmas.limit_functoriality
 
 open category_theory

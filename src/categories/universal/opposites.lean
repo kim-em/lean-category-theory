@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Daniel Barter
 
-import categories.opposites
+import category_theory.opposites
 import categories.equivalence
 import categories.universal
 import categories.universal.cones

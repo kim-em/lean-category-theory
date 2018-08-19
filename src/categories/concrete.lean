@@ -3,7 +3,7 @@
 -- Authors: Scott Morrison
 
 import categories.equivalence
-import categories.types
+import category_theory.types
 
 namespace category_theory
 

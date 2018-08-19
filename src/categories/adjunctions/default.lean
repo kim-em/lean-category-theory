@@ -3,8 +3,10 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import category_theory.natural_transformation
-import categories.opposites
-import categories.types
+import category_theory.opposites
+import category_theory.types
+
+import categories.tactics.obviously
 
 open category_theory
 

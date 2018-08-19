@@ -4,7 +4,7 @@
 
 import category_theory.products
 import categories.natural_isomorphism
-import categories.opposites
+import category_theory.opposites
 import categories.isomorphism
 
 open category_theory

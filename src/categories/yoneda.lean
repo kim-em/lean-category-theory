@@ -3,9 +3,9 @@
 -- Authors: Scott Morrison
 
 import category_theory.natural_transformation
-import categories.opposites
+import category_theory.opposites
 import categories.products.switch
-import categories.types
+import category_theory.types
 import categories.functor_categories.evaluation
 import categories.universe_lifting
 import categories.cancellation

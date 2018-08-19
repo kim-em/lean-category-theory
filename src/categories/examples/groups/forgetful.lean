@@ -3,7 +3,7 @@
 -- Authors: Scott Morrison
 
 import categories.examples.groups
-import categories.types
+import category_theory.types
 import categories.yoneda
 import algebra.group_power
 
