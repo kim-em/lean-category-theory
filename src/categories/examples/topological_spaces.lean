@@ -28,7 +28,7 @@ def continuous_map (X Y : Top.{u₁}) : Type u₁ := { f : X.1 → Y.1 // contin
 instance {X Y} (f : continuous_map X Y) : continuous f.1 := f.2
 
 instance : large_category Top :=
-{ Hom  := continuous_map,
+{ hom  := continuous_map,
   id   := λ X, ⟨ id, continuous_id ⟩,
   comp := λ _ _ _ f g, ⟨ g.val ∘ f.val, continuous.comp f.property g.property ⟩ }
 
@@ -54,7 +54,7 @@ local attribute [back] topological_space.is_open_inter
 
 -- FIXME
 instance category_of_open_sets {α : Type u₁} (X : topological_space α) : large_category (OpenSet X) :=
-{ Hom  := λ U V, ulift (plift (U ⊆ V)),
+{ hom  := λ U V, ulift (plift (U ⊆ V)),
   id   := by obviously,
   comp := λ _ _ _ f g, begin sorry, /- tidy, apply set.subset.trans f g -/ end,
   id_comp := sorry,

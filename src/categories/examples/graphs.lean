@@ -31,7 +31,7 @@ begin
 end
 
 instance CategoryOfGraphs : large_category Graph := {
-  Hom := GraphHomomorphism,
+  hom := GraphHomomorphism,
   id := λ G, ⟨ {
       onVertices   := id,
       onEdges := λ _ _ f, f

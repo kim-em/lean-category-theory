@@ -15,14 +15,14 @@ local attribute [back] category.id -- This says that whenever there is a goal of
 def discrete (α : Type u₁) := α
 
 instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) := 
-{ Hom  := λ X Y, ulift (plift (X = Y)),
+{ hom  := λ X Y, ulift (plift (X = Y)),
   id   := by obviously,
   comp := by obviously }
 
 instance EmptyCategory : small_category pempty := (by apply_instance : small_category (discrete pempty))
 
 instance OneCategory  : category.{u₁ v₁} punit :=
-{ Hom  := λ X Y, punit,
+{ hom  := λ X Y, punit,
   id   := by obviously,
   comp := by obviously }
 

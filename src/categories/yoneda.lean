@@ -32,7 +32,7 @@ def yoneda_evaluation : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (ma
  : ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl
 
 def yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) := 
-{ obj := λ X,      { obj := λ Y, @category.Hom C _ Y X,
+{ obj := λ X,      { obj := λ Y, @category.hom C _ Y X,
                      map := λ Y Y' f g, f ≫ g },
   map := λ X X' f, { app := λ Y g, g ≫ f } }
 
@@ -68,7 +68,7 @@ let H := (hom_pairing ((Cᵒᵖ) ↝ (Type v₁))) in
 @[simp] lemma yoneda_pairing_map (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (β : (yoneda_pairing C) (P.1, P.2)): (yoneda_pairing C).map α β = (yoneda C).map (α.snd) ≫ β ≫ α.fst := rfl
 
 def coyoneda : (Cᵒᵖ) ↝ (C ↝ (Type v₁)) := 
-{ obj := λ X,      { obj := λ Y, @category.Hom C _ X Y,
+{ obj := λ X,      { obj := λ Y, @category.hom C _ X Y,
                      map := λ Y Y' f g, g ≫ f },
   map := λ X X' f, { app := λ Y g, f ≫ g } }
 

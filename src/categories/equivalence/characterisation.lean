@@ -30,8 +30,10 @@ def Equivalences_are_Faithful (e : Equivalence C D) : faithful (e.functor) :=
 def Equivalences_are_Full (e : Equivalence C D) : full (e.functor) := 
 { preimage := λ X Y f, (e.isomorphism_1.components X).inv ≫ (e.inverse.map f) ≫ (e.isomorphism_1.components Y).hom,
   witness := λ X Y f, begin
-                        apply (Equivalences_are_Faithful e.symm).injectivity,                      
-                        obviously_vis,
+                        apply (Equivalences_are_Faithful e.symm).injectivity,
+                        tidy,
+                        rewrite_search_using [`ematch] {visualise := tt, exhaustive :=tt },                      
+                        -- obviously_vis,
                       end }
 
 section

@@ -13,7 +13,7 @@ universe u
 variable {C : Type u}
 
 instance category.graph [𝒞 : small_category C] : graph C := {
-  edges := 𝒞.Hom
+  edges := 𝒞.hom
 }
 
 variable [small_category C]

@@ -33,7 +33,7 @@ begin
 end
 
 instance Arrows (C : Type (u₁+1)) [large_category C] : large_category (arrow C):=
-{ Hom  := arrow_hom,
+{ hom  := arrow_hom,
   id   := by tidy,
   comp := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ }
 

@@ -15,12 +15,12 @@ variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C]
 include 𝒞 
 
 instance sigma_category (Z : C → Type w₁) : category.{(max u₁ w₁) v₁} (Σ X : C, Z X) := 
-{ Hom  := λ X Y, X.1 ⟶ Y.1,
+{ hom  := λ X Y, X.1 ⟶ Y.1,
   id   := by tidy,
   comp := λ _ _ _ f g, f ≫ g }
 
 instance full_subcategory (Z : C → Prop) : category.{u₁ v₁} {X : C // Z X} := 
-{ Hom  := λ X Y, X.1 ⟶ Y.1,
+{ hom  := λ X Y, X.1 ⟶ Y.1,
   id   := by tidy,
   comp := λ _ _ _ f g, f ≫ g }
 

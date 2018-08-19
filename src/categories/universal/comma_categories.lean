@@ -59,7 +59,7 @@ attribute [ematch] comma_morphism.condition_lemma
   end
 
 instance CommaCategory (S : A ↝ C) (T : B ↝ C) : category.{(max u₁ u₂ v₃) (max v₁ v₂)} (comma S T) :=
-{ Hom  := λ p q, comma_morphism p q,
+{ hom  := λ p q, comma_morphism p q,
   id   := λ p, ⟨ 𝟙 p.1.1, 𝟙 p.1.2, by obviously ⟩,
   comp := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, by obviously ⟩ }
 

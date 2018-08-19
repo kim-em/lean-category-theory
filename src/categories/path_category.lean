@@ -22,7 +22,7 @@ namespace category_theory.graphs
 def Path (C : Type u₁) := C 
 
 instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
-{ Hom     := λ x y : C, path x y,
+{ hom     := λ x y : C, path x y,
   id      := λ x, path.nil x,
   comp    := λ _ _ _ f g, concatenate_paths f g,
   comp_id := begin

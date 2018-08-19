@@ -12,7 +12,7 @@ variable (C : Type u₁)
 variable [small_category C]
 
 instance universe_lift : large_category (ulift.{(u₁+1)} C) := 
-{ Hom  := λ X Y, (X.down ⟶ Y.down),
+{ hom  := λ X Y, (X.down ⟶ Y.down),
   id   := λ X, 𝟙 X.down,
   comp := λ _ _ _ f g, f ≫ g }
 

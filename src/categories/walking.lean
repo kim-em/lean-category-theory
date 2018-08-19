@@ -51,7 +51,7 @@ local attribute [tidy] case_bash
 attribute [reducible] WalkingPair.hom._main
 
 instance WalkingPair_category : small_category WalkingPair := 
-{ Hom  := WalkingPair.hom,
+{ hom  := WalkingPair.hom,
   id   := by tidy,
   comp := by tidy }
 
@@ -109,7 +109,7 @@ end
 local attribute [tidy] case_bash
 
 instance : small_category WalkingParallelPair := 
-{ Hom := λ X Y, match X, Y with
+{ hom := λ X Y, match X, Y with
                 | _1, _1 := punit
                 | _2, _2 := punit
                 | _1, _2 := Two

@@ -42,7 +42,7 @@ class abelian_category (C : Type u₁) extends (additive_category.{u₁ v₁} C)
 -- TODO: monics are regular 
 
 instance category_of_chain_complexes {C : Type u₁} [additive_category.{u₁ v₁} C] : category.{(max u₁ v₁)} (chain_complex C) :=
-{ Hom := λ M N, chain_map M N,
+{ hom := λ M N, chain_map M N,
   comp := sorry,
   id := sorry,
   id_comp := sorry, comp_id := sorry, assoc := sorry

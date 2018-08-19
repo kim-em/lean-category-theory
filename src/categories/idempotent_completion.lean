@@ -42,7 +42,7 @@ end
 end Idempotent
 
 instance IdempotentCompletion : large_category (Idempotent C) := 
-{ Hom  := Idempotent.morphism,
+{ hom  := Idempotent.morphism,
   id   := λ X, ⟨ X.idempotent ⟩,
   comp := λ X Y Z f g, ⟨ f.morphism ≫ g.morphism ⟩ }
 
