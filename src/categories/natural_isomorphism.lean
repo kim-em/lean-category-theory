@@ -47,7 +47,7 @@ def from_components
   inv  := { app := λ X, (app X).inv,
             naturality := λ X Y f, begin 
                                     let p := congr_arg (λ f, (app X).inv ≫ (f ≫ (app Y).inv)) (eq.symm (naturality f)),
-                                    tidy,
+                                    obviously,
                                    end } }
 
 def vertical_composition (α : F ⇔ G) (β : G ⇔ H) : F ⇔ H := iso.trans α β

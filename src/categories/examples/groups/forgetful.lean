@@ -42,13 +42,13 @@ end
 local attribute [class] is_group_hom
 
 instance exponentiation_is_hom (G : Group) (g : G.1) : is_group_hom (λ (n : ℤ), gpow g n) := begin tidy, sorry end
-instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : ulift ℤ), gpow g (n.down)) := begin tidy, sorry end
-@[simp] lemma hom_exponentiation (G : Group) (f : ulift ℤ → G.1) [is_group_hom f] (n : ℤ) : gpow (f (ulift.up int.one)) n = f (ulift.up n) := sorry
+instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : _root_.ulift ℤ), gpow g (n.down)) := begin tidy, sorry end
+@[simp] lemma hom_exponentiation (G : Group) (f : _root_.ulift ℤ → G.1) [is_group_hom f] (n : ℤ) : gpow (f (ulift.up int.one)) n = f (ulift.up n) := sorry
 
 @[simp] lemma monoid_pow_one {G} [group G] (x : G) : monoid.pow x 1 = x := begin sorry, end
 
 instance Groups_ForgetfulFunctor_Representable : representable (ForgetfulFunctor_Groups_to_Types.{u₁}) := 
-{ c := ⟨ ulift ℤ, by apply_instance ⟩,
+{ c := ⟨ _root_.ulift ℤ, by apply_instance ⟩,
   Φ := { hom := { app := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
                         naturality := sorry },
           inv := { app := λ G f, f.map (ulift.up (1 : ℤ)), },

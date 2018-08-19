@@ -25,15 +25,15 @@ include 𝒞 𝒟
 variables {L : C ↝ D} {R : D ↝ C} 
 
 @[reducible] private def Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
-  : ((functor.prod L.opposite (functor.id D)) ⋙ (hom_pairing D)) ⟹ 
-                          (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (hom_pairing C) := 
+  : ((functor.prod L.op (functor.id D)) ⋙ (functor.hom D)) ⟹ 
+                          (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C) := 
 { app := λ P, 
     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
     λ f, (A.unit P.1) ≫ (R.map f) }
 
 @[reducible] private def Adjunction_to_HomAdjunction_inverse (A : L ⊣ R) 
-  : (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (hom_pairing C) ⟹ 
-                          ((functor.prod L.opposite (functor.id D)) ⋙ (hom_pairing D)) :=
+  : (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C) ⟹ 
+                          ((functor.prod L.op (functor.id D)) ⋙ (functor.hom D)) :=
 { app := λ P, 
     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
     λ f, (L.map f) ≫ (A.counit P.2) }

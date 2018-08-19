@@ -26,7 +26,7 @@ instance instance_1 : category (((Cᵒᵖ) ↝ Type v₁) × (Cᵒᵖ)) := categ
 instance instance_2 : category ((Cᵒᵖ) × ((Cᵒᵖ) ↝ Type v₁)) := category_theory.prod.{u₁ v₁ (max u₁ (v₁+1)) (max u₁ v₁)} (Cᵒᵖ) (Cᵒᵖ ↝ Type v₁) 
 
 def yoneda_evaluation : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) 
-  := (evaluation (Cᵒᵖ) (Type v₁)) ⋙ type_lift.{v₁ u₁}
+  := (evaluation (Cᵒᵖ) (Type v₁)) ⋙ ulift.{v₁ u₁}
 
 @[simp] lemma yoneda_evaluation_map_down (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (x : (yoneda_evaluation C) P)
  : ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl
@@ -61,8 +61,8 @@ end
 
 def yoneda_pairing : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) := 
 let F := (prod.switch ((Cᵒᵖ) ↝ (Type v₁)) (Cᵒᵖ)) in
-let G := (functor.prod ((yoneda C).opposite) (functor.id ((Cᵒᵖ) ↝ (Type v₁)))) in
-let H := (hom_pairing ((Cᵒᵖ) ↝ (Type v₁))) in
+let G := (functor.prod ((yoneda C).op) (functor.id ((Cᵒᵖ) ↝ (Type v₁)))) in
+let H := (functor.hom ((Cᵒᵖ) ↝ (Type v₁))) in
   (F ⋙ G ⋙ H)      
 
 @[simp] lemma yoneda_pairing_map (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (β : (yoneda_pairing C) (P.1, P.2)): (yoneda_pairing C).map α β = (yoneda C).map (α.snd) ≫ β ≫ α.fst := rfl

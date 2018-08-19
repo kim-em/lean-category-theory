@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison
 
 import category_theory.types
+import categories.tactics.obviously
 
 open category_theory
 

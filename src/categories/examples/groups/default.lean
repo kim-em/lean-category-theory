@@ -38,7 +38,7 @@ begin
 end
 
 instance CategoryOfGroups : large_category Group := 
-{ Hom := GroupHomomorphism,
+{ hom := GroupHomomorphism,
   id := GroupHomomorphism.identity,
   comp  := @GroupHomomorphism.composition }
 
