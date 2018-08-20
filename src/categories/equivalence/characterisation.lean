@@ -33,7 +33,7 @@ def Equivalences_are_Full (e : Equivalence C D) : full (e.functor) :=
   witness := λ X Y f, begin
                         apply (Equivalences_are_Faithful e.symm).injectivity,
                         tidy,
-                        rewrite_search_using [`ematch] /-{ view := visualiser, exhaustive := tt }-/,                      
+                        rewrite_search_using [`ematch] { view := visualiser, exhaustive := tt },   
                         -- obviously_vis,
                       end }
 
