@@ -16,13 +16,13 @@ include 𝒞 𝒟 ℰ
 
 def whiskering_on_left : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) := 
 { obj := λ F, { obj := λ G, F ⋙ G,
-                map := λ _ _ α, (nat_trans.id _) ◫ α },
-  map := λ F G τ,{ app := λ H, { app := λ c, H.map (τ c) } } }
+                map' := λ _ _ α, (nat_trans.id _) ◫ α },
+  map' := λ F G τ, { app := λ H, { app := λ c, H.map (τ c) } } }
 
 def whiskering_on_right : (D ↝ E) ↝ ((C ↝ D) ↝ (C ↝ E)) :=
 { obj := λ H, { obj := λ F, F ⋙ H,
-                map := λ _ _ α, α ◫ (nat_trans.id _) },
-  map := λ G H τ, { app := λ F, { app := λ c, τ (F c) } } }
+                map' := λ _ _ α, α ◫ (nat_trans.id _) },
+  map' := λ G H τ, { app := λ F, { app := λ c, τ (F c) } } }
 end
 
 def whisker_on_left_functor {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] (F : C ↝ D) (E : Type u₃) [ℰ : category.{u₃ v₃} E] : (D ↝ E) ↝ (C ↝ E) :=

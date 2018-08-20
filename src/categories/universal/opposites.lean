@@ -66,7 +66,7 @@ variable [large_category C]
 
 def Cones_in_Opposite_functor (F : J ↝ C) : (Cone (F.op))ᵒᵖ ↝ (Cocone F)  := 
 { obj := λ c, ⟨c.cone_point, c.cone_maps, begin tidy, erw c.commutativity_lemma, end⟩, -- PROJECT (Scott) why can't rewrite_search handle this one?
-  map := λ X Y f, ⟨f.cone_morphism, begin tidy, erw f.commutativity_lemma, end⟩ }
+  map' := λ X Y f, ⟨f.cone_morphism, begin tidy, erw f.commutativity_lemma, end⟩ }
 
 def Cocones_in_Opposite (F : J ↝ C) : Equivalence ((Cocone (F.op))ᵒᵖ) (Cone F) := sorry
 end

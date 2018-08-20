@@ -46,7 +46,7 @@ def Adjunction_to_HomAdjunction (A : L ⊣ R) : hom_adjunction L R :=
       (R.map (L.map f))
       = ((A.hom) (X, L Y)) (L.map f) :=
 begin
-  have p := @nat_trans.naturality _ _ _ _ _ _ A.hom (X, L X) (X, L Y) (𝟙 X, L.map f),
+  have p := @nat_trans.naturality_lemma _ _ _ _ _ _ A.hom (X, L X) (X, L Y) (𝟙 X, L.map f),
   have q := congr_fun p (L.map (𝟙 X)),
   obviously',
   erw category_theory.functor.map_id_lemma at q, -- FIXME why doesn't simp do this
@@ -56,15 +56,15 @@ end
 @[simp,ematch] lemma mate_of_L' (A : hom_adjunction L R) {X Y : C} (f : X ⟶ Y) : f ≫ (((A.hom) (Y, L Y)) (𝟙 (L Y)))
       = ((A.hom) (X, L Y)) (L.map f) :=
 begin
-  have p := @nat_trans.naturality _ _ _ _ _ _ A.hom (Y, L Y) (X, L Y) (f, 𝟙 (L Y)),
+  have p := @nat_trans.naturality_lemma _ _ _ _ _ _ A.hom (Y, L Y) (X, L Y) (f, 𝟙 (L Y)),
   have q := congr_fun p (L.map (𝟙 Y)),
-  tidy,
+  obviously',
 end
 
 @[simp,ematch] lemma mate_of_R (A : hom_adjunction L R) {X Y : D} (f : X ⟶ Y) : (L.map (R.map f)) ≫ (((A.inv) (R Y, Y)) (𝟙 (R Y)))
       = ((A.inv) (R X, Y)) (R.map f) :=
 begin
-  have p := @nat_trans.naturality _ _ _ _ _ _ A.inv (R Y, Y) (R X, Y) (R.map f, 𝟙 Y),
+  have p := @nat_trans.naturality_lemma _ _ _ _ _ _ A.inv (R Y, Y) (R X, Y) (R.map f, 𝟙 Y),
   have q := congr_fun p (R.map (𝟙 Y)),
   tidy,
 end
@@ -72,10 +72,8 @@ end
 @[simp,ematch] lemma mate_of_R' (A : hom_adjunction L R) {X Y : D} (f : X ⟶ Y) : (((A.inv) (R X, X)) (𝟙 (R X))) ≫ f = 
     ((A.inv) (R X, Y)) (R.map f) :=
 begin
-  have p := @nat_trans.naturality _ _ _ _ _ _ A.inv (R X, X) (R X, Y) (𝟙 (R X), f),
+  have p := @nat_trans.naturality_lemma _ _ _ _ _ _ A.inv (R X, X) (R X, Y) (𝟙 (R X), f),
   have q := congr_fun p (R.map (𝟙 X)),
-  obviously',
-  erw category_theory.functor.map_id_lemma at q, -- FIXME why doesn't simp do this
   obviously',
 end
 

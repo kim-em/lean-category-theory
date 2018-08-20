@@ -74,14 +74,14 @@ attribute [reducible] Pair_functor.onMorphisms._match_1
 
 def Pair_functor (α β : C) : WalkingPair.{v₁} ↝ C := 
 { obj := Pair_functor.onObjects α β,
-  map := Pair_functor.onMorphisms α β, }
+  map' := Pair_functor.onMorphisms α β, }
 
 def Pair_functor' (α β : C) : WalkingPair.{v₁} ↝ C := 
 { obj := λ X, match X with 
               | _1 := α 
               | _2 := β
               end,
-  map := λ X Y f, match X, Y, f with
+  map' := λ X Y f, match X, Y, f with
                   | _1, _1, _ := 𝟙 α 
                   | _2, _2, _ := 𝟙 β
                   end, }
@@ -131,7 +131,7 @@ def ParallelPair_functor {α β : C} (f g : α ⟶ β) : WalkingParallelPair.{v�
               | _1 := α
               | _2 := β
               end,
-  map := λ X Y h, match X, Y, h with
+  map' := λ X Y h, match X, Y, h with
                   | _1, _1, _ := 𝟙 α
                   | _2, _2, _ := 𝟙 β
                   | _1, _2, Two._0 := f

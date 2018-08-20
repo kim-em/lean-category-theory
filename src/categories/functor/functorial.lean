@@ -26,7 +26,7 @@ restate_axiom functorial.map_comp
 attribute [simp,ematch] functorial.map_comp_lemma functorial.map_id_lemma
 
 instance (F : C ↝ D) : functorial (F.obj) := 
-{ map := F.map }
+{ map := F.map' }
 
 -- TODO notations?
 end category_theory

@@ -52,8 +52,8 @@ variable [large_category D]
 
 def onArrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
 { obj := λ F,     { obj := λ X, ⟨ (F X.1.1, F X.1.2), F.map X.2 ⟩,
-                    map := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
-  map := λ F G τ, { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }
+                    map' := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
+  map' := λ F G τ, { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }
 
 end category_theory.Functor
 

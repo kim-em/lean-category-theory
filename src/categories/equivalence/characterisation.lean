@@ -3,7 +3,6 @@
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
 import categories.equivalence
--- import tidy.rewrite_search.tracer
 
 open category_theory
 
@@ -33,7 +32,7 @@ def Equivalences_are_Full (e : Equivalence C D) : full (e.functor) :=
   witness := λ X Y f, begin
                         apply (Equivalences_are_Faithful e.symm).injectivity,
                         tidy,
-                        rewrite_search_using [`ematch] { view := visualiser, exhaustive := tt },   
+                        rewrite_search_using [`ematch] /- { view := visualiser, exhaustive := tt }-/,   
                         -- obviously_vis,
                       end }
 
@@ -43,8 +42,8 @@ local attribute [tidy] faithfulness
 
 -- TODO: weirdly, failing to name `faithful` causes an error.
 def Fully_Faithful_EssentiallySurjective_Functor_inverse (F : C ↝ D) [full F] [faithful : faithful F] [es : EssentiallySurjective F] : D ↝ C := 
-{ obj := λ X, (es X).1,
-  map := λ X Y f, preimage F ((es X).2.hom ≫ f ≫ (es Y).2.inv) }
+{ obj  := λ X, (es X).1,
+  map' := λ X Y f, preimage F ((es X).2.hom ≫ f ≫ (es Y).2.inv) }
 
 def Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : C ↝ D) [full F] [faithful : faithful F] [es : EssentiallySurjective F] : is_Equivalence F := 
 { inverse := Fully_Faithful_EssentiallySurjective_Functor_inverse F,

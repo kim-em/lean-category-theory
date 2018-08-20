@@ -57,6 +57,6 @@ open category_theory.graphs
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
 def from_GraphHomomorphism (H : graph_homomorphism G C) : (Path G) ↝ C :=
 { obj := λ X, (H.onVertices X),
-  map := λ _ _ f, (path_to_morphism H f) }
+  map' := λ _ _ f, (path_to_morphism H f) }
 
 end category_theory.functor

@@ -49,11 +49,11 @@ def ConeMorphism_to_comma_ConeMorphism {X Y : Cone F} (f : ConeMorphism X Y) : (
 
 def comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (Cone F) := 
 { obj := comma_Cone_to_Cone,
-  map := λ X Y f, comma_ConeMorphism_to_ConeMorphism f }
+  map' := λ X Y f, comma_ConeMorphism_to_ConeMorphism f }
 
 def Cones_to_comma_Cones (F : J ↝ C) : (Cone F) ↝ (comma.Cone F) := 
 { obj := Cone_to_comma_Cone,
-  map := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
+  map' := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
 
 local attribute [back] category.id
 local attribute [tidy] dsimp_all' -- TODO get rid of this

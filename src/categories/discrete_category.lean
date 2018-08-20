@@ -49,7 +49,7 @@ end
 namespace functor
 def fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := 
 { obj := F,
-  map := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end }
+  map' := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end }
 end functor
 
 end category_theory

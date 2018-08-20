@@ -21,15 +21,15 @@ include 𝒥 𝒞
 -- The diagonal functor sends X to the constant functor that sends everything to X.
 def DiagonalFunctor : C ↝ (J ↝ C) :=
 { obj := λ X, { obj := λ _, X,
-                map := λ _ _ _, 𝟙 X },
-  map := λ X Y f, { app := λ _, f } }
+                map' := λ _ _ _, 𝟙 X },
+  map' := λ X Y f, { app := λ _, f } }
 
 @[simp] lemma DiagonalFunctor_map_app {X Y : C} (f : X ⟶ Y) (j : J) : ((DiagonalFunctor J C).map f) j = f := rfl
 end
 
 def ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{u₃ v₃ u₃ v₃} punit C := 
 { obj := λ _, X,
-  map := λ _ _ _, 𝟙 X }
+  map' := λ _ _ _, 𝟙 X }
 
 @[simp] lemma ObjectAsFunctor_map {C : Type u₃} [category.{u₃ v₃} C] (X : C) : @category_theory.functor.map _ _ _ _ (ObjectAsFunctor.{u₃ v₃} X) punit.star punit.star punit.star = 𝟙 X := rfl
 
@@ -66,11 +66,11 @@ instance CommaCategory (S : A ↝ C) (T : B ↝ C) : category.{(max u₁ u₂ v�
 -- cf Leinster Remark 2.3.2
 def CommaCategory_left_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ A := 
 { obj := λ X, X.1.1,
-  map := λ _ _ f, f.left }
+  map' := λ _ _ f, f.left }
 
 def CommaCategory_right_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝ B := 
 { obj := λ X, X.1.2,
-  map := λ _ _ f, f.right }
+  map' := λ _ _ f, f.right }
 
 def CommaCategory_projection_transformation (S : A ↝ C) (T : B ↝ C) : ((CommaCategory_left_projection S T) ⋙ S) ⟹ ((CommaCategory_right_projection S T) ⋙ T) := 
 { app := λ X, X.2 }
