@@ -12,7 +12,7 @@ open category_theory.comma
 
 namespace category_theory.universal
 
-universes u v
+universes u v u₁ v₁ u₂ v₂ 
 variables {J : Type v} [small_category J]
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞 
@@ -28,15 +28,18 @@ def comma_Cone_to_Cone (cone : (comma.Cone F)) : Cone F :=
 
 @[simp] lemma comma_Cone_to_Cone_cone_maps  (cone : (comma.Cone F)) (j : J) : (comma_Cone_to_Cone cone).cone_maps j = (cone.2) j := rfl
 
+-- @[simp] lemma refold_nat_trans_coe {A : Type u₁} [category.{u₁ v₁} A] {B : Type u₂} [category.{u₂ v₂} B] {F G : A ↝ B} (α : F ⟹ G) (X : A) : α.app X = α X := rfl
+
 section -- PROJECT improve automation here
 def comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
 { cone_morphism := f.left,
   commutativity := λ j : J, begin                    
-                              let q := congr_arg nat_trans.app f.condition_lemma,
-                              let q' := congr_fun q j,
-                              repeat { erw ← nat_trans.coe_def at q' },
-                              cases f,
-                              obviously,
+                              -- let q := congr_arg nat_trans.app f.condition_lemma,
+                              -- let q' := congr_fun q j,
+                              -- We need to refold the coercions.!
+                              -- cases f,
+                              -- obviously,
+                              sorry -- FIXME
                             end }
 end
 

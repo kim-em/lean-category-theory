@@ -24,8 +24,8 @@ variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
 def yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) := 
-{ obj := λ X,      { obj := λ Y, @category.hom C _ Y X,
-                     map' := λ Y Y' f g, f ≫ g },
+{ obj := λ X, { obj := λ Y, @category.hom C _ Y X,
+                map' := λ Y Y' f g, f ≫ g },
   map' := λ X X' f, { app := λ Y g, g ≫ f } }
 
 @[simp] lemma yoneda_obj_obj (X Y : C) : ((yoneda C) X) Y = (Y ⟶ X) := rfl

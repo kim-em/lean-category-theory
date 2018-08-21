@@ -4,7 +4,7 @@
 
 import categories.examples.groups
 import category_theory.types
-import categories.yoneda
+import categories.representable
 import algebra.group_power
 
 namespace category_theory.examples.groups
@@ -15,8 +15,8 @@ open category_theory.yoneda
 universes u₁ u₂
 
 def ForgetfulFunctor_Groups_to_Types : Group ↝ (Type u₁) :=
-{ obj := λ s, s.1,
-  map := λ s t f x, f.map x }
+{ obj  := λ s, s.1,
+  map' := λ s t f x, f.map x }
 
 local attribute [ematch] semigroup.mul_assoc
 

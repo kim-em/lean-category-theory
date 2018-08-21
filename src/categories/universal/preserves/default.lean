@@ -3,7 +3,7 @@
 -- Authors: Scott Morrison
 
 import categories.universal.cones
-import categories.yoneda
+import categories.representable
 
 open category_theory
 open category_theory.initial

@@ -10,11 +10,7 @@ namespace category_theory.equivalence
 
 universes u₁ u₂
 
-variable {C : Type (u₁+1)}
-variable [large_category C]
-variable {D : Type (u₂+1)}
-variable [large_category D]
-
+variables {C : Type (u₁+1)} [large_category C] {D : Type (u₂+1)} [large_category D]
 
 def Equivalences_are_EssentiallySurjective (e : Equivalence C D) : EssentiallySurjective (e.functor) :=
   λ Y : D, ⟨ e.inverse Y, e.isomorphism_2.components Y ⟩
@@ -32,15 +28,13 @@ def Equivalences_are_Full (e : Equivalence C D) : full (e.functor) :=
   witness := λ X Y f, begin
                         apply (Equivalences_are_Faithful e.symm).injectivity,
                         tidy,
-                        rewrite_search_using [`ematch] /- { view := visualiser, exhaustive := tt }-/,   
-                        -- obviously_vis,
+                        rewrite_search_using [`ematch] /-{ view := visualiser }-/,   
                       end }
 
 section
-private meta def faithfulness := `[apply faithful.injectivity] -- This is a bit dicey.
+private meta def faithfulness := `[apply faithful.injectivity] 
 local attribute [tidy] faithfulness
 
--- TODO: weirdly, failing to name `faithful` causes an error.
 def Fully_Faithful_EssentiallySurjective_Functor_inverse (F : C ↝ D) [full F] [faithful : faithful F] [es : EssentiallySurjective F] : D ↝ C := 
 { obj  := λ X, (es X).1,
   map' := λ X Y f, preimage F ((es X).2.hom ≫ f ≫ (es Y).2.inv) }
