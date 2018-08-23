@@ -24,7 +24,7 @@ variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
 def yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) := 
-{ obj := λ X, { obj := λ Y, @category.hom C _ Y X,
+{ obj := λ X, { obj := λ Y : C, Y ⟶ X,
                 map' := λ Y Y' f g, f ≫ g },
   map' := λ X X' f, { app := λ Y g, g ≫ f } }
 
@@ -36,9 +36,17 @@ def yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) :=
 @[simp,ematch] lemma yoneda_aux_2 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) {Z Z' : C} (f : Z ⟶ Z') (h : Z' ⟶ X) : α Z (f ≫ h) = f ≫ α Z' h := by obviously
 
 instance yoneda_full : full (yoneda C) := 
-{ preimage := λ X Y f, (f X) (𝟙 X) }
+{ preimage := λ X Y f, (f X) (𝟙 X) }.
 
-instance yoneda_faithful : faithful (yoneda C) := by obviously
+instance yoneda_faithful : faithful (yoneda C) := 
+begin
+/- obviously says: -/ 
+fsplit, 
+intros X Y f g p, 
+injections_and_clear, 
+have cancel_right'_f_g_h_1 := cancel_right' f g h_1, 
+assumption
+end
 
 -- We need to help typeclass inference with some awkward universe levels here.
 instance instance_1 : category (((Cᵒᵖ) ↝ Type v₁) × (Cᵒᵖ)) := category_theory.prod.{(max u₁ (v₁+1)) (max u₁ v₁) u₁ v₁} (Cᵒᵖ ↝ Type v₁) (Cᵒᵖ)
