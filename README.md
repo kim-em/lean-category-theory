@@ -2,7 +2,7 @@
 
 This repository develops the basics of category theory in Lean.
 
-(**Note: this development is temporarily split between two separate repositories, as I prepare a pull request into Lean's [mathlib](https://github.com/leanprover/mathlib). For the basic parts of the development, please see https://github.com/semorrison/lean-category-theory-pr/.**)
+Some parts of this library have already been PR'd into mathlib, under [`category_theory`](https://github.com/leanprover/mathlib/blob/master/docs/theories/categories.md), and hopefully more will come across soon.
 
 Please note that our goal is _not_ to produce a beautiful category theory library for Lean. Lean probably isn't ready for someone to try to write one!
 Instead, this is an experiment to discover how plausible it is that "working mathematicians" should be interested in the current state of interactive theorem proving. As such, we're trying to set a high bar for:
@@ -40,5 +40,5 @@ As notational conventions, we denote
 * Objects of categories by capital latin letters near the end of the alphabet,
 * Morphisms by lower case latin letters,
 * Functors by capital latin letters starting at F,
-* NaturalTransformations by greek letters.
+* Natural transformations by greek letters.
 
