@@ -7,7 +7,6 @@ import category_theory.universal.monic
 import category_theory.universal.kernels
 
 open category_theory
-open category_theory.initial
 open category_theory.universal
 open category_theory.universal.monic
 
@@ -15,26 +14,22 @@ namespace category_theory.abelian
 
 -- This is the def of abelian from Etingof's "Tensor categories"
 
-universe u
+universes u v
 
-structure KernelImageCokernelDecomposition {C : Type (u+1)} [large_category C] [has_ZeroObject.{u+1 u} C] {X Y : C} (f : X ⟶ Y) :=
-  (kernel                  : Kernel f  )
-  (cokernel                : Cokernel f)
-  (cokernel_of_kernel      : Cokernel (kernel.inclusion) )
-  (kernel_of_cokernel      : Kernel (cokernel.projection))
-  (image_well_defined      : cokernel_of_kernel.cokernel ≅ kernel_of_cokernel.kernel)
-  (composition_is_morphism : cokernel_of_kernel.projection ≫ image_well_defined.hom ≫ kernel_of_cokernel.inclusion = f)
+-- structure KernelImageCokernelDecomposition 
+--   {C : Type u} [category.{u v} C] [has_zero_object.{u v} C] [has_kernels.{u v} C] [has_cokernels.{u v} C]
+--   {X Y : C} (f : X ⟶ Y) :=
+--   (image_well_defined      : cokernel (kernel.map f) ≅ kernel (cokernel.map f))
+--   (composition_is_morphism : (cokernel (kernel.map f)).map ≫ image_well_defined.hom ≫ (kernel (cokernel.map f)).map = f)
 
-class Abelian (C : Type (u+1)) [large_category C] [has_ZeroObject.{u+1 u} C] := 
-  (decomposition : ∀ {X Y : C} (f : X ⟶ Y), KernelImageCokernelDecomposition f)
+-- class Abelian {C : Type u} [category.{u v} C] [has_zero_object.{u v} C] [has_kernels.{u v} C] [has_cokernels.{u v} C] := 
+--   (decomposition : ∀ {X Y : C} (f : X ⟶ Y), KernelImageCokernelDecomposition f)
 
 -- This is the usual definition
 
-class Abelian' (C : Type (u+1)) [large_category C] [has_ZeroObject.{u+1 u} C] :=
-  (kernel   : ∀ {X Y : C} (f : X ⟶ Y), Kernel f  )
-  (cokernel : ∀ {X Y : C} (f : X ⟶ Y), Cokernel f)
-  (monics_are_regular : ∀ {X Y : C} {f : X ⟶ Y} (m : mono f), RegularMonic f)
-  (epics_are_regular  : ∀ {X Y : C} {f : X ⟶ Y} (m : epi f ), RegularEpic f )
+class Abelian' {C : Type u} [category.{u v} C] [has_zero_object.{u v} C] :=
+  (monics_are_regular : ∀ {X Y : C} {f : X ⟶ Y} (m : mono f), regular_mono f)
+  (epics_are_regular  : ∀ {X Y : C} {f : X ⟶ Y} (m : epi f ), regular_epi  f)
   
 -- PROJECT show these definitions are equivalent
 

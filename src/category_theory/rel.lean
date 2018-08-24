@@ -1,5 +1,5 @@
 import category_theory.category
-import .tactics.obviously
+import category_theory.tactics.obviously
 
 namespace category_theory
 

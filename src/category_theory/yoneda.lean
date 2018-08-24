@@ -2,8 +2,6 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
--- cf https://github.com/UniMath/UniMath/blob/master/UniMath/CategoryTheory/yoneda.v
-
 import category_theory.natural_transformation
 import category_theory.opposites
 import category_theory.types
@@ -53,7 +51,7 @@ instance instance_1 : category (((Cᵒᵖ) ↝ Type v₁) × (Cᵒᵖ)) := categ
 instance instance_2 : category ((Cᵒᵖ) × ((Cᵒᵖ) ↝ Type v₁)) := category_theory.prod.{u₁ v₁ (max u₁ (v₁+1)) (max u₁ v₁)} (Cᵒᵖ) (Cᵒᵖ ↝ Type v₁) 
 
 def yoneda_evaluation : (((Cᵒᵖ) ↝ (Type v₁)) × (Cᵒᵖ)) ↝ (Type (max u₁ v₁)) 
-  := (evaluation (Cᵒᵖ) (Type v₁)) ⋙ ulift.{v₁ u₁}
+  := (evaluation (Cᵒᵖ) (Type v₁)) ⋙ ulift_functor.{v₁ u₁}
 
 @[simp] lemma yoneda_evaluation_map_down (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (x : (yoneda_evaluation C) P)
  : ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl

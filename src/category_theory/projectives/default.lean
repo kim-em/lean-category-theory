@@ -1,5 +1,5 @@
 import ..abelian.abelian
-import category_theory.universal.instances
+import category_theory.universal.zero
 
 
 open category_theory
@@ -20,20 +20,20 @@ structure projective_cover {C : Type u} [category.{u v} C] (X : C) :=
 class enough_projectives (C : Type u) [category.{u v} C]  :=
 (cover : Π X : C, projective_cover X)
 
-structure chain_complex (C : Type u) [category.{u v} C] [has_ZeroObject.{u v} C] :=
+structure chain_complex (C : Type u) [category.{u v} C] [has_zero_object.{u v} C] :=
 (objects : ℤ → C)
 (d : Π i : ℤ, objects i ⟶ objects (i + 1))
 (d_squared : Π i, (d i) ≫ (d (i+1)) = zero_morphism _ _)
 
-structure projective_resolution {C : Type u} [category.{u v} C] [has_ZeroObject.{u v} C] (X : C) :=
+structure projective_resolution {C : Type u} [category.{u v} C] [has_zero_object.{u v} C] (X : C) :=
 (complex : chain_complex C)
 (projectivity : Π i : ℤ, i < 0 → projective (complex.objects i))
 (of : complex.objects 0 = X)
-(nothing : Π i : ℤ, i > 0 → complex.objects i = zero_object C) -- it's zero
+(nothing : Π i : ℤ, i > 0 → complex.objects i = zero_object.{u v} C) -- it's zero
 
 -- TODO find out why we don't also need universe annotations on `enough_projectives`?
 -- TODO this needs the category to be abelian!
-def construct_injective_resolution {C : Type u} [category.{u v} C] [has_ZeroObject.{u v} C] [enough_projectives C] (X : C) : projective_resolution X := sorry
+def construct_injective_resolution {C : Type u} [category.{u v} C] [has_zero_object.{u v} C] [enough_projectives C] (X : C) : projective_resolution X := sorry
 -- we define the complex inductively, taking the cover of X, then the cover of its kernel, and so on
 
 /-

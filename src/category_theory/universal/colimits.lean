@@ -79,18 +79,11 @@ attribute [ematch, back'] is_initial.uniq_lemma
 @[extensionality] lemma is_initial.ext {X : C} (P Q : is_initial.{u v} X) : P = Q := 
 begin cases P, cases Q, obviously, end
 
-section
-variable (C) 
-
-structure initial_object extends t : point C :=
-(h : is_initial.{u v} t.X)
-end
-
-instance hom_to_initial_subsingleton (X : C) (B : initial_object.{u v} C) : subsingleton (B.X ⟶ X) :=
+instance hom_to_initial_subsingleton (X' : C) (X : C) (B : is_initial.{u v} X') : subsingleton (X' ⟶ X) :=
 begin
   fsplit, intros f g,
-  rw B.h.uniq X f,
-  rw B.h.uniq X g,
+  rw B.uniq X f,
+  rw B.uniq X g,
 end
 
 end initial

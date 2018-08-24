@@ -29,40 +29,29 @@ attribute [ematch, back'] is_zero.uniq_lift_lemma is_zero.uniq_desc_lemma
 @[extensionality] lemma is_zero.ext {X : C} (P Q : is_zero.{u v} X) : P = Q := 
 begin cases P, cases Q, obviously, end
 
-section
-variable (C) 
-
-structure zero_object extends t : point C :=
-(h : is_zero.{u v} t.X)
-end
-
-namespace zero_object
-def to_initial_object  (Z : zero_object.{u v} C) : initial_object.{u v} C  := { X := Z.X, h := Z.h.to_is_initial }
-def to_terminal_object (Z : zero_object.{u v} C) : terminal_object.{u v} C := { X := Z.X, h := Z.h.to_is_terminal }
-end zero_object
-
-instance hom_to_zero_subsingleton (X : C) (B : zero_object.{u v} C) : subsingleton (X ⟶ B.X) :=
-universal.hom_to_terminal_subsingleton X B.to_terminal_object
-instance hom_from_zero_subsingleton (X : C) (B : zero_object.{u v} C) : subsingleton (B.X ⟶ X) :=
-universal.hom_to_initial_subsingleton X B.to_initial_object
+-- instance hom_to_zero_subsingleton (X Z : C) (B : is_zero.{u v} Z) : subsingleton (X ⟶ Z) :=
+-- universal.hom_to_terminal_subsingleton X Z B.to_is_terminal
+-- instance hom_from_zero_subsingleton (Z X : C) (B : is_zero.{u v} Z) : subsingleton (Z ⟶ X) :=
+-- universal.hom_to_initial_subsingleton Z X B.to_is_initial
 
 variable (C)
 
 class has_zero_object :=
-(zero : zero_object.{u v} C)
+(zero : C)
+(is : is_zero.{u v} zero)
 
 end category_theory.universal
 
 namespace category_theory.universal
 
-def zero_object'  := has_zero_object.zero.{u v}
+def zero_object  := has_zero_object.zero.{u v}
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
 
 variables [has_zero_object.{u v} C]
 
-def zero_morphism (X Y : C) : X ⟶ Y := ((zero_object'.{u v} C).h.lift X) ≫ ((zero_object'.{u v} C).h.desc Y)
+def zero_morphism (X Y : C) : X ⟶ Y := ((has_zero_object.is.{u v} C).lift X) ≫ ((has_zero_object.is.{u v} C).desc Y)
 
 instance hom_has_zero (X Y : C) : _root_.has_zero (X ⟶ Y) := { zero := zero_morphism X Y }
 
@@ -71,12 +60,14 @@ begin
   unfold zero_morphism,
   rw category.assoc,
   congr,
+  sorry
 end
 @[simp] lemma zero_morphism_right {X Y Z : C} (f : X ⟶ Y) : f ≫ (zero_morphism Y Z) = zero_morphism X Z :=  
 begin
   unfold zero_morphism,
   rw ← category.assoc,
   congr,
+  sorry
 end
 
 end category_theory.universal

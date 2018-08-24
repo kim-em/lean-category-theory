@@ -1,6 +1,6 @@
-import .coyoneda
+import category_theory.coyoneda
 
-open category_theory
+namespace category_theory
 
 universes u₁ v₁
 
@@ -10,3 +10,5 @@ include 𝒞
 class representable (F : C ↝ (Type v₁)) := 
 (c : C)
 (Φ : F ⇔ ((coyoneda C) c))
+
+end category_theory

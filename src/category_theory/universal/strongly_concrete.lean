@@ -2,13 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import category_theory.universal.instances
-import category_theory.universal.preserves
+import category_theory.universal.continuous
 import category_theory.concrete
 import category_theory.functor.isomorphism
 
 open category_theory
-open category_theory.initial
 
 namespace category_theory.universal
 
@@ -18,7 +16,7 @@ variable [large_category C]
 
 class strongly_concrete [concrete C] :=
 (reflects_isos    : reflects_isos (fibre_functor C))
-(preserves_limits : preserves_limits (fibre_functor C))
+(preserves_limits : continuous (fibre_functor C))
 
 -- PROJECT
 -- instance type_strongly_concrete : strongly_concrete types := {

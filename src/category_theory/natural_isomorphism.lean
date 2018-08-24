@@ -4,6 +4,7 @@
 
 import category_theory.isomorphism
 import category_theory.functor_category
+import category_theory.tactics.obviously
 
 namespace category_theory
 

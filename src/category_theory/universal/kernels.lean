@@ -10,7 +10,7 @@ variables {C : Type u} [𝒞 : category.{u v} C] [has_zero_object.{u v} C]
 include 𝒞
 variables {X Y Z : C}
 
-structure is_kernel (f : Y ⟶ Z) (ι  : X ⟶ Y) :=
+structure is_kernel (f : Y ⟶ Z) (ι : X ⟶ Y) :=
 (w    : ι ≫ f = zero_morphism _ _)
 (lift : Π {X' : C} {ι' : X' ⟶ Y} (w : ι' ≫ f = zero_morphism X' Z), X' ⟶ X)
 (fac  : Π {X' : C} {ι' : X' ⟶ Y} (w : ι' ≫ f = zero_morphism X' Z), (lift w) ≫ ι = ι' . obviously)
@@ -33,14 +33,14 @@ structure kernel (f : Y ⟶ Z) :=
 
 variable (C)
 
-class has_kernel :=
+class has_kernels :=
 (kernel : Π {Y Z : C} (f : Y ⟶ Z), kernel.{u v} f)
 
 variable {C}
 
-variable [has_kernel.{u v} C]
+variable [has_kernels.{u v} C]
 
-def kernel' (f : Y ⟶ Z) := has_kernel.kernel.{u v} f
+def kernel' (f : Y ⟶ Z) := has_kernels.kernel.{u v} f
 
 
 def kernel_of_equalizer {f : Y ⟶ Z} (e : equalizer f (zero_morphism _ _)) : kernel f :=
@@ -65,8 +65,8 @@ local attribute [extensionality] kernel.ext
 def kernels_are_equalizers {f : Y ⟶ Z} : equiv (kernel f) (equalizer f (zero_morphism _ _)) := 
 { to_fun  := equalizer_of_kernel,
   inv_fun := kernel_of_equalizer,
-  left_inv  := by obviously,
-  right_inv := by obviously }
+  left_inv  := sorry,
+  right_inv := sorry }
 
 
 end category_theory.universal

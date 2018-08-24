@@ -2,7 +2,6 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import category_theory.functor
 import .limits
 import .colimits
 
@@ -128,8 +127,10 @@ def functoriality (F : J ↝ C) (G : C ↝ D) : (cocone F) ↝ (cocone (F ⋙ G)
 end
 end cocones
 
-def limit_cone     (F : J ↝ C) := terminal_object.{(max u v) v} (cone F)
-def colimit_cocone (F : J ↝ C) := initial_object.{(max u v) v} (cocone F)
+def limit.hom [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) (c : cone F) : cone_morphism c (limit.cone F) := 
+{ hom := (limit.universal_property F).lift c }
+
+@[simp] lemma limit.hom_π [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) (c : cone F) (j : J) : (limit.hom F c).hom ≫ (limit.π F j) = c.π j := sorry
 
 end category_theory.universal
 

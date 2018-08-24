@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison
 
 import category_theory.isomorphism
+import category_theory.tactics.obviously
 
 namespace category_theory
 

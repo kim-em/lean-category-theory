@@ -2,7 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import category_theory.universal
+import category_theory.universal.limits
+import category_theory.universal.colimits
 import category_theory.abelian.monic
 
 open category_theory
@@ -10,17 +11,15 @@ open category_theory.universal
 
 namespace category_theory.universal.monic
 
-universe u
-variable {C : Type (u+1)}
-variable [large_category C]
-variables {X Y Z : C}
+universes u v
+variables {C : Type u} [category.{u v} C] {X Y Z : C}
 
-structure RegularMonic (f : X ⟶ Y) :=
+structure regular_mono (f : X ⟶ Y) :=
 (Z : C)
 (a b : Y ⟶ Z)
-(e : Equalizer a b)
-(i : e.equalizer ≅ X)
-(w : e.inclusion = i.hom ≫ f)
+(e : equalizer a b)
+(i : e.X ≅ X)
+(w : e.ι = i.hom ≫ f)
 
 -- EXERCISE
 -- def SplitMonic_implies_RegularMonic
@@ -32,11 +31,11 @@ structure RegularMonic (f : X ⟶ Y) :=
 --   {f : Hom X Y} 
 --   (s : RegularMonic f) : Monic f := sorry
 
-structure RegularEpic (f : Y ⟶ Z) :=
+structure regular_epi (f : Y ⟶ Z) :=
 (X : C)
 (a b : X ⟶ Y)
-(c : Coequalizer a b)
-(i : c.coequalizer ≅ Z)
-(w : c.projection = f ≫ i.inv)
+(c : coequalizer a b)
+(i : c.X ≅ Z)
+(w : c.π = f ≫ i.inv)
 
 end category_theory.universal.monic

@@ -7,7 +7,6 @@ import category_theory.universal.comma_categories
 
 open category_theory
 open category_theory.comma
-open category_theory.initial
 
 namespace categories.adjunctions
 

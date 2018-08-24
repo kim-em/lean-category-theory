@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison
 
 import category_theory.examples.groups
-import category_theory.universal.instances
 import category_theory.universal.strongly_concrete
 
 namespace category_theory.examples.groups
@@ -28,12 +27,8 @@ end
 
 instance maps_to_punit_hom {Z : Type u} [group Z] (f : Z → punit) : is_group_hom f := by obviously
 
-instance Groups_has_TerminalObject : has_TerminalObject.{u+1 u} Group := {
-  terminal_object := {
-    obj := ⟨ punit, by obviously ⟩,
-    «from» := by obviously
- }
-}
+instance : has_terminal_object.{u+1 u} Group :=
+{ terminal := ⟨ punit, by obviously ⟩ }
 
 variables {α : Type u} [group α] {β : Type u} [group β] {γ : Type u} [group γ] {δ : Type u} [group δ] 
 

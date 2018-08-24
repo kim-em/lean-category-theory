@@ -1,111 +1,35 @@
--- -- Copyright (c) 2017 Scott Morrison. All rights reserved.
--- -- Released under Apache 2.0 license as described in the file LICENSE.
--- -- Authors: Scott Morrison
+-- Copyright (c) 2018 Scott Morrison. All rights reserved.
+-- Released under Apache 2.0 license as described in the file LICENSE.
+-- Authors: Scott Morrison
 
--- import category_theory.universal.complete.lemmas.cones_in_functor_categories
+import category_theory.currying
+import category_theory.products.switch
+import category_theory.functor_categories.whiskering
+import category_theory.universal.complete
+import category_theory.universal.complete.lemmas.cones_in_functor_categories
 
--- open categories
--- open categories.functor
--- open categories.functor_categories
--- open categories.isomorphism
--- open categories.initial
+open category_theory
+open category_theory.prod
 
--- namespace categories.universal
+namespace category_theory.universal
 
--- universes j u₁ u₂
--- section
--- variable {J : Type u₁}
--- variable [small_category J]
--- variable {C : Type u₁}
--- variable [small_category C]
--- variable {D : Type (u₁+1)}
--- variable [large_category D]
+universes u v
 
--- @[reducible] private def evaluate_Functor_to_FunctorCategory (F : J ↝ (C ↝ D)) (c : C) : J ↝ D := {
---   onObjects     := λ j, (F +> j) +> c,
---   onMorphisms   := λ _ _ f, (F &> f).components c
--- }
+variables {J : Type v} [small_category J] {C : Type v} [small_category C] {D : Type u} [category.{u v} D]
 
--- @[reducible] private def evaluate_Functor_to_FunctorCategory_on_Morphism (F : J ↝ (C ↝ D)) {c c' : C} (f : c ⟶ c')
---   : NaturalTransformation (evaluate_Functor_to_FunctorCategory F c) (evaluate_Functor_to_FunctorCategory F c') := {
---     components := λ j, (F +> j) &> f
---  }
+def switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D)) := uncurry ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry
 
--- -- PROJECT do this properly, as
--- -- private def Switch_Curry : Functor (Functor J (Functor C D)) (Functor C (Functor J D)) := 
--- end
+def limit_object_in_functor_category [has_limits.{u v} D] (F : J ↝ (C ↝ D)) : C ↝ D := 
+(switch_curry.obj F) ⋙ functorial_limit
 
--- section
--- variable {J : Type u₁}
--- variable [small_category J]
--- variable {C : Type u₁}
--- variable [small_category C]
--- variable {D : Type (u₁+1)}
--- variable [large_category D]
+def limit_cone_in_functor_category [has_limits.{u v} D] (F : J ↝ (C ↝ D)) : cone F := 
+{ X := limit_object_in_functor_category F,
+  π := λ j, sorry,
+  w := sorry }
 
--- local attribute [tidy] dsimp_all'
+instance [cmp : has_limits.{u v} D] : has_limits.{(max u v) v} (C ↝ D) := 
+{ limit := λ J _ F, begin resetI, exact @limit_cone_in_functor_category J _ C _ D _ _ F end,
+  is_limit := sorry
+}
 
--- def LimitObject_in_FunctorCategory [cmp : Complete D] (F : J ↝ (C ↝ D)) : Cone F := {     
---   cone_point    := {
---     onObjects     := λ c, functorial_Limit +> (evaluate_Functor_to_FunctorCategory F c), 
---     onMorphisms   := λ X Y f, functorial_Limit &> (evaluate_Functor_to_FunctorCategory_on_Morphism F f),
---     identities := begin 
---     ---
--- intros, tidy,
---  -- FIXME
--- ---
--- recover, tidy,
---      end,
---     functoriality := begin
---     ---
--- -- intros,
--- -- apply categories.universal.lemmas.cones_in_functor_categories.uniqueness_of_morphisms_to_terminal_object_cone_point,
--- -- tidy {trace_result:=tt}, recover,tidy {trace_result:=tt},
--- ---
--- sorry
---     end,
---  },
---   cone_maps     := λ j, {
---     components := λ c, (limitCone (evaluate_Functor_to_FunctorCategory F c)).terminal_object.cone_maps j,
---     naturality := sorry,
---  },
---  commutativity := sorry,
--- }
-
--- -- This would be a bit dangerous, but we just use it in the next construction.
--- @[back] private lemma cone_morphism_comparison (F : J ↝ (C ↝ D)) (X : C) (j : J) (Y Z : Cone F) (φ ψ : ConeMorphism Y Z) (f : ((Z.cone_point) +> X) ⟶ ((F +> j) +> X)) (w : f = ((Z.cone_maps j).components X))
---  : ((φ.cone_morphism).components X) ≫ f = ((ψ.cone_morphism).components X) ≫ f := 
--- begin
---   rewrite w,
---   simp,
--- end
-
-
--- -- needed for the proof of naturality below
--- local attribute [reducible] universal.lemmas.limit_functoriality.morphism_to_terminal_object_cone_point
-
--- local attribute [tidy] dsimp'
-
--- private def morphism_to_LimitObject_in_FunctorCategory [cmp : Complete D] {F : J ↝ (C ↝ D)} (Y : Cone F) : ConeMorphism Y (LimitObject_in_FunctorCategory F) := {
---       cone_morphism := {
---         components := begin
---                          tidy {trace_result:=tt},  -- this will use morphism_to_terminal_object_cone_point
---                          apply universal.lemmas.limit_functoriality.morphism_to_terminal_object_cone_point,
---                          exact (Y.cone_maps j).components X, 
---                          exact congr_fun (congr_arg (NaturalTransformation.components) (Y.commutativity f)) X,  
---                        end
---      }
---    }
-
--- instance Limits_in_FunctorCategory [cmp : Complete D] : Complete (C ↝ D) := {
---   limitCone := λ J _ F, begin
---                           resetI, 
---                           exact {
---                             terminal_object                            := @LimitObject_in_FunctorCategory J _ C _ D _ _ F,
---                             morphism_to_terminal_object_from           := morphism_to_LimitObject_in_FunctorCategory
---                           }
---                         end
--- }
-
--- end
--- end categories.universal
+end category_theory.universal

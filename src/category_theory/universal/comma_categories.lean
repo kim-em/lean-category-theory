@@ -5,10 +5,11 @@
 import category_theory.functor_category
 import category_theory.walking
 import category_theory.discrete_category
-import category_theory.universal.initial
+import category_theory.universal.limits
+import category_theory.universal.colimits
 
 open category_theory
-open category_theory.initial
+open category_theory.universal
 open category_theory.walking
 
 namespace category_theory.comma
@@ -99,13 +100,13 @@ def Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                  (Diagona
 instance Cones   (F : J ↝ C) : category (Cone F)   := begin unfold Cone, apply_instance end
 instance Cocones (F : J ↝ C) : category (Cocone F) := begin unfold Cocone, apply_instance end
 
-def Limit   (F: J ↝ C) := terminal_object (Cone   F)
-def Colimit (F: J ↝ C) := initial_object  (Cocone F)
+-- def Limit   (F: J ↝ C) := terminal_object (Cone   F)
+-- def Colimit (F: J ↝ C) := initial_object  (Cocone F)
 
-def BinaryProduct   (α β : C)                  := Limit   (Pair_functor.{u₁ v₁} α β)
-def BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
-def Equalizer       {α β : C} (f g : α ⟶ β)  := Limit   (ParallelPair_functor f g)
-def Coequalizer     {α β : C} (f g : α ⟶ β)  := Colimit (ParallelPair_functor f g)
+-- def BinaryProduct   (α β : C)                  := Limit   (Pair_functor.{u₁ v₁} α β)
+-- def BinaryCoproduct (α β : C)                  := Colimit (Pair_functor α β)
+-- def Equalizer       {α β : C} (f g : α ⟶ β)  := Limit   (ParallelPair_functor f g)
+-- def Coequalizer     {α β : C} (f g : α ⟶ β)  := Colimit (ParallelPair_functor f g)
 
 end category_theory.comma
 

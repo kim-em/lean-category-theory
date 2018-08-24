@@ -1,7 +1,7 @@
 /- Attempting to "live-formalise", from the PhD students reading group meeting on June 24 2018, starting at the beginning of homological algebra. -/
 
 import category_theory.category
-import category_theory.universal.instances
+import category_theory.universal.zero
 
 universes u₁ v₁ u₂ v₂
 
@@ -21,8 +21,8 @@ class Ab_category (C: Type u₁) extends category.{u₁ v₁} C := --- we really
 -- variables (C : Type u₁) [𝒞 : Ab_category.{u₁ v₁} C] (D : Type u₂) [𝒟 : Ab_category.{u₂ v₂} D]
 
 -- def additive_functor extends Functor C D := sorry
-
-class additive_category (C : Type u₁) extends (Ab_category.{u₁ v₁} C), (has_ZeroObject.{u₁ v₁} C), (has_FiniteProducts.{u₁ v₁} C)
+-- TODO should be has_finite_products, but that doesn't exist yet
+class additive_category (C : Type u₁) extends (Ab_category.{u₁ v₁} C), (has_zero_object.{u₁ v₁} C), (has_products.{u₁ v₁} C)
 
 /- Examples -/
 /- Field is not additve, it doesn't have a zero object, or all products. -/

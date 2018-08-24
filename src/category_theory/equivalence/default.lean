@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
-import ..embedding
+import category_theory.embedding
 
 namespace category_theory
 
