@@ -5,11 +5,5 @@ lean_version = "nightly-2018-06-21"
 path = "src"
 
 [dependencies]
-<<<<<<< HEAD
-mathlib = {git = "git@github.com:leanprover-community/mathlib.git", rev = "313fb7d943b5c37d2d4b33dc7c67ddc88723e84a"}
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "b98a121ab696d57928ecf6f2f03773bc1ea9943e"} 
-lean-category-theory-pr = {git = "https://github.com/semorrison/lean-category-theory-pr", rev = "8eede03beaca5691e1694244e691d379f9f4a2c2"}
-=======
 mathlib = {git = "git@github.com:leanprover-community/mathlib.git", rev = "9a2afdb5eebe3427021853438f38c07a71acfaf8"}
 lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "f3ee57e3ec8f72e8ebfd8ff88f909668482ed22e"}
->>>>>>> limits
