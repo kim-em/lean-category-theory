@@ -16,7 +16,8 @@ local attribute [back] category.id -- This says that whenever there is a goal of
 
 -- Is there any point defining these separately (rather than as the functor category from the walking arrow)?
 
-variables (C : Type u₁) [category.{u₁ v₁} C]
+variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
+include 𝒞
 
 def arrow := Σ (p : C × C), p.1 ⟶ p.2
 
@@ -36,7 +37,7 @@ begin
   tidy,
 end
 
-instance : large_category (arrow C):=
+instance : category (arrow C):=
 { hom  := arrow_hom,
   id   := by tidy,
   comp := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ }
@@ -51,10 +52,11 @@ open category_theory.arrows
 
 variables {C : Type u₁} [category.{u₁ v₁} C] {D : Type u₂} [category.{u₂ v₂} D]
 
-def map_arrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
-{ obj := λ F,     { obj := λ X, ⟨ (F X.1.1, F X.1.2), F.map X.2 ⟩,
-                    map' := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
-  map' := λ F G τ, { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }
+-- TODO loops?
+-- def map_arrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
+-- { obj := λ F,     { obj := λ X, ⟨ (F X.1.1, F X.1.2), F.map X.2 ⟩,
+--                     map' := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
+--   map' := λ F G τ, { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }
 
 end category_theory.functor
 
