@@ -127,10 +127,22 @@ def functoriality (F : J ↝ C) (G : C ↝ D) : (cocone F) ↝ (cocone (F ⋙ G)
 end
 end cocones
 
-def limit.hom [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) (c : cone F) : cone_morphism c (limit.cone F) := 
+section
+variables [has_limits.{u v} C]
+variables (F)
+
+def limit.cone_morphism (c : cone F) : cone_morphism c (limit.cone F) := 
 { hom := (limit.universal_property F).lift c }
 
-@[simp] lemma limit.hom_π [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) (c : cone F) (j : J) : (limit.hom F c).hom ≫ (limit.π F j) = c.π j := sorry
+@[simp] lemma limit.cone_morphism_hom (c : cone F) : (limit.cone_morphism F c).hom = (limit.universal_property F).lift c := rfl
+@[simp] lemma limit.cone_morphism_π (c : cone F) (j : J) : (limit.cone_morphism F c).hom ≫ (limit.π F j) = c.π j := sorry
+
+def limit.hom
+  (X : C) (π : Π j : J, X ⟶ F j) 
+  (w : Π (j j' : J) (f : j ⟶ j'), π j ≫ F.map f = π j') : 
+  X ⟶ (limit F) :=
+(limit.cone_morphism F { X := X, π := π, w := w }).hom
+end
 
 end category_theory.universal
 

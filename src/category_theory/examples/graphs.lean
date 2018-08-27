@@ -28,6 +28,7 @@ begin
   induction p,
   induction q,
   tidy,
+  tactic.result -- Heisenbug?
 end
 
 instance CategoryOfGraphs : large_category Graph := {

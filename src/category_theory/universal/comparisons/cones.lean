@@ -13,14 +13,16 @@ open category_theory.comma
 namespace category_theory.universal
 
 universes u v u₁ v₁ u₂ v₂ 
+
 variables {J : Type v} [small_category J]
 variables {C : Type u} [𝒞 : category.{u v} C]
+variable {F : J ↝ C}
+
+section
 include 𝒞 
 
 @[simp] lemma comma.Cone.commutativity (F : J ↝ C) (X : C) (cone : ((DiagonalFunctor J C) X) ⟶ ((ObjectAsFunctor.{(max u v) v} F).obj punit.star)) {j k : J} (f : j ⟶ k) : cone j ≫ (F.map f) = cone k := 
 by obviously
-
-variable {F : J ↝ C}
 
 def comma_Cone_to_Cone (c : (comma.Cone F)) : cone F := 
 { X := c.1.1,
@@ -28,18 +30,8 @@ def comma_Cone_to_Cone (c : (comma.Cone F)) : cone F :=
 
 @[simp] lemma comma_Cone_to_Cone_cone_maps  (c : (comma.Cone F)) (j : J) : (comma_Cone_to_Cone c).π j = (c.2) j := rfl
 
-section -- PROJECT improve automation here
 def comma_ConeMorphism_to_ConeMorphism {X Y : (comma.Cone F)} (f : comma.comma_morphism X Y) : (comma_Cone_to_Cone X) ⟶ (comma_Cone_to_Cone Y) := 
-{ hom := f.left,
-  w   := λ j : J, begin                    
-                    -- let q := congr_arg nat_trans.app f.condition_lemma,
-                    -- let q' := congr_fun q j,
-                    -- We need to refold the coercions.!
-                    -- cases f,
-                    -- obviously,
-                    sorry -- FIXME
-                  end }
-end
+{ hom := f.left }
 
 def Cone_to_comma_Cone (c : cone F) : comma.Cone F := 
 ⟨ (c.X, by obviously), { app := λ j, c.π j } ⟩
@@ -54,10 +46,17 @@ def comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (cone F) :=
 
 def Cones_to_comma_Cones (F : J ↝ C) : (cone F) ↝ (comma.Cone F) := 
 { obj := Cone_to_comma_Cone,
-  map' := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }
+  map' := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }.
+
+end /- end `include 𝒞` -/
 
 local attribute [back] category.id
-local attribute [tidy] dsimp_all' -- TODO get rid of this
+
+private meta def dsimp' := `[dsimp at * {unfold_reducible := tt, md := semireducible}]
+local attribute [tidy] dsimp'
+
+include 𝒞 
+
 def Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (cone F) := 
 { functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F }

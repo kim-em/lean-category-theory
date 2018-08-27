@@ -24,16 +24,7 @@ local attribute [extensionality] is_terminal.ext
 def limits_are_limit_cones {t : cone F} : equiv (is_limit t) (is_terminal.{(max u v) v} t) :=
 { to_fun    := limit_cone_of_limit,
   inv_fun   := limit_of_limit_cone,
-  left_inv  := begin
-                 obviously, 
-                 intros,
-                 cases x,
-                 tidy, 
-               end,
-  right_inv := begin 
-                 tidy, 
-                 unfold limit_cone_of_limit, 
-                 apply is_terminal.ext, -- why doesn't backwards_reasoning do this?
-               end }
+  left_inv  := by obviously,
+  right_inv := by obviously }
 
 end category_theory.universal

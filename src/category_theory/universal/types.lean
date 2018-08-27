@@ -11,7 +11,8 @@ instance : has_binary_products.{u+1 u} (Type u) :=
 { prod := λ Y Z, { X := Y × Z, π₁ := prod.fst, π₂ := prod.snd } }
 
 instance : has_products.{u+1 u} (Type u) := 
-{ prod := λ β f, { X := Π b, f b, π := λ b x, x b } }
+{ prod := λ β f, { X := Π b, f b, π := λ b x, x b } }.
+
 
 instance : has_equalizers.{u+1 u} (Type u) := 
 { equalizer := λ Y Z f g, { X := { y : Y // f y = g y }, ι := subtype.val } }

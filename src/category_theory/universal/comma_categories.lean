@@ -32,7 +32,7 @@ def ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{
 { obj := λ _, X,
   map' := λ _ _ _, 𝟙 X }
 
-@[simp] lemma ObjectAsFunctor_map {C : Type u₃} [category.{u₃ v₃} C] (X : C) : @category_theory.functor.map _ _ _ _ (ObjectAsFunctor.{u₃ v₃} X) punit.star punit.star punit.star = 𝟙 X := rfl
+@[simp] lemma ObjectAsFunctor_map {C : Type u₃} [category.{u₃ v₃} C] (X : C) (P Q : punit) (h : @category.hom.{u₃ v₃} punit _ P Q) : @category_theory.functor.map _ _ _ _ (ObjectAsFunctor.{u₃ v₃} X) P Q h = 𝟙 X := rfl
 
 section
 local attribute [ematch] subtype.property
@@ -91,8 +91,20 @@ variable {C : Type u₁}
 variable [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
-def Cone   (F : J ↝ C) := (comma (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C) (ObjectAsFunctor F))
-def Cocone (F : J ↝ C) := (comma (ObjectAsFunctor F)                  (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C))
+def Cone   (F : J ↝ C) := 
+(comma (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C) (ObjectAsFunctor F))
+def Cocone (F : J ↝ C) := 
+(comma (ObjectAsFunctor F) (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C)).
+
+@[ematch] lemma Cone.pointwise_condition_lemma {F : J ↝ C} (X Y : Cone F) (f : comma_morphism X Y) (j : J) : f.left ≫ (Y.snd) j = (X.snd) j := 
+begin
+  have p := f.condition_lemma,
+  have p' := congr_arg nat_trans.app p,
+  have p'' := congr_fun p' j,
+  simp at p'',
+  rw nat_trans.refold_coe at p'',
+  obviously
+end
 
 @[simp] lemma Cone_comma_unit   (F : J ↝ C) (X : Cone F)   : X.1.2 = punit.star := by obviously 
 @[simp] lemma Cocone_comma_unit (F : J ↝ C) (X : Cocone F) : X.1.1 = punit.star := by obviously 

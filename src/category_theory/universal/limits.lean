@@ -363,44 +363,75 @@ def terminal_object [has_terminal_object.{u v} C] : C := has_terminal_object.ter
 
 variable {C}
 
-def terminal_object.hom [has_terminal_object.{u v} C] (X : C) : (X ⟶ terminal_object.{u v} C) := sorry
-def terminal_object.universal_property [has_terminal_object.{u v} C] : is_terminal.{u v} (terminal_object.{u v} C) := has_terminal_object.is_terminal.{u v} C
+def terminal_object.universal_property [has_terminal_object.{u v} C] : is_terminal.{u v} (terminal_object.{u v} C) := 
+has_terminal_object.is_terminal.{u v} C
+def terminal_object.hom [has_terminal_object.{u v} C] (X : C) : (X ⟶ terminal_object.{u v} C) := 
+terminal_object.universal_property.lift.{u v} X
 
-def prod.span [has_binary_products.{u v} C] (Y Z : C) := has_binary_products.prod.{u v} Y Z
-def prod [has_binary_products.{u v} C] (Y Z : C) : C := (prod.span Y Z).X
-def prod.π₁ [has_binary_products.{u v} C] (Y Z : C) : prod Y Z ⟶ Y := (prod.span Y Z).π₁
-def prod.π₂ [has_binary_products.{u v} C] (Y Z : C) : prod Y Z ⟶ Z := (prod.span Y Z).π₂
-def prod.universal_property [has_binary_products.{u v} C] (Y Z : C) : is_binary_product (prod.span Y Z) := has_binary_products.is_binary_product.{u v} C Y Z
+section
+variables [has_binary_products.{u v} C] 
 
-@[back] def prod.characterisation [has_binary_products.{u v} C] (Y Z : C) (X : C) 
+def prod.span (Y Z : C) := has_binary_products.prod.{u v} Y Z
+def prod (Y Z : C) : C := (prod.span Y Z).X
+def prod.π₁ (Y Z : C) : prod Y Z ⟶ Y := (prod.span Y Z).π₁
+def prod.π₂ (Y Z : C) : prod Y Z ⟶ Z := (prod.span Y Z).π₂
+def prod.universal_property (Y Z : C) : is_binary_product (prod.span Y Z) :=
+has_binary_products.is_binary_product.{u v} C Y Z
+
+-- TODO remove duplication; this is done above, isn't it?
+@[back] def prod.characterisation (Y Z : C) (X : C) 
     (f g : X ⟶ prod Y Z) 
     (w₁ : f ≫ prod.π₁ Y Z = g ≫ prod.π₁ Y Z) 
     (w₂ : f ≫ prod.π₂ Y Z = g ≫ prod.π₂ Y Z) : f = g := 
-  sorry
+begin
+  have p_f := (prod.universal_property.{u v} Y Z).uniq { X := X, π₁ := f ≫ prod.π₁ Y Z, π₂ := f ≫ prod.π₂ Y Z } f (by obviously) (by obviously),
+  have p_g := (prod.universal_property.{u v} Y Z).uniq { X := X, π₁ := f ≫ prod.π₁ Y Z, π₂ := f ≫ prod.π₂ Y Z } g (by obviously) (by obviously),
+  obviously,
+end
+end
 
-def pi.fan [has_products.{u v} C] {β : Type v} (f : β → C) := has_products.prod.{u v} f
-def pi [has_products.{u v} C] {β : Type v} (f : β → C) : C := (pi.fan f).X
-def pi.π [has_products.{u v} C] {β : Type v} (f : β → C) (b : β) : pi f ⟶ f b := (pi.fan f).π b
-def pi.universal_property [has_products.{u v} C] {β : Type v} (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
+section
+variables [has_products.{u v} C] {β : Type v} 
+
+def pi.fan (f : β → C) := has_products.prod.{u v} f
+def pi (f : β → C) : C := (pi.fan f).X
+def pi.π (f : β → C) (b : β) : pi f ⟶ f b := (pi.fan f).π b
+def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
+
+end
 
 def equalizer' [has_equalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z) := has_equalizers.equalizer.{u v} f g
 
-def pullback.square [has_pullbacks.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) := has_pullbacks.pullback.{u v} r₁ r₂
-def pullback [has_pullbacks.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) := (pullback.square r₁ r₂).X
-def pullback.π₁ [has_pullbacks.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) : pullback r₁ r₂ ⟶ Y₁ := (pullback.square r₁ r₂).π₁
-def pullback.π₂ [has_pullbacks.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) : pullback r₁ r₂ ⟶ Y₂ := (pullback.square r₁ r₂).π₂
+section
+variables [has_pullbacks.{u v} C] {Y₁ Y₂ Z : C}
 
-def limit.cone [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) : cone F := has_limits.limit.{u v} F
-def limit [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) := (limit.cone F).X
-def limit.π [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) (j : J) : limit F ⟶ F j := (limit.cone F).π j
-def limit.universal_property [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) : is_limit (limit.cone F) := has_limits.is_limit.{u v} C F
+def pullback.square (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) := has_pullbacks.pullback.{u v} r₁ r₂
+def pullback (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) := (pullback.square r₁ r₂).X
+def pullback.π₁ (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) : pullback r₁ r₂ ⟶ Y₁ := (pullback.square r₁ r₂).π₁
+def pullback.π₂ (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) : pullback r₁ r₂ ⟶ Y₂ := (pullback.square r₁ r₂).π₂
+end
+
+section
+variables [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] 
+include 𝒥
+
+def limit.cone (F : J ↝ C) : cone F := has_limits.limit.{u v} F
+def limit (F : J ↝ C) := (limit.cone F).X
+def limit.π (F : J ↝ C) (j : J) : limit F ⟶ F j := (limit.cone F).π j
+def limit.universal_property (F : J ↝ C) : is_limit (limit.cone F) := 
+has_limits.is_limit.{u v} C F
 -- limit.cone is in cones.lean
 
-
-@[back] def limit.hom_characterisation [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] (F : J ↝ C) (c : cone F)
+@[back] def limit.hom_characterisation (F : J ↝ C) (c : cone F)
   (f g : c.X ⟶ limit F)
   (w_f : ∀ j, f ≫ limit.π F j = c.π j)
-  (w_g : ∀ j, g ≫ limit.π F j = c.π j) : f = g := sorry
+  (w_g : ∀ j, g ≫ limit.π F j = c.π j) : f = g :=
+begin
+  have p_f := (limit.universal_property.{u v} F).uniq c f (by obviously),
+  have p_g := (limit.universal_property.{u v} F).uniq c g (by obviously),
+  obviously,
+end
+end
 
 end
 

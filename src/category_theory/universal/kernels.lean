@@ -58,7 +58,7 @@ def equalizer_of_kernel {f : Y ⟶ Z} (k : kernel f) : equalizer f (zero_morphis
 }
 
 lemma kernel.ext (f : Y ⟶ Z) (k k' : kernel f) (h_X : k.X = k'.X) (h_ι : k.ι = (eq_to_iso h_X).hom ≫ k'.ι) : k = k' :=
-begin cases k, cases k', obviously, cases k_h, cases k'_h, obviously, end
+begin cases k, cases k', obviously end
 
 local attribute [extensionality] kernel.ext
 
