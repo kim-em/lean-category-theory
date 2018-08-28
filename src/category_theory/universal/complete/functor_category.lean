@@ -37,35 +37,23 @@ begin
   simp,
 end
 
-def limit_cone_in_functor_category [has_limits.{u v} D] (F : J ↝ (C ↝ D)) : cone F := 
-{ X := ((switched F) ⋙ functorial_limit),
-  π := λ j, { app := λ X : C, (limit.cone (switched F X)).π j },
-  w := begin intros j j' f, ext1, dsimp at *, rw introduce_switch, obviously, end }.
+-- def limit_cone_in_functor_category [has_limits.{u v} D] (F : J ↝ (C ↝ D)) : cone F := 
+-- { X := ((switched F) ⋙ functorial_limit),
+--   π := λ j, { app := λ X : C, (limit.cone (switched F X)).π j },
+--   w := begin intros j j' f, ext1, dsimp at *, rw introduce_switch, obviously, end }.
 
-instance [has_limits.{u v} D] : has_limits.{(max u v) v} (C ↝ D) := 
-{ limit := λ J _ F, begin resetI, exact limit_cone_in_functor_category F end,
-  is_limit := begin 
-                intros,
-                apply is_limit.of_comparison,
-                intros,
-                dunfold limit_cone_in_functor_category,
-                dunfold limit_comparison,
-                dsimp,
-                obviously,
-                    -- obviously,
-                    -- tactic.rotate_left 2,
-                    -- dunfold limit_cone_in_functor_category, dsimp,
-                    -- dunfold functorial_limit, dsimp,
-                    -- apply limit.hom,
-                    -- tactic.rotate_left 1,
-                    -- resetI,
-                    -- intro j,
-                    -- exact (s.π j) X,
-                    -- obviously,
-                    -- dunfold limit.hom,
-                    -- dunfold limit_cone_in_functor_category,
-                    -- dsimp,
-                    end
-}
+-- instance [has_limits.{u v} D] : has_limits.{(max u v) v} (C ↝ D) := 
+-- { limit := λ J _ F, begin resetI, exact limit_cone_in_functor_category F end,
+--   is_limit := begin 
+--                 intros,
+--                 apply is_limit.of_comparison,
+--                 intros,
+--                 dunfold limit_cone_in_functor_category,
+--                 dunfold limit_comparison,
+--                 dsimp,
+--                 obviously,
+--                 sorry,
+--               end
+-- }
 
 end category_theory.universal

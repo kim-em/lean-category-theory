@@ -12,14 +12,15 @@ universes u v
 
 variables {C : Type u} [category.{u v} C] {J : Type v} [small_category J]
 
-def functorial_limit [has_limits.{u v} C] : (J ↝ C) ↝ C := 
-{ obj := λ F, limit F,
-  map' := λ F G τ, (limit.hom G { X := _,
-                                  π := (λ j, ((limit.cone F).π j) ≫ (τ j)) }).hom }.
+-- TODO switch from using `limit.cone_morphism` to `limit.hom`
+-- def functorial_limit [has_limits.{u v} C] : (J ↝ C) ↝ C := 
+-- { obj := λ F, limit F,
+--   map' := λ F G τ, (limit.cone_morphism G
+--                      { X := _, π := (λ j, ((limit.cone F).π j) ≫ (τ j)) }).hom }.
 
-@[simp] lemma functorial_limit_map [has_limits.{u v} C] {F G : J ↝ C} (τ : F ⟹ G) : 
-  functorial_limit.map τ = (limit.hom G { X := _, π := (λ j, ((limit.cone F).π j) ≫ (τ j)) }).hom :=
-rfl
+-- @[simp] lemma functorial_limit_map [has_limits.{u v} C] {F G : J ↝ C} (τ : F ⟹ G) : 
+--   functorial_limit.map τ = (limit.hom G { X := _, π := (λ j, ((limit.cone F).π j) ≫ (τ j)) }).hom :=
+-- rfl
 
 -- def functorial_colimit [has_colimits C] : (J ↝ C) ↝ C := 
 -- { obj := λ F, colimit F,

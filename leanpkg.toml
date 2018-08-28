@@ -6,4 +6,4 @@ path = "src"
 
 [dependencies]
 mathlib = {git = "git@github.com:leanprover-community/mathlib.git", rev = "ce46baf418d9c379f77d10af532a3f1a5a264ed5"}
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "8883fa59b78d0618390a907a0fdae89b4c6ac9c5"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "f82c45e5631e4532a7626282ab25bc5a54f16065"}

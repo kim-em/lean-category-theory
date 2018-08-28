@@ -33,33 +33,28 @@ instance : large_category Top :=
   comp := λ _ _ _ f g, ⟨ g.val ∘ f.val, continuous.comp f.property g.property ⟩ }
 
 structure OpenSet {α : Type u₁} (X : topological_space α) : Type (u₁+1) := 
- (underlying_set : set α)
- (is_open : X.is_open underlying_set)
+(underlying_set : set α)
+(is_open : X.is_open underlying_set)
 
 attribute [back] OpenSet.is_open
 local attribute [back] topological_space.is_open_inter
 
-instance OpenSet.has_inter {α : Type u₁} {X : topological_space α} : has_inter (OpenSet X) := {
-  inter := λ U V, ⟨ U.underlying_set ∩ V.underlying_set, by obviously ⟩ 
-}
-instance OpenSet.has_subset {α : Type u₁} {X : topological_space α} : has_subset (OpenSet X) := {
-  subset := λ U V, U.underlying_set ⊆ V.underlying_set
-}
-instance OpenSet.has_mem {α : Type u₁} {X : topological_space α} : has_mem α (OpenSet X) := {
-  mem := λ a V, a ∈ V.underlying_set
-}
+instance OpenSet.has_inter {α : Type u₁} {X : topological_space α} : has_inter (OpenSet X) := 
+{ inter := λ U V, ⟨ U.underlying_set ∩ V.underlying_set, by obviously ⟩ }
+
+instance OpenSet.has_subset {α : Type u₁} {X : topological_space α} : has_subset (OpenSet X) := 
+{ subset := λ U V, U.underlying_set ⊆ V.underlying_set }
+
+instance OpenSet.has_mem {α : Type u₁} {X : topological_space α} : has_mem α (OpenSet X) := 
+{ mem := λ a V, a ∈ V.underlying_set }
 
 local attribute [back] set.subset.refl
 local attribute [back] topological_space.is_open_inter
 
--- FIXME
 instance category_of_open_sets {α : Type u₁} (X : topological_space α) : large_category (OpenSet X) :=
 { hom  := λ U V, ulift (plift (U ⊆ V)),
-  id   := by obviously,
-  comp := λ _ _ _ f g, begin sorry, /- tidy, apply set.subset.trans f g -/ end,
-  id_comp := sorry,
-  comp_id := sorry,
-  assoc := sorry }
+  id   := by tidy,
+  comp := by tidy }
 
 def Neighbourhoods {α} [X : topological_space α] (x : α) : large_category { U : OpenSet X | x ∈ U } := by apply_instance
 

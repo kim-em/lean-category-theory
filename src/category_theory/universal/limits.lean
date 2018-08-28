@@ -86,7 +86,7 @@ attribute [ematch, back'] is_terminal.uniq_lemma
 @[extensionality] lemma is_terminal.ext {X : C} (P Q : is_terminal.{u v} X) : P = Q := 
 begin cases P, cases Q, obviously, end
 
-lemma homs_to_terminal_eq (X' : C) (X : C) (B : is_terminal.{u v} X) (f g : X' ⟶ X) : f = g :=
+lemma homs_to_terminal_ext (X' : C) (X : C) (B : is_terminal.{u v} X) (f g : X' ⟶ X) : f = g :=
 begin
   rw B.uniq X' f,
   rw B.uniq X' g,
@@ -117,7 +117,8 @@ begin
   apply is_binary_product.ext, -- obviously will do this after https://github.com/leanprover/mathlib/pull/269
 end
 
-lemma is_binary_product.uniq' {Y Z : C} {t : span Y Z} (h : is_binary_product t) {X' : C} (m : X' ⟶ t.X) : m = h.lift { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } :=
+lemma is_binary_product.uniq' {Y Z : C} {t : span Y Z} (h : is_binary_product t) {X' : C} (m : X' ⟶ t.X) : 
+  m = h.lift { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } :=
 h.uniq { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } m (by obviously) (by obviously)
 
 -- TODO provide alternative constructor using uniq' instead of uniq.
@@ -135,7 +136,8 @@ def is_binary_product.of_lift_univ {Y Z : C} {t : span Y Z}
   fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
   uniq := begin tidy, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
-lemma homs_to_binary_product_eq {Y Z : C} (t : span.{u v} Y Z) (B : is_binary_product t) {X : C} (f g : X ⟶ t.X) (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
+lemma homs_to_binary_product_ext {Y Z : C} (t : span.{u v} Y Z) (B : is_binary_product t) {X : C} 
+  {f g : X ⟶ t.X} (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
 begin
   rw B.uniq' f,
   rw B.uniq' g,
@@ -186,7 +188,7 @@ def is_product.of_lift_univ {t : fan f}
   fac  := λ s b, ((univ s (lift s)).mpr (eq.refl (lift s))) b,
   uniq := begin tidy, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
-lemma homs_to_product_eq (B : product.{u v} f) {X : C} (f g : X ⟶ B.X) (w : ∀ b, f ≫ B.t.π b = g ≫ B.t.π b) : f = g :=
+lemma homs_to_product_ext (B : product.{u v} f) {X : C} (f g : X ⟶ B.X) (w : ∀ b, f ≫ B.t.π b = g ≫ B.t.π b) : f = g :=
 begin
   rw B.h.uniq' f,
   rw B.h.uniq' g,
@@ -235,7 +237,7 @@ def is_equalizer.of_lift_univ {f g : Y ⟶ Z} {t : fork f g}
   fac := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))),
   uniq := begin tidy, apply univ_s_m.mp, obviously, end }
 
-lemma homs_to_equalizer_eq {Y Z : C} {f g : Y ⟶ Z} (B : equalizer.{u v} f g) {X : C} (h k : X ⟶ B.X) (w : h ≫ B.t.ι = k ≫ B.t.ι) : h = k :=
+lemma homs_to_equalizer_ext {Y Z : C} {f g : Y ⟶ Z} (B : equalizer.{u v} f g) {X : C} (h k : X ⟶ B.X) (w : h ≫ B.t.ι = k ≫ B.t.ι) : h = k :=
 begin
   let s : fork f g := ⟨ ⟨ X ⟩, h ≫ B.t.ι ⟩,
   have q := B.h.uniq s h,
@@ -277,7 +279,7 @@ def is_pullback.of_lift_univ {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} {t : square
   fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
   uniq := begin tidy, apply univ_s_m.mp, obviously, end }
 
-lemma homs_to_pullback_eq {Y₁ Y₂ Z : C} {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} (t : square r₁ r₂) (B : is_pullback.{u v} t) {X : C} (f g : X ⟶ t.X) (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
+lemma homs_to_pullback_ext {Y₁ Y₂ Z : C} {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} (t : square r₁ r₂) (B : is_pullback.{u v} t) {X : C} (f g : X ⟶ t.X) (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
 begin
   let s : square r₁ r₂ := ⟨ ⟨ X ⟩, f ≫ t.π₁, f ≫ t.π₂ ⟩,
   have q := B.uniq s f,
@@ -317,7 +319,7 @@ def is_limit.of_lift_univ {F : J ↝ C} {t : cone F}
   fac  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j,
   uniq := begin tidy, apply univ_s_m.mp, obviously, end }
 
-lemma homs_to_limit_eq  {F : J ↝ C} (c : cone.{u v} F) (B : is_limit c) {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
+lemma homs_to_limit_ext  {F : J ↝ C} (c : cone.{u v} F) (B : is_limit c) {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
 begin
   let s : cone F := ⟨ ⟨ X ⟩, λ j, f ≫ c.π j, by obviously ⟩,
   have q := B.uniq s f,
@@ -375,18 +377,24 @@ def prod.span (Y Z : C) := has_binary_products.prod.{u v} Y Z
 def prod (Y Z : C) : C := (prod.span Y Z).X
 def prod.π₁ (Y Z : C) : prod Y Z ⟶ Y := (prod.span Y Z).π₁
 def prod.π₂ (Y Z : C) : prod Y Z ⟶ Z := (prod.span Y Z).π₂
-def prod.universal_property (Y Z : C) : is_binary_product (prod.span Y Z) :=
+@[back] def prod.universal_property (Y Z : C) : is_binary_product (prod.span Y Z) :=
 has_binary_products.is_binary_product.{u v} C Y Z
+def prod.pair {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : P ⟶ (prod Q R) :=
+(prod.universal_property Q R).lift ⟨ ⟨ P ⟩, f, g ⟩
+
+def prod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (prod P R) ⟶ (prod Q S) :=
+prod.pair (prod.π₁ P R ≫ f) (prod.π₂ P R ≫ g)
+
+@[simp,ematch] lemma prod.pair_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₁ Q R = f := sorry
+@[simp,ematch] lemma prod.pair_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₂ Q R = g := sorry
 
 -- TODO remove duplication; this is done above, isn't it?
-@[back] def prod.characterisation (Y Z : C) (X : C) 
-    (f g : X ⟶ prod Y Z) 
-    (w₁ : f ≫ prod.π₁ Y Z = g ≫ prod.π₁ Y Z) 
-    (w₂ : f ≫ prod.π₂ Y Z = g ≫ prod.π₂ Y Z) : f = g := 
-begin
-  have p_f := (prod.universal_property.{u v} Y Z).uniq { X := X, π₁ := f ≫ prod.π₁ Y Z, π₂ := f ≫ prod.π₂ Y Z } f (by obviously) (by obviously),
-  have p_g := (prod.universal_property.{u v} Y Z).uniq { X := X, π₁ := f ≫ prod.π₁ Y Z, π₂ := f ≫ prod.π₂ Y Z } g (by obviously) (by obviously),
-  obviously,
+@[extensionality] def prod.characterisation (Y Z : C) (X : C) 
+  (f g : X ⟶ prod Y Z) 
+  (w₁ : f ≫ prod.π₁ Y Z = g ≫ prod.π₁ Y Z) 
+  (w₂ : f ≫ prod.π₂ Y Z = g ≫ prod.π₂ Y Z) : f = g := 
+begin 
+  apply homs_to_binary_product_ext, obviously,
 end
 end
 
@@ -421,6 +429,9 @@ def limit.π (F : J ↝ C) (j : J) : limit F ⟶ F j := (limit.cone F).π j
 def limit.universal_property (F : J ↝ C) : is_limit (limit.cone F) := 
 has_limits.is_limit.{u v} C F
 -- limit.cone is in cones.lean
+
+-- FIXME why the @?
+@[simp] lemma limit.cone_π (F : J ↝ C) (j : J) : (limit.cone F).π j = (@limit.π C _ _ J _ F j) := rfl
 
 @[back] def limit.hom_characterisation (F : J ↝ C) (c : cone F)
   (f g : c.X ⟶ limit F)
