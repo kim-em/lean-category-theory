@@ -17,7 +17,7 @@ structure continuous (F : C ↝ D) :=
 (preserves_limits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (c : cone G) (L : is_limit c), is_limit ((cones.functoriality G F) c))
 
 structure cocontinuous (F : C ↝ D) :=
-(preserves_colimits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (L : colimit G), is_initial.{u+1 u} ((cocones.functoriality G F) L.t))
+(preserves_colimits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (c : cocone G) (L : is_colimit c), is_initial.{u+1 u} ((cocones.functoriality G F) c))
 
 -- instance HomFunctorPreservesLimits (a : A) : preserves_limits ((coyoneda A) a) := {
 --     preserves := λ I D q, sorry

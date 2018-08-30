@@ -19,7 +19,6 @@ structure GroupHomomorphism (G H : Group.{u₁}) : Type u₁ :=
   (map: G.1 → H.1)
   (is_group_hom : is_group_hom map . obviously)
 
-local attribute [class] is_group_hom
 instance (G H : Group.{u₁}) (f : GroupHomomorphism G H) : is_group_hom f.map := f.is_group_hom
 
 @[simp,ematch] lemma GroupHomomorphism.is_group_hom_lemma (G H : Group) (f : GroupHomomorphism G H) (x y : G.1) : f.map(x * y) = f.map(x) * f.map(y) := by rw f.is_group_hom.mul

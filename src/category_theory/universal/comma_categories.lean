@@ -5,11 +5,11 @@
 import category_theory.functor_category
 import category_theory.walking
 import category_theory.discrete_category
-import category_theory.universal.limits
-import category_theory.universal.colimits
+
+-- FIXME why do we need this here?
+@[obviously] meta def obviously_5 := tactic.tidy { tactics := extended_tidy_tactics }
 
 open category_theory
-open category_theory.universal
 open category_theory.walking
 
 namespace category_theory.comma
@@ -45,10 +45,10 @@ def comma (S : A ↝ C) (T : B ↝ C) : Type (max u₁ u₂ v₃) := Σ p : A ×
 structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (max v₁ v₂):=
 (left : p.1.1 ⟶ q.1.1)
 (right : p.1.2 ⟶ q.1.2)
-(condition : (S.map left) ≫ q.2 = p.2 ≫ (T.map right) . obviously)
+(condition' : (S.map left) ≫ q.2 = p.2 ≫ (T.map right) . obviously)
 
-restate_axiom comma_morphism.condition
-attribute [ematch] comma_morphism.condition_lemma
+restate_axiom comma_morphism.condition'
+attribute [ematch] comma_morphism.condition
 
 @[extensionality] lemma comma_morphism_equal
   {S : A ↝ C} {T : B ↝ C} {p q : comma S T} (f g : comma_morphism p q)
@@ -76,6 +76,7 @@ def CommaCategory_right_projection (S : A ↝ C) (T : B ↝ C) : (comma S T) ↝
 def CommaCategory_projection_transformation (S : A ↝ C) (T : B ↝ C) : ((CommaCategory_left_projection S T) ⋙ S) ⟹ ((CommaCategory_right_projection S T) ⋙ T) := 
 { app := λ X, X.2 }
 
+-- TODO show these agree with the explicitly defined `over` and `under` categories.
 -- Notice that if C is large, these are large, and if C is small, these are small.
 def SliceCategory   (X : C) : category.{(max u₃ v₃) v₃} (comma (functor.id C) (ObjectAsFunctor X)) := by apply_instance
 def CosliceCategory (X : C) : category.{(max u₃ v₃) v₃} (comma (ObjectAsFunctor X) (functor.id C)) := by apply_instance
@@ -96,14 +97,15 @@ def Cone   (F : J ↝ C) :=
 def Cocone (F : J ↝ C) := 
 (comma (ObjectAsFunctor F) (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C)).
 
-@[ematch] lemma Cone.pointwise_condition_lemma {F : J ↝ C} (X Y : Cone F) (f : comma_morphism X Y) (j : J) : f.left ≫ (Y.snd) j = (X.snd) j := 
+@[ematch] lemma Cone.pointwise_condition {F : J ↝ C} (X Y : Cone F) (f : comma_morphism X Y) (j : J) : f.left ≫ (Y.snd) j = (X.snd) j := 
 begin
-  have p := f.condition_lemma,
+  have p := f.condition,
   have p' := congr_arg nat_trans.app p,
   have p'' := congr_fun p' j,
   simp at p'',
-  rw nat_trans.refold_coe at p'',
-  obviously
+  sorry
+  -- rw nat_trans.refold_coe at p'',
+  -- obviously
 end
 
 @[simp] lemma Cone_comma_unit   (F : J ↝ C) (X : Cone F)   : X.1.2 = punit.star := by obviously 

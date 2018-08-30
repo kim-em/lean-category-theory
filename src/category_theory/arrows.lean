@@ -25,7 +25,7 @@ variable {C}
 
 structure arrow_hom (X Y : arrow C) :=
 (morphism : (X.1.1 ⟶ Y.1.1) × (X.1.2 ⟶ Y.1.2))
-(commutativity : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously')
+(commutativity : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously)
 
 restate_axiom arrow_hom.commutativity
 attribute [ematch] arrow_hom.commutativity_lemma
@@ -39,7 +39,7 @@ end
 
 instance : category (arrow C):=
 { hom  := arrow_hom,
-  id   := by tidy,
+  id   := by obviously,
   comp := λ X Y Z f g, ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ }
 
 @[simp] lemma arrow_comp {X Y Z : arrow C} (f : X ⟶ Y) (g : Y ⟶ Z) : f ≫ g = ⟨ (f.morphism.1 ≫ g.morphism.1, f.morphism.2 ≫ g.morphism.2) ⟩ := rfl

@@ -5,12 +5,16 @@
 import category_theory.products.bifunctors
 import category_theory.equivalence
 
+-- FIXME why do we need this here?
+@[obviously] meta def obviously_2 := tactic.tidy { tactics := extended_tidy_tactics }
+
 namespace category_theory
 
 universes u₁ v₁ u₂ v₂ u₃ v₃ 
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E]
 include 𝒞 𝒟 ℰ
+
 
 def uncurry : (C ↝ (D ↝ E)) ↝ ((C × D) ↝ E) := 
 { obj := λ F, { obj := λ X, (F X.1) X.2,

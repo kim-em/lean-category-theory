@@ -24,6 +24,13 @@ structure cospan {C : Type u} [𝒞 : category.{u v} C] (Y₁ Y₂ : C) extends 
 (ι₂ : Y₂ ⟶ X)
 
 /--
+A `cofan f`:
+`X <--(π b)-- f b`
+-/
+structure cofan {C : Type u} [𝒞 : category.{u v} C] {β : Type v} (f : β → C) extends shape C :=
+(ι : ∀ b, f b ⟶ X)
+
+/--
 A `cofork f g`:
 ```
               f
@@ -124,10 +131,61 @@ def is_binary_coproduct.of_desc_univ {Y Z : C} {t : cospan Y Z}
 { desc := desc,
   fac₁ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left, -- PROJECT automation
   fac₂ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
 
 end binary_coproduct
+
+section coproduct
+variables {β : Type v} {f : β → C} 
+
+structure is_coproduct (t : cofan f) :=
+(desc : ∀ (s : cofan f), t.X ⟶ s.X)
+(fac  : ∀ (s : cofan f), ∀ b, t.ι b ≫ (desc s) = s.ι b . obviously) 
+(uniq : ∀ (s : cofan f) (m : t.X ⟶ s.X) (w : ∀ b, t.ι b ≫ m = s.ι b), m = desc s . obviously)
+
+restate_axiom is_coproduct.fac
+attribute [simp,ematch] is_coproduct.fac_lemma
+restate_axiom is_coproduct.uniq
+attribute [ematch, back'] is_coproduct.uniq_lemma
+
+@[extensionality] lemma is_coproduct.ext {t : cofan f} (P Q : is_coproduct t) : P = Q :=
+begin cases P, cases Q, obviously end
+
+instance is_coproduct_subsingleton {t : cofan f}  : subsingleton (is_coproduct t) := 
+begin 
+  fsplit, intros,
+  apply is_coproduct.ext, -- obviously will do this after https://github.com/leanprover/mathlib/pull/269
+end
+
+lemma is_coproduct.uniq' {t : cofan f} (h : is_coproduct t) {X' : C} (m : t.X ⟶ X') : m = h.desc { X := X', ι := λ b, t.ι b ≫ m } :=
+h.uniq { X := X', ι := λ b, t.ι b ≫ m } m (by obviously)
+
+-- TODO provide alternative constructor using uniq' instead of uniq.
+
+lemma is_coproduct.univ {t : cofan f} (h : is_coproduct t) (s : cofan f) (φ : t.X ⟶ s.X) : (∀ b, t.ι b ≫ φ = s.ι b) ↔ (φ = h.desc s) :=
+begin
+obviously
+end
+
+def is_coproduct.of_desc_univ {t :cofan f}
+  (desc : Π (s : cofan f), t.X ⟶ s.X)
+  (univ : Π (s : cofan f) (φ : t.X ⟶ s.X), (∀ b, t.ι b ≫ φ = s.ι b) ↔ (φ = desc s)) : is_coproduct t :=
+{ desc := desc,
+  fac  := λ s b, ((univ s (desc s)).mpr (eq.refl (desc s))) b,
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+
+lemma homs_to_coproduct_ext {t : cofan f} (B : is_coproduct.{u v} t) {X : C} (f g : t.X ⟶ X) (w : ∀ b, t.ι b ≫ f = t.ι b ≫ g) : f = g :=
+begin
+  rw B.uniq' f,
+  rw B.uniq' g,
+  congr,
+  ext,
+  exact w x,
+end
+
+end coproduct
+
 
 section coequalizer
 variables {Y Z : C}
@@ -165,7 +223,7 @@ def is_coequalizer.of_desc_univ {f g : Z ⟶ Y} {t : cofork f g}
   (univ : Π (s : cofork f g) (φ : t.X ⟶ s.X), (t.π ≫ φ = s.π) ↔ (φ = desc s)) : is_coequalizer t :=
 { desc := desc,
   fac := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))),
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end }
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
 end coequalizer
 
@@ -201,7 +259,7 @@ def is_pushout.of_desc_univ {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquar
 { desc := desc,
   fac₁ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left,
   fac₂ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end }
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
 
 end pushout
@@ -223,9 +281,6 @@ attribute [ematch, back'] is_colimit.uniq_lemma
 @[extensionality] lemma is_colimit.ext {F : J ↝ C} {t : cocone F} (P Q : is_colimit t) : P = Q :=
 begin cases P, cases Q, obviously end
 
-structure colimit (F : J ↝ C) extends t : cocone F :=
-(h : is_colimit t)
-
 lemma is_colimit.univ {F : J ↝ C} {t : cocone F} (h : is_colimit t) (s : cocone F) (φ : t.X ⟶ s.X) : (∀ j, t.ι j ≫ φ = s.ι j) ↔ (φ = h.desc s) :=
 begin
 obviously,
@@ -236,32 +291,61 @@ def is_colimit.of_desc_univ {F : J ↝ C} {t : cocone F}
   (univ : Π (s : cocone F) (φ : t.X ⟶ s.X), (∀ j : J, (t.ι j ≫ φ) = s.ι j) ↔ (φ = desc s)) : is_colimit t :=
 { desc := desc,
   fac  := λ s j, ((univ s (desc s)).mpr (eq.refl (desc s))) j,
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end }
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
 end colimit
 
 variable (C)
 
+class has_initial_object :=
+(initial    : C)
+(is_initial : is_initial.{u v} initial . obviously)
+
 class has_binary_coproducts :=
-(binary_coproduct : Π (Y Z : C), binary_coproduct.{u v} Y Z)
+(coprod    : Π (Y Z : C), cospan Y Z)
+(is_binary_coproduct : Π (Y Z : C), is_binary_coproduct (coprod Y Z) . obviously)
+
+class has_coproducts :=
+(coprod : Π {β : Type v} (f : β → C), cofan.{u v} f)
+(is_coproduct : Π {β : Type v} (f : β → C), is_coproduct (coprod f) . obviously)
 
 class has_coequalizers :=
-(coequalizer : Π {Y Z : C} (f g : Z ⟶ Y), coequalizer f g)
+(coequalizer : Π {Y Z : C} (f g : Y ⟶ Z), cofork f g)
+(is_coequalizer : Π {Y Z : C} (f g : Y ⟶ Z), is_coequalizer (coequalizer f g) . obviously)
 
 class has_pushouts :=
-(pushout : Π {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂), pushout r₁ r₂)
+(pushout : Π {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂), cosquare r₁ r₂)
+(is_pushout : Π {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂), is_pushout (pushout r₁ r₂) . obviously)
+
+class has_colimits :=
+(colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ↝ C), cocone F)
+(is_colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ↝ C), is_colimit (colimit F) . obviously)
+
 
 variable {C}
 
--- TODO how to name these?
-def binary_coproduct' [has_binary_coproducts.{u v} C] (Y Z : C) := has_binary_coproducts.binary_coproduct.{u v} Y Z
-def coequalizer' [has_coequalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z) := has_coequalizers.coequalizer.{u v} f g
-def pushout' [has_pushouts.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂) := has_pushouts.pushout.{u v} r₁ r₂
+section
+variables [has_colimits.{u v} C] {J : Type v} [𝒥 : small_category J] 
+include 𝒥
 
+def colimit.cocone (F : J ↝ C) : cocone F := has_colimits.colimit.{u v} F
+def colimit (F : J ↝ C) := (colimit.cocone F).X
+def colimit.ι (F : J ↝ C) (j : J) : F j ⟶ colimit F := (colimit.cocone F).ι j
+def colimit.universal_property (F : J ↝ C) : is_colimit (colimit.cocone F) := 
+has_colimits.is_colimit.{u v} C F
+
+@[back] def colimit.hom_characterisation (F : J ↝ C) (c : cocone F)
+  (f g : colimit F ⟶ c.X)
+  (w_f : ∀ j, colimit.ι F j ≫ f = c.ι j)
+  (w_g : ∀ j, colimit.ι F j ≫ g = c.ι j) : f = g :=
+begin
+  have p_f := (colimit.universal_property.{u v} F).uniq c f (by obviously),
+  have p_g := (colimit.universal_property.{u v} F).uniq c g (by obviously),
+  obviously,
+end
 end
 
-
-
+end
 
 
 end category_theory.universal

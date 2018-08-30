@@ -20,7 +20,7 @@ restate_axiom full.witness
 attribute [simp,ematch] full.witness_lemma
 set_option pp.universes true
 def preimage (F : C ↝ D) [full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y := full.preimage.{u₁ v₁ u₂ v₂}  f
-@[simp] lemma image_preimage (F : C ↝ D) [full F] {X Y : C} (f : F X ⟶ F Y) : F.map (preimage F f) = f := begin unfold preimage, obviously' end
+@[simp] lemma image_preimage (F : C ↝ D) [full F] {X Y : C} (f : F X ⟶ F Y) : F.map (preimage F f) = f := begin unfold preimage, obviously end
 
 class faithful (F : C ↝ D) :=
   (injectivity : ∀ {X Y : C} {f g : X ⟶ Y} (p : F.map f = F.map g), f = g)
@@ -31,8 +31,8 @@ attribute [forward] faithful.injectivity_lemma
 def preimage_iso {F : C ↝ D} [full F] [faithful F] {X Y : C} (f : (F X) ≅ (F Y)) : X ≅ Y := 
 { hom := preimage F f.hom,
   inv := preimage F f.inv,
-  hom_inv_id := begin apply @faithful.injectivity _ _ _ _ F, tidy, end,
-  inv_hom_id := begin apply @faithful.injectivity _ _ _ _ F, tidy, end, }
+  hom_inv_id' := begin apply @faithful.injectivity _ _ _ _ F, tidy, end,
+  inv_hom_id' := begin apply @faithful.injectivity _ _ _ _ F, tidy, end, }
 
 -- TODO
 -- instance (F : C ↝ D) [Faithful F] : ReflectsIsomorphisms F := sorry

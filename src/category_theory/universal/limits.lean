@@ -134,7 +134,7 @@ def is_binary_product.of_lift_univ {Y Z : C} {t : span Y Z}
 { lift := lift,
   fac₁ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left, -- PROJECT automation
   fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
 lemma homs_to_binary_product_ext {Y Z : C} (t : span.{u v} Y Z) (B : is_binary_product t) {X : C} 
   {f g : X ⟶ t.X} (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
@@ -173,9 +173,6 @@ h.uniq { X := X', π := λ b, m ≫ t.π b } m (by obviously)
 
 -- TODO provide alternative constructor using uniq' instead of uniq.
 
-structure product (f : β → C) extends t : fan f :=
-(h : is_product t)
-
 lemma is_product.univ {t : fan f} (h : is_product t) (s : fan f) (φ : s.X ⟶ t.X) : (∀ b, φ ≫ t.π b = s.π b) ↔ (φ = h.lift s) :=
 begin
 obviously
@@ -186,12 +183,12 @@ def is_product.of_lift_univ {t : fan f}
   (univ : Π (s : fan f) (φ : s.X ⟶ t.X), (∀ b, φ ≫ t.π b = s.π b) ↔ (φ = lift s)) : is_product t :=
 { lift := lift,
   fac  := λ s b, ((univ s (lift s)).mpr (eq.refl (lift s))) b,
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
-lemma homs_to_product_ext (B : product.{u v} f) {X : C} (f g : X ⟶ B.X) (w : ∀ b, f ≫ B.t.π b = g ≫ B.t.π b) : f = g :=
+lemma homs_to_product_ext {t : fan f} (B : is_product.{u v} t) {X : C} (f g : X ⟶ t.X) (w : ∀ b, f ≫ t.π b = g ≫ t.π b) : f = g :=
 begin
-  rw B.h.uniq' f,
-  rw B.h.uniq' g,
+  rw B.uniq' f,
+  rw B.uniq' g,
   congr,
   ext,
   exact w x,
@@ -235,7 +232,7 @@ def is_equalizer.of_lift_univ {f g : Y ⟶ Z} {t : fork f g}
   (univ : Π (s : fork f g) (φ : s.X ⟶ t.X), (φ ≫ t.ι = s.ι) ↔ (φ = lift s)) : is_equalizer t :=
 { lift := lift,
   fac := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))),
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end }
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
 lemma homs_to_equalizer_ext {Y Z : C} {f g : Y ⟶ Z} (B : equalizer.{u v} f g) {X : C} (h k : X ⟶ B.X) (w : h ≫ B.t.ι = k ≫ B.t.ι) : h = k :=
 begin
@@ -277,7 +274,7 @@ def is_pullback.of_lift_univ {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} {t : square
 { lift := lift,
   fac₁ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left,
   fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end }
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
 lemma homs_to_pullback_ext {Y₁ Y₂ Z : C} {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} (t : square r₁ r₂) (B : is_pullback.{u v} t) {X : C} (f g : X ⟶ t.X) (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
 begin
@@ -317,7 +314,7 @@ def is_limit.of_lift_univ {F : J ↝ C} {t : cone F}
   (univ : Π (s : cone F) (φ : s.X ⟶ t.X), (∀ j : J, (φ ≫ t.π j) = s.π j) ↔ (φ = lift s)) : is_limit t :=
 { lift := lift,
   fac  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j,
-  uniq := begin tidy, apply univ_s_m.mp, obviously, end }
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
 lemma homs_to_limit_ext  {F : J ↝ C} (c : cone.{u v} F) (B : is_limit c) {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
 begin
@@ -405,6 +402,27 @@ def pi.fan (f : β → C) := has_products.prod.{u v} f
 def pi (f : β → C) : C := (pi.fan f).X
 def pi.π (f : β → C) (b : β) : pi f ⟶ f b := (pi.fan f).π b
 def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
+
+@[simp] def pi.fan_π (f : β → C) (b : β) : (pi.fan f).π b = @pi.π C _ _ _ f b := rfl
+
+def pi.of_components {f : β → C} {P : C} (p : Π b, P ⟶ f b) : P ⟶ pi f :=
+(pi.universal_property f).lift ⟨ ⟨ P ⟩, p ⟩
+
+@[simp] def pi.of_components_π {f : β → C} {P : C} (p : Π b, P ⟶ f b) (b : β) : pi.of_components p ≫ pi.π f b = p b :=
+begin
+  sorry
+end
+
+def pi.map {α : Type v} {f : α → C} {g : β → C} (h : β → α) (k : Π b, f (h b) ⟶ g b) : (pi f) ⟶ (pi g) :=
+pi.of_components (λ b, pi.π f (h b) ≫ k b) 
+
+@[simp] def pi.of_components_map 
+  {α : Type v} {f : α → C} {g : β → C} {P : C} (p : Π b, P ⟶ f b) (h : β → α) (k : Π b, f (h b) ⟶ g b) :
+  pi.of_components p ≫ pi.map h k = pi.of_components (λ b, p (h b) ≫ k b) :=
+begin
+  dsimp [pi.of_components, pi.map],
+  sorry
+end
 
 end
 

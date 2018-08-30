@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison
 
 import category_theory.functor_category
-import tactic.interactive
 import category_theory.tactics.obviously
 
 namespace category_theory

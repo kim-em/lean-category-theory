@@ -10,55 +10,51 @@ namespace category_theory
 
 universes u₁ u₂ v₁ v₂
 
-variable {C : Type u₁}
-variable [𝒞 : category.{u₁ v₁} C]
-variable {D : Type u₂}
-variable [𝒟 : category.{u₂ v₂} D]
+variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-def NaturalIsomorphism (F G : C ↝ D) := F ≅ G
+def nat_iso (F G : C ↝ D) := F ≅ G
 
-infix ` ⇔ `:10 := NaturalIsomorphism -- type as \<=>
+infix ` ⇔ `:10 := nat_iso -- type as \<=>
 
-namespace NaturalIsomorphism
+namespace nat_iso
 
--- It's a pity we need to separately define this coercion.
--- Ideally the coercion from Isomorphism along .morphism would just apply here.
--- Somehow we want the def above to be more transparent?
-instance coercion_to_NaturalTransformation (F G : C ↝ D) : has_coe (F ⇔ G) (F ⟹ G) :=
-  {coe := λ α, iso.hom α}
+def app {F G : C ↝ D} (α : F ⇔ G) (X : C) : F X ≅ G X :=
+{ hom := α.hom X,
+  inv := α.inv X,
+  hom_inv_id' := begin rw ← functor.category.comp_app, rw iso.hom_inv_id, tidy, end,
+  inv_hom_id' := begin rw ← functor.category.comp_app, rw iso.inv_hom_id, tidy, end }
+
+instance {F G : C ↝ D} : has_coe_to_fun (F ⇔ G) :=
+{ F   := λ α, Π X : C, (F X) ≅ (G X),
+  coe := λ α, α.app }
+
+@[simp,ematch] lemma comp_app {F G H : C ↝ D} (α : F ⇔ G) (β : G ⇔ H) (X : C) : 
+  ((α ≪≫ β) : F ⟹ H) X = α X ≪≫ β X := rfl
+
 
 variables {F G H : C ↝ D}
 
 section 
 variable (α : F ⇔ G)
-@[simp,ematch] lemma hom_inv_id (X : C) : (α.hom X) ≫ (α.inv X) = 𝟙 (F X) := by obviously'
-@[simp,ematch] lemma inv_hom_id (X : C) : (α.inv X) ≫ (α.hom X) = 𝟙 (G X) := by obviously'
-@[simp,ematch] lemma hom_inv_id_assoc {X : C} {Z : D} (f : (F X) ⟶ Z) : (α.hom X) ≫ (α.inv X) ≫ f = f := by obviously'
-@[simp,ematch] lemma inv_hom_id_assoc {X : C} {Z : D} (f : (G X) ⟶ Z) : (α.inv X) ≫ (α.hom X) ≫ f = f := by obviously'
+@[simp,ematch] lemma hom_inv_id (X : C) : ((α X) : F X ⟶ G X) ≫ ((α.symm X) : G X ⟶ F X) = 𝟙 (F X) := by obviously 
+@[simp,ematch] lemma inv_hom_id (X : C) : ((α.symm X) : G X ⟶ F X) ≫ ((α X) : F X ⟶ G X) = 𝟙 (G X) := by obviously
 
-@[ematch] lemma {u1 v1 u2 v2} naturality_1 {X Y : C} (f : X ⟶ Y) : (α.inv X) ≫ (F.map f) ≫ (α.hom Y) = G.map f := by obviously
-@[ematch] lemma {u1 v1 u2 v2} naturality_2 {X Y : C} (f : X ⟶ Y) : (α.hom X) ≫ (G.map f) ≫ (α.inv Y) = F.map f := by obviously
+@[ematch] lemma {u1 v1 u2 v2} naturality_1 {X Y : C} (f : X ⟶ Y) : (α.symm X) ≫ (F.map f) ≫ ((α Y) : F Y ⟶ G Y) = G.map f := by obviously
+@[ematch] lemma {u1 v1 u2 v2} naturality_2 {X Y : C} (f : X ⟶ Y) : ((α X) : F X ⟶ G X) ≫ (G.map f) ≫ (α.symm Y) = F.map f := by obviously
 end
 
 def from_components
   (app : ∀ X : C, (F X) ≅ (G X))
-  (naturality : ∀ {X Y : C} (f : X ⟶ Y), (F.map f) ≫ (app Y).hom = (app X).hom ≫ (G.map f)) : NaturalIsomorphism F G :=
+  (naturality : ∀ {X Y : C} (f : X ⟶ Y), (F.map f) ≫ (app Y).hom = (app X).hom ≫ (G.map f)) : F ⇔ G :=
 { hom  := { app := λ X, (app X).hom, },
   inv  := { app := λ X, (app X).inv,
-            naturality := λ X Y f, begin 
-                                    let p := congr_arg (λ f, (app X).inv ≫ (f ≫ (app Y).inv)) (eq.symm (naturality f)),
-                                    obviously,
-                                   end } }
+            naturality' := λ X Y f, begin 
+                                      let p := congr_arg (λ f, (app X).inv ≫ (f ≫ (app Y).inv)) (eq.symm (naturality f)),
+                                      obviously,
+                                    end } }
 
-def vertical_composition (α : F ⇔ G) (β : G ⇔ H) : F ⇔ H := iso.trans α β
-
--- TODO why this?
-attribute [reducible] NaturalIsomorphism
-
-@[reducible] def components (α : F ⇔ G) (X : C) : (F X) ≅ (G X) := 
-{ hom := α.hom X,
-  inv := α.inv X }
+def vcomp (α : F ⇔ G) (β : G ⇔ H) : F ⇔ H := iso.trans α β
 
 instance hom.app.is_iso (α : F ⇔ G) (X : C) : is_iso (α.hom X) := 
 { inv := α.inv X }
@@ -69,7 +65,7 @@ instance inv.app.is_iso   (α : F ⇔ G) (X : C) : is_iso (α.inv X) :=
 { hom := α.inv,
   inv := α.hom }
 
-end NaturalIsomorphism
+end nat_iso
 
 open nat_trans
 

@@ -18,19 +18,19 @@ variable {F : J ↝ C}
 
 structure cone_morphism (A B : cone F) : Type v :=
 (hom : A.X ⟶ B.X)
-(w : Π j : J, hom ≫ (B.π j) = (A.π j) . obviously)
+(w' : Π j : J, hom ≫ (B.π j) = (A.π j) . obviously)
 
-restate_axiom cone_morphism.w
-attribute [simp,ematch] cone_morphism.w_lemma
+restate_axiom cone_morphism.w'
+attribute [simp,ematch] cone_morphism.w
 
 namespace cone_morphism
 
-@[simp,ematch] def commutativity_lemma_assoc {A B : cone F} (c : cone_morphism A B) (j : J) {Z : C} (z : (F j) ⟶ Z): c.hom ≫ B.π j ≫ z = A.π j ≫ z :=
-begin
-  /- obviously' say: -/
-  rw ← category.assoc,
-  simp,
-end
+-- @[simp,ematch] def commutativity_lemma_assoc {A B : cone F} (c : cone_morphism A B) (j : J) {Z : C} (z : (F j) ⟶ Z): c.hom ≫ B.π j ≫ z = A.π j ≫ z :=
+-- begin
+--   /- obviously' say: -/
+--   rw ← category.assoc,
+--   simp,
+-- end
 
 @[extensionality] lemma ext {A B : cone F} {f g : cone_morphism A B} (w : f.hom = g.hom) : f = g :=
 begin
@@ -45,14 +45,9 @@ end
 end cone_morphism
 
 instance cones (F : J ↝ C) : category.{(max u v) v} (cone F) :=
-{ hom      := λ A B, cone_morphism A B,
-  comp    := λ _ _ _ f g, { hom := f.hom ≫ g.hom,
-                            w := begin /- `obviously'` says: -/ intros, simp end },
-  id      := λ B, { hom := 𝟙 B.X, 
-                    w := begin /- `obviously'` says: -/ intros, simp end },
-  id_comp := begin /- `obviously'` says: -/ intros, ext, dsimp, simp end,
-  comp_id := begin /- `obviously'` says: -/ intros, ext, dsimp, simp end,
-  assoc   := begin /- `obviously'` says: -/ intros, ext, dsimp, simp end }
+{ hom  := λ A B, cone_morphism A B,
+  comp := λ _ _ _ f g, { hom := f.hom ≫ g.hom },
+  id   := λ B, { hom := 𝟙 B.X } }
 
 namespace cones
 @[simp] lemma id.hom   {F : J ↝ C} (c : cone F) : (𝟙 c : cone_morphism c c).hom = 𝟙 (c.X) := rfl
@@ -65,27 +60,25 @@ include 𝒟
 def functoriality (F : J ↝ C) (G : C ↝ D) : (cone F) ↝ (cone (F ⋙ G)) := 
 { obj      := λ A, { X := G A.X,
                      π := λ j, G.map (A.π j), 
-                     w := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp_lemma, cone.w_lemma] end },
+                     w := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp, cone.w] end },
   map'     := λ X Y f, { hom := G.map f.hom,
-                         w := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp_lemma, cone_morphism.w_lemma] end },
-  map_id   := begin /- `obviously'` says: -/ intros, ext, dsimp, simp end,
-  map_comp := begin /- `obviously'` says: -/ intros, ext, dsimp, simp end }
+                         w' := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp, cone_morphism.w] end } }
 end
 end cones
 
 structure cocone_morphism (A B : cocone F) :=
 (hom : A.X ⟶ B.X)
-(w   : Π j : J, (A.ι j) ≫ hom = (B.ι j) . obviously)
+(w'  : Π j : J, (A.ι j) ≫ hom = (B.ι j) . obviously)
 
-restate_axiom cocone_morphism.w
-attribute [simp,ematch] cocone_morphism.w_lemma
+restate_axiom cocone_morphism.w'
+attribute [simp,ematch] cocone_morphism.w
 
 namespace cocone_morphism
-@[simp,ematch] def commutativity_lemma_assoc {A B : cocone F} (c : cocone_morphism A B) (j : J) {Z : C} (z : B.X ⟶ Z): (A.ι j) ≫ c.hom ≫ z = (B.ι j) ≫ z :=
-begin
-  -- `obviously'` says:
-  erw [←category.assoc_lemma, cocone_morphism.w_lemma]
-end
+-- @[simp,ematch] def commutativity_lemma_assoc {A B : cocone F} (c : cocone_morphism A B) (j : J) {Z : C} (z : B.X ⟶ Z): (A.ι j) ≫ c.hom ≫ z = (B.ι j) ≫ z :=
+-- begin
+--   -- `obviously'` says:
+--   erw [←category.assoc, cocone_morphism.w]
+-- end
 
 @[extensionality] lemma ext {A B : cocone F} {f g : cocone_morphism A B} (w : f.hom = g.hom) : f = g :=
 begin 
@@ -99,14 +92,9 @@ end
 end cocone_morphism
 
 instance cocones (F : J ↝ C) : category.{(max u v) v} (cocone F) := 
-{ hom     := λ A B, cocone_morphism A B,
-  comp    := λ _ _ _ f g, { hom := f.hom ≫ g.hom,
-                            w   := begin /- `obviously'` says: -/ intros, simp end },
-  id      := λ B,         { hom := 𝟙 B.X,
-                            w   := begin /- `obviously'` says: -/ intros, simp end },
-  id_comp := begin /- `obviously'` says: -/ intros, ext, dsimp, simp end,
-  comp_id := begin /- `obviously'` says: -/ intros, ext, dsimp, simp end,
-  assoc   := begin /- `obviously'` says: -/ intros, ext, dsimp, simp end }
+{ hom  := λ A B, cocone_morphism A B,
+  comp := λ _ _ _ f g, { hom := f.hom ≫ g.hom },
+  id   := λ B,         { hom := 𝟙 B.X } }
 
 namespace cocones
 @[simp] lemma id.hom   {F : J ↝ C} (c : cocone F) : (𝟙 c : cocone_morphism c c).hom = 𝟙 (c.X) := rfl
@@ -119,11 +107,9 @@ include 𝒟
 def functoriality (F : J ↝ C) (G : C ↝ D) : (cocone F) ↝ (cocone (F ⋙ G)) := 
 { obj      := λ A,     { X    := G A.X,
                          ι     := λ j, G.map (A.ι j),
-                         w   := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp_lemma, cocone.w_lemma] end },
+                         w   := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp, cocone.w] end },
   map'     := λ _ _ f, { hom := G.map f.hom,
-                         w   := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp_lemma, cocone_morphism.w_lemma] end },
-  map_id   := begin /- `obviously'` says -/ intros, ext, dsimp, simp end,
-  map_comp := begin /- `obviously'` says -/ intros, ext, dsimp, simp end }
+                         w'  := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp, cocone_morphism.w] end } }
 end
 end cocones
 

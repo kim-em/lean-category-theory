@@ -14,14 +14,14 @@ local attribute [back] category.id -- This says that whenever there is a goal of
 
 def discrete (α : Type u₁) := α
 
-instance  DiscreteCategory (α : Type u₁) : small_category (discrete α) := 
+instance (α : Type u₁) : small_category (discrete α) := 
 { hom  := λ X Y, ulift (plift (X = Y)),
   id   := by obviously,
   comp := by obviously }
 
-instance EmptyCategory : small_category pempty := (by apply_instance : small_category (discrete pempty))
+instance pempty_category : small_category pempty := (by apply_instance : small_category (discrete pempty))
 
-instance OneCategory  : category.{u₁ v₁} punit :=
+instance punit_category : category.{u₁ v₁} punit :=
 { hom  := λ X Y, punit,
   id   := by obviously,
   comp := by obviously }
@@ -47,7 +47,7 @@ begin
 end
 
 namespace functor
-def fromFunction {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := 
+def of_function {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ↝ C := 
 { obj := F,
   map' := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end }
 end functor

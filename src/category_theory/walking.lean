@@ -24,8 +24,8 @@ section
 open tactic
 @[tidy] private meta def induction_WalkingPair : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingPair) := cases h >> skip | _ := failed end)),
-   skip
+   r ← l.reverse.mmap (λ h, do t ← infer_type h, match t with | `(WalkingPair) := cases h >> skip | _ := failed end),
+   when (r.empty) failed
 end
 
 attribute [tidy] induction_WalkingPair
@@ -39,8 +39,8 @@ attribute [tidy] induction_WalkingPair
 open tactic
 private meta def case_bash : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, cases h >> skip)),
-   skip
+   r ← successes (l.reverse.map (λ h, cases h >> skip)),
+   when (r.empty) failed
 
 local attribute [tidy] case_bash
 
@@ -100,9 +100,9 @@ section
 open tactic
 private meta def induction_WalkingParallelPair : tactic unit :=
 do l ← local_context,
-   at_least_one (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := cases h >> skip | _ := failed end)),
-   skip
-   
+   r ← successes (l.reverse.map (λ h, do t ← infer_type h, match t with | `(WalkingParallelPair) := cases h >> skip | _ := failed end)),
+   when (r.empty) failed
+      
 attribute [tidy] induction_WalkingParallelPair
 end
 

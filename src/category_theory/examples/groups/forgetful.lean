@@ -50,9 +50,9 @@ instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : _r
 instance Groups_ForgetfulFunctor_Representable : representable (ForgetfulFunctor_Groups_to_Types.{u₁}) := 
 { c := ⟨ _root_.ulift ℤ, by apply_instance ⟩,
   Φ := { hom := { app := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
-                        naturality := sorry },
+                        naturality' := sorry },
           inv := { app := λ G f, f.map (ulift.up (1 : ℤ)), },
-          hom_inv_id := sorry,
-          inv_hom_id := sorry, } }
+          hom_inv_id' := sorry,
+          inv_hom_id' := sorry, } }
 
 end category_theory.examples.groups

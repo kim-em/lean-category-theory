@@ -5,6 +5,9 @@
 import category_theory.graphs.category
 import category_theory.universe_lifting
 
+-- FIXME why do we need this here?
+@[obviously] meta def obviously_4 := tactic.tidy { tactics := extended_tidy_tactics }
+
 open category_theory
 open category_theory.graphs
 
@@ -23,12 +26,12 @@ instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
 { hom     := λ x y : C, path x y,
   id      := λ x, path.nil x,
   comp    := λ _ _ _ f g, concatenate_paths f g,
-  comp_id := begin
+  comp_id' := begin
               tidy,
               induction f, -- PROJECT think about how to automate an inductive step. When can you be sure it's a good idea?
               obviously,                      
              end,
-  assoc  := begin
+  assoc'  := begin
               tidy,
               induction f,
               obviously,                    

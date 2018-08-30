@@ -16,12 +16,12 @@ include 𝒞
 
 instance sigma_category (Z : C → Type w₁) : category.{(max u₁ w₁) v₁} (Σ X : C, Z X) := 
 { hom  := λ X Y, X.1 ⟶ Y.1,
-  id   := by tidy,
+  id   := by obviously,
   comp := λ _ _ _ f g, f ≫ g }
 
 instance full_subcategory (Z : C → Prop) : category.{u₁ v₁} {X : C // Z X} := 
 { hom  := λ X Y, X.1 ⟶ Y.1,
-  id   := by tidy,
+  id   := by obviously,
   comp := λ _ _ _ f g, f ≫ g }
 
 def sigma_category_embedding (Z : C → Type u₁) : (Σ X : C, Z X) ↝ C := 
