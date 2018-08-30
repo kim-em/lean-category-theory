@@ -17,9 +17,8 @@ variables {C : Type u} [category.{u v} C] {X Y Z : C}
 structure regular_mono (f : X ⟶ Y) :=
 (Z : C)
 (a b : Y ⟶ Z)
-(e : equalizer a b)
-(i : e.X ≅ X)
-(w : e.ι = i.hom ≫ f)
+(w : f ≫ a = f ≫ b)
+(e : is_equalizer ⟨ ⟨ X ⟩, f, w ⟩)
 
 -- EXERCISE
 -- def SplitMonic_implies_RegularMonic

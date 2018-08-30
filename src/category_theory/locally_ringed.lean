@@ -1,7 +1,5 @@
-import .sheaves
-import ring_theory.ideals
-import category_theory.examples.rings
-import category_theory.universal.limits
+import category_theory.sheaves
+import category_theory.examples.rings.universal
 
 universes v
 
@@ -9,9 +7,6 @@ open category_theory.examples
 open category_theory.universal
 
 variables {α : Type v}
-
-instance : has_products.{v+1 v} Ring := sorry
-instance : has_colimits.{v+1 v} Ring := sorry
 
 structure structure_sheaf (X : topological_space α) extends 𝒪 : sheaf.{v+1 v} X Ring :=
 (locality : ∀ x : α, local_ring (stalk_at.{v+1 v} 𝒪 x).1)

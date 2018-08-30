@@ -219,9 +219,6 @@ lemma is_equalizer.mono {f g : Y ⟶ Z} {t : fork f g} (h : is_equalizer t) : mo
                                     obviously,
                               end }
 
-structure equalizer (f g : Y ⟶ Z) extends t : fork f g := 
-(h : is_equalizer t)
-
 lemma is_equalizer.univ {f g : Y ⟶ Z} {t : fork f g} (h : is_equalizer t) (s : fork f g) (φ : s.X ⟶ t.X) : (φ ≫ t.ι = s.ι) ↔ (φ = h.lift s) :=
 begin
 obviously
@@ -234,11 +231,11 @@ def is_equalizer.of_lift_univ {f g : Y ⟶ Z} {t : fork f g}
   fac := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))),
   uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
-lemma homs_to_equalizer_ext {Y Z : C} {f g : Y ⟶ Z} (B : equalizer.{u v} f g) {X : C} (h k : X ⟶ B.X) (w : h ≫ B.t.ι = k ≫ B.t.ι) : h = k :=
+lemma homs_to_equalizer_ext {Y Z : C} {f g : Y ⟶ Z} (t : fork f g) (B : is_equalizer.{u v} t) {X : C} (h k : X ⟶ t.X) (w : h ≫ t.ι = k ≫ t.ι) : h = k :=
 begin
-  let s : fork f g := ⟨ ⟨ X ⟩, h ≫ B.t.ι ⟩,
-  have q := B.h.uniq s h,
-  have p := B.h.uniq s k,
+  let s : fork f g := ⟨ ⟨ X ⟩, h ≫ t.ι ⟩,
+  have q := B.uniq s h,
+  have p := B.uniq s k,
   rw [q, ←p],
   solve_by_elim, refl
 end
@@ -426,7 +423,16 @@ end
 
 end
 
-def equalizer' [has_equalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z) := has_equalizers.equalizer.{u v} f g
+section
+variables [has_equalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
+
+def equalizer.fork := has_equalizers.equalizer.{u v} f g
+def equalizer := (equalizer.fork f g).X
+def equalizer.ι : (equalizer f g) ⟶ Y := (equalizer.fork f g).ι
+
+def equalizer.lift (P : C) (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := sorry
+
+end
 
 section
 variables [has_pullbacks.{u v} C] {Y₁ Y₂ Z : C}

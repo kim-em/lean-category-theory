@@ -28,9 +28,9 @@ end
 
 section
 local attribute [back] homs_to_equalizer_ext
-def equalizers_iso {Y Z : C} {f g : Y ⟶ Z} (A B : equalizer.{u v} f g) : A.X ≅ B.X :=
-{ hom := B.h.lift A.t,
-  inv := A.h.lift B.t }
+def equalizers_iso {Y Z : C} {f g : Y ⟶ Z} (A B : fork.{u v} f g) (A_w : is_equalizer A) (B_w : is_equalizer B) : A.X ≅ B.X :=
+{ hom := B_w.lift A,
+  inv := A_w.lift B }
 end
 
 section
