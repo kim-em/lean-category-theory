@@ -73,6 +73,8 @@ variables (cover : cover' α) (F : presheaf (open_set α) V)
 def sections : V :=
 pi.{u v} (λ c : cover.I, F.obj (cover.U c))
 
+def select_section (i : cover.I) := pi.π (λ c : cover.I, F.obj (cover.U c)) i
+
 def overlaps : V :=
 pi.{u v} (λ p : cover.I × cover.I, F.obj (cover.U p.1 ∩ cover.U p.2))
 
@@ -135,7 +137,31 @@ definition sheaf.of_types
                         (s : compatible_sections cover presheaf), gluing s) :
   sheaf.{v+1 v} α (Type v) :=
 { presheaf := presheaf,
-  sheaf_condition := sorry }
+  sheaf_condition := λ c,
+  let σ : Π s : fork (left c presheaf) (right c presheaf), s.X → compatible_sections c presheaf :=
+    λ s x, { sections := λ i, select_section c presheaf i (s.ι x),
+             compatibility := sorry } in
+  { lift := λ s x, (sheaf_condition c (σ s x)).«section»,
+    fac  := λ s, funext $ λ x, funext $ λ i, 
+      begin
+        have p := (sheaf_condition c (σ s x)).restrictions i,
+        conv at p { to_rhs, dsimp [σ, select_section] },
+        rw ← p,
+        dsimp [cover_fork, res, union_res],
+        simp,
+      end,
+    uniq := λ s m w, funext $ λ x, 
+      begin 
+        apply (sheaf_condition c (σ s x)).uniqueness, 
+        intro i, dsimp [σ, select_section], 
+        have p := congr_fun w x,
+        dsimp at p,
+        have q := congr_fun p i,
+        dsimp [cover_fork, res, union_res] at q,
+        simp at q,
+        exact q,
+      end
+  } }
 
 variables {α}
 
