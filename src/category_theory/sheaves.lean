@@ -19,21 +19,20 @@ def presheaf := (Cᵒᵖ) ↝ V
 def presheaves : category (presheaf C V) := begin unfold presheaf, apply_instance end
 end
 
-variables {α : Type v} (X : topological_space α)
+variables (α : Type v) [topological_space α]
 
 structure cover' :=
 (I : Type v)
-(U : I → (Open X))
+(U : I → (open_set α))
 
 -- FIXME have \func turn into ⥤?
+variables {α}
 
-variable {X}
+def cover'.union (c : cover' α) : open_set α := sorry
+def cover'.union_subset (c : cover' α) (i : c.I) : c.U i ⟶ c.union := sorry
 
-def cover'.union (c : cover' X) : Open X := sorry
-def cover'.union_subset (c : cover' X) (i : c.I) : c.U i ⟶ c.union := sorry
-
-private definition inter_subset_left {C : cover' X} (i j : C.I) : (C.U i ∩ C.U j) ⊆ (C.U i) := by obviously 
-private definition inter_subset_right {C : cover' X} (i j : C.I) : (C.U i ∩ C.U j) ⊆ (C.U j) := by obviously
+private definition inter_subset_left {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⟶ (C.U i) := by obviously
+private definition inter_subset_right {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⊆ (C.U j) := by obviously
 
 
 section
@@ -41,27 +40,27 @@ variables {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒟
 
 private definition res_left
-  {C : cover' X} 
+  {C : cover' α} 
   (i j : C.I) 
-  (F : presheaf (Open X) D) : (F.obj (C.U i)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
-F.map ⟨ ⟨ inter_subset_left i j ⟩ ⟩
+  (F : presheaf (open_set α) D) : (F.obj (C.U i)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
+F.map (inter_subset_left i j)
 
 private definition res_right
-  {C : cover' X} 
+  {C : cover' α} 
   (i j : C.I) 
-  (F : presheaf (Open X) D) : (F.obj (C.U j)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
+  (F : presheaf (open_set α) D) : (F.obj (C.U j)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
 F.map ⟨ ⟨ inter_subset_right i j ⟩ ⟩
 
 private definition union_res
-  {C : cover' X} 
+  {C : cover' α} 
   (i : C.I) 
-  (F : presheaf (Open X) D) : (F.obj (C.union)) ⟶ (F.obj ((C.U i))) := 
+  (F : presheaf (open_set α) D) : (F.obj (C.union)) ⟶ (F.obj ((C.U i))) := 
 F.map (C.union_subset i)
 
 @[simp] lemma union_res_left_right 
-  {C : cover' X} 
+  {C : cover' α} 
   (i j : C.I) 
-  (F : presheaf (Open X) D) : union_res i F ≫ res_left i j F = union_res j F ≫ res_right i j F :=
+  (F : presheaf (open_set α) D) : union_res i F ≫ res_left i j F = union_res j F ≫ res_right i j F :=
 sorry
 end
 
@@ -69,7 +68,7 @@ section
 variables {V : Type u} [𝒱 : category.{u v} V] [has_products.{u v} V]
 include 𝒱
 
-variables (cover : cover' X) (F : presheaf (Open X) V) 
+variables (cover : cover' α) (F : presheaf (open_set α) V) 
 
 def sections : V :=
 pi.{u v} (λ c : cover.I, F.obj (cover.U c))
@@ -96,22 +95,20 @@ def cover_fork : fork (left cover F) (right cover F) :=
 { X := F.obj (cover.union),
   ι := res cover F, }
 
--- @[simp] lemma cover_fork_ι : (cover_fork cover F).ι = @res _ _ V _ _ cover F := rfl
+variables (α V)
 
-variables (X V)
+structure sheaf  :=
+(presheaf : presheaf (open_set α) V)
+(sheaf_condition : Π (cover : cover' α), is_equalizer (cover_fork cover presheaf))
 
-structure sheaf :=
-(presheaf : presheaf (Open X) V)
-(sheaf_condition : Π (cover : cover' X), is_equalizer (cover_fork cover presheaf))
+variables {α V}
 
-variables {X V}
-
-def sheaf.near (F : sheaf X V) [topological_space α] (x : α) : presheaf { U : Open X // x ∈ U } V :=
-(full_subcategory_embedding (λ U : Open X, x ∈ U)).op ⋙ F.presheaf
+def sheaf.near (F : sheaf α V) (x : α) : presheaf { U : open_set α // x ∈ U } V :=
+(full_subcategory_embedding (λ U : open_set α, x ∈ U)).op ⋙ F.presheaf
 
 variable [has_colimits.{u v} V]
 
-def stalk_at (F : sheaf X V) (x : α) : V :=
+def stalk_at (F : sheaf α V) (x : α) : V :=
 colimit (F.near x)
 
 end
@@ -121,21 +118,21 @@ end
 -- This should eventually be generalised to sheaves of categories with a
 -- fibre functor with reflects iso and preserves limits.
 
-structure compatible_sections (cover : cover' X) (F : presheaf (Open X) (Type u₁)) := 
+structure compatible_sections (cover : cover' α) (F : presheaf (open_set α) (Type u₁)) := 
   (sections      : Π i : cover.I, F.obj (cover.U i))
   (compatibility : Π i j : cover.I, res_left i j F (sections i) = res_right i j F (sections j))
 
-structure gluing {cover : cover' X} {F : presheaf (Open X) (Type u₁)} (s : compatible_sections cover F) :=
+structure gluing {cover : cover' α} {F : presheaf (open_set α) (Type u₁)} (s : compatible_sections cover F) :=
   («section»    : F.obj cover.union)
   (restrictions : ∀ i : cover.I, (F.map (cover.union_subset i)) «section» = s.sections i)
   (uniqueness   : ∀ (Γ : F.obj cover.union) (w : ∀ i : cover.I, (F.map (cover.union_subset i)) Γ = s.sections i), Γ = «section»)
 
-variables (X)
+variables (α)
 
 definition sheaf.of_types
-  (presheaf        : presheaf (Open X) (Type v))
-  (sheaf_condition : Π (cover : cover' X) (s : compatible_sections cover presheaf), gluing s) :
-  sheaf.{v+1 v} X (Type v) :=
+  (presheaf        : presheaf (open_set α) (Type v))
+  (sheaf_condition : Π (cover : cover' α) (s : compatible_sections cover presheaf), gluing s) :
+  sheaf.{v+1 v} α (Type v) :=
 { presheaf := presheaf,
   sheaf_condition := λ c,
     let sections : Π (s : fork (left c presheaf) (right c presheaf)) (x : s.X), compatible_sections c presheaf := λ s x, { sections := s.ι x, compatibility := λ i j, congr_fun (congr_fun s.w x) (i, j) } in
@@ -143,7 +140,7 @@ definition sheaf.of_types
     fac  := λ s, funext $ λ x : s.X, funext $ λ i, (sheaf_condition c (sections s x)).restrictions i,
     uniq := λ s m w, funext $ λ x : s.X, (sheaf_condition c (sections s x)).uniqueness (m x) (λ i, congr_fun (congr_fun w x) i) } }
 
-variables {X}
+variables {α}
 
 instance types_has_colimits : has_colimits.{u₁+1 u₁} (Type u₁) := sorry
 

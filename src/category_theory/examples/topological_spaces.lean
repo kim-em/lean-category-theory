@@ -4,6 +4,7 @@
 
 import category_theory.full_subcategory
 import category_theory.opposites
+import category_theory.preorder
 import analysis.topology.topological_space
 import analysis.topology.continuity
 
@@ -24,42 +25,37 @@ instance : large_category Top :=
   id   := λ X, ⟨ id, continuous_id ⟩,
   comp := λ _ _ _ f g, ⟨ g.val ∘ f.val, continuous.comp f.property g.property ⟩ }
 
-variables {α : Type u₁} (X : topological_space α) 
-
-structure Open : Type u₁ := 
+structure open_set (α : Type u₁) [X : topological_space α] : Type u₁ := 
 (s : set α)
-(is_open : X.is_open s)
+(is_open : topological_space.is_open X s)
 
-instance : has_coe (Open X) (set α) := {coe := λ U, U.s }
+variables (α : Type u₁) [topological_space α]
 
-attribute [back] Open.is_open
+instance : has_coe (open_set α) (set α) := {coe := λ U, U.s }
+
+attribute [back] open_set.is_open
 local attribute [back] topological_space.is_open_inter
 
-instance : has_inter (Open X) := 
+instance : has_inter (open_set α) := 
 { inter := λ U V, ⟨ U.s ∩ V.s, by obviously ⟩ }
 
-instance has_inter_op : has_inter ((Open X)ᵒᵖ) := 
+instance has_inter_op : has_inter ((open_set α)ᵒᵖ) := 
 { inter := λ U V, ⟨ U.s ∩ V.s, by obviously ⟩ }
 
-instance : has_subset (Open X) := 
+instance : has_subset (open_set α) := 
 { subset := λ U V, U.s ⊆ V.s }
 
-instance : has_mem α (Open X) := 
+instance : has_mem α (open_set α) := 
 { mem := λ a V, a ∈ V.s }
 
-instance [preorder α] : small_category α :=
-{ hom  := λ U V, ulift (plift (U ≤ V)),
-  id   := by tidy,
-  comp := begin tidy, transitivity Y; assumption end } -- automate, via mono?
-
-instance : preorder (Open X) :=
+instance : preorder (open_set α) :=
 begin
   refine { le := (⊆), .. } ; tidy
-end
+end.
 
-instance open_sets : small_category (Open X) := by apply_instance
+instance open_sets : small_category (open_set α) :=  by apply_instance
 
-def nbhd {α} [X : topological_space α] (x : α) := { U : Open X // x ∈ U }
+def nbhd {α} [X : topological_space α] (x : α) := { U : open_set α // x ∈ U }
 def nbhds {α} [X : topological_space α] (x : α) : small_category (nbhd x) := begin unfold nbhd, apply_instance end
 
 end category_theory.examples.topological_spaces
