@@ -9,6 +9,6 @@ include 𝒞
 
 class representable (F : C ↝ (Type v₁)) := 
 (c : C)
-(Φ : F ⇔ ((coyoneda C) c))
+(Φ : F ≅ ((coyoneda C) c))
 
 end category_theory

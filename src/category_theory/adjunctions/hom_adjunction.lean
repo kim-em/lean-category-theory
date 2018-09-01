@@ -3,9 +3,9 @@
 -- Authors: Scott Morrison
 
 import category_theory.products
-import category_theory.natural_isomorphism
 import category_theory.opposites
 import category_theory.isomorphism
+import category_theory.tactics.obviously
 
 open category_theory
 
@@ -19,7 +19,7 @@ include 𝒞 𝒟
 
 def hom_adjunction (L : C ↝ D) (R : D ↝ C) :=
     ((functor.prod L.op (functor.id D)) ⋙ (functor.hom D))
-      ⇔ 
+      ≅ 
     (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C)
 
 def mate {L : C ↝ D} {R : D ↝ C} (A : hom_adjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)

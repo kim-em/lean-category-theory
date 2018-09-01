@@ -64,7 +64,7 @@ let H := (functor.hom ((Cᵒᵖ) ↝ (Type v₁))) in
 
 @[simp] lemma yoneda_pairing_map (P Q : (Cᵒᵖ ↝ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (β : (yoneda_pairing C) (P.1, P.2)): (yoneda_pairing C).map α β = (yoneda C).map (α.snd) ≫ β ≫ α.fst := rfl
 
-def yoneda_lemma : (yoneda_pairing C) ⇔ (yoneda_evaluation C) := 
+def yoneda_lemma : (yoneda_pairing C) ≅ (yoneda_evaluation C) := 
 { hom := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)) },
   inv := { app := λ F x, { app := λ X a, (F.1.map a) x.down } } }.
 

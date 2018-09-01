@@ -24,19 +24,19 @@ def is_binary_product.comparison {t : span Y Z} (h : is_binary_product t) (X' : 
                  end }
 
 def is_binary_product.of_comparison {t : span Y Z} (w : Π X' : C, is_equiv (binary_product_comparison t X')) : is_binary_product t :=
-{ lift := λ s, inv' (w s.X) (s.π₁, s.π₂),
+{ lift := λ s, @inv _ _ _ _ _ (w s.X) (s.π₁, s.π₂),
   fac₁ := λ s, begin
-                have p := inv_hom_id' (w s.X), 
+                have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
                 have q := congr_fun p (s.π₁, s.π₂),
                 tidy,
                end,
   fac₂ := λ s, begin
-            have p := inv_hom_id' (w s.X), 
+            have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
             have q := congr_fun p (s.π₁, s.π₂),
             tidy,
           end,
   uniq := λ s m w₁ w₂, begin
-            have p := hom_inv_id' (w s.X), 
+            have p := @is_iso.hom_inv_id _ _ _ _ _ (w s.X), 
             have q := congr_fun p m,
             obviously,
           end } 
@@ -54,14 +54,14 @@ def is_equalizer.comparison {f g : Y ⟶ Z} {t : fork f g} (h : is_equalizer t) 
                 end }
 
 def is_equalizer.of_comparison {f g : Y ⟶ Z} {t : fork f g} (w : Π X' : C, is_equiv (equalizer_comparison t X')) : is_equalizer t :=
-{ lift := λ s, inv' (w s.X) ⟨ s.ι, s.w ⟩,
+{ lift := λ s, @is_iso.inv _ _ _ _ _ (w s.X) ⟨ s.ι, s.w ⟩,
   fac  := λ s, begin
-            have p := inv_hom_id' (w s.X), 
+            have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
             have q := congr_fun p ⟨ s.ι, s.w ⟩,
             tidy,
           end,
   uniq := λ s m w', begin
-            have p := hom_inv_id' (w s.X), 
+            have p := @is_iso.hom_inv_id _ _ _ _ _ (w s.X), 
             have q := congr_fun p m,
             tidy,
             unfold equalizer_comparison at q,
@@ -83,19 +83,19 @@ def is_pullback.comparison {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} {t : square r
                  end }
 
 def is_pullback.of_comparison {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} {t : square r₁ r₂} (w : Π X' : C, is_equiv (pullback_comparison t X')) : is_pullback t :=
-{ lift := λ s, inv' (w s.X) ⟨ (s.π₁, s.π₂), s.w ⟩,
+{ lift := λ s, @is_iso.inv _ _ _ _ _ (w s.X) ⟨ (s.π₁, s.π₂), s.w ⟩,
   fac₁ := λ s, begin
-                have p := inv_hom_id' (w s.X), 
+                have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
                 have q := congr_fun p ⟨ (s.π₁, s.π₂), s.w ⟩,
                 tidy,
                end,
   fac₂ := λ s, begin
-                have p := inv_hom_id' (w s.X), 
+                have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
                 have q := congr_fun p ⟨ (s.π₁, s.π₂), s.w ⟩,
                 tidy,
                end,
   uniq := λ s m w₁ w₂, begin
-                        have p := hom_inv_id' (w s.X), 
+                        have p := @is_iso.hom_inv_id _ _ _ _ _ (w s.X), 
                         have q := congr_fun p m,
                         tidy,
                         unfold pullback_comparison at q,
@@ -120,15 +120,15 @@ def is_limit.comparison {F : J ↝ C} {t : cone F} (h : is_limit t) (X' : C) : i
                 end }
 
 def is_limit.of_comparison {F : J ↝ C} {t : cone F} (w : Π X' : C, is_equiv (limit_comparison t X')) : is_limit t :=
-{ lift := λ s, inv' (w s.X) ⟨ s.π, s.w ⟩,
+{ lift := λ s, @is_iso.inv _ _ _ _ _ (w s.X) ⟨ s.π, s.w ⟩,
   fac :=  λ s, begin
-                have p := inv_hom_id' (w s.X), 
+                have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
                 have q := congr_fun p ⟨ s.π, s.w ⟩,
                 tidy,
                 exact congr_fun q j -- TODO fix automation
                end,
   uniq := λ s m w', begin
-                      have p := hom_inv_id' (w s.X), 
+                      have p := @is_iso.hom_inv_id _ _ _ _ _ (w s.X), 
                       have q := congr_fun p m,
                       tidy,
                       unfold limit_comparison at q,

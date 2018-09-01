@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
 import .shape
-import category_theory.heterogeneous_identity
 
 open category_theory
 

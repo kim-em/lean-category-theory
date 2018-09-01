@@ -3,7 +3,8 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import category_theory.products
-import category_theory.natural_isomorphism
+import category_theory.isomorphism
+import category_theory.tactics.obviously
 
 open category_theory
 
@@ -20,6 +21,6 @@ def switch : (C × D) ↝ (D × C) :=
 { obj := λ X, (X.2, X.1),
   map' := λ _ _ f, (f.2, f.1) }
 
-def symmetry : ((switch C D) ⋙ (switch D C)) ⇔ (functor.id (C × D)) := by obviously
+def symmetry : ((switch C D) ⋙ (switch D C)) ≅ (functor.id (C × D)) := by obviously
         
 end category_theory.prod
