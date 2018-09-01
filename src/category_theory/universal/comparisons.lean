@@ -1,4 +1,5 @@
-import ..universal.limits
+import category_theory.universal.limits
+import category_theory.universal.limits.limits
 
 open category_theory
 open category_theory.universal

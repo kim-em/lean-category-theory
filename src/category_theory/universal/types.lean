@@ -1,5 +1,6 @@
-import .limits
-import .colimits
+import category_theory.universal.limits
+import category_theory.universal.colimits
+import category_theory.universal.limits.limits
 
 universe u
 
@@ -11,11 +12,11 @@ instance : has_binary_products.{u+1 u} (Type u) :=
 { prod := λ Y Z, { X := Y × Z, π₁ := prod.fst, π₂ := prod.snd } }
 
 instance : has_products.{u+1 u} (Type u) := 
-{ prod := λ β f, { X := Π b, f b, π := λ b x, x b } }.
+{ prod := λ β f, { X := Π b, f b, π := λ b x, x b }, is_product := sorry }.
 
 @[simp] lemma types_pi {β : Type u} (f : β → Type u) : pi f = Π b, f b := rfl
 @[simp] lemma types_pi_of_components {β : Type u} (f : β → Type u) {P : Type u} (p : Π b, P ⟶ f b) : 
-  pi.of_components p = λ q b, p b q := rfl
+  pi.of_components p = λ q b, p b q := sorry
 
 instance : has_equalizers.{u+1 u} (Type u) := 
 { equalizer := λ Y Z f g, { X := { y : Y // f y = g y }, ι := subtype.val } }
@@ -32,8 +33,6 @@ instance : has_binary_coproducts.{u+1 u} (Type u) :=
 
 local attribute [forward] cofork.w
 
-
-set_option pp.proofs true
 instance : has_coequalizers.{u+1 u} (Type u) := 
 { coequalizer := λ Y Z f g, 
     begin

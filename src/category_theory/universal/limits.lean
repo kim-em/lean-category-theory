@@ -2,7 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import .shape
+import category_theory.universal.limits.shape
+import category_theory.filtered
 
 open category_theory
 
@@ -12,64 +13,6 @@ namespace category_theory.universal
 universes u v w
 
 section
-
-section shapes
-/--
-A `span Y Z`:
-`Y <--π₁-- X --π₂--> Z`
--/
-structure span {C : Type u} [𝒞 : category.{u v} C] (Y₁ Y₂ : C) extends shape C :=
-(π₁ : X ⟶ Y₁)
-(π₂ : X ⟶ Y₂)
-
-/--
-A `fan f`:
-`X --(π b)--> f b`
--/
-structure fan {C : Type u} [𝒞 : category.{u v} C] {β : Type v} (f : β → C) extends shape C :=
-(π : ∀ b, X ⟶ f b)
-
-/--
-A `fork f g`:
-```
-             f
- X --ι--> Y ====> Z
-             g
-```            
--/
-structure fork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Y ⟶ Z) extends shape C := 
-(ι : X ⟶ Y)
-(w : ι ≫ f = ι ≫ g . obviously)
-
-restate_axiom fork.w
-attribute [ematch] fork.w_lemma
-
-/-- 
-A `square p q`:
-```
-X  --π₁--> Y₁
-|          |
-π₂         r₁
-↓          ↓
-Y₂ --r₂--> Z
-```
--/
-structure square {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z)extends shape C :=
-(π₁ : X ⟶ Y₁)
-(π₂ : X ⟶ Y₂)
-(w : π₁ ≫ r₁ = π₂ ≫ r₂ . obviously)
-
-restate_axiom square.w
-attribute [ematch] square.w_lemma
-
-structure cone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ↝ C) extends shape C :=
-(π : ∀ j : J, X ⟶ F j)
-(w : ∀ {j j' : J} (f : j ⟶ j'), π j ≫ (F.map f) = π j' . obviously)
-
-restate_axiom cone.w
-attribute [ematch] cone.w_lemma
-
-end shapes
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -184,7 +127,7 @@ def is_product.of_lift_univ {t : fan f}
   fac  := λ s b, ((univ s (lift s)).mpr (eq.refl (lift s))) b,
   uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
-lemma homs_to_product_ext {t : fan f} (B : is_product.{u v} t) {X : C} (f g : X ⟶ t.X) (w : ∀ b, f ≫ t.π b = g ≫ t.π b) : f = g :=
+@[extensionality] lemma homs_to_product_ext {t : fan f} (B : is_product.{u v} t) {X : C} (f g : X ⟶ t.X) (w : ∀ b, f ≫ t.π b = g ≫ t.π b) : f = g :=
 begin
   rw B.uniq' f,
   rw B.uniq' g,
@@ -242,8 +185,8 @@ end
 end equalizer
 
 section pullback
-variables {Y₁ Y₂ Z : C}
-structure is_pullback {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} (t : square r₁ r₂) :=
+variables {Y₁ Y₂ Z : C} {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} 
+structure is_pullback (t : square r₁ r₂) :=
 (lift : ∀ (s : square r₁ r₂), s.X ⟶ t.X)
 (fac₁ : ∀ (s : square r₁ r₂), (lift s ≫ t.π₁) = s.π₁ . obviously)
 (fac₂ : ∀ (s : square r₁ r₂), (lift s ≫ t.π₂) = s.π₂ . obviously)
@@ -256,23 +199,26 @@ attribute [simp,ematch] is_pullback.fac₂_lemma
 restate_axiom is_pullback.uniq
 attribute [ematch, back'] is_pullback.uniq_lemma
 
-@[extensionality] lemma is_pullback.ext {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} {t : square r₁ r₂} (P Q : is_pullback t) : P = Q :=
+@[extensionality] lemma is_pullback.ext {t : square r₁ r₂} (P Q : is_pullback t) : P = Q :=
 begin cases P, cases Q, obviously end
 
-lemma is_pullback.univ {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} {t : square r₁ r₂} (h : is_pullback t) (s : square r₁ r₂) (φ : s.X ⟶ t.X) : (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = h.lift s) :=
+lemma is_pullback.univ {t : square r₁ r₂} (h : is_pullback t) (s : square r₁ r₂) (φ : s.X ⟶ t.X) : 
+  (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = h.lift s) :=
 begin
 obviously
 end
 
-def is_pullback.of_lift_univ {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} {t : square r₁ r₂}
+def is_pullback.of_lift_univ {t : square r₁ r₂}
   (lift : Π (s : square r₁ r₂), s.X ⟶ t.X)
-  (univ : Π (s : square r₁ r₂) (φ : s.X ⟶ t.X), (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = lift s)) : is_pullback t :=
+  (univ : Π (s : square r₁ r₂) (φ : s.X ⟶ t.X), (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = lift s)) : 
+  is_pullback t :=
 { lift := lift,
   fac₁ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left,
   fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
   uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
-lemma homs_to_pullback_ext {Y₁ Y₂ Z : C} {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} (t : square r₁ r₂) (B : is_pullback.{u v} t) {X : C} (f g : X ⟶ t.X) (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
+lemma homs_to_pullback_ext (t : square r₁ r₂) (B : is_pullback.{u v} t) 
+  {X : C} (f g : X ⟶ t.X) (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
 begin
   let s : square r₁ r₂ := ⟨ ⟨ X ⟩, f ≫ t.π₁, f ≫ t.π₂ ⟩,
   have q := B.uniq s f,
@@ -282,50 +228,6 @@ begin
 end
 
 end pullback
-
-section limit
-variables {J : Type v} [𝒥 : small_category J]
-include 𝒥
-
-structure is_limit {F : J ↝ C} (t : cone F) :=
-(lift : ∀ (s : cone F), s.X ⟶ t.X)
-(fac  : ∀ (s : cone F) (j : J), (lift s ≫ t.π j) = s.π j . obviously)
-(uniq : ∀ (s : cone F) (m : s.X ⟶ t.X) (w : ∀ j : J, (m ≫ t.π j) = s.π j), m = lift s . obviously)
-
-restate_axiom is_limit.fac
-attribute [simp,ematch] is_limit.fac_lemma
-restate_axiom is_limit.uniq
-attribute [ematch, back'] is_limit.uniq_lemma
-
-@[extensionality] lemma is_limit.ext {F : J ↝ C} {t : cone F} (P Q : is_limit t) : P = Q :=
-begin cases P, cases Q, obviously end
-
-lemma is_limit.univ {F : J ↝ C} {t : cone F} (h : is_limit t) (s : cone F) (φ : s.X ⟶ t.X) : (∀ j, φ ≫ t.π j = s.π j) ↔ (φ = h.lift s) :=
-begin
-obviously,
-end
-
-def is_limit.of_lift_univ {F : J ↝ C} {t : cone F}
-  (lift : Π (s : cone F), s.X ⟶ t.X)
-  (univ : Π (s : cone F) (φ : s.X ⟶ t.X), (∀ j : J, (φ ≫ t.π j) = s.π j) ↔ (φ = lift s)) : is_limit t :=
-{ lift := lift,
-  fac  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j,
-  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
-
-lemma homs_to_limit_ext  {F : J ↝ C} (c : cone.{u v} F) (B : is_limit c) {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
-begin
-  let s : cone F := ⟨ ⟨ X ⟩, λ j, f ≫ c.π j, by obviously ⟩,
-  have q := B.uniq s f,
-  have p := B.uniq s g,
-  rw [q, ←p],
-  intros,
-  rw ← w j,
-  intros,
-  refl
-end
-
-
-end limit
 
 variable (C)
 
@@ -348,11 +250,6 @@ class has_equalizers :=
 class has_pullbacks :=
 (pullback : Π {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z), square r₁ r₂)
 (is_pullback : Π {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z), is_pullback (pullback r₁ r₂) . obviously)
-
-class has_limits :=
-(limit : Π {J : Type v} [𝒥 : small_category J] (F : J ↝ C), cone F)
-(is_limit : Π {J : Type v} [𝒥 : small_category J] (F : J ↝ C), is_limit (limit F) . obviously)
-
 
 def terminal_object [has_terminal_object.{u v} C] : C := has_terminal_object.terminal.{u v} C
 
@@ -378,8 +275,10 @@ def prod.pair {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : P ⟶ (prod Q R) :=
 def prod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (prod P R) ⟶ (prod Q S) :=
 prod.pair (prod.π₁ P R ≫ f) (prod.π₂ P R ≫ g)
 
-@[simp,ematch] lemma prod.pair_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₁ Q R = f := sorry
-@[simp,ematch] lemma prod.pair_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₂ Q R = g := sorry
+@[simp,ematch] lemma prod.pair_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₁ Q R = f := 
+(prod.universal_property.{u v} Q R).fac₁_lemma { X := P, π₁ := f, π₂ := g }
+@[simp,ematch] lemma prod.pair_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₂ Q R = g :=
+(prod.universal_property.{u v} Q R).fac₂_lemma { X := P, π₁ := f, π₂ := g }
 
 -- TODO remove duplication; this is done above, isn't it?
 @[extensionality] def prod.characterisation (Y Z : C) (X : C) 
@@ -397,16 +296,21 @@ variables [has_products.{u v} C] {β : Type v}
 def pi.fan (f : β → C) := has_products.prod.{u v} f
 def pi (f : β → C) : C := (pi.fan f).X
 def pi.π (f : β → C) (b : β) : pi f ⟶ f b := (pi.fan f).π b
-def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
+@[back] def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
+def pi.lift (f : β → C) (g : fan f) := (pi.universal_property f).lift g
 
 @[simp] def pi.fan_π (f : β → C) (b : β) : (pi.fan f).π b = @pi.π C _ _ _ f b := rfl
+@[simp] def pi.lift_π (f : β → C) (g : fan f) (b : β) : (pi.universal_property f).lift g ≫ pi.π f b = g.π b :=
+(pi.universal_property f).fac g b
 
 def pi.of_components {f : β → C} {P : C} (p : Π b, P ⟶ f b) : P ⟶ pi f :=
 (pi.universal_property f).lift ⟨ ⟨ P ⟩, p ⟩
 
 @[simp] def pi.of_components_π {f : β → C} {P : C} (p : Π b, P ⟶ f b) (b : β) : pi.of_components p ≫ pi.π f b = p b :=
 begin
-  sorry
+  dsimp [pi.of_components],
+  rw ← pi.fan_π f,
+  rw (pi.universal_property f).fac,
 end
 
 def pi.map {α : Type v} {f : α → C} {g : β → C} (h : β → α) (k : Π b, f (h b) ⟶ g b) : (pi f) ⟶ (pi g) :=
@@ -416,8 +320,7 @@ pi.of_components (λ b, pi.π f (h b) ≫ k b)
   {α : Type v} {f : α → C} {g : β → C} {P : C} (p : Π b, P ⟶ f b) (h : β → α) (k : Π b, f (h b) ⟶ g b) :
   pi.of_components p ≫ pi.map h k = pi.of_components (λ b, p (h b) ≫ k b) :=
 begin
-  dsimp [pi.of_components, pi.map],
-  sorry
+  obviously,
 end
 
 end
@@ -429,7 +332,8 @@ def equalizer.fork := has_equalizers.equalizer.{u v} f g
 def equalizer := (equalizer.fork f g).X
 def equalizer.ι : (equalizer f g) ⟶ Y := (equalizer.fork f g).ι
 
-def equalizer.lift (P : C) (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := sorry
+def equalizer.lift (P : C) (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := 
+(has_equalizers.is_equalizer.{u v} C f g ).lift { X := P, ι := h, w := w }
 
 end
 
@@ -440,31 +344,6 @@ def pullback.square (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) := has_pullbacks.pul
 def pullback (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) := (pullback.square r₁ r₂).X
 def pullback.π₁ (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) : pullback r₁ r₂ ⟶ Y₁ := (pullback.square r₁ r₂).π₁
 def pullback.π₂ (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) : pullback r₁ r₂ ⟶ Y₂ := (pullback.square r₁ r₂).π₂
-end
-
-section
-variables [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J] 
-include 𝒥
-
-def limit.cone (F : J ↝ C) : cone F := has_limits.limit.{u v} F
-def limit (F : J ↝ C) := (limit.cone F).X
-def limit.π (F : J ↝ C) (j : J) : limit F ⟶ F j := (limit.cone F).π j
-def limit.universal_property (F : J ↝ C) : is_limit (limit.cone F) := 
-has_limits.is_limit.{u v} C F
--- limit.cone is in cones.lean
-
--- FIXME why the @?
-@[simp] lemma limit.cone_π (F : J ↝ C) (j : J) : (limit.cone F).π j = (@limit.π C _ _ J _ F j) := rfl
-
-@[back] def limit.hom_characterisation (F : J ↝ C) (c : cone F)
-  (f g : c.X ⟶ limit F)
-  (w_f : ∀ j, f ≫ limit.π F j = c.π j)
-  (w_g : ∀ j, g ≫ limit.π F j = c.π j) : f = g :=
-begin
-  have p_f := (limit.universal_property.{u v} F).uniq c f (by obviously),
-  have p_g := (limit.universal_property.{u v} F).uniq c g (by obviously),
-  obviously,
-end
 end
 
 end

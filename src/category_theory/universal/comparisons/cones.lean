@@ -14,8 +14,7 @@ namespace category_theory.universal
 
 universes u v u₁ v₁ u₂ v₂ 
 
-variables {J : Type v} [small_category J]
-variables {C : Type u} [𝒞 : category.{u v} C]
+variables {J : Type v} [small_category J] {C : Type u} [𝒞 : category.{u v} C]
 variable {F : J ↝ C}
 
 section

@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison
 
 import category_theory.universal.limits
+import category_theory.universal.limits.limits
 import category_theory.walking
 
 open category_theory

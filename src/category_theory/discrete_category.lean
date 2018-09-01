@@ -14,7 +14,7 @@ local attribute [back] category.id -- This says that whenever there is a goal of
 
 def discrete (α : Type u₁) := α
 
-instance (α : Type u₁) : small_category (discrete α) := 
+instance discrete_category (α : Type u₁) : small_category (discrete α) := 
 { hom  := λ X Y, ulift (plift (X = Y)),
   id   := by obviously,
   comp := by obviously }

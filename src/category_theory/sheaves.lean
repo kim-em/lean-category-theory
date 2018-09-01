@@ -32,7 +32,7 @@ def cover'.union (c : cover' α) : open_set α := sorry
 def cover'.union_subset (c : cover' α) (i : c.I) : c.U i ⟶ c.union := sorry
 
 private definition inter_subset_left {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⟶ (C.U i) := by obviously
-private definition inter_subset_right {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⊆ (C.U j) := by obviously
+private definition inter_subset_right {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⟶ (C.U j) := by obviously
 
 
 section
@@ -49,7 +49,7 @@ private definition res_right
   {C : cover' α} 
   (i j : C.I) 
   (F : presheaf (open_set α) D) : (F.obj (C.U j)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
-F.map ⟨ ⟨ inter_subset_right i j ⟩ ⟩
+F.map (inter_subset_right i j)
 
 private definition union_res
   {C : cover' α} 
@@ -131,14 +131,11 @@ variables (α)
 
 definition sheaf.of_types
   (presheaf        : presheaf (open_set α) (Type v))
-  (sheaf_condition : Π (cover : cover' α) (s : compatible_sections cover presheaf), gluing s) :
+  (sheaf_condition : Π (cover : cover' α) 
+                        (s : compatible_sections cover presheaf), gluing s) :
   sheaf.{v+1 v} α (Type v) :=
 { presheaf := presheaf,
-  sheaf_condition := λ c,
-    let sections : Π (s : fork (left c presheaf) (right c presheaf)) (x : s.X), compatible_sections c presheaf := λ s x, { sections := s.ι x, compatibility := λ i j, congr_fun (congr_fun s.w x) (i, j) } in
-  { lift := λ s x, (sheaf_condition c (sections s x)).«section»,
-    fac  := λ s, funext $ λ x : s.X, funext $ λ i, (sheaf_condition c (sections s x)).restrictions i,
-    uniq := λ s m w, funext $ λ x : s.X, (sheaf_condition c (sections s x)).uniqueness (m x) (λ i, congr_fun (congr_fun w x) i) } }
+  sheaf_condition := sorry }
 
 variables {α}
 

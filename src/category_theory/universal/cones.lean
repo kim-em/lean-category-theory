@@ -2,6 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
+import .limits.limits
 import .limits
 import .colimits
 
@@ -24,13 +25,6 @@ restate_axiom cone_morphism.w'
 attribute [simp,ematch] cone_morphism.w
 
 namespace cone_morphism
-
--- @[simp,ematch] def commutativity_lemma_assoc {A B : cone F} (c : cone_morphism A B) (j : J) {Z : C} (z : (F j) ⟶ Z): c.hom ≫ B.π j ≫ z = A.π j ≫ z :=
--- begin
---   /- obviously' say: -/
---   rw ← category.assoc,
---   simp,
--- end
 
 @[extensionality] lemma ext {A B : cone F} {f g : cone_morphism A B} (w : f.hom = g.hom) : f = g :=
 begin

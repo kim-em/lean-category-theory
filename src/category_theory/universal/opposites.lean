@@ -6,6 +6,7 @@ import category_theory.opposites
 import category_theory.equivalence
 import category_theory.universal.cones
 import category_theory.universal.colimits
+import category_theory.universal.limits.limits
 
 
 open category_theory

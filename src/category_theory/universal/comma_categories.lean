@@ -103,9 +103,8 @@ begin
   have p' := congr_arg nat_trans.app p,
   have p'' := congr_fun p' j,
   simp at p'',
-  sorry
-  -- rw nat_trans.refold_coe at p'',
-  -- obviously
+  erw category.comp_id at p'',
+  exact p''
 end
 
 @[simp] lemma Cone_comma_unit   (F : J ↝ C) (X : Cone F)   : X.1.2 = punit.star := by obviously 

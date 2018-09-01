@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import .shape
+import category_theory.universal.limits.shape
 
 open category_theory
 
@@ -13,64 +13,6 @@ universes u v w
 
 section
 
-section shapes
-
-/--
-A `cospan Y Z`:
-`Y₁ --ι₁--> X <--ι₂-- Y₂`
--/
-structure cospan {C : Type u} [𝒞 : category.{u v} C] (Y₁ Y₂ : C) extends shape C :=
-(ι₁ : Y₁ ⟶ X)
-(ι₂ : Y₂ ⟶ X)
-
-/--
-A `cofan f`:
-`X <--(π b)-- f b`
--/
-structure cofan {C : Type u} [𝒞 : category.{u v} C] {β : Type v} (f : β → C) extends shape C :=
-(ι : ∀ b, f b ⟶ X)
-
-/--
-A `cofork f g`:
-```
-              f
- X <--π-- Y <==== Z
-              g
-```            
--/
-structure cofork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Z ⟶ Y) extends shape C := 
-(π : Y ⟶ X)
-(w : f ≫ π = g ≫ π . obviously)
-
-restate_axiom cofork.w
-attribute [ematch] cofork.w_lemma
-
-/-- 
-A `cosquare p q`:
-```
-X  <--ι₁-- Y₁
-↑          ↑
-ι₂         r₁
-|          |
-Y₂ <--r₂-- Z
-```
--/
-structure cosquare {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂)extends shape C :=
-(ι₁ : Y₁ ⟶ X)
-(ι₂ : Y₂ ⟶ X)
-(w : r₁ ≫ ι₁ = r₂ ≫ ι₂ . obviously)
-
-restate_axiom cosquare.w
-attribute [ematch] cosquare.w_lemma
-
-structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ↝ C) extends shape C :=
-(ι : ∀ j : J, F j ⟶ X)
-(w : ∀ {j j' : J} (f : j ⟶ j'), (F.map f) ≫ ι j' = ι j)
-
-restate_axiom cocone.w
-attribute [ematch] cocone.w_lemma
-
-end shapes
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -264,36 +206,6 @@ def is_pushout.of_desc_univ {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquar
 
 end pushout
 
-section colimit
-variables {J : Type v} [𝒥 : small_category J]
-include 𝒥
-
-structure is_colimit {F : J ↝ C} (t : cocone F) :=
-(desc : ∀ (s : cocone F), t.X ⟶ s.X)
-(fac  : ∀ (s : cocone F) (j : J), (t.ι j ≫ desc s) = s.ι j . obviously)
-(uniq : ∀ (s : cocone F) (m : t.X ⟶ s.X) (w : ∀ j : J, (t.ι j ≫ m) = s.ι j), m = desc s . obviously)
-
-restate_axiom is_colimit.fac
-attribute [simp,ematch] is_colimit.fac_lemma
-restate_axiom is_colimit.uniq
-attribute [ematch, back'] is_colimit.uniq_lemma
-
-@[extensionality] lemma is_colimit.ext {F : J ↝ C} {t : cocone F} (P Q : is_colimit t) : P = Q :=
-begin cases P, cases Q, obviously end
-
-lemma is_colimit.univ {F : J ↝ C} {t : cocone F} (h : is_colimit t) (s : cocone F) (φ : t.X ⟶ s.X) : (∀ j, t.ι j ≫ φ = s.ι j) ↔ (φ = h.desc s) :=
-begin
-obviously,
-end
-
-def is_colimit.of_desc_univ {F : J ↝ C} {t : cocone F}
-  (desc : Π (s : cocone F), t.X ⟶ s.X)
-  (univ : Π (s : cocone F) (φ : t.X ⟶ s.X), (∀ j : J, (t.ι j ≫ φ) = s.ι j) ↔ (φ = desc s)) : is_colimit t :=
-{ desc := desc,
-  fac  := λ s j, ((univ s (desc s)).mpr (eq.refl (desc s))) j,
-  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
-
-end colimit
 
 variable (C)
 
@@ -316,34 +228,6 @@ class has_coequalizers :=
 class has_pushouts :=
 (pushout : Π {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂), cosquare r₁ r₂)
 (is_pushout : Π {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂), is_pushout (pushout r₁ r₂) . obviously)
-
-class has_colimits :=
-(colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ↝ C), cocone F)
-(is_colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ↝ C), is_colimit (colimit F) . obviously)
-
-
-variable {C}
-
-section
-variables [has_colimits.{u v} C] {J : Type v} [𝒥 : small_category J] 
-include 𝒥
-
-def colimit.cocone (F : J ↝ C) : cocone F := has_colimits.colimit.{u v} F
-def colimit (F : J ↝ C) := (colimit.cocone F).X
-def colimit.ι (F : J ↝ C) (j : J) : F j ⟶ colimit F := (colimit.cocone F).ι j
-def colimit.universal_property (F : J ↝ C) : is_colimit (colimit.cocone F) := 
-has_colimits.is_colimit.{u v} C F
-
-@[back] def colimit.hom_characterisation (F : J ↝ C) (c : cocone F)
-  (f g : colimit F ⟶ c.X)
-  (w_f : ∀ j, colimit.ι F j ≫ f = c.ι j)
-  (w_g : ∀ j, colimit.ι F j ≫ g = c.ι j) : f = g :=
-begin
-  have p_f := (colimit.universal_property.{u v} F).uniq c f (by obviously),
-  have p_g := (colimit.universal_property.{u v} F).uniq c g (by obviously),
-  obviously,
-end
-end
 
 end
 

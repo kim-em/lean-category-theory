@@ -19,18 +19,12 @@ class strongly_concrete [concrete C] :=
 (preserves_limits : continuous (fibre_functor C))
 
 -- PROJECT
--- instance type_strongly_concrete : strongly_concrete types := {
---     F := functor.id types,
---     w := sorry,
---     reflects_isos := sorry,
---     preserves_limits := {
---       preserves := λ I D q, {
---           morphism_to_terminal_object_from := λ c, {
---               cone_morphism := (q.morphism_to_terminal_object_from c).cone_morphism,
---          },
---           uniqueness_of_morphisms_to_terminal_object := sorry
---      }
---    },
---}
+instance type_strongly_concrete : strongly_concrete (Type u₁) := {
+    reflects_isos := sorry,
+    preserves_limits := begin fsplit, intros, 
+    dsimp [fibre_functor, concrete.fibre_functor, universal.cones.functoriality],
+   convert L, sorry, sorry
+     end
+}
 
 end category_theory.universal
