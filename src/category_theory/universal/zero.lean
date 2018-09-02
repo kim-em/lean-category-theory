@@ -18,7 +18,7 @@ structure is_zero (t : C) :=
 
 namespace is_zero
 def to_is_initial  {t : C} (Z : is_zero.{u v} t) : is_initial.{u v} t  := { desc := Z.desc, uniq := Z.uniq_desc }
-def to_is_terminal {t : C} (Z : is_zero.{u v} t) : is_terminal.{u v} t := { lift := Z.lift, uniq := Z.uniq_lift }
+def to_is_terminal {t : C} (Z : is_zero.{u v} t) : is_terminal.{u v} t := { lift := Z.lift, uniq' := Z.uniq_lift }
 end is_zero
 
 

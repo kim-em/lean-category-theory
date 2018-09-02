@@ -44,18 +44,6 @@ def is_limit.of_lift_univ {F : J ↝ C} {t : cone F}
   fac  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j,
   uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
-lemma homs_to_limit_ext  {F : J ↝ C} (c : cone.{u v} F) (B : is_limit c) {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
-begin
-  let s : cone F := ⟨ ⟨ X ⟩, λ j, f ≫ c.π j, by obviously ⟩,
-  have q := B.uniq s f,
-  have p := B.uniq s g,
-  rw [q, ←p],
-  intros,
-  rw ← w j,
-  intros,
-  refl
-end
-
 end limit
 
 
@@ -118,7 +106,7 @@ has_limits.is_limit.{u v} C F
 -- FIXME why the @?
 @[simp] lemma limit.cone_π (F : J ↝ C) (j : J) : (limit.cone F).π j = (@limit.π C _ _ J _ F j) := rfl
 
-@[back] def limit.hom_characterisation (F : J ↝ C) (c : cone F)
+@[extensionality] def limit.hom_ext {F : J ↝ C} {c : cone F}
   (f g : c.X ⟶ limit F)
   (w_f : ∀ j, f ≫ limit.π F j = c.π j)
   (w_g : ∀ j, g ≫ limit.π F j = c.π j) : f = g :=
@@ -151,7 +139,7 @@ def colimit.ι (F : J ↝ C) (j : J) : F j ⟶ colimit F := (colimit.cocone F).�
 def colimit.universal_property (F : J ↝ C) : is_colimit (colimit.cocone F) := 
 has_colimits.is_colimit.{u v} C F
 
-@[back] def colimit.hom_characterisation (F : J ↝ C) (c : cocone F)
+@[extensionality] def colimit.hom_ext {F : J ↝ C} {c : cocone F}
   (f g : colimit F ⟶ c.X)
   (w_f : ∀ j, colimit.ι F j ≫ f = c.ι j)
   (w_g : ∀ j, colimit.ι F j ≫ g = c.ι j) : f = g :=

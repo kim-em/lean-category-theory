@@ -13,11 +13,11 @@ variable {F : J ↝ C}
 
 def limit_cone_of_limit {t : cone F} (L : is_limit t) : is_terminal.{(max u v) v} t :=
 { lift := λ s, { hom := L.lift s, },
-  uniq := begin tidy, apply L.uniq_lemma, tidy, end } -- uniq_lemma is marked @[back'], but the unifier fails to apply it
+  uniq' := begin tidy, apply L.uniq_lemma, tidy, end } -- TODO uniq_lemma is marked @[back'], but the unifier fails to apply it
 
 def limit_of_limit_cone {t : cone F} (L : is_terminal.{(max u v) v} t) : is_limit t :=
-{ lift := λ s, (L.lift s).hom,
-  uniq := begin tidy, have p := L.uniq_lemma s { hom := m }, rw ← p, end }
+{ lift := λ s, (@is_terminal.lift _ _ t L s).hom,
+  uniq := begin tidy, have p := @is_terminal.uniq _ _ t L s { hom := m }, rw ← p, end }
 
 local attribute [extensionality] is_terminal.ext
 

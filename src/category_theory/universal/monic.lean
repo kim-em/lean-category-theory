@@ -33,8 +33,7 @@ structure regular_mono (f : X ⟶ Y) :=
 structure regular_epi (f : Y ⟶ Z) :=
 (X : C)
 (a b : X ⟶ Y)
-(c : coequalizer a b)
-(i : c.X ≅ Z)
-(w : c.π = f ≫ i.inv)
+(w : a ≫ f = b ≫ f)
+(c : is_coequalizer ⟨ ⟨ Z ⟩, f, w ⟩)
 
 end category_theory.universal.monic

@@ -94,11 +94,7 @@ attribute [ematch, back'] is_coproduct.uniq_lemma
 @[extensionality] lemma is_coproduct.ext {t : cofan f} (P Q : is_coproduct t) : P = Q :=
 begin cases P, cases Q, obviously end
 
-instance is_coproduct_subsingleton {t : cofan f}  : subsingleton (is_coproduct t) := 
-begin 
-  fsplit, intros,
-  apply is_coproduct.ext, -- obviously will do this after https://github.com/leanprover/mathlib/pull/269
-end
+instance is_coproduct_subsingleton {t : cofan f}  : subsingleton (is_coproduct t) := by obviously
 
 lemma is_coproduct.uniq' {t : cofan f} (h : is_coproduct t) {X' : C} (m : t.X ⟶ X') : m = h.desc { X := X', ι := λ b, t.ι b ≫ m } :=
 h.uniq { X := X', ι := λ b, t.ι b ≫ m } m (by obviously)
@@ -152,9 +148,6 @@ lemma is_coequalizer.epi {f g : Z ⟶ Y} {t : cofork f g} (h : is_coequalizer t)
                                     obviously,
                               end }
 
-structure coequalizer (f g : Z ⟶ Y) extends t : cofork f g := 
-(h : is_coequalizer t)
-
 lemma is_coequalizer.univ {f g : Z ⟶ Y} {t : cofork f g} (h : is_coequalizer t) (s : cofork f g) (φ : t.X ⟶ s.X) : (t.π ≫ φ = s.π) ↔ (φ = h.desc s) :=
 begin
 obviously
@@ -186,9 +179,6 @@ attribute [ematch, back'] is_pushout.uniq_lemma
 
 @[extensionality] lemma is_pushout.ext {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂} (P Q : is_pushout t) : P = Q :=
 begin cases P, cases Q, obviously end
-
-structure pushout (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂) extends t : cosquare r₁ r₂ :=
-(h : is_pushout t)
 
 lemma is_pushout.univ {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂} (h : is_pushout t) (s : cosquare r₁ r₂) (φ : t.X ⟶ s.X) : (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = h.desc s) :=
 begin

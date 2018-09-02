@@ -18,21 +18,17 @@ variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
 
 section terminal
-structure is_terminal (t : C) :=
+class is_terminal (t : C) :=
 (lift : ∀ (s : C), s ⟶ t)
-(uniq : ∀ (s : C) (m : s ⟶ t), m = lift s . obviously)
+(uniq' : ∀ (s : C) (m : s ⟶ t), m = lift s . obviously)
 
-restate_axiom is_terminal.uniq
-attribute [ematch, back'] is_terminal.uniq_lemma
+-- attribute [class] is_terminal
+
+restate_axiom is_terminal.uniq'
+attribute [ematch, back'] is_terminal.uniq
 
 @[extensionality] lemma is_terminal.ext {X : C} (P Q : is_terminal.{u v} X) : P = Q := 
-begin cases P, cases Q, obviously, end
-
-lemma homs_to_terminal_ext (X' : C) (X : C) (B : is_terminal.{u v} X) (f g : X' ⟶ X) : f = g :=
-begin
-  rw B.uniq X' f,
-  rw B.uniq X' g,
-end
+begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously, end
 
 end terminal
 
@@ -53,11 +49,7 @@ attribute [ematch, back'] is_binary_product.uniq_lemma
 @[extensionality] lemma is_binary_product.ext {Y Z : C} {t : span Y Z} (P Q : is_binary_product t) : P = Q :=
 begin cases P, cases Q, obviously end
 
-instance {Y Z : C} {t : span Y Z} : subsingleton (is_binary_product t) := 
-begin 
-  fsplit, intros,
-  apply is_binary_product.ext, -- obviously will do this after https://github.com/leanprover/mathlib/pull/269
-end
+instance {Y Z : C} {t : span Y Z} : subsingleton (is_binary_product t) := by obviously
 
 lemma is_binary_product.uniq' {Y Z : C} {t : span Y Z} (h : is_binary_product t) {X' : C} (m : X' ⟶ t.X) : 
   m = h.lift { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } :=
@@ -78,14 +70,6 @@ def is_binary_product.of_lift_univ {Y Z : C} {t : span Y Z}
   fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
   uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
-lemma homs_to_binary_product_ext {Y Z : C} (t : span.{u v} Y Z) (B : is_binary_product t) {X : C} 
-  {f g : X ⟶ t.X} (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
-begin
-  rw B.uniq' f,
-  rw B.uniq' g,
-  congr ; assumption
-end
-
 end binary_product
 
 section product
@@ -104,11 +88,7 @@ attribute [ematch, back'] is_product.uniq_lemma
 @[extensionality] lemma is_product.ext {t : fan f} (P Q : is_product t) : P = Q :=
 begin cases P, cases Q, obviously end
 
-instance is_product_subsingleton {t : fan f}  : subsingleton (is_product t) := 
-begin 
-  fsplit, intros,
-  apply is_product.ext, -- obviously will do this after https://github.com/leanprover/mathlib/pull/269
-end
+instance is_product_subsingleton {t : fan f}  : subsingleton (is_product t) := by obviously
 
 lemma is_product.uniq' {t : fan f} (h : is_product t) {X' : C} (m : X' ⟶ t.X) : m = h.lift { X := X', π := λ b, m ≫ t.π b } :=
 h.uniq { X := X', π := λ b, m ≫ t.π b } m (by obviously)
@@ -126,15 +106,6 @@ def is_product.of_lift_univ {t : fan f}
 { lift := lift,
   fac  := λ s b, ((univ s (lift s)).mpr (eq.refl (lift s))) b,
   uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
-
-@[extensionality] lemma homs_to_product_ext {t : fan f} (B : is_product.{u v} t) {X : C} (f g : X ⟶ t.X) (w : ∀ b, f ≫ t.π b = g ≫ t.π b) : f = g :=
-begin
-  rw B.uniq' f,
-  rw B.uniq' g,
-  congr,
-  ext,
-  exact w x,
-end
 
 end product
 
@@ -173,15 +144,6 @@ def is_equalizer.of_lift_univ {f g : Y ⟶ Z} {t : fork f g}
   fac := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))),
   uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
-lemma homs_to_equalizer_ext {Y Z : C} {f g : Y ⟶ Z} (t : fork f g) (B : is_equalizer.{u v} t) {X : C} (h k : X ⟶ t.X) (w : h ≫ t.ι = k ≫ t.ι) : h = k :=
-begin
-  let s : fork f g := ⟨ ⟨ X ⟩, h ≫ t.ι ⟩,
-  have q := B.uniq s h,
-  have p := B.uniq s k,
-  rw [q, ←p],
-  solve_by_elim, refl
-end
-
 end equalizer
 
 section pullback
@@ -217,16 +179,6 @@ def is_pullback.of_lift_univ {t : square r₁ r₂}
   fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
   uniq := begin obviously, apply univ_s_m.mp, obviously, end }
 
-lemma homs_to_pullback_ext (t : square r₁ r₂) (B : is_pullback.{u v} t) 
-  {X : C} (f g : X ⟶ t.X) (w₁ : f ≫ t.π₁ = g ≫ t.π₁) (w₂ : f ≫ t.π₂ = g ≫ t.π₂) : f = g :=
-begin
-  let s : square r₁ r₂ := ⟨ ⟨ X ⟩, f ≫ t.π₁, f ≫ t.π₂ ⟩,
-  have q := B.uniq s f,
-  have p := B.uniq s g,
-  rw [q, ←p],
-  obviously,
-end
-
 end pullback
 
 variable (C)
@@ -254,11 +206,20 @@ class has_pullbacks :=
 def terminal_object [has_terminal_object.{u v} C] : C := has_terminal_object.terminal.{u v} C
 
 variable {C}
+section
+variables [has_terminal_object.{u v} C] 
 
-def terminal_object.universal_property [has_terminal_object.{u v} C] : is_terminal.{u v} (terminal_object.{u v} C) := 
+instance terminal_object.universal_property : is_terminal.{u v} (terminal_object.{u v} C) := 
 has_terminal_object.is_terminal.{u v} C
-def terminal_object.hom [has_terminal_object.{u v} C] (X : C) : (X ⟶ terminal_object.{u v} C) := 
-terminal_object.universal_property.lift.{u v} X
+def terminal_object.hom (X : C) : (X ⟶ terminal_object.{u v} C) := 
+is_terminal.lift.{u v} (terminal_object.{u v} C) X
+
+@[extensionality] lemma terminal.hom_ext {X' : C} (f g : X' ⟶ terminal_object.{u v} C) : f = g :=
+begin
+  rw is_terminal.uniq (terminal_object.{u v} C) X' f,
+  rw is_terminal.uniq (terminal_object.{u v} C) X' g,
+end
+end
 
 section
 variables [has_binary_products.{u v} C] 
@@ -280,13 +241,14 @@ prod.pair (prod.π₁ P R ≫ f) (prod.π₂ P R ≫ g)
 @[simp,ematch] lemma prod.pair_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₂ Q R = g :=
 (prod.universal_property.{u v} Q R).fac₂_lemma { X := P, π₁ := f, π₂ := g }
 
--- TODO remove duplication; this is done above, isn't it?
-@[extensionality] def prod.characterisation (Y Z : C) (X : C) 
+@[extensionality] def prod.hom_ext (Y Z : C) (X : C) 
   (f g : X ⟶ prod Y Z) 
   (w₁ : f ≫ prod.π₁ Y Z = g ≫ prod.π₁ Y Z) 
   (w₂ : f ≫ prod.π₂ Y Z = g ≫ prod.π₂ Y Z) : f = g := 
 begin 
-  apply homs_to_binary_product_ext, obviously,
+  rw (prod.universal_property Y Z).uniq' f,
+  rw (prod.universal_property Y Z).uniq' g,
+  congr ; assumption,
 end
 end
 
@@ -296,8 +258,18 @@ variables [has_products.{u v} C] {β : Type v}
 def pi.fan (f : β → C) := has_products.prod.{u v} f
 def pi (f : β → C) : C := (pi.fan f).X
 def pi.π (f : β → C) (b : β) : pi f ⟶ f b := (pi.fan f).π b
-@[back] def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
+def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
 def pi.lift (f : β → C) (g : fan f) := (pi.universal_property f).lift g
+
+@[extensionality] lemma pi.hom_ext (f : β → C) {X : C} (g h : X ⟶ pi f) (w : ∀ b, g ≫ pi.π f b = h ≫ pi.π f b) : g = h :=
+begin
+  rw (pi.universal_property f).uniq' g,
+  rw (pi.universal_property f).uniq' h,
+  congr,
+  ext,
+  exact w x,
+end
+
 
 @[simp] def pi.fan_π (f : β → C) (b : β) : (pi.fan f).π b = @pi.π C _ _ _ f b := rfl
 @[simp] def pi.lift_π (f : β → C) (g : fan f) (b : β) : (pi.universal_property f).lift g ≫ pi.π f b = g.π b :=
@@ -331,19 +303,44 @@ variables [has_equalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
 def equalizer.fork := has_equalizers.equalizer.{u v} f g
 def equalizer := (equalizer.fork f g).X
 def equalizer.ι : (equalizer f g) ⟶ Y := (equalizer.fork f g).ι
+def equalizer.universal_property : is_equalizer (equalizer.fork f g) := has_equalizers.is_equalizer.{u v} C f g
 
 def equalizer.lift (P : C) (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := 
-(has_equalizers.is_equalizer.{u v} C f g ).lift { X := P, ι := h, w := w }
+(equalizer.universal_property f g).lift { X := P, ι := h, w := w }
+
+@[extensionality] lemma equalizer.hom_ext {Y Z : C} {f g : Y ⟶ Z} {X : C} (h k : X ⟶ equalizer f g) (w : h ≫ equalizer.ι f g = k ≫ equalizer.ι f g) : h = k :=
+begin
+  let s : fork f g := ⟨ ⟨ X ⟩, h ≫ equalizer.ι f g ⟩,
+  have q := (equalizer.universal_property f g).uniq s h,
+  have p := (equalizer.universal_property f g).uniq s k,
+  rw [q, ←p],
+  solve_by_elim, refl
+end
 
 end
 
 section
-variables [has_pullbacks.{u v} C] {Y₁ Y₂ Z : C}
+variables [has_pullbacks.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z)
 
-def pullback.square (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) := has_pullbacks.pullback.{u v} r₁ r₂
-def pullback (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) := (pullback.square r₁ r₂).X
-def pullback.π₁ (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) : pullback r₁ r₂ ⟶ Y₁ := (pullback.square r₁ r₂).π₁
-def pullback.π₂ (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z) : pullback r₁ r₂ ⟶ Y₂ := (pullback.square r₁ r₂).π₂
+def pullback.square := has_pullbacks.pullback.{u v} r₁ r₂
+def pullback := (pullback.square r₁ r₂).X
+def pullback.π₁ : pullback r₁ r₂ ⟶ Y₁ := (pullback.square r₁ r₂).π₁
+def pullback.π₂ : pullback r₁ r₂ ⟶ Y₂ := (pullback.square r₁ r₂).π₂
+def pullback.universal_property : is_pullback (pullback.square r₁ r₂) := has_pullbacks.is_pullback.{u v} C r₁ r₂
+
+@[extensionality] lemma pullback.hom_ext 
+  {X : C} (f g : X ⟶ pullback r₁ r₂) 
+  (w₁ : f ≫ pullback.π₁ r₁ r₂ = g ≫ pullback.π₁ r₁ r₂) 
+  (w₂ : f ≫ pullback.π₂ r₁ r₂ = g ≫ pullback.π₂ r₁ r₂) : f = g :=
+begin
+  let s : square r₁ r₂ := ⟨ ⟨ X ⟩, f ≫ pullback.π₁ r₁ r₂, f ≫ pullback.π₂ r₁ r₂ ⟩,
+  have q := (pullback.universal_property r₁ r₂).uniq s f,
+  have p := (pullback.universal_property r₁ r₂).uniq s g,
+  rw [q, ←p],
+  obviously,
+end
+
+
 end
 
 end
