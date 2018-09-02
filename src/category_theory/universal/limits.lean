@@ -268,6 +268,7 @@ begin
   exact w x,
 end
 
+lemma pi.components_eq (f : β → C) {X : C} {g h : X ⟶ pi f} (e : g = h) (b : β) : g ≫ pi.π f b = h ≫ pi.π f b := by subst e
 
 @[simp] def pi.fan_π (f : β → C) (b : β) : (pi.fan f).π b = @pi.π C _ _ _ f b := rfl
 @[simp] def pi.lift_π (f : β → C) (g : fan f) (b : β) : (pi.universal_property f).lift g ≫ pi.π f b = g.π b :=
@@ -276,7 +277,7 @@ end
 def pi.of_components {f : β → C} {P : C} (p : Π b, P ⟶ f b) : P ⟶ pi f :=
 (pi.universal_property f).lift ⟨ ⟨ P ⟩, p ⟩
 
-@[simp] def pi.of_components_π {f : β → C} {P : C} (p : Π b, P ⟶ f b) (b : β) : pi.of_components p ≫ pi.π f b = p b :=
+@[simp,ematch] def pi.of_components_π {f : β → C} {P : C} (p : Π b, P ⟶ f b) (b : β) : pi.of_components p ≫ pi.π f b = p b :=
 begin
   dsimp [pi.of_components],
   rw ← pi.fan_π f,
@@ -301,6 +302,7 @@ variables [has_equalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
 def equalizer.fork := has_equalizers.equalizer.{u v} f g
 def equalizer := (equalizer.fork f g).X
 def equalizer.ι : (equalizer f g) ⟶ Y := (equalizer.fork f g).ι
+@[ematch] def equalizer.w : (equalizer.ι f g) ≫ f = (equalizer.ι f g) ≫ g := (equalizer.fork f g).w
 def equalizer.universal_property : is_equalizer (equalizer.fork f g) := has_equalizers.is_equalizer.{u v} C f g
 
 def equalizer.lift (P : C) (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := 
