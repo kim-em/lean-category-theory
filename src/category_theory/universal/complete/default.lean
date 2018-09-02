@@ -23,9 +23,10 @@ def lim : (J ↝ C) ↝ C :=
   lim.map t = ((limit.universal_property F').lift $ { X := limit F, π := λ j, limit.π F j ≫ t j }) :=
 rfl
 
--- def functorial_colimit [has_colimits C] : (J ↝ C) ↝ C := 
--- { obj := λ F, colimit F,
---   map' := λ F G τ, (colimit.hom F { X := _,
---                                     π := (λ j, (τ j) ≫ ((colimit_cocone G).π j)) }).hom }
+-- def colim : (J ↝ C) ↝ C := 
+-- { obj := colimit,
+--   map' := λ F F' t, (colimit.universal_property F').desc $
+--     { X := colimit F, π := λ j, t j ≫ colimit.ι F j},
+--   map_id' := begin tidy, erw colimit.desc_ι, dsimp, simp, end }. -- FIXME why doesn't simp work here?
 
 end category_theory.universal
