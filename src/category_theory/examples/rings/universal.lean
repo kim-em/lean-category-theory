@@ -49,14 +49,49 @@ variables {J : Type v} [𝒥 : small_category J] [filtered.{v v} J]
 include 𝒥
 
 def matching (F : J ↝ Ring) (a b : Σ j : J, (F j).1) : Prop :=
-let s := filtered.obj_bound.{v v} a.1 b.1 in
-(F.map(s.ι₁)).map a.2 = (F.map(s.ι₂)).map b.2
+∃ (j : J) (f_a : a.1 ⟶ j) (f_b : b.1 ⟶ j),
+(F.map f_a).map a.2 = (F.map f_b).map b.2
 
 def filtered_colimit (F : J ↝ Ring) :=
-quotient (eqv_gen.setoid (matching F))
+@quot (Σ j : J, (F j).1) (matching F)
+
+local attribute [elab_with_expected_type] quot.lift
+
+def filtered_colimit.add (F : J ↝ Ring) (x y : filtered_colimit F) : filtered_colimit F :=
+quot.lift (λ p : Σ j, (F j).1, 
+  quot.lift (λ q : Σ j, (F j).1, 
+  quot.mk _ (begin 
+    have s := filtered.obj_bound.{v v} p.1 q.1,
+    exact ⟨ s.X, ((F.map s.ι₁).map p.2) + ((F.map s.ι₂).map q.2) ⟩
+  end : Σ j, (F j).1))
+  (λ q q' (r : matching F q q'), @quot.sound _ (matching F) _ _ 
+    begin  
+    dunfold matching,
+    dsimp,
+    dsimp [matching] at r,
+    rcases r with ⟨j, f_a, f_b, e⟩,
+    /- this is messy, but doable -/
+    sorry
+    end))
+  (λ p p' (r : matching F p p'), funext $ λ q, begin dsimp, /- no idea -/ sorry end) x y
 
 def filtered_colimit_is_comm_ring (F : J ↝ Ring) : comm_ring (filtered_colimit F) := 
-sorry
+{ add := filtered_colimit.add F,
+  neg := sorry,
+  mul := sorry,
+  zero := sorry,
+  one := sorry,
+  add_comm := sorry,
+  add_assoc := sorry,
+  zero_add := sorry,
+  add_zero := sorry,
+  add_left_neg := sorry,
+  mul_comm := sorry,
+  mul_assoc := sorry,
+  one_mul := sorry,
+  mul_one := sorry,
+  left_distrib := sorry,
+  right_distrib := sorry }
 
 end
 
