@@ -1,6 +1,5 @@
 import category_theory.opposites
 import category_theory.full_subcategory
-import category_theory.Grothendieck_topology
 import category_theory.universal.types
 import category_theory.examples.topological_spaces
 
@@ -25,11 +24,19 @@ structure cover' :=
 (I : Type v)
 (U : I → (open_set α))
 
+
 -- FIXME have \func turn into ⥤?
 variables {α}
 
-def cover'.union (c : cover' α) : open_set α := sorry
-def cover'.union_subset (c : cover' α) (i : c.I) : c.U i ⟶ c.union := sorry
+-- TODO cleanup
+def cover'.union (c : cover' α) : open_set α := ⟨ set.Union (λ i : c.I, (c.U i).1), 
+  begin 
+  apply topological_space.is_open_sUnion, 
+  tidy, 
+  subst H_h,
+  exact (c.U H_w).2
+  end ⟩
+def cover'.union_subset (c : cover' α) (i : c.I) : c.U i ⟶ c.union := by obviously
 
 private definition inter_subset_left {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⟶ (C.U i) := by obviously
 private definition inter_subset_right {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⟶ (C.U j) := by obviously
@@ -39,13 +46,13 @@ section
 variables {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒟
 
-private definition res_left
+definition res_left
   {C : cover' α} 
   (i j : C.I) 
   (F : presheaf (open_set α) D) : (F.obj (C.U i)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
 F.map (inter_subset_left i j)
 
-private definition res_right
+definition res_right
   {C : cover' α} 
   (i j : C.I) 
   (F : presheaf (open_set α) D) : (F.obj (C.U j)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
@@ -61,7 +68,12 @@ F.map (C.union_subset i)
   {C : cover' α} 
   (i j : C.I) 
   (F : presheaf (open_set α) D) : union_res i F ≫ res_left i j F = union_res j F ≫ res_right i j F :=
-sorry
+begin
+  dsimp [union_res, res_left, res_right],
+  rw ← functor.map_comp,
+  rw ← functor.map_comp,
+  refl,
+end
 end
 
 section
@@ -97,11 +109,15 @@ def cover_fork : fork (left cover F) (right cover F) :=
 { X := F.obj (cover.union),
   ι := res cover F, }
 
+
+class is_sheaf (presheaf : presheaf (open_set α) V) :=
+(sheaf_condition : Π (cover : cover' α), is_equalizer (cover_fork cover presheaf))
+
 variables (α V)
 
 structure sheaf  :=
 (presheaf : presheaf (open_set α) V)
-(sheaf_condition : Π (cover : cover' α), is_equalizer (cover_fork cover presheaf))
+(sheaf_condition : is_sheaf presheaf)
 
 variables {α V}
 
@@ -114,56 +130,3 @@ def stalk_at (F : sheaf α V) (x : α) : V :=
 colimit (F.near x)
 
 end
-
--- We now provide an alternative 'pointwise' constructor for sheaves of types.
-
--- This should eventually be generalised to sheaves of categories with a
--- fibre functor with reflects iso and preserves limits.
-
-structure compatible_sections (cover : cover' α) (F : presheaf (open_set α) (Type u₁)) := 
-  (sections      : Π i : cover.I, F.obj (cover.U i))
-  (compatibility : Π i j : cover.I, res_left i j F (sections i) = res_right i j F (sections j))
-
-structure gluing {cover : cover' α} {F : presheaf (open_set α) (Type u₁)} (s : compatible_sections cover F) :=
-  («section»    : F.obj cover.union)
-  (restrictions : ∀ i : cover.I, (F.map (cover.union_subset i)) «section» = s.sections i)
-  (uniqueness   : ∀ (Γ : F.obj cover.union) (w : ∀ i : cover.I, (F.map (cover.union_subset i)) Γ = s.sections i), Γ = «section»)
-
-variables (α)
-
-definition sheaf.of_types
-  (presheaf        : presheaf (open_set α) (Type v))
-  (sheaf_condition : Π (cover : cover' α) 
-                        (s : compatible_sections cover presheaf), gluing s) :
-  sheaf.{v+1 v} α (Type v) :=
-{ presheaf := presheaf,
-  sheaf_condition := λ c,
-  let σ : Π s : fork (left c presheaf) (right c presheaf), s.X → compatible_sections c presheaf :=
-    λ s x, { sections := λ i, select_section c presheaf i (s.ι x),
-             compatibility := sorry } in
-  { lift := λ s x, (sheaf_condition c (σ s x)).«section»,
-    fac  := λ s, funext $ λ x, funext $ λ i, 
-      begin
-        have p := (sheaf_condition c (σ s x)).restrictions i,
-        conv at p { to_rhs, dsimp [σ, select_section] },
-        rw ← p,
-        dsimp [cover_fork, res, union_res],
-        simp,
-      end,
-    uniq := λ s m w, funext $ λ x, 
-      begin 
-        apply (sheaf_condition c (σ s x)).uniqueness, 
-        intro i, dsimp [σ, select_section], 
-        have p := congr_fun w x,
-        dsimp at p,
-        have q := congr_fun p i,
-        dsimp [cover_fork, res, union_res] at q,
-        simp at q,
-        exact q,
-      end
-  } }
-
-variables {α}
-
-instance types_has_colimits : has_colimits.{u₁+1 u₁} (Type u₁) := sorry
-

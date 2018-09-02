@@ -19,8 +19,6 @@ def limit_of_limit_cone {t : cone F} (L : is_terminal.{(max u v) v} t) : is_limi
 { lift := λ s, (@is_terminal.lift _ _ t L s).hom,
   uniq := begin tidy, have p := @is_terminal.uniq _ _ t L s { hom := m }, rw ← p, end }
 
-local attribute [extensionality] is_terminal.ext
-
 def limits_are_limit_cones {t : cone F} : equiv (is_limit t) (is_terminal.{(max u v) v} t) :=
 { to_fun    := limit_cone_of_limit,
   inv_fun   := limit_of_limit_cone,

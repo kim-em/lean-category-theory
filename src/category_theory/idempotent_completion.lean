@@ -11,10 +11,10 @@ universes u u₁ u₂
 structure Idempotent (C : Type (u+1)) [large_category C] :=
 (object : C)
 (idempotent : object ⟶ object)
-(witness : idempotent ≫ idempotent = idempotent . obviously)
+(witness' : idempotent ≫ idempotent = idempotent . obviously)
 
-restate_axiom Idempotent.witness
-attribute [simp,ematch] Idempotent.witness_lemma
+restate_axiom Idempotent.witness'
+attribute [simp,ematch] Idempotent.witness
 
 local attribute [ematch] subtype.property
 
@@ -24,12 +24,12 @@ namespace Idempotent
 
 structure morphism (X Y : Idempotent C) :=
 (morphism : X.object ⟶ Y.object)
-(left : X.idempotent ≫ morphism = morphism . obviously)
-(right : morphism ≫ Y.idempotent = morphism . obviously)
+(left' : X.idempotent ≫ morphism = morphism . obviously)
+(right' : morphism ≫ Y.idempotent = morphism . obviously)
 
-restate_axiom morphism.left
-restate_axiom morphism.right
-attribute [simp,ematch] morphism.left_lemma morphism.right_lemma
+restate_axiom morphism.left'
+restate_axiom morphism.right'
+attribute [simp,ematch] morphism.left morphism.right
 
 @[extensionality] lemma ext {X Y : Idempotent C} (f g : morphism X Y) (w : f.morphism = g.morphism) : f = g :=
 begin

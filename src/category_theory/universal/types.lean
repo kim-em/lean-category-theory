@@ -20,13 +20,12 @@ instance : has_products.{u+1 u} (Type u) :=
 { prod := λ β f, { X := Π b, f b, π := λ b x, x b } }.
 
 @[simp] lemma types_pi {β : Type u} (f : β → Type u) : pi f = Π b, f b := rfl
-@[simp] lemma types_pi_π {β : Type u} (f : β → Type u) (b : β) : pi.π f b = λ (g : Π b, f b), g b := rfl
+@[simp] lemma types_pi_π {β : Type u} (f : β → Type u) (b : β) : pi.π f b = λ (g : Π b, f b), g b := rfl.
+@[simp] lemma types_pi_map {β α : Type u} (f : α → Type u) (g : β → Type u) 
+  (h : β → α) (k : Π b, f (h b) ⟶ g b) (a : pi f) : 
+  pi.map h k a = (λ (b : β), k b (a (h b))) := rfl
 @[simp] lemma types_pi_of_components {β : Type u} (f : β → Type u) {P : Type u} (p : Π b, P ⟶ f b) : 
-  pi.of_components p = λ q b, p b q :=
-begin
-  dsimp [pi.of_components],
-  sorry
-end
+  pi.of_components p = λ q b, p b q := rfl
 
 instance : has_equalizers.{u+1 u} (Type u) := 
 { equalizer := λ Y Z f g, { X := { y : Y // f y = g y }, ι := subtype.val } }

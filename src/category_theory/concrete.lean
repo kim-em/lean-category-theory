@@ -7,13 +7,11 @@ import category_theory.types
 
 namespace category_theory
 
-universes u
+universes u v
 
-class concrete (C : Type (u+1)) [large_category C] := 
-  (fibre_functor : C ↝ (Type u))
+class concrete (C : Type u) [category.{u v} C] := 
+  (fibre_functor : C ↝ (Type v))
   (faithfulness : faithful fibre_functor . obviously)
-
-def fibre_functor (C : Type (u+1)) [large_category C] [concrete : concrete C] := concrete.fibre_functor
 
 instance : concrete (Type u) := 
 { fibre_functor := functor.id _ }

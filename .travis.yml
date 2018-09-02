@@ -37,8 +37,6 @@ jobs:
     - stage: Test
       script:
         - leanpkg test
-        - lean --recursive --export=lean-category-theory.txt
-        - leanchecker lean-category-theory.txt
 
 notifications:
   webhooks:

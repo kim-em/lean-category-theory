@@ -22,8 +22,6 @@ class is_terminal (t : C) :=
 (lift : ∀ (s : C), s ⟶ t)
 (uniq' : ∀ (s : C) (m : s ⟶ t), m = lift s . obviously)
 
--- attribute [class] is_terminal
-
 restate_axiom is_terminal.uniq'
 attribute [ematch, back'] is_terminal.uniq
 

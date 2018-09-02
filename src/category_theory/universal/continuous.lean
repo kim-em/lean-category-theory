@@ -8,16 +8,17 @@ open category_theory
 
 namespace category_theory.universal
 
-universes u
-variables {C : Type (u+1)} [large_category C] {D : Type (u+1)} [large_category D]
+universes u v
+variables {C : Type u} [𝒞 : category.{u v} C] {D : Type u} [𝒟 : category.{u v} D]
+include 𝒞 𝒟
 
 -- TODO it would be nice to get rid of these explicit universe levels
 
 structure continuous (F : C ↝ D) :=
-(preserves_limits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (c : cone G) (L : is_limit c), is_limit ((cones.functoriality G F) c))
+(preserves_limits : ∀ {J : Type v} [small_category J] (G : J ↝ C) (c : cone G) (L : is_limit c), is_limit ((cones.functoriality G F) c))
 
 structure cocontinuous (F : C ↝ D) :=
-(preserves_colimits : ∀ {J : Type u} [small_category J] (G : J ↝ C) (c : cocone G) (L : is_colimit c), is_initial.{u+1 u} ((cocones.functoriality G F) c))
+(preserves_colimits : ∀ {J : Type v} [small_category J] (G : J ↝ C) (c : cocone G) (L : is_colimit c), is_colimit ((cocones.functoriality G F) c))
 
 -- instance HomFunctorPreservesLimits (a : A) : preserves_limits ((coyoneda A) a) := {
 --     preserves := λ I D q, sorry

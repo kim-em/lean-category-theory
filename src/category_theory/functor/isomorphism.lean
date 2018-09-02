@@ -9,12 +9,9 @@ open category_theory
 
 namespace category_theory
 
-universes u₁ u₂ 
+universes u₁ v₁ u₂ v₂
 
-variable {C : Type (u₁+1)}
-variable [large_category C]
-variable {D : Type (u₂+1)}
-variable [large_category D]
+variables {C : Type u₁} [category.{u₁ v₁} C] {D : Type u₂} [category.{u₂ v₂} D]
 
 class reflects_isos (F : C ↝ D) :=
 (reflects : Π {X Y : C} (f : X ⟶ Y) (w : is_iso (F.map f)), is_iso f)

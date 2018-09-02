@@ -17,7 +17,7 @@ def Equivalences_are_EssentiallySurjective (e : Equivalence C D) : ess_surj (e.f
 ⟨ λ Y : D, e.inverse Y, λ Y : D, (e.isomorphism_2 Y) ⟩
 
 lemma Equivalences_are_Faithful (e : Equivalence C D) : faithful (e.functor) := 
-{ injectivity := λ X Y f g w, begin  
+{ injectivity' := λ X Y f g w, begin  
                                 have p := congr_arg (@category_theory.functor.map _ _ _ _ e.inverse  _ _) w,
                                 simp at p,
                                 exact p
@@ -26,13 +26,13 @@ lemma Equivalences_are_Faithful (e : Equivalence C D) : faithful (e.functor) :=
 
 def Equivalences_are_Full (e : Equivalence C D) : full (e.functor) := 
 { preimage := λ X Y f, (e.isomorphism_1 X).inv ≫ (e.inverse.map f) ≫ (e.isomorphism_1 Y).hom,
-  witness := λ X Y f, begin
-                        apply (Equivalences_are_Faithful e.symm).injectivity,
+  witness' := λ X Y f, begin
+                        apply (Equivalences_are_Faithful e.symm).injectivity',
                         obviously,
                       end }
 
 section
-private meta def faithfulness := `[apply faithful.injectivity] 
+private meta def faithfulness := `[apply faithful.injectivity'] 
 local attribute [tidy] faithfulness
 
 -- FIXME improve API for ess_surj
