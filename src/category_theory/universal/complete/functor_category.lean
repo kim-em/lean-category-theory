@@ -45,7 +45,7 @@ instance [has_limits.{u v} D] : has_limits.{(max u v) v} (C ↝ D) :=
   is_limit := λ J 𝒥 F, begin resetI, exact
   { lift := λ s, { app := λ X, (limit.cone_morphism (switched F X) { X := s.X X, π := λ j, (s.π j) X }).hom,
                    naturality' := begin tidy, dsimp [limit_cone_in_functor_category], tidy,
-                   
+                  -- FIXME why does this rw fail? I wanted to apply this to both sides, then use naturality.
                   --  rw limit.pullback_lift (switched F Y),
                   sorry
                     end, },
