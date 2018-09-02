@@ -10,17 +10,17 @@ namespace category_theory.universal
 
 universes u v 
 
-variables {C : Type u} [category.{u v} C] {J : Type v} [small_category J]
+variables {C : Type u} [category.{u v} C] {J : Type v} [small_category J] [has_limits.{u v} C] 
 
-def functorial_limit [has_limits.{u v} C] : (J ↝ C) ↝ C := 
-{ obj := λ F, limit F,
-  map' := λ F G τ, (limit.cone_morphism G
-                     { X := _, π := (λ j, (limit.π F j) ≫ (τ j)) }).hom,
-  map_id' := begin tidy, erw limit.lift_π, dsimp, simp, end }. -- FIXME why doesn't obviously manage this?
-
+def lim : (J ↝ C) ↝ C := 
+{ obj := limit,
+  map' := λ F F' t, (limit.universal_property F').lift $
+    { X := limit F, π := λ j, limit.π F j ≫ t j },
+  map_id' := begin tidy, erw limit.lift_π, dsimp, simp, end }. -- FIXME why doesn't simp use limit.lift_π here?
+ 
 -- boilerplate
-@[simp] lemma functorial_limit_map [has_limits.{u v} C] {F G : J ↝ C} (τ : F ⟹ G) : 
-  functorial_limit.map τ = (limit.cone_morphism G { X := _, π := (λ j, ((limit.cone F).π j) ≫ (τ j)) }).hom :=
+@[simp] lemma lim_map [has_limits.{u v} C] {F F' : J ↝ C} (t : F ⟹ F') : 
+  lim.map t = ((limit.universal_property F').lift $ { X := limit F, π := λ j, limit.π F j ≫ t j }) :=
 rfl
 
 -- def functorial_colimit [has_colimits C] : (J ↝ C) ↝ C := 
