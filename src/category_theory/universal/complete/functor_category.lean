@@ -36,7 +36,7 @@ def introduce_switch (F : J ↝ (C ↝ D)) {j j' : J} (f : j ⟶ j') (X : C) : (
 
 
 def limit_cone_in_functor_category [has_limits.{u v} D] (F : J ↝ (C ↝ D)) : cone F := 
-{ X := ((switched F) ⋙ functorial_limit),
+{ X := ((switched F) ⋙ lim),
   π := λ j, { app := λ X : C, (limit.cone (switched F X)).π j },
   w := λ j j' f, begin ext1, dsimp at *, rw introduce_switch, obviously, end }.
 
