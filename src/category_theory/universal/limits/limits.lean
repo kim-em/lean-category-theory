@@ -101,10 +101,23 @@ def limit (F : J ↝ C) := (limit.cone F).X
 def limit.π (F : J ↝ C) (j : J) : limit F ⟶ F j := (limit.cone F).π j
 def limit.universal_property (F : J ↝ C) : is_limit (limit.cone F) := 
 has_limits.is_limit.{u v} C F
--- limit.cone is in cones.lean
+
+def limit.lift (F : J ↝ C) (c : cone F) : c.X ⟶ limit F := (limit.universal_property F).lift c
+
+@[simp] def limit.universal_property_lift (F : J ↝ C) (c : cone F) : (limit.universal_property F).lift c = limit.lift F c := rfl
+@[simp] def limit.lift_π (F : J ↝ C) (c : cone F) (j : J) : (limit.universal_property F).lift c ≫ limit.π F j = c.π j :=
+(limit.universal_property F).fac c j
+
 
 -- FIXME why the @?
 @[simp] lemma limit.cone_π (F : J ↝ C) (j : J) : (limit.cone F).π j = (@limit.π C _ _ J _ F j) := rfl
+
+-- TODO needs a home
+def cone.pullback {F : J ↝ C} (A : cone F) {X : C} (f : X ⟶ A.X) : cone F :=
+{ X := X,
+  π := λ j, f ≫ A.π j }
+
+-- lemma limit.pullback_lift (F : J ↝ C) (c : cone F) {X : C} (f : X ⟶ c.X) : f ≫ limit.lift F c = limit.lift F (c.pullback f) := sorry
 
 @[extensionality] def limit.hom_ext {F : J ↝ C} {c : cone F}
   (f g : c.X ⟶ limit F)

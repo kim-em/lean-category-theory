@@ -118,11 +118,11 @@ def limit.cone_morphism (c : cone F) : cone_morphism c (limit.cone F) :=
 @[simp] lemma limit.cone_morphism_π (c : cone F) (j : J) : (limit.cone_morphism F c).hom ≫ (limit.π F j) = c.π j :=
 (limit.universal_property F).fac c j
 
-def limit.hom
-  (X : C) (π : Π j : J, X ⟶ F j) 
-  (w : Π (j j' : J) (f : j ⟶ j'), π j ≫ F.map f = π j') : 
-  X ⟶ (limit F) :=
-(limit.cone_morphism F { X := X, π := π, w := w }).hom
+-- def limit.hom
+--   {X : C} (π : Π j : J, X ⟶ F j) 
+--   (w : Π (j j' : J) (f : j ⟶ j'), π j ≫ F.map f = π j') : 
+--   X ⟶ (limit F) :=
+-- (limit.cone_morphism F { X := X, π := π, w := w }).hom
 end
 
 end category_theory.universal

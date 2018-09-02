@@ -21,39 +21,36 @@ private meta def dsimp' : tactic unit := `[dsimp at * {unfold_reducible := tt, m
 variables {J : Type v} [small_category J] {C : Type v} [small_category C] {D : Type u} [𝒟 : category.{u v} D]
 include 𝒟 
 
-def switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D)) := uncurry ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry
+-- def switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D)) := uncurry ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry
 
-def switched (F : J ↝ (C ↝ D)) : C ↝ (J ↝ D):= ((switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D))) F)
+def switched (F : J ↝ (C ↝ D)) : C ↝ (J ↝ D) :=
+{ obj := λ c, { obj := λ j, (F j) c, map' := λ j j' f, (F.map f) c },
+  map' := λ c c' f, { app := λ j, (F j).map f }}.
 
-def introduce_switch (F : J ↝ (C ↝ D)) {j j' : J} (f : j ⟶ j') (X : C) : (F.map f) X = ((switched F) X).map f := 
-begin
-  dunfold switched,
-  dunfold switch_curry,
-  dunfold curry, dunfold uncurry,
-  dunfold whisker_on_left_functor,
-  dunfold whiskering_on_left,
-  dunfold switch,
-  dsimp,
-  simp,
-end
+-- section
+-- local attribute [back] category.id
+-- def switched_twice (F : J ↝ (C ↝ D)) : switched (switched F) ≅ F := by obviously
+-- end
 
--- def limit_cone_in_functor_category [has_limits.{u v} D] (F : J ↝ (C ↝ D)) : cone F := 
--- { X := ((switched F) ⋙ functorial_limit),
---   π := λ j, { app := λ X : C, (limit.cone (switched F X)).π j },
---   w := begin intros j j' f, ext1, dsimp at *, rw introduce_switch, obviously, end }.
+def introduce_switch (F : J ↝ (C ↝ D)) {j j' : J} (f : j ⟶ j') (X : C) : (F.map f) X = ((switched F) X).map f := sorry
 
--- instance [has_limits.{u v} D] : has_limits.{(max u v) v} (C ↝ D) := 
--- { limit := λ J _ F, begin resetI, exact limit_cone_in_functor_category F end,
---   is_limit := begin 
---                 intros,
---                 apply is_limit.of_comparison,
---                 intros,
---                 dunfold limit_cone_in_functor_category,
---                 dunfold limit_comparison,
---                 dsimp,
---                 obviously,
---                 sorry,
---               end
--- }
+
+def limit_cone_in_functor_category [has_limits.{u v} D] (F : J ↝ (C ↝ D)) : cone F := 
+{ X := ((switched F) ⋙ functorial_limit),
+  π := λ j, { app := λ X : C, (limit.cone (switched F X)).π j },
+  w := λ j j' f, begin ext1, dsimp at *, rw introduce_switch, obviously, end }.
+
+instance [has_limits.{u v} D] : has_limits.{(max u v) v} (C ↝ D) := 
+{ limit := λ J 𝒥 F, begin resetI, exact limit_cone_in_functor_category F end,
+  is_limit := λ J 𝒥 F, begin resetI, exact
+  { lift := λ s, { app := λ X, (limit.cone_morphism (switched F X) { X := s.X X, π := λ j, (s.π j) X }).hom,
+                   naturality' := begin tidy, dsimp [limit_cone_in_functor_category], tidy,
+                   
+                  --  rw limit.pullback_lift (switched F Y),
+                  sorry
+                    end, },
+    fac := sorry,
+    uniq := sorry } end
+}
 
 end category_theory.universal
