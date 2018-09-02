@@ -16,6 +16,8 @@ instance : has_terminal_object.{u+1 u} (Type u) :=
 instance : has_binary_products.{u+1 u} (Type u) := 
 { prod := λ Y Z, { X := Y × Z, π₁ := prod.fst, π₂ := prod.snd } }
 
+@[simp] lemma types_prod (Y Z : Type u) : universal.prod Y Z = (Y × Z) := rfl
+
 instance : has_products.{u+1 u} (Type u) := 
 { prod := λ β f, { X := Π b, f b, π := λ b x, x b } }.
 

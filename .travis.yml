@@ -36,7 +36,7 @@ jobs:
 
     - stage: Test
       script:
-        - leanpkg test
+        - leanpkg build
 
 notifications:
   webhooks:
