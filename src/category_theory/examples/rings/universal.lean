@@ -57,6 +57,9 @@ def filtered_colimit (F : J ↝ Ring) :=
 
 local attribute [elab_with_expected_type] quot.lift
 
+def filtered_colimit.zero (F : J ↝ Ring) : filtered_colimit F :=
+quot.mk _ ⟨ filtered.default.{v v} J, 0 ⟩ 
+
 def filtered_colimit.add (F : J ↝ Ring) (x y : filtered_colimit F) : filtered_colimit F :=
 quot.lift (λ p : Σ j, (F j).1, 
   quot.lift (λ q : Σ j, (F j).1, 
@@ -79,7 +82,7 @@ def filtered_colimit_is_comm_ring (F : J ↝ Ring) : comm_ring (filtered_colimit
 { add := filtered_colimit.add F,
   neg := sorry,
   mul := sorry,
-  zero := sorry,
+  zero := filtered_colimit.zero F,
   one := sorry,
   add_comm := sorry,
   add_assoc := sorry,
