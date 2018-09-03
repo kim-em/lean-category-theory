@@ -45,11 +45,10 @@ def preimage_iso (f : (F X) ≅ (F Y)) : X ≅ Y :=
 @[simp] lemma preimage_iso_coe (f : (F X) ≅ (F Y)) : ((preimage_iso f) : X ⟶ Y) = preimage F (f : F X ⟶ F Y) := rfl
 @[simp] lemma preimage_iso_symm_coe (f : (F X) ≅ (F Y)) : ((preimage_iso f).symm : Y ⟶ X) = preimage F (f.symm : F Y ⟶ F X) := rfl
 end
--- TODO
--- instance (F : C ↝ D) [Faithful F] : ReflectsIsomorphisms F := sorry
 
 class embedding (F : C ↝ D) extends (full F), (faithful F).
 
+-- TODO remove?
 @[back] def embedding.ext (F : C ↝ D) (full : full F) (faithful : faithful F) : embedding F := by obviously
 
 end category_theory

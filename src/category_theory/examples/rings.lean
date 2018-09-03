@@ -21,9 +21,9 @@ structure ring_hom (R S : Ring.{u₁}) : Type u₁ :=
 
 instance (R S : Ring.{u₁}) (f : ring_hom R S) : is_ring_hom f.map := f.is_ring_hom
 
-@[simp,search] lemma ring_hom.map_mul (R S : Ring.{u₁}) (f : ring_hom R S) (x y : R.1) : f.map(x * y) = (f.map x) * (f.map y) := by sorry
-@[simp,search] lemma ring_hom.map_add (R S : Ring.{u₁}) (f : ring_hom R S) (x y : R.1) : f.map(x + y) = (f.map x) + (f.map y) := by sorry
-@[simp,search] lemma ring_hom.map_one (R S : Ring.{u₁}) (f : ring_hom R S) : f.map 1 = 1 := by sorry
+@[simp] lemma ring_hom.map_mul (R S : Ring.{u₁}) (f : ring_hom R S) (x y : R.1) : f.map(x * y) = (f.map x) * (f.map y) := by rw f.is_ring_hom.map_mul
+@[simp] lemma ring_hom.map_add (R S : Ring.{u₁}) (f : ring_hom R S) (x y : R.1) : f.map(x + y) = (f.map x) + (f.map y) := by rw f.is_ring_hom.map_add
+@[simp] lemma ring_hom.map_one (R S : Ring.{u₁}) (f : ring_hom R S) : f.map 1 = 1 := by rw f.is_ring_hom.map_one
 
 def ring_hom.id (R : Ring) : ring_hom R R :=
 { map := id }

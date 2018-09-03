@@ -20,6 +20,15 @@ end
 
 variables (α : Type v) [topological_space α]
 
+local attribute [back] topological_space.is_open_inter
+local attribute [back] open_set.is_open
+
+instance : has_inter (open_set α) := 
+{ inter := λ U V, ⟨ U.s ∩ V.s, by obviously ⟩ }
+
+instance has_inter_op : has_inter ((open_set α)ᵒᵖ) := 
+{ inter := λ U V, ⟨ U.s ∩ V.s, by obviously ⟩ }
+
 structure cover' :=
 (I : Type v)
 (U : I → (open_set α))

@@ -13,6 +13,8 @@ section
 variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (D : Type u₂) [𝒟 : category.{u₂ v₂} D] (E : Type u₃) [ℰ : category.{u₃ v₃} E]
 include 𝒞 𝒟 ℰ
 
+-- set_option trace.tidy true
+
 def whiskering_on_left : (C ↝ D) ↝ ((D ↝ E) ↝ (C ↝ E)) := 
 { obj := λ F, { obj := λ G, F ⋙ G,
                 map' := λ _ _ α, (nat_trans.id _) ◫ α },
