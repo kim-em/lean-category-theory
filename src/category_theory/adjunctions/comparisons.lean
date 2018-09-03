@@ -19,8 +19,8 @@ section
 variables {A : Type u₁} [𝒜 : category.{u₁ v₁} A] {B : Type u₂} [ℬ : category.{u₂ v₂} B] {C : Type u₃} [𝒞 : category.{u₃ v₃} C] {D : Type u₄} [𝒟 : category.{u₄ v₄} D]
 include 𝒜 ℬ 𝒞 𝒟
 
-@[simp, ematch] lemma prod_obj' (F : A ↝ B) (G : C ↝ D) (a : A) (c : C) : (functor.prod F G).obj (a, c) = (F a, G c) := rfl
-@[simp, ematch] lemma prod_app' {F G : A ↝ B} {H I : C ↝ D} (α : F ⟹ G) (β : H ⟹ I) (a : A) (c : C) : (nat_trans.prod α β).app (a, c) = (α a, β c) := rfl
+@[simp,search] lemma prod_obj' (F : A ↝ B) (G : C ↝ D) (a : A) (c : C) : (functor.prod F G).obj (a, c) = (F a, G c) := rfl
+@[simp,search] lemma prod_app' {F G : A ↝ B} {H I : C ↝ D} (α : F ⟹ G) (β : H ⟹ I) (a : A) (c : C) : (nat_trans.prod α β).app (a, c) = (α a, β c) := rfl
 end
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₁} [𝒟 : category.{u₁ v₁} D]
@@ -45,7 +45,7 @@ def Adjunction_to_HomAdjunction (A : L ⊣ R) : hom_adjunction L R :=
 { hom := Adjunction_to_HomAdjunction_morphism A,
   inv := Adjunction_to_HomAdjunction_inverse A }
 
-@[simp,ematch] lemma mate_of_L (A : hom_adjunction L R) {X Y : C} (f : X ⟶ Y) : (((A.hom) (X, L X)) (𝟙 (L X))) ≫ 
+@[simp,search] lemma mate_of_L (A : hom_adjunction L R) {X Y : C} (f : X ⟶ Y) : (((A.hom) (X, L X)) (𝟙 (L X))) ≫ 
       (R.map (L.map f))
       = ((A.hom) (X, L Y)) (L.map f) :=
 begin
@@ -56,7 +56,7 @@ begin
   obviously,
 end
 
-@[simp,ematch] lemma mate_of_L' (A : hom_adjunction L R) {X Y : C} (f : X ⟶ Y) : f ≫ (((A.hom) (Y, L Y)) (𝟙 (L Y)))
+@[simp,search] lemma mate_of_L' (A : hom_adjunction L R) {X Y : C} (f : X ⟶ Y) : f ≫ (((A.hom) (Y, L Y)) (𝟙 (L Y)))
       = ((A.hom) (X, L Y)) (L.map f) :=
 begin
   have p := @nat_trans.naturality _ _ _ _ _ _ A.hom (Y, L Y) (X, L Y) (f, 𝟙 (L Y)),
@@ -64,7 +64,7 @@ begin
   obviously,
 end
 
-@[simp,ematch] lemma mate_of_R (A : hom_adjunction L R) {X Y : D} (f : X ⟶ Y) : (L.map (R.map f)) ≫ (((A.inv) (R Y, Y)) (𝟙 (R Y)))
+@[simp,search] lemma mate_of_R (A : hom_adjunction L R) {X Y : D} (f : X ⟶ Y) : (L.map (R.map f)) ≫ (((A.inv) (R Y, Y)) (𝟙 (R Y)))
       = ((A.inv) (R X, Y)) (R.map f) :=
 begin
   have p := @nat_trans.naturality _ _ _ _ _ _ A.inv (R Y, Y) (R X, Y) (R.map f, 𝟙 Y),
@@ -72,7 +72,7 @@ begin
   tidy,
 end
 
-@[simp,ematch] lemma mate_of_R' (A : hom_adjunction L R) {X Y : D} (f : X ⟶ Y) : (((A.inv) (R X, X)) (𝟙 (R X))) ≫ f = 
+@[simp,search] lemma mate_of_R' (A : hom_adjunction L R) {X Y : D} (f : X ⟶ Y) : (((A.inv) (R X, X)) (𝟙 (R X))) ≫ f = 
     ((A.inv) (R X, Y)) (R.map f) :=
 begin
   have p := @nat_trans.naturality _ _ _ _ _ _ A.inv (R X, X) (R X, Y) (𝟙 (R X), f),

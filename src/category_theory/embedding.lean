@@ -18,13 +18,13 @@ class full (F : C ↝ D) :=
 
 attribute [back'] full.preimage
 restate_axiom full.witness'
-attribute [simp,ematch] full.witness
+attribute [simp,search] full.witness
 
 instance : full (functor.id C) :=
 { preimage := λ _ _ f, f }
 
 def preimage (F : C ↝ D) [full F] {X Y : C} (f : F X ⟶ F Y) : X ⟶ Y := full.preimage.{u₁ v₁ u₂ v₂}  f
-@[simp,ematch] lemma image_preimage (F : C ↝ D) [full F] {X Y : C} (f : F X ⟶ F Y) : F.map (preimage F f) = f := begin unfold preimage, obviously end
+@[simp,search] lemma image_preimage (F : C ↝ D) [full F] {X Y : C} (f : F X ⟶ F Y) : F.map (preimage F f) = f := begin unfold preimage, obviously end
 
 class faithful (F : C ↝ D) : Prop :=
 (injectivity' : ∀ {X Y : C} {f g : X ⟶ Y} (p : F.map f = F.map g), f = g)

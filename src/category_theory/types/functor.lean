@@ -24,7 +24,7 @@
 --               end
 -- }
 
--- attribute [ematch] is_lawful_functor.comp_map
+-- attribute [search] is_lawful_functor.comp_map
 
 -- def functor_of_functor' (g : Type u → Type v) [functor g] [is_lawful_functor g] : (Type u) ↝ (Type v) := 
 -- { obj := g,

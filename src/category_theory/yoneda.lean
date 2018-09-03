@@ -30,8 +30,8 @@ def yoneda : C ↝ ((Cᵒᵖ) ↝ (Type v₁)) :=
 @[simp] lemma yoneda_obj_map (X : C) {Y Y' : C} (f : Y ⟶ Y') : ((yoneda C) X).map f = λ g, f ≫ g := rfl
 @[simp] lemma yoneda_map_app {X X' : C} (f : X ⟶ X') (Y : C) : ((yoneda C).map f) Y = λ g, g ≫ f := rfl
 
-@[ematch] lemma yoneda_aux_1 {X Y : Cᵒᵖ} (f : X ⟶ Y) : ((yoneda C).map f) Y (𝟙 Y) = ((yoneda C) X).map f (𝟙 X) := by obviously
-@[simp,ematch] lemma yoneda_aux_2 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) {Z Z' : C} (f : Z ⟶ Z') (h : Z' ⟶ X) : α Z (f ≫ h) = f ≫ α Z' h := by obviously
+@[search] lemma yoneda_aux_1 {X Y : Cᵒᵖ} (f : X ⟶ Y) : ((yoneda C).map f) Y (𝟙 Y) = ((yoneda C) X).map f (𝟙 X) := by obviously
+@[simp,search] lemma yoneda_aux_2 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) {Z Z' : C} (f : Z ⟶ Z') (h : Z' ⟶ X) : α Z (f ≫ h) = f ≫ α Z' h := by obviously
 
 instance yoneda_full : full (yoneda C) := 
 { preimage := λ X Y f, (f X) (𝟙 X) }.
@@ -41,7 +41,7 @@ begin
 /- obviously says: -/ 
 fsplit, 
 intros X Y f g p, 
-injections_and_clear, 
+injections_and_clear,
 have cancel_right'_f_g_h_1 := cancel_right' f g h_1, 
 assumption
 end

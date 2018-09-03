@@ -18,9 +18,9 @@ structure is_kernel (f : Y ⟶ Z) (ι : X ⟶ Y) :=
 (uniq : Π {X' : C} {ι' : X' ⟶ Y} (w : ι' ≫ f = zero_morphism X' Z) {m : X' ⟶ X} (h : m ≫ ι = ι'), m = lift w . obviously)
 
 restate_axiom is_kernel.fac
-attribute [simp,ematch] is_kernel.fac_lemma
+attribute [simp,search] is_kernel.fac_lemma
 restate_axiom is_kernel.uniq
-attribute [ematch, back'] is_kernel.uniq_lemma
+attribute [search, back'] is_kernel.uniq_lemma
 
 @[extensionality] lemma is_kernel.ext {f : Y ⟶ Z} {ι : X ⟶ Y} (P Q : is_kernel f ι) : P = Q :=
 begin cases P, cases Q, obviously end

@@ -69,7 +69,7 @@ structure fork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Y ⟶ Z) 
 (w : ι ≫ f = ι ≫ g . obviously)
 
 restate_axiom fork.w
-attribute [ematch] fork.w_lemma
+attribute [search] fork.w_lemma
 
 /--
 A `cofork f g`:
@@ -84,7 +84,7 @@ structure cofork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Z ⟶ Y
 (w : f ≫ π = g ≫ π . obviously)
 
 restate_axiom cofork.w
-attribute [ematch] cofork.w_lemma
+attribute [search] cofork.w_lemma
 
 /-- 
 A `square p q`:
@@ -102,7 +102,7 @@ structure square {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r₁ 
 (w : π₁ ≫ r₁ = π₂ ≫ r₂ . obviously)
 
 restate_axiom square.w
-attribute [ematch] square.w_lemma
+attribute [search] square.w_lemma
 
 /-- 
 A `cosquare p q`:
@@ -120,14 +120,14 @@ structure cosquare {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r�
 (w : r₁ ≫ ι₁ = r₂ ≫ ι₂ . obviously)
 
 restate_axiom cosquare.w
-attribute [ematch] cosquare.w_lemma
+attribute [search] cosquare.w_lemma
 
 structure cone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ↝ C) extends shape C :=
 (π : ∀ j : J, X ⟶ F j)
 (w : ∀ {j j' : J} (f : j ⟶ j'), π j ≫ (F.map f) = π j' . obviously)
 
 restate_axiom cone.w
-attribute [ematch] cone.w_lemma
+attribute [search] cone.w_lemma
 
 
 structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ↝ C) extends shape C :=
@@ -135,7 +135,7 @@ structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_cate
 (w : ∀ {j j' : J} (f : j ⟶ j'), (F.map f) ≫ ι j' = ι j)
 
 restate_axiom cocone.w
-attribute [ematch] cocone.w_lemma
+attribute [search] cocone.w_lemma
 
 end shapes
 

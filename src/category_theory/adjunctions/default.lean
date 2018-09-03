@@ -26,7 +26,7 @@ structure Adjunction (L : C ↝ D) (R : D ↝ C) :=
   -- (Triangle_1 : (whisker_on_left R unit) ⊟ (whisker_on_right counit R) = 1) -- we'd need unitors and associators here
 
 
-attribute [simp,ematch] Adjunction.triangle_1 Adjunction.triangle_2
+attribute [simp,search] Adjunction.triangle_1 Adjunction.triangle_2
 
 infix ` ⊣ `:50 := Adjunction
 
@@ -58,10 +58,10 @@ infix ` ⊣ `:50 := Adjunction
 --   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
 --   = IdentityNaturalTransformation L
 
-@[simp,ematch] lemma Adjunction.unit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : C} (f : X ⟶ Y) : (A.unit X) ≫ (R.map (L.map f)) = f ≫ (A.unit Y) := 
+@[simp,search] lemma Adjunction.unit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : C} (f : X ⟶ Y) : (A.unit X) ≫ (R.map (L.map f)) = f ≫ (A.unit Y) := 
 by obviously
 
-@[simp,ematch] lemma Adjunction.counit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : D} (f : X ⟶ Y) : (L.map (R.map f)) ≫ (A.counit Y) = (A.counit X) ≫ f :=
+@[simp,search] lemma Adjunction.counit_naturality {L : C ↝ D} {R : D ↝ C} (A : L ⊣ R) {X Y : D} (f : X ⟶ Y) : (L.map (R.map f)) ≫ (A.counit Y) = (A.counit X) ≫ f :=
 by obviously
 
 -- PROJECT examples

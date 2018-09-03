@@ -7,7 +7,6 @@ import category_theory.filtered
 
 open category_theory
 
-
 namespace category_theory.universal
 
 universes u v w
@@ -25,16 +24,16 @@ structure is_limit {F : J ↝ C} (t : cone F) :=
 (uniq : ∀ (s : cone F) (m : s.X ⟶ t.X) (w : ∀ j : J, (m ≫ t.π j) = s.π j), m = lift s . obviously)
 
 restate_axiom is_limit.fac
-attribute [simp,ematch] is_limit.fac_lemma
+attribute [simp,search] is_limit.fac_lemma
 restate_axiom is_limit.uniq
-attribute [ematch, back'] is_limit.uniq_lemma
+attribute [search,back'] is_limit.uniq_lemma
 
 @[extensionality] lemma is_limit.ext {F : J ↝ C} {t : cone F} (P Q : is_limit t) : P = Q :=
 begin cases P, cases Q, obviously end
 
 lemma is_limit.univ {F : J ↝ C} {t : cone F} (h : is_limit t) (s : cone F) (φ : s.X ⟶ t.X) : (∀ j, φ ≫ t.π j = s.π j) ↔ (φ = h.lift s) :=
 begin
-obviously,
+obviously
 end
 
 def is_limit.of_lift_univ {F : J ↝ C} {t : cone F}
@@ -57,9 +56,9 @@ structure is_colimit {F : J ↝ C} (t : cocone F) :=
 (uniq : ∀ (s : cocone F) (m : t.X ⟶ s.X) (w : ∀ j : J, (t.ι j ≫ m) = s.ι j), m = desc s . obviously)
 
 restate_axiom is_colimit.fac
-attribute [simp,ematch] is_colimit.fac_lemma
+attribute [simp,search] is_colimit.fac_lemma
 restate_axiom is_colimit.uniq
-attribute [ematch, back'] is_colimit.uniq_lemma
+attribute [search,back'] is_colimit.uniq_lemma
 
 @[extensionality] lemma is_colimit.ext {F : J ↝ C} {t : cocone F} (P Q : is_colimit t) : P = Q :=
 begin cases P, cases Q, obviously end

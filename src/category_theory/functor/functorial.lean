@@ -23,7 +23,7 @@ class functorial (f : C → D) :=
 
 restate_axiom functorial.map_id'
 restate_axiom functorial.map_comp'
-attribute [simp,ematch] functorial.map_comp functorial.map_id
+attribute [simp,search] functorial.map_comp functorial.map_id
 
 -- instance (F : C ↝ D) : functorial (F.obj) := 
 -- { map := F.map' }

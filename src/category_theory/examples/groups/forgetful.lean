@@ -18,7 +18,7 @@ def ForgetfulFunctor_Groups_to_Types : Group ↝ (Type u₁) :=
 { obj  := λ s, s.1,
   map' := λ s t f x, f.map x }
 
-local attribute [ematch] semigroup.mul_assoc
+local attribute [search] semigroup.mul_assoc
 
 instance ulift_group {α : Type u₁} [group α] : group (ulift.{u₂} α) := 
 begin

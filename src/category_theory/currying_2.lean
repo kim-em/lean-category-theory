@@ -32,7 +32,7 @@
 --                     --  erw category.comp_id_lemma,
 --                     --  erw category.id_comp_lemma,
 
---                      rewrite_search_using [`ematch] {trace_result := tt, trace := tt, visualise := tt}
+--                      rewrite_search_using [`search] {trace_result := tt, trace := tt, visualise := tt}
 --                     end },
 --     naturality := sorry }, naturality := sorry },
 --     inv := sorry,

@@ -23,7 +23,7 @@ class is_terminal (t : C) :=
 (uniq' : ∀ (s : C) (m : s ⟶ t), m = lift s . obviously)
 
 restate_axiom is_terminal.uniq'
-attribute [ematch, back'] is_terminal.uniq
+attribute [search, back'] is_terminal.uniq
 
 @[extensionality] lemma is_terminal.ext {X : C} (P Q : is_terminal.{u v} X) : P = Q := 
 begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously, end
@@ -38,11 +38,11 @@ structure is_binary_product {Y Z : C} (t : span Y Z) :=
 (uniq : ∀ (s : span Y Z) (m : s.X ⟶ t.X) (w₁ : m ≫ t.π₁ = s.π₁) (w₂ : m ≫ t.π₂ = s.π₂), m = lift s . obviously)
 
 restate_axiom is_binary_product.fac₁
-attribute [simp,ematch] is_binary_product.fac₁_lemma
+attribute [simp,search] is_binary_product.fac₁_lemma
 restate_axiom is_binary_product.fac₂
-attribute [simp,ematch] is_binary_product.fac₂_lemma
+attribute [simp,search] is_binary_product.fac₂_lemma
 restate_axiom is_binary_product.uniq
-attribute [ematch, back'] is_binary_product.uniq_lemma
+attribute [search,back'] is_binary_product.uniq_lemma
 
 @[extensionality] lemma is_binary_product.ext {Y Z : C} {t : span Y Z} (P Q : is_binary_product t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -79,9 +79,9 @@ structure is_product (t : fan f) :=
 (uniq : ∀ (s : fan f) (m : s.X ⟶ t.X) (w : ∀ b, m ≫ t.π b = s.π b), m = lift s . obviously)
 
 restate_axiom is_product.fac
-attribute [simp,ematch] is_product.fac_lemma
+attribute [simp,search] is_product.fac_lemma
 restate_axiom is_product.uniq
-attribute [ematch, back'] is_product.uniq_lemma
+attribute [search, back'] is_product.uniq_lemma
 
 @[extensionality] lemma is_product.ext {t : fan f} (P Q : is_product t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -115,9 +115,9 @@ structure is_equalizer {f g : Y ⟶ Z} (t : fork f g) :=
 (uniq : ∀ (s : fork f g) (m : s.X ⟶ t.X) (w : m ≫ t.ι = s.ι), m = lift s . obviously)
 
 restate_axiom is_equalizer.fac
-attribute [simp,ematch] is_equalizer.fac_lemma
+attribute [simp,search] is_equalizer.fac_lemma
 restate_axiom is_equalizer.uniq
-attribute [ematch, back'] is_equalizer.uniq_lemma
+attribute [search, back'] is_equalizer.uniq_lemma
 
 @[extensionality] lemma is_equalizer.ext {f g : Y ⟶ Z} {t : fork f g} (P Q : is_equalizer t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -153,11 +153,11 @@ structure is_pullback (t : square r₁ r₂) :=
 (uniq : ∀ (s : square r₁ r₂) (m : s.X ⟶ t.X) (w₁ : (m ≫ t.π₁) = s.π₁) (w₂ : (m ≫ t.π₂) = s.π₂), m = lift s . obviously)
 
 restate_axiom is_pullback.fac₁
-attribute [simp,ematch] is_pullback.fac₁_lemma
+attribute [simp,search] is_pullback.fac₁_lemma
 restate_axiom is_pullback.fac₂
-attribute [simp,ematch] is_pullback.fac₂_lemma
+attribute [simp,search] is_pullback.fac₂_lemma
 restate_axiom is_pullback.uniq
-attribute [ematch, back'] is_pullback.uniq_lemma
+attribute [search, back'] is_pullback.uniq_lemma
 
 @[extensionality] lemma is_pullback.ext {t : square r₁ r₂} (P Q : is_pullback t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -234,9 +234,9 @@ def prod.pair {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : P ⟶ (prod Q R) :=
 def prod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (prod P R) ⟶ (prod Q S) :=
 prod.pair (prod.π₁ P R ≫ f) (prod.π₂ P R ≫ g)
 
-@[simp,ematch] lemma prod.pair_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₁ Q R = f := 
+@[simp,search] lemma prod.pair_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₁ Q R = f := 
 (prod.universal_property.{u v} Q R).fac₁_lemma { X := P, π₁ := f, π₂ := g }
-@[simp,ematch] lemma prod.pair_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₂ Q R = g :=
+@[simp,search] lemma prod.pair_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₂ Q R = g :=
 (prod.universal_property.{u v} Q R).fac₂_lemma { X := P, π₁ := f, π₂ := g }
 
 @[extensionality] def prod.hom_ext (Y Z : C) (X : C) 
@@ -277,7 +277,7 @@ lemma pi.components_eq (f : β → C) {X : C} {g h : X ⟶ pi f} (e : g = h) (b 
 def pi.of_components {f : β → C} {P : C} (p : Π b, P ⟶ f b) : P ⟶ pi f :=
 (pi.universal_property f).lift ⟨ ⟨ P ⟩, p ⟩
 
-@[simp,ematch] def pi.of_components_π {f : β → C} {P : C} (p : Π b, P ⟶ f b) (b : β) : pi.of_components p ≫ pi.π f b = p b :=
+@[simp,search] def pi.of_components_π {f : β → C} {P : C} (p : Π b, P ⟶ f b) (b : β) : pi.of_components p ≫ pi.π f b = p b :=
 begin
   dsimp [pi.of_components],
   rw ← pi.fan_π f,
@@ -302,7 +302,7 @@ variables [has_equalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
 def equalizer.fork := has_equalizers.equalizer.{u v} f g
 def equalizer := (equalizer.fork f g).X
 def equalizer.ι : (equalizer f g) ⟶ Y := (equalizer.fork f g).ι
-@[ematch] def equalizer.w : (equalizer.ι f g) ≫ f = (equalizer.ι f g) ≫ g := (equalizer.fork f g).w
+@[search] def equalizer.w : (equalizer.ι f g) ≫ f = (equalizer.ι f g) ≫ g := (equalizer.fork f g).w
 def equalizer.universal_property : is_equalizer (equalizer.fork f g) := has_equalizers.is_equalizer.{u v} C f g
 
 def equalizer.lift (P : C) (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := 

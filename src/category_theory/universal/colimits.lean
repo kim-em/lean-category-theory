@@ -23,7 +23,7 @@ structure is_initial (t : C) :=
 (uniq : ∀ (s : C) (m : t ⟶ s), m = desc s . obviously)
 
 restate_axiom is_initial.uniq
-attribute [ematch, back'] is_initial.uniq_lemma
+attribute [search, back'] is_initial.uniq_lemma
 
 @[extensionality] lemma is_initial.ext {X : C} (P Q : is_initial.{u v} X) : P = Q := 
 begin cases P, cases Q, obviously, end
@@ -45,11 +45,11 @@ structure is_binary_coproduct {Y Z : C} (t : cospan Y Z) :=
 (uniq : ∀ (s : cospan Y Z) (m : t.X ⟶ s.X) (w₁ : t.ι₁ ≫ m = s.ι₁) (w₂ : t.ι₂ ≫ m = s.ι₂), m = desc s . obviously)
 
 restate_axiom is_binary_coproduct.fac₁
-attribute [simp,ematch] is_binary_coproduct.fac₁_lemma
+attribute [simp,search] is_binary_coproduct.fac₁_lemma
 restate_axiom is_binary_coproduct.fac₂
-attribute [simp,ematch] is_binary_coproduct.fac₂_lemma
+attribute [simp,search] is_binary_coproduct.fac₂_lemma
 restate_axiom is_binary_coproduct.uniq
-attribute [ematch, back'] is_binary_coproduct.uniq_lemma
+attribute [search, back'] is_binary_coproduct.uniq_lemma
 
 @[extensionality] lemma is_binary_coproduct.ext {Y Z : C} {t : cospan Y Z} (P Q : is_binary_coproduct t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -87,9 +87,9 @@ structure is_coproduct (t : cofan f) :=
 (uniq : ∀ (s : cofan f) (m : t.X ⟶ s.X) (w : ∀ b, t.ι b ≫ m = s.ι b), m = desc s . obviously)
 
 restate_axiom is_coproduct.fac
-attribute [simp,ematch] is_coproduct.fac_lemma
+attribute [simp,search] is_coproduct.fac_lemma
 restate_axiom is_coproduct.uniq
-attribute [ematch, back'] is_coproduct.uniq_lemma
+attribute [search, back'] is_coproduct.uniq_lemma
 
 @[extensionality] lemma is_coproduct.ext {t : cofan f} (P Q : is_coproduct t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -133,9 +133,9 @@ structure is_coequalizer {f g : Z ⟶ Y} (t : cofork f g) :=
 (uniq : ∀ (s : cofork f g) (m : t.X ⟶ s.X) (w : t.π ≫ m = s.π), m = desc s . obviously)
 
 restate_axiom is_coequalizer.fac
-attribute [simp,ematch] is_coequalizer.fac_lemma
+attribute [simp,search] is_coequalizer.fac_lemma
 restate_axiom is_coequalizer.uniq
-attribute [ematch, back'] is_coequalizer.uniq_lemma
+attribute [search, back'] is_coequalizer.uniq_lemma
 
 @[extensionality] lemma is_coequalizer.ext {f g : Z ⟶ Y} {t : cofork f g} (P Q : is_coequalizer t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -171,11 +171,11 @@ structure is_pushout {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} (t : cosquare r₁ 
 (uniq : ∀ (s : cosquare r₁ r₂) (m : t.X ⟶ s.X) (w₁ : (t.ι₁ ≫ m) = s.ι₁) (w₂ : (t.ι₂ ≫ m) = s.ι₂), m = desc s . obviously)
 
 restate_axiom is_pushout.fac₁
-attribute [simp,ematch] is_pushout.fac₁_lemma
+attribute [simp,search] is_pushout.fac₁_lemma
 restate_axiom is_pushout.fac₂
-attribute [simp,ematch] is_pushout.fac₂_lemma
+attribute [simp,search] is_pushout.fac₂_lemma
 restate_axiom is_pushout.uniq
-attribute [ematch, back'] is_pushout.uniq_lemma
+attribute [search, back'] is_pushout.uniq_lemma
 
 @[extensionality] lemma is_pushout.ext {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂} (P Q : is_pushout t) : P = Q :=
 begin cases P, cases Q, obviously end

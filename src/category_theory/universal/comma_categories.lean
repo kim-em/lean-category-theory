@@ -35,7 +35,7 @@ def ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{
 @[simp] lemma ObjectAsFunctor_map {C : Type u₃} [category.{u₃ v₃} C] (X : C) (P Q : punit) (h : @category.hom.{u₃ v₃} punit _ P Q) : @category_theory.functor.map _ _ _ _ (ObjectAsFunctor.{u₃ v₃} X) P Q h = 𝟙 X := rfl
 
 section
-local attribute [ematch] subtype.property
+local attribute [search] subtype.property
 
 variables {A : Type u₁} [𝒜 : category.{u₁ v₁} A] {B : Type u₂} [ℬ : category.{u₂ v₂} B] {C : Type u₃} [𝒞 : category.{u₃ v₃} C]
 include 𝒜 ℬ 𝒞
@@ -48,7 +48,7 @@ structure comma_morphism {S : A ↝ C} {T : B ↝ C} (p q : comma S T) : Type (m
 (condition' : (S.map left) ≫ q.2 = p.2 ≫ (T.map right) . obviously)
 
 restate_axiom comma_morphism.condition'
-attribute [ematch] comma_morphism.condition
+attribute [search] comma_morphism.condition
 
 @[extensionality] lemma comma_morphism_equal
   {S : A ↝ C} {T : B ↝ C} {p q : comma S T} (f g : comma_morphism p q)
@@ -97,7 +97,7 @@ def Cone   (F : J ↝ C) :=
 def Cocone (F : J ↝ C) := 
 (comma (ObjectAsFunctor F) (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C)).
 
-@[ematch] lemma Cone.pointwise_condition {F : J ↝ C} (X Y : Cone F) (f : comma_morphism X Y) (j : J) : f.left ≫ (Y.snd) j = (X.snd) j := 
+@[search] lemma Cone.pointwise_condition {F : J ↝ C} (X Y : Cone F) (f : comma_morphism X Y) (j : J) : f.left ≫ (Y.snd) j = (X.snd) j := 
 begin
   have p := f.condition,
   have p' := congr_arg nat_trans.app p,

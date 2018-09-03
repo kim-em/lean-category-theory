@@ -28,7 +28,7 @@ structure arrow_hom (X Y : arrow C) :=
 (commutativity' : morphism.1 ≫ Y.2 = X.2 ≫ morphism.2 . obviously)
 
 restate_axiom arrow_hom.commutativity'
-attribute [ematch] arrow_hom.commutativity
+attribute [search] arrow_hom.commutativity
 
 @[extensionality] lemma ext {f g : arrow C} {α β : arrow_hom f g} (w : α.morphism = β.morphism) : α = β :=
 begin

@@ -22,7 +22,7 @@ structure cone_morphism (A B : cone F) : Type v :=
 (w' : Π j : J, hom ≫ (B.π j) = (A.π j) . obviously)
 
 restate_axiom cone_morphism.w'
-attribute [simp,ematch] cone_morphism.w
+attribute [simp,search] cone_morphism.w
 
 namespace cone_morphism
 
@@ -65,10 +65,10 @@ structure cocone_morphism (A B : cocone F) :=
 (w'  : Π j : J, (A.ι j) ≫ hom = (B.ι j) . obviously)
 
 restate_axiom cocone_morphism.w'
-attribute [simp,ematch] cocone_morphism.w
+attribute [simp,search] cocone_morphism.w
 
 namespace cocone_morphism
--- @[simp,ematch] def commutativity_lemma_assoc {A B : cocone F} (c : cocone_morphism A B) (j : J) {Z : C} (z : B.X ⟶ Z): (A.ι j) ≫ c.hom ≫ z = (B.ι j) ≫ z :=
+-- @[simp,search] def commutativity_lemma_assoc {A B : cocone F} (c : cocone_morphism A B) (j : J) {Z : C} (z : B.X ⟶ Z): (A.ι j) ≫ c.hom ≫ z = (B.ι j) ≫ z :=
 -- begin
 --   -- `obviously'` says:
 --   erw [←category.assoc, cocone_morphism.w]

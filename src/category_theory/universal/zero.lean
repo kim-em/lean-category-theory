@@ -24,7 +24,7 @@ end is_zero
 
 restate_axiom is_zero.uniq_lift
 restate_axiom is_zero.uniq_desc
-attribute [ematch, back'] is_zero.uniq_lift_lemma is_zero.uniq_desc_lemma
+attribute [search, back'] is_zero.uniq_lift_lemma is_zero.uniq_desc_lemma
 
 @[extensionality] lemma is_zero.ext {X : C} (P Q : is_zero.{u v} X) : P = Q := 
 begin cases P, cases Q, obviously, end

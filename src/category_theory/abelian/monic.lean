@@ -17,7 +17,7 @@ structure split_mono (f : Y ⟶ Z) :=
 (evidence'      : f ≫ right_inverse = 𝟙 Y . obviously)
 
 restate_axiom split_mono.evidence'
-attribute [simp,ematch] split_mono.evidence
+attribute [simp,search] split_mono.evidence
 
 def mono.of_split_mono {f : Y ⟶ Z} (m : split_mono f) : mono f := 
 { right_cancellation := λ _ a b p, begin
