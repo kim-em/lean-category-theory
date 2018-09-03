@@ -8,11 +8,11 @@ open category_theory.universal
 
 variables (α : Type v) [topological_space α]
 
-def structure_sheaf := sheaf.{v+1 v} α Ring
+def structure_sheaf := sheaf.{v+1 v} α CommRing
 
 structure ringed_space :=
 (𝒪 : structure_sheaf α)
-
+ 
 structure locally_ringed_space extends ringed_space α :=
 (locality : ∀ x : α, local_ring (stalk_at.{v+1 v} 𝒪 x).1)
 

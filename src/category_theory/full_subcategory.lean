@@ -5,38 +5,38 @@
 import category_theory.functor
 import category_theory.embedding
 
+import category_theory.tactics.obviously
+
 namespace category_theory
 
 universes u₁ v₁ u₂ v₂ w₁
 
-local attribute [back] category.id -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
-
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C]
 include 𝒞 
 
-instance sigma_category (Z : C → Type w₁) : category.{(max u₁ w₁) v₁} (Σ X : C, Z X) := 
-{ hom  := λ X Y, X.1 ⟶ Y.1,
-  id   := by obviously,
-  comp := λ _ _ _ f g, f ≫ g }
-
 instance full_subcategory (Z : C → Prop) : category.{u₁ v₁} {X : C // Z X} := 
 { hom  := λ X Y, X.1 ⟶ Y.1,
-  id   := by obviously,
+  id   := λ X, 𝟙 X.1,
+  comp := λ _ _ _ f g, f ≫ g }
+
+def full_subcategory_embedding (Z : C → Prop) : {X : C // Z X} ⥤ C := 
+{ obj := λ X, X.1,
+  map' := λ _ _ f, f }
+
+instance full_subcategory_full     (Z : C → Prop) : full     (full_subcategory_embedding Z) := by obviously
+instance full_subcategory_faithful (Z : C → Prop) : faithful (full_subcategory_embedding Z) := by obviously
+
+instance sigma_category (Z : C → Type w₁) : category.{(max u₁ w₁) v₁} (Σ X : C, Z X) := 
+{ hom  := λ X Y, X.1 ⟶ Y.1,
+  id   := λ X, 𝟙 X.1,
   comp := λ _ _ _ f g, f ≫ g }
 
 def sigma_category_embedding (Z : C → Type u₁) : (Σ X : C, Z X) ⥤ C := 
 { obj := λ X, X.1,
   map' := λ _ _ f, f }
 
-def full_subcategory_embedding (Z : C → Prop) : {X : C // Z X} ⥤ C := 
-{ obj := λ X, X.1,
-  map' := λ _ _ f, f }
-
--- move out/simplify dependencies
 instance full_σ        (Z : C → Type u₁) : full    (sigma_category_embedding Z)    := by obviously
-instance full_full     (Z : C → Prop)    : full     (full_subcategory_embedding Z) := by obviously
 instance faithful_σ    (Z : C → Type u₁) : faithful (sigma_category_embedding Z)   := by obviously
-instance faithful_full (Z : C → Prop)    : faithful (full_subcategory_embedding Z) := by obviously
 
 variables {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒟 

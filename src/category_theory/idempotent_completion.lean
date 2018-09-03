@@ -54,7 +54,8 @@ def functor_to_completion (C : Type (u+1)) [large_category C] : C ⥤ (Idempoten
 -- -- PROJECT
 -- def IdempotentCompletion_functorial (C : Type u) [category C] (D : Type u) [category D] : Functor (Functor C D) (Functor (Idempotent C) (Idempotent D)) := {
 
-lemma embedding (C : Type (u+1)) [large_category C]  : embedding (functor_to_completion C) := by obviously
+-- FIXME
+-- lemma embedding' (C : Type (u+1)) [large_category C]  : embedding (functor_to_completion C) := by obviously
 
 variable {D : Type (u₂+1)}
 variable [large_category D]

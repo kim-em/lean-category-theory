@@ -3,6 +3,7 @@
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
 import category_theory.embedding
+import category_theory.tactics.obviously
 
 namespace category_theory
 

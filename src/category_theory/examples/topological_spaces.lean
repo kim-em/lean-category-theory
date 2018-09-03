@@ -3,7 +3,6 @@
 -- Authors: Patrick Massot, Scott Morrison
 
 import category_theory.full_subcategory
-import category_theory.opposites
 import category_theory.preorder
 import analysis.topology.topological_space
 import analysis.topology.continuity
@@ -31,15 +30,12 @@ structure open_set (α : Type u₁) [X : topological_space α] : Type u₁ :=
 
 variables {α : Type u₁} [topological_space α]
 
-instance : has_coe (open_set α) (set α) := {coe := λ U, U.s }
+instance : has_coe (open_set α) (set α) := { coe := λ U, U.s }
 
 instance : has_subset (open_set α) := 
 { subset := λ U V, U.s ⊆ V.s }
 
-instance : preorder (open_set α) :=
-begin
-  refine { le := (⊆), .. } ; tidy
-end.
+instance : preorder (open_set α) := by refine { le := (⊆), .. } ; tidy
 
 instance open_sets : small_category (open_set α) := by apply_instance
 

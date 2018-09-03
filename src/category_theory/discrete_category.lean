@@ -10,8 +10,6 @@ namespace category_theory
 
 universes u₁ v₁ u₂ 
 
-local attribute [back] category.id -- This says that whenever there is a goal of the form C.Hom X X, we can safely complete it with the identity morphism. This isn't universally true.
-
 def discrete (α : Type u₁) := α
 
 instance discrete_category (α : Type u₁) : small_category (discrete α) := 

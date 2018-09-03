@@ -15,16 +15,16 @@ open category_theory.universal
 
 variables {α : Type v}
 
-instance : has_products.{v+1 v} Ring := sorry
+instance : has_products.{v+1 v} CommRing := sorry
 
-def coequalizer_ideal {R S : Ring} (f g : ring_hom R S) : set S.1 :=
+def coequalizer_ideal {R S : CommRing} (f g : ring_hom R S) : set S.1 :=
 span (set.range (λ x : R.1, f.map x - g.map x))
 
-instance {R S : Ring} (f g : ring_hom R S) : is_ideal (coequalizer_ideal f g) := sorry
+instance {R S : CommRing} (f g : ring_hom R S) : is_ideal (coequalizer_ideal f g) := sorry
 
 local attribute [instance] classical.prop_decidable
 
-instance : has_coequalizers.{v+1 v} Ring :=
+instance : has_coequalizers.{v+1 v} CommRing :=
 { coequalizer := λ R S f g, 
     { X := ⟨ quotient_ring.quotient (coequalizer_ideal f g), by apply_instance ⟩,
       π := ⟨ quotient_ring.mk, by apply_instance ⟩,
@@ -42,26 +42,26 @@ instance : has_coequalizers.{v+1 v} Ring :=
       uniq := sorry }
 }
 
-instance : has_colimits.{v+1 v} Ring := sorry
+instance : has_colimits.{v+1 v} CommRing := sorry
 
 section
 variables {J : Type v} [𝒥 : small_category J] [filtered.{v v} J]
 include 𝒥
 
-def matching (F : J ⥤ Ring) (a b : Σ j : J, (F j).1) : Prop :=
+def matching (F : J ⥤ CommRing) (a b : Σ j : J, (F j).1) : Prop :=
 ∃ (j : J) (f_a : a.1 ⟶ j) (f_b : b.1 ⟶ j),
 (F.map f_a).map a.2 = (F.map f_b).map b.2
 
-def filtered_colimit (F : J ⥤ Ring) :=
+def filtered_colimit (F : J ⥤ CommRing) :=
 @quot (Σ j : J, (F j).1) (matching F)
 
 local attribute [elab_with_expected_type] quot.lift
 
-def filtered_colimit.zero (F : J ⥤ Ring) : filtered_colimit F :=
+def filtered_colimit.zero (F : J ⥤ CommRing) : filtered_colimit F :=
 quot.mk _ ⟨ filtered.default.{v v} J, 0 ⟩ 
 
 -- TODO do this in two steps.
-def filtered_colimit.add (F : J ⥤ Ring) (x y : filtered_colimit F) : filtered_colimit F :=
+def filtered_colimit.add (F : J ⥤ CommRing) (x y : filtered_colimit F) : filtered_colimit F :=
 quot.lift (λ p : Σ j, (F j).1, 
   quot.lift (λ q : Σ j, (F j).1, 
   quot.mk _ (begin 
@@ -79,7 +79,7 @@ quot.lift (λ p : Σ j, (F j).1,
     end))
   (λ p p' (r : matching F p p'), funext $ λ q, begin dsimp, /- no idea -/ sorry end) x y
 
-def filtered_colimit_is_comm_ring (F : J ⥤ Ring) : comm_ring (filtered_colimit F) := 
+def filtered_colimit_is_comm_ring (F : J ⥤ CommRing) : comm_ring (filtered_colimit F) := 
 { add := filtered_colimit.add F,
   neg := sorry,
   mul := sorry,
@@ -99,7 +99,7 @@ def filtered_colimit_is_comm_ring (F : J ⥤ Ring) : comm_ring (filtered_colimit
 
 end
 
-instance : has_filtered_colimits.{v+1 v} Ring :=
+instance : has_filtered_colimits.{v+1 v} CommRing :=
 { colimit := λ J 𝒥 f F,
   begin
     resetI, exact 

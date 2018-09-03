@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison
 
 import category_theory.currying
-import category_theory.products.switch
 import category_theory.functor_categories.whiskering
 import category_theory.universal.complete
 import category_theory.universal.complete.lemmas.cones_in_functor_categories
@@ -21,7 +20,7 @@ private meta def dsimp' : tactic unit := `[dsimp at * {unfold_reducible := tt, m
 variables {J : Type v} [small_category J] {C : Type v} [small_category C] {D : Type u} [𝒟 : category.{u v} D]
 include 𝒟 
 
--- def switch_curry : (J ⥤ (C ⥤ D)) ⥤ (C ⥤ (J ⥤ D)) := uncurry ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry
+-- def switch_curry : (J ⥤ (C ⥤ D)) ⥤ (C ⥤ (J ⥤ D)) := uncurry ⋙ (whisker_on_left_functor (prod.swap C J) D) ⋙ curry
 
 def switched (F : J ⥤ (C ⥤ D)) : C ⥤ (J ⥤ D) :=
 { obj := λ c, { obj := λ j, (F j) c, map' := λ j j' f, (F.map f) c },

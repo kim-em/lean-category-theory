@@ -5,9 +5,7 @@
 import category_theory.natural_transformation
 import category_theory.opposites
 import category_theory.types
-import category_theory.products.switch
-import category_theory.functor_categories.evaluation
-import category_theory.universe_lifting
+import category_theory.embedding
 import category_theory.cancellation
 
 import tactic.interactive
@@ -57,7 +55,7 @@ def yoneda_evaluation : (((Cᵒᵖ) ⥤ (Type v₁)) × (Cᵒᵖ)) ⥤ (Type (ma
  : ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl
 
 def yoneda_pairing : (((Cᵒᵖ) ⥤ (Type v₁)) × (Cᵒᵖ)) ⥤ (Type (max u₁ v₁)) := 
-let F := (prod.switch ((Cᵒᵖ) ⥤ (Type v₁)) (Cᵒᵖ)) in
+let F := (category_theory.prod.swap ((Cᵒᵖ) ⥤ (Type v₁)) (Cᵒᵖ)) in
 let G := (functor.prod ((yoneda C).op) (functor.id ((Cᵒᵖ) ⥤ (Type v₁)))) in
 let H := (functor.hom ((Cᵒᵖ) ⥤ (Type v₁))) in
   (F ⋙ G ⋙ H)      

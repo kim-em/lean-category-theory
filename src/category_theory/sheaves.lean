@@ -33,8 +33,6 @@ structure cover' :=
 (I : Type v)
 (U : I → (open_set α))
 
-
--- FIXME have \func turn into ⥤?
 variables {α}
 
 -- TODO cleanup
