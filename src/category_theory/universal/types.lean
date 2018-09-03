@@ -74,22 +74,22 @@ instance : has_coequalizers.{u+1 u} (Type u) :=
 variables {J : Type u} [𝒥 : small_category J]
 include 𝒥
 
-def limit (F : J ↝ Type u) : cone F :=
+def limit (F : J ⥤ Type u) : cone F :=
 { X := {u : Π j, F j // ∀ (j j' : J) (f : j ⟶ j'), F.map f (u j) = u j'},
   π := λ j u, u.val j }
 
-def limit_is_limit (F : J ↝ Type u) : is_limit (limit F) :=
+def limit_is_limit (F : J ⥤ Type u) : is_limit (limit F) :=
 { lift := λ s v, ⟨λ j, s.π j v, λ j j' f, congr_fun (s.w f) _⟩ }
 
 instance : has_limits.{u+1 u} (Type u) :=
 { limit := @limit, is_limit := @limit_is_limit }
 
-def colimit (F : J ↝ Type u) : cocone F :=
+def colimit (F : J ⥤ Type u) : cocone F :=
 { X := @quot (Σ j, F j) (λ p p', ∃ f : p.1 ⟶ p'.1, p'.2 = F.map f p.2),
   ι := λ j x, quot.mk _ ⟨j, x⟩,
   w := λ j j' f, funext $ λ x, eq.symm (quot.sound ⟨f, rfl⟩) }
 
-def colimit_is_colimit (F : J ↝ Type u) : is_colimit (colimit F) :=
+def colimit_is_colimit (F : J ⥤ Type u) : is_colimit (colimit F) :=
 { desc := λ s, quot.lift (λ (p : Σ j, F j), s.ι p.1 p.2)
     (assume ⟨j, x⟩ ⟨j', x'⟩ ⟨f, hf⟩,
       by rw hf; exact (congr_fun (s.w f) x).symm) }

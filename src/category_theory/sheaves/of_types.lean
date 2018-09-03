@@ -43,7 +43,7 @@ end
 section
 variables {α : Type u} [topological_space α]
 
-variables {V : Type (u+1)} [𝒱 : large_category V] [has_products.{u+1 u} V] (ℱ : V ↝ (Type u)) 
+variables {V : Type (u+1)} [𝒱 : large_category V] [has_products.{u+1 u} V] (ℱ : V ⥤ (Type u)) 
           [faithful ℱ] [category_theory.universal.continuous ℱ] [reflects_isos ℱ]
 include 𝒱
 

@@ -21,26 +21,26 @@ private meta def dsimp' : tactic unit := `[dsimp at * {unfold_reducible := tt, m
 variables {J : Type v} [small_category J] {C : Type v} [small_category C] {D : Type u} [𝒟 : category.{u v} D]
 include 𝒟 
 
--- def switch_curry : (J ↝ (C ↝ D)) ↝ (C ↝ (J ↝ D)) := uncurry ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry
+-- def switch_curry : (J ⥤ (C ⥤ D)) ⥤ (C ⥤ (J ⥤ D)) := uncurry ⋙ (whisker_on_left_functor (switch C J) D) ⋙ curry
 
-def switched (F : J ↝ (C ↝ D)) : C ↝ (J ↝ D) :=
+def switched (F : J ⥤ (C ⥤ D)) : C ⥤ (J ⥤ D) :=
 { obj := λ c, { obj := λ j, (F j) c, map' := λ j j' f, (F.map f) c },
   map' := λ c c' f, { app := λ j, (F j).map f }}.
 
 -- section
 -- local attribute [back] category.id
--- def switched_twice (F : J ↝ (C ↝ D)) : switched (switched F) ≅ F := by obviously
+-- def switched_twice (F : J ⥤ (C ⥤ D)) : switched (switched F) ≅ F := by obviously
 -- end
 
-def introduce_switch (F : J ↝ (C ↝ D)) {j j' : J} (f : j ⟶ j') (X : C) : (F.map f) X = ((switched F) X).map f := sorry
+def introduce_switch (F : J ⥤ (C ⥤ D)) {j j' : J} (f : j ⟶ j') (X : C) : (F.map f) X = ((switched F) X).map f := sorry
 
 
-def limit_cone_in_functor_category [has_limits.{u v} D] (F : J ↝ (C ↝ D)) : cone F := 
+def limit_cone_in_functor_category [has_limits.{u v} D] (F : J ⥤ (C ⥤ D)) : cone F := 
 { X := ((switched F) ⋙ lim),
   π := λ j, { app := λ X : C, (limit.cone (switched F X)).π j },
   w := λ j j' f, begin ext1, dsimp at *, rw introduce_switch, obviously, end }.
 
-instance [has_limits.{u v} D] : has_limits.{(max u v) v} (C ↝ D) := 
+instance [has_limits.{u v} D] : has_limits.{(max u v) v} (C ⥤ D) := 
 { limit := λ J 𝒥 F, begin resetI, exact limit_cone_in_functor_category F end,
   is_limit := λ J 𝒥 F, begin resetI, exact
   { lift := λ s, { app := λ X, (limit.cone_morphism (switched F X) { X := s.X X, π := λ j, (s.π j) X }).hom,

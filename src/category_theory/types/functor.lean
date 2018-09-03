@@ -9,13 +9,13 @@
 
 -- universes u v
 
--- instance functor_of_functor (F : (Type u) ↝ (Type v)) : _root_.functor F.obj := 
+-- instance functor_of_functor (F : (Type u) ⥤ (Type v)) : _root_.functor F.obj := 
 -- { map := λ _ _ f, F.map f }
 
 -- -- local attribute [tidy] dsimp'
 
 -- -- TODO yuck, automate
--- instance lawful_functor_of_Functor (F : (Type u) ↝ (Type v)) : is_lawful_functor (F.obj) := 
+-- instance lawful_functor_of_Functor (F : (Type u) ⥤ (Type v)) : is_lawful_functor (F.obj) := 
 -- { id_map := begin obviously,  end,
 --   comp_map := begin
 --                 tidy,
@@ -26,6 +26,6 @@
 
 -- attribute [search] is_lawful_functor.comp_map
 
--- def functor_of_functor' (g : Type u → Type v) [functor g] [is_lawful_functor g] : (Type u) ↝ (Type v) := 
+-- def functor_of_functor' (g : Type u → Type v) [functor g] [is_lawful_functor g] : (Type u) ⥤ (Type v) := 
 -- { obj := g,
 --   map' := λ X Y f z, f <$> z }

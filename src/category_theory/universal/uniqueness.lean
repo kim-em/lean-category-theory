@@ -52,7 +52,7 @@ include 𝒥
 
 section
 -- FIXME this is a horrible formulation
-lemma homs_to_limit_ext  {F : J ↝ C} (c : cone.{u v} F) (B : is_limit c) {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
+lemma homs_to_limit_ext  {F : J ⥤ C} (c : cone.{u v} F) (B : is_limit c) {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
 begin
   let s : cone F := ⟨ ⟨ X ⟩, λ j, f ≫ c.π j, by obviously ⟩,
   have q := B.uniq s f,
@@ -66,7 +66,7 @@ end
 
 
 local attribute [back] homs_to_limit_ext
-def limits_iso {F : J ↝  C} (A B : cone.{u v} F) (A_w : is_limit A) (B_w : is_limit B) : A.X ≅ B.X :=
+def limits_iso {F : J ⥤  C} (A B : cone.{u v} F) (A_w : is_limit A) (B_w : is_limit B) : A.X ≅ B.X :=
 { hom := B_w.lift A,
   inv := A_w.lift B }
 end

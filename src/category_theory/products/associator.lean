@@ -16,14 +16,14 @@ include 𝒞 𝒟 ℰ
 set_option trace.tidy true
 local attribute [tidy] tactic.assumption
 
-def associator : ((C × D) × E) ↝ (C × (D × E)) := by tidy
+def associator : ((C × D) × E) ⥤ (C × (D × E)) := by tidy
 -- { obj := λ X, (X.1.1, (X.1.2, X.2)),
 --   map := λ _ _ f, (f.1.1, (f.1.2, f.2)) }
 
 -- @[simp] lemma associator_obj (X) : (associator C D E) X = (X.1.1, (X.1.2, X.2)) := rfl
 -- @[simp] lemma associator_map {X Y} (f : X ⟶ Y) : (associator C D E).map f = (f.1.1, (f.1.2, f.2)) := rfl
 
-def inverse_associator : (C × (D × E)) ↝ ((C × D) × E) := by tidy
+def inverse_associator : (C × (D × E)) ⥤ ((C × D) × E) := by tidy
 -- { obj := λ X, ((X.1, X.2.1), X.2.2),
 --   map := λ _ _ f, ((f.1, f.2.1), f.2.2) }
 

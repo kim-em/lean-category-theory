@@ -36,23 +36,23 @@ private meta def faithfulness := `[apply faithful.injectivity']
 local attribute [tidy] faithfulness
 
 -- FIXME improve API for ess_surj
-def Fully_Faithful_EssentiallySurjective_Functor_inverse (F : C ↝ D) [full F] [faithful : faithful F] [es : ess_surj F] : D ↝ C := 
+def Fully_Faithful_EssentiallySurjective_Functor_inverse (F : C ⥤ D) [full F] [faithful : faithful F] [es : ess_surj F] : D ⥤ C := 
 { obj  := λ X, (ess_surj.pre.{u₁+1 u₁} F X),
   map' := λ X Y f, preimage F ((ess_surj.iso.{u₁+1 u₁} F X).hom ≫ f ≫ (ess_surj.iso.{u₁+1 u₁} F Y).inv) }
 
 -- FIXME pure boilerplate...
 @[simp] lemma Fully_Faithful_EssentiallySurjective_Functor_inverse_map 
-  (F : C ↝ D) [full F] [faithful : faithful F] [es : ess_surj F]
+  (F : C ⥤ D) [full F] [faithful : faithful F] [es : ess_surj F]
   {X Y : D} (f : X ⟶ Y) : (Fully_Faithful_EssentiallySurjective_Functor_inverse F).map f = preimage F ((ess_surj.iso.{u₁+1 u₁} F X).hom ≫ f ≫ (ess_surj.iso.{u₁+1 u₁} F Y).inv) := rfl
 
-def Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : C ↝ D) [full F] [faithful : faithful F] [es : ess_surj F] : is_Equivalence F := 
+def Fully_Faithful_EssentiallySurjective_Functor_is_Equivalence (F : C ⥤ D) [full F] [faithful : faithful F] [es : ess_surj F] : is_Equivalence F := 
 { inverse := Fully_Faithful_EssentiallySurjective_Functor_inverse F,
   isomorphism_1' := nat_iso.from_components (λ X, preimage_iso (ess_surj.iso F (F X))) (by obviously), 
   isomorphism_2' := nat_iso.from_components (λ Y, (ess_surj.iso F Y))                  (by obviously) }
 end
 
 -- TODO
-instance (F : C ↝ D) [is_Equivalence F] : full F     := sorry
-instance (F : C ↝ D) [is_Equivalence F] : faithful F := sorry
+instance (F : C ⥤ D) [is_Equivalence F] : full F     := sorry
+instance (F : C ⥤ D) [is_Equivalence F] : faithful F := sorry
 
 end category_theory.equivalence

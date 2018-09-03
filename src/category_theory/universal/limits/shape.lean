@@ -122,7 +122,7 @@ structure cosquare {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r�
 restate_axiom cosquare.w
 attribute [search] cosquare.w_lemma
 
-structure cone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ↝ C) extends shape C :=
+structure cone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ⥤ C) extends shape C :=
 (π : ∀ j : J, X ⟶ F j)
 (w : ∀ {j j' : J} (f : j ⟶ j'), π j ≫ (F.map f) = π j' . obviously)
 
@@ -130,7 +130,7 @@ restate_axiom cone.w
 attribute [search] cone.w_lemma
 
 
-structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ↝ C) extends shape C :=
+structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ⥤ C) extends shape C :=
 (ι : ∀ j : J, F j ⟶ X)
 (w : ∀ {j j' : J} (f : j ⟶ j'), (F.map f) ≫ ι j' = ι j)
 

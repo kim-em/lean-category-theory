@@ -7,7 +7,7 @@ open category_theory
 variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
-def coyoneda : (Cᵒᵖ) ↝ (C ↝ (Type v₁)) := 
+def coyoneda : (Cᵒᵖ) ⥤ (C ⥤ (Type v₁)) := 
 { obj := λ X : C, { obj := λ Y, X ⟶ Y,
                 map' := λ Y Y' f g, g ≫ f },
   map' := λ X X' f, { app := λ Y g, f ≫ g } }

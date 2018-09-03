@@ -10,7 +10,7 @@ namespace category_theory
 universes u v
 
 class concrete (C : Type u) [category.{u v} C] := 
-  (fibre_functor : C ↝ (Type v))
+  (fibre_functor : C ⥤ (Type v))
   (faithfulness : faithful fibre_functor . obviously)
 
 instance : concrete (Type u) := 

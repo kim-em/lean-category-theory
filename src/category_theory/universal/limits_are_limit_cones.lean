@@ -9,7 +9,7 @@ universes u v
 variables {J : Type v} [small_category J] {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞 
 
-variable {F : J ↝ C}
+variable {F : J ⥤ C}
 
 def limit_cone_of_limit {t : cone F} (L : is_limit t) : is_terminal.{(max u v) v} t :=
 { lift := λ s, { hom := L.lift s, },

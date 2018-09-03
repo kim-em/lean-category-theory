@@ -48,20 +48,20 @@ section
 variables {J : Type v} [𝒥 : small_category J] [filtered.{v v} J]
 include 𝒥
 
-def matching (F : J ↝ Ring) (a b : Σ j : J, (F j).1) : Prop :=
+def matching (F : J ⥤ Ring) (a b : Σ j : J, (F j).1) : Prop :=
 ∃ (j : J) (f_a : a.1 ⟶ j) (f_b : b.1 ⟶ j),
 (F.map f_a).map a.2 = (F.map f_b).map b.2
 
-def filtered_colimit (F : J ↝ Ring) :=
+def filtered_colimit (F : J ⥤ Ring) :=
 @quot (Σ j : J, (F j).1) (matching F)
 
 local attribute [elab_with_expected_type] quot.lift
 
-def filtered_colimit.zero (F : J ↝ Ring) : filtered_colimit F :=
+def filtered_colimit.zero (F : J ⥤ Ring) : filtered_colimit F :=
 quot.mk _ ⟨ filtered.default.{v v} J, 0 ⟩ 
 
 -- TODO do this in two steps.
-def filtered_colimit.add (F : J ↝ Ring) (x y : filtered_colimit F) : filtered_colimit F :=
+def filtered_colimit.add (F : J ⥤ Ring) (x y : filtered_colimit F) : filtered_colimit F :=
 quot.lift (λ p : Σ j, (F j).1, 
   quot.lift (λ q : Σ j, (F j).1, 
   quot.mk _ (begin 
@@ -79,7 +79,7 @@ quot.lift (λ p : Σ j, (F j).1,
     end))
   (λ p p' (r : matching F p p'), funext $ λ q, begin dsimp, /- no idea -/ sorry end) x y
 
-def filtered_colimit_is_comm_ring (F : J ↝ Ring) : comm_ring (filtered_colimit F) := 
+def filtered_colimit_is_comm_ring (F : J ⥤ Ring) : comm_ring (filtered_colimit F) := 
 { add := filtered_colimit.add F,
   neg := sorry,
   mul := sorry,

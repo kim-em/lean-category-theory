@@ -12,7 +12,7 @@ namespace category_theory
 variables {C : Type u} [𝒞 : category.{u v} C]
 variables (V : Type (v+1)) [𝒱 : large_category V] 
           [has_terminal_object.{v+1 v} V] [has_binary_products.{v+1 v} V]
-          (ℱ : V ↝ Type v) [faithful ℱ] [continuous ℱ]
+          (ℱ : V ⥤ Type v) [faithful ℱ] [continuous ℱ]
 
 include 𝒞 𝒱
 

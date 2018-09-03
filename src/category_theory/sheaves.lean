@@ -13,7 +13,7 @@ section
 variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (V : Type u₂) [𝒱 : category.{u₂ v₂} V]
 include 𝒞 𝒱
 
-def presheaf := (Cᵒᵖ) ↝ V
+def presheaf := (Cᵒᵖ) ⥤ V
 
 def presheaves : category (presheaf C V) := begin unfold presheaf, apply_instance end
 end

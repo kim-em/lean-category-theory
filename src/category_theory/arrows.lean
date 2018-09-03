@@ -53,7 +53,7 @@ open category_theory.arrows
 variables {C : Type u₁} [category.{u₁ v₁} C] {D : Type u₂} [category.{u₂ v₂} D]
 
 -- TODO loops?
--- def map_arrows : (C ↝ D) ↝ ((arrow C) ↝ (arrow D)) := 
+-- def map_arrows : (C ⥤ D) ⥤ ((arrow C) ⥤ (arrow D)) := 
 -- { obj := λ F,     { obj := λ X, ⟨ (F X.1.1, F X.1.2), F.map X.2 ⟩,
 --                     map' := λ X Y f, ⟨ (F.map f.morphism.1, F.map f.morphism.2) ⟩ },
 --   map' := λ F G τ, { app := λ X, ⟨ (τ X.1.1, τ X.1.2) ⟩ } }

@@ -17,12 +17,12 @@ universes u₁ v₁
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₁} [𝒟 : category.{u₁ v₁} D]
 include 𝒞 𝒟 
 
-def hom_adjunction (L : C ↝ D) (R : D ↝ C) :=
+def hom_adjunction (L : C ⥤ D) (R : D ⥤ C) :=
     ((functor.prod L.op (functor.id D)) ⋙ (functor.hom D))
       ≅ 
     (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C)
 
-def mate {L : C ↝ D} {R : D ↝ C} (A : hom_adjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)
+def mate {L : C ⥤ D} {R : D ⥤ C} (A : hom_adjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)
   := ((A.hom) (X, Y)) f
 
 -- PROJECT lemmas about mates.

@@ -9,8 +9,8 @@ namespace category_theory
 universes u₁ v₁ u₂ v₂
 
 structure Equivalence (C : Type u₁) [category.{u₁ v₁} C] (D : Type u₂) [category.{u₂ v₂} D] :=
-  (functor : C ↝ D)
-  (inverse : D ↝ C)
+  (functor : C ⥤ D)
+  (inverse : D ⥤ C)
   (isomorphism_1' : (functor ⋙ inverse) ≅ (category_theory.functor.id C) . obviously)
   (isomorphism_2' : (inverse ⋙ functor) ≅ (category_theory.functor.id D) . obviously)
 
@@ -43,12 +43,12 @@ def symm (e : Equivalence C D) : Equivalence D C :=
 end Equivalence
 
 
-class ess_surj (F : C ↝ D) := 
+class ess_surj (F : C ⥤ D) := 
 (pre (d : D) : C)
 (iso (d : D) : F (pre d) ≅ d)
 
-class is_Equivalence (F : C ↝ D) := 
-(inverse        : D ↝ C)
+class is_Equivalence (F : C ⥤ D) := 
+(inverse        : D ⥤ C)
 (isomorphism_1' : (F ⋙ inverse) ≅ (functor.id C))
 (isomorphism_2' : (inverse ⋙ F) ≅ (functor.id D))
 

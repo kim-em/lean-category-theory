@@ -15,12 +15,12 @@ namespace category_theory.universal
 universes u v u₁ v₁ u₂ v₂ 
 
 variables {J : Type v} [small_category J] {C : Type u} [𝒞 : category.{u v} C]
-variable {F : J ↝ C}
+variable {F : J ⥤ C}
 
 section
 include 𝒞 
 
-@[simp] lemma comma.Cone.commutativity (F : J ↝ C) (X : C) (cone : ((DiagonalFunctor J C) X) ⟶ ((ObjectAsFunctor.{(max u v) v} F).obj punit.star)) {j k : J} (f : j ⟶ k) : cone j ≫ (F.map f) = cone k := 
+@[simp] lemma comma.Cone.commutativity (F : J ⥤ C) (X : C) (cone : ((DiagonalFunctor J C) X) ⟶ ((ObjectAsFunctor.{(max u v) v} F).obj punit.star)) {j k : J} (f : j ⟶ k) : cone j ≫ (F.map f) = cone k := 
 by obviously
 
 def comma_Cone_to_Cone (c : (comma.Cone F)) : cone F := 
@@ -39,11 +39,11 @@ def ConeMorphism_to_comma_ConeMorphism {X Y : cone F} (f : cone_morphism X Y) : 
 { left := f.hom, 
   right := by obviously }
 
-def comma_Cones_to_Cones (F : J ↝ C) : (comma.Cone F) ↝ (cone F) := 
+def comma_Cones_to_Cones (F : J ⥤ C) : (comma.Cone F) ⥤ (cone F) := 
 { obj := comma_Cone_to_Cone,
   map' := λ X Y f, comma_ConeMorphism_to_ConeMorphism f }
 
-def Cones_to_comma_Cones (F : J ↝ C) : (cone F) ↝ (comma.Cone F) := 
+def Cones_to_comma_Cones (F : J ⥤ C) : (cone F) ⥤ (comma.Cone F) := 
 { obj := Cone_to_comma_Cone,
   map' := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }.
 
@@ -56,7 +56,7 @@ local attribute [tidy] dsimp'
 
 include 𝒞 
 
-def Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (cone F) := 
+def Cones_agree (F : J ⥤ C) : Equivalence (comma.Cone F) (cone F) := 
 { functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F }
 

@@ -21,7 +21,7 @@
 
 -- @[back] lemma uniqueness_of_morphisms_to_terminal_object_cone_point 
 --   {Z : D}
---   {G : J ↝ D}
+--   {G : J ⥤ D}
 --   {L : LimitCone G}
 --   (cone_maps : Π j : J, Z ⟶ (G j)) 
 --   (commutativity : Π j k : J, Π f : j ⟶ k, (cone_maps j) ≫ (G.map f) = cone_maps k)
@@ -38,7 +38,7 @@
 
 -- -- TODO find a better home
 -- lemma bifunctor_naturality  
--- (F : J ↝ (C ↝ D))
+-- (F : J ⥤ (C ⥤ D))
 -- (X Y : C)
 -- (f : X ⟶ Y)
 -- (j k : J)
@@ -47,7 +47,7 @@
 --   = ((F.map g) X) ≫ ((F k).map f) := by obviously
 
 -- @[simp] lemma cone_in_functor_category 
--- (F : J ↝ (C ↝ D))
+-- (F : J ⥤ (C ⥤ D))
 -- (X Y : C)
 -- (f : X ⟶ Y)
 -- (j k : J)
@@ -59,7 +59,7 @@
 -- by obviously
 
 -- @[simp] lemma cone_in_functor_category_naturality
--- (F : J ↝ (C ↝ D))
+-- (F : J ⥤ (C ⥤ D))
 -- (X Y : C)
 -- (f : X ⟶ Y)
 -- (j : J)
@@ -68,7 +68,7 @@
 --     ((cone.cone_maps j) X) ≫ ((F j).map f) := by obviously
 
 -- @[simp] lemma cone_commutativity_in_FunctorCategory
--- (F : J ↝ (C ↝ D))
+-- (F : J ⥤ (C ⥤ D))
 -- (X : C)
 -- (j k : J)
 -- (f : j ⟶ k) 
@@ -77,7 +77,7 @@
 -- by obviously
 
 -- @[simp] lemma cone_commutativity_in_FunctorCategory_assoc
--- (F : J ↝ (C ↝ D))
+-- (F : J ⥤ (C ⥤ D))
 -- (X : C)
 -- (j k : J)
 -- (f : j ⟶ k) 
@@ -87,7 +87,7 @@
 --  : ((Y.cone_maps j) X) ≫ ((F.map f) X) ≫ z = (Y.cone_maps k) X ≫ z := by obviously
 
 -- @[simp] lemma cone_morphism_commutativity_in_FunctorCategory
--- (F : J ↝ (C ↝ D))
+-- (F : J ⥤ (C ⥤ D))
 -- (X : C)
 -- (j : J)
 -- (Y Z : Cone F)

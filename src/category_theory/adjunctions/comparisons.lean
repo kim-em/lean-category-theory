@@ -19,13 +19,13 @@ section
 variables {A : Type u₁} [𝒜 : category.{u₁ v₁} A] {B : Type u₂} [ℬ : category.{u₂ v₂} B] {C : Type u₃} [𝒞 : category.{u₃ v₃} C] {D : Type u₄} [𝒟 : category.{u₄ v₄} D]
 include 𝒜 ℬ 𝒞 𝒟
 
-@[simp,search] lemma prod_obj' (F : A ↝ B) (G : C ↝ D) (a : A) (c : C) : (functor.prod F G).obj (a, c) = (F a, G c) := rfl
-@[simp,search] lemma prod_app' {F G : A ↝ B} {H I : C ↝ D} (α : F ⟹ G) (β : H ⟹ I) (a : A) (c : C) : (nat_trans.prod α β).app (a, c) = (α a, β c) := rfl
+@[simp,search] lemma prod_obj' (F : A ⥤ B) (G : C ⥤ D) (a : A) (c : C) : (functor.prod F G).obj (a, c) = (F a, G c) := rfl
+@[simp,search] lemma prod_app' {F G : A ⥤ B} {H I : C ⥤ D} (α : F ⟹ G) (β : H ⟹ I) (a : A) (c : C) : (nat_trans.prod α β).app (a, c) = (α a, β c) := rfl
 end
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₁} [𝒟 : category.{u₁ v₁} D]
 include 𝒞 𝒟 
-variables {L : C ↝ D} {R : D ↝ C} 
+variables {L : C ⥤ D} {R : D ⥤ C} 
 
 @[reducible] private def Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
   : ((functor.prod L.op (functor.id D)) ⋙ (functor.hom D)) ⟹ 
@@ -87,7 +87,7 @@ private def unit_from_HomAdjunction (A : hom_adjunction L R) : (functor.id _) �
 { app := λ X : C, (A.hom (X, L X)) (𝟙 (L X)) }
 
 -- PROJECT
--- def HomAdjunction_to_Adjunction {L : C ↝ D} {R : D ↝ C} (A : hom_adjunction L R) : L ⊣ R := 
+-- def HomAdjunction_to_Adjunction {L : C ⥤ D} {R : D ⥤ C} (A : hom_adjunction L R) : L ⊣ R := 
 -- {
 --   unit       := unit_from_HomAdjunction A,
 --   counit     := counit_from_HomAdjunction A,
@@ -103,7 +103,7 @@ private def unit_from_HomAdjunction (A : hom_adjunction L R) : (functor.id _) �
 --   triangle_2 := sorry
 -- }
 
--- def Adjunctions_agree (L : C ↝ D) (R : D ↝ C) : equiv (L ⊣ R) (hom_adjunction L R) := 
+-- def Adjunctions_agree (L : C ⥤ D) (R : D ⥤ C) : equiv (L ⊣ R) (hom_adjunction L R) := 
 -- { to_fun    := Adjunction_to_HomAdjunction,
 --   inv_fun   := HomAdjunction_to_Adjunction,
 --   left_inv  := begin sorry end,

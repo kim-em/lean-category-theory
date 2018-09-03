@@ -14,7 +14,7 @@ open category_theory.yoneda
 
 universes u₁ u₂
 
-def ForgetfulFunctor_Groups_to_Types : Group ↝ (Type u₁) :=
+def ForgetfulFunctor_Groups_to_Types : Group ⥤ (Type u₁) :=
 { obj  := λ s, s.1,
   map' := λ s t f x, f.map x }
 

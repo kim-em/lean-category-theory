@@ -24,11 +24,11 @@ instance full_subcategory (Z : C → Prop) : category.{u₁ v₁} {X : C // Z X}
   id   := by obviously,
   comp := λ _ _ _ f g, f ≫ g }
 
-def sigma_category_embedding (Z : C → Type u₁) : (Σ X : C, Z X) ↝ C := 
+def sigma_category_embedding (Z : C → Type u₁) : (Σ X : C, Z X) ⥤ C := 
 { obj := λ X, X.1,
   map' := λ _ _ f, f }
 
-def full_subcategory_embedding (Z : C → Prop) : {X : C // Z X} ↝ C := 
+def full_subcategory_embedding (Z : C → Prop) : {X : C // Z X} ⥤ C := 
 { obj := λ X, X.1,
   map' := λ _ _ f, f }
 
@@ -41,11 +41,11 @@ instance faithful_full (Z : C → Prop)    : faithful (full_subcategory_embeddin
 variables {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒟 
 
-def restrict_functor_σ (F : C ↝ D) (ZC : C → Type u₁) (ZD : D → Type u₂) (w : ∀ {X : C} (z : ZC X), ZD (F X)) : (Σ X : C, ZC X) ↝ (Σ Y : D, ZD Y) := 
+def restrict_functor_σ (F : C ⥤ D) (ZC : C → Type u₁) (ZD : D → Type u₂) (w : ∀ {X : C} (z : ZC X), ZD (F X)) : (Σ X : C, ZC X) ⥤ (Σ Y : D, ZD Y) := 
 { obj := λ X, ⟨ F X.1, w X.2 ⟩,
   map' := λ _ _ f, F.map f }
 
-def restrict_functor (F : C ↝ D) (ZC : C → Prop) (ZD : D → Prop) (w : ∀ {X : C} (z : ZC X), ZD (F X)) : {X : C // ZC X} ↝ {Y : D // ZD Y} := 
+def restrict_functor (F : C ⥤ D) (ZC : C → Prop) (ZD : D → Prop) (w : ∀ {X : C} (z : ZC X), ZD (F X)) : {X : C // ZC X} ⥤ {Y : D // ZD Y} := 
 { obj := λ X, ⟨ F X.1, w X.2 ⟩,
   map' := λ _ _ f, F.map f }
 

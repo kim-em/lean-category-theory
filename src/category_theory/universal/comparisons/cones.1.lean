@@ -17,12 +17,12 @@
 -- variables {C : Type u} [𝒞 : category.{u v} C]
 -- include 𝒞 
 
--- @[simp] lemma comma.Cone.commutativity (F : J ↝ C) (X : C) (cone : ((DiagonalFunctor J C) X) ⟶ ((ObjectAsFunctor.{(max u v) v} F).obj punit.star)) {j k : J} (f : j ⟶ k) : cone j ≫ (F.map f) = cone k := 
+-- @[simp] lemma comma.Cone.commutativity (F : J ⥤ C) (X : C) (cone : ((DiagonalFunctor J C) X) ⟶ ((ObjectAsFunctor.{(max u v) v} F).obj punit.star)) {j k : J} (f : j ⟶ k) : cone j ≫ (F.map f) = cone k := 
 -- by obviously
 
 -- local attribute [back] category.id
 
--- def Cones_agree (F : J ↝ C) : Equivalence (comma.Cone F) (cone F) := 
+-- def Cones_agree (F : J ⥤ C) : Equivalence (comma.Cone F) (cone F) := 
 -- { functor := { obj := λ c, { X := c.1.1,
 --                              π := λ j : J, (c.2) j },
 --                map' := λ X Y f, { hom := f.left } },

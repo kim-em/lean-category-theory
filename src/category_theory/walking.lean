@@ -72,11 +72,11 @@ match X, Y, f with
 end
 attribute [reducible] Pair_functor.onMorphisms._match_1
 
-def Pair_functor (α β : C) : WalkingPair.{v₁} ↝ C := 
+def Pair_functor (α β : C) : WalkingPair.{v₁} ⥤ C := 
 { obj := Pair_functor.onObjects α β,
   map' := Pair_functor.onMorphisms α β, }
 
-def Pair_functor' (α β : C) : WalkingPair.{v₁} ↝ C := 
+def Pair_functor' (α β : C) : WalkingPair.{v₁} ⥤ C := 
 { obj := λ X, match X with 
               | _1 := α 
               | _2 := β
@@ -126,7 +126,7 @@ instance : small_category WalkingParallelPair :=
 variable {C : Type u₁}
 variable [category.{u₁ v₁} C]
 
-def ParallelPair_functor {α β : C} (f g : α ⟶ β) : WalkingParallelPair.{v₁} ↝ C := 
+def ParallelPair_functor {α β : C} (f g : α ⟶ β) : WalkingParallelPair.{v₁} ⥤ C := 
 { obj := λ X, match X with
               | _1 := α
               | _2 := β

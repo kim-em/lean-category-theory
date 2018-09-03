@@ -19,7 +19,7 @@
 -- variable [small_category J]
 -- variable {C : Type (u₁+1)}
 -- variable [large_category C]
--- variables {F : J ↝ C} {L : LimitCone F} {Z : C} 
+-- variables {F : J ⥤ C} {L : LimitCone F} {Z : C} 
 
 -- private def Cone_from_map_to_limit (f : Z ⟶ L.obj.cone_point) : Cone F := {
 --   cone_point    := Z,

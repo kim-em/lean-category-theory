@@ -108,10 +108,10 @@ def is_pullback.of_comparison {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} {t : squar
 variables {J : Type v} [𝒥 : small_category J]
 include 𝒥
 
-@[reducible] def limit_comparison {F : J ↝ C} (t : cone F) (X' : C) : (X' ⟶ t.X) → { c : Π j : J, (X' ⟶ F j) // ∀ {j j' : J} (f : j ⟶ j'), c j ≫ F.map f = c j' } :=
+@[reducible] def limit_comparison {F : J ⥤ C} (t : cone F) (X' : C) : (X' ⟶ t.X) → { c : Π j : J, (X' ⟶ F j) // ∀ {j j' : J} (f : j ⟶ j'), c j ≫ F.map f = c j' } :=
 λ φ, ⟨ λ j, φ ≫ t.π j, by obviously ⟩ 
 
-def is_limit.comparison {F : J ↝ C} {t : cone F} (h : is_limit t) (X' : C) : is_equiv (limit_comparison t X') :=
+def is_limit.comparison {F : J ⥤ C} {t : cone F} (h : is_limit t) (X' : C) : is_equiv (limit_comparison t X') :=
 { inv := λ p, h.lift ⟨ ⟨ X' ⟩, p.val, p.property ⟩,
   hom_inv_id' := begin 
                  tidy, 
@@ -120,7 +120,7 @@ def is_limit.comparison {F : J ↝ C} {t : cone F} (h : is_limit t) (X' : C) : i
                  tidy,
                 end }
 
-def is_limit.of_comparison {F : J ↝ C} {t : cone F} (w : Π X' : C, is_equiv (limit_comparison t X')) : is_limit t :=
+def is_limit.of_comparison {F : J ⥤ C} {t : cone F} (w : Π X' : C, is_equiv (limit_comparison t X')) : is_limit t :=
 { lift := λ s, @is_iso.inv _ _ _ _ _ (w s.X) ⟨ s.π, s.w ⟩,
   fac :=  λ s, begin
                 have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 

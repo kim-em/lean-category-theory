@@ -25,7 +25,7 @@ restate_axiom functorial.map_id'
 restate_axiom functorial.map_comp'
 attribute [simp,search] functorial.map_comp functorial.map_id
 
--- instance (F : C ↝ D) : functorial (F.obj) := 
+-- instance (F : C ⥤ D) : functorial (F.obj) := 
 -- { map := F.map' }
 
 -- TODO notations?

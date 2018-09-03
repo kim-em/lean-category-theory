@@ -15,23 +15,23 @@ universes u₁ u₂ v₁ v₂
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒞 𝒟
 
-def app {F G : C ↝ D} (α : F ≅ G) (X : C) : F X ≅ G X :=
+def app {F G : C ⥤ D} (α : F ≅ G) (X : C) : F X ≅ G X :=
 { hom := (α : F ⟶ G) X,
   inv := (α.symm : G ⟶ F) X,
   hom_inv_id' := begin rw ← functor.category.comp_app, rw iso.hom_inv_id, tidy, end,
   inv_hom_id' := begin rw ← functor.category.comp_app, rw iso.inv_hom_id, tidy, end }
 
-instance {F G : C ↝ D} : has_coe_to_fun (F ≅ G) :=
+instance {F G : C ⥤ D} : has_coe_to_fun (F ≅ G) :=
 { F   := λ α, Π X : C, (F X) ≅ (G X),
   coe := λ α, app α }
 
-@[simp,search] lemma comp_app {F G H : C ↝ D} (α : F ≅ G) (β : G ≅ H) (X : C) : 
+@[simp,search] lemma comp_app {F G H : C ⥤ D} (α : F ≅ G) (β : G ≅ H) (X : C) : 
   ((α ≪≫ β) : F ⟹ H) X = α X ≪≫ β X := rfl
 
-@[simp] lemma hom_eq_coe {F G : C ↝ D} (α : F ≅ G) (X : C) : α.hom X = (α : F ⟶ G) X := rfl
-@[simp] lemma inv_eq_symm_coe {F G : C ↝ D} (α : F ≅ G) (X : C) : α.inv X = (α.symm : G ⟶ F) X := rfl
+@[simp] lemma hom_eq_coe {F G : C ⥤ D} (α : F ≅ G) (X : C) : α.hom X = (α : F ⟶ G) X := rfl
+@[simp] lemma inv_eq_symm_coe {F G : C ⥤ D} (α : F ≅ G) (X : C) : α.inv X = (α.symm : G ⟶ F) X := rfl
 
-variables {F G : C ↝ D} 
+variables {F G : C ⥤ D} 
 
 instance hom_app_is_iso (α : F ≅ G) (X : C) : is_iso ((α : F ⟶ G) X) := 
 { inv := α.inv X }
