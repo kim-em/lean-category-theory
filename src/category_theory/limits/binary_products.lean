@@ -16,27 +16,27 @@ include 𝒞
 section binary_product
 structure is_binary_product {Y Z : C} (t : span Y Z) :=
 (lift : ∀ (s : span Y Z), s.X ⟶ t.X)
-(fac₁ : ∀ (s : span Y Z), (lift s) ≫ t.π₁ = s.π₁ . obviously) 
-(fac₂ : ∀ (s : span Y Z), (lift s) ≫ t.π₂ = s.π₂ . obviously) 
-(uniq : ∀ (s : span Y Z) (m : s.X ⟶ t.X) (w₁ : m ≫ t.π₁ = s.π₁) (w₂ : m ≫ t.π₂ = s.π₂), m = lift s . obviously)
+(fac₁' : ∀ (s : span Y Z), (lift s) ≫ t.π₁ = s.π₁ . obviously) 
+(fac₂' : ∀ (s : span Y Z), (lift s) ≫ t.π₂ = s.π₂ . obviously) 
+(uniq' : ∀ (s : span Y Z) (m : s.X ⟶ t.X) (w₁ : m ≫ t.π₁ = s.π₁) (w₂ : m ≫ t.π₂ = s.π₂), m = lift s . obviously)
 
-restate_axiom is_binary_product.fac₁
-attribute [simp,search] is_binary_product.fac₁_lemma
-restate_axiom is_binary_product.fac₂
-attribute [simp,search] is_binary_product.fac₂_lemma
-restate_axiom is_binary_product.uniq
-attribute [search,back'] is_binary_product.uniq_lemma
+restate_axiom is_binary_product.fac₁'
+attribute [simp,search] is_binary_product.fac₁
+restate_axiom is_binary_product.fac₂'
+attribute [simp,search] is_binary_product.fac₂
+restate_axiom is_binary_product.uniq'
+attribute [search,back'] is_binary_product.uniq
 
 @[extensionality] lemma is_binary_product.ext {Y Z : C} {t : span Y Z} (P Q : is_binary_product t) : P = Q :=
 begin cases P, cases Q, obviously end
 
-instance {Y Z : C} {t : span Y Z} : subsingleton (is_binary_product t) := by obviously
+instance subsingleton_is_binary_product {Y Z : C} {t : span Y Z} : subsingleton (is_binary_product t) := by obviously
 
-lemma is_binary_product.uniq' {Y Z : C} {t : span Y Z} (h : is_binary_product t) {X' : C} (m : X' ⟶ t.X) : 
+lemma is_binary_product.uniq'' {Y Z : C} {t : span Y Z} (h : is_binary_product t) {X' : C} (m : X' ⟶ t.X) : 
   m = h.lift { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } :=
 h.uniq { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } m (by obviously) (by obviously)
 
--- TODO provide alternative constructor using uniq' instead of uniq?
+-- TODO provide alternative constructor using uniq'' instead of uniq?
 
 lemma is_binary_product.univ {Y Z : C} {t : span Y Z} (h : is_binary_product t) (s : span Y Z) (φ : s.X ⟶ t.X) : (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = h.lift s) :=
 begin
@@ -47,49 +47,48 @@ def is_binary_product.of_lift_univ {Y Z : C} {t : span Y Z}
   (lift : Π (s : span Y Z), s.X ⟶ t.X)
   (univ : Π (s : span Y Z) (φ : s.X ⟶ t.X), (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = lift s)) : is_binary_product t :=
 { lift := lift,
-  fac₁ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left, -- PROJECT automation
-  fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
-  uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+  fac₁' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left, -- PROJECT automation
+  fac₂' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
+  uniq' := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
 end binary_product
 
 section binary_coproduct
 structure is_binary_coproduct {Y Z : C} (t : cospan Y Z) :=
 (desc : ∀ (s : cospan Y Z), t.X ⟶ s.X)
-(fac₁ : ∀ (s : cospan Y Z), t.ι₁ ≫ (desc s) = s.ι₁ . obviously) 
-(fac₂ : ∀ (s : cospan Y Z), t.ι₂ ≫ (desc s) = s.ι₂ . obviously) 
-(uniq : ∀ (s : cospan Y Z) (m : t.X ⟶ s.X) (w₁ : t.ι₁ ≫ m = s.ι₁) (w₂ : t.ι₂ ≫ m = s.ι₂), m = desc s . obviously)
+(fac₁' : ∀ (s : cospan Y Z), t.ι₁ ≫ (desc s) = s.ι₁ . obviously) 
+(fac₂' : ∀ (s : cospan Y Z), t.ι₂ ≫ (desc s) = s.ι₂ . obviously) 
+(uniq' : ∀ (s : cospan Y Z) (m : t.X ⟶ s.X) (w₁ : t.ι₁ ≫ m = s.ι₁) (w₂ : t.ι₂ ≫ m = s.ι₂), m = desc s . obviously)
 
-restate_axiom is_binary_coproduct.fac₁
-attribute [simp,search] is_binary_coproduct.fac₁_lemma
-restate_axiom is_binary_coproduct.fac₂
-attribute [simp,search] is_binary_coproduct.fac₂_lemma
-restate_axiom is_binary_coproduct.uniq
-attribute [search, back'] is_binary_coproduct.uniq_lemma
+restate_axiom is_binary_coproduct.fac₁'
+attribute [simp,search] is_binary_coproduct.fac₁
+restate_axiom is_binary_coproduct.fac₂'
+attribute [simp,search] is_binary_coproduct.fac₂
+restate_axiom is_binary_coproduct.uniq'
+attribute [search, back'] is_binary_coproduct.uniq
 
 @[extensionality] lemma is_binary_coproduct.ext {Y Z : C} {t : cospan Y Z} (P Q : is_binary_coproduct t) : P = Q :=
 begin cases P, cases Q, obviously end
 
-lemma is_binary_coproduct.uniq' {Y Z : C} {t : cospan Y Z} (h : is_binary_coproduct t) {X' : C} (m : t.X ⟶ X') : m = h.desc { X := X', ι₁ := t.ι₁ ≫ m, ι₂ := t.ι₂ ≫ m } :=
+instance subsingleton_is_binary_coproduct {Y Z : C} {t : cospan Y Z} : subsingleton (is_binary_coproduct t) := by obviously
+
+lemma is_binary_coproduct.uniq'' {Y Z : C} {t : cospan Y Z} (h : is_binary_coproduct t) {X' : C} (m : t.X ⟶ X') : m = h.desc { X := X', ι₁ := t.ι₁ ≫ m, ι₂ := t.ι₂ ≫ m } :=
 h.uniq { X := X', ι₁ := t.ι₁ ≫ m, ι₂ := t.ι₂ ≫ m } m (by obviously) (by obviously)
 
--- TODO provide alternative constructor using uniq' instead of uniq.
-
-structure binary_coproduct (Y Z : C) extends t : cospan Y Z :=
-(h : is_binary_coproduct t)
+-- TODO provide alternative constructor using uniq'' instead of uniq.
 
 lemma is_binary_coproduct.univ {Y Z : C} {t : cospan Y Z} (h : is_binary_coproduct t) (s : cospan Y Z) (φ : t.X ⟶ s.X) : (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = h.desc s) :=
 begin
-obviously
+  obviously
 end
 
 def is_binary_coproduct.of_desc_univ {Y Z : C} {t : cospan Y Z}
   (desc : Π (s : cospan Y Z), t.X ⟶ s.X)
   (univ : Π (s : cospan Y Z) (φ : t.X ⟶ s.X), (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = desc s)) : is_binary_coproduct t :=
 { desc := desc,
-  fac₁ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left, -- PROJECT automation
-  fac₂ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
-  uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+  fac₁' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left, -- PROJECT automation
+  fac₂' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
+  uniq' := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
 
 
 end binary_coproduct
@@ -115,26 +114,139 @@ def prod.π₁ (Y Z : C) : prod Y Z ⟶ Y := (prod.span Y Z).π₁
 def prod.π₂ (Y Z : C) : prod Y Z ⟶ Z := (prod.span Y Z).π₂
 @[back] def prod.universal_property (Y Z : C) : is_binary_product (prod.span Y Z) :=
 has_binary_products.is_binary_product.{u v} C Y Z
+
 def prod.pair {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : P ⟶ (prod Q R) :=
 (prod.universal_property Q R).lift ⟨ ⟨ P ⟩, f, g ⟩
+
+def prod.swap (P Q : C) : prod P Q ⟶ prod Q P := prod.pair (prod.π₂ P Q) (prod.π₁ P Q)
 
 def prod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (prod P R) ⟶ (prod Q S) :=
 prod.pair (prod.π₁ P R ≫ f) (prod.π₂ P R ≫ g)
 
 @[simp,search] lemma prod.pair_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₁ Q R = f := 
-(prod.universal_property.{u v} Q R).fac₁_lemma { X := P, π₁ := f, π₂ := g }
+(prod.universal_property.{u v} Q R).fac₁ { X := P, π₁ := f, π₂ := g }
 @[simp,search] lemma prod.pair_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₂ Q R = g :=
-(prod.universal_property.{u v} Q R).fac₂_lemma { X := P, π₁ := f, π₂ := g }
+(prod.universal_property.{u v} Q R).fac₂ { X := P, π₁ := f, π₂ := g }
+
+@[simp,search] lemma prod.swap_π₁ (P Q : C) : prod.swap P Q ≫ prod.π₁ Q P = prod.π₂ P Q :=
+begin
+  erw is_binary_product.fac₁,
+end
+@[simp,search] lemma prod.swap_π₂ (P Q : C) : prod.swap P Q ≫ prod.π₂ Q P = prod.π₁ P Q :=
+begin
+  erw is_binary_product.fac₂,
+end
+
+@[simp,search] lemma prod.map_π₁ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : prod.map f g ≫ prod.π₁ Q S = prod.π₁ P R ≫ f := 
+begin
+  erw is_binary_product.fac₁,
+end
+@[simp,search] lemma prod.map_π₂ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : prod.map f g ≫ prod.π₂ Q S = prod.π₂ P R ≫ g :=
+begin
+  erw is_binary_product.fac₂,
+end
+
 
 @[extensionality] def prod.hom_ext (Y Z : C) (X : C) 
   (f g : X ⟶ prod Y Z) 
   (w₁ : f ≫ prod.π₁ Y Z = g ≫ prod.π₁ Y Z) 
   (w₂ : f ≫ prod.π₂ Y Z = g ≫ prod.π₂ Y Z) : f = g := 
 begin 
-  rw (prod.universal_property Y Z).uniq' f,
-  rw (prod.universal_property Y Z).uniq' g,
+  rw (prod.universal_property Y Z).uniq'' f,
+  rw (prod.universal_property Y Z).uniq'' g,
   congr ; assumption,
 end
+
+@[simp,search] lemma prod.swap_swap (P Q : C) : prod.swap P Q ≫ prod.swap Q P = 𝟙 _ := 
+by obviously
+
+@[simp,search] lemma prod.swap_pair {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : 
+  prod.pair g f ≫ prod.swap R Q = prod.pair f g := 
+by obviously
+
+@[search] lemma prod.swap_map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : 
+  prod.swap P R ≫ prod.map g f = prod.map f g ≫ prod.swap Q S := 
+by obviously
+
+@[simp,search] lemma prod.pair_map {P Q R S T : C} (f : P ⟶ Q) (g : P ⟶ R) (h : Q ⟶ T) (k : R ⟶ S) : 
+  prod.pair f g ≫ prod.map h k = prod.pair (f ≫ h) (g ≫ k) := 
+by obviously
+
+@[simp,search] lemma prod.map_map {P Q R S T U : C} (f : P ⟶ Q) (g : R ⟶ S) (h : Q ⟶ T) (k : S ⟶ U) :
+  prod.map f g ≫ prod.map h k = prod.map (f ≫ h) (g ≫ k) :=
+by obviously 
+
+end
+
+section 
+variables [has_binary_coproducts.{u v} C] 
+
+def coprod.cospan (Y Z : C) := has_binary_coproducts.coprod.{u v} Y Z
+def coprod (Y Z : C) : C := (coprod.cospan Y Z).X
+def coprod.ι₁ (Y Z : C) : Y ⟶ coprod Y Z := (coprod.cospan Y Z).ι₁
+def coprod.ι₂ (Y Z : C) : Z ⟶ coprod Y Z := (coprod.cospan Y Z).ι₂
+@[back] def coprod.universal_property (Y Z : C) : is_binary_coproduct (coprod.cospan Y Z) :=
+has_binary_coproducts.is_binary_coproduct.{u v} C Y Z
+
+def coprod.pair {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : (coprod Q R) ⟶ P :=
+(coprod.universal_property Q R).desc ⟨ ⟨ P ⟩, f, g ⟩
+
+def coprod.swap (P Q : C) : coprod P Q ⟶ coprod Q P := coprod.pair (coprod.ι₂ Q P) (coprod.ι₁ Q P)
+
+def coprod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (coprod P R) ⟶ (coprod Q S) :=
+coprod.pair (f ≫ coprod.ι₁ Q S) (g ≫ coprod.ι₂ Q S)
+
+@[simp,search] lemma coprod.pair_ι₁ {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : coprod.ι₁ Q R ≫ coprod.pair f g = f := 
+(coprod.universal_property.{u v} Q R).fac₁ { X := P, ι₁ := f, ι₂ := g }
+@[simp,search] lemma coprod.pair_ι₂ {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : coprod.ι₂ Q R ≫ coprod.pair f g = g :=
+(coprod.universal_property.{u v} Q R).fac₂ { X := P, ι₁ := f, ι₂ := g }
+
+@[simp,search] lemma coprod.swap_ι₁ (P Q : C) : coprod.ι₁ P Q ≫ coprod.swap P Q = coprod.ι₂ Q P :=
+begin
+  erw is_binary_coproduct.fac₁,
+end
+@[simp,search] lemma coprod.swap_ι₂ (P Q : C) : coprod.ι₂ P Q ≫ coprod.swap P Q = coprod.ι₁ Q P :=
+begin
+  erw is_binary_coproduct.fac₂,
+end
+
+@[simp,search] lemma coprod.map_ι₁ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : coprod.ι₁ P R ≫ coprod.map f g = f ≫ coprod.ι₁ Q S := 
+begin
+  erw is_binary_coproduct.fac₁,
+end
+@[simp,search] lemma coprod.map_ι₂ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : coprod.ι₂ P R ≫ coprod.map f g = g ≫ coprod.ι₂ Q S :=
+begin
+  erw is_binary_coproduct.fac₂,
+end
+
+@[extensionality] def coprod.hom_ext (Y Z : C) (X : C) 
+  (f g : coprod Y Z ⟶ X) 
+  (w₁ : coprod.ι₁ Y Z ≫ f = coprod.ι₁ Y Z ≫ g) 
+  (w₂ : coprod.ι₂ Y Z ≫ f = coprod.ι₂ Y Z ≫ g) : f = g := 
+begin 
+  rw (coprod.universal_property Y Z).uniq'' f,
+  rw (coprod.universal_property Y Z).uniq'' g,
+  congr ; assumption,
+end
+
+@[simp,search] lemma coprod.swap_swap (P Q : C) : coprod.swap P Q ≫ coprod.swap Q P = 𝟙 _ := 
+by obviously
+
+@[simp,search] lemma coprod.swap_pair {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : 
+  coprod.swap Q R ≫ coprod.pair g f = coprod.pair f g := 
+by obviously
+
+@[search] lemma coprod.swap_map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : 
+  coprod.swap P R ≫ coprod.map g f = coprod.map f g ≫ coprod.swap Q S := 
+by obviously
+
+@[simp,search] lemma coprod.map_pair {P Q R S T : C} (f : P ⟶ Q) (g : R ⟶ S)  (h : Q ⟶ T) (k : S ⟶ T) : 
+  coprod.map f g ≫ coprod.pair h k = coprod.pair (f ≫ h) (g ≫ k) := 
+by obviously
+
+@[simp,search] lemma coprod.map_map {P Q R S T U : C} (f : P ⟶ Q) (g : R ⟶ S) (h : Q ⟶ T) (k : S ⟶ U) :
+  coprod.map f g ≫ coprod.map h k = coprod.map (f ≫ h) (g ≫ k) :=
+by obviously 
 
 end
 

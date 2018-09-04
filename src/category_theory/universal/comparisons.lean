@@ -24,17 +24,17 @@ def is_binary_product.comparison {t : span Y Z} (h : is_binary_product t) (X' : 
 
 def is_binary_product.of_comparison {t : span Y Z} (w : Π X' : C, is_equiv (binary_product_comparison t X')) : is_binary_product t :=
 { lift := λ s, @inv _ _ _ _ _ (w s.X) (s.π₁, s.π₂),
-  fac₁ := λ s, begin
+  fac₁' := λ s, begin
                 have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
                 have q := congr_fun p (s.π₁, s.π₂),
                 tidy,
                end,
-  fac₂ := λ s, begin
+  fac₂' := λ s, begin
             have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
             have q := congr_fun p (s.π₁, s.π₂),
             tidy,
           end,
-  uniq := λ s m w₁ w₂, begin
+  uniq' := λ s m w₁ w₂, begin
             have p := @is_iso.hom_inv_id _ _ _ _ _ (w s.X), 
             have q := congr_fun p m,
             obviously,
