@@ -2,11 +2,12 @@
 
 import category_theory.category
 import category_theory.universal.zero
+import category_theory.limits.products
 
 universes u₁ v₁ u₂ v₂
 
 open category_theory
-open category_theory.universal
+open category_theory.limits
 
 class Ab_category (C: Type u₁) extends category.{u₁ v₁} C := --- we really need to setup enriched categories
   (hom_groups : Π X Y : C, comm_group (X ⟶ Y))

@@ -5,13 +5,12 @@
 import category_theory.currying
 import category_theory.functor_categories.whiskering
 import category_theory.universal.complete
-import category_theory.universal.complete.lemmas.cones_in_functor_categories
 import category_theory.universal.comparisons
 
 open category_theory
 open category_theory.prod
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v
 
@@ -52,4 +51,4 @@ instance [has_limits.{u v} D] : has_limits.{(max u v) v} (C ⥤ D) :=
     uniq := sorry } end
 }
 
-end category_theory.universal
+end category_theory.limits

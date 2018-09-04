@@ -1,8 +1,8 @@
-import category_theory.universal.limits
+import category_theory.limits
 import category_theory.over
 
 open category_theory
-open category_theory.universal
+open category_theory.limits
 
 universes u₁ v₁
 

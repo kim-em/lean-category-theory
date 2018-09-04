@@ -2,17 +2,13 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import category_theory.universal.limits.shape
-import category_theory.filtered
+import category_theory.limits.shape
 
 open category_theory
 
-
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v w
-
-section
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -40,11 +36,11 @@ lemma is_binary_product.uniq' {Y Z : C} {t : span Y Z} (h : is_binary_product t)
   m = h.lift { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } :=
 h.uniq { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } m (by obviously) (by obviously)
 
--- TODO provide alternative constructor using uniq' instead of uniq.
+-- TODO provide alternative constructor using uniq' instead of uniq?
 
 lemma is_binary_product.univ {Y Z : C} {t : span Y Z} (h : is_binary_product t) (s : span Y Z) (φ : s.X ⟶ t.X) : (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = h.lift s) :=
 begin
-obviously
+  obviously
 end
 
 def is_binary_product.of_lift_univ {Y Z : C} {t : span Y Z}
@@ -57,16 +53,60 @@ def is_binary_product.of_lift_univ {Y Z : C} {t : span Y Z}
 
 end binary_product
 
+section binary_coproduct
+structure is_binary_coproduct {Y Z : C} (t : cospan Y Z) :=
+(desc : ∀ (s : cospan Y Z), t.X ⟶ s.X)
+(fac₁ : ∀ (s : cospan Y Z), t.ι₁ ≫ (desc s) = s.ι₁ . obviously) 
+(fac₂ : ∀ (s : cospan Y Z), t.ι₂ ≫ (desc s) = s.ι₂ . obviously) 
+(uniq : ∀ (s : cospan Y Z) (m : t.X ⟶ s.X) (w₁ : t.ι₁ ≫ m = s.ι₁) (w₂ : t.ι₂ ≫ m = s.ι₂), m = desc s . obviously)
+
+restate_axiom is_binary_coproduct.fac₁
+attribute [simp,search] is_binary_coproduct.fac₁_lemma
+restate_axiom is_binary_coproduct.fac₂
+attribute [simp,search] is_binary_coproduct.fac₂_lemma
+restate_axiom is_binary_coproduct.uniq
+attribute [search, back'] is_binary_coproduct.uniq_lemma
+
+@[extensionality] lemma is_binary_coproduct.ext {Y Z : C} {t : cospan Y Z} (P Q : is_binary_coproduct t) : P = Q :=
+begin cases P, cases Q, obviously end
+
+lemma is_binary_coproduct.uniq' {Y Z : C} {t : cospan Y Z} (h : is_binary_coproduct t) {X' : C} (m : t.X ⟶ X') : m = h.desc { X := X', ι₁ := t.ι₁ ≫ m, ι₂ := t.ι₂ ≫ m } :=
+h.uniq { X := X', ι₁ := t.ι₁ ≫ m, ι₂ := t.ι₂ ≫ m } m (by obviously) (by obviously)
+
+-- TODO provide alternative constructor using uniq' instead of uniq.
+
+structure binary_coproduct (Y Z : C) extends t : cospan Y Z :=
+(h : is_binary_coproduct t)
+
+lemma is_binary_coproduct.univ {Y Z : C} {t : cospan Y Z} (h : is_binary_coproduct t) (s : cospan Y Z) (φ : t.X ⟶ s.X) : (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = h.desc s) :=
+begin
+obviously
+end
+
+def is_binary_coproduct.of_desc_univ {Y Z : C} {t : cospan Y Z}
+  (desc : Π (s : cospan Y Z), t.X ⟶ s.X)
+  (univ : Π (s : cospan Y Z) (φ : t.X ⟶ s.X), (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = desc s)) : is_binary_coproduct t :=
+{ desc := desc,
+  fac₁ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left, -- PROJECT automation
+  fac₂ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+
+
+end binary_coproduct
+
 variable (C)
 
 class has_binary_products :=
 (prod    : Π (Y Z : C), span Y Z)
 (is_binary_product : Π (Y Z : C), is_binary_product (prod Y Z) . obviously)
 
+class has_binary_coproducts :=
+(coprod    : Π (Y Z : C), cospan Y Z)
+(is_binary_coproduct : Π (Y Z : C), is_binary_coproduct (coprod Y Z) . obviously)
+
 variable {C}
 
-
-section
+section 
 variables [has_binary_products.{u v} C] 
 
 def prod.span (Y Z : C) := has_binary_products.prod.{u v} Y Z
@@ -95,4 +135,7 @@ begin
   rw (prod.universal_property Y Z).uniq' g,
   congr ; assumption,
 end
+
 end
+
+end category_theory.limits

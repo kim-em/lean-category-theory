@@ -4,9 +4,9 @@
 
 import category_theory.universal.cones
 
-open category_theory
+open category_theory.limits
 
-namespace category_theory.universal
+namespace category_theory
 
 universes u v
 variables {C : Type u} [𝒞 : category.{u v} C] {D : Type u} [𝒟 : category.{u v} D]
@@ -27,8 +27,7 @@ instance : continuous (functor.id C) :=
 { preserves_limits := λ J 𝒥 G c L,
     begin resetI, exact
       { lift := λ s, L.lift { X := s.X, π := s.π }, -- We need to do a little work here because `G ⋙ (functor.id _) ≠ G`.
-        uniq := λ s m w, L.uniq { X := s.X, π := s.π } m w,
-      } 
+        uniq := λ s m w, L.uniq { X := s.X, π := s.π } m w, } 
     end }
 
 end
@@ -42,5 +41,5 @@ end
 
 -- PROJECT right adjoints are continuous
 
-end category_theory.universal
+end category_theory
 

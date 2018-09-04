@@ -1,11 +1,10 @@
-import .limits
-import .colimits
+import category_theory.limits.terminal
 
 open category_theory
 
 universes u v
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -40,9 +39,9 @@ class has_zero_object :=
 (zero : C)
 (is : is_zero.{u v} zero)
 
-end category_theory.universal
+end category_theory.limits
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 def zero_object  := has_zero_object.zero.{u v}
 
@@ -60,15 +59,15 @@ begin
   unfold zero_morphism,
   rw category.assoc,
   congr,
-  sorry
+  apply is_zero.uniq_desc,
 end
 @[simp] lemma zero_morphism_right {X Y Z : C} (f : X ⟶ Y) : f ≫ (zero_morphism Y Z) = zero_morphism X Z :=  
 begin
   unfold zero_morphism,
   rw ← category.assoc,
   congr,
-  sorry
+  apply is_zero.uniq_lift,
 end
 
-end category_theory.universal
+end category_theory.limits
 

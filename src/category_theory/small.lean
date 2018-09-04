@@ -5,7 +5,7 @@
 
 import category_theory.category
 import category_theory.functor
-import category_theory.universal.colimits -- for cocone
+import category_theory.limits.shape -- for cocone
 import set_theory.cardinal
 
 universe u
@@ -19,6 +19,6 @@ cardinal.mk (Σ (a b : I), a ⟶ b) < κ
 
 structure kappa_filtered (C : Type u) [small_category.{u} C] : Prop :=
 (has_cocones : ∀ (I : Type u) [small_category.{u} I] (hI : is_kappa_small κ I) (F : I ⥤ C),
-  nonempty (universal.cocone F))
+  nonempty (limits.cocone F))
 
 end category_theory

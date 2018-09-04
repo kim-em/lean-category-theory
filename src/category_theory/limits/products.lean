@@ -2,17 +2,13 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import category_theory.universal.limits.shape
-import category_theory.filtered
+import category_theory.limits.shape
 
 open category_theory
 
-
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v w
-
-section
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -54,12 +50,64 @@ def is_product.of_lift_univ {t : fan f}
 
 end product
 
+
+section coproduct
+variables {β : Type v} {f : β → C} 
+
+structure is_coproduct (t : cofan f) :=
+(desc : ∀ (s : cofan f), t.X ⟶ s.X)
+(fac  : ∀ (s : cofan f), ∀ b, t.ι b ≫ (desc s) = s.ι b . obviously) 
+(uniq : ∀ (s : cofan f) (m : t.X ⟶ s.X) (w : ∀ b, t.ι b ≫ m = s.ι b), m = desc s . obviously)
+
+restate_axiom is_coproduct.fac
+attribute [simp,search] is_coproduct.fac_lemma
+restate_axiom is_coproduct.uniq
+attribute [search, back'] is_coproduct.uniq_lemma
+
+@[extensionality] lemma is_coproduct.ext {t : cofan f} (P Q : is_coproduct t) : P = Q :=
+begin cases P, cases Q, obviously end
+
+instance is_coproduct_subsingleton {t : cofan f}  : subsingleton (is_coproduct t) := by obviously
+
+lemma is_coproduct.uniq' {t : cofan f} (h : is_coproduct t) {X' : C} (m : t.X ⟶ X') : m = h.desc { X := X', ι := λ b, t.ι b ≫ m } :=
+h.uniq { X := X', ι := λ b, t.ι b ≫ m } m (by obviously)
+
+-- TODO provide alternative constructor using uniq' instead of uniq.
+
+lemma is_coproduct.univ {t : cofan f} (h : is_coproduct t) (s : cofan f) (φ : t.X ⟶ s.X) : (∀ b, t.ι b ≫ φ = s.ι b) ↔ (φ = h.desc s) :=
+begin
+obviously
+end
+
+def is_coproduct.of_desc_univ {t :cofan f}
+  (desc : Π (s : cofan f), t.X ⟶ s.X)
+  (univ : Π (s : cofan f) (φ : t.X ⟶ s.X), (∀ b, t.ι b ≫ φ = s.ι b) ↔ (φ = desc s)) : is_coproduct t :=
+{ desc := desc,
+  fac  := λ s b, ((univ s (desc s)).mpr (eq.refl (desc s))) b,
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+
+lemma homs_to_coproduct_ext {t : cofan f} (B : is_coproduct.{u v} t) {X : C} (f g : t.X ⟶ X) (w : ∀ b, t.ι b ≫ f = t.ι b ≫ g) : f = g :=
+begin
+  rw B.uniq' f,
+  rw B.uniq' g,
+  congr,
+  ext,
+  exact w x,
+end
+
+end coproduct
+
 variable (C)
 
 class has_products :=
 (prod : Π {β : Type v} (f : β → C), fan.{u v} f)
 (is_product : Π {β : Type v} (f : β → C), is_product (prod f) . obviously)
 
+class has_coproducts :=
+(coprod : Π {β : Type v} (f : β → C), cofan.{u v} f)
+(is_coproduct : Π {β : Type v} (f : β → C), is_coproduct (coprod f) . obviously)
+
+variable {C}
 
 section
 variables [has_products.{u v} C] {β : Type v} 
@@ -106,3 +154,5 @@ begin
 end
 
 end
+
+end category_theory.limits

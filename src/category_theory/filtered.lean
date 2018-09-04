@@ -1,8 +1,8 @@
-import category_theory.universal.limits.shape
+import category_theory.limits.shape
 import category_theory.preorder
 import order.filter
 
-open category_theory.universal
+open category_theory.limits
 
 namespace category_theory
 

@@ -8,7 +8,7 @@ import category_theory.functor.isomorphism
 
 open category_theory
 
-namespace category_theory.universal
+namespace category_theory
 
 universes u
 variable (C : Type (u+1))
@@ -24,4 +24,4 @@ instance type_strongly_concrete : strongly_concrete (Type u) := {
     preserves_limits := sorry
 }
 
-end category_theory.universal
+end category_theory

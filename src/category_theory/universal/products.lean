@@ -2,14 +2,13 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import .limits
-import .comparisons
+import category_theory.limits.binary_products
 
 open category_theory
 
 universes u v
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 variables {C : Type u} [𝒞 : category.{u v} C] [has_binary_products.{u v} C]
 include 𝒞
@@ -30,4 +29,4 @@ def binary_product.associativity (P Q R : C) : (prod (prod P Q) R) ≅ (prod P (
 
 -- TODO verify the pentagon?
 
-end category_theory.universal
+end category_theory.limits

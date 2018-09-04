@@ -5,14 +5,12 @@
 import category_theory.opposites
 import category_theory.equivalence
 import category_theory.universal.cones
-import category_theory.universal.colimits
-import category_theory.universal.limits.limits
+import category_theory.limits
 
 
 open category_theory
-open category_theory.universal
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v
 
@@ -38,4 +36,4 @@ def has_colimits_of_opposite_has_limits [has_limits.{u v} (Cᵒᵖ)] : has_colim
 
 end
 
-end category_theory.universal
+end category_theory.limits

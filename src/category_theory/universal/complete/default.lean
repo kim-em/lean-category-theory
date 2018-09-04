@@ -6,7 +6,7 @@ import category_theory.universal.cones
 
 open category_theory
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v 
 
@@ -29,4 +29,4 @@ rfl
 --     { X := colimit F, π := λ j, t j ≫ colimit.ι F j},
 --   map_id' := begin tidy, erw colimit.desc_ι, dsimp, simp, end }. -- FIXME why doesn't simp work here?
 
-end category_theory.universal
+end category_theory.limits

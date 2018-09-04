@@ -1,10 +1,9 @@
-import category_theory.universal.limits
-import category_theory.universal.colimits
-import category_theory.universal.limits.limits
+import category_theory.limits
 
 universe u
 
-open category_theory category_theory.universal
+open category_theory 
+open category_theory.limits
 
 namespace category_theory.universal.types
 
@@ -16,7 +15,7 @@ instance : has_terminal_object.{u+1 u} (Type u) :=
 instance : has_binary_products.{u+1 u} (Type u) := 
 { prod := λ Y Z, { X := Y × Z, π₁ := prod.fst, π₂ := prod.snd } }
 
-@[simp] lemma types_prod (Y Z : Type u) : universal.prod Y Z = (Y × Z) := rfl
+@[simp] lemma types_prod (Y Z : Type u) : limits.prod Y Z = (Y × Z) := rfl
 
 instance : has_products.{u+1 u} (Type u) := 
 { prod := λ β f, { X := Π b, f b, π := λ b x, x b } }.

@@ -1,8 +1,9 @@
-import .cones
+import category_theory.universal.cones
+import category_theory.limits.terminal
 
 open category_theory
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v
 
@@ -25,4 +26,4 @@ def limits_are_limit_cones {t : cone F} : equiv (is_limit t) (is_terminal.{(max 
   left_inv  := by obviously,
   right_inv := by obviously }
 
-end category_theory.universal
+end category_theory.limits

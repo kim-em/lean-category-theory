@@ -2,13 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import .limits.limits
-import .limits
-import .colimits
+import category_theory.limits.limits
 
 open category_theory
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v
 variables {J : Type v} [small_category J]
@@ -125,7 +123,7 @@ def limit.cone_morphism (c : cone F) : cone_morphism c (limit.cone F) :=
 -- (limit.cone_morphism F { X := X, π := π, w := w }).hom
 end
 
-end category_theory.universal
+end category_theory.limits
 
 namespace category_theory.functor
 
@@ -134,7 +132,7 @@ variables {J : Type v} [small_category J]
 variables {C : Type u} [category.{u v} C] {D : Type u} [category.{u v} D]
 variables {F : J ⥤ C} {G : J ⥤ C}
 
-open category_theory.universal
+open category_theory.limits
 
 def map_cone   (H : C ⥤ D) (c : cone F)   : cone (F ⋙ H)   := (cones.functoriality F H) c
 def map_cocone (H : C ⥤ D) (c : cocone F) : cocone (F ⋙ H) := (cocones.functoriality F H) c

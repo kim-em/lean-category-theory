@@ -1,10 +1,8 @@
-import category_theory.universal.limits
-import category_theory.universal.limits.limits
+import category_theory.limits
 
 open category_theory
-open category_theory.universal
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v
 
@@ -139,4 +137,4 @@ def is_limit.of_comparison {F : J ⥤ C} {t : cone F} (w : Π X' : C, is_equiv (
                     end } 
 
 
-end category_theory.universal
+end category_theory.limits

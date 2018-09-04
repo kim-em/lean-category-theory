@@ -2,17 +2,16 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import category_theory.universal.limits.shape
+import category_theory.limits.shape
 import category_theory.filtered
 
 open category_theory
 
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v w
 
-section
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -55,11 +54,52 @@ def is_equalizer.of_lift_univ {f g : Y ⟶ Z} {t : fork f g}
 end equalizer
 
 
+section coequalizer
+variables {Y Z : C}
+structure is_coequalizer {f g : Z ⟶ Y} (t : cofork f g) :=
+(desc : ∀ (s : cofork f g), t.X ⟶ s.X)
+(fac  : ∀ (s : cofork f g), t.π ≫ (desc s) = s.π . obviously)
+(uniq : ∀ (s : cofork f g) (m : t.X ⟶ s.X) (w : t.π ≫ m = s.π), m = desc s . obviously)
+
+restate_axiom is_coequalizer.fac
+attribute [simp,search] is_coequalizer.fac_lemma
+restate_axiom is_coequalizer.uniq
+attribute [search, back'] is_coequalizer.uniq_lemma
+
+@[extensionality] lemma is_coequalizer.ext {f g : Z ⟶ Y} {t : cofork f g} (P Q : is_coequalizer t) : P = Q :=
+begin cases P, cases Q, obviously end
+
+lemma is_coequalizer.epi {f g : Z ⟶ Y} {t : cofork f g} (h : is_coequalizer t) : epi (t.π) :=
+{ left_cancellation := λ X' k l w, begin 
+                                    let s : cofork f g := { X := X', π := t.π ≫ k }, 
+                                    have uniq_k := h.uniq s k (by obviously),
+                                    have uniq_l := h.uniq s l (by obviously),
+                                    obviously,
+                              end }
+
+lemma is_coequalizer.univ {f g : Z ⟶ Y} {t : cofork f g} (h : is_coequalizer t) (s : cofork f g) (φ : t.X ⟶ s.X) : (t.π ≫ φ = s.π) ↔ (φ = h.desc s) :=
+begin
+obviously
+end
+
+def is_coequalizer.of_desc_univ {f g : Z ⟶ Y} {t : cofork f g}
+  (desc : Π (s : cofork f g), t.X ⟶ s.X)
+  (univ : Π (s : cofork f g) (φ : t.X ⟶ s.X), (t.π ≫ φ = s.π) ↔ (φ = desc s)) : is_coequalizer t :=
+{ desc := desc,
+  fac := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))),
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
+
+end coequalizer
+
 variable (C)
 
 class has_equalizers :=
 (equalizer : Π {Y Z : C} (f g : Y ⟶ Z), fork f g)
 (is_equalizer : Π {Y Z : C} (f g : Y ⟶ Z), is_equalizer (equalizer f g) . obviously)
+
+class has_coequalizers :=
+(coequalizer : Π {Y Z : C} (f g : Y ⟶ Z), cofork f g)
+(is_coequalizer : Π {Y Z : C} (f g : Y ⟶ Z), is_coequalizer (coequalizer f g) . obviously)
 
 variable {C}
 
@@ -87,3 +127,5 @@ begin
 end
 
 end
+
+end category_theory.limits

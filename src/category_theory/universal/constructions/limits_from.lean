@@ -2,14 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import category_theory.universal.limits
-import category_theory.universal.limits.limits
-import category_theory.walking
+import category_theory.limits
 
 open category_theory
-open category_theory.walking
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u₁ v₁
 variables {C : Type u₁} [category.{u₁ v₁} C]
@@ -38,11 +35,11 @@ instance [has_products.{u₁ v₁} C] [has_equalizers.{u₁ v₁} C] : has_limit
     begin resetI, exact
     { lift := λ c, begin  -- TODO cleanup?
                      fapply equalizer.lift,
-                     fapply pi.of_components,
-                     intro j,
-                     exact c.π j, obviously,
+                     apply pi.of_components,
+                     exact (λ j : J, c.π j), 
+                     obviously,
                    end }
     end
 }
 
-end category_theory.universal
+end category_theory.limits

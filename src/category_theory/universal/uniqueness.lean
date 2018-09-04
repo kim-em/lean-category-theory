@@ -1,11 +1,10 @@
-import .limits
-import .limits.limits
+import category_theory.limits
 
 universes u v
 
 open category_theory
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -71,4 +70,4 @@ def limits_iso {F : J ⥤  C} (A B : cone.{u v} F) (A_w : is_limit A) (B_w : is_
   inv := A_w.lift B }
 end
 
-end category_theory.universal
+end category_theory.limits

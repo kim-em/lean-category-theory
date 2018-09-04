@@ -10,7 +10,7 @@ open category_theory
 
 universes u v
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 definition is_equiv {α β : Type v} (f : α → β) := @is_iso (Type v) (category_theory.types) _ _ f
 
@@ -139,4 +139,4 @@ attribute [search] cocone.w_lemma
 
 end shapes
 
-end category_theory.universal
+end category_theory.limits

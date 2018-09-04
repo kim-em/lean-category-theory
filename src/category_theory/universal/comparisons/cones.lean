@@ -7,10 +7,9 @@ import category_theory.universal.cones
 import category_theory.universal.comma_categories
 
 open category_theory
-open category_theory.universal
 open category_theory.comma
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v u₁ v₁ u₂ v₂ 
 
@@ -60,4 +59,4 @@ def Cones_agree (F : J ⥤ C) : Equivalence (comma.Cone F) (cone F) :=
 { functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F }
 
-end category_theory.universal
+end category_theory.limits

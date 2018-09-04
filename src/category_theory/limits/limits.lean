@@ -2,12 +2,12 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import category_theory.universal.limits.shape
+import category_theory.limits.shape
 import category_theory.filtered
 
 open category_theory
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v w
 
@@ -162,4 +162,5 @@ begin
 end
 
 end
-end category_theory.universal
+
+end category_theory.limits

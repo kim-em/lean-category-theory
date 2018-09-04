@@ -5,7 +5,7 @@ import category_theory.functor.isomorphism
 universes u v
 
 open category_theory
-open category_theory.universal
+open category_theory.limits
 open category_theory.examples.topological_spaces
 
 -- We now provide an alternative 'pointwise' constructor for sheaves of types.
@@ -44,7 +44,7 @@ section
 variables {α : Type u} [topological_space α]
 
 variables {V : Type (u+1)} [𝒱 : large_category V] [has_products.{u+1 u} V] (ℱ : V ⥤ (Type u)) 
-          [faithful ℱ] [category_theory.universal.continuous ℱ] [reflects_isos ℱ]
+          [faithful ℱ] [category_theory.continuous ℱ] [reflects_isos ℱ]
 include 𝒱
 
 -- This is a good project!

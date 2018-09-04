@@ -2,12 +2,11 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import category_theory.universal.limits
-import category_theory.universal.colimits
+import category_theory.limits.equalizers
 import category_theory.abelian.monic
 
 open category_theory
-open category_theory.universal
+open category_theory.limits
 
 namespace category_theory.universal.monic
 

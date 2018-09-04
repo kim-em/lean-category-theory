@@ -12,6 +12,6 @@ variables {X Y Z : C}
 
 structure is_image (f : Y ⟶ Z) (ι : X ⟶ Z) :=
 (mono : mono ι)
-(fac  : sorry)
+-- (fac  : sorry)
 
 end category_theory.universal

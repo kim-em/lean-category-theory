@@ -7,7 +7,7 @@ import category_theory.universal.monic
 import category_theory.universal.kernels
 
 open category_theory
-open category_theory.universal
+open category_theory.limits
 open category_theory.universal.monic
 
 namespace category_theory.abelian

@@ -4,11 +4,12 @@
 
 import category_theory.examples.groups
 import category_theory.universal.strongly_concrete
+import category_theory.limits
 
 namespace category_theory.examples.groups
 
 open category_theory
-open category_theory.universal
+open category_theory.limits
 
 universe u
 

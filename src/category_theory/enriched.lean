@@ -1,9 +1,9 @@
-import category_theory.universal.limits
+import category_theory.limits
 import category_theory.universal.continuous
 import category_theory.universal.types
 import category_theory.embedding
 
-open category_theory.universal
+open category_theory.limits
 
 universes u v
 

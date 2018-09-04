@@ -1,9 +1,7 @@
 import ring_theory.ideals
 import linear_algebra.quotient_module
 import category_theory.examples.rings
-import category_theory.universal.limits.limits
-import category_theory.universal.limits
-import category_theory.universal.colimits
+import category_theory.limits
 import category_theory.filtered
 
 universes v
@@ -11,7 +9,7 @@ universes v
 namespace category_theory.examples
 
 open category_theory
-open category_theory.universal
+open category_theory.limits
 
 variables {α : Type v}
 

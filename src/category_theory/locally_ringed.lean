@@ -4,7 +4,7 @@ import category_theory.examples.rings.universal
 universes v
 
 open category_theory.examples
-open category_theory.universal
+open category_theory.limits
 
 variables (α : Type v) [topological_space α]
 

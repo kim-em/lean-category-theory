@@ -2,17 +2,13 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import category_theory.universal.limits.shape
-import category_theory.filtered
+import category_theory.limits.shape
 
 open category_theory
 
-
-namespace category_theory.universal
+namespace category_theory.limits
 
 universes u v w
-
-section
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -52,11 +48,51 @@ def is_pullback.of_lift_univ {t : square r₁ r₂}
 
 end pullback
 
+
+section pushout
+variables {Y₁ Y₂ Z : C}
+structure is_pushout {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} (t : cosquare r₁ r₂) :=
+(desc : ∀ (s : cosquare r₁ r₂), t.X ⟶ s.X)
+(fac₁ : ∀ (s : cosquare r₁ r₂), (t.ι₁ ≫ desc s) = s.ι₁ . obviously)
+(fac₂ : ∀ (s : cosquare r₁ r₂), (t.ι₂ ≫ desc s) = s.ι₂ . obviously)
+(uniq : ∀ (s : cosquare r₁ r₂) (m : t.X ⟶ s.X) (w₁ : (t.ι₁ ≫ m) = s.ι₁) (w₂ : (t.ι₂ ≫ m) = s.ι₂), m = desc s . obviously)
+
+restate_axiom is_pushout.fac₁
+attribute [simp,search] is_pushout.fac₁_lemma
+restate_axiom is_pushout.fac₂
+attribute [simp,search] is_pushout.fac₂_lemma
+restate_axiom is_pushout.uniq
+attribute [search, back'] is_pushout.uniq_lemma
+
+@[extensionality] lemma is_pushout.ext {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂} (P Q : is_pushout t) : P = Q :=
+begin cases P, cases Q, obviously end
+
+lemma is_pushout.univ {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂} (h : is_pushout t) (s : cosquare r₁ r₂) (φ : t.X ⟶ s.X) : (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = h.desc s) :=
+begin
+obviously
+end
+
+def is_pushout.of_desc_univ {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂}
+  (desc : Π (s : cosquare r₁ r₂), t.X ⟶ s.X)
+  (univ : Π (s : cosquare r₁ r₂) (φ : t.X ⟶ s.X), (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = desc s)) : is_pushout t :=
+{ desc := desc,
+  fac₁ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left,
+  fac₂ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
+  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
+
+
+end pushout
+
+
 variable (C)
 
 class has_pullbacks :=
 (pullback : Π {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z), square r₁ r₂)
 (is_pullback : Π {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z), is_pullback (pullback r₁ r₂) . obviously)
+
+class has_pushouts :=
+(pushout : Π {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂), cosquare r₁ r₂)
+(is_pushout : Π {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂), is_pushout (pushout r₁ r₂) . obviously)
 
 variable {C}
 
@@ -82,5 +118,6 @@ begin
   obviously,
 end
 
+end 
 
-end
+end category_theory.limits

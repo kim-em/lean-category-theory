@@ -1,11 +1,12 @@
 import category_theory.universal.zero
+import category_theory.limits.equalizers
 import category_theory.over
 
 open category_theory
 
 universes u v
 
-namespace category_theory.universal
+namespace category_theory.limits
 
 variables {C : Type u} [𝒞 : category.{u v} C] [has_zero_object.{u v} C]
 include 𝒞
@@ -58,5 +59,5 @@ def kernels_are_equalizers {f : Y ⟶ Z} (t : fork f (zero_morphism _ _)) : equi
   left_inv  := sorry,
   right_inv := sorry }
 
-end category_theory.universal
+end category_theory.limits
 

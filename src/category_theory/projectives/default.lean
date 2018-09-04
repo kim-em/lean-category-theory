@@ -3,7 +3,7 @@ import category_theory.universal.zero
 
 
 open category_theory
-open category_theory.universal
+open category_theory.limits
 
 universes u v
 
