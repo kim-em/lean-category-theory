@@ -25,7 +25,9 @@ end
 
 def binary_product.associativity (P Q R : C) : (prod (prod P Q) R) ≅ (prod P (prod Q R)) :=
 { hom := prod.pair (prod.π₁ _ _ ≫ prod.π₁ _ _) (prod.pair (prod.π₁ _ _ ≫ prod.π₂ _ _) (prod.π₂ _ _)),
-  inv := prod.pair (prod.pair (prod.π₁ _ _) (prod.π₂ _ _ ≫ prod.π₁ _ _)) (prod.π₂ _ _ ≫ prod.π₂ _ _) }
+  inv := prod.pair (prod.pair (prod.π₁ _ _) (prod.π₂ _ _ ≫ prod.π₁ _ _)) (prod.π₂ _ _ ≫ prod.π₂ _ _),
+  hom_inv_id' := begin ext; simp; rw ← category.assoc; simp, end,
+  inv_hom_id' := begin ext; simp; rw ← category.assoc; simp, end }
 
 -- TODO verify the pentagon?
 

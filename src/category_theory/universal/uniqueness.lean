@@ -23,9 +23,9 @@ def terminals_iso (A B : C) [is_terminal.{u v} A] [is_terminal.{u v} B] : A ≅ 
 end
 
 section
-def binary_products_iso {Y Z : C} (A B : span.{u v} Y Z) (A_w : is_binary_product A) (B_w : is_binary_product B) : A.X ≅ B.X :=
-{ hom := B_w.lift A,
-  inv := A_w.lift B,
+def binary_products_iso {Y Z : C} (A B : span.{u v} Y Z) [is_binary_product A] [is_binary_product B] : A.X ≅ B.X :=
+{ hom := is_binary_product.lift _ A,
+  inv := is_binary_product.lift _ B,
   hom_inv_id' := sorry, 
   inv_hom_id' := sorry }
 end

@@ -12,13 +12,13 @@ include 𝒞
 @[reducible] def binary_product_comparison (t : span Y Z) (X' : C) : (X' ⟶ t.X) → (X' ⟶ Y) × (X' ⟶ Z) :=
 λ φ, (φ ≫ t.π₁, φ ≫ t.π₂)
 
-def is_binary_product.comparison {t : span Y Z} (h : is_binary_product t) (X' : C) : is_equiv (binary_product_comparison t X') :=
-{ inv := λ p, h.lift ⟨ ⟨ X' ⟩, p.1, p.2 ⟩,
+def is_binary_product.comparison {t : span Y Z} [is_binary_product t] (X' : C) : is_equiv (binary_product_comparison t X') :=
+{ inv := λ p, is_binary_product.lift _ ⟨ ⟨ X' ⟩, p.1, p.2 ⟩,
   hom_inv_id' := begin 
                   tidy, 
                   symmetry, 
-                  have := h.uniq {to_shape := {X := X'}, π₁ := x ≫ t.π₁, π₂ := x ≫ t.π₂} x,
-                  apply this, -- TODO why can't we just `apply h.uniq`?
+                  have := is_binary_product.uniq _ {to_shape := {X := X'}, π₁ := x ≫ t.π₁, π₂ := x ≫ t.π₂} x,
+                  apply this, -- TODO why can't we just `apply`?
                   tidy,
                  end }
 
