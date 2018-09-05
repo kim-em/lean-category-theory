@@ -110,11 +110,11 @@ variables [has_limits.{u v} C]
 variables (F)
 
 def limit.cone_morphism (c : cone F) : cone_morphism c (limit.cone F) := 
-{ hom := (limit.universal_property F).lift c }
+{ hom := (limit.lift F) c }
 
-@[simp] lemma limit.cone_morphism_hom (c : cone F) : (limit.cone_morphism F c).hom = (limit.universal_property F).lift c := rfl
+@[simp] lemma limit.cone_morphism_hom (c : cone F) : (limit.cone_morphism F c).hom = limit.lift F c := rfl
 @[simp] lemma limit.cone_morphism_π (c : cone F) (j : J) : (limit.cone_morphism F c).hom ≫ (limit.π F j) = c.π j :=
-(limit.universal_property F).fac c j
+by erw is_limit.fac
 
 -- def limit.hom
 --   {X : C} (π : Π j : J, X ⟶ F j) 

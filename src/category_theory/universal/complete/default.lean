@@ -14,13 +14,12 @@ variables {C : Type u} [category.{u v} C] {J : Type v} [small_category J] [has_l
 
 def lim : (J ⥤ C) ⥤ C := 
 { obj := limit,
-  map' := λ F F' t, (limit.universal_property F').lift $
-    { X := limit F, π := λ j, limit.π F j ≫ t j },
-  map_id' := begin tidy, erw limit.lift_π, dsimp, simp, end }. -- FIXME why doesn't simp use limit.lift_π here?
+  map' := λ F F' t, limit.lift F' $
+    { X := limit F, π := λ j, limit.π F j ≫ t j } }.
  
 -- boilerplate
 @[simp] lemma lim_map [has_limits.{u v} C] {F F' : J ⥤ C} (t : F ⟹ F') : 
-  lim.map t = ((limit.universal_property F').lift $ { X := limit F, π := λ j, limit.π F j ≫ t j }) :=
+  lim.map t = (limit.lift F' $ { X := limit F, π := λ j, limit.π F j ≫ t j }) :=
 rfl
 
 -- def colim : (J ⥤ C) ⥤ C := 

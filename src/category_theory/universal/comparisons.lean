@@ -110,23 +110,23 @@ include 𝒥
 λ φ, ⟨ λ j, φ ≫ t.π j, by obviously ⟩ 
 
 def is_limit.comparison {F : J ⥤ C} {t : cone F} (h : is_limit t) (X' : C) : is_equiv (limit_comparison t X') :=
-{ inv := λ p, h.lift ⟨ ⟨ X' ⟩, p.val, p.property ⟩,
+{ inv := λ p, is_limit.lift _ ⟨ ⟨ X' ⟩, p.val, p.property ⟩,
   hom_inv_id' := begin 
                  tidy, 
                  symmetry, 
-                 apply h.uniq {to_shape := {X := X'}, π := λ j, x ≫ t.π j, w := by obviously } x,
+                 apply is_limit.uniq _ {to_shape := {X := X'}, π := λ j, x ≫ t.π j, w := by obviously } x,
                  tidy,
                 end }
 
 def is_limit.of_comparison {F : J ⥤ C} {t : cone F} (w : Π X' : C, is_equiv (limit_comparison t X')) : is_limit t :=
 { lift := λ s, @is_iso.inv _ _ _ _ _ (w s.X) ⟨ s.π, s.w ⟩,
-  fac :=  λ s, begin
+  fac' :=  λ s, begin
                 have p := @is_iso.inv_hom_id _ _ _ _ _ (w s.X), 
                 have q := congr_fun p ⟨ s.π, s.w ⟩,
                 tidy,
                 exact congr_fun q j -- TODO fix automation
                end,
-  uniq := λ s m w', begin
+  uniq' := λ s m w', begin
                       have p := @is_iso.hom_inv_id _ _ _ _ _ (w s.X), 
                       have q := congr_fun p m,
                       tidy,

@@ -109,7 +109,7 @@ def pi.π (f : β → C) (b : β) : pi f ⟶ f b := (pi.fan f).π b
 instance pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
 -- def pi.lift (f : β → C) (g : fan f) := is_product.lift (pi.fan f) g
 
--- lemma pi.components_eq (f : β → C) {X : C} {g h : X ⟶ pi f} (e : g = h) (b : β) : g ≫ pi.π f b = h ≫ pi.π f b := by subst e
+lemma pi.components_eq (f : β → C) {X : C} {g h : X ⟶ pi f} (e : g = h) (b : β) : g ≫ pi.π f b = h ≫ pi.π f b := by subst e
 
 @[simp] def pi.fan_π (f : β → C) (b : β) : (pi.fan f).π b = @pi.π C _ _ _ f b := rfl
 
@@ -159,53 +159,57 @@ by obviously
 @[simp] def pi.map_map {f1 : β → C} {f2 : β → C} {f3 : β → C} 
   (k1 : Π b, f1 b ⟶ f2 b) (k2 : Π b, f2 b ⟶ f3 b) :
   pi.map k1 ≫ pi.map k2 = pi.map (λ b, k1 b ≫ k2 b) := 
+by obviously.
+
+@[simp] def pi.lift_pre {α : Type v} {f : β → C} {P : C} (p : Π b, P ⟶ f b) (h : α → β) :
+  pi.lift p ≫ pi.pre _ h = pi.lift (λ a, p (h a)) :=
 by obviously
 
 -- TODO lemmas describing interactions:
--- lift_pre, map_pre, pre_pre, lift_post, map_post, pre_post, post_post
+-- map_pre, pre_pre, lift_post, map_post, pre_post, post_post
 
 end
 
 section
 variables [has_coproducts.{u v} C] {β : Type v} 
 
-def sigma.cofan (f : β → C) := has_coproducts.coprod.{u v} f
-def sigma (f : β → C) : C := (sigma.cofan f).X
-def sigma.ι (f : β → C) (b : β) : f b ⟶ sigma f := (sigma.cofan f).ι b
-instance sigma.universal_property (f : β → C) : is_coproduct (sigma.cofan f) := has_coproducts.is_coproduct.{u v} C f
+def Sigma.cofan (f : β → C) := has_coproducts.coprod.{u v} f
+def Sigma (f : β → C) : C := (Sigma.cofan f).X
+def Sigma.ι (f : β → C) (b : β) : f b ⟶ Sigma f := (Sigma.cofan f).ι b
+instance Sigma.universal_property (f : β → C) : is_coproduct (Sigma.cofan f) := has_coproducts.is_coproduct.{u v} C f
 
-@[simp] def sigma.cofan_ι (f : β → C) (b : β) : (sigma.cofan f).ι b = @sigma.ι C _ _ _ f b := rfl
+@[simp] def Sigma.cofan_ι (f : β → C) (b : β) : (Sigma.cofan f).ι b = @Sigma.ι C _ _ _ f b := rfl
 
-def sigma.desc {f : β → C} {P : C} (p : Π b, f b ⟶ P) : sigma f ⟶ P :=
+def Sigma.desc {f : β → C} {P : C} (p : Π b, f b ⟶ P) : Sigma f ⟶ P :=
 is_coproduct.desc _ ⟨ ⟨ P ⟩, p ⟩
 
-@[simp,search] def sigma.lift_ι {f : β → C} {P : C} (p : Π b, f b ⟶ P) (b : β) : sigma.ι f b ≫ sigma.desc p = p b :=
+@[simp,search] def Sigma.lift_ι {f : β → C} {P : C} (p : Π b, f b ⟶ P) (b : β) : Sigma.ι f b ≫ Sigma.desc p = p b :=
 by erw is_coproduct.fac
 
-def sigma.map {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) : (sigma f) ⟶ (sigma g) :=
-sigma.desc (λ b, k b ≫ sigma.ι g b) 
+def Sigma.map {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) : (Sigma f) ⟶ (Sigma g) :=
+Sigma.desc (λ b, k b ≫ Sigma.ι g b) 
 
-@[simp] def sigma.map_ι {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) (b : β) : sigma.ι f b ≫ sigma.map k = k b ≫ sigma.ι g b :=
+@[simp] def Sigma.map_ι {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) (b : β) : Sigma.ι f b ≫ Sigma.map k = k b ≫ Sigma.ι g b :=
 by erw is_coproduct.fac
 
-def sigma.pre {α} (f : α → C) (h : β → α) : sigma (f ∘ h) ⟶ sigma f :=
-sigma.desc (λ g, sigma.ι f (h g))
+def Sigma.pre {α} (f : α → C) (h : β → α) : Sigma (f ∘ h) ⟶ Sigma f :=
+Sigma.desc (λ g, Sigma.ι f (h g))
 
-@[simp] def sigma.pre_ι {α} (f : α → C) (h : β → α) (b : β) : sigma.ι (f ∘ h) b ≫ sigma.pre f h = sigma.ι f (h b) := 
+@[simp] def Sigma.pre_ι {α} (f : α → C) (h : β → α) (b : β) : Sigma.ι (f ∘ h) b ≫ Sigma.pre f h = Sigma.ι f (h b) := 
 by erw is_coproduct.fac
 
 section
 variables {D : Type u} [𝒟 : category.{u v} D] [has_coproducts.{u v} D]
 include 𝒟 
 
-def sigma.post (f : β → C) (G : C ⥤ D) : (sigma (G.obj ∘ f)) ⟶ G (sigma f) :=
-@is_coproduct.desc _ _ _ _ (sigma.cofan (G.obj ∘ f)) _ { X := _, ι := λ b, G.map (sigma.ι f b) }
+def Sigma.post (f : β → C) (G : C ⥤ D) : (Sigma (G.obj ∘ f)) ⟶ G (Sigma f) :=
+@is_coproduct.desc _ _ _ _ (Sigma.cofan (G.obj ∘ f)) _ { X := _, ι := λ b, G.map (Sigma.ι f b) }
 
-@[simp] def sigma.post_π (f : β → C) (G : C ⥤ D) (b : β) : sigma.ι _ b ≫ sigma.post f G = G.map (sigma.ι f b) := 
+@[simp] def Sigma.post_π (f : β → C) (G : C ⥤ D) (b : β) : Sigma.ι _ b ≫ Sigma.post f G = G.map (Sigma.ι f b) := 
 by erw is_coproduct.fac
 end
 
-@[extensionality] lemma sigma.hom_ext (f : β → C) {X : C} (g h : sigma f ⟶ X) (w : ∀ b, sigma.ι f b ≫ g = sigma.ι f b ≫ h) : g = h :=
+@[extensionality] lemma Sigma.hom_ext (f : β → C) {X : C} (g h : Sigma f ⟶ X) (w : ∀ b, Sigma.ι f b ≫ g = Sigma.ι f b ≫ h) : g = h :=
 begin
   rw is_coproduct.uniq'' g,
   rw is_coproduct.uniq'' h,
@@ -214,15 +218,20 @@ begin
   exact w x,
 end
 
-@[simp] def sigma.desc_map 
+@[simp] def Sigma.desc_map 
   {f : β → C} {g : β → C} {P : C} (k : Π b, f b ⟶ g b) (p : Π b, g b ⟶ P) :
-  sigma.map k ≫ sigma.desc p = sigma.desc (λ b, k b ≫ p b) :=
+  Sigma.map k ≫ Sigma.desc p = Sigma.desc (λ b, k b ≫ p b) :=
 by obviously
 
-@[simp] def sigma.map_map {f1 : β → C} {f2 : β → C} {f3 : β → C} 
+@[simp] def Sigma.map_map {f1 : β → C} {f2 : β → C} {f3 : β → C} 
   (k1 : Π b, f1 b ⟶ f2 b) (k2 : Π b, f2 b ⟶ f3 b) :
-  sigma.map k1 ≫ sigma.map k2 = sigma.map (λ b, k1 b ≫ k2 b) := 
+  Sigma.map k1 ≫ Sigma.map k2 = Sigma.map (λ b, k1 b ≫ k2 b) := 
+by obviously.
+
+@[simp] def Sigma.desc_pre {α : Type v} {f : β → C} {P : C} (p : Π b, f b ⟶ P) (h : α → β) :
+  Sigma.pre _ h ≫ Sigma.desc p = Sigma.desc (λ a, p (h a)) :=
 by obviously
+
 
 -- TODO lemmas describing interactions:
 -- desc_pre, map_pre, pre_pre, desc_post, map_post, pre_post, post_post

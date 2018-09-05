@@ -51,11 +51,11 @@ include 𝒥
 
 section
 -- FIXME this is a horrible formulation
-lemma homs_to_limit_ext  {F : J ⥤ C} (c : cone.{u v} F) (B : is_limit c) {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
+lemma homs_to_limit_ext  {F : J ⥤ C} (c : cone.{u v} F) [is_limit c] {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
 begin
   let s : cone F := ⟨ ⟨ X ⟩, λ j, f ≫ c.π j, by obviously ⟩,
-  have q := B.uniq s f,
-  have p := B.uniq s g,
+  have q := is_limit.uniq _ s f,
+  have p := is_limit.uniq _ s g,
   rw [q, ←p],
   intros,
   rw ← w j,
@@ -65,9 +65,9 @@ end
 
 
 local attribute [back] homs_to_limit_ext
-def limits_iso {F : J ⥤  C} (A B : cone.{u v} F) (A_w : is_limit A) (B_w : is_limit B) : A.X ≅ B.X :=
-{ hom := B_w.lift A,
-  inv := A_w.lift B }
+def limits_iso {F : J ⥤  C} (A B : cone.{u v} F) [is_limit A] [is_limit B] : A.X ≅ B.X :=
+{ hom := is_limit.lift _ A,
+  inv := is_limit.lift _ B }
 end
 
 end category_theory.limits

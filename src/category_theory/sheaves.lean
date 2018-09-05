@@ -98,17 +98,20 @@ def overlaps : V :=
 pi.{u v} (λ p : cover.I × cover.I, F.obj (cover.U p.1 ∩ cover.U p.2))
 
 def left : (sections cover F) ⟶ (overlaps cover F) := 
-pi.map (λ p, p.1) (λ p, res_left p.1 p.2 F)
+pi.pre _ (λ p : cover.I × cover.I, p.1) ≫ pi.map (λ p, res_left p.1 p.2 F)
 
 def right : (sections cover F) ⟶ (overlaps cover F) := 
-pi.map (λ p, p.2) (λ p, res_right p.1 p.2 F)
+pi.pre _ (λ p : cover.I × cover.I, p.2) ≫ pi.map (λ p, res_right p.1 p.2 F)
 
 def res : F.obj (cover.union) ⟶ (sections cover F) :=
-pi.of_components (λ i, union_res i F)
+pi.lift (λ i, union_res i F)
 
 @[simp] lemma res_left_right : res cover F ≫ left cover F = res cover F ≫ right cover F :=
 begin
   dsimp [left, right, res],
+  rw ← category.assoc,
+  simp,
+  rw ← category.assoc,
   simp,
 end
 
