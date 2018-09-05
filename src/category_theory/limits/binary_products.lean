@@ -116,37 +116,41 @@ def prod.π₂ (Y Z : C) : prod Y Z ⟶ Z := (prod.span Y Z).π₂
 instance prod.universal_property (Y Z : C) : is_binary_product (prod.span Y Z) :=
 has_binary_products.is_binary_product.{u v} C Y Z
 
-def prod.pair {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : P ⟶ (prod Q R) :=
+def prod.lift {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : P ⟶ (prod Q R) :=
 is_binary_product.lift _ ⟨ ⟨ P ⟩, f, g ⟩
 
-def prod.swap (P Q : C) : prod P Q ⟶ prod Q P := prod.pair (prod.π₂ P Q) (prod.π₁ P Q)
-
-def prod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (prod P R) ⟶ (prod Q S) :=
-prod.pair (prod.π₁ P R ≫ f) (prod.π₂ P R ≫ g)
-
-@[simp,search] lemma prod.pair_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₁ Q R = f := 
+@[simp,search] lemma prod.lift_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.lift f g ≫ prod.π₁ Q R = f := 
 is_binary_product.fac₁ _ { X := P, π₁ := f, π₂ := g }
-@[simp,search] lemma prod.pair_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.pair f g ≫ prod.π₂ Q R = g :=
+@[simp,search] lemma prod.lift_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.lift f g ≫ prod.π₂ Q R = g :=
 is_binary_product.fac₂ _ { X := P, π₁ := f, π₂ := g }
 
-@[simp,search] lemma prod.swap_π₁ (P Q : C) : prod.swap P Q ≫ prod.π₁ Q P = prod.π₂ P Q :=
-begin
-  erw is_binary_product.fac₁,
-end
-@[simp,search] lemma prod.swap_π₂ (P Q : C) : prod.swap P Q ≫ prod.π₂ Q P = prod.π₁ P Q :=
-begin
-  erw is_binary_product.fac₂,
-end
+def prod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (prod P R) ⟶ (prod Q S) :=
+prod.lift (prod.π₁ P R ≫ f) (prod.π₂ P R ≫ g)
 
 @[simp,search] lemma prod.map_π₁ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : prod.map f g ≫ prod.π₁ Q S = prod.π₁ P R ≫ f := 
-begin
-  erw is_binary_product.fac₁,
-end
+by erw is_binary_product.fac₁
 @[simp,search] lemma prod.map_π₂ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : prod.map f g ≫ prod.π₂ Q S = prod.π₂ P R ≫ g :=
-begin
-  erw is_binary_product.fac₂,
-end
+by erw is_binary_product.fac₂
 
+def prod.swap (P Q : C) : prod P Q ⟶ prod Q P := prod.lift (prod.π₂ P Q) (prod.π₁ P Q)
+
+@[simp,search] lemma prod.swap_π₁ (P Q : C) : prod.swap P Q ≫ prod.π₁ Q P = prod.π₂ P Q :=
+by erw is_binary_product.fac₁
+@[simp,search] lemma prod.swap_π₂ (P Q : C) : prod.swap P Q ≫ prod.π₂ Q P = prod.π₁ P Q :=
+by erw is_binary_product.fac₂
+
+section
+variables {D : Type u} [𝒟 : category.{u v} D] [has_binary_products.{u v} D]
+include 𝒟 
+
+def prod.post (P Q : C) (G : C ⥤ D) : G (prod P Q) ⟶ (prod (G P) (G Q)) :=
+@is_binary_product.lift _ _ _ _ (prod.span (G P) (G Q)) _ { X := _, π₁ := G.map (prod.π₁ P Q), π₂ := G.map (prod.π₂ P Q) }
+
+@[simp] def prod.post_π₁ (P Q : C) (G : C ⥤ D) : prod.post P Q G ≫ prod.π₁ _ _ = G.map (prod.π₁ P Q) := 
+by erw is_binary_product.fac₁
+@[simp] def prod.post_π₂ (P Q : C) (G : C ⥤ D) : prod.post P Q G ≫ prod.π₂ _ _ = G.map (prod.π₂ P Q) := 
+by erw is_binary_product.fac₂
+end
 
 @[extensionality] def prod.hom_ext (Y Z : C) (X : C) 
   (f g : X ⟶ prod Y Z) 
@@ -161,21 +165,24 @@ end
 @[simp,search] lemma prod.swap_swap (P Q : C) : prod.swap P Q ≫ prod.swap Q P = 𝟙 _ := 
 by obviously
 
-@[simp,search] lemma prod.swap_pair {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : 
-  prod.pair g f ≫ prod.swap R Q = prod.pair f g := 
+@[simp,search] lemma prod.swap_lift {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : 
+  prod.lift g f ≫ prod.swap R Q = prod.lift f g := 
 by obviously
 
 @[search] lemma prod.swap_map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : 
   prod.swap P R ≫ prod.map g f = prod.map f g ≫ prod.swap Q S := 
 by obviously
 
-@[simp,search] lemma prod.pair_map {P Q R S T : C} (f : P ⟶ Q) (g : P ⟶ R) (h : Q ⟶ T) (k : R ⟶ S) : 
-  prod.pair f g ≫ prod.map h k = prod.pair (f ≫ h) (g ≫ k) := 
+@[simp,search] lemma prod.lift_map {P Q R S T : C} (f : P ⟶ Q) (g : P ⟶ R) (h : Q ⟶ T) (k : R ⟶ S) : 
+  prod.lift f g ≫ prod.map h k = prod.lift (f ≫ h) (g ≫ k) := 
 by obviously
 
 @[simp,search] lemma prod.map_map {P Q R S T U : C} (f : P ⟶ Q) (g : R ⟶ S) (h : Q ⟶ T) (k : S ⟶ U) :
   prod.map f g ≫ prod.map h k = prod.map (f ≫ h) (g ≫ k) :=
 by obviously 
+
+-- TODO add lemmas lift_post, map_post, swap_post, post_post when needed
+-- TODO also to coprod
 
 end
 
@@ -189,36 +196,28 @@ def coprod.ι₂ (Y Z : C) : Z ⟶ coprod Y Z := (coprod.cospan Y Z).ι₂
 instance coprod.universal_property (Y Z : C) : is_binary_coproduct (coprod.cospan Y Z) :=
 has_binary_coproducts.is_binary_coproduct.{u v} C Y Z
 
-def coprod.pair {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : (coprod Q R) ⟶ P :=
+def coprod.desc {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : (coprod Q R) ⟶ P :=
 is_binary_coproduct.desc _ ⟨ ⟨ P ⟩, f, g ⟩
 
-def coprod.swap (P Q : C) : coprod P Q ⟶ coprod Q P := coprod.pair (coprod.ι₂ Q P) (coprod.ι₁ Q P)
-
 def coprod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (coprod P R) ⟶ (coprod Q S) :=
-coprod.pair (f ≫ coprod.ι₁ Q S) (g ≫ coprod.ι₂ Q S)
+coprod.desc (f ≫ coprod.ι₁ Q S) (g ≫ coprod.ι₂ Q S)
 
-@[simp,search] lemma coprod.pair_ι₁ {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : coprod.ι₁ Q R ≫ coprod.pair f g = f := 
+def coprod.swap (P Q : C) : coprod P Q ⟶ coprod Q P := coprod.desc (coprod.ι₂ Q P) (coprod.ι₁ Q P)
+
+@[simp,search] lemma coprod.desc_ι₁ {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : coprod.ι₁ Q R ≫ coprod.desc f g = f := 
 is_binary_coproduct.fac₁ _ { X := P, ι₁ := f, ι₂ := g }
-@[simp,search] lemma coprod.pair_ι₂ {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : coprod.ι₂ Q R ≫ coprod.pair f g = g :=
+@[simp,search] lemma coprod.desc_ι₂ {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : coprod.ι₂ Q R ≫ coprod.desc f g = g :=
 is_binary_coproduct.fac₂ _ { X := P, ι₁ := f, ι₂ := g }
 
 @[simp,search] lemma coprod.swap_ι₁ (P Q : C) : coprod.ι₁ P Q ≫ coprod.swap P Q = coprod.ι₂ Q P :=
-begin
-  erw is_binary_coproduct.fac₁,
-end
+by erw is_binary_coproduct.fac₁
 @[simp,search] lemma coprod.swap_ι₂ (P Q : C) : coprod.ι₂ P Q ≫ coprod.swap P Q = coprod.ι₁ Q P :=
-begin
-  erw is_binary_coproduct.fac₂,
-end
+by erw is_binary_coproduct.fac₂
 
 @[simp,search] lemma coprod.map_ι₁ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : coprod.ι₁ P R ≫ coprod.map f g = f ≫ coprod.ι₁ Q S := 
-begin
-  erw is_binary_coproduct.fac₁,
-end
+by erw is_binary_coproduct.fac₁
 @[simp,search] lemma coprod.map_ι₂ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : coprod.ι₂ P R ≫ coprod.map f g = g ≫ coprod.ι₂ Q S :=
-begin
-  erw is_binary_coproduct.fac₂,
-end
+by erw is_binary_coproduct.fac₂
 
 @[extensionality] def coprod.hom_ext (Y Z : C) (X : C) 
   (f g : coprod Y Z ⟶ X) 
@@ -233,16 +232,16 @@ end
 @[simp,search] lemma coprod.swap_swap (P Q : C) : coprod.swap P Q ≫ coprod.swap Q P = 𝟙 _ := 
 by obviously
 
-@[simp,search] lemma coprod.swap_pair {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : 
-  coprod.swap Q R ≫ coprod.pair g f = coprod.pair f g := 
+@[simp,search] lemma coprod.swap_desc {P Q R : C} (f : Q ⟶ P) (g : R ⟶ P) : 
+  coprod.swap Q R ≫ coprod.desc g f = coprod.desc f g := 
 by obviously
 
 @[search] lemma coprod.swap_map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : 
   coprod.swap P R ≫ coprod.map g f = coprod.map f g ≫ coprod.swap Q S := 
 by obviously
 
-@[simp,search] lemma coprod.map_pair {P Q R S T : C} (f : P ⟶ Q) (g : R ⟶ S)  (h : Q ⟶ T) (k : S ⟶ T) : 
-  coprod.map f g ≫ coprod.pair h k = coprod.pair (f ≫ h) (g ≫ k) := 
+@[simp,search] lemma coprod.map_desc {P Q R S T : C} (f : P ⟶ Q) (g : R ⟶ S)  (h : Q ⟶ T) (k : S ⟶ T) : 
+  coprod.map f g ≫ coprod.desc h k = coprod.desc (f ≫ h) (g ≫ k) := 
 by obviously
 
 @[simp,search] lemma coprod.map_map {P Q R S T U : C} (f : P ⟶ Q) (g : R ⟶ S) (h : Q ⟶ T) (k : S ⟶ U) :
