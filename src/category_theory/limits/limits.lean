@@ -166,6 +166,24 @@ def colimit.ι (F : J ⥤ C) (j : J) : F j ⟶ colimit F := (colimit.cocone F).�
 def colimit.universal_property (F : J ⥤ C) : is_colimit (colimit.cocone F) := 
 has_colimits.is_colimit.{u v} C F
 
+def colimit.desc (F : J ⥤ C) (c : cocone F) : colimit F ⟶ c.X := is_colimit.desc _ c
+
+section
+variables {K : Type v} [𝒦 : small_category K]
+include 𝒦
+
+def colimit.pre (F : J ⥤ C) (E : K ⥤ J) : colimit (E ⋙ F) ⟶ colimit F :=
+@is_colimit.desc _ _ _ _ _ (colimit.cocone (E ⋙ F)) _ { X := colimit F, ι := λ k, colimit.ι F (E k) }
+end
+
+section
+variables {D : Type u} [𝒟 : category.{u v} D] [has_colimits.{u v} D]
+include 𝒟
+
+def colimit.post (F : J ⥤ C) (G : C ⥤ D) : colimit (F ⋙ G) ⟶ G (colimit F) :=
+@is_colimit.desc _ _ _ _ _ (colimit.cocone (F ⋙ G)) _ { X := _, ι := λ j, G.map (colimit.ι F j) }
+end
+
 @[extensionality] def colimit.hom_ext {F : J ⥤ C} {c : cocone F}
   (f g : colimit F ⟶ c.X)
   (w_f : ∀ j, colimit.ι F j ≫ f = c.ι j)

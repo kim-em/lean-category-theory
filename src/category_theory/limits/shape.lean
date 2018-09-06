@@ -132,7 +132,7 @@ attribute [search] cone.w_lemma
 
 structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ⥤ C) extends shape C :=
 (ι : ∀ j : J, F j ⟶ X)
-(w : ∀ {j j' : J} (f : j ⟶ j'), (F.map f) ≫ ι j' = ι j)
+(w : ∀ {j j' : J} (f : j ⟶ j'), (F.map f) ≫ ι j' = ι j . obviously)
 
 restate_axiom cocone.w
 attribute [search] cocone.w_lemma
