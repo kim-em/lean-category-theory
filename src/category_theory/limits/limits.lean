@@ -18,7 +18,7 @@ section limit
 variables {J : Type v} [𝒥 : small_category J]
 include 𝒥
 
-class is_limit {F : J ⥤ C} (t : cone F) :=
+structure is_limit {F : J ⥤ C} (t : cone F) :=
 (lift : ∀ (s : cone F), s.X ⟶ t.X)
 (fac'  : ∀ (s : cone F) (j : J), (lift s ≫ t.π j) = s.π j . obviously)
 (uniq' : ∀ (s : cone F) (m : s.X ⟶ t.X) (w : ∀ j : J, (m ≫ t.π j) = s.π j), m = lift s . obviously)
@@ -31,8 +31,8 @@ attribute [search,back'] is_limit.uniq
 @[extensionality] lemma is_limit.ext {F : J ⥤ C} {t : cone F} (P Q : is_limit t) : P = Q :=
 begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously end
 
-lemma is_limit.univ {F : J ⥤ C} {t : cone F} [is_limit t] (s : cone F) (φ : s.X ⟶ t.X) : 
-  (∀ j, φ ≫ t.π j = s.π j) ↔ (φ = is_limit.lift t s) :=
+lemma is_limit.univ {F : J ⥤ C} {t : cone F} [h : is_limit t] (s : cone F) (φ : s.X ⟶ t.X) : 
+  (∀ j, φ ≫ t.π j = s.π j) ↔ (φ = is_limit.lift h s) :=
 by obviously
 
 def is_limit.of_lift_univ {F : J ⥤ C} {t : cone F}
@@ -49,7 +49,7 @@ section colimit
 variables {J : Type v} [𝒥 : small_category J]
 include 𝒥
 
-class is_colimit {F : J ⥤ C} (t : cocone F) :=
+structure is_colimit {F : J ⥤ C} (t : cocone F) :=
 (desc : ∀ (s : cocone F), t.X ⟶ s.X)
 (fac'  : ∀ (s : cocone F) (j : J), (t.ι j ≫ desc s) = s.ι j . obviously)
 (uniq' : ∀ (s : cocone F) (m : t.X ⟶ s.X) (w : ∀ j : J, (t.ι j ≫ m) = s.ι j), m = desc s . obviously)
@@ -62,8 +62,8 @@ attribute [search,back'] is_colimit.uniq
 @[extensionality] lemma is_colimit.ext {F : J ⥤ C} {t : cocone F} (P Q : is_colimit t) : P = Q :=
 begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously end
 
-lemma is_colimit.univ {F : J ⥤ C} {t : cocone F} [is_colimit t] (s : cocone F) (φ : t.X ⟶ s.X) : 
-  (∀ j, t.ι j ≫ φ = s.ι j) ↔ (φ = is_colimit.desc t s) :=
+lemma is_colimit.univ {F : J ⥤ C} {t : cocone F} [h : is_colimit t] (s : cocone F) (φ : t.X ⟶ s.X) : 
+  (∀ j, t.ι j ≫ φ = s.ι j) ↔ (φ = is_colimit.desc h s) :=
 by obviously
 
 def is_colimit.of_desc_univ {F : J ⥤ C} {t : cocone F}
@@ -96,16 +96,15 @@ include 𝒥
 def limit.cone (F : J ⥤ C) : cone F := has_limits.limit.{u v} F
 def limit (F : J ⥤ C) := (limit.cone F).X
 def limit.π (F : J ⥤ C) (j : J) : limit F ⟶ F j := (limit.cone F).π j
-instance limit.universal_property (F : J ⥤ C) : is_limit (limit.cone F) := 
+def limit.universal_property (F : J ⥤ C) : is_limit (limit.cone F) := 
 has_limits.is_limit.{u v} C F
 
-def limit.lift (F : J ⥤ C) (c : cone F) : c.X ⟶ limit F := is_limit.lift _ c
+def limit.lift (F : J ⥤ C) (c : cone F) : c.X ⟶ limit F := (limit.universal_property F).lift c
+@[simp] def limit.universal_property_lift (F : J ⥤ C) (c : cone F) : (limit.universal_property F).lift c = limit.lift F c := rfl
 
--- @[simp] def limit.universal_property_lift (F : J ⥤ C) (c : cone F) : (limit.universal_property F).lift c = limit.lift F c := rfl
 @[simp] def limit.lift_π (F : J ⥤ C) (c : cone F) (j : J) : limit.lift F c ≫ limit.π F j = c.π j :=
 is_limit.fac _ c j
 
--- FIXME why the @?
 @[simp] lemma limit.cone_π (F : J ⥤ C) (j : J) : (limit.cone F).π j = (@limit.π C _ _ J _ F j) := rfl
 
 -- TODO needs a home
@@ -116,14 +115,14 @@ def cone.pullback {F : J ⥤ C} (A : cone F) {X : C} (f : X ⟶ A.X) : cone F :=
 -- lemma limit.pullback_lift (F : J ⥤ C) (c : cone F) {X : C} (f : X ⟶ c.X) : f ≫ limit.lift F c = limit.lift F (c.pullback f) := sorry
 
 def limit.map (F G : J ⥤ C) (α : F ⟹ G) : limit F ⟶ limit G :=
-is_limit.lift _ { X := _, π := λ j, limit.π F j ≫ α j }
+limit.lift G { X := _, π := λ j, limit.π F j ≫ α j }
 
 section
 variables {K : Type v} [𝒦 : small_category K]
 include 𝒦
 
 def limit.pre (F : J ⥤ C) (E : K ⥤ J) : limit F ⟶ limit (E ⋙ F) :=
-@is_limit.lift _ _ _ _ _ (limit.cone (E ⋙ F)) _ { X := limit F, π := λ k, limit.π F (E k) }
+limit.lift (E ⋙ F) { X := limit F, π := λ k, limit.π F (E k) }
 end
 
 section
@@ -131,7 +130,7 @@ variables {D : Type u} [𝒟 : category.{u v} D] [has_limits.{u v} D]
 include 𝒟 
 
 def limit.post (F : J ⥤ C) (G : C ⥤ D) : G (limit F) ⟶ limit (F ⋙ G) :=
-@is_limit.lift _ _ _ _ _ (limit.cone (F ⋙ G)) _ { X := _, π := λ j, G.map (limit.π F j) }
+limit.lift (F ⋙ G) { X := _, π := λ j, G.map (limit.π F j) }
 end
 
 @[extensionality] def limit.hom_ext {F : J ⥤ C} {c : cone F}
@@ -139,8 +138,8 @@ end
   (w_f : ∀ j, f ≫ limit.π F j = c.π j)
   (w_g : ∀ j, g ≫ limit.π F j = c.π j) : f = g :=
 begin
-  have p_f := is_limit.uniq _ c f (by obviously),
-  have p_g := is_limit.uniq _ c g (by obviously),
+  have p_f := (limit.universal_property F).uniq c f (by obviously),
+  have p_g := (limit.universal_property F).uniq c g (by obviously),
   obviously,
 end
 end
@@ -164,7 +163,7 @@ include 𝒥
 def colimit.cocone (F : J ⥤ C) : cocone F := has_colimits.colimit.{u v} F
 def colimit (F : J ⥤ C) := (colimit.cocone F).X
 def colimit.ι (F : J ⥤ C) (j : J) : F j ⟶ colimit F := (colimit.cocone F).ι j
-instance colimit.universal_property (F : J ⥤ C) : is_colimit (colimit.cocone F) := 
+def colimit.universal_property (F : J ⥤ C) : is_colimit (colimit.cocone F) := 
 has_colimits.is_colimit.{u v} C F
 
 @[extensionality] def colimit.hom_ext {F : J ⥤ C} {c : cocone F}
@@ -172,8 +171,8 @@ has_colimits.is_colimit.{u v} C F
   (w_f : ∀ j, colimit.ι F j ≫ f = c.ι j)
   (w_g : ∀ j, colimit.ι F j ≫ g = c.ι j) : f = g :=
 begin
-  have p_f := is_colimit.uniq _ c f (by obviously),
-  have p_g := is_colimit.uniq _ c g (by obviously),
+  have p_f := (colimit.universal_property F).uniq c f (by obviously),
+  have p_g := (colimit.universal_property F).uniq c g (by obviously),
   obviously,
 end
 

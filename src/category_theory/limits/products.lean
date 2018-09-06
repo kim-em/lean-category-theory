@@ -16,7 +16,7 @@ include 𝒞
 section product
 variables {β : Type v} {f : β → C} 
 
-class is_product (t : fan f) :=
+structure is_product (t : fan f) :=
 (lift : ∀ (s : fan f), s.X ⟶ t.X)
 (fac'  : ∀ (s : fan f), ∀ b, (lift s) ≫ t.π b = s.π b . obviously) 
 (uniq' : ∀ (s : fan f) (m : s.X ⟶ t.X) (w : ∀ b, m ≫ t.π b = s.π b), m = lift s . obviously)
@@ -31,15 +31,13 @@ begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously end
 
 instance is_product_subsingleton {t : fan f}  : subsingleton (is_product t) := by obviously
 
-lemma is_product.uniq'' {t : fan f} [is_product t] {X' : C} (m : X' ⟶ t.X) : m = is_product.lift t { X := X', π := λ b, m ≫ t.π b } :=
-is_product.uniq t { X := X', π := λ b, m ≫ t.π b } m (by obviously)
+lemma is_product.uniq'' {t : fan f} (h : is_product t) {X' : C} (m : X' ⟶ t.X) : m = h.lift { X := X', π := λ b, m ≫ t.π b } :=
+h.uniq { X := X', π := λ b, m ≫ t.π b } m (by obviously)
 
 -- TODO provide alternative constructor using uniq'' instead of uniq'.
 
-lemma is_product.univ {t : fan f} [is_product t] (s : fan f) (φ : s.X ⟶ t.X) : (∀ b, φ ≫ t.π b = s.π b) ↔ (φ = is_product.lift t s) :=
-begin
-obviously
-end
+lemma is_product.univ {t : fan f} (h : is_product t) (s : fan f) (φ : s.X ⟶ t.X) : (∀ b, φ ≫ t.π b = s.π b) ↔ (φ = h.lift s) :=
+by obviously
 
 def is_product.of_lift_univ {t : fan f}
   (lift : Π (s : fan f), s.X ⟶ t.X)
@@ -54,7 +52,7 @@ end product
 section coproduct
 variables {β : Type v} {f : β → C} 
 
-class is_coproduct (t : cofan f) :=
+structure is_coproduct (t : cofan f) :=
 (desc : ∀ (s : cofan f), t.X ⟶ s.X)
 (fac'  : ∀ (s : cofan f), ∀ b, t.ι b ≫ (desc s) = s.ι b . obviously) 
 (uniq' : ∀ (s : cofan f) (m : t.X ⟶ s.X) (w : ∀ b, t.ι b ≫ m = s.ι b), m = desc s . obviously)
@@ -69,15 +67,13 @@ begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously end
 
 instance is_coproduct_subsingleton {t : cofan f}  : subsingleton (is_coproduct t) := by obviously
 
-lemma is_coproduct.uniq'' {t : cofan f} [is_coproduct t] {X' : C} (m : t.X ⟶ X') : m = is_coproduct.desc t { X := X', ι := λ b, t.ι b ≫ m } :=
-is_coproduct.uniq t { X := X', ι := λ b, t.ι b ≫ m } m (by obviously)
+lemma is_coproduct.uniq'' {t : cofan f} (h : is_coproduct t) {X' : C} (m : t.X ⟶ X') : m = h.desc { X := X', ι := λ b, t.ι b ≫ m } :=
+h.uniq { X := X', ι := λ b, t.ι b ≫ m } m (by obviously)
 
 -- TODO provide alternative constructor using uniq'' instead of uniq'.
 
-lemma is_coproduct.univ {t : cofan f} [is_coproduct t] (s : cofan f) (φ : t.X ⟶ s.X) : (∀ b, t.ι b ≫ φ = s.ι b) ↔ (φ = is_coproduct.desc t s) :=
-begin
-obviously
-end
+lemma is_coproduct.univ {t : cofan f} (h : is_coproduct t) (s : cofan f) (φ : t.X ⟶ s.X) : (∀ b, t.ι b ≫ φ = s.ι b) ↔ (φ = h.desc s) :=
+by obviously
 
 def is_coproduct.of_desc_univ {t :cofan f}
   (desc : Π (s : cofan f), t.X ⟶ s.X)
@@ -106,15 +102,15 @@ variables [has_products.{u v} C] {β : Type v}
 def pi.fan (f : β → C) := has_products.prod.{u v} f
 def pi (f : β → C) : C := (pi.fan f).X
 def pi.π (f : β → C) (b : β) : pi f ⟶ f b := (pi.fan f).π b
-instance pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
--- def pi.lift (f : β → C) (g : fan f) := is_product.lift (pi.fan f) g
-
-lemma pi.components_eq (f : β → C) {X : C} {g h : X ⟶ pi f} (e : g = h) (b : β) : g ≫ pi.π f b = h ≫ pi.π f b := by subst e
+def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
 
 @[simp] def pi.fan_π (f : β → C) (b : β) : (pi.fan f).π b = @pi.π C _ _ _ f b := rfl
 
 def pi.lift {f : β → C} {P : C} (p : Π b, P ⟶ f b) : P ⟶ pi f :=
-is_product.lift _ ⟨ ⟨ P ⟩, p ⟩
+(pi.universal_property f).lift ⟨ ⟨ P ⟩, p ⟩
+
+-- @[simp] lemma pi.universal_property_lift (f : β → C) {P : C} (p : Π b, P ⟶ f b) : 
+--   (pi.universal_property f).lift ⟨ ⟨ P ⟩, p ⟩ = pi.lift p := rfl
 
 @[simp,search] def pi.lift_π {f : β → C} {P : C} (p : Π b, P ⟶ f b) (b : β) : pi.lift p ≫ pi.π f b = p b :=
 by erw is_product.fac
@@ -136,7 +132,7 @@ variables {D : Type u} [𝒟 : category.{u v} D] [has_products.{u v} D]
 include 𝒟 
 
 def pi.post (f : β → C) (G : C ⥤ D) : G (pi f) ⟶ (pi (G.obj ∘ f)) :=
-@is_product.lift _ _ _ _ (pi.fan (G.obj ∘ f)) _ { X := _, π := λ b, G.map (pi.π f b) }
+@is_product.lift _ _ _ _ (pi.fan (G.obj ∘ f)) (pi.universal_property _) { X := _, π := λ b, G.map (pi.π f b) }
 
 @[simp] def pi.post_π (f : β → C) (G : C ⥤ D) (b : β) : pi.post f G ≫ pi.π _ b = G.map (pi.π f b) := 
 by erw is_product.fac
@@ -144,11 +140,9 @@ end
 
 @[extensionality] lemma pi.hom_ext (f : β → C) {X : C} (g h : X ⟶ pi f) (w : ∀ b, g ≫ pi.π f b = h ≫ pi.π f b) : g = h :=
 begin
-  rw is_product.uniq'' g,
-  rw is_product.uniq'' h,
-  congr,
-  ext,
-  exact w x,
+  rw is_product.uniq (pi.universal_property f) { X := X, π := λ b, g ≫ pi.π f b } g,
+  rw is_product.uniq (pi.universal_property f) { X := X, π := λ b, g ≫ pi.π f b } h,
+  obviously,
 end
 
 @[simp] def pi.lift_map 
@@ -176,12 +170,12 @@ variables [has_coproducts.{u v} C] {β : Type v}
 def Sigma.cofan (f : β → C) := has_coproducts.coprod.{u v} f
 def Sigma (f : β → C) : C := (Sigma.cofan f).X
 def Sigma.ι (f : β → C) (b : β) : f b ⟶ Sigma f := (Sigma.cofan f).ι b
-instance Sigma.universal_property (f : β → C) : is_coproduct (Sigma.cofan f) := has_coproducts.is_coproduct.{u v} C f
+def Sigma.universal_property (f : β → C) : is_coproduct (Sigma.cofan f) := has_coproducts.is_coproduct.{u v} C f
 
 @[simp] def Sigma.cofan_ι (f : β → C) (b : β) : (Sigma.cofan f).ι b = @Sigma.ι C _ _ _ f b := rfl
 
 def Sigma.desc {f : β → C} {P : C} (p : Π b, f b ⟶ P) : Sigma f ⟶ P :=
-is_coproduct.desc _ ⟨ ⟨ P ⟩, p ⟩
+(Sigma.universal_property f).desc ⟨ ⟨ P ⟩, p ⟩
 
 @[simp,search] def Sigma.lift_ι {f : β → C} {P : C} (p : Π b, f b ⟶ P) (b : β) : Sigma.ι f b ≫ Sigma.desc p = p b :=
 by erw is_coproduct.fac
@@ -203,7 +197,7 @@ variables {D : Type u} [𝒟 : category.{u v} D] [has_coproducts.{u v} D]
 include 𝒟 
 
 def Sigma.post (f : β → C) (G : C ⥤ D) : (Sigma (G.obj ∘ f)) ⟶ G (Sigma f) :=
-@is_coproduct.desc _ _ _ _ (Sigma.cofan (G.obj ∘ f)) _ { X := _, ι := λ b, G.map (Sigma.ι f b) }
+@is_coproduct.desc _ _ _ _ (Sigma.cofan (G.obj ∘ f)) (Sigma.universal_property _) { X := _, ι := λ b, G.map (Sigma.ι f b) }
 
 @[simp] def Sigma.post_π (f : β → C) (G : C ⥤ D) (b : β) : Sigma.ι _ b ≫ Sigma.post f G = G.map (Sigma.ι f b) := 
 by erw is_coproduct.fac
@@ -211,11 +205,9 @@ end
 
 @[extensionality] lemma Sigma.hom_ext (f : β → C) {X : C} (g h : Sigma f ⟶ X) (w : ∀ b, Sigma.ι f b ≫ g = Sigma.ι f b ≫ h) : g = h :=
 begin
-  rw is_coproduct.uniq'' g,
-  rw is_coproduct.uniq'' h,
-  congr,
-  ext,
-  exact w x,
+  rw is_coproduct.uniq (Sigma.universal_property f) { X := X, ι := λ b, Sigma.ι f b ≫ g } g,
+  rw is_coproduct.uniq (Sigma.universal_property f) { X := X, ι := λ b, Sigma.ι f b ≫ g } h,
+  obviously
 end
 
 @[simp] def Sigma.desc_map 

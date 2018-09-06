@@ -11,21 +11,21 @@ include 𝒞
 
 section
 
-@[extensionality] lemma homs_to_terminal_ext (X' : C) (X : C) [is_terminal.{u v} X] (f g : X' ⟶ X) : f = g :=
+@[extensionality] lemma homs_to_terminal_ext (X' : C) (X : C) (h : is_terminal.{u v} X) (f g : X' ⟶ X) : f = g :=
 begin
-  rw is_terminal.uniq X X' f,
-  rw is_terminal.uniq X X' g,
+  rw h.uniq X' f,
+  rw h.uniq X' g,
 end
 
-def terminals_iso (A B : C) [is_terminal.{u v} A] [is_terminal.{u v} B] : A ≅ B :=
-{ hom := is_terminal.lift.{u v} B A,
-  inv := is_terminal.lift.{u v} A B }
+def terminals_iso (A B : C) (h_A : is_terminal.{u v} A) (h_B : is_terminal.{u v} B) : A ≅ B :=
+{ hom := is_terminal.lift.{u v} h_B A,
+  inv := is_terminal.lift.{u v} h_A B }
 end
 
 section
-def binary_products_iso {Y Z : C} (A B : span.{u v} Y Z) [is_binary_product A] [is_binary_product B] : A.X ≅ B.X :=
-{ hom := is_binary_product.lift _ A,
-  inv := is_binary_product.lift _ B,
+def binary_products_iso {Y Z : C} (A B : span.{u v} Y Z) (h_A : is_binary_product A) (h_B : is_binary_product B) : A.X ≅ B.X :=
+{ hom := is_binary_product.lift h_B A,
+  inv := is_binary_product.lift h_A B,
   hom_inv_id' := sorry, 
   inv_hom_id' := sorry }
 end
@@ -49,25 +49,25 @@ end
 variables {J : Type v} [𝒥 : small_category J]
 include 𝒥
 
-section
+-- section
 -- FIXME this is a horrible formulation
-lemma homs_to_limit_ext  {F : J ⥤ C} (c : cone.{u v} F) [is_limit c] {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
-begin
-  let s : cone F := ⟨ ⟨ X ⟩, λ j, f ≫ c.π j, by obviously ⟩,
-  have q := is_limit.uniq _ s f,
-  have p := is_limit.uniq _ s g,
-  rw [q, ←p],
-  intros,
-  rw ← w j,
-  intros,
-  refl
-end
+-- lemma homs_to_limit_ext  {F : J ⥤ C} (c : cone.{u v} F) [is_limit c] {X : C} (f g : X ⟶ c.X) (w : ∀ j, f ≫ c.π j = g ≫ c.π j) : f = g :=
+-- begin
+--   let s : cone F := ⟨ ⟨ X ⟩, λ j, f ≫ c.π j, by obviously ⟩,
+--   have q := is_limit.uniq _ s f,
+--   have p := is_limit.uniq _ s g,
+--   rw [q, ←p],
+--   intros,
+--   rw ← w j,
+--   intros,
+--   refl
+-- end
 
 
-local attribute [back] homs_to_limit_ext
-def limits_iso {F : J ⥤  C} (A B : cone.{u v} F) [is_limit A] [is_limit B] : A.X ≅ B.X :=
-{ hom := is_limit.lift _ A,
-  inv := is_limit.lift _ B }
-end
+-- local attribute [back] homs_to_limit_ext
+-- def limits_iso {F : J ⥤  C} (A B : cone.{u v} F) (h_A : is_limit A) (h_B : is_limit B) : A.X ≅ B.X :=
+-- { hom := is_limit.lift h_B A,
+--   inv := is_limit.lift h_A B }
+-- end
 
 end category_theory.limits
