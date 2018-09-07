@@ -38,10 +38,8 @@ instance yoneda_faithful : faithful (yoneda C) :=
 begin
   fsplit, 
   intros X Y f g p, 
-  injections_and_clear,
-  convert (congr_fun (congr_fun h_1 X) (𝟙 X)),
-  simp,
-  simp
+  injection p with h,
+  convert (congr_fun (congr_fun h X) (𝟙 X)) ; simp
 end
 
 -- We need to help typeclass inference with some awkward universe levels here.
