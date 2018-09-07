@@ -4,6 +4,8 @@
 
 import category_theory.limits.shape
 import category_theory.filtered
+import category_theory.functor_categories.whiskering
+import category_theory.universal.cones
 
 open category_theory
 
@@ -107,15 +109,57 @@ is_limit.fac _ c j
 
 @[simp] lemma limit.cone_π (F : J ⥤ C) (j : J) : (limit.cone F).π j = (@limit.π C _ _ J _ F j) := rfl
 
+def limit.cone_morphism (F : J ⥤ C) (c : cone F) : cone_morphism c (limit.cone F) := 
+{ hom := (limit.lift F) c }
+
+@[simp] lemma limit.cone_morphism_hom {F : J ⥤ C} (c : cone F) : (limit.cone_morphism F c).hom = limit.lift F c := rfl
+@[simp] lemma limit.cone_morphism_π {F : J ⥤ C} (c : cone F) (j : J) : (limit.cone_morphism F c).hom ≫ (limit.π F j) = c.π j :=
+by erw is_limit.fac
+
 -- TODO needs a home
 def cone.pullback {F : J ⥤ C} (A : cone F) {X : C} (f : X ⟶ A.X) : cone F :=
 { X := X,
   π := λ j, f ≫ A.π j }
 
--- lemma limit.pullback_lift (F : J ⥤ C) (c : cone F) {X : C} (f : X ⟶ c.X) : f ≫ limit.lift F c = limit.lift F (c.pullback f) := sorry
+-- lemma limit.pullback_lift (F : J ⥤ C) (c : cone F) {X : C} (f : X ⟶ c.X) : limit.lift F (c.pullback f) = f ≫ limit.lift F c := sorry
 
-def limit.map (F G : J ⥤ C) (α : F ⟹ G) : limit F ⟶ limit G :=
-limit.lift G { X := _, π := λ j, limit.π F j ≫ α j }
+-- @[extensionality] def limit.hom_ext {F : J ⥤ C} {c : cone F}
+--   (f g : c.X ⟶ limit F)
+--   (w_f : ∀ j, f ≫ limit.π F j = c.π j)
+--   (w_g : ∀ j, g ≫ limit.π F j = c.π j) : f = g :=
+-- begin
+--   have p_f := (limit.universal_property F).uniq c f (by obviously),
+--   have p_g := (limit.universal_property F).uniq c g (by obviously),
+--   obviously,
+-- end.
+
+@[extensionality] def limit.hom_ext {F : J ⥤ C} {X : C}
+  (f g : X ⟶ limit F)
+  (w : ∀ j, f ≫ limit.π F j = g ≫ limit.π F j) : f = g :=
+begin
+  let c : cone F := { X := X, π := λ j, f ≫ limit.π F j },
+  have p_f := (limit.universal_property F).uniq c f (by obviously),
+  have p_g := (limit.universal_property F).uniq c g (by obviously),
+  obviously
+end
+
+-- TODO get rid of `limit` itself??
+def lim : (J ⥤ C) ⥤ C := 
+{ obj := limit,
+  map' := λ F F' t, limit.lift F' $
+    { X := limit F, π := λ j, limit.π F j ≫ t j } }.
+ 
+-- boilerplate
+@[simp] lemma lim_map [has_limits.{u v} C] {F F' : J ⥤ C} (t : F ⟹ F') : 
+  lim.map t = (limit.lift F' $ { X := limit F, π := λ j, limit.π F j ≫ t j }) :=
+rfl
+
+@[simp] lemma lim_map_π {F G : J ⥤ C} (α : F ⟹ G) (j : J) : lim.map α ≫ limit.π G j = limit.π F j ≫ α j :=
+by erw is_limit.fac
+
+@[simp] def limit.lift_map {F G : J ⥤ C} (c : cone F) (α : F ⟹ G) : 
+  limit.lift F c ≫ lim.map α = limit.lift G { X := c.X, π := λ j, c.π j ≫ α j } := -- should this cone have a name?
+by obviously
 
 section
 variables {K : Type v} [𝒦 : small_category K]
@@ -123,6 +167,18 @@ include 𝒦
 
 def limit.pre (F : J ⥤ C) (E : K ⥤ J) : limit F ⟶ limit (E ⋙ F) :=
 limit.lift (E ⋙ F) { X := limit F, π := λ k, limit.π F (E k) }
+
+@[simp,search] lemma limit.pre_π (F : J ⥤ C) (E : K ⥤ J) (k : K) : 
+  limit.pre F E ≫ limit.π (E ⋙ F) k = limit.π F (E k) :=
+by erw is_limit.fac
+
+@[simp] def limit.lift_pre {F : J ⥤ C} (c : cone F) (E : K ⥤ J) :
+  limit.lift F c ≫ limit.pre F E = limit.lift (E ⋙ F) { X := c.X, π := λ k, c.π (E k) } := -- should this cone have a name?
+by obviously
+
+def limit.map_pre {F G : J ⥤ C} (α : F ⟹ G) (E : K ⥤ J) :
+  lim.map α ≫ limit.pre G E = limit.pre F E ≫ lim.map (whisker_on_left E α) :=
+by obviously
 end
 
 section
@@ -131,17 +187,31 @@ include 𝒟
 
 def limit.post (F : J ⥤ C) (G : C ⥤ D) : G (limit F) ⟶ limit (F ⋙ G) :=
 limit.lift (F ⋙ G) { X := _, π := λ j, G.map (limit.π F j) }
+
+@[simp,search] lemma limit.post_π (F : J ⥤ C) (G : C ⥤ D) (j : J) : 
+  limit.post F G ≫ limit.π (F ⋙ G) j = G.map (limit.π F j) :=
+by erw is_limit.fac
+
+@[simp] def limit.lift_post {F : J ⥤ C} (c : cone F) (G : C ⥤ D) :
+  G.map (limit.lift F c) ≫ limit.post F G = limit.lift (F ⋙ G) (G.map_cone c) := -- should this cone have a name?
+by obviously
+
+def limit.map_post {F G : J ⥤ C} (α : F ⟹ G) (H : C ⥤ D) :
+/- H (limit F) ⟶ H (limit G) ⟶ limit (G ⋙ H) vs
+   H (limit F) ⟶ limit (F ⋙ H) ⟶ limit (G ⋙ H) -/
+  H.map (lim.map α) ≫ limit.post G H = limit.post F H ≫ lim.map (whisker_on_right α H) :=
+by obviously
+
+variables {K : Type v} [𝒦 : small_category K]
+include 𝒦
+
+def limit.pre_post (F : J ⥤ C) (E : K ⥤ J) (G : C ⥤ D) :
+/- G (limit F) ⟶ G (limit (E ⋙ F)) ⟶ limit ((E ⋙ F) ⋙ G) vs -/
+/- G (limit F) ⟶ limit F ⋙ G ⟶ limit (E ⋙ (F ⋙ G)) or -/
+  G.map (limit.pre F E) ≫ limit.post (E ⋙ F) G = limit.post F G ≫ limit.pre (F ⋙ G) E :=
+by obviously
 end
 
-@[extensionality] def limit.hom_ext {F : J ⥤ C} {c : cone F}
-  (f g : c.X ⟶ limit F)
-  (w_f : ∀ j, f ≫ limit.π F j = c.π j)
-  (w_g : ∀ j, g ≫ limit.π F j = c.π j) : f = g :=
-begin
-  have p_f := (limit.universal_property F).uniq c f (by obviously),
-  have p_g := (limit.universal_property F).uniq c g (by obviously),
-  obviously,
-end
 end
 
 variable (C)
@@ -166,14 +236,14 @@ def colimit.ι (F : J ⥤ C) (j : J) : F j ⟶ colimit F := (colimit.cocone F).�
 def colimit.universal_property (F : J ⥤ C) : is_colimit (colimit.cocone F) := 
 has_colimits.is_colimit.{u v} C F
 
-def colimit.desc (F : J ⥤ C) (c : cocone F) : colimit F ⟶ c.X := is_colimit.desc _ c
+def colimit.desc (F : J ⥤ C) (c : cocone F) : colimit F ⟶ c.X := (colimit.universal_property F).desc c
 
 section
 variables {K : Type v} [𝒦 : small_category K]
 include 𝒦
 
 def colimit.pre (F : J ⥤ C) (E : K ⥤ J) : colimit (E ⋙ F) ⟶ colimit F :=
-@is_colimit.desc _ _ _ _ _ (colimit.cocone (E ⋙ F)) _ { X := colimit F, ι := λ k, colimit.ι F (E k) }
+colimit.desc (E ⋙ F) { X := colimit F, ι := λ k, colimit.ι F (E k) }
 end
 
 section
@@ -181,7 +251,7 @@ variables {D : Type u} [𝒟 : category.{u v} D] [has_colimits.{u v} D]
 include 𝒟
 
 def colimit.post (F : J ⥤ C) (G : C ⥤ D) : colimit (F ⋙ G) ⟶ G (colimit F) :=
-@is_colimit.desc _ _ _ _ _ (colimit.cocone (F ⋙ G)) _ { X := _, ι := λ j, G.map (colimit.ι F j) }
+colimit.desc (F ⋙ G) { X := _, ι := λ j, G.map (colimit.ι F j) }
 end
 
 @[extensionality] def colimit.hom_ext {F : J ⥤ C} {c : cocone F}

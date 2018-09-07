@@ -26,16 +26,13 @@ def whiskering_on_right : (D ⥤ E) ⥤ ((C ⥤ D) ⥤ (C ⥤ E)) :=
   map' := λ G H τ, { app := λ F, { app := λ c, τ (F c) } } }
 end
 
-def whisker_on_left_functor {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] (F : C ⥤ D) (E : Type u₃) [ℰ : category.{u₃ v₃} E] : (D ⥤ E) ⥤ (C ⥤ E) :=
-(whiskering_on_left C D E) F
+variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E] 
+include 𝒞 𝒟 ℰ
 
-def whisker_on_right_functor (C : Type u₁) [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E] (H : D ⥤ E) : (C ⥤ D) ⥤ (C ⥤ E) :=
-(whiskering_on_right C D E) H
+def whisker_on_left (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟹ H) : (F ⋙ G) ⟹ (F ⋙ H) :=
+((whiskering_on_left C D E) F).map α
 
-def whisker_on_left {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E]  (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟹ H) : (F ⋙ G) ⟹ (F ⋙ H) :=
-(whisker_on_left_functor F E).map α
-
-def whisker_on_right {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D] {E : Type u₃} [ℰ : category.{u₃ v₃} E] {G H : C ⥤ D} (α : G ⟹ H)  (F : D ⥤ E) : (G ⋙ F) ⟹ (H ⋙ F) := 
-(whisker_on_right_functor C F).map α
+def whisker_on_right {G H : C ⥤ D} (α : G ⟹ H) (F : D ⥤ E) : (G ⋙ F) ⟹ (H ⋙ F) := 
+((whiskering_on_right C D E) F).map α
 
 end category_theory

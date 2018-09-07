@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
 
-import category_theory.limits.limits
+import category_theory.limits.shape
 
 open category_theory
 
@@ -66,11 +66,6 @@ restate_axiom cocone_morphism.w'
 attribute [simp,search] cocone_morphism.w
 
 namespace cocone_morphism
--- @[simp,search] def commutativity_lemma_assoc {A B : cocone F} (c : cocone_morphism A B) (j : J) {Z : C} (z : B.X ⟶ Z): (A.ι j) ≫ c.hom ≫ z = (B.ι j) ≫ z :=
--- begin
---   -- `obviously'` says:
---   erw [←category.assoc, cocone_morphism.w]
--- end
 
 @[extensionality] lemma ext {A B : cocone F} {f g : cocone_morphism A B} (w : f.hom = g.hom) : f = g :=
 begin 
@@ -104,24 +99,6 @@ def functoriality (F : J ⥤ C) (G : C ⥤ D) : (cocone F) ⥤ (cocone (F ⋙ G)
                          w'  := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp, cocone_morphism.w] end } }
 end
 end cocones
-
-section
-variables [has_limits.{u v} C]
-variables (F)
-
-def limit.cone_morphism (c : cone F) : cone_morphism c (limit.cone F) := 
-{ hom := (limit.lift F) c }
-
-@[simp] lemma limit.cone_morphism_hom (c : cone F) : (limit.cone_morphism F c).hom = limit.lift F c := rfl
-@[simp] lemma limit.cone_morphism_π (c : cone F) (j : J) : (limit.cone_morphism F c).hom ≫ (limit.π F j) = c.π j :=
-by erw is_limit.fac
-
--- def limit.hom
---   {X : C} (π : Π j : J, X ⟶ F j) 
---   (w : Π (j j' : J) (f : j ⟶ j'), π j ≫ F.map f = π j') : 
---   X ⟶ (limit F) :=
--- (limit.cone_morphism F { X := X, π := π, w := w }).hom
-end
 
 end category_theory.limits
 

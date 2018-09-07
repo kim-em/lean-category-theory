@@ -15,10 +15,10 @@ variables {α : Type v}
 
 instance : has_products.{v+1 v} CommRing := sorry
 
-def coequalizer_ideal {R S : CommRing} (f g : ring_hom R S) : set S.1 :=
-span (set.range (λ x : R.1, f.map x - g.map x))
+def coequalizer_ideal {R S : CommRing} (f g : R ⟶ S) : set S.1 :=
+span (set.range (λ x : R, f x - g x))
 
-instance {R S : CommRing} (f g : ring_hom R S) : is_ideal (coequalizer_ideal f g) := sorry
+instance {R S : CommRing} (f g : R ⟶ S) : is_ideal (coequalizer_ideal f g) := sorry
 
 local attribute [instance] classical.prop_decidable
 
@@ -34,8 +34,8 @@ instance : has_coequalizers.{v+1 v} CommRing :=
            end -/ },
   is_coequalizer := λ R S f g, 
     { desc := λ s,
-      { map := sorry, 
-        is_ring_hom := sorry, }, 
+      { val := sorry, 
+        property := sorry, }, 
       fac := sorry, 
       uniq := sorry }
 }
@@ -48,7 +48,7 @@ include 𝒥
 
 def matching (F : J ⥤ CommRing) (a b : Σ j : J, (F j).1) : Prop :=
 ∃ (j : J) (f_a : a.1 ⟶ j) (f_b : b.1 ⟶ j),
-(F.map f_a).map a.2 = (F.map f_b).map b.2
+(F.map f_a) a.2 = (F.map f_b) b.2
 
 def filtered_colimit (F : J ⥤ CommRing) :=
 @quot (Σ j : J, (F j).1) (matching F)
@@ -64,7 +64,7 @@ quot.lift (λ p : Σ j, (F j).1,
   quot.lift (λ q : Σ j, (F j).1, 
   quot.mk _ (begin 
     have s := filtered.obj_bound.{v v} p.1 q.1,
-    exact ⟨ s.X, ((F.map s.ι₁).map p.2) + ((F.map s.ι₂).map q.2) ⟩
+    exact ⟨ s.X, ((F.map s.ι₁) p.2) + ((F.map s.ι₂) q.2) ⟩
   end : Σ j, (F j).1))
   (λ q q' (r : matching F q q'), @quot.sound _ (matching F) _ _ 
     begin  
@@ -102,8 +102,8 @@ instance : has_filtered_colimits.{v+1 v} CommRing :=
   begin
     resetI, exact 
     { X := ⟨ filtered_colimit F, filtered_colimit_is_comm_ring F ⟩,
-      ι := λ j, { map := λ x, begin sorry end, 
-                  is_ring_hom := sorry },
+      ι := λ j, { val := λ x, begin sorry end, 
+                  property := sorry },
       w := sorry, }
   end,
   is_colimit := sorry }

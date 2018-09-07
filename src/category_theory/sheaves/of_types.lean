@@ -6,7 +6,7 @@ universes u v
 
 open category_theory
 open category_theory.limits
-open category_theory.examples.topological_spaces
+open category_theory.examples
 
 -- We now provide an alternative 'pointwise' constructor for sheaves of types.
 

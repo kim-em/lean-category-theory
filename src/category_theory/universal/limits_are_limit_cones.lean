@@ -1,5 +1,4 @@
-import category_theory.universal.cones
-import category_theory.limits.terminal
+import category_theory.limits
 
 open category_theory
 

@@ -5,7 +5,7 @@ import category_theory.examples.topological_spaces
 
 open category_theory
 open category_theory.limits
-open category_theory.examples.topological_spaces
+open category_theory.examples
 
 universes u v u₁ v₁ u₂ v₂
 

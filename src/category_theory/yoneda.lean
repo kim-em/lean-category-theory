@@ -36,12 +36,12 @@ instance yoneda_full : full (yoneda C) :=
 
 instance yoneda_faithful : faithful (yoneda C) := 
 begin
-/- obviously says: -/ 
-fsplit, 
-intros X Y f g p, 
-injections_and_clear,
-have cancel_right'_f_g_h_1 := cancel_right' f g h_1, 
-assumption
+  fsplit, 
+  intros X Y f g p, 
+  injections_and_clear,
+  convert (congr_fun (congr_fun h_1 X) (𝟙 X)),
+  simp,
+  simp
 end
 
 -- We need to help typeclass inference with some awkward universe levels here.
