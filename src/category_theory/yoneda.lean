@@ -2,11 +2,17 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
+/- The Yoneda embedding, as a functor `yoneda : C ⥤ ((Cᵒᵖ) ⥤ (Type v₁))`,
+   along with instances that it is `full` and `faithful`.
+   
+   Also the Yoneda lemma, `yoneda_lemma : (yoneda_pairing C) ≅ (yoneda_evaluation C)`. -/
+
 import category_theory.natural_transformation
 import category_theory.opposites
 import category_theory.types
 import category_theory.embedding
-import category_theory.cancellation
+
+import category_theory.tactics.obviously
 
 import tactic.interactive
 
@@ -28,8 +34,10 @@ def yoneda : C ⥤ ((Cᵒᵖ) ⥤ (Type v₁)) :=
 @[simp] lemma yoneda_obj_map (X : C) {Y Y' : C} (f : Y ⟶ Y') : ((yoneda C) X).map f = λ g, f ≫ g := rfl
 @[simp] lemma yoneda_map_app {X X' : C} (f : X ⟶ X') (Y : C) : ((yoneda C).map f) Y = λ g, g ≫ f := rfl
 
-@[search] lemma yoneda_aux_1 {X Y : Cᵒᵖ} (f : X ⟶ Y) : ((yoneda C).map f) Y (𝟙 Y) = ((yoneda C) X).map f (𝟙 X) := by obviously
-@[simp,search] lemma yoneda_aux_2 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) {Z Z' : C} (f : Z ⟶ Z') (h : Z' ⟶ X) : α Z (f ≫ h) = f ≫ α Z' h := by obviously
+lemma yoneda_aux_1 {X Y : Cᵒᵖ} (f : X ⟶ Y) : ((yoneda C) X).map f (𝟙 X) = ((yoneda C).map f) Y (𝟙 Y) := by obviously
+@[simp] lemma yoneda_aux_2 {X Y : C} (α : (yoneda C) X ⟶ (yoneda C) Y) 
+  {Z Z' : C} (f : Z ⟶ Z') (h : Z' ⟶ X) : f ≫ α Z' h = α Z (f ≫ h) :=
+begin erw [functor_to_types.naturality], refl end
 
 instance yoneda_full : full (yoneda C) := 
 { preimage := λ X Y f, (f X) (𝟙 X) }.
@@ -39,7 +47,7 @@ begin
   fsplit, 
   intros X Y f g p, 
   injection p with h,
-  convert (congr_fun (congr_fun h X) (𝟙 X)) ; simp
+  convert (congr_fun (congr_fun h X) (𝟙 X)) ; sorry
 end
 
 -- We need to help typeclass inference with some awkward universe levels here.
@@ -61,7 +69,12 @@ let H := (functor.hom ((Cᵒᵖ) ⥤ (Type v₁))) in
 @[simp] lemma yoneda_pairing_map (P Q : (Cᵒᵖ ⥤ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (β : (yoneda_pairing C) (P.1, P.2)): (yoneda_pairing C).map α β = (yoneda C).map (α.snd) ≫ β ≫ α.fst := rfl
 
 def yoneda_lemma : (yoneda_pairing C) ≅ (yoneda_evaluation C) := 
-{ hom := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)) },
-  inv := { app := λ F x, { app := λ X a, (F.1.map a) x.down } } }.
+{ hom := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)),
+           naturality' := begin intros X Y f, ext1, ext1, cases f, cases Y, cases X, dsimp at *, simp at *, erw [←functor_to_types.naturality, yoneda_aux_1, functor_to_types.naturality, functor_to_types.map_id] end },
+  inv := { app := λ F x, { app := λ X a, (F.1.map a) x.down,
+                           naturality' := begin intros X Y f, ext1, cases x, cases F, dsimp at *, erw [functor_to_types.map_comp], refl end },
+           naturality' := begin intros X Y f, ext1, ext1, ext1, cases x, cases f, cases Y, cases X, dsimp at *, simp at *, erw [←functor_to_types.naturality, functor_to_types.map_comp] end },
+  hom_inv_id' := begin ext1, ext1, ext1, ext1, cases X, dsimp at *, simp at *, erw [←functor_to_types.naturality, yoneda_aux_1, functor_to_types.naturality, functor_to_types.map_id] end,
+  inv_hom_id' := begin ext1, ext1, ext1, cases x, cases X, dsimp at *, erw [functor_to_types.map_id] end }.
 
 end category_theory.yoneda
