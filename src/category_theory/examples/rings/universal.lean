@@ -24,7 +24,7 @@ local attribute [instance] classical.prop_decidable
 
 instance : has_coequalizers.{v+1 v} CommRing :=
 { coequalizer := λ R S f g, 
-    { X := ⟨ quotient_ring.quotient (coequalizer_ideal f g), by apply_instance ⟩,
+    { X := { α := quotient_ring.quotient (coequalizer_ideal f g) },
       π := ⟨ quotient_ring.mk, by apply_instance ⟩,
       w := sorry /- almost there: -/
         /- begin 
@@ -101,7 +101,7 @@ instance : has_filtered_colimits.{v+1 v} CommRing :=
 { colimit := λ J 𝒥 f F,
   begin
     resetI, exact 
-    { X := ⟨ filtered_colimit F, filtered_colimit_is_comm_ring F ⟩,
+    { X := { α := filtered_colimit F, str := filtered_colimit_is_comm_ring F },
       ι := λ j, { val := λ x, begin sorry end, 
                   property := sorry },
       w := sorry, }

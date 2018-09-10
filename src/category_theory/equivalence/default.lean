@@ -4,6 +4,7 @@
 
 import category_theory.embedding
 import category_theory.tactics.obviously
+import category_theory.follow_your_nose
 
 namespace category_theory
 
@@ -44,13 +45,41 @@ def symm (e : C ≌ D) : D ≌ C :=
 variables {E : Type u₃} [ℰ : category.{u₃ v₃} E]
 include ℰ
 
--- PROJECT a good way to do this?
--- a calc block? rewriting along isos? magic?
-def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E := 
-{ functor := e.functor ⋙ f.functor,
-  inverse := f.inverse ⋙ e.inverse,
-  fun_inv_id' := sorry,
-  inv_fun_id' := sorry }
+attribute [trans] category.comp
+
+def effe_id (e : C ≌ D) (f : D ≌ E) (X : C) : (e.inverse) ((f.inverse) ((f.functor) ((e.functor) X))) ⟶ X :=
+calc    
+  _ ⟶ (e.inverse) ((e.functor) X) : e.inverse.map (f.fun_inv_id.hom.app _)
+... ⟶ X                           : e.fun_inv_id.hom.app _
+def id_effe (e : C ≌ D) (f : D ≌ E) (X : C) : (functor.id C) X ⟶ ((e.functor ⋙ f.functor) ⋙ f.inverse ⋙ e.inverse) X :=
+calc 
+  X ⟶ (e.functor ⋙ e.inverse) X : e.fun_inv_id.inv.app _
+... ⟶ _                           : e.inverse.map (f.fun_inv_id.inv.app _)  
+def feef_id (e : C ≌ D) (f : D ≌ E) (X : E) : (f.functor) ((e.functor) ((e.inverse) ((f.inverse) X))) ⟶ X :=
+calc    
+  _ ⟶ (f.functor) ((f.inverse) X) : f.functor.map (e.inv_fun_id.hom.app _)
+... ⟶ X                           : f.inv_fun_id.hom.app _
+def id_feef (e : C ≌ D) (f : D ≌ E) (X : E) : X ⟶ ((f.inverse ⋙ e.inverse) ⋙ e.functor ⋙ f.functor) X :=
+calc 
+  X ⟶ (f.inverse ⋙ f.functor) X : f.inv_fun_id.inv.app _
+... ⟶ _                           : f.functor.map (e.inv_fun_id.inv.app _)  
+
+set_option trace.tidy true
+
+-- def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E := 
+-- { functor := e.functor ⋙ f.functor,
+--   inverse := f.inverse ⋙ e.inverse,
+--   fun_inv_id' := 
+--   { hom := { app := λ X, effe_id e f X, naturality' := sorry /- begin tidy, rewrite_search_using [`search] end -/ }, -- These fail, exceeding max iterations.
+--     inv := { app := λ X, id_effe e f X, naturality' := sorry },
+--     hom_inv_id' := sorry, -- These seem to work: 13 step rewrites!
+--     inv_hom_id' := sorry },
+--   inv_fun_id' :=
+--   { hom := { app := λ X, feef_id e f X, naturality' := sorry }, 
+--     inv := { app := λ X, id_feef e f X, naturality' := sorry },
+--     hom_inv_id' := sorry,
+--     inv_hom_id' := sorry },
+--  }
 
 end equivalence
 
