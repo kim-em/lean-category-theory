@@ -2,7 +2,6 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
-import category_theory.currying
 import category_theory.functor_categories.whiskering
 import category_theory.universal.comparisons
 
@@ -12,8 +11,6 @@ open category_theory.prod
 namespace category_theory.limits
 
 universes u v
-
--- private meta def dsimp' : tactic unit := `[dsimp at * {unfold_reducible := tt, md := semireducible}]
 
 variables {J : Type v} [small_category J] {C : Type v} [small_category C] {D : Type u} [𝒟 : category.{u v} D]
 include 𝒟 
