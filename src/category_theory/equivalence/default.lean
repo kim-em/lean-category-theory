@@ -100,9 +100,15 @@ instance is_equivalence_inverse (e : C ≌ D) : is_equivalence e.inverse :=
 end is_equivalence
 
 class ess_surj (F : C ⥤ D) := 
-(pre (d : D) : C)
-(iso' (d : D) : F (pre d) ≅ d . obviously)
+(obj_preimage (d : D) : C)
+(iso' (d : D) : F (obj_preimage d) ≅ d . obviously)
 
 restate_axiom ess_surj.iso'
+
+namespace functor
+def obj_preimage (F : C ⥤ D) [ess_surj F] (d : D) : C := ess_surj.obj_preimage.{u₁ v₁ u₂ v₂} F d
+def fun_obj_preimage_iso (F : C ⥤ D) [ess_surj F] (d : D) : F (F.obj_preimage d) ≅ d := ess_surj.iso F d
+end functor
+
 
 end category_theory
