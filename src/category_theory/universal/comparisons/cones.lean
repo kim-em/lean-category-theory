@@ -55,7 +55,7 @@ local attribute [tidy] dsimp'
 
 include 𝒞 
 
-def Cones_agree (F : J ⥤ C) : Equivalence (comma.Cone F) (cone F) := 
+def Cones_agree (F : J ⥤ C) : equivalence (comma.Cone F) (cone F) := 
 { functor := comma_Cones_to_Cones F,
   inverse := Cones_to_comma_Cones F }
 

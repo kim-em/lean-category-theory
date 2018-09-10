@@ -13,6 +13,6 @@ variable [small_category C]
 
 local attribute [back] category.id
 
-def universe_lift.equivalence : Equivalence C (ulift.{(u₁+1)} C) := by obviously
+def universe_lift.equivalence : equivalence C (ulift.{(u₁+1)} C) := by obviously
 
 end category_theory

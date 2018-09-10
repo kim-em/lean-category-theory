@@ -24,7 +24,7 @@ instance punit_category : category.{u₁ v₁} punit :=
   id   := by obviously,
   comp := by obviously }
 
-example : Equivalence.{u₁ u₁ u₁ u₁} punit (discrete punit) := by obviously
+example : equivalence.{u₁ u₁ u₁ u₁} punit (discrete punit) := by obviously
 
 def EmptyFunctor (C : Type (u₂+1)) [large_category C] : pempty ⥤ C := by obviously
 

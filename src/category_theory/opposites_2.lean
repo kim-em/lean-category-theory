@@ -4,7 +4,7 @@ namespace category_theory
 
 universes u₁ v₁
 
--- def OppositeOpposite (C : Category) : Equivalence (Opposite (Opposite C)) C := sorry
+-- def OppositeOpposite (C : Category) : equivalence (Opposite (Opposite C)) C := sorry
 -- PROJECT opposites preserve products, functors, slices.
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C]

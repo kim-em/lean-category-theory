@@ -1,8 +1,6 @@
-import category_theory.functor_category
-import category_theory.natural_transformation
+import category_theory.natural_isomorphism
 import category_theory.products
 import category_theory.types
-import category_theory.isomorphism
 import category_theory.embedding
 import tidy.tidy
 
@@ -15,6 +13,8 @@ attribute [search] prod_id prod_comp functor.prod_obj functor.prod_map nat_trans
 attribute [search] functor.category.id_app functor.category.comp_app functor.category.nat_trans.app_naturality functor.category.nat_trans.naturality_app 
 attribute [search] functor_to_types.map_comp functor_to_types.map_id functor_to_types.naturality
 attribute [search] iso.hom_inv_id iso.inv_hom_id is_iso.hom_inv_id is_iso.inv_hom_id
+
+attribute [search] nat_iso.comp_app nat_iso.naturality_1 nat_iso.naturality_2
 
 attribute [back'] full.preimage
 attribute [search] full.witness image_preimage

@@ -78,7 +78,7 @@ private def idempotent_inverse (C : Type (u+1)) [large_category C] : (Idempotent
 -- PROJECT prove these lemmas about idempotent completion
 
 -- lemma IdempotentCompletion_idempotent (C : Type u) [category C] :
---   Equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
+--   equivalence (IdempotentCompletion (IdempotentCompletion C)) (IdempotentCompletion C) :=
 -- {
 --   functor := IdempotentCompletion_idempotent_functor C,
 --   inverse := IdempotentCompletion_idempotent_inverse C,

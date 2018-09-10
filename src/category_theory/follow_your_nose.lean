@@ -27,12 +27,14 @@ notation `ƛ` binders `, ` r:(scoped f, { category_theory.functor . obj := f }) 
 
 open category_theory
 
-variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
-include 𝒞
+-- These examples require adding `. obviously` to functor.hom and nat_trans.app
 
-def yoneda : C ⥤ ((Cᵒᵖ) ⥤ (Type v₁)) := ƛ X, ƛ Y : C, Y ⟶ X.
+-- variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
+-- include 𝒞
 
-variables (D : Type u₁) [𝒟 : category.{u₁ v₁} D]
-include 𝒟 
+-- def yoneda : C ⥤ ((Cᵒᵖ) ⥤ (Type v₁)) := ƛ X, ƛ Y : C, Y ⟶ X.
 
-def curry_id : C ⥤ (D ⥤ (C × D)) := ƛ X, ƛ Y, (X, Y)
+-- variables (D : Type u₁) [𝒟 : category.{u₁ v₁} D]
+-- include 𝒟 
+
+-- def curry_id : C ⥤ (D ⥤ (C × D)) := ƛ X, ƛ Y, (X, Y)
