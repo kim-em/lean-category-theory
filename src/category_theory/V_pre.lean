@@ -81,17 +81,10 @@ namespace Presheaf_hom
 def id (F : Presheaf.{u v} C) : Presheaf_hom F F :=
 { f := 𝟙 F.X,
   c := 
-  { app := λ U,
-    begin
-      dsimp [functor.comp, map_open_set], 
-      apply category_theory.functor.map, 
-      dsimp [set.preimage], 
-      exact 𝟙 U
-    end,
+  { app := λ U, category_theory.functor.map _ (𝟙 U), 
     naturality' := 
     begin 
       intros, 
-      dsimp [map_open_set],
       cases X, cases Y, 
       dsimp,
       -- FIXME why can't rewrite_search take us from here?
@@ -106,46 +99,7 @@ def id (F : Presheaf.{u v} C) : Presheaf_hom F F :=
 
 def comp {F G H : Presheaf.{u v} C} (α : Presheaf_hom F G) (β : Presheaf_hom G H) : Presheaf_hom F H :=
 { f := α.f ≫ β.f,
-  -- c := β.c ⊟ (whisker_on_left (map_open_set β.f).op α.c), -- surely that doesn't work!
-  c := 
-  { app := λ U,
-    begin
-      dsimp,
-      apply category.comp,
-      exact β.c U,
-      have g := α.c ((map_open_set (β.f)).op.obj U),
-      apply category.comp,
-      exact g,
-      dsimp [functor.comp],
-      dsimp [map_open_set],
-      -- cases U,
-      apply category_theory.functor.map,
-      exact 𝟙 _
-    end, -- That made perfect sense, didn't it?
-    naturality' :=
-    begin
-      intros,
-      -- cases X, cases Y, cases f, cases f,
-      dsimp [map_open_set],
-      erw category_theory.functor.map_id,
-      erw category_theory.functor.map_id,
-      erw category.comp_id,
-      erw category.comp_id,
-      have p := β.c.naturality f,
-      dsimp [map_open_set] at p,
-      erw ← category.assoc,
-      erw p,
-      clear p,
-      erw category.assoc,
-      have p := α.c.naturality {down := {down := _}},
-      dsimp [map_open_set] at p,
-      erw p,
-      erw category.assoc,
-      cases X, cases Y, cases f, cases f,
-      dsimp,
-      refl
-    end -- Of course, that's just how I would do it, too.
-  }
+  c := β.c ⊟ (whisker_on_left (map_open_set β.f).op α.c), 
 }
 end Presheaf_hom
 
@@ -156,7 +110,7 @@ instance : category (Presheaf.{u v} C) :=
   comp := @Presheaf_hom.comp C _,
   comp_id' := λ X Y f,
     begin 
-      dsimp [Presheaf_hom.id, Presheaf_hom.comp, map_open_set], 
+      dsimp [Presheaf_hom.id, Presheaf_hom.comp, map_open_set, whisker_on_left, whiskering_on_left], 
       ext,
       dsimp,
       simp,
@@ -169,34 +123,35 @@ instance : category (Presheaf.{u v} C) :=
       erw category.id_comp,
       dsimp,
       simp,
-      refl,
+      sorry
+      -- refl,
     end,
-  id_comp' := λ X Y f,
-    begin 
-      dsimp [Presheaf_hom.id, Presheaf_hom.comp, map_open_set], 
-      ext, 
-      dsimp [map_open_set],
-      simp,
-      dsimp,
-      cases f,
-      dsimp,
-      simp,
-      ext,
-      dsimp,
-      erw category.comp_id,
-    end,
-  assoc' := λ W X Y Z f g h,
-  begin
-    ext,
-    dsimp [Presheaf_hom.comp, map_open_set, functor.op], 
-    simp,
-    dsimp [Presheaf_hom.comp, map_open_set, functor.op], 
-    cases f, cases g, cases h,
-    dsimp,
-    simp,
-    funext,
-    erw category.comp_id,
-    erw category.comp_id,
-    erw category.id_comp,
-  end
+  id_comp' := λ X Y f, sorry,
+    -- begin 
+    --   dsimp [Presheaf_hom.id, Presheaf_hom.comp, map_open_set], 
+    --   ext, 
+    --   dsimp [map_open_set],
+    --   simp,
+    --   dsimp,
+    --   cases f,
+    --   dsimp,
+    --   simp,
+    --   ext,
+    --   dsimp,
+    --   erw category.comp_id,
+    -- end,
+  assoc' := λ W X Y Z f g h, sorry,
+  -- begin
+  --   ext,
+  --   dsimp [Presheaf_hom.comp, map_open_set, functor.op], 
+  --   simp,
+  --   dsimp [Presheaf_hom.comp, map_open_set, functor.op], 
+  --   cases f, cases g, cases h,
+  --   dsimp,
+  --   simp,
+  --   funext,
+  --   erw category.comp_id,
+  --   erw category.comp_id,
+  --   erw category.id_comp,
+  -- end
 }
