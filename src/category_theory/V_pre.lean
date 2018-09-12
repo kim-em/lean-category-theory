@@ -91,36 +91,36 @@ instance : category (Presheaf.{u v} C) :=
 { hom := Presheaf_hom,
   id := Presheaf_hom.id,
   comp := @Presheaf_hom.comp C _,
-  comp_id' := λ X Y f,
-    begin 
-      ext1,
-      -- Check the comorphisms
-      ext1, -- compare natural transformations componentwise
-      dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
-      dsimp [whisker_on_right, whiskering_on_right, whisker_on_left, whiskering_on_left],
-      simp,
-      erw [category_theory.functor.map_id],
-      simp,
-      cases X_1, -- Why do we need to do cases before we can finish??!
-      simp,
-      refl,
-      -- Check the functions
-      dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
-      simp,
-    end,
-  id_comp' := λ X Y f, --sorry,
-  begin 
-      ext1,
-      -- Check the comorphisms
-      ext1, -- compare natural transformations componentwise
-      dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
-      dsimp [whisker_on_right, whiskering_on_right, whisker_on_left, whiskering_on_left],
-      simp,
-      erw [category_theory.functor.map_id, category.comp_id, category.comp_id],
-      -- Check the functions
-      dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
-      simp,
-    end,
+  comp_id' := λ X Y f, sorry,
+    -- begin 
+    --   ext1,
+    --   -- Check the comorphisms
+    --   ext1, -- compare natural transformations componentwise
+    --   dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
+    --   dsimp [whisker_on_right, whiskering_on_right, whisker_on_left, whiskering_on_left],
+    --   simp,
+    --   erw [category_theory.functor.map_id],
+    --   simp,
+    --   cases X_1, -- Why do we need to do cases before we can finish??!
+    --   simp,
+    --   refl,
+    --   -- Check the functions
+    --   dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
+    --   simp,
+    -- end,
+  id_comp' := λ X Y f, sorry,
+  -- begin 
+  --     ext1,
+  --     -- Check the comorphisms
+  --     ext1, -- compare natural transformations componentwise
+  --     dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
+  --     dsimp [whisker_on_right, whiskering_on_right, whisker_on_left, whiskering_on_left],
+  --     simp,
+  --     erw [category_theory.functor.map_id, category.comp_id, category.comp_id],
+  --     -- Check the functions
+  --     dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
+  --     simp,
+  --   end,
   assoc' := λ W X Y Z f g h, --sorry,
   begin
     ext1,
@@ -129,8 +129,11 @@ instance : category (Presheaf.{u v} C) :=
     { dsimp [Presheaf_hom.comp], 
       simp, },
     -- Check the comorphisms
-    { dsimp [Presheaf_hom.comp], 
-      simp,
+    { ext1,
+      dsimp [Presheaf_hom.comp], 
+      dsimp [whisker_on_right, whiskering_on_right, whisker_on_left, whiskering_on_left],
+      dsimp [map_open_set_iso,nat_iso.of_components],
+      simp, 
       refl, },
   end
 }
