@@ -30,8 +30,8 @@ def map_open_set
     end }.
 
 -- These next two are desperate attempts to solve problems below.
-@[simp] def map_open_set_id_obj (X : Top) (U : open_set X.α) : map_open_set (𝟙 X) U = U :=
-begin dsimp [map_open_set], cases U, congr, end
+-- @[simp] def map_open_set_id_obj (X : Top) (U : open_set X.α) : map_open_set (𝟙 X) U = U :=
+-- begin dsimp [map_open_set], cases U, congr, end
 @[simp] def map_open_set_id (X : Top) : map_open_set (𝟙 X) ≅ functor.id (open_set X.α) := 
 { hom :=
   { app := λ U, 𝟙 U },
@@ -104,13 +104,15 @@ instance : category (Presheaf.{u v} C) :=
       -- and now the comorphisms
       dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
       simp,
-      ext,
+      ext, -- compare natural transformations componentwise?
       dsimp [whisker_on_right, whiskering_on_right, whisker_on_left, whiskering_on_left],
+      dsimp [map_open_set],
       simp,
-    -- It should be easy to make progress from here, but all avenues appear to be blocked!
-    --   rw [category_theory.functor.map_id Y.𝒪 X_1] {md := semireducible}, -- 'did not find instance'
-    --   rw map_open_set_id_obj, -- 'failed'
-      sorry
+      erw [category_theory.functor.map_id],
+      simp,
+      cases X_1,
+      simp,
+      refl,
     end,
   id_comp' := λ X Y f, sorry,
   assoc' := λ W X Y Z f g h, --sorry
