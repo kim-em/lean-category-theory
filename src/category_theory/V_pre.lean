@@ -1,8 +1,9 @@
-import category_theory.sheaves
-import analysis.topology.topological_structures
+import category_theory.examples.topological_spaces
 import category_theory.examples.categories
+import category_theory.functor_category
+import category_theory.functor_categories.whiskering
 
-universes u v
+universes u v u₂ v₂
 
 open category_theory
 open category_theory.examples
@@ -13,8 +14,7 @@ open category_theory.examples
 
 def map_open_set
   {X Y : Top} (f : X ⟶ Y) : open_set Y.α ⥤ open_set X.α :=
-{ obj := λ U, ⟨ f.val ⁻¹' U.s, 
-    begin apply f.property, exact U.is_open, end ⟩,
+{ obj := λ U, ⟨ f.val ⁻¹' U.s, f.property _ U.is_open ⟩,
   map' := λ U V i, 
     begin 
       dsimp at i, 
@@ -29,32 +29,34 @@ def map_open_set
       assumption
     end }.
 
-structure TopRing :=
-{β : Type u}
-[Ring : comm_ring β]
-[Top : topological_space β]
-[TopRing : topological_ring β]
-
-instance TopRing_comm_ring (R : TopRing) : comm_ring R.β := R.Ring
-instance TopRing_topological_space (R : TopRing) : topological_space R.β := R.Top
-instance TopRing_topological_ring (R : TopRing) : topological_ring R.β := R.TopRing
-
-instance : category TopRing :=
-{ hom   := λ R S, {f : R.β → S.β // is_ring_hom f ∧ continuous f },
-  id    := λ R, ⟨id, by obviously⟩,
-  comp  := λ R S T f g, ⟨g.val ∘ f.val, 
-    begin -- TODO automate
-      cases f, cases g, cases f_property, cases g_property, split, 
-      dsimp, resetI, apply_instance, 
-      dsimp, apply continuous.comp ; assumption  
-    end⟩ }
+-- These next two are desperate attempts to solve problems below.
+@[simp] def map_open_set_id_obj (X : Top) (U : open_set X.α) : map_open_set (𝟙 X) U = U :=
+begin dsimp [map_open_set], cases U, congr, end
+@[simp] def map_open_set_id (X : Top) : map_open_set (𝟙 X) ≅ functor.id (open_set X.α) := 
+{ hom :=
+  { app := λ U, 𝟙 U },
+  inv :=
+  { app := λ U, 𝟙 U }
+}
 
 variables (C : Type u) [𝒞 : category.{u v} C]
 include 𝒞
 
+section
+variables (D : Type u₂) [𝒟 : category.{u₂ v₂} D]
+include 𝒟 
+variables (F : C ⥤ D)
+@[simp] def functor.id_comp : functor.id C ⋙ F ≅ F := 
+{ hom :=
+  { app := λ X, 𝟙 (F X) },
+  inv :=
+  { app := λ X, 𝟙 (F X) }
+}
+end
+
 structure Presheaf :=
 (X : Top)
-(𝒪 : presheaf (open_set X.α) C)
+(𝒪 : (open_set X.α) ⥤ C)
 
 variables {C}
 
@@ -62,7 +64,7 @@ instance Presheaf_topological_space (F : Presheaf.{u v} C) : topological_space F
 
 structure Presheaf_hom (F G : Presheaf.{u v} C) :=
 (f : F.X ⟶ G.X)
-(c : G.𝒪 ⟹ (((map_open_set f).op) ⋙ F.𝒪))
+(c : G.𝒪 ⟹ ((map_open_set f) ⋙ F.𝒪))
 
 @[extensionality] lemma ext {F G : Presheaf.{u v} C} (α β : Presheaf_hom F G)
   (w : α.f = β.f) (h : α.c == β.c)
@@ -76,82 +78,50 @@ begin
   exact eq_of_heq h,
 end
 
-
 namespace Presheaf_hom
 def id (F : Presheaf.{u v} C) : Presheaf_hom F F :=
 { f := 𝟙 F.X,
-  c := 
-  { app := λ U, category_theory.functor.map _ (𝟙 U), 
-    naturality' := 
-    begin 
-      intros, 
-      cases X, cases Y, 
-      dsimp,
-      -- FIXME why can't rewrite_search take us from here?
-      erw category_theory.functor.map_id,
-      erw category_theory.functor.map_id,
-      erw category.comp_id,
-      erw category.id_comp,
-      cases f, cases f,
-      refl,      
-    end } -- That was horrific.
+  c := begin apply nat_trans.vcomp, swap, apply whisker_on_right (map_open_set_id _).inv, apply (functor.id_comp _ _ _).inv end
 }
 
 def comp {F G H : Presheaf.{u v} C} (α : Presheaf_hom F G) (β : Presheaf_hom G H) : Presheaf_hom F H :=
 { f := α.f ≫ β.f,
-  c := β.c ⊟ (whisker_on_left (map_open_set β.f).op α.c), 
+  c := β.c ⊟ (whisker_on_left (map_open_set β.f) α.c), -- It's hard to believe this typechecks!
 }
 end Presheaf_hom
 
-
+-- set_option pp.implicit true
 instance : category (Presheaf.{u v} C) :=
 { hom := Presheaf_hom,
   id := Presheaf_hom.id,
   comp := @Presheaf_hom.comp C _,
-  comp_id' := λ X Y f,
+  comp_id' := λ X Y f, --sorry,
     begin 
-      dsimp [Presheaf_hom.id, Presheaf_hom.comp, map_open_set, whisker_on_left, whiskering_on_left], 
       ext,
-      dsimp,
+      -- we check the functions first
+      dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
       simp,
-      dsimp,
+      -- and now the comorphisms
+      dsimp [Presheaf_hom.id, Presheaf_hom.comp], 
       simp,
       ext,
-      dsimp [functor.op],
-      cases X_1,
-      erw category_theory.functor.map_id,
-      erw category.id_comp,
-      dsimp,
+      dsimp [whisker_on_right, whiskering_on_right, whisker_on_left, whiskering_on_left],
       simp,
+    -- It should be easy to make progress from here, but all avenues appear to be blocked!
+    --   rw [category_theory.functor.map_id Y.𝒪 X_1] {md := semireducible}, -- 'did not find instance'
+    --   rw map_open_set_id_obj, -- 'failed'
       sorry
-      -- refl,
     end,
   id_comp' := λ X Y f, sorry,
-    -- begin 
-    --   dsimp [Presheaf_hom.id, Presheaf_hom.comp, map_open_set], 
-    --   ext, 
-    --   dsimp [map_open_set],
-    --   simp,
-    --   dsimp,
-    --   cases f,
-    --   dsimp,
-    --   simp,
-    --   ext,
-    --   dsimp,
-    --   erw category.comp_id,
-    -- end,
-  assoc' := λ W X Y Z f g h, sorry,
-  -- begin
-  --   ext,
-  --   dsimp [Presheaf_hom.comp, map_open_set, functor.op], 
-  --   simp,
-  --   dsimp [Presheaf_hom.comp, map_open_set, functor.op], 
-  --   cases f, cases g, cases h,
-  --   dsimp,
-  --   simp,
-  --   funext,
-  --   erw category.comp_id,
-  --   erw category.comp_id,
-  --   erw category.id_comp,
-  -- end
+  assoc' := λ W X Y Z f g h, --sorry
+  begin
+    ext,
+    -- we check the functions first
+    { dsimp [Presheaf_hom.comp], 
+      simp, },
+    -- and now the comorphisms
+    dsimp [Presheaf_hom.comp], 
+    simp,
+    refl,
+  end
 }

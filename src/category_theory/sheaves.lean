@@ -13,7 +13,8 @@ section
 variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (V : Type u₂) [𝒱 : category.{u₂ v₂} V]
 include 𝒞 𝒱
 
-def presheaf := (Cᵒᵖ) ⥤ V
+def presheaf := C ⥤ V -- I know there's usually an op on C here, but I'm having trouble with opposites, so
+                       -- you'll have to provide it yourself!
 
 def presheaves : category (presheaf C V) := begin unfold presheaf, apply_instance end
 end
@@ -43,10 +44,10 @@ def cover'.union (c : cover' α) : open_set α := ⟨ set.Union (λ i : c.I, (c.
   subst H_h,
   exact (c.U H_w).2
   end ⟩
-def cover'.union_subset (c : cover' α) (i : c.I) : c.U i ⟶ c.union := by obviously
+def cover'.union_subset (c : cover' α) (i : c.I) : c.union ⟶ c.U i := by obviously
 
-private definition inter_subset_left {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⟶ (C.U i) := by obviously
-private definition inter_subset_right {C : cover' α} (i j : C.I) : (C.U i ∩ C.U j) ⟶ (C.U j) := by obviously
+private definition inter_subset_left {C : cover' α} (i j : C.I) : (C.U i) ⟶ (C.U i ∩ C.U j) := by obviously
+private definition inter_subset_right {C : cover' α} (i j : C.I) : (C.U j) ⟶ (C.U i ∩ C.U j) := by obviously
 
 
 section
@@ -56,19 +57,19 @@ include 𝒟
 definition res_left
   {C : cover' α} 
   (i j : C.I) 
-  (F : presheaf (open_set α) D) : (F.obj (C.U i)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
+  (F : (open_set α) ⥤ D) : (F.obj (C.U i)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
 F.map (inter_subset_left i j)
 
 definition res_right
   {C : cover' α} 
   (i j : C.I) 
-  (F : presheaf (open_set α) D) : (F.obj (C.U j)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
+  (F : (open_set α) ⥤ D) : (F.obj (C.U j)) ⟶ (F.obj ((C.U i) ∩ (C.U j))) := 
 F.map (inter_subset_right i j)
 
 private definition union_res
   {C : cover' α} 
   (i : C.I) 
-  (F : presheaf (open_set α) D) : (F.obj (C.union)) ⟶ (F.obj ((C.U i))) := 
+  (F : (open_set α) ⥤ D) : (F.obj (C.union)) ⟶ (F.obj ((C.U i))) := 
 F.map (C.union_subset i)
 
 @[simp] lemma union_res_left_right 
@@ -132,7 +133,7 @@ structure sheaf  :=
 variables {α V}
 
 def sheaf.near (F : sheaf α V) (x : α) : presheaf { U : open_set α // x ∈ U } V :=
-(full_subcategory_embedding (λ U : open_set α, x ∈ U)).op ⋙ F.presheaf
+(full_subcategory_embedding (λ U : open_set α, x ∈ U)) ⋙ F.presheaf
 
 variable [has_colimits.{u v} V]
 
