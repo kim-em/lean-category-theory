@@ -37,8 +37,21 @@ variables {C} {D} {E}
 def whisker_on_left (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟹ H) : (F ⋙ G) ⟹ (F ⋙ H) :=
 ((whiskering_on_left C D E) F).map α
 
+@[simp] lemma whisker_on_left.app (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟹ H) (X : C) : (whisker_on_left F α) X = α (F X) := 
+begin
+  dsimp [whisker_on_left, whiskering_on_left],
+  rw category_theory.functor.map_id,
+  rw category.comp_id,
+end
+
 def whisker_on_right {G H : C ⥤ D} (α : G ⟹ H) (F : D ⥤ E) : (G ⋙ F) ⟹ (H ⋙ F) := 
 ((whiskering_on_right C D E) F).map α
+
+@[simp] lemma whisker_on_right.app {G H : C ⥤ D} (α : G ⟹ H) (F : D ⥤ E) (X : C) : (whisker_on_right α F) X = F.map (α X) := 
+begin
+  dsimp [whisker_on_right, whiskering_on_right],
+  rw category.id_comp,
+end
 
 @[simp] lemma whisker_on_left_vcomp (F : C ⥤ D) {G H K : D ⥤ E} (α : G ⟹ H) (β : H ⟹ K) : 
   whisker_on_left F (α ⊟ β) = ((whisker_on_left F α) ⊟ (whisker_on_left F β)) :=
@@ -53,22 +66,14 @@ include ℬ
 
 @[simp] lemma whisker_on_left_twice (F : B ⥤ C) (G : C ⥤ D) {H K : D ⥤ E} (α : H ⟹ K) :
   whisker_on_left F (whisker_on_left G α) = (@whisker_on_left _ _ _ _ _ _ (F ⋙ G) _ _ α) :=
-by obviously
+by tidy
 
 @[simp] lemma whisker_on_right_twice {H K : B ⥤ C} (F : C ⥤ D) (G : D ⥤ E) (α : H ⟹ K) :
   whisker_on_right (whisker_on_right α F) G = (@whisker_on_right _ _ _ _ _ _ _ _ α (F ⋙ G)) :=
-by obviously
+by tidy
 
 lemma whisker_on_right_left (F : B ⥤ C) {G H : C ⥤ D} (α : G ⟹ H) (K : D ⥤ E) :
   whisker_on_right (whisker_on_left F α) K = whisker_on_left F (whisker_on_right α K) :=
-begin
-ext1, dsimp at *, 
-/- rewrite_search says (that humans shouldn't write proofs like): -/
-conv { to_lhs, rw [nat_trans.hcomp_app, category.id_comp, nat_trans.hcomp_app, functor.category.id_app, functor.map_comp ] {md := semireducible} },
-dsimp at *, simp at *,
-conv { to_rhs, rw [nat_trans.hcomp_app] {md := semireducible} },
-dsimp at *, simp at *, 
-erw [nat_trans.hcomp_app, category.id_comp],
-end
+by tidy
 
 end category_theory

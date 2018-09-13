@@ -18,7 +18,7 @@ variables (C : Type u) [𝒞 : category.{u v} C]
 include 𝒞
 
 structure Presheaf :=
-(X : Top)
+(X : Top.{v})
 (𝒪 : (open_set X) ⥤ C)
 
 variables {C}
@@ -30,7 +30,7 @@ structure Presheaf_hom (F G : Presheaf.{u v} C) :=
 (c : G.𝒪 ⟹ ((open_set.map f) ⋙ F.𝒪))
 
 @[extensionality] lemma ext {F G : Presheaf.{u v} C} (α β : Presheaf_hom F G)
-  (w : α.f = β.f) (h : α.c ⊟ (whisker_on_right (open_set.map_iso w).hom F.𝒪) = β.c) :
+  (w : α.f = β.f) (h : α.c ⊟ (whisker_on_right (open_set.map_iso _ _ w).hom F.𝒪) = β.c) :
   α = β :=
 begin
   cases α, cases β,
@@ -69,6 +69,8 @@ def comp {F G H : Presheaf.{u v} C} (α : Presheaf_hom F G) (β : Presheaf_hom G
 -- comp (comp α β) γ = comp α (comp β γ) := sorry
   
 end Presheaf_hom
+
+variables (C)
 
 instance category_of_presheaves : category (Presheaf.{u v} C) :=
 { hom := Presheaf_hom,
@@ -125,6 +127,11 @@ instance category_of_presheaves : category (Presheaf.{u v} C) :=
       erw [category.id_comp] },
   end }.
 
-#print presheaves.category_of_presheaves
+namespace Presheaf_hom
+@[simp] lemma id_f (F : Presheaf.{u v} C) : ((𝟙 F) : F ⟶ F).f = 𝟙 F.X := rfl
+@[simp] lemma id_c (F : Presheaf.{u v} C) : ((𝟙 F) : F ⟶ F).c = (((functor.id_comp _).inv) ⊟ (whisker_on_right (open_set.map_id _).inv _)) := rfl
+@[simp] lemma comp_f {F G H : Presheaf.{u v} C} (α : F ⟶ G) (β : G ⟶ H) : (α ≫ β).f = α.f ≫ β.f := rfl
+@[simp] lemma comp_c {F G H : Presheaf.{u v} C} (α : F ⟶ G) (β : G ⟶ H) : (α ≫ β).c = (β.c ⊟ (whisker_on_left (open_set.map β.f) α.c)) := rfl
+end Presheaf_hom
 
 end category_theory.presheaves
