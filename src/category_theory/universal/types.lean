@@ -29,6 +29,8 @@ instance : has_products.{u+1 u} (Type u) :=
 @[simp] lemma types_pi_lift {β : Type u} (f : β → Type u) {P : Type u} (p : Π b, P ⟶ f b) : 
   pi.lift p = λ q b, p b q := rfl
 
+set_option trace.tidy true
+
 instance : has_equalizers.{u+1 u} (Type u) := 
 { equalizer := λ Y Z f g, { X := { y : Y // f y = g y }, ι := subtype.val } }
 
