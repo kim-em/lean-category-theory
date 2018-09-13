@@ -70,7 +70,7 @@ def comp {F G H : Presheaf.{u v} C} (α : Presheaf_hom F G) (β : Presheaf_hom G
   
 end Presheaf_hom
 
-instance : category (Presheaf.{u v} C) :=
+instance category_of_presheaves : category (Presheaf.{u v} C) :=
 { hom := Presheaf_hom,
   id := Presheaf_hom.id,
   comp := @Presheaf_hom.comp C _,
@@ -123,8 +123,8 @@ instance : category (Presheaf.{u v} C) :=
       erw [category.comp_id],
       erw [category.comp_id],
       erw [category.id_comp] },
-  end
+  end }.
 
-}
+#print presheaves.category_of_presheaves
 
 end category_theory.presheaves
