@@ -32,21 +32,22 @@ instance : has_pullbacks.{u v} C :=
                  end } }.
 end
 
-section
-variables [has_binary_coproducts.{u v} C] [has_coequalizers.{u v} C]
+-- FIXME why does this time out??
+-- section
+-- variables [has_binary_coproducts.{u v} C] [has_coequalizers.{u v} C]
 
-instance : has_pushouts.{u v} C :=
-{ pushout := λ Y₁ Y₂ Z r₁ r₂,
-    let f := r₁ ≫ coprod.ι₁ Y₁ Y₂ in
-    let g := r₂ ≫ coprod.ι₂ Y₁ Y₂ in
-    { X := coequalizer f g, ι₁ := coprod.ι₁ Y₁ Y₂ ≫ coequalizer.π f g, ι₂ := coprod.ι₂ Y₁ Y₂ ≫ coequalizer.π f g },
-  is_pushout := λ Y₁ Y₂ Z r₁ r₂,
-  { lift := λ s, coequalizer.desc (coprod.desc s.ι₁ s.ι₂)
-                 begin -- FIXME why not obviously?
-                   rw [← category.assoc, ← category.assoc],
-                   simp,
-                   exact s.w
-                 end } }.
-end
+-- instance : has_pushouts.{u v} C :=
+-- { pushout := λ Y₁ Y₂ Z r₁ r₂,
+--     let f := r₁ ≫ coprod.ι₁ Y₁ Y₂ in
+--     let g := r₂ ≫ coprod.ι₂ Y₁ Y₂ in
+--     { X := coequalizer f g, ι₁ := coprod.ι₁ Y₁ Y₂ ≫ coequalizer.π f g, ι₂ := coprod.ι₂ Y₁ Y₂ ≫ coequalizer.π f g },
+--   is_pushout := λ Y₁ Y₂ Z r₁ r₂,
+--   { lift := λ s, coequalizer.desc (coprod.desc s.ι₁ s.ι₂)
+--                  begin -- FIXME why not obviously?
+--                    rw [← category.assoc, ← category.assoc],
+--                    simp,
+--                    exact s.w
+--                  end } }.
+-- end
 
 end category_theory.limits

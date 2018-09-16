@@ -17,13 +17,13 @@ section equalizer
 variables {Y Z : C}
 structure is_equalizer {f g : Y ⟶ Z} (t : fork f g) :=
 (lift : ∀ (s : fork f g), s.X ⟶ t.X)
-(fac  : ∀ (s : fork f g), (lift s) ≫ t.ι = s.ι . obviously)
-(uniq : ∀ (s : fork f g) (m : s.X ⟶ t.X) (w : m ≫ t.ι = s.ι), m = lift s . obviously)
+(fac'  : ∀ (s : fork f g), (lift s) ≫ t.ι = s.ι . obviously)
+(uniq' : ∀ (s : fork f g) (m : s.X ⟶ t.X) (w : m ≫ t.ι = s.ι), m = lift s . obviously)
 
-restate_axiom is_equalizer.fac
-attribute [simp,search] is_equalizer.fac_lemma
-restate_axiom is_equalizer.uniq
-attribute [search, back'] is_equalizer.uniq_lemma
+restate_axiom is_equalizer.fac'
+attribute [simp,search] is_equalizer.fac
+restate_axiom is_equalizer.uniq'
+attribute [search, back'] is_equalizer.uniq
 
 @[extensionality] lemma is_equalizer.ext {f g : Y ⟶ Z} {t : fork f g} (P Q : is_equalizer t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -45,8 +45,7 @@ def is_equalizer.of_lift_univ {f g : Y ⟶ Z} {t : fork f g}
   (lift : Π (s : fork f g), s.X ⟶ t.X)
   (univ : Π (s : fork f g) (φ : s.X ⟶ t.X), (φ ≫ t.ι = s.ι) ↔ (φ = lift s)) : is_equalizer t :=
 { lift := lift,
-  fac := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))),
-  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))) }
 
 end equalizer
 
@@ -55,13 +54,13 @@ section coequalizer
 variables {Y Z : C}
 structure is_coequalizer {f g : Z ⟶ Y} (t : cofork f g) :=
 (desc : ∀ (s : cofork f g), t.X ⟶ s.X)
-(fac  : ∀ (s : cofork f g), t.π ≫ (desc s) = s.π . obviously)
-(uniq : ∀ (s : cofork f g) (m : t.X ⟶ s.X) (w : t.π ≫ m = s.π), m = desc s . obviously)
+(fac'  : ∀ (s : cofork f g), t.π ≫ (desc s) = s.π . obviously)
+(uniq' : ∀ (s : cofork f g) (m : t.X ⟶ s.X) (w : t.π ≫ m = s.π), m = desc s . obviously)
 
-restate_axiom is_coequalizer.fac
-attribute [simp,search] is_coequalizer.fac_lemma
-restate_axiom is_coequalizer.uniq
-attribute [search, back'] is_coequalizer.uniq_lemma
+restate_axiom is_coequalizer.fac'
+attribute [simp,search] is_coequalizer.fac
+restate_axiom is_coequalizer.uniq'
+attribute [search, back'] is_coequalizer.uniq
 
 @[extensionality] lemma is_coequalizer.ext {f g : Z ⟶ Y} {t : cofork f g} (P Q : is_coequalizer t) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -83,8 +82,7 @@ def is_coequalizer.of_desc_univ {f g : Z ⟶ Y} {t : cofork f g}
   (desc : Π (s : cofork f g), t.X ⟶ s.X)
   (univ : Π (s : cofork f g) (φ : t.X ⟶ s.X), (t.π ≫ φ = s.π) ↔ (φ = desc s)) : is_coequalizer t :=
 { desc := desc,
-  fac := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))),
-  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))) }
 
 end coequalizer
 

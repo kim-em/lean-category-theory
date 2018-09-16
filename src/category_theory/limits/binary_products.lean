@@ -48,8 +48,7 @@ def is_binary_product.of_lift_univ {Y Z : C} {t : span Y Z}
   (univ : Π (s : span Y Z) (φ : s.X ⟶ t.X), (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = lift s)) : is_binary_product t :=
 { lift := lift,
   fac₁' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left, -- PROJECT automation
-  fac₂' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
-  uniq' := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
+  fac₂' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right }
 
 end binary_product
 
@@ -88,9 +87,7 @@ def is_binary_coproduct.of_desc_univ {Y Z : C} {t : cospan Y Z}
   (univ : Π (s : cospan Y Z) (φ : t.X ⟶ s.X), (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = desc s)) : is_binary_coproduct t :=
 { desc := desc,
   fac₁' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left, -- PROJECT automation
-  fac₂' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
-  uniq' := begin obviously, apply univ_s_m.mp, obviously, end } -- TODO should be easy to automate
-
+  fac₂' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right }
 
 end binary_coproduct
 

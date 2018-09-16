@@ -41,8 +41,7 @@ def is_pullback.of_lift_univ {t : square r₁ r₂}
   is_pullback t :=
 { lift := lift,
   fac₁' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left,
-  fac₂' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
-  uniq' := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac₂' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right }
 
 end pullback
 
@@ -74,8 +73,7 @@ def is_pushout.of_desc_univ {t : cosquare r₁ r₂}
   (univ : Π (s : cosquare r₁ r₂) (φ : t.X ⟶ s.X), (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = desc s)) : is_pushout t :=
 { desc := desc,
   fac₁' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left,
-  fac₂' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
-  uniq' := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac₂' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right }
 
 
 end pushout
@@ -116,5 +114,7 @@ begin
 end
 
 end 
+
+-- TODO pushouts
 
 end category_theory.limits
