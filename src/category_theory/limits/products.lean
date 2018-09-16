@@ -50,8 +50,7 @@ def is_product.of_lift_univ {t : fan f}
   (lift : Π (s : fan f), s.X ⟶ t.X)
   (univ : Π (s : fan f) (φ : s.X ⟶ t.X), (∀ b, φ ≫ t.π b = s.π b) ↔ (φ = lift s)) : is_product t :=
 { lift := lift,
-  fac'  := λ s b, ((univ s (lift s)).mpr (eq.refl (lift s))) b,
-  uniq' := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac'  := λ s b, ((univ s (lift s)).mpr (eq.refl (lift s))) b }
 
 end product
 
@@ -86,8 +85,7 @@ def is_coproduct.of_desc_univ {t :cofan f}
   (desc : Π (s : cofan f), t.X ⟶ s.X)
   (univ : Π (s : cofan f) (φ : t.X ⟶ s.X), (∀ b, t.ι b ≫ φ = s.ι b) ↔ (φ = desc s)) : is_coproduct t :=
 { desc := desc,
-  fac'  := λ s b, ((univ s (desc s)).mpr (eq.refl (desc s))) b,
-  uniq' := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac'  := λ s b, ((univ s (desc s)).mpr (eq.refl (desc s))) b }
 
 end coproduct
 

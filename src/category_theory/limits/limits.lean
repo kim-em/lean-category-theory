@@ -41,8 +41,7 @@ def is_limit.of_lift_univ {F : J ⥤ C} {t : cone F}
   (lift : Π (s : cone F), s.X ⟶ t.X)
   (univ : Π (s : cone F) (φ : s.X ⟶ t.X), (∀ j : J, (φ ≫ t.π j) = s.π j) ↔ (φ = lift s)) : is_limit t :=
 { lift := lift,
-  fac'  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j,
-  uniq' := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac'  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j }
 
 end limit
 
@@ -72,8 +71,7 @@ def is_colimit.of_desc_univ {F : J ⥤ C} {t : cocone F}
   (desc : Π (s : cocone F), t.X ⟶ s.X)
   (univ : Π (s : cocone F) (φ : t.X ⟶ s.X), (∀ j : J, (t.ι j ≫ φ) = s.ι j) ↔ (φ = desc s)) : is_colimit t :=
 { desc := desc,
-  fac'  := λ s j, ((univ s (desc s)).mpr (eq.refl (desc s))) j,
-  uniq' := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac'  := λ s j, ((univ s (desc s)).mpr (eq.refl (desc s))) j }
 
 end colimit
 
