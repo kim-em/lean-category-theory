@@ -3,7 +3,6 @@
 -- Authors: Stephen Morgan and Scott Morrison
 
 import category_theory.graphs.category
-import category_theory.universe_lifting
 
 -- FIXME why do we need this here?
 @[obviously] meta def obviously_4 := tactic.tidy { tactics := extended_tidy_tactics }
@@ -11,18 +10,14 @@ import category_theory.universe_lifting
 open category_theory
 open category_theory.graphs
 
-universes u₁ u₂
-
-variable {G : Type u₁}
-variable [graph G]
-variable {C : Type u₂}
-variable [small_category C]
+universes u₁ v₁ u₂ v₂
 
 namespace category_theory.graphs
 
-def Path (C : Type u₁) := C 
+def paths (C : Type u₂) := C 
 
-instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
+
+instance paths_category (C : Type u₁) [graph.{u₁ v₁} C] : category.{u₁ (max u₁ v₁)} (paths C) :=
 { hom     := λ x y : C, path x y,
   id      := λ x, path.nil x,
   comp    := λ _ _ _ f g, concatenate_paths f g,
@@ -35,15 +30,20 @@ instance PathCategory (C : Type u₁) [graph C] : small_category (Path C) :=
               tidy,
               induction f,
               obviously,                    
-            end }
+            end }.
 
-def path_to_morphism
-  (H : graph_homomorphism G C)
+instance paths_small_category (C : Type u₁) [graph.{u₁ u₁} C] : small_category (paths C) := graphs.paths_category C
+
+variables {C : Type u₂} [𝒞 : category.{u₂ v₂} C] {G : Type u₁} [𝒢 : graph.{u₁ v₁} G]
+include 𝒢 𝒞
+
+@[simp] def path_to_morphism
+  (H : graph_hom G C)
   : Π {X Y : G}, path X Y → ((H.onVertices X) ⟶ (H.onVertices Y))
 | ._ ._ (path.nil Z)              := 𝟙 (H.onVertices Z)
 | ._ ._ (@path.cons ._ _ _ _ _ e p) := (H.onEdges e) ≫ (path_to_morphism p)
  
-@[simp] lemma path_to_morphism.comp (H : graph_homomorphism G C) {X Y Z : Path G} (f : X ⟶ Y) (g : Y ⟶ Z) : path_to_morphism H (f ≫ g) = path_to_morphism H f ≫ path_to_morphism H g :=
+@[simp] lemma path_to_morphism.comp (H : graph_hom G C) {X Y Z : paths G} (f : X ⟶ Y) (g : Y ⟶ Z) : path_to_morphism H (f ≫ g) = path_to_morphism H f ≫ path_to_morphism H g :=
 begin
   induction f,
   obviously,
@@ -55,8 +55,11 @@ namespace category_theory.functor
 
 open category_theory.graphs
 
+variables {C : Type u₂} [𝒞 : category.{u₂ v₂} C] {G : Type u₁} [𝒢 : graph.{u₁ v₁} G]
+include 𝒢 𝒞
+
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
-def from_GraphHomomorphism (H : graph_homomorphism G C) : (Path G) ⥤ C :=
+@[simp] def of_graph_hom (H : graph_hom G C) : (paths G) ⥤ C :=
 { obj := λ X, (H.onVertices X),
   map' := λ _ _ f, (path_to_morphism H f) }
 

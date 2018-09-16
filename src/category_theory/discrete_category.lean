@@ -8,7 +8,7 @@ import category_theory.equivalence
 
 namespace category_theory
 
-universes u₁ v₁ u₂ 
+universes u₁ v₁ u₂ v₂
 
 def discrete (α : Type u₁) := α
 
@@ -45,7 +45,7 @@ begin
 end
 
 namespace functor
-def of_function {C : Type (u₂+1)} [large_category C] {I : Type u₁} (F : I → C) : (discrete I) ⥤ C := 
+def of_function {C : Type u₂} [category.{u₂ v₂} C] {I : Type u₁} (F : I → C) : (discrete I) ⥤ C := 
 { obj := F,
   map' := λ X Y f, begin cases f, cases f, cases f, exact 𝟙 (F X) end }
 end functor

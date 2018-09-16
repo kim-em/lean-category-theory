@@ -100,5 +100,3 @@ instance : has_colimits.{u+1 u} (Type u) :=
 { colimit := @colimit, is_colimit := @colimit_is_colimit }
 
 end category_theory.universal.types
-
-

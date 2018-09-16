@@ -17,68 +17,65 @@ section pullback
 variables {Y₁ Y₂ Z : C} {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} 
 structure is_pullback (t : square r₁ r₂) :=
 (lift : ∀ (s : square r₁ r₂), s.X ⟶ t.X)
-(fac₁ : ∀ (s : square r₁ r₂), (lift s ≫ t.π₁) = s.π₁ . obviously)
-(fac₂ : ∀ (s : square r₁ r₂), (lift s ≫ t.π₂) = s.π₂ . obviously)
-(uniq : ∀ (s : square r₁ r₂) (m : s.X ⟶ t.X) (w₁ : (m ≫ t.π₁) = s.π₁) (w₂ : (m ≫ t.π₂) = s.π₂), m = lift s . obviously)
+(fac₁' : ∀ (s : square r₁ r₂), (lift s ≫ t.π₁) = s.π₁ . obviously)
+(fac₂' : ∀ (s : square r₁ r₂), (lift s ≫ t.π₂) = s.π₂ . obviously)
+(uniq' : ∀ (s : square r₁ r₂) (m : s.X ⟶ t.X) (w₁ : (m ≫ t.π₁) = s.π₁) (w₂ : (m ≫ t.π₂) = s.π₂), m = lift s . obviously)
 
-restate_axiom is_pullback.fac₁
-attribute [simp,search] is_pullback.fac₁_lemma
-restate_axiom is_pullback.fac₂
-attribute [simp,search] is_pullback.fac₂_lemma
-restate_axiom is_pullback.uniq
-attribute [search, back'] is_pullback.uniq_lemma
+restate_axiom is_pullback.fac₁'
+attribute [simp,search] is_pullback.fac₁
+restate_axiom is_pullback.fac₂'
+attribute [simp,search] is_pullback.fac₂
+restate_axiom is_pullback.uniq'
+attribute [search,back'] is_pullback.uniq
 
 @[extensionality] lemma is_pullback.ext {t : square r₁ r₂} (P Q : is_pullback t) : P = Q :=
 begin cases P, cases Q, obviously end
 
 lemma is_pullback.univ {t : square r₁ r₂} (h : is_pullback t) (s : square r₁ r₂) (φ : s.X ⟶ t.X) : 
   (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = h.lift s) :=
-begin
-obviously
-end
+by obviously
 
 def is_pullback.of_lift_univ {t : square r₁ r₂}
   (lift : Π (s : square r₁ r₂), s.X ⟶ t.X)
   (univ : Π (s : square r₁ r₂) (φ : s.X ⟶ t.X), (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = lift s)) : 
   is_pullback t :=
 { lift := lift,
-  fac₁ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left,
-  fac₂ := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
-  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac₁' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left,
+  fac₂' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right,
+  uniq' := begin obviously, apply univ_s_m.mp, obviously, end }
 
 end pullback
 
 
 section pushout
-variables {Y₁ Y₂ Z : C}
-structure is_pushout {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} (t : cosquare r₁ r₂) :=
+variables {Y₁ Y₂ Z : C} {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} 
+structure is_pushout (t : cosquare r₁ r₂) :=
 (desc : ∀ (s : cosquare r₁ r₂), t.X ⟶ s.X)
-(fac₁ : ∀ (s : cosquare r₁ r₂), (t.ι₁ ≫ desc s) = s.ι₁ . obviously)
-(fac₂ : ∀ (s : cosquare r₁ r₂), (t.ι₂ ≫ desc s) = s.ι₂ . obviously)
-(uniq : ∀ (s : cosquare r₁ r₂) (m : t.X ⟶ s.X) (w₁ : (t.ι₁ ≫ m) = s.ι₁) (w₂ : (t.ι₂ ≫ m) = s.ι₂), m = desc s . obviously)
+(fac₁' : ∀ (s : cosquare r₁ r₂), (t.ι₁ ≫ desc s) = s.ι₁ . obviously)
+(fac₂' : ∀ (s : cosquare r₁ r₂), (t.ι₂ ≫ desc s) = s.ι₂ . obviously)
+(uniq' : ∀ (s : cosquare r₁ r₂) (m : t.X ⟶ s.X) (w₁ : (t.ι₁ ≫ m) = s.ι₁) (w₂ : (t.ι₂ ≫ m) = s.ι₂), m = desc s . obviously)
 
-restate_axiom is_pushout.fac₁
-attribute [simp,search] is_pushout.fac₁_lemma
-restate_axiom is_pushout.fac₂
-attribute [simp,search] is_pushout.fac₂_lemma
-restate_axiom is_pushout.uniq
-attribute [search, back'] is_pushout.uniq_lemma
+restate_axiom is_pushout.fac₁'
+attribute [simp,search] is_pushout.fac₁
+restate_axiom is_pushout.fac₂'
+attribute [simp,search] is_pushout.fac₂
+restate_axiom is_pushout.uniq'
+attribute [search,back'] is_pushout.uniq
 
-@[extensionality] lemma is_pushout.ext {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂} (P Q : is_pushout t) : P = Q :=
+@[extensionality] lemma is_pushout.ext {t : cosquare r₁ r₂} (P Q : is_pushout t) : P = Q :=
 begin cases P, cases Q, obviously end
 
-lemma is_pushout.univ {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂} (h : is_pushout t) (s : cosquare r₁ r₂) (φ : t.X ⟶ s.X) : (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = h.desc s) :=
-begin
-obviously
-end
+lemma is_pushout.univ {t : cosquare r₁ r₂} (h : is_pushout t) (s : cosquare r₁ r₂) (φ : t.X ⟶ s.X) : 
+  (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = h.desc s) :=
+by obviously
 
-def is_pushout.of_desc_univ {r₁ : Z ⟶ Y₁} {r₂ : Z ⟶ Y₂} {t : cosquare r₁ r₂}
+def is_pushout.of_desc_univ {t : cosquare r₁ r₂}
   (desc : Π (s : cosquare r₁ r₂), t.X ⟶ s.X)
   (univ : Π (s : cosquare r₁ r₂) (φ : t.X ⟶ s.X), (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = desc s)) : is_pushout t :=
 { desc := desc,
-  fac₁ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left,
-  fac₂ := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
-  uniq := begin obviously, apply univ_s_m.mp, obviously, end }
+  fac₁' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left,
+  fac₂' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right,
+  uniq' := begin obviously, apply univ_s_m.mp, obviously, end }
 
 
 end pushout

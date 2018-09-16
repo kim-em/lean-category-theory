@@ -21,9 +21,12 @@ structure Presheaf :=
 (X : Top.{v})
 (𝒪 : (open_set X) ⥤ C)
 
+instance : has_coe_to_sort (Presheaf.{u v} C) :=
+{ S := Type v, coe := λ F, F.X.α }
+
 variables {C}
 
-instance Presheaf_topological_space (F : Presheaf.{u v} C) : topological_space F.X.α := F.X.str 
+instance Presheaf_topological_space (F : Presheaf.{u v} C) : topological_space F := F.X.str 
 
 structure Presheaf_hom (F G : Presheaf.{u v} C) :=
 (f : F.X ⟶ G.X)

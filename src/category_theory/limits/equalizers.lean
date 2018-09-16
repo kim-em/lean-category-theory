@@ -3,15 +3,12 @@
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
 import category_theory.limits.shape
-import category_theory.filtered
 
 open category_theory
-
 
 namespace category_theory.limits
 
 universes u v w
-
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -114,14 +111,45 @@ def equalizer.ι : (equalizer f g) ⟶ Y := (equalizer.fork f g).ι
 @[search] def equalizer.w : (equalizer.ι f g) ≫ f = (equalizer.ι f g) ≫ g := (equalizer.fork f g).w
 def equalizer.universal_property : is_equalizer (equalizer.fork f g) := has_equalizers.is_equalizer.{u v} C f g
 
-def equalizer.lift (P : C) (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := 
-(equalizer.universal_property f g).lift { X := P, ι := h, w := w }
+variables {f g}
 
-@[extensionality] lemma equalizer.hom_ext {Y Z : C} {f g : Y ⟶ Z} {X : C} (h k : X ⟶ equalizer f g) (w : h ≫ equalizer.ι f g = k ≫ equalizer.ι f g) : h = k :=
+def equalizer.lift {P : C} (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := 
+(equalizer.universal_property f g).lift { X := P, ι := h, w' := w }
+
+lemma equalizer.lift_ι {P : C} (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : equalizer.lift h w ≫ equalizer.ι f g = h := by obviously
+
+@[extensionality] lemma equalizer.hom_ext {X : C} (h k : X ⟶ equalizer f g) (w : h ≫ equalizer.ι f g = k ≫ equalizer.ι f g) : h = k :=
 begin
   let s : fork f g := ⟨ ⟨ X ⟩, h ≫ equalizer.ι f g ⟩,
   have q := (equalizer.universal_property f g).uniq s h,
   have p := (equalizer.universal_property f g).uniq s k,
+  rw [q, ←p],
+  solve_by_elim, refl
+end
+
+end
+
+section
+variables [has_coequalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
+
+def coequalizer.cofork := has_coequalizers.coequalizer.{u v} f g
+def coequalizer := (coequalizer.cofork f g).X
+def coequalizer.π : Z ⟶ (coequalizer f g) := (coequalizer.cofork f g).π
+@[search] def coequalizer.w : f ≫ (coequalizer.π f g)  = g ≫ (coequalizer.π f g) := (coequalizer.cofork f g).w
+def coequalizer.universal_property : is_coequalizer (coequalizer.cofork f g) := has_coequalizers.is_coequalizer.{u v} C f g
+
+variables {f g}
+
+def coequalizer.desc {P : C} (h : Z ⟶ P) (w : f ≫ h = g ≫ h) : coequalizer f g ⟶ P := 
+(coequalizer.universal_property f g).desc { X := P, π := h, w' := w }
+
+lemma coequalizer.desc_π {P : C} (h : Z ⟶ P) (w : f ≫ h = g ≫ h) : coequalizer.π f g ≫ coequalizer.desc h w = h := by obviously
+
+@[extensionality] lemma coequalizer.hom_ext {X : C} (h k : coequalizer f g ⟶ X) (w : coequalizer.π f g ≫ h = coequalizer.π f g ≫ k) : h = k :=
+begin
+  let s : cofork f g := ⟨ ⟨ X ⟩, coequalizer.π f g ≫ h ⟩,
+  have q := (coequalizer.universal_property f g).uniq s h,
+  have p := (coequalizer.universal_property f g).uniq s k,
   rw [q, ←p],
   solve_by_elim, refl
 end

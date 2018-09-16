@@ -66,30 +66,30 @@ calc
 
 set_option trace.tidy true
 
-def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E := 
-{ functor := e.functor ⋙ f.functor,
-  inverse := f.inverse ⋙ e.inverse,
-  fun_inv_id' := 
-  { hom := { app := λ X, effe_id e f X, naturality' := 
-      begin 
-        dsimp [effe_id],
-        intros,
-        rw ← category.assoc,
-        rw ← functor.map_comp,
-        rw nat_trans.app_eq_coe,
-        erw nat_trans.naturality ((fun_inv_id f).hom), -- work out why this is so difficult: we must be missing something
-        sorry 
-      end
-      /-begin tidy, rewrite_search_using [`search] end-/ }, -- These fail, exceeding max iterations.
-    inv := { app := λ X, id_effe e f X, naturality' := sorry },
-    hom_inv_id' := sorry, -- These seem to work: 13 step rewrites!
-    inv_hom_id' := sorry },
-  inv_fun_id' :=
-  { hom := { app := λ X, feef_id e f X, naturality' := sorry }, 
-    inv := { app := λ X, id_feef e f X, naturality' := sorry },
-    hom_inv_id' := sorry,
-    inv_hom_id' := sorry },
- }
+-- def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E := 
+-- { functor := e.functor ⋙ f.functor,
+--   inverse := f.inverse ⋙ e.inverse,
+--   fun_inv_id' := 
+--   { hom := { app := λ X, effe_id e f X, naturality' := 
+--       begin 
+--         dsimp [effe_id],
+--         intros,
+--         rw ← category.assoc,
+--         rw ← functor.map_comp,
+--         rw nat_trans.app_eq_coe,
+--         erw nat_trans.naturality ((fun_inv_id f).hom), -- work out why this is so difficult: we must be missing something
+--         sorry 
+--       end
+--       /-begin tidy, rewrite_search_using [`search] end-/ }, -- These fail, exceeding max iterations.
+--     inv := { app := λ X, id_effe e f X, naturality' := sorry },
+--     hom_inv_id' := sorry, -- These seem to work: 13 step rewrites!
+--     inv_hom_id' := sorry },
+--   inv_fun_id' :=
+--   { hom := { app := λ X, feef_id e f X, naturality' := sorry }, 
+--     inv := { app := λ X, id_feef e f X, naturality' := sorry },
+--     hom_inv_id' := sorry,
+--     inv_hom_id' := sorry },
+--  }
 
 end equivalence
 
@@ -141,8 +141,8 @@ def as_equivalence (F : C ⥤ D) [is_equivalence F] : C ≌ D :=
 variables {E : Type u₃} [ℰ : category.{u₃ v₃} E]
 include ℰ 
 
-instance is_equivalence_trans (F : C ⥤ D) (G : D ⥤ E) [is_equivalence F] [is_equivalence G] :
-  is_equivalence (F ⋙ G) := sorry
+-- instance is_equivalence_trans (F : C ⥤ D) (G : D ⥤ E) [is_equivalence F] [is_equivalence G] :
+--   is_equivalence (F ⋙ G) := sorry
 
 end functor
 

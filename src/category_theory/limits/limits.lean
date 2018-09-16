@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import category_theory.limits.shape
+import category_theory.discrete_category
 import category_theory.filtered
 import category_theory.functor_categories.whiskering
 import category_theory.universal.cones
@@ -122,16 +122,6 @@ def cone.pullback {F : J ⥤ C} (A : cone F) {X : C} (f : X ⟶ A.X) : cone F :=
   π := λ j, f ≫ A.π j }
 
 -- lemma limit.pullback_lift (F : J ⥤ C) (c : cone F) {X : C} (f : X ⟶ c.X) : limit.lift F (c.pullback f) = f ≫ limit.lift F c := sorry
-
--- @[extensionality] def limit.hom_ext {F : J ⥤ C} {c : cone F}
---   (f g : c.X ⟶ limit F)
---   (w_f : ∀ j, f ≫ limit.π F j = c.π j)
---   (w_g : ∀ j, g ≫ limit.π F j = c.π j) : f = g :=
--- begin
---   have p_f := (limit.universal_property F).uniq c f (by obviously),
---   have p_g := (limit.universal_property F).uniq c g (by obviously),
---   obviously,
--- end.
 
 @[extensionality] def limit.hom_ext {F : J ⥤ C} {X : C}
   (f g : X ⟶ limit F)

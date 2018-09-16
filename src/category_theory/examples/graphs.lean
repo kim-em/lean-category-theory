@@ -12,16 +12,16 @@ namespace category_theory.examples.graphs
 
 universe u₁
 
-def Graph := Σ α : Type (u₁+1), graph α
+def Graph := Σ α : Type (u₁+1), graph.{u₁+1 u₁} α
 
 instance graph_from_Graph (G : Graph) : graph G.1 := G.2
 
-structure GraphHomomorphism (G H : Graph.{u₁}) : Type (u₁+1) := 
-(map : @graph_homomorphism G.1 G.2 H.1 H.2)
+structure Graph_hom (G H : Graph.{u₁}) : Type (u₁+1) := 
+(map : @graph_hom G.1 G.2 H.1 H.2)
 
 @[extensionality] lemma graph_homomorphisms_pointwise_equal
   {G H : Graph.{u₁}}
-  {p q : GraphHomomorphism G H} 
+  {p q : Graph_hom G H} 
   (vertexWitness : ∀ X : G.1, p.map.onVertices X = q.map.onVertices X) 
   (edgeWitness : ∀ X Y : G.1, ∀ f : edges X Y, ⟬ p.map.onEdges f ⟭ = q.map.onEdges f ) : p = q :=
 begin
@@ -32,7 +32,7 @@ begin
 end
 
 instance CategoryOfGraphs : large_category Graph := {
-  hom := GraphHomomorphism,
+  hom := Graph_hom,
   id := λ G, ⟨ {
       onVertices   := id,
       onEdges := λ _ _ f, f

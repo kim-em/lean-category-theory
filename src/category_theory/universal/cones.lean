@@ -52,7 +52,7 @@ include 𝒟
 def functoriality (F : J ⥤ C) (G : C ⥤ D) : (cone F) ⥤ (cone (F ⋙ G)) := 
 { obj      := λ A, { X := G A.X,
                      π := λ j, G.map (A.π j), 
-                     w := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp, cone.w] end },
+                     w' := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp, cone.w] end },
   map'     := λ X Y f, { hom := G.map f.hom,
                          w' := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp, cone_morphism.w] end } }
 end
@@ -94,7 +94,7 @@ include 𝒟
 def functoriality (F : J ⥤ C) (G : C ⥤ D) : (cocone F) ⥤ (cocone (F ⋙ G)) := 
 { obj      := λ A,     { X    := G A.X,
                          ι     := λ j, G.map (A.ι j),
-                         w   := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp, cocone.w] end },
+                         w'   := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp, cocone.w] end },
   map'     := λ _ _ f, { hom := G.map f.hom,
                          w'  := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp, cocone_morphism.w] end } }
 end

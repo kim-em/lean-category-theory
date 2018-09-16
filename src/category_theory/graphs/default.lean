@@ -7,28 +7,27 @@ import tidy.auto_cast
 
 namespace category_theory.graphs
 
-universes u₁ u₂
+universes u₁ v₁ u₂ v₂
 
 class graph (vertices : Type u₁) :=
-  (edges : vertices → vertices → Type u₁)
+  (edges : vertices → vertices → Type v₁)
 
 variable {C : Type u₁}
 variables {W X Y Z : C}
-variable [graph C]
+variable [𝒞 : graph.{u₁ v₁} C]
 
-def edges : C → C → Type u₁ := graph.edges
+def edges : C → C → Type v₁ := @graph.edges.{u₁ v₁} C 𝒞
 
-structure graph_homomorphism (G : Type u₁) [graph G] (H : Type u₂) [graph H] := 
+structure graph_hom (G : Type u₁) [graph.{u₁ v₁} G] (H : Type u₂) [graph.{u₂ v₂} H] := 
   (onVertices : G → H)
   (onEdges    : ∀ {X Y : G}, edges X Y → edges (onVertices X) (onVertices Y))
 
-variable {G : Type u₁}
-variable [graph G]
-variable {H : Type u₂}
-variable [graph H]
+section
+variables {G : Type u₁} [𝒢 : graph.{u₁ v₁} G] {H : Type u₂} [ℋ : graph.{u₂ v₂} H]
+include 𝒢 ℋ
 
-@[extensionality] lemma graph_homomorphisms_pointwise_equal
-  {p q : graph_homomorphism G H} 
+@[extensionality] lemma graph_hom_pointwise_equal
+  {p q : graph_hom G H} 
   (vertexWitness : ∀ X : G, p.onVertices X = q.onVertices X) 
   (edgeWitness : ∀ X Y : G, ∀ f : edges X Y, ⟬ p.onEdges f ⟭ = q.onEdges f) : p = q :=
 begin
@@ -41,15 +40,19 @@ begin
   exact edgeWitness X Y f,
   subst h_edges
 end
+end
 
-inductive path : G → G → Type u₁
+variables {G : Type u₁} [𝒢 : graph.{u₁ v₁} G]
+include 𝒢
+
+inductive path : G → G → Type (max u₁ v₁)
 | nil  : Π (h : G), path h h
 | cons : Π {h s t : G} (e : edges h s) (l : path s t), path h t
 
 notation a :: b := path.cons a b
 notation `p[` l:(foldr `, ` (h t, path.cons h t) path.nil _ `]`) := l
 
-inductive path_of_paths : G → G → Type (u₁+1)
+inductive path_of_paths : G → G → Type (max u₁ v₁)
 | nil  : Π (h : G), path_of_paths h h
 | cons : Π {h s t : G} (e : path h s) (l : path_of_paths s t), path_of_paths h t
 

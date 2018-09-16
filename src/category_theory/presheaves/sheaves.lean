@@ -9,30 +9,16 @@ open category_theory.examples
 
 universes u v u₁ v₁ u₂ v₂
 
-section
-variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (V : Type u₂) [𝒱 : category.{u₂ v₂} V]
-include 𝒞 𝒱
+-- section
+-- variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (V : Type u₂) [𝒱 : category.{u₂ v₂} V]
+-- include 𝒞 𝒱
 
-def presheaf := C ⥤ V -- I know there's usually an op on C here, but I'm having trouble with opposites, so
-                       -- you'll have to provide it yourself!
+-- def presheaf := C ⥤ V -- I know there's usually an op on C here, but I'm having trouble with opposites, so
+--                        -- you'll have to provide it yourself!
 
-def presheaves : category (presheaf C V) := begin unfold presheaf, apply_instance end
-end
+-- def presheaves : category (presheaf C V) := begin unfold presheaf, apply_instance end
+-- end
 
-section
-variables {V : Type u} [𝒱 : category.{u v} V]
-include 𝒱 
-variables {X : Top.{v}}
-
-def presheaf.near (F : presheaf (open_set X) V) (x : X) : presheaf { U : open_set X // x ∈ U } V :=
-(full_subcategory_embedding (λ U : open_set X, x ∈ U)) ⋙ F
-
-variable [has_colimits.{u v} V]
-
-def stalk_at (F : presheaf (open_set X) V) (x : X) : V :=
-colimit (F.near x)
-
-end
 
 variable (X : Top.{v})
 
@@ -90,7 +76,7 @@ F.map (C.union_subset i)
 @[simp] lemma union_res_left_right 
   {C : cover' X} 
   (i j : C.I) 
-  (F : presheaf (open_set X) D) : union_res i F ≫ res_left i j F = union_res j F ≫ res_right i j F :=
+  (F : (open_set X) ⥤ D) : union_res i F ≫ res_left i j F = union_res j F ≫ res_right i j F :=
 begin
   dsimp [union_res, res_left, res_right],
   rw ← functor.map_comp,
@@ -103,7 +89,7 @@ section
 variables {V : Type u} [𝒱 : category.{u v} V] [has_products.{u v} V]
 include 𝒱
 
-variables (cover : cover' X) (F : presheaf (open_set X) V) 
+variables (cover : cover' X) (F : (open_set X) ⥤ V) 
 
 def sections : V :=
 pi.{u v} (λ c : cover.I, F.obj (cover.U c))
@@ -136,13 +122,13 @@ def cover_fork : fork (left cover F) (right cover F) :=
   ι := res cover F, }
 
 
-class is_sheaf (presheaf : presheaf (open_set X) V) :=
+class is_sheaf (presheaf : (open_set X) ⥤ V) :=
 (sheaf_condition : Π (cover : cover' X), is_equalizer (cover_fork cover presheaf))
 
 variables (X V)
 
 structure sheaf  :=
-(presheaf : presheaf (open_set X) V)
+(presheaf : (open_set X) ⥤ V)
 (sheaf_condition : is_sheaf presheaf)
 
 end

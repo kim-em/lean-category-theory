@@ -2,13 +2,20 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import category_theory.limits.shape
+import category_theory.limits.terminal
+import category_theory.limits.binary_products
 
 open category_theory
 
-namespace category_theory.limits
-
 universes u v w
+
+-- def cond_fun {α : Type u} {β γ : Type v} (f : α → β) (g : α → γ) (b : bool) : α → cond b β γ :=
+-- begin 
+-- cases b,
+-- exact g, exact f
+-- end
+
+namespace category_theory.limits
 
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
@@ -99,7 +106,7 @@ variable {C}
 section
 variables [has_products.{u v} C] {β : Type v} 
 
-def pi.fan (f : β → C) := has_products.prod.{u v} f
+def pi.fan (f : β → C) : fan f := has_products.prod.{u v} f
 def pi (f : β → C) : C := (pi.fan f).X
 def pi.π (f : β → C) (b : β) : pi f ⟶ f b := (pi.fan f).π b
 def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products.is_product.{u v} C f
@@ -157,10 +164,30 @@ by obviously.
 
 @[simp] def pi.lift_pre {α : Type v} {f : β → C} {P : C} (p : Π b, P ⟶ f b) (h : α → β) :
   pi.lift p ≫ pi.pre _ h = pi.lift (λ a, p (h a)) :=
-by obviously
+by obviously.
 
 -- TODO lemmas describing interactions:
 -- map_pre, pre_pre, lift_post, map_post, pre_post, post_post
+
+instance : has_terminal_object.{u v} C :=
+{ terminal := pi.{u v} (@pempty.elim.{u+1} C),
+  is_terminal := { lift := λ X, pi.lift (pempty.rec _) } }
+
+instance : has_binary_products.{u v} C :=
+{ prod := λ Y Z, 
+  begin
+    let f : ulift bool → C := (λ b : ulift bool, cond b.down Y Z),
+    exact { X := pi f, π₁ := pi.π f ⟨ tt ⟩, π₂ := pi.π f ⟨ ff ⟩ }
+  end,
+  is_binary_product := λ Y Z,
+  { lift := λ s, pi.lift (λ b, bool.cases_on b.down s.π₂ s.π₁),
+    uniq' := λ s m w₁ w₂, 
+    begin 
+      -- TODO
+      -- `tidy` doesn't do this because it won't perform `cases` on `bool`.
+      -- What if we did the aggressives parts of auto_cases only if `dsimp` then proceeds?
+      dsimp at *, ext1, cases b, cases b, tidy,
+    end } }
 
 end
 
@@ -227,6 +254,26 @@ by obviously
 
 -- TODO lemmas describing interactions:
 -- desc_pre, map_pre, pre_pre, desc_post, map_post, pre_post, post_post
+
+instance : has_initial_object.{u v} C :=
+{ initial := Sigma.{u v} (@pempty.elim.{u+1} C),
+  is_initial := { desc := λ X, Sigma.desc (pempty.rec _) } }
+
+instance : has_binary_coproducts.{u v} C :=
+{ coprod := λ Y Z, 
+  begin
+    let f : ulift bool → C := (λ b : ulift bool, cond b.down Y Z),
+    exact { X := Sigma f, ι₁ := Sigma.ι f ⟨ tt ⟩, ι₂ := Sigma.ι f ⟨ ff ⟩ }
+  end,
+  is_binary_coproduct := λ Y Z,
+  { desc := λ s, Sigma.desc (λ b, bool.cases_on b.down s.ι₂ s.ι₁),
+    uniq' := λ s m w₁ w₂, 
+    begin 
+      -- TODO
+      -- `tidy` doesn't do this because it won't perform `cases` on `bool`.
+      -- What if we did the aggressives parts of auto_cases only if `dsimp` then proceeds?
+      dsimp at *, ext1, cases b, cases b, tidy,
+    end } }
 
 end
 
