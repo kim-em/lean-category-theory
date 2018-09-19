@@ -14,8 +14,8 @@ namespace category_theory.limits
 
 definition is_equiv {α β : Type v} (f : α → β) := @is_iso (Type v) (category_theory.types) _ _ f
 
-@[forward] lemma subtype_val {α : Type u} {P : α → Prop} {x y : {a : α // P a}} (h : x = y) : x.val = y.val := 
-begin obviously, end
+-- @[forward] lemma subtype_val {α : Type u} {P : α → Prop} {x y : {a : α // P a}} (h : x = y) : x.val = y.val := 
+-- begin obviously, end
 
 section shapes
 structure shape (C : Type u) [𝒞 : category.{u v} C] :=

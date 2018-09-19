@@ -167,6 +167,10 @@ by obviously
 def limit.map_pre {F G : J ⥤ C} (α : F ⟹ G) (E : K ⥤ J) :
   lim.map α ≫ limit.pre G E = limit.pre F E ≫ lim.map (whisker_on_left E α) :=
 by obviously
+
+@[simp] lemma limit.pre_pre {L : Type v} [small_category L] (F : J ⥤ C) (E : K ⥤ J) (D : L ⥤ K) :
+  limit.pre F E ≫ limit.pre (E ⋙ F) D = limit.pre F (D ⋙ E) :=
+by obviously
 end
 
 section
@@ -190,13 +194,16 @@ def limit.map_post {F G : J ⥤ C} (α : F ⟹ G) (H : C ⥤ D) :
   H.map (lim.map α) ≫ limit.post G H = limit.post F H ≫ lim.map (whisker_on_right α H) :=
 by obviously
 
-variables {K : Type v} [𝒦 : small_category K]
-include 𝒦
-
-def limit.pre_post (F : J ⥤ C) (E : K ⥤ J) (G : C ⥤ D) :
+def limit.pre_post {K : Type v} [small_category K] (F : J ⥤ C) (E : K ⥤ J) (G : C ⥤ D) :
 /- G (limit F) ⟶ G (limit (E ⋙ F)) ⟶ limit ((E ⋙ F) ⋙ G) vs -/
 /- G (limit F) ⟶ limit F ⋙ G ⟶ limit (E ⋙ (F ⋙ G)) or -/
   G.map (limit.pre F E) ≫ limit.post (E ⋙ F) G = limit.post F G ≫ limit.pre (F ⋙ G) E :=
+by obviously.
+
+@[simp] def limit.post_post {E : Type u} [category.{u v} E] [has_limits.{u v} E] (F : J ⥤ C) (G : C ⥤ D) (H : D ⥤ E):
+/- H G (limit F) ⟶ H (limit (F ⋙ G)) ⟶ limit ((F ⋙ G) ⋙ H) vs -/
+/- H G (limit F) ⟶ limit (F ⋙ (G ⋙ H)) or -/
+  H.map (limit.post F G) ≫ limit.post (F ⋙ G) H = limit.post F (G ⋙ H) :=
 by obviously
 end
 

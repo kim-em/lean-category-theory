@@ -36,18 +36,19 @@ lemma is_binary_product.uniq'' {Y Z : C} {t : span Y Z} (h : is_binary_product t
   m = h.lift { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } :=
 h.uniq { X := X', π₁ := m ≫ t.π₁, π₂ := m ≫ t.π₂ } m (by obviously) (by obviously)
 
--- TODO provide alternative constructor using uniq'' instead of uniq?
-
-lemma is_binary_product.univ {Y Z : C} {t : span Y Z} (h : is_binary_product t) (s : span Y Z) (φ : s.X ⟶ t.X) : (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = h.lift s) :=
+lemma is_binary_product.univ 
+  {Y Z : C} {t : span Y Z} (h : is_binary_product t) (s : span Y Z) (φ : s.X ⟶ t.X) : 
+  (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = h.lift s) :=
 begin
   obviously
 end
 
 def is_binary_product.of_lift_univ {Y Z : C} {t : span Y Z}
   (lift : Π (s : span Y Z), s.X ⟶ t.X)
-  (univ : Π (s : span Y Z) (φ : s.X ⟶ t.X), (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = lift s)) : is_binary_product t :=
+  (univ : Π (s : span Y Z) (φ : s.X ⟶ t.X), (φ ≫ t.π₁ = s.π₁ ∧ φ ≫ t.π₂ = s.π₂) ↔ (φ = lift s)) : 
+  is_binary_product t :=
 { lift := lift,
-  fac₁' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left, -- PROJECT automation
+  fac₁' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).left,
   fac₂' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))).right }
 
 end binary_product
@@ -75,18 +76,19 @@ lemma is_binary_coproduct.uniq'' {Y Z : C} {t : cospan Y Z} (h : is_binary_copro
   m = h.desc { X := X', ι₁ := t.ι₁ ≫ m, ι₂ := t.ι₂ ≫ m } :=
 h.uniq { X := X', ι₁ := t.ι₁ ≫ m, ι₂ := t.ι₂ ≫ m } m (by obviously) (by obviously)
 
--- TODO provide alternative constructor using uniq'' instead of uniq.
-
-lemma is_binary_coproduct.univ {Y Z : C} {t : cospan Y Z} (h : is_binary_coproduct t) (s : cospan Y Z) (φ : t.X ⟶ s.X) : (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = h.desc s) :=
+lemma is_binary_coproduct.univ 
+  {Y Z : C} {t : cospan Y Z} (h : is_binary_coproduct t) (s : cospan Y Z) (φ : t.X ⟶ s.X) : 
+  (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = h.desc s) :=
 begin
   obviously
 end
 
 def is_binary_coproduct.of_desc_univ {Y Z : C} {t : cospan Y Z}
   (desc : Π (s : cospan Y Z), t.X ⟶ s.X)
-  (univ : Π (s : cospan Y Z) (φ : t.X ⟶ s.X), (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = desc s)) : is_binary_coproduct t :=
+  (univ : Π (s : cospan Y Z) (φ : t.X ⟶ s.X), (t.ι₁ ≫ φ = s.ι₁ ∧ t.ι₂ ≫ φ = s.ι₂) ↔ (φ = desc s)) : 
+  is_binary_coproduct t :=
 { desc := desc,
-  fac₁' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left, -- PROJECT automation
+  fac₁' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).left,
   fac₂' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))).right }
 
 end binary_coproduct
@@ -116,17 +118,21 @@ has_binary_products.is_binary_product.{u v} C Y Z
 def prod.lift {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : P ⟶ (prod Q R) :=
 (prod.universal_property Q R).lift ⟨ ⟨ P ⟩, f, g ⟩
 
-@[simp,search] lemma prod.lift_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.lift f g ≫ prod.π₁ Q R = f := 
+@[simp,search] lemma prod.lift_π₁ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : 
+  prod.lift f g ≫ prod.π₁ Q R = f := 
 is_binary_product.fac₁ _ { X := P, π₁ := f, π₂ := g }
-@[simp,search] lemma prod.lift_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : prod.lift f g ≫ prod.π₂ Q R = g :=
+@[simp,search] lemma prod.lift_π₂ {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : 
+  prod.lift f g ≫ prod.π₂ Q R = g :=
 is_binary_product.fac₂ _ { X := P, π₁ := f, π₂ := g }
 
 def prod.map {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : (prod P R) ⟶ (prod Q S) :=
 prod.lift (prod.π₁ P R ≫ f) (prod.π₂ P R ≫ g)
 
-@[simp,search] lemma prod.map_π₁ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : prod.map f g ≫ prod.π₁ Q S = prod.π₁ P R ≫ f := 
+@[simp,search] lemma prod.map_π₁ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : 
+  prod.map f g ≫ prod.π₁ Q S = prod.π₁ P R ≫ f := 
 by erw is_binary_product.fac₁
-@[simp,search] lemma prod.map_π₂ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : prod.map f g ≫ prod.π₂ Q S = prod.π₂ P R ≫ g :=
+@[simp,search] lemma prod.map_π₂ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : 
+  prod.map f g ≫ prod.π₂ Q S = prod.π₂ P R ≫ g :=
 by erw is_binary_product.fac₂
 
 def prod.swap (P Q : C) : prod P Q ⟶ prod Q P := prod.lift (prod.π₂ P Q) (prod.π₁ P Q)
@@ -141,11 +147,14 @@ variables {D : Type u} [𝒟 : category.{u v} D] [has_binary_products.{u v} D]
 include 𝒟 
 
 def prod.post (P Q : C) (G : C ⥤ D) : G (prod P Q) ⟶ (prod (G P) (G Q)) :=
-@is_binary_product.lift _ _ _ _ (prod.span (G P) (G Q)) (prod.universal_property _ _) { X := _, π₁ := G.map (prod.π₁ P Q), π₂ := G.map (prod.π₂ P Q) }
+@is_binary_product.lift _ _ _ _ (prod.span (G P) (G Q)) (prod.universal_property _ _) 
+  { X := _, π₁ := G.map (prod.π₁ P Q), π₂ := G.map (prod.π₂ P Q) }
 
-@[simp] def prod.post_π₁ (P Q : C) (G : C ⥤ D) : prod.post P Q G ≫ prod.π₁ _ _ = G.map (prod.π₁ P Q) := 
+@[simp] def prod.post_π₁ (P Q : C) (G : C ⥤ D) : 
+  prod.post P Q G ≫ prod.π₁ (G P) (G Q) = G.map (prod.π₁ P Q) := 
 by erw is_binary_product.fac₁
-@[simp] def prod.post_π₂ (P Q : C) (G : C ⥤ D) : prod.post P Q G ≫ prod.π₂ _ _ = G.map (prod.π₂ P Q) := 
+@[simp] def prod.post_π₂ (P Q : C) (G : C ⥤ D) : 
+  prod.post P Q G ≫ prod.π₂ (G P) (G Q) = G.map (prod.π₂ P Q) := 
 by erw is_binary_product.fac₂
 end
 
@@ -170,15 +179,37 @@ by obviously
   prod.swap P R ≫ prod.map g f = prod.map f g ≫ prod.swap Q S := 
 by obviously
 
-@[simp,search] lemma prod.lift_map {P Q R S T : C} (f : P ⟶ Q) (g : P ⟶ R) (h : Q ⟶ T) (k : R ⟶ S) : 
+@[simp,search] lemma prod.lift_map 
+  {P Q R S T : C} (f : P ⟶ Q) (g : P ⟶ R) (h : Q ⟶ T) (k : R ⟶ S) : 
   prod.lift f g ≫ prod.map h k = prod.lift (f ≫ h) (g ≫ k) := 
 by obviously
 
-@[simp,search] lemma prod.map_map {P Q R S T U : C} (f : P ⟶ Q) (g : R ⟶ S) (h : Q ⟶ T) (k : S ⟶ U) :
+@[simp,search] lemma prod.map_map 
+  {P Q R S T U : C} (f : P ⟶ Q) (g : R ⟶ S) (h : Q ⟶ T) (k : S ⟶ U) :
   prod.map f g ≫ prod.map h k = prod.map (f ≫ h) (g ≫ k) :=
 by obviously 
 
--- TODO add lemmas lift_post, map_post, swap_post, post_post when needed
+section
+variables {D : Type u} [category.{u v} D] [has_binary_products.{u v} D] 
+
+@[simp] def prod.lift_post {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) (G : C ⥤ D) :
+  G.map (prod.lift f g) ≫ prod.post Q R G = prod.lift (G.map f) (G.map g) := 
+by obviously.
+
+def prod.map_post {Q R S T : C} (h : Q ⟶ S) (k : R ⟶ T) (H : C ⥤ D) :
+  H.map (prod.map h k) ≫ prod.post S T H = prod.post Q R H ≫ prod.map (H.map h) (H.map k) :=
+by obviously.
+
+def prod.swap_post (Q R : C) (G : C ⥤ D) :
+  G.map (prod.swap Q R) ≫ prod.post R Q G = prod.post Q R G ≫ prod.swap (G Q) (G R) :=
+by obviously.
+
+@[simp] def prod.post_post {E : Type u} [category.{u v} E] [has_binary_products.{u v} E] 
+  (Q R : C) (G : C ⥤ D) (H : D ⥤ E):
+  H.map (prod.post Q R G) ≫ prod.post (G Q) (G R) H = prod.post Q R (G ⋙ H) :=
+by obviously.
+end
+
 -- TODO also to coprod
 
 end

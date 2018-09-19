@@ -164,8 +164,34 @@ by obviously.
   pi.lift p ≫ pi.pre _ h = pi.lift (λ a, p (h a)) :=
 by obviously.
 
--- TODO lemmas describing interactions:
--- map_pre, pre_pre, lift_post, map_post, pre_post, post_post
+def pi.map_pre {α : Type v} {f g : β → C} (k : Π b : β, f b ⟶ g b) (e : α → β) :
+  pi.map k ≫ pi.pre g e = pi.pre f e ≫ pi.map (λ a, k (e a)) :=
+by obviously.
+
+@[simp] lemma pi.pre_pre {γ δ : Type v} (f : β → C) (g : γ → β) (h : δ → γ) :
+  pi.pre f g ≫ pi.pre (f ∘ g) h = pi.pre f (g ∘ h) :=
+by obviously.
+
+section
+variables {D : Type u} [category.{u v} D] [has_products.{u v} D] 
+
+@[simp] def pi.lift_post {f : β → C} {P : C} (k : Π b : β, P ⟶ f b) (G : C ⥤ D) :
+  G.map (pi.lift k) ≫ pi.post f G = pi.lift (λ b, G.map (k b)) := 
+by obviously.
+
+def pi.map_post {f g : β → C} (k : Π b : β, f b ⟶ g b) (H : C ⥤ D) :
+  H.map (pi.map k) ≫ pi.post g H = pi.post f H ≫ pi.map (λ b, H.map (k b)) :=
+by obviously.
+
+def pi.pre_post {α} (f : β → C) (g : α → β) (G : C ⥤ D) :
+  G.map (pi.pre f g) ≫ pi.post (f ∘ g) G = pi.post f G ≫ pi.pre (G.obj ∘ f) g :=
+by obviously.
+
+@[simp] def pi.post_post {E : Type u} [category.{u v} E] [has_products.{u v} E] (f : β → C) (G : C ⥤ D) (H : D ⥤ E):
+  H.map (pi.post f G) ≫ pi.post (G.obj ∘ f) H = pi.post f (G ⋙ H) :=
+by obviously.
+end
+
 
 instance : has_terminal_object.{u v} C :=
 { terminal := pi.{u v} (@pempty.elim.{u+1} C),
@@ -192,61 +218,61 @@ end
 section
 variables [has_coproducts.{u v} C] {β : Type v} 
 
-def Sigma.cofan (f : β → C) := has_coproducts.coprod.{u v} f
-def Sigma (f : β → C) : C := (Sigma.cofan f).X
-def Sigma.ι (f : β → C) (b : β) : f b ⟶ Sigma f := (Sigma.cofan f).ι b
-def Sigma.universal_property (f : β → C) : is_coproduct (Sigma.cofan f) := has_coproducts.is_coproduct.{u v} C f
+def sigma.cofan (f : β → C) := has_coproducts.coprod.{u v} f
+def sigma (f : β → C) : C := (sigma.cofan f).X
+def sigma.ι (f : β → C) (b : β) : f b ⟶ sigma f := (sigma.cofan f).ι b
+def sigma.universal_property (f : β → C) : is_coproduct (sigma.cofan f) := has_coproducts.is_coproduct.{u v} C f
 
-@[simp] def Sigma.cofan_ι (f : β → C) (b : β) : (Sigma.cofan f).ι b = @Sigma.ι C _ _ _ f b := rfl
+@[simp] def sigma.cofan_ι (f : β → C) (b : β) : (sigma.cofan f).ι b = @sigma.ι C _ _ _ f b := rfl
 
-def Sigma.desc {f : β → C} {P : C} (p : Π b, f b ⟶ P) : Sigma f ⟶ P :=
-(Sigma.universal_property f).desc ⟨ ⟨ P ⟩, p ⟩
+def sigma.desc {f : β → C} {P : C} (p : Π b, f b ⟶ P) : sigma f ⟶ P :=
+(sigma.universal_property f).desc ⟨ ⟨ P ⟩, p ⟩
 
-@[simp,search] def Sigma.lift_ι {f : β → C} {P : C} (p : Π b, f b ⟶ P) (b : β) : Sigma.ι f b ≫ Sigma.desc p = p b :=
+@[simp,search] def sigma.lift_ι {f : β → C} {P : C} (p : Π b, f b ⟶ P) (b : β) : sigma.ι f b ≫ sigma.desc p = p b :=
 by erw is_coproduct.fac
 
-def Sigma.map {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) : (Sigma f) ⟶ (Sigma g) :=
-Sigma.desc (λ b, k b ≫ Sigma.ι g b) 
+def sigma.map {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) : (sigma f) ⟶ (sigma g) :=
+sigma.desc (λ b, k b ≫ sigma.ι g b) 
 
-@[simp] def Sigma.map_ι {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) (b : β) : Sigma.ι f b ≫ Sigma.map k = k b ≫ Sigma.ι g b :=
+@[simp] def sigma.map_ι {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) (b : β) : sigma.ι f b ≫ sigma.map k = k b ≫ sigma.ι g b :=
 by erw is_coproduct.fac
 
-def Sigma.pre {α} (f : α → C) (h : β → α) : Sigma (f ∘ h) ⟶ Sigma f :=
-Sigma.desc (λ g, Sigma.ι f (h g))
+def sigma.pre {α} (f : α → C) (h : β → α) : sigma (f ∘ h) ⟶ sigma f :=
+sigma.desc (λ g, sigma.ι f (h g))
 
-@[simp] def Sigma.pre_ι {α} (f : α → C) (h : β → α) (b : β) : Sigma.ι (f ∘ h) b ≫ Sigma.pre f h = Sigma.ι f (h b) := 
+@[simp] def sigma.pre_ι {α} (f : α → C) (h : β → α) (b : β) : sigma.ι (f ∘ h) b ≫ sigma.pre f h = sigma.ι f (h b) := 
 by erw is_coproduct.fac
 
 section
 variables {D : Type u} [𝒟 : category.{u v} D] [has_coproducts.{u v} D]
 include 𝒟 
 
-def Sigma.post (f : β → C) (G : C ⥤ D) : (Sigma (G.obj ∘ f)) ⟶ G (Sigma f) :=
-@is_coproduct.desc _ _ _ _ (Sigma.cofan (G.obj ∘ f)) (Sigma.universal_property _) { X := _, ι := λ b, G.map (Sigma.ι f b) }
+def sigma.post (f : β → C) (G : C ⥤ D) : (sigma (G.obj ∘ f)) ⟶ G (sigma f) :=
+@is_coproduct.desc _ _ _ _ (sigma.cofan (G.obj ∘ f)) (sigma.universal_property _) { X := _, ι := λ b, G.map (sigma.ι f b) }
 
-@[simp] def Sigma.post_π (f : β → C) (G : C ⥤ D) (b : β) : Sigma.ι _ b ≫ Sigma.post f G = G.map (Sigma.ι f b) := 
+@[simp] def sigma.post_π (f : β → C) (G : C ⥤ D) (b : β) : sigma.ι _ b ≫ sigma.post f G = G.map (sigma.ι f b) := 
 by erw is_coproduct.fac
 end
 
-@[extensionality] lemma Sigma.hom_ext (f : β → C) {X : C} (g h : Sigma f ⟶ X) (w : ∀ b, Sigma.ι f b ≫ g = Sigma.ι f b ≫ h) : g = h :=
+@[extensionality] lemma sigma.hom_ext (f : β → C) {X : C} (g h : sigma f ⟶ X) (w : ∀ b, sigma.ι f b ≫ g = sigma.ι f b ≫ h) : g = h :=
 begin
-  rw is_coproduct.uniq (Sigma.universal_property f) { X := X, ι := λ b, Sigma.ι f b ≫ g } g,
-  rw is_coproduct.uniq (Sigma.universal_property f) { X := X, ι := λ b, Sigma.ι f b ≫ g } h,
+  rw is_coproduct.uniq (sigma.universal_property f) { X := X, ι := λ b, sigma.ι f b ≫ g } g,
+  rw is_coproduct.uniq (sigma.universal_property f) { X := X, ι := λ b, sigma.ι f b ≫ g } h,
   obviously
 end
 
-@[simp] def Sigma.desc_map 
+@[simp] def sigma.desc_map 
   {f : β → C} {g : β → C} {P : C} (k : Π b, f b ⟶ g b) (p : Π b, g b ⟶ P) :
-  Sigma.map k ≫ Sigma.desc p = Sigma.desc (λ b, k b ≫ p b) :=
+  sigma.map k ≫ sigma.desc p = sigma.desc (λ b, k b ≫ p b) :=
 by obviously
 
-@[simp] def Sigma.map_map {f1 : β → C} {f2 : β → C} {f3 : β → C} 
+@[simp] def sigma.map_map {f1 : β → C} {f2 : β → C} {f3 : β → C} 
   (k1 : Π b, f1 b ⟶ f2 b) (k2 : Π b, f2 b ⟶ f3 b) :
-  Sigma.map k1 ≫ Sigma.map k2 = Sigma.map (λ b, k1 b ≫ k2 b) := 
+  sigma.map k1 ≫ sigma.map k2 = sigma.map (λ b, k1 b ≫ k2 b) := 
 by obviously.
 
-@[simp] def Sigma.desc_pre {α : Type v} {f : β → C} {P : C} (p : Π b, f b ⟶ P) (h : α → β) :
-  Sigma.pre _ h ≫ Sigma.desc p = Sigma.desc (λ a, p (h a)) :=
+@[simp] def sigma.desc_pre {α : Type v} {f : β → C} {P : C} (p : Π b, f b ⟶ P) (h : α → β) :
+  sigma.pre _ h ≫ sigma.desc p = sigma.desc (λ a, p (h a)) :=
 by obviously
 
 
@@ -254,17 +280,17 @@ by obviously
 -- desc_pre, map_pre, pre_pre, desc_post, map_post, pre_post, post_post
 
 instance : has_initial_object.{u v} C :=
-{ initial := Sigma.{u v} (@pempty.elim.{u+1} C),
-  is_initial := { desc := λ X, Sigma.desc (pempty.rec _) } }
+{ initial := sigma.{u v} (@pempty.elim.{u+1} C),
+  is_initial := { desc := λ X, sigma.desc (pempty.rec _) } }
 
 instance : has_binary_coproducts.{u v} C :=
 { coprod := λ Y Z, 
   begin
     let f : ulift bool → C := (λ b : ulift bool, cond b.down Y Z),
-    exact { X := Sigma f, ι₁ := Sigma.ι f ⟨ tt ⟩, ι₂ := Sigma.ι f ⟨ ff ⟩ }
+    exact { X := sigma f, ι₁ := sigma.ι f ⟨ tt ⟩, ι₂ := sigma.ι f ⟨ ff ⟩ }
   end,
   is_binary_coproduct := λ Y Z,
-  { desc := λ s, Sigma.desc (λ b, bool.cases_on b.down s.ι₂ s.ι₁),
+  { desc := λ s, sigma.desc (λ b, bool.cases_on b.down s.ι₂ s.ι₁),
     uniq' := λ s m w₁ w₂, 
     begin 
       -- TODO

@@ -125,6 +125,10 @@ begin
   solve_by_elim, refl
 end
 
+-- There are many lemmas one could prove here, analogous to those in products.lean and limits.lean.
+-- (e.g. how equalizers transform under functors, that equalizer f g ≅ equalizer g f, ...)
+-- They can wait until needed.
+
 end
 
 section

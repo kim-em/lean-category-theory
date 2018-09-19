@@ -26,7 +26,7 @@ instance : has_coequalizers.{v+1 v} CommRing :=
 { coequalizer := λ R S f g, 
     { X := { α := quotient_ring.quotient (coequalizer_ideal f g) },
       π := ⟨ quotient_ring.mk, by apply_instance ⟩,
-      w := sorry /- almost there: -/
+      w' := sorry /- almost there: -/
         /- begin 
              ext, dsimp, apply quotient.sound, fsplit, 
              exact finsupp.single 1 (f.map x - g.map x), obviously, 
@@ -46,6 +46,7 @@ section
 variables {J : Type v} [𝒥 : small_category J] [filtered.{v v} J]
 include 𝒥
 
+-- This is stupid; we just need one map in the condition.
 def matching (F : J ⥤ CommRing) (a b : Σ j : J, (F j).1) : Prop :=
 ∃ (j : J) (f_a : a.1 ⟶ j) (f_b : b.1 ⟶ j),
 (F.map f_a) a.2 = (F.map f_b) b.2

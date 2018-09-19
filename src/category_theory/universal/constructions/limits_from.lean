@@ -23,7 +23,7 @@ instance [has_products.{u₁ v₁} C] [has_equalizers.{u₁ v₁} C] : has_limit
     let t : pi_obj ⟶ pi_hom := pi.lift (λ f : (Σ p : J × J, p.1 ⟶ p.2), pi.π β_obj f.1.2),
     exact { X := equalizer s t,
             π := λ j, equalizer.ι s t ≫ pi.π β_obj j,
-            w := λ j j' f, begin  -- FIXME Ugh, this should be much smoother.
+            w' := λ j j' f, begin  -- FIXME Ugh, this should be much smoother.
                              rw category.assoc, 
                              have p := congr_arg (λ φ , φ ≫ pi.π β_hom ⟨ ⟨ j, j' ⟩, f ⟩) (equalizer.w s t),
                              dsimp at p,

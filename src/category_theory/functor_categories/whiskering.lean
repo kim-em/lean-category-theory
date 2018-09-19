@@ -3,15 +3,14 @@
 -- Authors: Scott Morrison
 
 import category_theory.functor_category
-import category_theory.tactics.obviously
-
-set_option trace.tidy true
 
 namespace category_theory
 
 universes u₁ v₁ u₂ v₂ u₃ v₃ u₄ v₄
 
-variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] (D : Type u₂) [𝒟 : category.{u₂ v₂} D] (E : Type u₃) [ℰ : category.{u₃ v₃} E]
+variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C] 
+          (D : Type u₂) [𝒟 : category.{u₂ v₂} D] 
+          (E : Type u₃) [ℰ : category.{u₃ v₃} E]
 include 𝒞 𝒟 ℰ
 
 def whiskering_on_left : (C ⥤ D) ⥤ ((D ⥤ E) ⥤ (C ⥤ E)) := 
@@ -37,7 +36,8 @@ variables {C} {D} {E}
 def whisker_on_left (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟹ H) : (F ⋙ G) ⟹ (F ⋙ H) :=
 ((whiskering_on_left C D E) F).map α
 
-@[simp] lemma whisker_on_left.app (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟹ H) (X : C) : (whisker_on_left F α) X = α (F X) := 
+@[simp] lemma whisker_on_left.app (F : C ⥤ D) {G H : D ⥤ E} (α : G ⟹ H) (X : C) : 
+  (whisker_on_left F α) X = α (F X) := 
 begin
   dsimp [whisker_on_left, whiskering_on_left],
   rw category_theory.functor.map_id,
@@ -47,7 +47,8 @@ end
 def whisker_on_right {G H : C ⥤ D} (α : G ⟹ H) (F : D ⥤ E) : (G ⋙ F) ⟹ (H ⋙ F) := 
 ((whiskering_on_right C D E) F).map α
 
-@[simp] lemma whisker_on_right.app {G H : C ⥤ D} (α : G ⟹ H) (F : D ⥤ E) (X : C) : (whisker_on_right α F) X = F.map (α X) := 
+@[simp] lemma whisker_on_right.app {G H : C ⥤ D} (α : G ⟹ H) (F : D ⥤ E) (X : C) :
+   (whisker_on_right α F) X = F.map (α X) := 
 begin
   dsimp [whisker_on_right, whiskering_on_right],
   rw category.id_comp,
