@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
 import category_theory.limits.shape
-import category_theory.filtered
 
 open category_theory
 
@@ -20,12 +19,11 @@ structure is_terminal (t : C) :=
 (uniq' : ∀ (s : C) (m : s ⟶ t), m = lift s . obviously)
 
 restate_axiom is_terminal.uniq'
-attribute [search,back'] is_terminal.uniq
 
 @[extensionality] lemma is_terminal.ext {X : C} (P Q : is_terminal.{u v} X) : P = Q := 
 begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously, end
 
-instance hom_to_terminal_subsingleton (X' : C) (X : C) (h : is_terminal.{u v} X) : subsingleton (X' ⟶ X) :=
+def hom_to_terminal_subsingleton (X' : C) (X : C) (h : is_terminal.{u v} X) : subsingleton (X' ⟶ X) :=
 begin
   fsplit, intros f g,
   rw h.uniq X' f,
@@ -42,12 +40,11 @@ structure is_initial (t : C) :=
 attribute [class] is_initial
 
 restate_axiom is_initial.uniq'
-attribute [search,back'] is_initial.uniq
 
 @[extensionality] lemma is_initial.ext {X : C} (P Q : is_initial.{u v} X) : P = Q := 
 begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously, end
 
-instance hom_from_initial_subsingleton (X' : C) (X : C) (h : is_initial.{u v} X') : subsingleton (X' ⟶ X) :=
+def hom_from_initial_subsingleton (X' : C) (X : C) (h : is_initial.{u v} X') : subsingleton (X' ⟶ X) :=
 begin
   fsplit, intros f g,
   rw h.uniq X f,

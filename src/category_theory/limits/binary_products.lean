@@ -3,6 +3,9 @@
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
 import category_theory.limits.shape
+import .obviously
+
+-- set_option trace.tidy true
 
 open category_theory
 
@@ -171,7 +174,7 @@ end
 @[simp,search] lemma prod.swap_swap (P Q : C) : prod.swap P Q ≫ prod.swap Q P = 𝟙 _ := 
 by obviously
 
-@[simp,search] lemma prod.swap_lift {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : 
+@[simp,search] lemma prod.lift_swap {P Q R : C} (f : P ⟶ Q) (g : P ⟶ R) : 
   prod.lift g f ≫ prod.swap R Q = prod.lift f g := 
 by obviously
 
@@ -210,8 +213,6 @@ by obviously.
 by obviously.
 end
 
--- TODO also to coprod
-
 end
 
 section 
@@ -238,14 +239,31 @@ is_binary_coproduct.fac₁ _ { X := P, ι₁ := f, ι₂ := g }
 is_binary_coproduct.fac₂ _ { X := P, ι₁ := f, ι₂ := g }
 
 @[simp,search] lemma coprod.swap_ι₁ (P Q : C) : coprod.ι₁ P Q ≫ coprod.swap P Q = coprod.ι₂ Q P :=
-by erw is_binary_coproduct.fac₁
+by erw is_binary_coproduct.fac₁.
 @[simp,search] lemma coprod.swap_ι₂ (P Q : C) : coprod.ι₂ P Q ≫ coprod.swap P Q = coprod.ι₁ Q P :=
-by erw is_binary_coproduct.fac₂
+by erw is_binary_coproduct.fac₂.
 
 @[simp,search] lemma coprod.map_ι₁ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : coprod.ι₁ P R ≫ coprod.map f g = f ≫ coprod.ι₁ Q S := 
-by erw is_binary_coproduct.fac₁
+by erw is_binary_coproduct.fac₁.
 @[simp,search] lemma coprod.map_ι₂ {P Q R S : C} (f : P ⟶ Q) (g : R ⟶ S) : coprod.ι₂ P R ≫ coprod.map f g = g ≫ coprod.ι₂ Q S :=
+by erw is_binary_coproduct.fac₂.
+
+section
+variables {D : Type u} [𝒟 : category.{u v} D] [has_binary_coproducts.{u v} D]
+include 𝒟 
+
+def coprod.post (P Q : C) (G : C ⥤ D) : (coprod (G P) (G Q)) ⟶ G (coprod P Q) :=
+@is_binary_coproduct.desc _ _ _ _ (coprod.cospan (G P) (G Q)) (coprod.universal_property _ _) 
+  { X := _, ι₁ := G.map (coprod.ι₁ P Q), ι₂ := G.map (coprod.ι₂ P Q) }
+
+@[simp] def coprod.post_ι₁ (P Q : C) (G : C ⥤ D) : 
+  coprod.ι₁ (G P) (G Q) ≫ coprod.post P Q G = G.map (coprod.ι₁ P Q) := 
+by erw is_binary_coproduct.fac₁
+@[simp] def coprod.post_ι₂ (P Q : C) (G : C ⥤ D) : 
+  coprod.ι₂ (G P) (G Q) ≫ coprod.post P Q G = G.map (coprod.ι₂ P Q) := 
 by erw is_binary_coproduct.fac₂
+end
+
 
 @[extensionality] def coprod.hom_ext (Y Z : C) (X : C) 
   (f g : coprod Y Z ⟶ X) 
@@ -275,6 +293,27 @@ by obviously
 @[simp,search] lemma coprod.map_map {P Q R S T U : C} (f : P ⟶ Q) (g : R ⟶ S) (h : Q ⟶ T) (k : S ⟶ U) :
   coprod.map f g ≫ coprod.map h k = coprod.map (f ≫ h) (g ≫ k) :=
 by obviously 
+
+section
+variables {D : Type u} [category.{u v} D] [has_binary_coproducts.{u v} D] 
+
+@[simp] def coprod.post_desc {P Q R : C} (f : P ⟶ R) (g : Q ⟶ R) (G : C ⥤ D) :
+  coprod.post P Q G ≫ G.map (coprod.desc f g) = coprod.desc (G.map f) (G.map g) := 
+by obviously.
+
+def coprod.map_post {Q R S T : C} (h : Q ⟶ S) (k : R ⟶ T) (H : C ⥤ D) :
+  coprod.map (H.map h) (H.map k) ≫ coprod.post S T H = coprod.post Q R H ≫ H.map (coprod.map h k) :=
+by obviously.
+
+def coprod.swap_post (Q R : C) (G : C ⥤ D) :
+  coprod.swap (G Q) (G R) ≫ coprod.post R Q G = coprod.post Q R G ≫ G.map (coprod.swap Q R) :=
+by obviously.
+
+@[simp] def coprod.post_post {E : Type u} [category.{u v} E] [has_binary_coproducts.{u v} E] 
+  (Q R : C) (G : C ⥤ D) (H : D ⥤ E):
+  coprod.post (G Q) (G R) H ≫ H.map (coprod.post Q R G) = coprod.post Q R (G ⋙ H) :=
+by obviously.
+end
 
 end
 

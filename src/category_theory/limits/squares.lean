@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
 import category_theory.limits.shape
+import category_theory.limits.obviously
 
 open category_theory
 
@@ -115,6 +116,27 @@ end
 
 end 
 
--- TODO pushouts
+section
+variables [has_pushouts.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂)
+
+def pushout.cosquare := has_pushouts.pushout.{u v} r₁ r₂
+def pushout := (pushout.cosquare r₁ r₂).X
+def pushout.ι₁ : Y₁ ⟶ pushout r₁ r₂ := (pushout.cosquare r₁ r₂).ι₁
+def pushout.ι₂ : Y₂ ⟶ pushout r₁ r₂ := (pushout.cosquare r₁ r₂).ι₂
+def pushout.universal_property : is_pushout (pushout.cosquare r₁ r₂) := has_pushouts.is_pushout.{u v} C r₁ r₂
+
+@[extensionality] lemma pushout.hom_ext 
+  {X : C} (f g : pushout r₁ r₂ ⟶ X) 
+  (w₁ : pushout.ι₁ r₁ r₂ ≫ f = pushout.ι₁ r₁ r₂ ≫ g) 
+  (w₂ : pushout.ι₂ r₁ r₂ ≫ f = pushout.ι₂ r₁ r₂ ≫ g) : f = g :=
+begin
+  let s : cosquare r₁ r₂ := ⟨ ⟨ X ⟩, pushout.ι₁ r₁ r₂ ≫ f, pushout.ι₂ r₁ r₂ ≫ f ⟩,
+  have q := (pullback.universal_property r₁ r₂).uniq s f,
+  have p := (pullback.universal_property r₁ r₂).uniq s g,
+  rw [q, ←p],
+  obviously,
+end
+
+end 
 
 end category_theory.limits

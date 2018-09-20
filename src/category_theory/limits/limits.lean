@@ -3,7 +3,6 @@
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
 import category_theory.discrete_category
-import category_theory.filtered
 import category_theory.functor_categories.whiskering
 import category_theory.universal.cones
 
@@ -81,9 +80,6 @@ class has_limits :=
 (limit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), cone F)
 (is_limit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), is_limit (limit F) . obviously)
 
-class has_filtered_limits :=
-(limit : Π {J : Type v} [𝒥 : small_category J] [filtered.{v v} J] (F : J ⥤ C), cone F)
-(is_limit : Π {J : Type v} [𝒥 : small_category J] [filtered.{v v} J] (F : J ⥤ C), is_limit (limit F) . obviously)
 
 -- also do finite limits?
 
@@ -115,11 +111,10 @@ def limit.cone_morphism (F : J ⥤ C) (c : cone F) : cone_morphism c (limit.cone
 by erw is_limit.fac
 
 -- TODO needs a home
-def cone.pullback {F : J ⥤ C} (A : cone F) {X : C} (f : X ⟶ A.X) : cone F :=
+def cone.precompose {F : J ⥤ C} (A : cone F) {X : C} (f : X ⟶ A.X) : cone F :=
 { X := X,
   π := λ j, f ≫ A.π j }
 
--- lemma limit.pullback_lift (F : J ⥤ C) (c : cone F) {X : C} (f : X ⟶ c.X) : limit.lift F (c.pullback f) = f ≫ limit.lift F c := sorry
 
 @[extensionality] def limit.hom_ext {F : J ⥤ C} {X : C}
   (f g : X ⟶ limit F)
@@ -131,17 +126,16 @@ begin
   obviously
 end
 
--- TODO get rid of `limit` itself??
-def lim : (J ⥤ C) ⥤ C := 
+lemma limit.precompose_lift (F : J ⥤ C) (c : cone F) {X : C} (f : X ⟶ c.X) : 
+  limit.lift F (c.precompose f) = f ≫ limit.lift F c :=
+by obviously
+
+/-- `limit F` is functorial in `F`. -/
+@[simp] def lim : (J ⥤ C) ⥤ C := 
 { obj := limit,
   map' := λ F F' t, limit.lift F' $
     { X := limit F, π := λ j, limit.π F j ≫ t j } }.
  
--- boilerplate
-@[simp] lemma lim_map [has_limits.{u v} C] {F F' : J ⥤ C} (t : F ⟹ F') : 
-  lim.map t = (limit.lift F' $ { X := limit F, π := λ j, limit.π F j ≫ t j }) :=
-rfl
-
 @[simp] lemma lim_map_π {F G : J ⥤ C} (α : F ⟹ G) (j : J) : lim.map α ≫ limit.π G j = limit.π F j ≫ α j :=
 by erw is_limit.fac
 
@@ -215,9 +209,6 @@ class has_colimits :=
 (colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), cocone F)
 (is_colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), is_colimit (colimit F) . obviously)
 
-class has_filtered_colimits :=
-(colimit : Π {J : Type v} [𝒥 : small_category J] [filtered.{v v} J] (F : J ⥤ C), cocone F)
-(is_colimit : Π {J : Type v} [𝒥 : small_category J] [filtered.{v v} J] (F : J ⥤ C), is_colimit (colimit F) . obviously)
 
 variable {C}
 

@@ -114,7 +114,7 @@ variables {f g}
 def equalizer.lift {P : C} (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : P ⟶ equalizer f g := 
 (equalizer.universal_property f g).lift { X := P, ι := h, w' := w }
 
-lemma equalizer.lift_ι {P : C} (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : equalizer.lift h w ≫ equalizer.ι f g = h := by obviously
+@[simp] lemma equalizer.lift_ι {P : C} (h : P ⟶ Y) (w : h ≫ f = h ≫ g) : equalizer.lift h w ≫ equalizer.ι f g = h := by obviously
 
 @[extensionality] lemma equalizer.hom_ext {X : C} (h k : X ⟶ equalizer f g) (w : h ≫ equalizer.ι f g = k ≫ equalizer.ι f g) : h = k :=
 begin
@@ -127,7 +127,6 @@ end
 
 -- There are many lemmas one could prove here, analogous to those in products.lean and limits.lean.
 -- (e.g. how equalizers transform under functors, that equalizer f g ≅ equalizer g f, ...)
--- They can wait until needed.
 
 end
 
@@ -145,7 +144,7 @@ variables {f g}
 def coequalizer.desc {P : C} (h : Z ⟶ P) (w : f ≫ h = g ≫ h) : coequalizer f g ⟶ P := 
 (coequalizer.universal_property f g).desc { X := P, π := h, w' := w }
 
-lemma coequalizer.desc_π {P : C} (h : Z ⟶ P) (w : f ≫ h = g ≫ h) : coequalizer.π f g ≫ coequalizer.desc h w = h := by obviously
+@[simp] lemma coequalizer.desc_π {P : C} (h : Z ⟶ P) (w : f ≫ h = g ≫ h) : coequalizer.π f g ≫ coequalizer.desc h w = h := by obviously
 
 @[extensionality] lemma coequalizer.hom_ext {X : C} (h k : coequalizer f g ⟶ X) (w : coequalizer.π f g ≫ h = coequalizer.π f g ≫ k) : h = k :=
 begin

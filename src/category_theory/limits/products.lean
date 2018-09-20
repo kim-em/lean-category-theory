@@ -9,12 +9,6 @@ open category_theory
 
 universes u v w
 
--- def cond_fun {α : Type u} {β γ : Type v} (f : α → β) (g : α → γ) (b : bool) : α → cond b β γ :=
--- begin 
--- cases b,
--- exact g, exact f
--- end
-
 namespace category_theory.limits
 
 variables {C : Type u} [𝒞 : category.{u v} C]
@@ -40,8 +34,6 @@ instance is_product_subsingleton {t : fan f}  : subsingleton (is_product t) := b
 
 lemma is_product.uniq'' {t : fan f} (h : is_product t) {X' : C} (m : X' ⟶ t.X) : m = h.lift { X := X', π := λ b, m ≫ t.π b } :=
 h.uniq { X := X', π := λ b, m ≫ t.π b } m (by obviously)
-
--- TODO provide alternative constructor using uniq'' instead of uniq'.
 
 lemma is_product.univ {t : fan f} (h : is_product t) (s : fan f) (φ : s.X ⟶ t.X) : (∀ b, φ ≫ t.π b = s.π b) ↔ (φ = h.lift s) :=
 by obviously
@@ -75,8 +67,6 @@ instance is_coproduct_subsingleton {t : cofan f}  : subsingleton (is_coproduct t
 
 lemma is_coproduct.uniq'' {t : cofan f} (h : is_coproduct t) {X' : C} (m : t.X ⟶ X') : m = h.desc { X := X', ι := λ b, t.ι b ≫ m } :=
 h.uniq { X := X', ι := λ b, t.ι b ≫ m } m (by obviously)
-
--- TODO provide alternative constructor using uniq'' instead of uniq'.
 
 lemma is_coproduct.univ {t : cofan f} (h : is_coproduct t) (s : cofan f) (φ : t.X ⟶ s.X) : (∀ b, t.ι b ≫ φ = s.ι b) ↔ (φ = h.desc s) :=
 by obviously
@@ -113,9 +103,6 @@ def pi.universal_property (f : β → C) : is_product (pi.fan f) := has_products
 
 def pi.lift {f : β → C} {P : C} (p : Π b, P ⟶ f b) : P ⟶ pi f :=
 (pi.universal_property f).lift ⟨ ⟨ P ⟩, p ⟩
-
--- @[simp] lemma pi.universal_property_lift (f : β → C) {P : C} (p : Π b, P ⟶ f b) : 
---   (pi.universal_property f).lift ⟨ ⟨ P ⟩, p ⟩ = pi.lift p := rfl
 
 @[simp,search] def pi.lift_π {f : β → C} {P : C} (p : Π b, P ⟶ f b) (b : β) : pi.lift p ≫ pi.π f b = p b :=
 by erw is_product.fac
@@ -209,7 +196,7 @@ instance : has_binary_products.{u v} C :=
     begin 
       -- TODO
       -- `tidy` doesn't do this because it won't perform `cases` on `bool`.
-      -- What if we did the aggressives parts of auto_cases only if `dsimp` then proceeds?
+      -- What if we did the aggressive parts of auto_cases only if `dsimp` then proceeds?
       dsimp at *, ext1, cases b, cases b, tidy,
     end } }
 
@@ -228,19 +215,19 @@ def sigma.universal_property (f : β → C) : is_coproduct (sigma.cofan f) := ha
 def sigma.desc {f : β → C} {P : C} (p : Π b, f b ⟶ P) : sigma f ⟶ P :=
 (sigma.universal_property f).desc ⟨ ⟨ P ⟩, p ⟩
 
-@[simp,search] def sigma.lift_ι {f : β → C} {P : C} (p : Π b, f b ⟶ P) (b : β) : sigma.ι f b ≫ sigma.desc p = p b :=
+@[simp,search] def sigma.ι_lift {f : β → C} {P : C} (p : Π b, f b ⟶ P) (b : β) : sigma.ι f b ≫ sigma.desc p = p b :=
 by erw is_coproduct.fac
 
 def sigma.map {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) : (sigma f) ⟶ (sigma g) :=
 sigma.desc (λ b, k b ≫ sigma.ι g b) 
 
-@[simp] def sigma.map_ι {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) (b : β) : sigma.ι f b ≫ sigma.map k = k b ≫ sigma.ι g b :=
+@[simp] def sigma.ι_map {f : β → C} {g : β → C} (k : Π b, f b ⟶ g b) (b : β) : sigma.ι f b ≫ sigma.map k = k b ≫ sigma.ι g b :=
 by erw is_coproduct.fac
 
 def sigma.pre {α} (f : α → C) (h : β → α) : sigma (f ∘ h) ⟶ sigma f :=
 sigma.desc (λ g, sigma.ι f (h g))
 
-@[simp] def sigma.pre_ι {α} (f : α → C) (h : β → α) (b : β) : sigma.ι (f ∘ h) b ≫ sigma.pre f h = sigma.ι f (h b) := 
+@[simp] def sigma.ι_pre {α} (f : α → C) (h : β → α) (b : β) : sigma.ι (f ∘ h) b ≫ sigma.pre f h = sigma.ι f (h b) := 
 by erw is_coproduct.fac
 
 section
@@ -261,7 +248,7 @@ begin
   obviously
 end
 
-@[simp] def sigma.desc_map 
+@[simp] def sigma.map_desc
   {f : β → C} {g : β → C} {P : C} (k : Π b, f b ⟶ g b) (p : Π b, g b ⟶ P) :
   sigma.map k ≫ sigma.desc p = sigma.desc (λ b, k b ≫ p b) :=
 by obviously
@@ -271,10 +258,9 @@ by obviously
   sigma.map k1 ≫ sigma.map k2 = sigma.map (λ b, k1 b ≫ k2 b) := 
 by obviously.
 
-@[simp] def sigma.desc_pre {α : Type v} {f : β → C} {P : C} (p : Π b, f b ⟶ P) (h : α → β) :
+@[simp] def sigma.pre_desc {α : Type v} {f : β → C} {P : C} (p : Π b, f b ⟶ P) (h : α → β) :
   sigma.pre _ h ≫ sigma.desc p = sigma.desc (λ a, p (h a)) :=
 by obviously
-
 
 -- TODO lemmas describing interactions:
 -- desc_pre, map_pre, pre_pre, desc_post, map_post, pre_post, post_post

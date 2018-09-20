@@ -3,6 +3,7 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import category_theory.limits.shape
+import category_theory.limits.obviously
 
 open category_theory
 

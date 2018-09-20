@@ -4,7 +4,7 @@
 
 import category_theory.types
 import category_theory.isomorphism
-import category_theory.tactics.obviously
+-- import category_theory.tactics.obviously
 
 open category_theory
 
@@ -13,9 +13,6 @@ universes u v w
 namespace category_theory.limits
 
 definition is_equiv {α β : Type v} (f : α → β) := @is_iso (Type v) (category_theory.types) _ _ f
-
--- @[forward] lemma subtype_val {α : Type u} {P : α → Prop} {x y : {a : α // P a}} (h : x = y) : x.val = y.val := 
--- begin obviously, end
 
 section shapes
 structure shape (C : Type u) [𝒞 : category.{u v} C] :=
@@ -69,7 +66,6 @@ structure fork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Y ⟶ Z) 
 (w' : ι ≫ f = ι ≫ g . obviously)
 
 restate_axiom fork.w'
-attribute [search] fork.w
 
 /--
 A `cofork f g`:
@@ -84,7 +80,6 @@ structure cofork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Z ⟶ Y
 (w' : f ≫ π = g ≫ π . obviously)
 
 restate_axiom cofork.w'
-attribute [search] cofork.w
 
 /-- 
 A `square p q`:
@@ -102,7 +97,6 @@ structure square {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r₁ 
 (w' : π₁ ≫ r₁ = π₂ ≫ r₂ . obviously)
 
 restate_axiom square.w'
-attribute [search] square.w
 
 /-- 
 A `cosquare p q`:
@@ -120,14 +114,12 @@ structure cosquare {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r�
 (w' : r₁ ≫ ι₁ = r₂ ≫ ι₂ . obviously)
 
 restate_axiom cosquare.w'
-attribute [search] cosquare.w
 
 structure cone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ⥤ C) extends shape C :=
 (π : ∀ j : J, X ⟶ F j)
 (w' : ∀ {j j' : J} (f : j ⟶ j'), π j ≫ (F.map f) = π j' . obviously)
 
 restate_axiom cone.w'
-attribute [search] cone.w
 
 
 structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ⥤ C) extends shape C :=
@@ -135,7 +127,6 @@ structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_cate
 (w' : ∀ {j j' : J} (f : j ⟶ j'), (F.map f) ≫ ι j' = ι j . obviously)
 
 restate_axiom cocone.w'
-attribute [search] cocone.w
 
 end shapes
 
