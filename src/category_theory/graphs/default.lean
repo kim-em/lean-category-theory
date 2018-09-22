@@ -49,6 +49,10 @@ inductive path : G → G → Type (max u₁ v₁)
 | nil  : Π (h : G), path h h
 | cons : Π {h s t : G} (e : edges h s) (l : path s t), path h t
 
+def path.length : Π {s t : G}, path s t → ℕ
+| _ _ (path.nil _) := 0
+| _ _ (@path.cons _ _ _ _ _ e l) := path.length l
+
 notation a :: b := path.cons a b
 notation `p[` l:(foldr `, ` (h t, path.cons h t) path.nil _ `]`) := l
 
