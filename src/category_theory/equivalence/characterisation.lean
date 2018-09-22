@@ -5,6 +5,8 @@
 import category_theory.equivalence
 import category_theory.natural_isomorphism
 
+import tidy.command.rfl_lemma
+
 open category_theory
 
 namespace category_theory.equivalence
@@ -40,9 +42,11 @@ private def equivalence_inverse (F : C ⥤ D) [full F] [faithful F] [ess_surj F]
   map_comp' := λ X Y Z f g, begin apply F.injectivity, obviously, end }.
 
 -- FIXME pure boilerplate...
-@[simp] private lemma equivalence_inverse_map
-  (F : C ⥤ D) [full F] [faithful : faithful F] [ess_surj F]
-  {X Y : D} (f : X ⟶ Y) : (equivalence_inverse F).map f = F.preimage ((F.fun_obj_preimage_iso X).hom ≫ f ≫ (F.fun_obj_preimage_iso Y).inv) := rfl.
+-- @[simp] private lemma equivalence_inverse_map
+--   (F : C ⥤ D) [full F] [faithful : faithful F] [ess_surj F]
+--   {X Y : D} (f : X ⟶ Y) : (equivalence_inverse F).map f = F.preimage ((F.fun_obj_preimage_iso X).hom ≫ f ≫ (F.fun_obj_preimage_iso Y).inv) := rfl.
+
+private rfl_lemma equivalence_inverse map
 
 def equivalence_of_fully_faithfully_ess_surj
   (F : C ⥤ D) [full F] [faithful : faithful F] [ess_surj F] : is_equivalence F :=
