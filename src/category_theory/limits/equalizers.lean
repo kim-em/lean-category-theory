@@ -3,6 +3,9 @@
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
 import category_theory.limits.shape
+import category_theory.limits.obviously
+
+set_option trace.tidy true
 
 open category_theory
 
@@ -23,17 +26,18 @@ structure is_equalizer {f g : Y ⟶ Z} (t : fork f g) :=
 restate_axiom is_equalizer.fac'
 attribute [simp,search] is_equalizer.fac
 restate_axiom is_equalizer.uniq'
-attribute [search, back'] is_equalizer.uniq
+attribute [search,back'] is_equalizer.uniq
 
 @[extensionality] lemma is_equalizer.ext {f g : Y ⟶ Z} {t : fork f g} (P Q : is_equalizer t) : P = Q :=
 begin cases P, cases Q, obviously end
 
 lemma is_equalizer.mono {f g : Y ⟶ Z} {t : fork f g} (h : is_equalizer t) : mono (t.ι) :=
 { right_cancellation := λ X' k l w, begin 
-                                    let s : fork f g := { X := X', ι := k ≫ t.ι }, 
+                                    let s : fork f g := { X := X', ι := k ≫ t.ι, w' := begin dsimp at *, simp at *, erw [limits.fork.w] end }, 
                                     have uniq_k := h.uniq s k (by obviously),
                                     have uniq_l := h.uniq s l (by obviously),
                                     obviously,
+                                    -- rw [uniq_k, uniq_l]
                               end }
 
 lemma is_equalizer.univ {f g : Y ⟶ Z} {t : fork f g} (h : is_equalizer t) (s : fork f g) (φ : s.X ⟶ t.X) : (φ ≫ t.ι = s.ι) ↔ (φ = h.lift s) :=
