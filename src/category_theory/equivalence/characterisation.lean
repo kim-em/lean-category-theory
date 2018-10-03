@@ -4,6 +4,7 @@
 
 import category_theory.equivalence
 import category_theory.natural_isomorphism
+import tidy.rewrite_search
 
 open category_theory
 
@@ -23,26 +24,24 @@ instance faithful_of_equivalence (F : C ⥤ D) [is_equivalence F] : faithful F :
                                 assumption
                               end }.
 
+open tidy.rewrite_search.tracer
+
 instance full_of_equivalence (F : C ⥤ D) [is_equivalence F] : full F := 
 { preimage := λ X Y f, (nat_iso.app F.fun_inv_id X).inv ≫ (F.inv.map f) ≫ (nat_iso.app F.fun_inv_id Y).hom,
   witness' := λ X Y f, 
     begin
       apply F.inv.injectivity,
-      obviously,
+      tidy,
+      rewrite_search_using [`search] { view := visualiser },
     end }.
 
 section
 
-private def equivalence_inverse (F : C ⥤ D) [full F] [faithful F] [ess_surj F] : D ⥤ C := 
+@[simp] private def equivalence_inverse (F : C ⥤ D) [full F] [faithful F] [ess_surj F] : D ⥤ C := 
 { obj  := λ X, F.obj_preimage X,
   map' := λ X Y f, F.preimage ((F.fun_obj_preimage_iso X).hom ≫ f ≫ (F.fun_obj_preimage_iso Y).inv),
   map_id' := λ X, begin apply F.injectivity, obviously, end,
   map_comp' := λ X Y Z f g, begin apply F.injectivity, obviously, end }.
-
--- FIXME pure boilerplate...
-@[simp] private lemma equivalence_inverse_map 
-  (F : C ⥤ D) [full F] [faithful : faithful F] [ess_surj F]
-  {X Y : D} (f : X ⟶ Y) : (equivalence_inverse F).map f = F.preimage ((F.fun_obj_preimage_iso X).hom ≫ f ≫ (F.fun_obj_preimage_iso Y).inv) := rfl.
 
 def equivalence_of_fully_faithfully_ess_surj
   (F : C ⥤ D) [full F] [faithful : faithful F] [ess_surj F] : is_equivalence F := 

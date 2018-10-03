@@ -22,7 +22,7 @@ do ctx ← local_context,
 
 meta def fyn := tidy { tactics := tactic.tidy.default_tactics ++ [construct_morphism >> pure "construct_morphism"] }
 
-local attribute [tidy] construct_morphism
+attribute [tidy] construct_morphism
 
 notation `ƛ` binders `, ` r:(scoped f, { category_theory.functor . obj := f, map' := by obviously }) := r
 

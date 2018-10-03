@@ -2,6 +2,8 @@ import category_theory.natural_isomorphism
 import category_theory.products
 import category_theory.types
 import category_theory.embedding
+import category_theory.yoneda
+
 import tidy.tidy
 
 open category_theory
@@ -19,3 +21,5 @@ attribute [search] nat_iso.comp_app nat_iso.naturality_1 nat_iso.naturality_2
 attribute [back'] full.preimage
 attribute [search] full.witness functor.image_preimage
 attribute [forward] faithful.injectivity
+
+attribute [search] yoneda.obj_map_id
