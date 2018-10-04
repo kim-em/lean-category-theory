@@ -11,6 +11,8 @@ open category_theory
 -- https://www.isa-afp.org/browser_info/current/AFP/Category/document.pdf
 -- Alexander Katovsky, Isabelle
 -- https://www.isa-afp.org/browser_info/current/AFP/Category2/document.pdf
+-- Gross, Chlipala, Spivak, Coq
+-- https://arxiv.org/src/1401.7694v2/anc/HoTT/theories/categories/Yoneda.v
 
 variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
 include 𝒞
