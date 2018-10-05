@@ -1,4 +1,5 @@
 import category_theory.presheaves
+import category_theory.tactics.obviously
 
 open category_theory
 open category_theory.examples
@@ -30,7 +31,7 @@ def functor.map_presheaf (F : C ⥤ D) : Presheaf.{u v} C ⥤ Presheaf.{u v} D :
     refl,
     ext1, -- check the equality of natural transformations componentwise
     dsimp at *, simp at *, dsimp at *,
-    obviously,
+    obviously
   end,
   map_comp' :=
   begin

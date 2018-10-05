@@ -3,7 +3,7 @@
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
 import category_theory.discrete_category
-import category_theory.functor_categories.whiskering
+import category_theory.whiskering
 import category_theory.universal.cones
 
 open category_theory

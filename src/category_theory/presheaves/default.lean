@@ -4,7 +4,7 @@
 
 import category_theory.examples.topological_spaces
 import category_theory.functor_category
-import category_theory.functor_categories.whiskering
+import category_theory.whiskering
 import category_theory.natural_isomorphism
 
 universes u v u₂ v₂

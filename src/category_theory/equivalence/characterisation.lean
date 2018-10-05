@@ -25,6 +25,7 @@ instance faithful_of_equivalence (F : C ⥤ D) [is_equivalence F] : faithful F :
                               end }.
 
 open tidy.rewrite_search.tracer
+open tidy.rewrite_search.strategy
 
 instance full_of_equivalence (F : C ⥤ D) [is_equivalence F] : full F := 
 { preimage := λ X Y f, (nat_iso.app F.fun_inv_id X).inv ≫ (F.inv.map f) ≫ (nat_iso.app F.fun_inv_id Y).hom,
@@ -32,7 +33,7 @@ instance full_of_equivalence (F : C ⥤ D) [is_equivalence F] : full F :=
     begin
       apply F.inv.injectivity,
       tidy,
-      rewrite_search_using [`search] { view := visualiser },
+      rewrite_search_using [`search] { view := visualiser, strategy := pexplore {pop_size := 5} },
     end }.
 
 section
