@@ -15,7 +15,7 @@ namespace category_theory.adjunctions
 universes u₁ v₁ u₂ v₂
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
-include 𝒞 𝒟 
+include 𝒞 𝒟
 
 -- TODO think again about whether we should specify the conditions here in terms of natural transformations or components
 structure Adjunction (L : C ⥤ D) (R : D ⥤ C) :=
@@ -23,7 +23,7 @@ structure Adjunction (L : C ⥤ D) (R : D ⥤ C) :=
   (counit     : (R ⋙ L) ⟹ functor.id _)
   (triangle_1 : ∀ X : D, (unit (R X)) ≫ (R.map (counit X)) = 𝟙 (R X))
   (triangle_2 : ∀ X : C, (L.map (unit X)) ≫ (counit (L X)) = 𝟙 (L X))
-  -- (Triangle_1 : (whisker_on_left R unit) ⊟ (whisker_on_right counit R) = 1) -- we'd need unitors and associators here
+  -- (Triangle_1 : (whisker_left R unit) ⊟ (whisker_right counit R) = 1) -- we'd need unitors and associators here
 
 
 attribute [simp,search] Adjunction.triangle_1 Adjunction.triangle_2
@@ -31,7 +31,7 @@ attribute [simp,search] Adjunction.triangle_1 Adjunction.triangle_2
 infix ` ⊣ `:50 := Adjunction
 
 @[extensionality] lemma Adjunctions_pointwise_equal
-  (L : C ⥤ D) (R : D ⥤ C) (A B : L ⊣ R) 
+  (L : C ⥤ D) (R : D ⥤ C) (A B : L ⊣ R)
   (w1 : A.unit = B.unit) (w2 : A.counit = B.counit) : A = B :=
   begin
     induction A,
@@ -46,7 +46,7 @@ infix ` ⊣ `:50 := Adjunction
 --   {R : Functor D C}
 --   (unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
 --   (counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D)) :=
---   @vertical_composition_of_NaturalTransformations D C R (FunctorComposition (FunctorComposition R L) R) R ⟦ whisker_on_left R unit ⟧ ⟦ whisker_on_right counit R ⟧
+--   @vertical_composition_of_NaturalTransformations D C R (FunctorComposition (FunctorComposition R L) R) R ⟦ whisker_left R unit ⟧ ⟦ whisker_right counit R ⟧
 --   = IdentityNaturalTransformation R
 
 -- def Triangle_2
@@ -55,10 +55,10 @@ infix ` ⊣ `:50 := Adjunction
 --   {R : Functor D C}
 --   (unit   : NaturalTransformation (IdentityFunctor C) (FunctorComposition L R))
 --   (counit : NaturalTransformation (FunctorComposition R L) (IdentityFunctor D)) :=
---   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_on_right unit L ⟧ ⟦ whisker_on_left L counit ⟧
+--   @vertical_composition_of_NaturalTransformations C D L (FunctorComposition (FunctorComposition L R) L) L ⟦ whisker_right unit L ⟧ ⟦ whisker_left L counit ⟧
 --   = IdentityNaturalTransformation L
 
-@[simp,search] lemma Adjunction.unit_naturality {L : C ⥤ D} {R : D ⥤ C} (A : L ⊣ R) {X Y : C} (f : X ⟶ Y) : (A.unit X) ≫ (R.map (L.map f)) = f ≫ (A.unit Y) := 
+@[simp,search] lemma Adjunction.unit_naturality {L : C ⥤ D} {R : D ⥤ C} (A : L ⊣ R) {X Y : C} (f : X ⟶ Y) : (A.unit X) ≫ (R.map (L.map f)) = f ≫ (A.unit Y) :=
 by obviously
 
 @[simp,search] lemma Adjunction.counit_naturality {L : C ⥤ D} {R : D ⥤ C} (A : L ⊣ R) {X Y : D} (f : X ⟶ Y) : (L.map (R.map f)) ≫ (A.counit Y) = (A.counit X) ≫ f :=

@@ -59,9 +59,9 @@ A `fork f g`:
              f
  X --ι--> Y ====> Z
              g
-```            
+```
 -/
-structure fork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Y ⟶ Z) extends shape C := 
+structure fork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Y ⟶ Z) extends shape C :=
 (ι : X ⟶ Y)
 (w' : ι ≫ f = ι ≫ g . obviously)
 
@@ -73,15 +73,15 @@ A `cofork f g`:
               f
  X <--π-- Y <==== Z
               g
-```            
+```
 -/
-structure cofork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Z ⟶ Y) extends shape C := 
+structure cofork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Z ⟶ Y) extends shape C :=
 (π : Y ⟶ X)
 (w' : f ≫ π = g ≫ π . obviously)
 
 restate_axiom cofork.w'
 
-/-- 
+/--
 A `square p q`:
 ```
 X  --π₁--> Y₁
@@ -98,7 +98,7 @@ structure square {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r₁ 
 
 restate_axiom square.w'
 
-/-- 
+/--
 A `cosquare p q`:
 ```
 X  <--ι₁-- Y₁
@@ -120,7 +120,6 @@ structure cone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_catego
 (w' : ∀ {j j' : J} (f : j ⟶ j'), π j ≫ (F.map f) = π j' . obviously)
 
 restate_axiom cone.w'
-
 
 structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ⥤ C) extends shape C :=
 (ι : ∀ j : J, F j ⟶ X)
