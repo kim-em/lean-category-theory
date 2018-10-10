@@ -18,7 +18,7 @@ def fyn_names :=
 meta def construct_morphism : tactic unit := 
 do ctx ← local_context,
    extra ← fyn_names.mmap (λ n, mk_const n),
-   solve_by_elim { restr_hyp_set := some (ctx ++ extra) }
+   solve_by_elim { assumptions := return (ctx ++ extra) }
 
 meta def fyn := tidy { tactics := tactic.tidy.default_tactics ++ [construct_morphism >> pure "construct_morphism"] }
 

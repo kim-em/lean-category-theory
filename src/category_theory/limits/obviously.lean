@@ -10,8 +10,8 @@ attribute [search] cosquare.w
 attribute [search] cone.w
 attribute [search] cocone.w
 
-attribute [search,back'] is_terminal.uniq
-attribute [search,back'] is_initial.uniq
+attribute [search,elim] is_terminal.uniq
+attribute [search,elim] is_initial.uniq
 
 -- attribute [search] is_equalizer.fac
 -- attribute [search,back'] is_equalizer.uniq

@@ -18,7 +18,7 @@ attribute [search] iso.hom_inv_id iso.inv_hom_id is_iso.hom_inv_id is_iso.inv_ho
 
 attribute [search] nat_iso.comp_app nat_iso.naturality_1 nat_iso.naturality_2
 
-attribute [back'] full.preimage
+attribute [elim] full.preimage
 attribute [search] full.witness functor.image_preimage
 attribute [forward] faithful.injectivity
 
