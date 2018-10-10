@@ -1,4 +1,5 @@
 import category_theory.limits.terminal
+import category_theory.tactics.obviously
 
 open category_theory
 
