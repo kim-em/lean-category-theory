@@ -36,7 +36,7 @@ instance full_of_equivalence (F : C ⥤ D) [is_equivalence F] : full F :=
       tidy,
       rewrite_search_using [`search] { view := visualiser,
                                        trace_summary := tt,
-                                       strategy := pexplore {pop_size := 5},
+                                       strategy := pexplore {pop_size := 3},
                                       --  metric := edit_distance {refresh_freq := 5} weight.cm
                                        },
     end }.

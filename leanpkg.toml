@@ -5,5 +5,5 @@ lean_version = "nightly-2018-06-21"
 path = "src"
 
 [dependencies]
-mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "c1f9f2e2977c0f6cb1cfd949bee8c3817cce0489"}
 lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "d8f6c73524314e6b6eccaeb50ccff24d5002476b"}
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "911497f4ccec22645882b6948669b34d9697ee09"}
