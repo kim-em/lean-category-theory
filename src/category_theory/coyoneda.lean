@@ -1,4 +1,5 @@
-import .yoneda
+import category_theory.yoneda
+import category_theory.tactics.obviously
 
 universes u₁ v₁ 
 

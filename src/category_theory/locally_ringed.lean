@@ -6,17 +6,17 @@ universes v
 open category_theory.examples
 open category_theory.limits
 
-variables (α : Type v) [topological_space α]
+variables (X : Top.{v})
 
-def structure_sheaf := sheaf.{v+1 v} α CommRing
+def structure_sheaf := sheaf.{v+1 v} X CommRing
 
 structure ringed_space :=
-(𝒪 : structure_sheaf α)
+(𝒪 : structure_sheaf X)
  
-structure locally_ringed_space extends ringed_space α :=
-(locality : ∀ x : α, local_ring (stalk_at.{v+1 v} 𝒪 x).1)
+structure locally_ringed_space extends ringed_space X :=
+(locality : ∀ x : X, local_ring (stalk_at.{v+1 v} 𝒪.presheaf x).1) -- coercion from sheaf to presheaf?
 
-def ringed_space.of_topological_space : ringed_space α :=
+def ringed_space.of_topological_space : ringed_space X :=
 { 𝒪 := { presheaf := { obj       := λ U, sorry /- ring of continuous functions U → ℂ -/,
                         map'      := sorry,
                         map_id'   := sorry,
