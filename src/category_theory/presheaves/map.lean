@@ -30,8 +30,9 @@ def functor.map_presheaf (F : C ⥤ D) : Presheaf.{u v} C ⥤ Presheaf.{u v} D :
     swap, -- check the continuous map first (hopefully this will not be necessary after my PR)
     refl,
     ext1, -- check the equality of natural transformations componentwise
-    dsimp at *, simp at *, dsimp at *,
-    obviously
+    dsimp at *, simp at *,
+    erw functor.map_id,
+    simp
   end,
   map_comp' :=
   begin

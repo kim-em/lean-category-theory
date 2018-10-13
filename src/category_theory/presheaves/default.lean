@@ -43,7 +43,7 @@ begin
   ext,
   have h' := congr_fun (congr_arg nat_trans.app h) X,
   dsimp at h',
-  dsimp [open_set.map_iso, whisker_right, whiskering_on_right, nat_iso.of_components, nat_trans.hcomp] at h',
+  dsimp [open_set.map_iso, whisker_right, whiskering_right, nat_iso.of_components, nat_trans.hcomp] at h',
   simp at h',
   dsimp at h',
   rw category.comp_id at h',
@@ -85,7 +85,6 @@ instance category_of_presheaves : category (Presheaf.{u v} C) :=
     -- Check the comorphisms
     ext1, -- compare natural transformations componentwise
     dsimp [Presheaf_hom.id, Presheaf_hom.comp],
-    dsimp [whisker_right, whiskering_on_right, whisker_left, whiskering_on_left],
     simp,
     erw [category_theory.functor.map_id],
     simp,
@@ -102,9 +101,8 @@ instance category_of_presheaves : category (Presheaf.{u v} C) :=
     -- Check the comorphisms
     ext1, -- compare natural transformations componentwise
     dsimp [Presheaf_hom.id, Presheaf_hom.comp],
-    dsimp [whisker_right, whiskering_on_right, whisker_left, whiskering_on_left],
     simp,
-    erw [category_theory.functor.map_id, category.comp_id, category.comp_id],
+    erw [category_theory.functor.map_id, category.comp_id],
     -- Check the functions
     dsimp [Presheaf_hom.id, Presheaf_hom.comp],
     simp,
@@ -112,22 +110,17 @@ instance category_of_presheaves : category (Presheaf.{u v} C) :=
   assoc' := λ W X Y Z f g h,
   begin
     ext1,
-    swap,
-    -- Check the functions
-    { dsimp [Presheaf_hom.comp],
-      simp only [category.assoc, eq_self_iff_true], },
     -- Check the comorphisms
     { ext1,
       dsimp only [Presheaf_hom.comp,
-             whisker_right, whiskering_on_right, whisker_left, whiskering_on_left,
+             whisker_right, whisker_left, whiskering_right, whiskering_left,
              open_set.map_iso, nat_iso.of_components],
       dsimp, -- This is really slow.
       simp only [category.assoc, category_theory.functor.map_id, category.comp_id],
-      erw [category_theory.functor.map_id],
-      erw [category_theory.functor.map_id],
-      erw [category.comp_id],
-      erw [category.comp_id],
-      erw [category.id_comp] },
+      refl, },
+    -- Check the functions
+    { dsimp [Presheaf_hom.comp],
+      simp only [category.assoc, eq_self_iff_true], },
   end }.
 
 namespace Presheaf_hom

@@ -2,9 +2,9 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison, Reid Barton, Mario Carneiro
 
-import category_theory.discrete_category
 import category_theory.whiskering
 import category_theory.limits.cones
+import category_theory.tactics.obviously
 
 open category_theory
 
@@ -25,9 +25,8 @@ structure is_limit {F : J ⥤ C} (t : cone F) :=
 (uniq' : ∀ (s : cone F) (m : s.X ⟶ t.X) (w : ∀ j : J, (m ≫ t.π j) = s.π j), m = lift s . obviously)
 
 restate_axiom is_limit.fac'
-attribute [simp,search] is_limit.fac
+attribute [simp] is_limit.fac
 restate_axiom is_limit.uniq'
-attribute [search,elim] is_limit.uniq
 
 @[extensionality] lemma is_limit.ext {F : J ⥤ C} {t : cone F} (P Q : is_limit t) : P = Q :=
 begin
@@ -69,9 +68,8 @@ structure is_colimit {F : J ⥤ C} (t : cocone F) :=
 (uniq' : ∀ (s : cocone F) (m : t.X ⟶ s.X) (w : ∀ j : J, (t.ι j ≫ m) = s.ι j), m = desc s . obviously)
 
 restate_axiom is_colimit.fac'
-attribute [simp,search] is_colimit.fac
+attribute [simp] is_colimit.fac
 restate_axiom is_colimit.uniq'
-attribute [search,elim] is_colimit.uniq
 
 @[extensionality] lemma is_colimit.ext {F : J ⥤ C} {t : cocone F} (P Q : is_colimit t) : P = Q :=
 begin
@@ -212,7 +210,7 @@ limit.lift (E ⋙ F)
     refl
   end }
 
-@[simp,search] lemma limit.pre_π (F : J ⥤ C) (E : K ⥤ J) (k : K) :
+@[simp] lemma limit.pre_π (F : J ⥤ C) (E : K ⥤ J) (k : K) :
   limit.pre F E ≫ limit.π (E ⋙ F) k = limit.π F (E k) :=
 by erw is_limit.fac
 
@@ -255,7 +253,7 @@ limit.lift (F ⋙ G)
     refl
   end }
 
-@[simp,search] lemma limit.post_π (F : J ⥤ C) (G : C ⥤ D) (j : J) :
+@[simp] lemma limit.post_π (F : J ⥤ C) (G : C ⥤ D) (j : J) :
   limit.post F G ≫ limit.π (F ⋙ G) j = G.map (limit.π F j) :=
 by erw is_limit.fac
 
@@ -419,7 +417,7 @@ colimit.desc (E ⋙ F)
     refl
   end }
 
-@[simp,search] lemma colimit.ι_pre (F : J ⥤ C) (E : K ⥤ J) (k : K) :
+@[simp] lemma colimit.ι_pre (F : J ⥤ C) (E : K ⥤ J) (k : K) :
   colimit.ι (E ⋙ F) k ≫ colimit.pre F E = colimit.ι F (E k) :=
 by erw is_colimit.fac
 
@@ -471,7 +469,7 @@ colimit.desc (F ⋙ G)
     refl
   end }
 
-@[simp,search] lemma colimit.ι_post (F : J ⥤ C) (G : C ⥤ D) (j : J) :
+@[simp] lemma colimit.ι_post (F : J ⥤ C) (G : C ⥤ D) (j : J) :
   colimit.ι (F ⋙ G) j ≫ colimit.post F G = G.map (colimit.ι F j) :=
 by erw is_colimit.fac
 

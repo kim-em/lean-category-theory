@@ -36,7 +36,7 @@ instance full_of_equivalence (F : C ⥤ D) [is_equivalence F] : full F :=
     begin
       apply F.inv.injectivity,
       tidy,
-      rewrite_search_using [`search] { view := visualiser,
+      rewrite_search_using [`search] { --view := visualiser,
                                        trace_summary := tt,
                                        strategy := pexplore {pop_size := 3},
                                        },
