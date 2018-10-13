@@ -4,7 +4,6 @@
 
 import category_theory.types
 import category_theory.isomorphism
--- import category_theory.tactics.obviously
 
 open category_theory
 

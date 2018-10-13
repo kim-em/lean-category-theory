@@ -5,9 +5,6 @@
 import category_theory.discrete_category
 import category_theory.whiskering
 import category_theory.limits.cones
--- import category_theory.limits.obviously
-
--- set_option trace.tidy true
 
 open category_theory
 
@@ -33,23 +30,31 @@ restate_axiom is_limit.uniq'
 attribute [search,elim] is_limit.uniq
 
 @[extensionality] lemma is_limit.ext {F : J ⥤ C} {t : cone F} (P Q : is_limit t) : P = Q :=
-begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously end
+begin
+  tactic.unfreeze_local_instances,
+  cases P, cases Q,
+  congr,
+  ext1,
+  solve_by_elim,
+ end
 
 lemma is_limit.univ {F : J ⥤ C} {t : cone F} [h : is_limit t] (s : cone F) (φ : s.X ⟶ t.X) :
   (∀ j, φ ≫ t.π j = s.π j) ↔ (φ = is_limit.lift h s) :=
-begin
-  fsplit, work_on_goal 0 { back },
-  intros a j,
-  rw a,
-  rw ←is_limit.fac h,
-  simp at *,
-end
+/- obviously says: -/
+⟨ is_limit.uniq h s φ,
+  begin
+    intros a j,
+    rw a,
+    rw ←is_limit.fac h,
+    simp at *,
+  end ⟩
 
 def is_limit.of_lift_univ {F : J ⥤ C} {t : cone F}
   (lift : Π (s : cone F), s.X ⟶ t.X)
   (univ : Π (s : cone F) (φ : s.X ⟶ t.X), (∀ j : J, (φ ≫ t.π j) = s.π j) ↔ (φ = lift s)) : is_limit t :=
 { lift := lift,
-  fac'  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j }
+  fac'  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j,
+  uniq' := λ s φ, (univ s φ).mp }
 
 end limit
 
@@ -69,23 +74,30 @@ restate_axiom is_colimit.uniq'
 attribute [search,elim] is_colimit.uniq
 
 @[extensionality] lemma is_colimit.ext {F : J ⥤ C} {t : cocone F} (P Q : is_colimit t) : P = Q :=
-begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously end
+begin
+  tactic.unfreeze_local_instances,
+  cases P, cases Q,
+  congr,
+  ext1,
+  solve_by_elim,
+end
 
 lemma is_colimit.univ {F : J ⥤ C} {t : cocone F} [h : is_colimit t] (s : cocone F) (φ : t.X ⟶ s.X) :
   (∀ j, t.ι j ≫ φ = s.ι j) ↔ (φ = is_colimit.desc h s) :=
-begin
-  fsplit, work_on_goal 0 { back },
-  intros a j,
-  rw a,
-  rw ←is_colimit.fac h,
-  simp at *,
-end
+⟨ is_colimit.uniq h s φ,
+  begin
+    intros a j,
+    rw a,
+    rw ←is_colimit.fac h,
+    simp at *,
+  end ⟩
 
 def is_colimit.of_desc_univ {F : J ⥤ C} {t : cocone F}
   (desc : Π (s : cocone F), t.X ⟶ s.X)
   (univ : Π (s : cocone F) (φ : t.X ⟶ s.X), (∀ j : J, (t.ι j ≫ φ) = s.ι j) ↔ (φ = desc s)) : is_colimit t :=
 { desc := desc,
-  fac'  := λ s j, ((univ s (desc s)).mpr (eq.refl (desc s))) j }
+  fac'  := λ s j, ((univ s (desc s)).mpr (eq.refl (desc s))) j,
+  uniq' := λ s φ, (univ s φ).mp }
 
 end colimit
 
@@ -95,8 +107,7 @@ class has_limits :=
 (limit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), cone F)
 (is_limit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), is_limit (limit F) . obviously)
 
-
--- also do finite limits?
+-- also do finite limits? filtered limits? can we do these without lots of repetition below?
 
 variable {C}
 
@@ -111,9 +122,9 @@ def limit.universal_property (F : J ⥤ C) : is_limit (limit.cone F) :=
 has_limits.is_limit.{u v} C F
 
 def limit.lift (F : J ⥤ C) (c : cone F) : c.X ⟶ limit F := (limit.universal_property F).lift c
-@[simp] def limit.universal_property_lift (F : J ⥤ C) (c : cone F) : (limit.universal_property F).lift c = limit.lift F c := rfl
+@[simp] lemma limit.universal_property_lift (F : J ⥤ C) (c : cone F) : (limit.universal_property F).lift c = limit.lift F c := rfl
 
-@[simp] def limit.lift_π (F : J ⥤ C) (c : cone F) (j : J) : limit.lift F c ≫ limit.π F j = c.π j :=
+@[simp] lemma limit.lift_π (F : J ⥤ C) (c : cone F) (j : J) : limit.lift F c ≫ limit.π F j = c.π j :=
 is_limit.fac _ c j
 
 @[simp] lemma limit.cone_π (F : J ⥤ C) (j : J) : (limit.cone F).π j = (@limit.π C _ _ J _ F j) := rfl
@@ -125,7 +136,7 @@ def limit.cone_morphism (F : J ⥤ C) (c : cone F) : cone_morphism c (limit.cone
 @[simp] lemma limit.cone_morphism_π {F : J ⥤ C} (c : cone F) (j : J) : (limit.cone_morphism F c).hom ≫ (limit.π F j) = c.π j :=
 by erw is_limit.fac
 
-@[extensionality] def limit.hom_ext {F : J ⥤ C} {X : C}
+@[extensionality] lemma limit.hom_ext {F : J ⥤ C} {X : C}
   (f g : X ⟶ limit F)
   (w : ∀ j, f ≫ limit.π F j = g ≫ limit.π F j) : f = g :=
 begin
@@ -139,10 +150,11 @@ begin
       erw limits.cone.w,
       simp,
     end },
-  have p_f := (limit.universal_property F).uniq c f (by obviously),
-  have p_g := (limit.universal_property F).uniq c g (by obviously),
+  have p_f := (limit.universal_property F).uniq c f (λ j, by simp),
+  have p_g := (limit.universal_property F).uniq c g (λ j, eq.symm (w j)
+),
   /- obviously says: -/
-  dsimp at *, simp at *,
+  dsimp at *,
   rw [p_f, p_g]
 end
 
@@ -174,7 +186,7 @@ by obviously
 @[simp] lemma lim_map_π {F G : J ⥤ C} (α : F ⟹ G) (j : J) : lim.map α ≫ limit.π G j = limit.π F j ≫ α j :=
 by erw is_limit.fac
 
-@[simp] def limit.lift_map {F G : J ⥤ C} (c : cone F) (α : F ⟹ G) :
+@[simp] lemma limit.lift_map {F G : J ⥤ C} (c : cone F) (α : F ⟹ G) :
   limit.lift F c ≫ lim.map α = limit.lift G (c.postcompose α) :=
 begin
   /- `obviously` says -/
@@ -204,11 +216,11 @@ limit.lift (E ⋙ F)
   limit.pre F E ≫ limit.π (E ⋙ F) k = limit.π F (E k) :=
 by erw is_limit.fac
 
-@[simp] def limit.lift_pre {F : J ⥤ C} (c : cone F) (E : K ⥤ J) :
+@[simp] lemma limit.lift_pre {F : J ⥤ C} (c : cone F) (E : K ⥤ J) :
   limit.lift F c ≫ limit.pre F E = limit.lift (E ⋙ F) (c.whisker E) :=
 by obviously
 
-def limit.map_pre {F G : J ⥤ C} (α : F ⟹ G) (E : K ⥤ J) :
+lemma limit.map_pre {F G : J ⥤ C} (α : F ⟹ G) (E : K ⥤ J) :
   lim.map α ≫ limit.pre G E = limit.pre F E ≫ lim.map (whisker_left E α) :=
 begin
   /- `obviously` says -/
@@ -222,10 +234,8 @@ end
 begin
   /- `obviously` says -/
   ext1, dsimp at *, simp at *,
-  erw [←limit.pre_π, limit.pre_π, ←limit.pre_π F E],
-  dsimp at *, simp at *, nth_rewrite_lhs 0 ←limit.pre_π,
-nth_rewrite_rhs 0 limit.pre_π,
-nth_rewrite_rhs 0 ←limit.pre_π F E
+  erw limit.pre_π, -- isn't it sad this simp lemma isn't applied by simp?
+  refl
 end
 end
 
@@ -249,7 +259,7 @@ limit.lift (F ⋙ G)
   limit.post F G ≫ limit.π (F ⋙ G) j = G.map (limit.π F j) :=
 by erw is_limit.fac
 
-@[simp] def limit.lift_post {F : J ⥤ C} (c : cone F) (G : C ⥤ D) :
+@[simp] lemma limit.lift_post {F : J ⥤ C} (c : cone F) (G : C ⥤ D) :
   G.map (limit.lift F c) ≫ limit.post F G = limit.lift (F ⋙ G) (G.map_cone c) :=
 begin
   /- `obviously` says -/
@@ -259,7 +269,7 @@ begin
   refl
 end
 
-def limit.map_post {F G : J ⥤ C} (α : F ⟹ G) (H : C ⥤ D) :
+lemma limit.map_post {F G : J ⥤ C} (α : F ⟹ G) (H : C ⥤ D) :
 /- H (limit F) ⟶ H (limit G) ⟶ limit (G ⋙ H) vs
    H (limit F) ⟶ limit (F ⋙ H) ⟶ limit (G ⋙ H) -/
   H.map (lim.map α) ≫ limit.post G H = limit.post F H ≫ lim.map (whisker_right α H) :=
@@ -270,7 +280,7 @@ begin
   refl
 end
 
-def limit.pre_post {K : Type v} [small_category K] (F : J ⥤ C) (E : K ⥤ J) (G : C ⥤ D) :
+lemma limit.pre_post {K : Type v} [small_category K] (F : J ⥤ C) (E : K ⥤ J) (G : C ⥤ D) :
 /- G (limit F) ⟶ G (limit (E ⋙ F)) ⟶ limit ((E ⋙ F) ⋙ G) vs -/
 /- G (limit F) ⟶ limit F ⋙ G ⟶ limit (E ⋙ (F ⋙ G)) or -/
   G.map (limit.pre F E) ≫ limit.post (E ⋙ F) G = limit.post F G ≫ limit.pre (F ⋙ G) E :=
@@ -281,7 +291,7 @@ begin
   simp,
 end.
 
-@[simp] def limit.post_post {E : Type u} [category.{u v} E] [has_limits.{u v} E] (F : J ⥤ C) (G : C ⥤ D) (H : D ⥤ E):
+@[simp] lemma limit.post_post {E : Type u} [category.{u v} E] [has_limits.{u v} E] (F : J ⥤ C) (G : C ⥤ D) (H : D ⥤ E):
 /- H G (limit F) ⟶ H (limit (F ⋙ G)) ⟶ limit ((F ⋙ G) ⋙ H) vs -/
 /- H G (limit F) ⟶ limit (F ⋙ (G ⋙ H)) or -/
   H.map (limit.post F G) ≫ limit.post (F ⋙ G) H = limit.post F (G ⋙ H) :=
@@ -302,7 +312,6 @@ class has_colimits :=
 (colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), cocone F)
 (is_colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), is_colimit (colimit F) . obviously)
 
-
 variable {C}
 
 section
@@ -316,6 +325,83 @@ def colimit.universal_property (F : J ⥤ C) : is_colimit (colimit.cocone F) :=
 has_colimits.is_colimit.{u v} C F
 
 def colimit.desc (F : J ⥤ C) (c : cocone F) : colimit F ⟶ c.X := (colimit.universal_property F).desc c
+@[simp] lemma colimit.universal_property_desc (F : J ⥤ C) (c : cocone F) : (colimit.universal_property F).desc c = colimit.desc F c := rfl
+
+@[simp] lemma colimit.ι_desc (F : J ⥤ C) (c : cocone F) (j : J) : colimit.ι F j ≫ colimit.desc F c = c.ι j :=
+is_colimit.fac _ c j
+
+@[simp] lemma colimit.cone_ι (F : J ⥤ C) (j : J) : (colimit.cocone F).ι j = (@colimit.ι C _ _ J _ F j) := rfl
+
+def colimit.cocone_morphism (F : J ⥤ C) (c : cocone F) : cocone_morphism (colimit.cocone F) c :=
+{ hom := (colimit.desc F) c }
+
+@[simp] lemma colimit.cocone_morphism_hom {F : J ⥤ C} (c : cocone F) : (colimit.cocone_morphism F c).hom = colimit.desc F c := rfl
+@[simp] lemma colimit.ι_cocone_morphism {F : J ⥤ C} (c : cocone F) (j : J) : (colimit.ι F j) ≫ (colimit.cocone_morphism F c).hom = c.ι j :=
+by erw is_colimit.fac
+
+@[extensionality] lemma colimit.hom_ext {F : J ⥤ C} {X : C}
+  (f g : colimit F ⟶ X)
+  (w : ∀ j, colimit.ι F j ≫ f = colimit.ι F j ≫ g) : f = g :=
+begin
+  let c : cocone F :=
+  { X := X,
+    ι := λ j, colimit.ι F j ≫ f,
+    w' :=
+    begin
+      /- obviously says: -/
+      intros j j' f_1, dsimp at *,
+      erw [← category.assoc, limits.cocone.w],
+      simp,
+    end },
+  have p_f := (colimit.universal_property F).uniq c f (λ j, by simp),
+  have p_g := (colimit.universal_property F).uniq c g (λ j, eq.symm (w j)
+),
+  rw [p_f, p_g],
+end
+
+lemma colimit.desc_extend (F : J ⥤ C) (c : cocone F) {X : C} (f : c.X ⟶ X) :
+  colimit.desc F (c.extend f) = colimit.desc F c ≫ f :=
+begin
+  /- obviously says: -/
+  ext1, simp at *, erw ←category.assoc, simp, refl
+end
+
+/-- `colimit F` is functorial in `F`. -/
+@[simp] def colim : (J ⥤ C) ⥤ C :=
+{ obj := colimit,
+  map' := λ F F' t, colimit.desc F $
+    { X := colimit F',
+      ι := λ j, t j ≫ colimit.ι F' j,
+      w' :=
+      begin
+        /- `obviously` says -/
+        intros j j' f, dsimp at *,
+        erw [←category.assoc,
+             nat_trans.naturality,
+             category.assoc,
+             limits.cocone.w],
+        refl,
+      end },
+  map_comp' :=
+  begin
+    /- `obviously` says -/
+    intros X Y Z f g, ext1, dsimp at *, simp at *,
+    conv { to_rhs, rw ←category.assoc },
+    simp
+  end }.
+
+@[simp] lemma colim_ι_map {F G : J ⥤ C} (α : F ⟹ G) (j : J) : colimit.ι F j ≫ colim.map α = α j ≫ colimit.ι G j :=
+by erw is_colimit.fac
+
+@[simp] lemma colimit.map_desc {F G : J ⥤ C} (c : cocone G) (α : F ⟹ G) :
+  colim.map α ≫ colimit.desc G c = colimit.desc F (c.precompose α) :=
+begin
+  /- `obviously` says -/
+  ext1, dsimp at *, simp at *,
+  erw ←category.assoc,
+  simp,
+  refl
+end
 
 section
 variables {K : Type v} [𝒦 : small_category K]
@@ -332,6 +418,41 @@ colimit.desc (E ⋙ F)
     erw limits.cocone.w,
     refl
   end }
+
+@[simp,search] lemma colimit.ι_pre (F : J ⥤ C) (E : K ⥤ J) (k : K) :
+  colimit.ι (E ⋙ F) k ≫ colimit.pre F E = colimit.ι F (E k) :=
+by erw is_colimit.fac
+
+@[simp] lemma colimit.desc_pre {F : J ⥤ C} (c : cocone F) (E : K ⥤ J) :
+  colimit.pre F E ≫ colimit.desc F c = colimit.desc (E ⋙ F) (c.whisker E) :=
+begin
+  /- `obviously` says -/
+  ext1, dsimp at *, simp at *,
+  rw ←category.assoc,
+  simp,
+  refl,
+end
+
+lemma colimit.map_pre {F G : J ⥤ C} (α : F ⟹ G) (E : K ⥤ J) :
+  colimit.pre F E ≫ colim.map α = colim.map (whisker_left E α) ≫ colimit.pre G E :=
+begin
+  /- `obviously` says -/
+  ext1, dsimp at *, simp at *,
+  conv {to_rhs, rw ←category.assoc},
+  simp,
+  refl
+end.
+
+@[simp] lemma colimit.pre_pre {L : Type v} [small_category L] (F : J ⥤ C) (E : K ⥤ J) (D : L ⥤ K) :
+  colimit.pre (E ⋙ F) D ≫ colimit.pre F E = colimit.pre F (D ⋙ E) :=
+begin
+  /- `obviously` says -/
+  ext1, dsimp at *,
+  conv { to_lhs, rw [←category.assoc, colimit.ι_pre, is_colimit.fac] {md:=semireducible} },
+  conv { to_rhs, rw [is_colimit.fac] {md:=semireducible} },
+refl
+end
+
 end
 
 section
@@ -349,16 +470,57 @@ colimit.desc (F ⋙ G)
     erw [←functor.map_comp, limits.cocone.w],
     refl
   end }
+
+@[simp,search] lemma colimit.ι_post (F : J ⥤ C) (G : C ⥤ D) (j : J) :
+  colimit.ι (F ⋙ G) j ≫ colimit.post F G = G.map (colimit.ι F j) :=
+by erw is_colimit.fac
+
+@[simp] lemma colimit.desc_post {F : J ⥤ C} (c : cocone F) (G : C ⥤ D) :
+  colimit.post F G ≫ G.map (colimit.desc F c) = colimit.desc (F ⋙ G) (G.map_cocone c) :=
+begin
+  /- `obviously` says -/
+  ext1, dsimp at *, simp at *,
+  rw ←category.assoc,
+  simp,
+  rw ←functor.map_comp,
+  simp,
+  refl,
 end
 
-@[extensionality] def colimit.hom_ext {F : J ⥤ C} {c : cocone F}
-  (f g : colimit F ⟶ c.X)
-  (w_f : ∀ j, colimit.ι F j ≫ f = c.ι j)
-  (w_g : ∀ j, colimit.ι F j ≫ g = c.ι j) : f = g :=
+lemma colimit.post_map {F G : J ⥤ C} (α : F ⟹ G) (H : C ⥤ D) :
+  colimit.post F H ≫ H.map (colim.map α) = colim.map (whisker_right α H) ≫ colimit.post G H :=
 begin
-  have p_f := (colimit.universal_property F).uniq c f (by obviously),
-  have p_g := (colimit.universal_property F).uniq c g (by obviously),
-  rw [p_f, p_g],
+  /- `obviously` says -/
+  ext1, dsimp at *, simp at *,
+  erw [←category.assoc, is_colimit.fac, category.assoc, is_colimit.fac, ←functor.map_comp],
+  refl
+end
+
+lemma colimit.pre_post {K : Type v} [small_category K] (F : J ⥤ C) (E : K ⥤ J) (G : C ⥤ D) :
+  colimit.pre (F ⋙ G) E ≫ colimit.post F G = colimit.post (E ⋙ F) G ≫ G.map (colimit.pre F E) :=
+begin
+  /- `obviously` says -/
+  ext1, dsimp at *,
+  rw ←category.assoc,
+  simp,
+  rw ←category.assoc,
+  erw colimit.ι_post (E ⋙ F) G,
+  rw ←functor.map_comp,
+  rw colimit.ι_pre,
+end.
+
+@[simp] lemma colimit.post_post {E : Type u} [category.{u v} E] [has_colimits.{u v} E] (F : J ⥤ C) (G : C ⥤ D) (H : D ⥤ E):
+  colimit.post (F ⋙ G) H ≫ H.map (colimit.post F G) = colimit.post F (G ⋙ H) :=
+begin
+  /- `obviously` says -/
+  ext1, dsimp at *,
+  rw ←category.assoc,
+  simp,
+  rw ←functor.map_comp,
+  erw colimit.ι_post,
+  erw colimit.ι_post F (G ⋙ H),
+  simp,
+end
 end
 
 end

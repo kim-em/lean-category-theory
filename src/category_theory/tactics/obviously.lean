@@ -25,4 +25,4 @@ attribute [forward] faithful.injectivity
 
 attribute [search] yoneda.obj_map_id
 
-attribute [search] cone_morphism.w cocone_morphism.w
+-- attribute [search] cone_morphism.w cocone_morphism.w
