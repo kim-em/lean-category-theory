@@ -1,11 +1,10 @@
 import ring_theory.ideals
 import linear_algebra.quotient_module
-import algebra.pi_instances
 import category_theory.examples.rings
 import category_theory.limits
 import category_theory.filtered
 
-universes v
+universes u v w
 
 namespace category_theory.examples
 
@@ -13,11 +12,6 @@ open category_theory
 open category_theory.limits
 
 variables {α : Type v}
-
-instance : has_products.{v+1 v} CommRing :=
-{ prod := λ β f, { X := { α := Π b : β, (f b).α, str := by apply_instance },
-                   π := sorry, },
-  is_product := sorry }
 
 def coequalizer_ideal {R S : CommRing} (f g : R ⟶ S) : set S.1 :=
 span (set.range (λ x : R, f x - g x))
