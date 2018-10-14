@@ -115,7 +115,7 @@ variables [has_equalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
 def equalizer.fork := has_equalizers.equalizer.{u v} f g
 def equalizer := (equalizer.fork f g).X
 def equalizer.ι : (equalizer f g) ⟶ Y := (equalizer.fork f g).ι
-@[search] def equalizer.w : (equalizer.ι f g) ≫ f = (equalizer.ι f g) ≫ g := (equalizer.fork f g).w
+def equalizer.w : (equalizer.ι f g) ≫ f = (equalizer.ι f g) ≫ g := (equalizer.fork f g).w
 def equalizer.universal_property : is_equalizer (equalizer.fork f g) := has_equalizers.is_equalizer.{u v} C f g
 
 variables {f g}
@@ -150,7 +150,7 @@ variables [has_coequalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
 def coequalizer.cofork := has_coequalizers.coequalizer.{u v} f g
 def coequalizer := (coequalizer.cofork f g).X
 def coequalizer.π : Z ⟶ (coequalizer f g) := (coequalizer.cofork f g).π
-@[search] def coequalizer.w : f ≫ (coequalizer.π f g)  = g ≫ (coequalizer.π f g) := (coequalizer.cofork f g).w
+def coequalizer.w : f ≫ (coequalizer.π f g)  = g ≫ (coequalizer.π f g) := (coequalizer.cofork f g).w
 def coequalizer.universal_property : is_coequalizer (coequalizer.cofork f g) := has_coequalizers.is_coequalizer.{u v} C f g
 
 variables {f g}

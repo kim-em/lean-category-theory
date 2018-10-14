@@ -116,6 +116,7 @@ include 𝒥
 def limit.cone (F : J ⥤ C) : cone F := has_limits.limit.{u v} F
 def limit (F : J ⥤ C) := (limit.cone F).X
 def limit.π (F : J ⥤ C) (j : J) : limit F ⟶ F j := (limit.cone F).π j
+@[simp] lemma limit.w (F : J ⥤ C) {j j' : J} (f : j ⟶ j') : limit.π F j ≫ F.map f = limit.π F j' := (limit.cone F).w f
 def limit.universal_property (F : J ⥤ C) : is_limit (limit.cone F) :=
 has_limits.is_limit.{u v} C F
 
@@ -140,14 +141,7 @@ by erw is_limit.fac
 begin
   let c : cone F :=
   { X := X,
-    π := λ j, f ≫ limit.π F j,
-    w' :=
-    begin
-      /- obviously says: -/
-      intros j j' f_1, dsimp at *, simp at *,
-      erw limits.cone.w,
-      simp,
-    end },
+    π := λ j, f ≫ limit.π F j },
   have p_f := (limit.universal_property F).uniq c f (λ j, by simp),
   have p_g := (limit.universal_property F).uniq c g (λ j, eq.symm (w j)
 ),

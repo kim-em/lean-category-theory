@@ -18,8 +18,7 @@ variable {F : J ⥤ C}
 namespace cone
 def extend (c : cone F) {X : C} (f : X ⟶ c.X) : cone F :=
 { X := X,
-  π := λ j, f ≫ c.π j,
-  w' := begin intros j j' f_1, dsimp at *, simp at *, rw limits.cone.w c f_1 end }
+  π := λ j, f ≫ c.π j }
 
 def postcompose {G : J ⥤ C} (c : cone F) (α : F ⟹ G) : cone G :=
 { X := c.X,
