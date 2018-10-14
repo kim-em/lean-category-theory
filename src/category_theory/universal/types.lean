@@ -71,14 +71,14 @@ instance : has_binary_coproducts.{u+1 u} (Type u) :=
 instance : has_coproducts.{u+1 u} (Type u) :=
 { coprod := λ β f, { X := Σ b, f b, ι := λ b x, ⟨b, x⟩ } }.
 
-@[simp] lemma types_sigma {β : Type u} (f : β → Type u) : limits.sigma f = Σ b, f b := rfl
-@[simp] lemma types_sigma_ι {β : Type u} (f : β → Type u) (b : β) : limits.sigma.ι f b = λ p : f b, (⟨b, p⟩ : Σ b, f b) := rfl
-@[simp] lemma types_sigma_pre {β α : Type u} (f : α → Type u) (h : β → α) :
-  limits.sigma.pre f h = λ (d : Σ b, f (h b)), (⟨h d.1, d.2⟩ : Σ a, f a) := by obviously
+@[simp] lemma types_Sigma {β : Type u} (f : β → Type u) : limits.Sigma f = Σ b, f b := rfl
+@[simp] lemma types_Sigma_ι {β : Type u} (f : β → Type u) (b : β) : limits.Sigma.ι f b = λ p : f b, (⟨b, p⟩ : Σ b, f b) := rfl
+@[simp] lemma types_Sigma_pre {β α : Type u} (f : α → Type u) (h : β → α) :
+  limits.Sigma.pre f h = λ (d : Σ b, f (h b)), (⟨h d.1, d.2⟩ : Σ a, f a) := by obviously
 @[simp] lemma types_sigma_map {β : Type u} (f : β → Type u) (g : β → Type u) (k : Π b, f b ⟶ g b) :
-  limits.sigma.map k = λ (d : Σ b, f b), ⟨d.1, k d.1 d.2⟩ := by obviously
+  limits.Sigma.map k = λ (d : Σ b, f b), ⟨d.1, k d.1 d.2⟩ := by obviously
 @[simp] lemma types_sigma_desc {β : Type u} (f : β → Type u) {P : Type u} (p : Π b, f b ⟶ P) :
-  limits.sigma.desc p = (λ d : Σ b, f b, p d.1 d.2) := by obviously
+  limits.Sigma.desc p = (λ d : Σ b, f b, p d.1 d.2) := by obviously
 
 local attribute [elab_with_expected_type] quot.lift
 

@@ -6,6 +6,7 @@ import category_theory.examples.topological_spaces
 import category_theory.functor_category
 import category_theory.whiskering
 import category_theory.natural_isomorphism
+import category_theory.opposites
 
 universes u v u₂ v₂
 
@@ -19,7 +20,7 @@ include 𝒞
 
 structure Presheaf :=
 (X : Top.{v})
-(𝒪 : (open_set X) ⥤ C)
+(𝒪 : (open_set X)ᵒᵖ ⥤ C)
 
 instance : has_coe_to_sort (Presheaf.{u v} C) :=
 { S := Type v, coe := λ F, F.X.α }
@@ -30,7 +31,7 @@ instance Presheaf_topological_space (F : Presheaf.{u v} C) : topological_space F
 
 structure Presheaf_hom (F G : Presheaf.{u v} C) :=
 (f : F.X ⟶ G.X)
-(c : G.𝒪 ⟹ ((open_set.map f) ⋙ F.𝒪))
+(c : G.𝒪 ⟹ ((open_set.map f).op ⋙ F.𝒪))
 
 @[extensionality] lemma ext {F G : Presheaf.{u v} C} (α β : Presheaf_hom F G)
   (w : α.f = β.f) (h : α.c ⊟ (whisker_right (open_set.map_iso _ _ w).hom F.𝒪) = β.c) :

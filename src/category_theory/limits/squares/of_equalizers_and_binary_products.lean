@@ -5,6 +5,7 @@
 import category_theory.limits.equalizers
 import category_theory.limits.binary_products
 import category_theory.limits.squares
+import category_theory.limits.obviously
 
 open category_theory
 
@@ -25,7 +26,7 @@ instance : has_pullbacks.{u v} C :=
     { X := equalizer f g, π₁ := equalizer.ι f g ≫ prod.π₁ Y₁ Y₂, π₂ := equalizer.ι f g ≫ prod.π₂ Y₁ Y₂ },
   is_pullback := λ Y₁ Y₂ Z r₁ r₂,
   { lift := λ s, equalizer.lift (prod.lift s.π₁ s.π₂)
-                 begin -- FIXME why not obviously?
+                 begin
                    rw [← category.assoc, ← category.assoc],
                    simp,
                    exact s.w
@@ -42,8 +43,8 @@ instance : has_pushouts.{u v} C :=
     let g := r₂ ≫ coprod.ι₂ Y₁ Y₂ in
     { X := coequalizer f g, ι₁ := coprod.ι₁ Y₁ Y₂ ≫ coequalizer.π f g, ι₂ := coprod.ι₂ Y₁ Y₂ ≫ coequalizer.π f g },
   is_pushout := λ Y₁ Y₂ Z r₁ r₂,
-  { lift := λ s, coequalizer.desc (coprod.desc s.ι₁ s.ι₂)
-                 begin -- FIXME why not obviously?
+  { desc := λ s, coequalizer.desc (coprod.desc s.ι₁ s.ι₂)
+                 begin
                    rw [← category.assoc, ← category.assoc],
                    simp,
                    exact s.w

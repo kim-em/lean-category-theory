@@ -243,11 +243,11 @@ end.
 end
 
 
-instance : has_terminal_object.{u v} C :=
+instance has_terminal_object_of_has_products : has_terminal_object.{u v} C :=
 { terminal := pi.{u v} (@pempty.elim.{u+1} C),
   is_terminal := { lift := λ X, pi.lift (pempty.rec _) } }
 
-instance : has_binary_products.{u v} C :=
+instance has_binary_products_of_has_products : has_binary_products.{u v} C :=
 { prod := λ Y Z,
   begin
     let f : ulift bool → C := (λ b : ulift bool, cond b.down Y Z),

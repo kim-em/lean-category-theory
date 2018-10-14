@@ -13,8 +13,10 @@ namespace category_theory.presheaves.Presheaf
 variables {C : Type u} [𝒞 : category.{u v} C]
 include 𝒞
 
-def near (F : Presheaf.{u v} C) (x : F) : { U : open_set F.X // x ∈ U } ⥤ C :=
-(full_subcategory_embedding (λ U : open_set F.X, x ∈ U)) ⋙ F.𝒪 
+instance has_mem_open_set_op (X : Top) : has_mem X.α ((open_set X)ᵒᵖ) := (by apply_instance : has_mem X.α (open_set X))
+
+def near (F : Presheaf.{u v} C) (x : F) : { U : (open_set F.X)ᵒᵖ // x ∈ U } ⥤ C :=
+(full_subcategory_embedding (λ U : (open_set F.X)ᵒᵖ, x ∈ U)) ⋙ F.𝒪
 
 variable [has_colimits.{u v} C]
 

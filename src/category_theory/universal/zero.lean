@@ -53,11 +53,11 @@ variables [has_zero_object.{u v} C]
 
 def zero_is_zero : is_zero.{u v} (zero_object.{u v} C) := has_zero_object.is_zero C
 
-instance : has_initial_object.{u v} C :=
+instance has_initial_object_of_has_zero : has_initial_object.{u v} C :=
 { initial := zero_object.{u v} C,
   is_initial := zero_is_zero.to_is_initial }
 
-instance : has_terminal_object.{u v} C :=
+instance has_terminal_object_of_has_zero: has_terminal_object.{u v} C :=
 { terminal := zero_object.{u v} C,
   is_terminal := zero_is_zero.to_is_terminal }
 
