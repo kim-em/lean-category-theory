@@ -4,18 +4,14 @@
 
 import category_theory.types
 import category_theory.isomorphism
-import category_theory.tactics.obviously
 
 open category_theory
 
-universes u v
+universes u v w
 
 namespace category_theory.limits
 
 definition is_equiv {α β : Type v} (f : α → β) := @is_iso (Type v) (category_theory.types) _ _ f
-
-@[forward] lemma subtype_val {α : Type u} {P : α → Prop} {x y : {a : α // P a}} (h : x = y) : x.val = y.val := 
-begin obviously, end
 
 section shapes
 structure shape (C : Type u) [𝒞 : category.{u v} C] :=
@@ -62,14 +58,13 @@ A `fork f g`:
              f
  X --ι--> Y ====> Z
              g
-```            
+```
 -/
-structure fork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Y ⟶ Z) extends shape C := 
+structure fork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Y ⟶ Z) extends shape C :=
 (ι : X ⟶ Y)
-(w : ι ≫ f = ι ≫ g . obviously)
+(w' : ι ≫ f = ι ≫ g . obviously)
 
-restate_axiom fork.w
-attribute [search] fork.w_lemma
+restate_axiom fork.w'
 
 /--
 A `cofork f g`:
@@ -77,16 +72,15 @@ A `cofork f g`:
               f
  X <--π-- Y <==== Z
               g
-```            
+```
 -/
-structure cofork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Z ⟶ Y) extends shape C := 
+structure cofork {C : Type u} [𝒞 : category.{u v} C] {Y Z : C} (f g : Z ⟶ Y) extends shape C :=
 (π : Y ⟶ X)
-(w : f ≫ π = g ≫ π . obviously)
+(w' : f ≫ π = g ≫ π . obviously)
 
-restate_axiom cofork.w
-attribute [search] cofork.w_lemma
+restate_axiom cofork.w'
 
-/-- 
+/--
 A `square p q`:
 ```
 X  --π₁--> Y₁
@@ -99,12 +93,11 @@ Y₂ --r₂--> Z
 structure square {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Y₁ ⟶ Z) (r₂ : Y₂ ⟶ Z)extends shape C :=
 (π₁ : X ⟶ Y₁)
 (π₂ : X ⟶ Y₂)
-(w : π₁ ≫ r₁ = π₂ ≫ r₂ . obviously)
+(w' : π₁ ≫ r₁ = π₂ ≫ r₂ . obviously)
 
-restate_axiom square.w
-attribute [search] square.w_lemma
+restate_axiom square.w'
 
-/-- 
+/--
 A `cosquare p q`:
 ```
 X  <--ι₁-- Y₁
@@ -117,25 +110,23 @@ Y₂ <--r₂-- Z
 structure cosquare {C : Type u} [𝒞 : category.{u v} C] {Y₁ Y₂ Z : C} (r₁ : Z ⟶ Y₁) (r₂ : Z ⟶ Y₂)extends shape C :=
 (ι₁ : Y₁ ⟶ X)
 (ι₂ : Y₂ ⟶ X)
-(w : r₁ ≫ ι₁ = r₂ ≫ ι₂ . obviously)
+(w' : r₁ ≫ ι₁ = r₂ ≫ ι₂ . obviously)
 
-restate_axiom cosquare.w
-attribute [search] cosquare.w_lemma
+restate_axiom cosquare.w'
 
 structure cone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ⥤ C) extends shape C :=
 (π : ∀ j : J, X ⟶ F j)
-(w : ∀ {j j' : J} (f : j ⟶ j'), π j ≫ (F.map f) = π j' . obviously)
+(w' : ∀ {j j' : J} (f : j ⟶ j'), π j ≫ (F.map f) = π j' . obviously)
 
-restate_axiom cone.w
-attribute [search] cone.w_lemma
-
+restate_axiom cone.w'
+attribute [simp] cone.w
 
 structure cocone {C : Type u} [𝒞 : category.{u v} C] {J : Type v} [small_category J] (F : J ⥤ C) extends shape C :=
 (ι : ∀ j : J, F j ⟶ X)
-(w : ∀ {j j' : J} (f : j ⟶ j'), (F.map f) ≫ ι j' = ι j . obviously)
+(w' : ∀ {j j' : J} (f : j ⟶ j'), (F.map f) ≫ ι j' = ι j . obviously)
 
-restate_axiom cocone.w
-attribute [search] cocone.w_lemma
+restate_axiom cocone.w'
+attribute [simp] cocone.w
 
 end shapes
 

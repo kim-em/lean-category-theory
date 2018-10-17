@@ -1,9 +1,12 @@
-import category_theory.sheaves
-import category_theory.examples.rings.universal
+import category_theory.presheaves.sheaves
+import category_theory.presheaves.stalk
+import category_theory.examples.rings.products
+import category_theory.examples.rings.others
 
 universes v
 
 open category_theory.examples
+open category_theory.presheaves
 open category_theory.limits
 
 variables (X : Top.{v})
@@ -12,7 +15,7 @@ def structure_sheaf := sheaf.{v+1 v} X CommRing
 
 structure ringed_space :=
 (𝒪 : structure_sheaf X)
- 
+
 structure locally_ringed_space extends ringed_space X :=
 (locality : ∀ x : X, local_ring (stalk_at.{v+1 v} 𝒪.presheaf x).1) -- coercion from sheaf to presheaf?
 

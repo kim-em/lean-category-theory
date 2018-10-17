@@ -4,9 +4,7 @@
 
 import category_theory.opposites
 import category_theory.equivalence
-import category_theory.universal.cones
 import category_theory.limits
-
 
 open category_theory
 
@@ -21,13 +19,13 @@ include 𝒞
 
 def opposite_fan_of_cofan {β : Type v} (f : β → C) (t : cofan f) : @fan (Cᵒᵖ) _ _ f :=
 { X := t.X,
-  π := λ b, t.ι b } 
+  π := λ b, t.ι b }
 def fan_of_opposite_cofan {β : Type v} (f : β → C) (t : @cofan (Cᵒᵖ) _ _ f) : fan f :=
 { X := t.X,
-  π := λ b, t.ι b } 
+  π := λ b, t.ι b }
 
-instance [has_coproducts.{u v} C] : has_products.{u v} (Cᵒᵖ) := 
-{ prod := λ {β : Type v} (f : β → C), fan_of_opposite_cofan f sorry,
+instance [has_coproducts.{u v} C] : has_products.{u v} (Cᵒᵖ) :=
+{ fan := λ {β : Type v} (f : β → C), fan_of_opposite_cofan f sorry,
   is_product := sorry }
 instance [has_coequalizers.{u v} C] : has_equalizers.{u v} (Cᵒᵖ) := sorry
 

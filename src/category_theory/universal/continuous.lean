@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison
 
 import category_theory.limits.limits
+import category_theory.tactics.obviously
 
 open category_theory.limits
 
@@ -26,8 +27,14 @@ include 𝒞
 instance : continuous (functor.id C) :=
 { preserves_limits := λ J 𝒥 G c L,
     begin resetI, exact
-      { lift := λ s, @is_limit.lift _ _ _ _ _ c L { X := s.X, π := s.π }, -- We need to do a little work here because `G ⋙ (functor.id _) ≠ G`.
-        uniq' := λ s m w,  @is_limit.uniq _ _ _ _ _ c L { X := s.X, π := s.π } m w, } 
+      { lift := λ s, @is_limit.lift _ _ _ _ _ c L
+          { X := s.X,
+            π := s.π,
+            w' := λ j j' f, by erw s.w }, -- We need to do a little work here because `G ⋙ (functor.id _) ≠ G`.
+        uniq' := λ s m w,  @is_limit.uniq _ _ _ _ _ c L
+          { X := s.X,
+            π := s.π,
+            w' := λ j j' f, by erw s.w } m w, }
     end }
 
 end

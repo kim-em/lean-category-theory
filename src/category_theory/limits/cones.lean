@@ -11,16 +11,62 @@ namespace category_theory.limits
 universes u v
 variables {J : Type v} [small_category J]
 variables {C : Type u} [𝒞 : category.{u v} C]
-include 𝒞 
+include 𝒞
 
 variable {F : J ⥤ C}
+
+namespace cone
+def extend (c : cone F) {X : C} (f : X ⟶ c.X) : cone F :=
+{ X := X,
+  π := λ j, f ≫ c.π j }
+
+def postcompose {G : J ⥤ C} (c : cone F) (α : F ⟹ G) : cone G :=
+{ X := c.X,
+  π := λ j, c.π j ≫ α j,
+  w' :=
+  begin
+    intros j j' f, dsimp at *, simp at *,
+    rw ←nat_trans.naturality,
+    rw ←category.assoc,
+    rw ←limits.cone.w c f
+  end }
+
+def whisker (c : cone F) {K : Type v} [small_category K] (E : K ⥤ J) : cone (E ⋙ F) :=
+{ X := c.X,
+  π := λ k, c.π (E k),
+  w' := begin intros j j' f, dsimp at *, rw limits.cone.w c end }
+end cone
+
+namespace cocone
+def extend (c : cocone F) {X : C} (f : c.X ⟶ X) : cocone F :=
+{ X := X,
+  ι := λ j, c.ι j ≫ f,
+  w' := begin intros j j' f_1, dsimp at *, rw ←category.assoc, rw limits.cocone.w c f_1 end }
+
+def precompose {G : J ⥤ C} (c : cocone F) (α : G ⟹ F) : cocone G :=
+{ X := c.X,
+  ι := λ j, α j ≫ c.ι j,
+  w' :=
+  begin
+    intros j j' f, dsimp at *,
+    rw ←category.assoc,
+    rw nat_trans.naturality α f,
+    rw ←limits.cocone.w c f,
+    rw ←category.assoc
+  end }
+
+def whisker (c : cocone F) {K : Type v} [small_category K] (E : K ⥤ J) : cocone (E ⋙ F) :=
+{ X := c.X,
+  ι := λ k, c.ι (E k),
+  w' := begin intros j j' f, dsimp at *, rw limits.cocone.w c end }
+end cocone
 
 structure cone_morphism (A B : cone F) : Type v :=
 (hom : A.X ⟶ B.X)
 (w' : Π j : J, hom ≫ (B.π j) = (A.π j) . obviously)
 
 restate_axiom cone_morphism.w'
-attribute [simp,search] cone_morphism.w
+attribute [simp] cone_morphism.w
 
 namespace cone_morphism
 
@@ -49,12 +95,12 @@ section
 variables {D : Type u} [𝒟 : category.{u v} D]
 include 𝒟
 
-def functoriality (F : J ⥤ C) (G : C ⥤ D) : (cone F) ⥤ (cone (F ⋙ G)) := 
+@[simp] def functoriality (F : J ⥤ C) (G : C ⥤ D) : (cone F) ⥤ (cone (F ⋙ G)) :=
 { obj      := λ A, { X := G A.X,
-                     π := λ j, G.map (A.π j), 
-                     w := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp, cone.w] end },
+                     π := λ j, G.map (A.π j),
+                     w' := begin intros, simp, erw [←functor.map_comp, cone.w] end },
   map'     := λ X Y f, { hom := G.map f.hom,
-                         w' := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp, cone_morphism.w] end } }
+                         w' := begin intros, dsimp, erw [←functor.map_comp, cone_morphism.w] end } }
 end
 end cones
 
@@ -63,12 +109,12 @@ structure cocone_morphism (A B : cocone F) :=
 (w'  : Π j : J, (A.ι j) ≫ hom = (B.ι j) . obviously)
 
 restate_axiom cocone_morphism.w'
-attribute [simp,search] cocone_morphism.w
+attribute [simp] cocone_morphism.w
 
 namespace cocone_morphism
 
 @[extensionality] lemma ext {A B : cocone F} {f g : cocone_morphism A B} (w : f.hom = g.hom) : f = g :=
-begin 
+begin
   induction f,
   induction g,
   -- `obviously'` says:
@@ -78,10 +124,12 @@ begin
 end
 end cocone_morphism
 
-instance cocones (F : J ⥤ C) : category.{(max u v) v} (cocone F) := 
+instance cocones (F : J ⥤ C) : category.{(max u v) v} (cocone F) :=
 { hom  := λ A B, cocone_morphism A B,
-  comp := λ _ _ _ f g, { hom := f.hom ≫ g.hom },
-  id   := λ B,         { hom := 𝟙 B.X } }
+  comp := λ _ _ _ f g,
+  { hom := f.hom ≫ g.hom,
+    w' := begin intros j, rw ←category.assoc, rw ←cocone_morphism.w g, rw ←cocone_morphism.w f j end },
+  id   := λ B, { hom := 𝟙 B.X } }
 
 namespace cocones
 @[simp] lemma id.hom   {F : J ⥤ C} (c : cocone F) : (𝟙 c : cocone_morphism c c).hom = 𝟙 (c.X) := rfl
@@ -91,12 +139,12 @@ section
 variables {D : Type u} [𝒟 : category.{u v} D]
 include 𝒟
 
-def functoriality (F : J ⥤ C) (G : C ⥤ D) : (cocone F) ⥤ (cocone (F ⋙ G)) := 
-{ obj      := λ A,     { X    := G A.X,
-                         ι     := λ j, G.map (A.ι j),
-                         w   := begin /- `obviously'` says: -/ intros, simp, erw [←functor.map_comp, cocone.w] end },
+@[simp] def functoriality (F : J ⥤ C) (G : C ⥤ D) : (cocone F) ⥤ (cocone (F ⋙ G)) :=
+{ obj      := λ A,     { X  := G A.X,
+                         ι  := λ j, G.map (A.ι j),
+                         w' := begin intros, simp, erw [←functor.map_comp, cocone.w] end },
   map'     := λ _ _ f, { hom := G.map f.hom,
-                         w'  := begin /- `obviously'` says: -/ intros, dsimp, erw [←functor.map_comp, cocone_morphism.w] end } }
+                         w'  := begin intros, dsimp, erw [←functor.map_comp, cocone_morphism.w] end } }
 end
 end cocones
 

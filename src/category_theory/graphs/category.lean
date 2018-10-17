@@ -9,10 +9,10 @@ namespace category_theory
 
 open category_theory.graphs
 
-universe u
+universes u v
 variable {C : Type u}
 
-instance category.graph [𝒞 : small_category C] : graph C := {
+instance category.graph [𝒞 : category.{u v} C] : graph C := {
   edges := 𝒞.hom
 }
 

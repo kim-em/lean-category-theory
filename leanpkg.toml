@@ -1,9 +1,9 @@
 [package]
 name = "lean-category-theory"
 version = "0.1"
-lean_version = "nightly-2018-06-21"
+lean_version = "khoek/klean:3.4.4"
 path = "src"
 
 [dependencies]
-mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "318ec36d528e3f3c0ca7f43a0615d0116abf9c0f"}
-lean-tidy = {git = "https://github.com/khoek/lean-tidy", rev = "d8f6c73524314e6b6eccaeb50ccff24d5002476b"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "8ec2b7c481ec43bb2675f4d04ecc9e333b0fa1d1"}
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "792c673188f8da5be51848db3f82f96871ed86b9"}

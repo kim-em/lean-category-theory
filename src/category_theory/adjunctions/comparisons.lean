@@ -24,34 +24,34 @@ include 𝒜 ℬ 𝒞 𝒟
 end
 
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C] {D : Type u₁} [𝒟 : category.{u₁ v₁} D]
-include 𝒞 𝒟 
-variables {L : C ⥤ D} {R : D ⥤ C} 
+include 𝒞 𝒟
+variables {L : C ⥤ D} {R : D ⥤ C}
 
-@[reducible] private def Adjunction_to_HomAdjunction_morphism (A : L ⊣ R) 
-  : ((functor.prod L.op (functor.id D)) ⋙ (functor.hom D)) ⟹ 
-                          (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C) := 
-{ app := λ P, 
+@[reducible] private def Adjunction_to_HomAdjunction_morphism (A : L ⊣ R)
+  : ((functor.prod L.op (functor.id D)) ⋙ (functor.hom D)) ⟹
+                          (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C) :=
+{ app := λ P,
     -- We need to construct the map from D.Hom (L P.1) P.2 to C.Hom P.1 (R P.2)
     λ f, (A.unit P.1) ≫ (R.map f) }
 
-@[reducible] private def Adjunction_to_HomAdjunction_inverse (A : L ⊣ R) 
-  : (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C) ⟹ 
+@[reducible] private def Adjunction_to_HomAdjunction_inverse (A : L ⊣ R)
+  : (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C) ⟹
                           ((functor.prod L.op (functor.id D)) ⋙ (functor.hom D)) :=
-{ app := λ P, 
+{ app := λ P,
     -- We need to construct the map back to D.Hom (L P.1) P.2 from C.Hom P.1 (R P.2)
     λ f, (L.map f) ≫ (A.counit P.2) }
 
-def Adjunction_to_HomAdjunction (A : L ⊣ R) : hom_adjunction L R := 
+def Adjunction_to_HomAdjunction (A : L ⊣ R) : hom_adjunction L R :=
 { hom := Adjunction_to_HomAdjunction_morphism A,
   inv := Adjunction_to_HomAdjunction_inverse A }
 
-@[simp,search] lemma mate_of_L (A : hom_adjunction L R) {X Y : C} (f : X ⟶ Y) : (((A.hom) (X, L X)) (𝟙 (L X))) ≫ 
+@[simp,search] lemma mate_of_L (A : hom_adjunction L R) {X Y : C} (f : X ⟶ Y) : (((A.hom) (X, L X)) (𝟙 (L X))) ≫
       (R.map (L.map f))
       = ((A.hom) (X, L Y)) (L.map f) :=
 begin
   have p := @nat_trans.naturality _ _ _ _ _ _ A.hom (X, L X) (X, L Y) (𝟙 X, L.map f),
   have q := congr_fun p (L.map (𝟙 X)),
-  obviously,
+  tidy,
   erw category_theory.functor.map_id at q, -- FIXME why doesn't simp do this
   obviously,
 end
@@ -72,7 +72,7 @@ begin
   tidy,
 end
 
-@[simp,search] lemma mate_of_R' (A : hom_adjunction L R) {X Y : D} (f : X ⟶ Y) : (((A.inv) (R X, X)) (𝟙 (R X))) ≫ f = 
+@[simp,search] lemma mate_of_R' (A : hom_adjunction L R) {X Y : D} (f : X ⟶ Y) : (((A.inv) (R X, X)) (𝟙 (R X))) ≫ f =
     ((A.inv) (R X, Y)) (R.map f) :=
 begin
   have p := @nat_trans.naturality _ _ _ _ _ _ A.inv (R X, X) (R X, Y) (𝟙 (R X), f),
@@ -80,19 +80,19 @@ begin
   obviously,
 end
 
-private def counit_from_HomAdjunction (A : hom_adjunction L R) : (R ⋙ L) ⟹ (functor.id _) := 
+private def counit_from_HomAdjunction (A : hom_adjunction L R) : (R ⋙ L) ⟹ (functor.id _) :=
 { app := λ X : D, (A.inv (R X, X)) (𝟙 (R X)) }
 
-private def unit_from_HomAdjunction (A : hom_adjunction L R) : (functor.id _) ⟹ (L ⋙ R) := 
+private def unit_from_HomAdjunction (A : hom_adjunction L R) : (functor.id _) ⟹ (L ⋙ R) :=
 { app := λ X : C, (A.hom (X, L X)) (𝟙 (L X)) }
 
 -- PROJECT
--- def HomAdjunction_to_Adjunction {L : C ⥤ D} {R : D ⥤ C} (A : hom_adjunction L R) : L ⊣ R := 
+-- def HomAdjunction_to_Adjunction {L : C ⥤ D} {R : D ⥤ C} (A : hom_adjunction L R) : L ⊣ R :=
 -- {
 --   unit       := unit_from_HomAdjunction A,
 --   counit     := counit_from_HomAdjunction A,
 --   triangle_1 := begin
---                   tidy, 
+--                   tidy,
 --                   -- have p1 := A.witness_2,
 --                   -- have p2 := congr_arg NaturalTransformation.components p1,
 --                   -- have p3 := congr_fun p2 (((R +> X) : C), L +> (R +> X)),
@@ -103,7 +103,7 @@ private def unit_from_HomAdjunction (A : hom_adjunction L R) : (functor.id _) �
 --   triangle_2 := sorry
 -- }
 
--- def Adjunctions_agree (L : C ⥤ D) (R : D ⥤ C) : equiv (L ⊣ R) (hom_adjunction L R) := 
+-- def Adjunctions_agree (L : C ⥤ D) (R : D ⥤ C) : equiv (L ⊣ R) (hom_adjunction L R) :=
 -- { to_fun    := Adjunction_to_HomAdjunction,
 --   inv_fun   := HomAdjunction_to_Adjunction,
 --   left_inv  := begin sorry end,
