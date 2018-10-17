@@ -1,6 +1,6 @@
 import ring_theory.ideals
 import linear_algebra.quotient_module
-import category_theory.examples.rings
+import ..rings
 import category_theory.limits
 import category_theory.filtered
 
@@ -21,7 +21,7 @@ instance {R S : CommRing} (f g : R ⟶ S) : is_ideal (coequalizer_ideal f g) := 
 local attribute [instance] classical.prop_decidable
 
 instance : has_coequalizers.{v+1 v} CommRing :=
-{ coequalizer := λ R S f g,
+{ cofork := λ R S f g,
     { X := { α := quotient_ring.quotient (coequalizer_ideal f g) },
       π := ⟨ quotient_ring.mk, by apply_instance ⟩,
       w' := sorry /- almost there: -/

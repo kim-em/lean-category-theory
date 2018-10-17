@@ -4,7 +4,6 @@
 
 import category_theory.whiskering
 import category_theory.limits.cones
-import category_theory.tactics.obviously
 
 open category_theory
 
@@ -37,7 +36,7 @@ begin
   solve_by_elim,
  end
 
-lemma is_limit.univ {F : J ⥤ C} {t : cone F} [h : is_limit t] (s : cone F) (φ : s.X ⟶ t.X) :
+lemma is_limit.universal {F : J ⥤ C} {t : cone F} [h : is_limit t] (s : cone F) (φ : s.X ⟶ t.X) :
   (∀ j, φ ≫ t.π j = s.π j) ↔ (φ = is_limit.lift h s) :=
 /- obviously says: -/
 ⟨ is_limit.uniq h s φ,
@@ -48,12 +47,12 @@ lemma is_limit.univ {F : J ⥤ C} {t : cone F} [h : is_limit t] (s : cone F) (φ
     simp at *,
   end ⟩
 
-def is_limit.of_lift_univ {F : J ⥤ C} {t : cone F}
+def is_limit.of_lift_universal {F : J ⥤ C} {t : cone F}
   (lift : Π (s : cone F), s.X ⟶ t.X)
-  (univ : Π (s : cone F) (φ : s.X ⟶ t.X), (∀ j : J, (φ ≫ t.π j) = s.π j) ↔ (φ = lift s)) : is_limit t :=
+  (universal : Π (s : cone F) (φ : s.X ⟶ t.X), (∀ j : J, (φ ≫ t.π j) = s.π j) ↔ (φ = lift s)) : is_limit t :=
 { lift := lift,
-  fac'  := λ s j, ((univ s (lift s)).mpr (eq.refl (lift s))) j,
-  uniq' := λ s φ, (univ s φ).mp }
+  fac'  := λ s j, ((universal s (lift s)).mpr (eq.refl (lift s))) j,
+  uniq' := λ s φ, (universal s φ).mp }
 
 end limit
 
@@ -80,7 +79,7 @@ begin
   solve_by_elim,
 end
 
-lemma is_colimit.univ {F : J ⥤ C} {t : cocone F} [h : is_colimit t] (s : cocone F) (φ : t.X ⟶ s.X) :
+lemma is_colimit.universal {F : J ⥤ C} {t : cocone F} [h : is_colimit t] (s : cocone F) (φ : t.X ⟶ s.X) :
   (∀ j, t.ι j ≫ φ = s.ι j) ↔ (φ = is_colimit.desc h s) :=
 ⟨ is_colimit.uniq h s φ,
   begin
@@ -90,20 +89,20 @@ lemma is_colimit.univ {F : J ⥤ C} {t : cocone F} [h : is_colimit t] (s : cocon
     simp at *,
   end ⟩
 
-def is_colimit.of_desc_univ {F : J ⥤ C} {t : cocone F}
+def is_colimit.of_desc_universal {F : J ⥤ C} {t : cocone F}
   (desc : Π (s : cocone F), t.X ⟶ s.X)
-  (univ : Π (s : cocone F) (φ : t.X ⟶ s.X), (∀ j : J, (t.ι j ≫ φ) = s.ι j) ↔ (φ = desc s)) : is_colimit t :=
+  (universal : Π (s : cocone F) (φ : t.X ⟶ s.X), (∀ j : J, (t.ι j ≫ φ) = s.ι j) ↔ (φ = desc s)) : is_colimit t :=
 { desc := desc,
-  fac'  := λ s j, ((univ s (desc s)).mpr (eq.refl (desc s))) j,
-  uniq' := λ s φ, (univ s φ).mp }
+  fac'  := λ s j, ((universal s (desc s)).mpr (eq.refl (desc s))) j,
+  uniq' := λ s φ, (universal s φ).mp }
 
 end colimit
 
 variable (C)
 
 class has_limits :=
-(limit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), cone F)
-(is_limit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), is_limit (limit F) . obviously)
+(cone : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), cone F)
+(is_limit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), is_limit (cone F) . obviously)
 
 -- also do finite limits? filtered limits? can we do these without lots of repetition below?
 
@@ -113,7 +112,7 @@ section
 variables [has_limits.{u v} C] {J : Type v} [𝒥 : small_category J]
 include 𝒥
 
-def limit.cone (F : J ⥤ C) : cone F := has_limits.limit.{u v} F
+def limit.cone (F : J ⥤ C) : cone F := has_limits.cone.{u v} F
 def limit (F : J ⥤ C) := (limit.cone F).X
 def limit.π (F : J ⥤ C) (j : J) : limit F ⟶ F j := (limit.cone F).π j
 @[simp] lemma limit.w (F : J ⥤ C) {j j' : J} (f : j ⟶ j') : limit.π F j ≫ F.map f = limit.π F j' := (limit.cone F).w f
@@ -143,10 +142,7 @@ begin
   { X := X,
     π := λ j, f ≫ limit.π F j },
   have p_f := (limit.universal_property F).uniq c f (λ j, by simp),
-  have p_g := (limit.universal_property F).uniq c g (λ j, eq.symm (w j)
-),
-  /- obviously says: -/
-  dsimp at *,
+  have p_g := (limit.universal_property F).uniq c g (λ j, eq.symm (w j)),
   rw [p_f, p_g]
 end
 
@@ -301,8 +297,8 @@ end
 variable (C)
 
 class has_colimits :=
-(colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), cocone F)
-(is_colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), is_colimit (colimit F) . obviously)
+(cocone : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), cocone F)
+(is_colimit : Π {J : Type v} [𝒥 : small_category J] (F : J ⥤ C), is_colimit (cocone F) . obviously)
 
 variable {C}
 
@@ -310,9 +306,10 @@ section
 variables [has_colimits.{u v} C] {J : Type v} [𝒥 : small_category J]
 include 𝒥
 
-def colimit.cocone (F : J ⥤ C) : cocone F := has_colimits.colimit.{u v} F
+def colimit.cocone (F : J ⥤ C) : cocone F := has_colimits.cocone.{u v} F
 def colimit (F : J ⥤ C) := (colimit.cocone F).X
 def colimit.ι (F : J ⥤ C) (j : J) : F j ⟶ colimit F := (colimit.cocone F).ι j
+@[simp] lemma colimit.w (F : J ⥤ C) {j j' : J} (f : j ⟶ j') : F.map f ≫ colimit.ι F j' = colimit.ι F j := (colimit.cocone F).w f
 def colimit.universal_property (F : J ⥤ C) : is_colimit (colimit.cocone F) :=
 has_colimits.is_colimit.{u v} C F
 
@@ -346,8 +343,7 @@ begin
       simp,
     end },
   have p_f := (colimit.universal_property F).uniq c f (λ j, by simp),
-  have p_g := (colimit.universal_property F).uniq c g (λ j, eq.symm (w j)
-),
+  have p_g := (colimit.universal_property F).uniq c g (λ j, eq.symm (w j)),
   rw [p_f, p_g],
 end
 

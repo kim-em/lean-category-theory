@@ -1,5 +1,5 @@
 import algebra.pi_instances
-import category_theory.examples.rings
+import ..rings
 import category_theory.limits
 
 universes u v w
@@ -26,7 +26,7 @@ end
 def CommRing.pi {β : Type u} (f : β → CommRing.{u}) : CommRing :=
 { α := Π b : β, (f b), str := by apply_instance }
 
-@[simp] def CommRing.pi_π {β : Type u} (f : β → CommRing) (b : β): CommRing.pi f ⟶ f b :=
+def CommRing.pi_π {β : Type u} (f : β → CommRing) (b : β): CommRing.pi f ⟶ f b :=
 { val := λ g, g b, property := by tidy }
 
 @[simp] def CommRing.hom_pi
@@ -35,9 +35,13 @@ def CommRing.pi {β : Type u} (f : β → CommRing.{u}) : CommRing :=
 { val := λ x b, f b x,
   property := begin convert is_ring_hom_pi (λ a, (f a).val) end }
 
+local attribute [extensionality] subtype.eq
+-- @[simp] lemma subtype.val_eq_iff {α : Type u} {p : α → Prop} (a1 a2 : {x // p x}) : a1 = a2 ↔ a1.val = a2.val := by tidy
+
 instance CommRing_has_products : has_products.{v+1 v} CommRing :=
 { fan := λ β f, { X := CommRing.pi f,
                   π := CommRing.pi_π f, },
-  is_product := λ β f, { lift := λ s, CommRing.hom_pi (λ j, s.π j) } }.
+  is_product := λ β f, { lift := λ s, CommRing.hom_pi (λ j, s.π j),
+                         uniq' := begin tidy, rw ←w, tidy, end } }.
 
 end category_theory.examples

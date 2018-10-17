@@ -42,17 +42,17 @@ end }
 def Cone_to_comma_Cone (c : cone F) : comma.Cone F :=
 ⟨ (c.X, by obviously), { app := λ j, c.π j } ⟩
 
-def ConeMorphism_to_comma_ConeMorphism {X Y : cone F} (f : cone_morphism X Y) : (Cone_to_comma_Cone X) ⟶ (Cone_to_comma_Cone Y) :=
-{ left := f.hom,
-  right := by obviously }
+-- def ConeMorphism_to_comma_ConeMorphism {X Y : cone F} (f : cone_morphism X Y) : (Cone_to_comma_Cone X) ⟶ (Cone_to_comma_Cone Y) :=
+-- { left := f.hom,
+--   right := sorry }
 
-def comma_Cones_to_Cones (F : J ⥤ C) : (comma.Cone F) ⥤ (cone F) :=
-{ obj := comma_Cone_to_Cone,
-  map' := λ X Y f, comma_ConeMorphism_to_ConeMorphism f }
+-- def comma_Cones_to_Cones (F : J ⥤ C) : (comma.Cone F) ⥤ (cone F) :=
+-- { obj := comma_Cone_to_Cone,
+--   map' := λ X Y f, comma_ConeMorphism_to_ConeMorphism f }
 
-def Cones_to_comma_Cones (F : J ⥤ C) : (cone F) ⥤ (comma.Cone F) :=
-{ obj := Cone_to_comma_Cone,
-  map' := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }.
+-- def Cones_to_comma_Cones (F : J ⥤ C) : (cone F) ⥤ (comma.Cone F) :=
+-- { obj := Cone_to_comma_Cone,
+--   map' := λ X Y f, ConeMorphism_to_comma_ConeMorphism f }.
 
 end /- end `include 𝒞` -/
 
@@ -63,8 +63,8 @@ local attribute [tidy] dsimp'
 
 include 𝒞
 
-def Cones_agree (F : J ⥤ C) : equivalence (comma.Cone F) (cone F) :=
-{ functor := comma_Cones_to_Cones F,
-  inverse := Cones_to_comma_Cones F }
+-- def Cones_agree (F : J ⥤ C) : equivalence (comma.Cone F) (cone F) :=
+-- { functor := comma_Cones_to_Cones F,
+--   inverse := Cones_to_comma_Cones F }
 
 end category_theory.limits

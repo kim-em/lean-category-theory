@@ -25,7 +25,7 @@ def fan_of_opposite_cofan {β : Type v} (f : β → C) (t : @cofan (Cᵒᵖ) _ _
   π := λ b, t.ι b }
 
 instance [has_coproducts.{u v} C] : has_products.{u v} (Cᵒᵖ) :=
-{ prod := λ {β : Type v} (f : β → C), fan_of_opposite_cofan f sorry,
+{ fan := λ {β : Type v} (f : β → C), fan_of_opposite_cofan f sorry,
   is_product := sorry }
 instance [has_coequalizers.{u v} C] : has_equalizers.{u v} (Cᵒᵖ) := sorry
 

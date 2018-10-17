@@ -17,16 +17,17 @@ begin
   rw h.uniq X' g,
 end
 
-def terminals_iso (A B : C) (h_A : is_terminal.{u v} A) (h_B : is_terminal.{u v} B) : A ≅ B :=
-{ hom := is_terminal.lift.{u v} h_B A,
-  inv := is_terminal.lift.{u v} h_A B }
+-- FIXME this is running forever?
+-- def terminals_iso (A B : C) (h_A : is_terminal.{u v} A) (h_B : is_terminal.{u v} B) : A ≅ B :=
+-- { hom := is_terminal.lift.{u v} h_B A,
+--   inv := is_terminal.lift.{u v} h_A B }
 end
 
 section
 def binary_products_iso {Y Z : C} (A B : span.{u v} Y Z) (h_A : is_binary_product A) (h_B : is_binary_product B) : A.X ≅ B.X :=
 { hom := is_binary_product.lift h_B A,
   inv := is_binary_product.lift h_A B,
-  hom_inv_id' := sorry, 
+  hom_inv_id' := sorry,
   inv_hom_id' := sorry }
 end
 
@@ -34,7 +35,7 @@ section
 def equalizers_iso {Y Z : C} {f g : Y ⟶ Z} (A B : fork.{u v} f g) (A_w : is_equalizer A) (B_w : is_equalizer B) : A.X ≅ B.X :=
 { hom := B_w.lift A,
   inv := A_w.lift B,
-  hom_inv_id' := sorry, 
+  hom_inv_id' := sorry,
   inv_hom_id' := sorry }
 end
 
@@ -42,7 +43,7 @@ section
 def pullbacks_iso {Y₁ Y₂ Z : C} {r₁ : Y₁ ⟶ Z} {r₂ : Y₂ ⟶ Z} (A B : square.{u v} r₁ r₂) (A_w : is_pullback A) (B_w : is_pullback B): A.X ≅ B.X :=
 { hom := B_w.lift A,
   inv := A_w.lift B,
-  hom_inv_id' := sorry, 
+  hom_inv_id' := sorry,
   inv_hom_id' := sorry }
 end
 

@@ -4,6 +4,8 @@
 
 import category_theory.limits.shape
 
+set_option trace.tidy true
+
 open category_theory
 
 namespace category_theory.limits
@@ -40,16 +42,16 @@ lemma is_equalizer.mono {f g : Y ⟶ Z} {t : fork f g} (h : is_equalizer t) : mo
                                     rw [uniq_k, uniq_l]
                               end }
 
-lemma is_equalizer.univ {f g : Y ⟶ Z} {t : fork f g} (h : is_equalizer t) (s : fork f g) (φ : s.X ⟶ t.X) : (φ ≫ t.ι = s.ι) ↔ (φ = h.lift s) :=
+lemma is_equalizer.universal {f g : Y ⟶ Z} {t : fork f g} (h : is_equalizer t) (s : fork f g) (φ : s.X ⟶ t.X) : (φ ≫ t.ι = s.ι) ↔ (φ = h.lift s) :=
 ⟨ is_equalizer.uniq h s φ,
   λ a, by rw [a, is_equalizer.fac] ⟩
 
-def is_equalizer.of_lift_univ {f g : Y ⟶ Z} {t : fork f g}
+def is_equalizer.of_lift_universal {f g : Y ⟶ Z} {t : fork f g}
   (lift : Π (s : fork f g), s.X ⟶ t.X)
-  (univ : Π (s : fork f g) (φ : s.X ⟶ t.X), (φ ≫ t.ι = s.ι) ↔ (φ = lift s)) : is_equalizer t :=
+  (universal : Π (s : fork f g) (φ : s.X ⟶ t.X), (φ ≫ t.ι = s.ι) ↔ (φ = lift s)) : is_equalizer t :=
 { lift := lift,
-  fac' := λ s, ((univ s (lift s)).mpr (eq.refl (lift s))),
-  uniq' := λ s φ, (univ s φ).mp }
+  fac' := λ s, ((universal s (lift s)).mpr (eq.refl (lift s))),
+  uniq' := λ s φ, (universal s φ).mp }
 
 end equalizer
 
@@ -84,35 +86,35 @@ lemma is_coequalizer.epi {f g : Z ⟶ Y} {t : cofork f g} (h : is_coequalizer t)
                                     rw [uniq_k, uniq_l],
                               end }
 
-lemma is_coequalizer.univ {f g : Z ⟶ Y} {t : cofork f g} (h : is_coequalizer t) (s : cofork f g) (φ : t.X ⟶ s.X) : (t.π ≫ φ = s.π) ↔ (φ = h.desc s) :=
+lemma is_coequalizer.universal {f g : Z ⟶ Y} {t : cofork f g} (h : is_coequalizer t) (s : cofork f g) (φ : t.X ⟶ s.X) : (t.π ≫ φ = s.π) ↔ (φ = h.desc s) :=
 ⟨ is_coequalizer.uniq h s φ,
   λ a, by rw [a, is_coequalizer.fac] ⟩
 
-def is_coequalizer.of_desc_univ {f g : Z ⟶ Y} {t : cofork f g}
+def is_coequalizer.of_desc_universal {f g : Z ⟶ Y} {t : cofork f g}
   (desc : Π (s : cofork f g), t.X ⟶ s.X)
-  (univ : Π (s : cofork f g) (φ : t.X ⟶ s.X), (t.π ≫ φ = s.π) ↔ (φ = desc s)) : is_coequalizer t :=
+  (universal : Π (s : cofork f g) (φ : t.X ⟶ s.X), (t.π ≫ φ = s.π) ↔ (φ = desc s)) : is_coequalizer t :=
 { desc := desc,
-  fac' := λ s, ((univ s (desc s)).mpr (eq.refl (desc s))),
-  uniq' := λ s φ, (univ s φ).mp }
+  fac' := λ s, ((universal s (desc s)).mpr (eq.refl (desc s))),
+  uniq' := λ s φ, (universal s φ).mp }
 
 end coequalizer
 
 variable (C)
 
 class has_equalizers :=
-(equalizer : Π {Y Z : C} (f g : Y ⟶ Z), fork f g)
-(is_equalizer : Π {Y Z : C} (f g : Y ⟶ Z), is_equalizer (equalizer f g) . obviously)
+(fork : Π {Y Z : C} (f g : Y ⟶ Z), fork f g)
+(is_equalizer : Π {Y Z : C} (f g : Y ⟶ Z), is_equalizer (fork f g) . obviously)
 
 class has_coequalizers :=
-(coequalizer : Π {Y Z : C} (f g : Y ⟶ Z), cofork f g)
-(is_coequalizer : Π {Y Z : C} (f g : Y ⟶ Z), is_coequalizer (coequalizer f g) . obviously)
+(cofork : Π {Y Z : C} (f g : Y ⟶ Z), cofork f g)
+(is_coequalizer : Π {Y Z : C} (f g : Y ⟶ Z), is_coequalizer (cofork f g) . obviously)
 
 variable {C}
 
 section
 variables [has_equalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
 
-def equalizer.fork := has_equalizers.equalizer.{u v} f g
+def equalizer.fork := has_equalizers.fork.{u v} f g
 def equalizer := (equalizer.fork f g).X
 def equalizer.ι : (equalizer f g) ⟶ Y := (equalizer.fork f g).ι
 def equalizer.w : (equalizer.ι f g) ≫ f = (equalizer.ι f g) ≫ g := (equalizer.fork f g).w
@@ -147,7 +149,7 @@ end
 section
 variables [has_coequalizers.{u v} C] {Y Z : C} (f g : Y ⟶ Z)
 
-def coequalizer.cofork := has_coequalizers.coequalizer.{u v} f g
+def coequalizer.cofork := has_coequalizers.cofork.{u v} f g
 def coequalizer := (coequalizer.cofork f g).X
 def coequalizer.π : Z ⟶ (coequalizer f g) := (coequalizer.cofork f g).π
 def coequalizer.w : f ≫ (coequalizer.π f g)  = g ≫ (coequalizer.π f g) := (coequalizer.cofork f g).w

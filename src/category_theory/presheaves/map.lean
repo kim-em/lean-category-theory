@@ -27,12 +27,13 @@ def functor.map_presheaf (F : C ⥤ D) : Presheaf.{u v} C ⥤ Presheaf.{u v} D :
   begin
     intros X,
     ext1,
-    swap, -- check the continuous map first (hopefully this will not be necessary after my PR)
+    swap,
     refl,
     ext1, -- check the equality of natural transformations componentwise
-    dsimp at *, simp at *,
+    dsimp at *,
     erw functor.map_id,
-    simp
+    erw functor.map_id,
+    simp,
   end,
   map_comp' :=
   begin
@@ -42,6 +43,9 @@ def functor.map_presheaf (F : C ⥤ D) : Presheaf.{u v} C ⥤ Presheaf.{u v} D :
     refl,
     tidy,
     dsimp [open_set.map_iso, nat_iso.of_components, open_set.map],
+    simp,
+    erw functor.map_id,
+    erw functor.map_id,
     simp,
   end }.
 

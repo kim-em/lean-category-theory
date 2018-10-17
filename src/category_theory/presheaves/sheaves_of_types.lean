@@ -28,12 +28,12 @@ structure gluing {c : cover X} {F : (open_set X)ᵒᵖ ⥤ (Type u)} (s : compat
 definition sheaf.of_types
   (presheaf        : (open_set X)ᵒᵖ ⥤ (Type v))
   (sheaf_condition : Π (c : cover X)
-                        (s : compatible_sections c presheaf), gluing s) :
+                       (s : compatible_sections c presheaf), gluing s) :
   sheaf.{v+1 v} X (Type v) :=
 { presheaf := presheaf,
   sheaf_condition := ⟨ λ c,
   let σ : Π s : fork (left c presheaf) (right c presheaf), s.X → compatible_sections c presheaf :=
-    λ s x, { sections := λ i, sorry,
+    λ s x, { sections := λ i, pi.π (λ i : c.I, presheaf.obj (c.U i)) i (s.ι x),
              compatibility := λ i j, congr_fun (congr_fun s.w x) (i,j), } in
   { lift := λ s x, (sheaf_condition c (σ s x)).«section»,
     fac'  := λ s, funext $ λ x, funext $ λ i, (sheaf_condition c (σ s x)).restrictions i,

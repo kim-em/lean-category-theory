@@ -1,6 +1,6 @@
 import category_theory.opposites
 import category_theory.full_subcategory
-import category_theory.universal.types
+import category_theory.limits.types
 import category_theory.examples.topological_spaces
 import category_theory.limits.obviously
 
@@ -93,10 +93,10 @@ include 𝒱
 variables (c : cover X) (F : (open_set X)ᵒᵖ ⥤ V)
 
 def sections : V :=
-pi.{u v} (λ i : c.I, F.obj (c.U i))
+limits.pi.{u v} (λ i : c.I, F.obj (c.U i))
 
 def overlaps : V :=
-pi.{u v} (λ p : c.I × c.I, F.obj (c.U p.1 ∩ c.U p.2))
+limits.pi.{u v} (λ p : c.I × c.I, F.obj (c.U p.1 ∩ c.U p.2))
 
 def left : (sections c F) ⟶ (overlaps c F) :=
 pi.pre _ (λ p : c.I × c.I, p.1) ≫ pi.map (λ p, res_left p.1 p.2 F)
