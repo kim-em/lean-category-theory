@@ -4,7 +4,6 @@
 
 import category_theory.embedding
 import category_theory.tactics.obviously
-import category_theory.follow_your_nose
 
 namespace category_theory
 
