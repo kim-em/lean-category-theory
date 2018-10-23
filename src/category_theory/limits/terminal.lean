@@ -20,7 +20,7 @@ structure is_terminal (t : C) :=
 
 restate_axiom is_terminal.uniq'
 
-@[extensionality] lemma is_terminal.ext {X : C} (P Q : is_terminal.{u v} X) : P = Q := 
+@[extensionality] lemma is_terminal.ext {X : C} (P Q : is_terminal.{u v} X) : P = Q :=
 begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously, end
 
 def hom_to_terminal_subsingleton (X' : C) (X : C) (h : is_terminal.{u v} X) : subsingleton (X' ⟶ X) :=
@@ -41,7 +41,7 @@ attribute [class] is_initial
 
 restate_axiom is_initial.uniq'
 
-@[extensionality] lemma is_initial.ext {X : C} (P Q : is_initial.{u v} X) : P = Q := 
+@[extensionality] lemma is_initial.ext {X : C} (P Q : is_initial.{u v} X) : P = Q :=
 begin tactic.unfreeze_local_instances, cases P, cases Q, congr, obviously, end
 
 def hom_from_initial_subsingleton (X' : C) (X : C) (h : is_initial.{u v} X') : subsingleton (X' ⟶ X) :=
@@ -63,37 +63,37 @@ class has_initial_object :=
 (initial    : C)
 (is_initial : is_initial.{u v} initial . obviously)
 
-def terminal_object [has_terminal_object.{u v} C] : C := has_terminal_object.terminal.{u v} C
-def initial_object  [has_initial_object.{u v} C]  : C := has_initial_object.initial.{u v} C
+def terminal [has_terminal_object.{u v} C] : C := has_terminal_object.terminal.{u v} C
+def initial  [has_initial_object.{u v} C]  : C := has_initial_object.initial.{u v} C
 
 variable {C}
 section
-variables [has_terminal_object.{u v} C] 
+variables [has_terminal_object.{u v} C]
 
-def terminal_object.universal_property : is_terminal.{u v} (terminal_object.{u v} C) := 
+def terminal.universal_property : is_terminal.{u v} (terminal.{u v} C) :=
 has_terminal_object.is_terminal.{u v} C
-def terminal_object.hom (X : C) : (X ⟶ terminal_object.{u v} C) := 
-terminal_object.universal_property.lift.{u v} X
+def terminal.π (X : C) : (X ⟶ terminal.{u v} C) :=
+terminal.universal_property.lift.{u v} X
 
-@[extensionality] lemma terminal.hom_ext {X' : C} (f g : X' ⟶ terminal_object.{u v} C) : f = g :=
+@[extensionality] lemma terminal.hom_ext {X' : C} (f g : X' ⟶ terminal.{u v} C) : f = g :=
 begin
-  rw (terminal_object.universal_property).uniq _ f,
-  rw (terminal_object.universal_property).uniq _ g,
+  rw (terminal.universal_property).uniq _ f,
+  rw (terminal.universal_property).uniq _ g,
 end
 end
 
 section
-variables [has_initial_object.{u v} C] 
+variables [has_initial_object.{u v} C]
 
-def initial_object.universal_property : is_initial.{u v} (initial_object.{u v} C) := 
+def initial.universal_property : is_initial.{u v} (initial.{u v} C) :=
 has_initial_object.is_initial.{u v} C
-def initial_object.hom (X : C) : (initial_object.{u v} C ⟶ X) := 
-initial_object.universal_property.desc.{u v} X
+def initial.ι (X : C) : (initial.{u v} C ⟶ X) :=
+initial.universal_property.desc.{u v} X
 
-@[extensionality] lemma initial.hom_ext {X' : C} (f g : initial_object.{u v} C ⟶ X') : f = g :=
+@[extensionality] lemma initial.hom_ext {X' : C} (f g : initial.{u v} C ⟶ X') : f = g :=
 begin
-  rw (initial_object.universal_property).uniq _ f,
-  rw (initial_object.universal_property).uniq _ g,
+  rw (initial.universal_property).uniq _ f,
+  rw (initial.universal_property).uniq _ g,
 end
 end
 

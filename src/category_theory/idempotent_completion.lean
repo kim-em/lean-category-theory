@@ -16,8 +16,6 @@ structure Idempotent (C : Type (u+1)) [large_category C] :=
 restate_axiom Idempotent.witness'
 attribute [simp,search] Idempotent.witness
 
-local attribute [search] subtype.property
-
 variables {C : Type (u+1)} [large_category C]
 
 namespace Idempotent
@@ -40,14 +38,14 @@ end
 
 end Idempotent
 
-instance IdempotentCompletion : large_category (Idempotent C) := 
+instance IdempotentCompletion : large_category (Idempotent C) :=
 { hom  := Idempotent.morphism,
   id   := λ X, ⟨ X.idempotent ⟩,
   comp := λ X Y Z f g, ⟨ f.morphism ≫ g.morphism ⟩ }
 
 namespace IdempotentCompletion
 
-def functor_to_completion (C : Type (u+1)) [large_category C] : C ⥤ (Idempotent C) := 
+def functor_to_completion (C : Type (u+1)) [large_category C] : C ⥤ (Idempotent C) :=
 { obj := λ X, { object := X, idempotent := 𝟙 X },
   map' := λ _ _ f, { morphism := f } }
 
@@ -87,13 +85,13 @@ private def idempotent_inverse (C : Type (u+1)) [large_category C] : (Idempotent
 --}
 
 def extend_Functor_to_completion (F : C ⥤ (Idempotent D)) : (Idempotent C) ⥤ (Idempotent D) :=
-{ obj := λ X, { object := (F X.object).object, 
+{ obj := λ X, { object := (F X.object).object,
                 idempotent := (F.map X.idempotent).morphism },
   map' := λ X Y f, { morphism := (F.map f.morphism).morphism } }
 
--- lemma Functor_from_IdempotentCompletion_determined_by_restriction 
+-- lemma Functor_from_IdempotentCompletion_determined_by_restriction
 --   {C D : Category} (F : Functor (IdempotentCompletion C) (IdempotentCompletion D)) :
---     NaturalIsomorphism (extend_Functor_to_IdempotentCompletion (restrict_Functor_from_IdempotentCompletion F)) F := 
+--     NaturalIsomorphism (extend_Functor_to_IdempotentCompletion (restrict_Functor_from_IdempotentCompletion F)) F :=
 --       sorry
 
 -- PROJECT idempotent completion left adjoint to the forgetful functor from categories to semicategories?

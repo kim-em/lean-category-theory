@@ -22,13 +22,13 @@ include 𝒞
 
 @[simp] def eq_to_hom {X Y : C} (h : X = Y) : X ⟶ Y := (eq_to_iso h).hom
 
-@[simp] def graph_functor {n k : ℕ} {e : vector (fin n × fin n) k} 
+@[simp] def graph_functor {n k : ℕ} {e : vector (fin n × fin n) k}
   (objs : vector C n) (homs : Π m : fin k, objs.nth (e.nth m).1 ⟶ objs.nth (e.nth m).2) :
   paths (finite_graph.{v₁} e) ⥤ C :=
 functor.of_graph_hom
 { onVertices := λ x, objs.nth x.down,
-  onEdges := λ x y f, 
-  begin 
+  onEdges := λ x y f,
+  begin
     have p := homs f.down.val,
     refine (eq_to_hom _) ≫ p ≫ (eq_to_hom _), -- TODO this needs a name, e.g. `convert_hom`
     rw f.down.property,
@@ -36,10 +36,10 @@ functor.of_graph_hom
   end}
 
 
-def parallel_pair_functor {X Y : C} (f g : X ⟶ Y) : paths.{v₁} (finite_graph parallel_pair) ⥤ C :=
+def parallel_pair_functor' {X Y : C} (f g : X ⟶ Y) : paths.{v₁} (finite_graph parallel_pair) ⥤ C :=
 graph_functor ⟨ [X, Y], by refl ⟩
-(λ m, match m with 
-| ⟨ 0, _ ⟩ := f 
+(λ m, match m with
+| ⟨ 0, _ ⟩ := f
 | ⟨ 1, _ ⟩ := g
 | ⟨ n+2, _ ⟩ := by exfalso; linarith
 end)

@@ -23,7 +23,7 @@ attribute [search] is_kernel.w
 restate_axiom is_kernel.fac'
 attribute [simp,search] is_kernel.fac
 restate_axiom is_kernel.uniq'
-attribute [search, back'] is_kernel.uniq
+attribute [search,elim] is_kernel.uniq
 
 @[extensionality] lemma is_kernel.ext {f : Y ⟶ Z} {ι : X ⟶ Y} (P Q : is_kernel f ι) : P = Q :=
 begin cases P, cases Q, obviously end
@@ -52,10 +52,10 @@ def kernel_of_equalizer {f : Y ⟶ Z} {t : fork f (zero_morphism _ _)} (e : is_e
   uniq' := λ X' ι' w m h, begin tidy, apply e.uniq { X := X', ι := m ≫ t.ι }, tidy end }
 
 -- def equalizer_of_kernel {f : Y ⟶ Z} {t : fork f (zero_morphism _ _)} (k : is_kernel f t.ι) : is_equalizer t :=
--- { lift := λ s, begin have e := s.w, tidy, exact k.lift e, end, 
+-- { lift := λ s, begin have e := s.w, tidy, exact k.lift e, end,
 --   uniq := sorry, }
 
--- def kernels_are_equalizers {f : Y ⟶ Z} (t : fork f (zero_morphism _ _)) : equiv (is_kernel f t.ι) (is_equalizer t) := 
+-- def kernels_are_equalizers {f : Y ⟶ Z} (t : fork f (zero_morphism _ _)) : equiv (is_kernel f t.ι) (is_equalizer t) :=
 -- { to_fun  := equalizer_of_kernel,
 --   inv_fun := kernel_of_equalizer,
 --   left_inv  := sorry,

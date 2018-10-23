@@ -17,7 +17,7 @@ namespace category_theory.comma
 universes j u₁ v₁ u₂ v₂ u₃ v₃
 
 section
-variables (J : Type u₁) [𝒥 : category.{u₁ v₁} J] (C : Type u₂) [𝒞 : category.{u₂ v₂} C] 
+variables (J : Type u₁) [𝒥 : category.{u₁ v₁} J] (C : Type u₂) [𝒞 : category.{u₂ v₂} C]
 include 𝒥 𝒞
 -- The diagonal functor sends X to the constant functor that sends everything to X.
 def DiagonalFunctor : C ⥤ (J ⥤ C) :=
@@ -28,15 +28,13 @@ def DiagonalFunctor : C ⥤ (J ⥤ C) :=
 @[simp] lemma DiagonalFunctor_map_app {X Y : C} (f : X ⟶ Y) (j : J) : ((DiagonalFunctor J C).map f) j = f := rfl
 end
 
-def ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{u₃ v₃ u₃ v₃} punit C := 
+def ObjectAsFunctor {C : Type u₃} [category.{u₃ v₃} C] (X : C) : functor.{u₃ v₃ u₃ v₃} punit C :=
 { obj := λ _, X,
   map' := λ _ _ _, 𝟙 X }
 
 @[simp] lemma ObjectAsFunctor_map {C : Type u₃} [category.{u₃ v₃} C] (X : C) (P Q : punit) (h : @category.hom.{u₃ v₃} punit _ P Q) : @category_theory.functor.map _ _ _ _ (ObjectAsFunctor.{u₃ v₃} X) P Q h = 𝟙 X := rfl
 
 section
-local attribute [search] subtype.property
-
 variables {A : Type u₁} [𝒜 : category.{u₁ v₁} A] {B : Type u₂} [ℬ : category.{u₂ v₂} B] {C : Type u₃} [𝒞 : category.{u₃ v₃} C]
 include 𝒜 ℬ 𝒞
 
@@ -65,15 +63,15 @@ instance CommaCategory (S : A ⥤ C) (T : B ⥤ C) : category.{(max u₁ u₂ v�
   comp := λ p q r f g, ⟨ f.left ≫ g.left, f.right ≫ g.right, by obviously ⟩ }
 
 -- cf Leinster Remark 2.3.2
-def CommaCategory_left_projection (S : A ⥤ C) (T : B ⥤ C) : (comma S T) ⥤ A := 
+def CommaCategory_left_projection (S : A ⥤ C) (T : B ⥤ C) : (comma S T) ⥤ A :=
 { obj := λ X, X.1.1,
   map' := λ _ _ f, f.left }
 
-def CommaCategory_right_projection (S : A ⥤ C) (T : B ⥤ C) : (comma S T) ⥤ B := 
+def CommaCategory_right_projection (S : A ⥤ C) (T : B ⥤ C) : (comma S T) ⥤ B :=
 { obj := λ X, X.1.2,
   map' := λ _ _ f, f.right }
 
-def CommaCategory_projection_transformation (S : A ⥤ C) (T : B ⥤ C) : ((CommaCategory_left_projection S T) ⋙ S) ⟹ ((CommaCategory_right_projection S T) ⋙ T) := 
+def CommaCategory_projection_transformation (S : A ⥤ C) (T : B ⥤ C) : ((CommaCategory_left_projection S T) ⋙ S) ⟹ ((CommaCategory_right_projection S T) ⋙ T) :=
 { app := λ X, X.2 }
 
 -- TODO show these agree with the explicitly defined `over` and `under` categories.
@@ -92,12 +90,12 @@ variable {C : Type u₁}
 variable [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
-def Cone   (F : J ⥤ C) := 
+def Cone   (F : J ⥤ C) :=
 (comma (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C) (ObjectAsFunctor F))
-def Cocone (F : J ⥤ C) := 
+def Cocone (F : J ⥤ C) :=
 (comma (ObjectAsFunctor F) (DiagonalFunctor.{v₁ v₁ u₁ v₁} J C)).
 
-@[search] lemma Cone.pointwise_condition {F : J ⥤ C} (X Y : Cone F) (f : comma_morphism X Y) (j : J) : f.left ≫ (Y.snd) j = (X.snd) j := 
+@[search] lemma Cone.pointwise_condition {F : J ⥤ C} (X Y : Cone F) (f : comma_morphism X Y) (j : J) : f.left ≫ (Y.snd) j = (X.snd) j :=
 begin
   have p := f.condition,
   have p' := congr_arg nat_trans.app p,
@@ -107,8 +105,8 @@ begin
   exact p''
 end
 
-@[simp] lemma Cone_comma_unit   (F : J ⥤ C) (X : Cone F)   : X.1.2 = punit.star := by obviously 
-@[simp] lemma Cocone_comma_unit (F : J ⥤ C) (X : Cocone F) : X.1.1 = punit.star := by obviously 
+@[simp] lemma Cone_comma_unit   (F : J ⥤ C) (X : Cone F)   : X.1.2 = punit.star := by obviously
+@[simp] lemma Cocone_comma_unit (F : J ⥤ C) (X : Cocone F) : X.1.1 = punit.star := by obviously
 
 instance Cones   (F : J ⥤ C) : category (Cone F)   := begin unfold Cone, apply_instance end
 instance Cocones (F : J ⥤ C) : category (Cocone F) := begin unfold Cocone, apply_instance end

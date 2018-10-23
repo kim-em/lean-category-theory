@@ -6,6 +6,8 @@ import category_theory.equivalence
 import category_theory.natural_isomorphism
 import tidy.rewrite_search
 
+import tidy.command.rfl_lemma
+
 open category_theory
 
 namespace category_theory.equivalence
@@ -28,18 +30,15 @@ open tidy.rewrite_search.tracer
 open tidy.rewrite_search.strategy
 open tidy.rewrite_search.metric
 
-set_option profiler true
-
 instance full_of_equivalence (F : C ⥤ D) [is_equivalence F] : full F :=
 { preimage := λ X Y f, (nat_iso.app F.fun_inv_id X).inv ≫ (F.inv.map f) ≫ (nat_iso.app F.fun_inv_id Y).hom,
   witness' := λ X Y f,
     begin
       apply F.inv.injectivity,
       tidy,
-      rewrite_search_using [`search] { view := visualiser,
+      rewrite_search_using [`search] { --view := visualiser,
                                        trace_summary := tt,
                                        strategy := pexplore {pop_size := 3},
-                                       metric := edit_distance {refresh_freq := 5} weight.cm
                                        },
     end }.
 

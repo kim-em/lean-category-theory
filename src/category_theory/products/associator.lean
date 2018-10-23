@@ -31,9 +31,9 @@ def inverse_associator : (C × (D × E)) ⥤ ((C × D) × E) := by tidy
 
 local attribute [back] category.id
 
-def associativity : equivalence ((C × D) × E) (C × (D × E)) := --by obviously -- times out
-{ functor := associator C D E,
-  inverse := inverse_associator C D E, }
+-- def associativity : equivalence ((C × D) × E) (C × (D × E)) := --by obviously -- times out
+-- { functor := associator C D E,
+--   inverse := inverse_associator C D E, }
 
 -- TODO pentagon natural transformation? satisfying?
 
