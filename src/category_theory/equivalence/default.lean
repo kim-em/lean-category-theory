@@ -38,8 +38,10 @@ def symm (e : C ≌ D) : D ≌ C :=
   fun_inv_id' := e.inv_fun_id,
   inv_fun_id' := e.fun_inv_id }
 
-@[simp,search] lemma fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) : e.functor.map (e.inverse.map f) = (e.inv_fun_id.hom X) ≫ f ≫ (e.inv_fun_id.inv Y) := by obviously
-@[simp,search] lemma inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) : e.inverse.map (e.functor.map f) = (e.fun_inv_id.hom X) ≫ f ≫ (e.fun_inv_id.inv Y) := by obviously
+@[simp,search] lemma fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) : 
+e.functor.map (e.inverse.map f) = (e.inv_fun_id.hom X) ≫ f ≫ (e.inv_fun_id.inv Y) := by obviously
+@[simp,search] lemma inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) : 
+e.inverse.map (e.functor.map f) = (e.fun_inv_id.hom X) ≫ f ≫ (e.fun_inv_id.inv Y) := by obviously
 
 variables {E : Type u₃} [ℰ : category.{u₃ v₃} E]
 include ℰ
@@ -71,6 +73,7 @@ calc
 ... ⟶ _                           : f.functor.map (e.inv_fun_id.inv.app _)
 
 set_option trace.tidy true
+open tidy.rewrite_search.tracer
 
 -- -- With rewrite_search and good caching, we could just write:
 -- def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E :=
@@ -102,10 +105,12 @@ def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E :=
       end },
     inv := { app := λ X, id_effe e f X, naturality' :=
       begin
+        -- sorry
+        dsimp [id_effe],
+        intros X Y f_1,
+        simp at *, dsimp at *,
         sorry
-        -- dsimp [id_effe],
-        -- intros X Y f_1,
-        -- simp at *, dsimp at *,
+        -- rewrite_search { trace_summary := tt, trace_result := tt, view := visualiser, optimal := ff }
         -- nth_rewrite_lhs 0 ←category.assoc,
         -- nth_rewrite_rhs 2 ←category.assoc,
         -- nth_rewrite_rhs 3 ←category.assoc,
