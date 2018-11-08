@@ -11,8 +11,6 @@ universes u v w
 
 namespace category_theory.limits
 
-definition is_equiv {α β : Type v} (f : α → β) := @is_iso (Type v) (category_theory.types) _ _ f
-
 section shapes
 structure shape (C : Type u) [𝒞 : category.{u v} C] :=
 (X : C)
