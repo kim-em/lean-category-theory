@@ -1,4 +1,4 @@
-import .rings
+import category_theory.examples.rings
 import analysis.topology.topological_structures
 
 universes u
@@ -34,7 +34,7 @@ namespace TopRing
 /-- The forgetful functor to CommRing. -/
 def forget_to_CommRing : TopRing ⥤ CommRing :=
 { obj := λ R, { α := R, str := examples.TopRing_comm_ring R },
-  map' := λ R S f, ⟨ f.1, f.2.left ⟩ }
+  map := λ R S f, ⟨ f.1, f.2.left ⟩ }
 
 instance : faithful (forget_to_CommRing) := by tidy
 end TopRing

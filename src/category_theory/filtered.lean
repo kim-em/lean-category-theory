@@ -1,4 +1,4 @@
-import category_theory.limits.shape
+import category_theory.limits
 import order.filter
 
 open category_theory.limits
@@ -17,14 +17,14 @@ class directed [preorder α] :=
 variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
 include 𝒞 
 
-class filtered :=
-(default : C)
-(obj_bound (X Y : C) : cospan X Y)
-(hom_bound {X Y : C} (f g : X ⟶ Y) : cofork f g)
+-- class filtered :=
+-- (default : C)
+-- (obj_bound (X Y : C) : cone (two.map X Y))
+-- (hom_bound {X Y : C} (f g : X ⟶ Y) : cofork f g)
 
-instance [inhabited α] [preorder α] [directed α] : filtered.{u₁ u₁} α :=
-{ default := default α,
-  obj_bound := λ x y, { X := directed.bound x y, ι₁ := ⟨ ⟨ directed.i₁ x y ⟩ ⟩, ι₂ := ⟨ ⟨ directed.i₂ x y ⟩ ⟩ },
-  hom_bound := λ _ y f g, { X := y, π := 𝟙 y, w' := begin cases f, cases f, cases g, cases g, simp end } }
+-- instance [inhabited α] [preorder α] [directed α] : filtered.{u₁ u₁} α :=
+-- { default := default α,
+--   obj_bound := λ x y, { X := directed.bound x y, ι₁ := ⟨ ⟨ directed.i₁ x y ⟩ ⟩, ι₂ := ⟨ ⟨ directed.i₂ x y ⟩ ⟩ },
+--   hom_bound := λ _ y f g, { X := y, π := 𝟙 y, w' := begin cases f, cases f, cases g, cases g, simp end } }
 
 end category_theory

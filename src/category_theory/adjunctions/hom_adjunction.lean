@@ -22,8 +22,9 @@ def hom_adjunction (L : C ⥤ D) (R : D ⥤ C) :=
       ≅ 
     (functor.prod (functor.id (Cᵒᵖ)) R) ⋙ (functor.hom C)
 
-def mate {L : C ⥤ D} {R : D ⥤ C} (A : hom_adjunction L R) {X : C} {Y : D} (f : (L X) ⟶ Y) : X ⟶ (R Y)
-  := ((A.hom) (X, Y)) f
+def mate {L : C ⥤ D} {R : D ⥤ C} (A : hom_adjunction L R) {X : C} {Y : D} (f : (L.obj X) ⟶ Y) : 
+  X ⟶ (R.obj Y) := 
+((A.hom).app (X, Y)) f
 
 -- PROJECT lemmas about mates.
 

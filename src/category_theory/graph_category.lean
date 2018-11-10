@@ -20,8 +20,6 @@ example : category.{v₁ v₁} (paths (finite_graph parallel_pair)) := by apply_
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
-@[simp] def eq_to_hom {X Y : C} (h : X = Y) : X ⟶ Y := (eq_to_iso h).hom
-
 @[simp] def graph_functor {n k : ℕ} {e : vector (fin n × fin n) k}
   (objs : vector C n) (homs : Π m : fin k, objs.nth (e.nth m).1 ⟶ objs.nth (e.nth m).2) :
   paths (finite_graph.{v₁} e) ⥤ C :=

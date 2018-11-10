@@ -1,7 +1,7 @@
 import category_theory.natural_isomorphism
 import category_theory.products
 import category_theory.types
-import category_theory.embedding
+import category_theory.fully_faithful
 import category_theory.yoneda
 import category_theory.limits.cones
 

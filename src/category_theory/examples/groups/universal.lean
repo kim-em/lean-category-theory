@@ -28,7 +28,7 @@ end
 
 instance maps_to_punit_hom {Z : Type u} [group Z] (f : Z → punit) : is_group_hom f := by obviously
 
-instance : has_terminal_object.{u+1 u} Group :=
+instance : has_terminal.{u+1 u} Group :=
 { terminal := ⟨ punit, by obviously ⟩ }
 
 variables {α : Type u} [group α] {β : Type u} [group β] {γ : Type u} [group γ] {δ : Type u} [group δ] 

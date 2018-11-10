@@ -21,6 +21,6 @@ instance category_over {Z : C} : category (over Z) :=
 
 def over.forget (Z : C) : over Z ⥤ C :=
 { obj  := λ X, X.1,
-  map' := λ X Y f, f.1 }
+  map := λ X Y f, f.1 }
 
 end category_theory

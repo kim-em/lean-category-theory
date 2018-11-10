@@ -47,7 +47,7 @@ namespace IdempotentCompletion
 
 def functor_to_completion (C : Type (u+1)) [large_category C] : C ⥤ (Idempotent C) :=
 { obj := λ X, { object := X, idempotent := 𝟙 X },
-  map' := λ _ _ f, { morphism := f } }
+  map := λ _ _ f, { morphism := f } }
 
 -- -- PROJECT
 -- def IdempotentCompletion_functorial (C : Type u) [category C] (D : Type u) [category D] : Functor (Functor C D) (Functor (Idempotent C) (Idempotent D)) := {
@@ -68,10 +68,10 @@ def restrict_Functor_from (F : (Idempotent C) ⥤ D) : C ⥤ D :=
 
 private def idempotent_functor (C : Type (u+1)) [large_category C] : (Idempotent (Idempotent C)) ⥤ (Idempotent C) :=
 { obj := λ X, ⟨ X.object.object, X.idempotent.morphism, congr_arg Idempotent.morphism.morphism X.witness ⟩, -- PROJECT think about automation here
-  map' := λ X Y f, ⟨ f.morphism.morphism, by obviously ⟩ }
+  map := λ X Y f, ⟨ f.morphism.morphism, by obviously ⟩ }
 private def idempotent_inverse (C : Type (u+1)) [large_category C] : (Idempotent C) ⥤ (Idempotent (Idempotent C)) :=
 { obj := λ X, ⟨ X, ⟨ X.idempotent, by obviously ⟩, by obviously ⟩,
-  map' := λ X Y f, ⟨ f, by obviously ⟩ }
+  map := λ X Y f, ⟨ f, by obviously ⟩ }
 
 -- PROJECT prove these lemmas about idempotent completion
 
@@ -85,9 +85,9 @@ private def idempotent_inverse (C : Type (u+1)) [large_category C] : (Idempotent
 --}
 
 def extend_Functor_to_completion (F : C ⥤ (Idempotent D)) : (Idempotent C) ⥤ (Idempotent D) :=
-{ obj := λ X, { object := (F X.object).object,
+{ obj := λ X, { object := (F.obj X.object).object,
                 idempotent := (F.map X.idempotent).morphism },
-  map' := λ X Y f, { morphism := (F.map f.morphism).morphism } }
+  map := λ X Y f, { morphism := (F.map f.morphism).morphism } }
 
 -- lemma Functor_from_IdempotentCompletion_determined_by_restriction
 --   {C D : Category} (F : Functor (IdempotentCompletion C) (IdempotentCompletion D)) :

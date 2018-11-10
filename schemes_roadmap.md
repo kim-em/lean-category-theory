@@ -61,7 +61,7 @@
   (𝒪 : structure_sheaf α)
 
   structure locally_ringed_space extends ringed_space α :=
-  (locality : ∀ x : α, local_ring (stalk_at.{v+1 v} 𝒪 x).1)
+  (locality : ∀ x : α, is_local_ring (stalk_at.{v+1 v} 𝒪 x).1)
   ````
   and observe we've got all the ingredients to make an example out of continuous functions to `ℂ`.
   * Although consider the alternative description of locality, which doesn't require computing stalks:

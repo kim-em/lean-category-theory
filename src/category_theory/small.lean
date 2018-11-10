@@ -5,7 +5,7 @@
 
 import category_theory.category
 import category_theory.functor
-import category_theory.limits.shape -- for cocone
+import category_theory.limits.cones
 import set_theory.cardinal
 
 universe u

@@ -4,7 +4,7 @@
 
 import category_theory.examples.groups
 import category_theory.types
-import category_theory.representable
+import category_theory.limits
 import algebra.group_power
 
 namespace category_theory.examples.groups
@@ -16,7 +16,7 @@ universes u₁ u₂
 
 def ForgetfulFunctor_Groups_to_Types : Group ⥤ (Type u₁) :=
 { obj  := λ s, s.1,
-  map' := λ s t f x, f.map x }
+  map := λ s t f x, f.map x }
 
 local attribute [search] semigroup.mul_assoc
 
@@ -47,12 +47,12 @@ instance exponentiation_is_hom' (G : Group) (g : G.1) : is_group_hom (λ (n : _r
 
 @[simp] lemma monoid_pow_one {G} [group G] (x : G) : monoid.pow x 1 = x := begin sorry, end
 
-instance Groups_ForgetfulFunctor_Representable : representable (ForgetfulFunctor_Groups_to_Types.{u₁}) := 
-{ c := ⟨ _root_.ulift ℤ, by apply_instance ⟩,
-  Φ := { hom := { app := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
-                        naturality' := sorry },
-          inv := { app := λ G f, f.map (ulift.up (1 : ℤ)), },
-          hom_inv_id' := sorry,
-          inv_hom_id' := sorry, } }
+-- instance Groups_ForgetfulFunctor_Representable : representable (ForgetfulFunctor_Groups_to_Types.{u₁}) := 
+-- { c := ⟨ _root_.ulift ℤ, by apply_instance ⟩,
+--   Φ := { hom := { app := λ G g, ⟨λ n, gpow g n.down, begin tidy, sorry end⟩,
+--                         naturality' := sorry },
+--           inv := { app := λ G f, f.map (ulift.up (1 : ℤ)), },
+--           hom_inv_id' := sorry,
+--           inv_hom_id' := sorry, } }
 
 end category_theory.examples.groups

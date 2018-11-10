@@ -61,6 +61,6 @@ include 𝒢 𝒞
 -- PROJECT obtain this as the left adjoint to the forgetful functor.
 @[simp] def of_graph_hom (H : graph_hom G C) : (paths G) ⥤ C :=
 { obj := λ X, (H.onVertices X),
-  map' := λ _ _ f, (path_to_morphism H f) }
+  map := λ _ _ f, (path_to_morphism H f) }
 
 end category_theory.functor

@@ -2,7 +2,7 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
-import category_theory.embedding
+import category_theory.fully_faithful
 import category_theory.tactics.obviously
 
 namespace category_theory
@@ -39,9 +39,11 @@ def symm (e : C ≌ D) : D ≌ C :=
   inv_fun_id' := e.fun_inv_id }
 
 @[simp,search] lemma fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) : 
-e.functor.map (e.inverse.map f) = (e.inv_fun_id.hom X) ≫ f ≫ (e.inv_fun_id.inv Y) := by obviously
+e.functor.map (e.inverse.map f) = (e.inv_fun_id.hom.app X) ≫ f ≫ (e.inv_fun_id.inv.app Y) := 
+by obviously
 @[simp,search] lemma inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) : 
-e.inverse.map (e.functor.map f) = (e.fun_inv_id.hom X) ≫ f ≫ (e.fun_inv_id.inv Y) := by obviously
+e.inverse.map (e.functor.map f) = (e.fun_inv_id.hom.app X) ≫ f ≫ (e.fun_inv_id.inv.app Y) := 
+by obviously
 
 variables {E : Type u₃} [ℰ : category.{u₃ v₃} E]
 include ℰ
@@ -49,28 +51,28 @@ include ℰ
 attribute [trans] category.comp
 
 @[simp] def effe_id (e : C ≌ D) (f : D ≌ E) (X : C) :
-  (e.inverse) ((f.inverse) ((f.functor) ((e.functor) X))) ⟶ X :=
+  (e.inverse).obj ((f.inverse).obj ((f.functor).obj ((e.functor).obj X))) ⟶ X :=
 calc
-  _ ⟶ (e.inverse) ((e.functor) X) : e.inverse.map (f.fun_inv_id.hom.app _)
-... ⟶ X                           : e.fun_inv_id.hom.app _
+  _ ⟶ (e.inverse).obj ((e.functor).obj X) : e.inverse.map (f.fun_inv_id.hom.app _)
+... ⟶ X                                   : e.fun_inv_id.hom.app _
 
 @[simp] def id_effe (e : C ≌ D) (f : D ≌ E) (X : C) :
-  (functor.id C) X ⟶ ((e.functor ⋙ f.functor) ⋙ f.inverse ⋙ e.inverse) X :=
+  (functor.id C).obj X ⟶ ((e.functor ⋙ f.functor) ⋙ f.inverse ⋙ e.inverse).obj X :=
 calc
-  X ⟶ (e.functor ⋙ e.inverse) X : e.fun_inv_id.inv.app _
-... ⟶ _                           : e.inverse.map (f.fun_inv_id.inv.app _)
+  X ⟶ (e.functor ⋙ e.inverse).obj X : e.fun_inv_id.inv.app _
+... ⟶ _                              : e.inverse.map (f.fun_inv_id.inv.app _)
 
 @[simp] def feef_id (e : C ≌ D) (f : D ≌ E) (X : E) :
-  (f.functor) ((e.functor) ((e.inverse) ((f.inverse) X))) ⟶ X :=
+  (f.functor).obj ((e.functor).obj ((e.inverse).obj ((f.inverse).obj X))) ⟶ X :=
 calc
-  _ ⟶ (f.functor) ((f.inverse) X) : f.functor.map (e.inv_fun_id.hom.app _)
-... ⟶ X                           : f.inv_fun_id.hom.app _
+  _ ⟶ (f.functor).obj ((f.inverse).obj X) : f.functor.map (e.inv_fun_id.hom.app _)
+... ⟶ X                                   : f.inv_fun_id.hom.app _
 
 @[simp] def id_feef (e : C ≌ D) (f : D ≌ E) (X : E) :
-  X ⟶ ((f.inverse ⋙ e.inverse) ⋙ e.functor ⋙ f.functor) X :=
+  X ⟶ ((f.inverse ⋙ e.inverse) ⋙ e.functor ⋙ f.functor).obj X :=
 calc
-  X ⟶ (f.inverse ⋙ f.functor) X : f.inv_fun_id.inv.app _
-... ⟶ _                           : f.functor.map (e.inv_fun_id.inv.app _)
+  X ⟶ (f.inverse ⋙ f.functor).obj X : f.inv_fun_id.inv.app _
+... ⟶ _                              : f.functor.map (e.inv_fun_id.inv.app _)
 
 set_option trace.tidy true
 open tidy.rewrite_search.tracer
@@ -287,20 +289,25 @@ instance is_equivalence_inverse (e : C ≌ D) : is_equivalence e.inverse :=
   fun_inv_id' := e.inv_fun_id,
   inv_fun_id' := e.fun_inv_id }
 
-@[simp,search] lemma fun_inv_map (F : C ⥤ D) [is_equivalence F] (X Y : D) (f : X ⟶ Y) : F.map (F.inv.map f) = (F.inv_fun_id.hom.app X) ≫ f ≫ (F.inv_fun_id.inv.app Y) := by obviously
-@[simp,search] lemma inv_fun_map (F : C ⥤ D) [is_equivalence F] (X Y : C) (f : X ⟶ Y) : F.inv.map (F.map f) = (F.fun_inv_id.hom.app X) ≫ f ≫ (F.fun_inv_id.inv.app Y) := by obviously
+@[simp,search] lemma fun_inv_map (F : C ⥤ D) [is_equivalence F] (X Y : D) (f : X ⟶ Y) : 
+  F.map (F.inv.map f) = (F.inv_fun_id.hom.app X) ≫ f ≫ (F.inv_fun_id.inv.app Y) := 
+by obviously
+@[simp,search] lemma inv_fun_map (F : C ⥤ D) [is_equivalence F] (X Y : C) (f : X ⟶ Y) : 
+  F.inv.map (F.map f) = (F.fun_inv_id.hom.app X) ≫ f ≫ (F.fun_inv_id.inv.app Y) := 
+by obviously
 
 end is_equivalence
 
 class ess_surj (F : C ⥤ D) :=
 (obj_preimage (d : D) : C)
-(iso' (d : D) : F (obj_preimage d) ≅ d . obviously)
+(iso' (d : D) : F.obj (obj_preimage d) ≅ d . obviously)
 
 restate_axiom ess_surj.iso'
 
 namespace functor
 def obj_preimage (F : C ⥤ D) [ess_surj F] (d : D) : C := ess_surj.obj_preimage.{u₁ v₁ u₂ v₂} F d
-def fun_obj_preimage_iso (F : C ⥤ D) [ess_surj F] (d : D) : F (F.obj_preimage d) ≅ d := ess_surj.iso F d
+def fun_obj_preimage_iso (F : C ⥤ D) [ess_surj F] (d : D) : F.obj (F.obj_preimage d) ≅ d := 
+ess_surj.iso F d
 end functor
 
 

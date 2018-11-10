@@ -19,7 +19,7 @@ variable [ℰ : category.{u₃ v₃} E]
 include 𝒞 𝒟 ℰ
 
 @[simp] lemma Bifunctor_identities (F : (C × D) ⥤ E) (X : C) (Y : D)
-  : @category_theory.functor.map _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F (X, Y))
+  : @category_theory.functor.map _ _ _ _ F (X, Y) (X, Y) (𝟙 X, 𝟙 Y) = 𝟙 (F.obj (X, Y))
   := F.map_id (X, Y)
 
 @[simp] lemma Bifunctor_left_identity (F : (C × D) ⥤ E) (W : C) {X Y Z : D} (f : X ⟶ Y) (g : Y ⟶ Z)

@@ -10,7 +10,8 @@ open category_theory
 def functor.prod' (C : Type u₁) [category.{u₁ v₁} C] : ( (C ⥤ C) × (C ⥤ C) ) ⥤ (C ⥤ C) :=
 begin
   refine
-  { obj := λ a, a.1 ⋙ a.2, map' := λ a b f, f.1 ◫ f.2,
+  { obj := λ a, a.1 ⋙ a.2, 
+    map := λ a b f, f.1 ◫ f.2,
     map_comp' := _ },
   tidy,
     -- Z_fst Z_snd Y_fst Y_snd : C ⥤ C,

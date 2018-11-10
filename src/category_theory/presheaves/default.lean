@@ -7,6 +7,10 @@ import category_theory.functor_category
 import category_theory.whiskering
 import category_theory.natural_isomorphism
 import category_theory.opposites
+import analysis.topology.topological_space
+import analysis.topology.continuity
+
+open topological_space
 
 universes u v u₁ v₁ u₂ v₂
 
@@ -19,7 +23,7 @@ variables {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒟
 variables {F G : C ⥤ D}
 @[simp] protected definition op (α : F ⟹ G) : G.op ⟹ F.op :=
-{ app       := λ X, α X,
+{ app         := λ X, α.app X,
   naturality' := begin tidy, erw α.naturality, refl, end}
 end nat_trans
 
@@ -40,7 +44,7 @@ include 𝒞
 
 structure Presheaf :=
 (X : Top.{v})
-(𝒪 : (open_set X)ᵒᵖ ⥤ C)
+(𝒪 : (opens X)ᵒᵖ ⥤ C)
 
 instance : has_coe_to_sort (Presheaf.{u v} C) :=
 { S := Type v, coe := λ F, F.X.α }
@@ -51,10 +55,10 @@ instance Presheaf_topological_space (F : Presheaf.{u v} C) : topological_space F
 
 structure Presheaf_hom (F G : Presheaf.{u v} C) :=
 (f : F.X ⟶ G.X)
-(c : G.𝒪 ⟹ ((open_set.map f).op ⋙ F.𝒪))
+(c : G.𝒪 ⟹ ((opens.map f).op ⋙ F.𝒪))
 
 @[extensionality] lemma ext {F G : Presheaf.{u v} C} (α β : Presheaf_hom F G)
-  (w : α.f = β.f) (h : α.c ⊟ (whisker_right (open_set.map_iso _ _ w).inv.op F.𝒪) = β.c) :
+  (w : α.f = β.f) (h : α.c ⊟ (whisker_right (opens.map_iso _ _ w).inv.op F.𝒪) = β.c) :
   α = β :=
 begin
   cases α, cases β,
@@ -64,9 +68,7 @@ begin
   ext,
   have h' := congr_fun (congr_arg nat_trans.app h) X,
   dsimp at h',
-  dsimp [open_set.map_iso, whisker_right, whiskering_right, nat_iso.of_components, nat_trans.hcomp] at h',
-  simp at h',
-  dsimp at h',
+  dsimp [opens.map_iso, whisker_right, whiskering_right, nat_iso.of_components, nat_trans.hcomp] at h',
   erw category_theory.functor.map_id at h',
   rw category.comp_id at h',
   exact h'
@@ -75,11 +77,11 @@ end.
 namespace Presheaf_hom
 @[simp] def id (F : Presheaf.{u v} C) : Presheaf_hom F F :=
 { f := 𝟙 F.X,
-  c := ((functor.id_comp _).inv) ⊟ (whisker_right (open_set.map_id _).hom.op _) }
+  c := ((functor.id_comp _).inv) ⊟ (whisker_right (opens.map_id _).hom.op _) }
 
 @[simp] def comp {F G H : Presheaf.{u v} C} (α : Presheaf_hom F G) (β : Presheaf_hom G H) : Presheaf_hom F H :=
 { f := α.f ≫ β.f,
-  c := β.c ⊟ (whisker_left (open_set.map β.f).op α.c) }
+  c := β.c ⊟ (whisker_left (opens.map β.f).op α.c) }
 
 /- I tried to break out the axioms for `category (Presheaf C)` below as lemmas here,
    but mysteriously `ext` (nor `apply ext`) doesn't work here! -/
@@ -137,7 +139,7 @@ instance category_of_presheaves : category (Presheaf.{u v} C) :=
     { ext1,
       dsimp only [Presheaf_hom.comp,
              whisker_right, whisker_left, whiskering_right, whiskering_left,
-             open_set.map_iso, nat_iso.of_components],
+             opens.map_iso, nat_iso.of_components],
       dsimp, -- This is really slow.
       erw category_theory.functor.map_id,
       simp only [category.assoc, category_theory.functor.map_id, category.comp_id],
@@ -149,9 +151,9 @@ instance category_of_presheaves : category (Presheaf.{u v} C) :=
 
 namespace Presheaf_hom
 @[simp] lemma id_f (F : Presheaf.{u v} C) : ((𝟙 F) : F ⟶ F).f = 𝟙 F.X := rfl
-@[simp] lemma id_c (F : Presheaf.{u v} C) : ((𝟙 F) : F ⟶ F).c = (((functor.id_comp _).inv) ⊟ (whisker_right (open_set.map_id _).hom.op _)) := rfl
+@[simp] lemma id_c (F : Presheaf.{u v} C) : ((𝟙 F) : F ⟶ F).c = (((functor.id_comp _).inv) ⊟ (whisker_right (opens.map_id _).hom.op _)) := rfl
 @[simp] lemma comp_f {F G H : Presheaf.{u v} C} (α : F ⟶ G) (β : G ⟶ H) : (α ≫ β).f = α.f ≫ β.f := rfl
-@[simp] lemma comp_c {F G H : Presheaf.{u v} C} (α : F ⟶ G) (β : G ⟶ H) : (α ≫ β).c = (β.c ⊟ (whisker_left (open_set.map β.f).op α.c)) := rfl
+@[simp] lemma comp_c {F G H : Presheaf.{u v} C} (α : F ⟶ G) (β : G ⟶ H) : (α ≫ β).c = (β.c ⊟ (whisker_left (opens.map β.f).op α.c)) := rfl
 end Presheaf_hom
 
 end category_theory.presheaves

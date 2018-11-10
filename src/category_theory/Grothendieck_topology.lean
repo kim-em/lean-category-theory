@@ -35,7 +35,7 @@ structure Grothendieck_topology [has_pullbacks.{u₁ v₁} C] :=
 (pullback {X : C} (c ∈ covers X) {Y : C} (f : Y ⟶ X) : pullback_cover c f ∈ covers Y)
 (cover_of_covers {X : C} (c ∈ covers X) (d : Π (i : cover.I.{u₁ v₁} c), {P | covers (c.U i) P}) : 
   covers_of_cover c (λ i, (d i).1) ∈ covers X)
-(isomorphism_cover {Y X : C} (f : Y ≅ X) : singleton_cover (f : Y ⟶ X) ∈ covers X)
+(isomorphism_cover {Y X : C} (f : Y ≅ X) : singleton_cover (f.hom) ∈ covers X)
 
 -- structure site (C : Type u₁) 
 

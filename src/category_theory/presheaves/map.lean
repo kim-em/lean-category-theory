@@ -7,6 +7,7 @@ open category_theory.examples
 universes u v
 
 open category_theory.presheaves
+open topological_space
 
 namespace category_theory
 
@@ -22,7 +23,7 @@ set_option trace.tidy true
 
 def functor.map_presheaf (F : C ⥤ D) : Presheaf.{u v} C ⥤ Presheaf.{u v} D :=
 { obj := λ X, { X := X.X, 𝒪 := X.𝒪 ⋙ F },
-  map' := λ X Y f, { f := f.f, c := whisker_right f.c F },
+  map := λ X Y f, { f := f.f, c := whisker_right f.c F },
   map_id' :=
   begin
     intros X,
@@ -42,8 +43,7 @@ def functor.map_presheaf (F : C ⥤ D) : Presheaf.{u v} C ⥤ Presheaf.{u v} D :
     swap,
     refl,
     tidy,
-    dsimp [open_set.map_iso, nat_iso.of_components, open_set.map],
-    simp,
+    dsimp [opens.map_iso, nat_iso.of_components, opens.map],
     erw functor.map_id,
     erw functor.map_id,
     simp,
@@ -52,7 +52,7 @@ def functor.map_presheaf (F : C ⥤ D) : Presheaf.{u v} C ⥤ Presheaf.{u v} D :
 def nat_trans.map_presheaf {F G : C ⥤ D} (α : F ⟹ G) : (G.map_presheaf) ⟹ (F.map_presheaf) :=
 { app := λ ℱ,
   { f := 𝟙 ℱ.X,
-    c := { app := λ U, (α.app _) ≫ G.map (ℱ.𝒪.map (((open_set.map_id ℱ.X).symm U).hom)),
+    c := { app := λ U, (α.app _) ≫ G.map (ℱ.𝒪.map ((opens.map_id ℱ.X).hom.app U)),
            naturality' := sorry }
   },
   naturality' := sorry }

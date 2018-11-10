@@ -1,7 +1,7 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
-import category_theory.embedding
+import category_theory.fully_faithful
 
 /- This is exactly analogous to the full_subcategory definition for a subtype, but
 for a sigma type instead. -/
@@ -21,7 +21,7 @@ instance sigma_category (Z : C → Type w) : category.{(max u w) v} (Σ X : C, Z
 
 def sigma_category_embedding (Z : C → Type w) : (Σ X : C, Z X) ⥤ C := 
 { obj := λ X, X.1,
-  map' := λ _ _ f, f }
+  map := λ _ _ f, f }
 
 instance sigma_category_full     (Z : C → Type w) : full     (sigma_category_embedding Z) := by obviously
 instance sigma_category_faithful (Z : C → Type w) : faithful (sigma_category_embedding Z) := by obviously

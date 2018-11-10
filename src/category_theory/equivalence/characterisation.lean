@@ -17,7 +17,7 @@ universes u₁ u₂
 variables {C : Type (u₁+1)} [large_category C] {D : Type (u₂+1)} [large_category D]
 
 def ess_surj_of_equivalence (F : C ⥤ D) [is_equivalence F] : ess_surj F :=
-⟨ λ Y : D, F.inv Y, λ Y : D, (nat_iso.app F.inv_fun_id Y) ⟩
+⟨ λ Y : D, F.inv.obj Y, λ Y : D, (nat_iso.app F.inv_fun_id Y) ⟩
 
 instance faithful_of_equivalence (F : C ⥤ D) [is_equivalence F] : faithful F :=
 { injectivity' := λ X Y f g w, begin
@@ -46,7 +46,7 @@ section
 
 @[simp] private def equivalence_inverse (F : C ⥤ D) [full F] [faithful F] [ess_surj F] : D ⥤ C :=
 { obj  := λ X, F.obj_preimage X,
-  map' := λ X Y f, F.preimage ((F.fun_obj_preimage_iso X).hom ≫ f ≫ (F.fun_obj_preimage_iso Y).inv),
+  map := λ X Y f, F.preimage ((F.fun_obj_preimage_iso X).hom ≫ f ≫ (F.fun_obj_preimage_iso Y).inv),
   map_id' := λ X, begin apply F.injectivity, obviously, end,
   map_comp' := λ X Y Z f g, begin apply F.injectivity, obviously, end }.
 
@@ -54,7 +54,7 @@ def equivalence_of_fully_faithfully_ess_surj
   (F : C ⥤ D) [full F] [faithful : faithful F] [ess_surj F] : is_equivalence F :=
 { inverse := equivalence_inverse F,
   fun_inv_id' := nat_iso.of_components
-    (λ X, preimage_iso (F.fun_obj_preimage_iso (F X)))
+    (λ X, preimage_iso (F.fun_obj_preimage_iso (F.obj X)))
     (λ X Y f, begin apply F.injectivity, obviously, end),
   inv_fun_id' := nat_iso.of_components
     (λ Y, (F.fun_obj_preimage_iso Y))

@@ -31,7 +31,7 @@ end
 
 def monoid_type_constructor : isos (Type u) ⥤ Type u :=
 { obj := monoid,
-  map' := λ α β f m,
+  map := λ α β f m,
   { one := f.hom (by resetI; exact 1),
       mul := λ x y, begin resetI, exact f.hom (f.inv x * f.inv y) end,
       one_mul := sorry,
@@ -39,7 +39,7 @@ def monoid_type_constructor : isos (Type u) ⥤ Type u :=
       mul_assoc := sorry },
   }
 
-def monoid_type_constructor_indirection (α : Type u) : monoid α = monoid_type_constructor α := rfl
+def monoid_type_constructor_indirection (α : Type u) : monoid α = monoid_type_constructor.obj α := rfl
 
 def monoid_transport {α β : Type u} (f : α ≅ β) (m : monoid α) : monoid β :=
 begin

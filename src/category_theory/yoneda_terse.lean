@@ -11,25 +11,24 @@ include 𝒞
 
 def yoneda : C ⥤ ((Cᵒᵖ) ⥤ (Type v₁)) := ƛ X, ƛ Y : C, Y ⟶ X.
 
-def yoneda_evaluation : (((Cᵒᵖ) ⥤ (Type v₁)) × (Cᵒᵖ)) ⥤ (Type (max u₁ v₁)) := 
-(evaluation (Cᵒᵖ) (Type v₁)) ⋙ ulift_functor.{v₁ u₁}
+def yoneda_evaluation : ((Cᵒᵖ) × ((Cᵒᵖ) ⥤ (Type v₁))) ⥤ (Type (max u₁ v₁)) :=
+(evaluation_uncurried (Cᵒᵖ) (Type v₁)) ⋙ ulift_functor.{v₁ u₁}
 
 @[simp] lemma yoneda_evaluation_map_down
-  (P Q : (Cᵒᵖ ⥤ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (x : (yoneda_evaluation C) P) : 
-  ((yoneda_evaluation C).map α x).down = (α.1) (Q.2) ((P.1).map (α.2) (x.down)) := rfl
+  (P Q : (Cᵒᵖ) × (Cᵒᵖ ⥤ Type v₁)) (α : P ⟶ Q) (x : (yoneda_evaluation C).obj P) :
+  ((yoneda_evaluation C).map α x).down = (α.2).app (Q.1) ((P.2).map (α.1) (x.down)) := rfl
 
-def yoneda_pairing : (((Cᵒᵖ) ⥤ (Type v₁)) × (Cᵒᵖ)) ⥤ (Type (max u₁ v₁)) := 
-let F := (category_theory.prod.swap ((Cᵒᵖ) ⥤ (Type v₁)) (Cᵒᵖ)) in
-let G := (functor.prod ((yoneda C).op) (functor.id ((Cᵒᵖ) ⥤ (Type v₁)))) in
-let H := (functor.hom ((Cᵒᵖ) ⥤ (Type v₁))) in
-  (F ⋙ G ⋙ H)      
+def yoneda_pairing : ((Cᵒᵖ) × ((Cᵒᵖ) ⥤ (Type v₁))) ⥤ (Type (max u₁ v₁)) :=
+let F := (functor.prod ((yoneda C).op) (functor.id ((Cᵒᵖ) ⥤ (Type v₁)))) in
+let G := (functor.hom ((Cᵒᵖ) ⥤ (Type v₁))) in
+  (F ⋙ G)
 
 @[simp] lemma yoneda_pairing_map
-  (P Q : (Cᵒᵖ ⥤ Type v₁) ×  (Cᵒᵖ)) (α : P ⟶ Q) (β : (yoneda_pairing C) (P.1, P.2)) : 
-  (yoneda_pairing C).map α β = (yoneda C).map (α.snd) ≫ β ≫ α.fst := rfl
+  (P Q : (Cᵒᵖ) × (Cᵒᵖ ⥤ Type v₁)) (α : P ⟶ Q) (β : (yoneda_pairing C).obj P) :
+  (yoneda_pairing C).map α β = (yoneda C).map (α.1) ≫ β ≫ α.2 := rfl
 
 def yoneda_lemma : (yoneda_pairing C) ≅ (yoneda_evaluation C) := 
-{ hom := { app := λ F x, ulift.up ((x.app F.2) (𝟙 F.2)) },
-  inv := { app := λ F x, { app := λ X a, (F.1.map a) x.down } } }.
+{ hom := { app := λ F x, ulift.up ((x.app F.1) (𝟙 F.1)) },
+  inv := { app := λ F x, { app := λ X a, (F.2.map a) x.down } } }.
 
 end terse

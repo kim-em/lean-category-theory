@@ -24,7 +24,7 @@ meta def fyn := tidy { tactics := tactic.tidy.default_tactics ++ [construct_morp
 
 attribute [tidy] construct_morphism
 
-notation `ƛ` binders `, ` r:(scoped f, { category_theory.functor . obj := f, map' := by obviously }) := r
+notation `ƛ` binders `, ` r:(scoped f, { category_theory.functor . obj := f, map := by obviously }) := r
 
 open category_theory
 
