@@ -5,5 +5,5 @@ lean_version = "khoek/klean:3.4.4"
 path = "src"
 
 [dependencies]
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "76ed3b0bb13ab3dc062e9e727d5db5b5a3705905"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", rev = "81db17e9312a2c5535d5303f4ba4530ea91fac19"}
 mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "8e66172b47608e7bfa1543a938e5be24d0118b38"}
