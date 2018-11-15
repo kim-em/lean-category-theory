@@ -38,11 +38,11 @@ def symm (e : C ≌ D) : D ≌ C :=
   fun_inv_id' := e.inv_fun_id,
   inv_fun_id' := e.fun_inv_id }
 
-@[simp,search] lemma fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) : 
-e.functor.map (e.inverse.map f) = (e.inv_fun_id.hom.app X) ≫ f ≫ (e.inv_fun_id.inv.app Y) := 
+@[simp,search] lemma fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) :
+e.functor.map (e.inverse.map f) = (e.inv_fun_id.hom.app X) ≫ f ≫ (e.inv_fun_id.inv.app Y) :=
 by obviously
-@[simp,search] lemma inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) : 
-e.inverse.map (e.functor.map f) = (e.fun_inv_id.hom.app X) ≫ f ≫ (e.fun_inv_id.inv.app Y) := 
+@[simp,search] lemma inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) :
+e.inverse.map (e.functor.map f) = (e.fun_inv_id.hom.app X) ≫ f ≫ (e.fun_inv_id.inv.app Y) :=
 by obviously
 
 variables {E : Type u₃} [ℰ : category.{u₃ v₃} E]
@@ -55,6 +55,13 @@ attribute [trans] category.comp
 calc
   _ ⟶ (e.inverse).obj ((e.functor).obj X) : e.inverse.map (f.fun_inv_id.hom.app _)
 ... ⟶ X                                   : e.fun_inv_id.hom.app _
+
+@[simp] def effe_id_iso (e : C ≌ D) (f : D ≌ E) (X : C) :
+  (e.inverse).obj ((f.inverse).obj ((f.functor).obj ((e.functor).obj X))) ≅ X :=
+calc
+  (e.inverse).obj ((f.inverse).obj ((f.functor).obj ((e.functor).obj X)))
+    ≅ (e.inverse).obj ((e.functor).obj X) : e.inverse.on_iso (nat_iso.app f.fun_inv_id _)
+... ≅ X                                   : nat_iso.app e.fun_inv_id _
 
 @[simp] def id_effe (e : C ≌ D) (f : D ≌ E) (X : C) :
   (functor.id C).obj X ⟶ ((e.functor ⋙ f.functor) ⋙ f.inverse ⋙ e.inverse).obj X :=
@@ -289,11 +296,11 @@ instance is_equivalence_inverse (e : C ≌ D) : is_equivalence e.inverse :=
   fun_inv_id' := e.inv_fun_id,
   inv_fun_id' := e.fun_inv_id }
 
-@[simp,search] lemma fun_inv_map (F : C ⥤ D) [is_equivalence F] (X Y : D) (f : X ⟶ Y) : 
-  F.map (F.inv.map f) = (F.inv_fun_id.hom.app X) ≫ f ≫ (F.inv_fun_id.inv.app Y) := 
+@[simp,search] lemma fun_inv_map (F : C ⥤ D) [is_equivalence F] (X Y : D) (f : X ⟶ Y) :
+  F.map (F.inv.map f) = (F.inv_fun_id.hom.app X) ≫ f ≫ (F.inv_fun_id.inv.app Y) :=
 by obviously
-@[simp,search] lemma inv_fun_map (F : C ⥤ D) [is_equivalence F] (X Y : C) (f : X ⟶ Y) : 
-  F.inv.map (F.map f) = (F.fun_inv_id.hom.app X) ≫ f ≫ (F.fun_inv_id.inv.app Y) := 
+@[simp,search] lemma inv_fun_map (F : C ⥤ D) [is_equivalence F] (X Y : C) (f : X ⟶ Y) :
+  F.inv.map (F.map f) = (F.fun_inv_id.hom.app X) ≫ f ≫ (F.fun_inv_id.inv.app Y) :=
 by obviously
 
 end is_equivalence
@@ -306,7 +313,7 @@ restate_axiom ess_surj.iso'
 
 namespace functor
 def obj_preimage (F : C ⥤ D) [ess_surj F] (d : D) : C := ess_surj.obj_preimage.{u₁ v₁ u₂ v₂} F d
-def fun_obj_preimage_iso (F : C ⥤ D) [ess_surj F] (d : D) : F.obj (F.obj_preimage d) ≅ d := 
+def fun_obj_preimage_iso (F : C ⥤ D) [ess_surj F] (d : D) : F.obj (F.obj_preimage d) ≅ d :=
 ess_surj.iso F d
 end functor
 

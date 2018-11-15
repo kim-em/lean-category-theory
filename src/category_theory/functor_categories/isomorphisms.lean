@@ -3,31 +3,57 @@
 -- Authors: Stephen Morgan, Scott Morrison
 
 import category_theory.isomorphism
-import category_theory.tactics.obviously
+import category_theory.whiskering
 
 open category_theory
 
 namespace category_theory.functor
 
-universes u₁ v₁ u₂ v₂ u₃ v₃ u₄ v₄ 
+universes u₁ v₁ u₂ v₂ u₃ v₃ u₄ v₄ u₅ v₅
 
-variable {B : Type u₁}
-variable [ℬ : category.{u₁ v₁} B]
-variable {C : Type u₂}
-variable [𝒞 : category.{u₂ v₂} C]
-include ℬ 𝒞
+variables {A : Type u₁} [𝒜 : category.{u₁ v₁} A]
+variables {B : Type u₂} [ℬ : category.{u₂ v₂} B]
+include 𝒜 ℬ
 
-local attribute [back] category.id -- This says that whenever there is a goal of the form (X ⟶ X), we can safely complete it with the identity morphism. This isn't universally true.
+def left_unitor (F : A ⥤ B) : ((functor.id _) ⋙ F) ≅ F :=
+{ hom := { app := λ X, 𝟙 (F.obj X) },
+  inv := { app := λ X, 𝟙 (F.obj X) } }
 
-def left_unitor (F : B ⥤ C) : ((functor.id _) ⋙ F) ≅ F := by obviously
+def right_unitor (F : A ⥤ B) : (F ⋙ (functor.id _)) ≅ F :=
+{ hom := { app := λ X, 𝟙 (F.obj X) },
+  inv := { app := λ X, 𝟙 (F.obj X) } }
 
-def right_unitor (F : B ⥤ C) : (F ⋙ (functor.id _)) ≅ F := by obviously
+variables {C : Type u₃} [𝒞 : category.{u₃ v₃} C]
+variables {D : Type u₄} [𝒟 : category.{u₄ v₄} D]
+include 𝒞 𝒟
 
-variables {D : Type u₃} [𝒟 : category.{u₃ v₃} D] {E : Type u₄} [ℰ : category.{u₄ v₄} E]
-include 𝒟 ℰ 
+def associator (F : A ⥤ B) (G : B ⥤ C) (H : C ⥤ D) : ((F ⋙ G) ⋙ H) ≅ (F ⋙ (G ⋙ H)) :=
+{ hom := { app := λ _, 𝟙 _ },
+  inv := { app := λ _, 𝟙 _ } }
 
-def associator (F : B ⥤ C) (G : C ⥤ D) (H : D ⥤ E) : ((F ⋙ G) ⋙ H) ≅ (F ⋙ (G ⋙ H)) := by obviously 
+omit 𝒟
 
--- PROJECT pentagon
+lemma triangle (F : A ⥤ B) (G : B ⥤ C) :
+  (associator F (functor.id B) G).hom ⊟ (whisker_left F (left_unitor G).hom) =
+    (whisker_right (right_unitor F).hom G) :=
+begin
+  ext1,
+  dsimp [associator, left_unitor, right_unitor],
+  simp
+end
+
+variables {E : Type u₅} [ℰ : category.{u₅ v₅} E]
+include 𝒟 ℰ
+
+variables (F : A ⥤ B) (G : B ⥤ C) (H : C ⥤ D) (K : D ⥤ E)
+
+lemma pentagon :
+  (whisker_right (associator F G H).hom K) ⊟ (associator F (G ⋙ H) K).hom ⊟ (whisker_left F (associator G H K).hom) =
+    ((associator (F ⋙ G) H K).hom ⊟ (associator F G (H ⋙ K)).hom) :=
+begin
+  ext1,
+  dsimp [associator],
+  simp,
+end
 
 end category_theory.functor
