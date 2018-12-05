@@ -43,7 +43,10 @@ def monoid_type_constructor_indirection (α : Type u) : monoid α = monoid_type_
 
 def monoid_transport {α β : Type u} (f : α ≅ β) (m : monoid α) : monoid β :=
 begin
-  -- iso_induction f, --
+  -- I'd like to prove this by:
+  -- iso_induction f,
+  -- exact m
+
   -- This tactic doesn't exist yet, but 'just' needs to do:
   rw monoid_type_constructor_indirection α at m,
   replace m := monoid_type_constructor.map f m,
