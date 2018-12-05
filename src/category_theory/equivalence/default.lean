@@ -3,7 +3,9 @@
 -- Authors: Tim Baumann, Stephen Morgan, Scott Morrison
 
 import category_theory.fully_faithful
-import category_theory.tactics.obviously
+import category_theory.functor_category
+import category_theory.natural_isomorphism
+import tactic.converter.interactive
 
 namespace category_theory
 
@@ -25,211 +27,81 @@ namespace equivalence
 variables {C : Type u₁} [𝒞 : category.{u₁ v₁} C]
 include 𝒞
 
-def refl : C ≌ C :=
+@[refl] def refl : C ≌ C :=
 { functor := functor.id C,
   inverse := functor.id C }
 
 variables {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
 include 𝒟
 
-def symm (e : C ≌ D) : D ≌ C :=
+@[symm] def symm (e : C ≌ D) : D ≌ C :=
 { functor := e.inverse,
   inverse := e.functor,
   fun_inv_id' := e.inv_fun_id,
   inv_fun_id' := e.fun_inv_id }
 
-@[simp,search] lemma fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) :
+@[simp] lemma fun_inv_map (e : C ≌ D) (X Y : D) (f : X ⟶ Y) :
 e.functor.map (e.inverse.map f) = (e.inv_fun_id.hom.app X) ≫ f ≫ (e.inv_fun_id.inv.app Y) :=
-by obviously
-@[simp,search] lemma inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) :
+begin
+  erw [nat_iso.naturality_2],
+  refl
+end
+@[simp] lemma inv_fun_map (e : C ≌ D) (X Y : C) (f : X ⟶ Y) :
 e.inverse.map (e.functor.map f) = (e.fun_inv_id.hom.app X) ≫ f ≫ (e.fun_inv_id.inv.app Y) :=
-by obviously
+begin
+  erw [nat_iso.naturality_2],
+  refl
+end
 
 variables {E : Type u₃} [ℰ : category.{u₃ v₃} E]
 include ℰ
 
 attribute [trans] category.comp
 
-@[simp] def effe_id (e : C ≌ D) (f : D ≌ E) (X : C) :
-  (e.inverse).obj ((f.inverse).obj ((f.functor).obj ((e.functor).obj X))) ⟶ X :=
-calc
-  _ ⟶ (e.inverse).obj ((e.functor).obj X) : e.inverse.map (f.fun_inv_id.hom.app _)
-... ⟶ X                                   : e.fun_inv_id.hom.app _
-
-@[simp] def effe_id_iso (e : C ≌ D) (f : D ≌ E) (X : C) :
+@[simp] def effe_iso_id (e : C ≌ D) (f : D ≌ E) (X : C) :
   (e.inverse).obj ((f.inverse).obj ((f.functor).obj ((e.functor).obj X))) ≅ X :=
 calc
   (e.inverse).obj ((f.inverse).obj ((f.functor).obj ((e.functor).obj X)))
     ≅ (e.inverse).obj ((e.functor).obj X) : e.inverse.on_iso (nat_iso.app f.fun_inv_id _)
 ... ≅ X                                   : nat_iso.app e.fun_inv_id _
 
-@[simp] def id_effe (e : C ≌ D) (f : D ≌ E) (X : C) :
-  (functor.id C).obj X ⟶ ((e.functor ⋙ f.functor) ⋙ f.inverse ⋙ e.inverse).obj X :=
+@[simp] def feef_iso_id (e : C ≌ D) (f : D ≌ E) (X : E) :
+  (f.functor).obj ((e.functor).obj ((e.inverse).obj ((f.inverse).obj X))) ≅ X :=
 calc
-  X ⟶ (e.functor ⋙ e.inverse).obj X : e.fun_inv_id.inv.app _
-... ⟶ _                              : e.inverse.map (f.fun_inv_id.inv.app _)
+  (f.functor).obj ((e.functor).obj ((e.inverse).obj ((f.inverse).obj X)))
+    ≅ (f.functor).obj ((f.inverse).obj X) : f.functor.on_iso (nat_iso.app e.inv_fun_id _)
+... ≅ X                                   : nat_iso.app f.inv_fun_id _
 
-@[simp] def feef_id (e : C ≌ D) (f : D ≌ E) (X : E) :
-  (f.functor).obj ((e.functor).obj ((e.inverse).obj ((f.inverse).obj X))) ⟶ X :=
-calc
-  _ ⟶ (f.functor).obj ((f.inverse).obj X) : f.functor.map (e.inv_fun_id.hom.app _)
-... ⟶ X                                   : f.inv_fun_id.hom.app _
-
-@[simp] def id_feef (e : C ≌ D) (f : D ≌ E) (X : E) :
-  X ⟶ ((f.inverse ⋙ e.inverse) ⋙ e.functor ⋙ f.functor).obj X :=
-calc
-  X ⟶ (f.inverse ⋙ f.functor).obj X : f.inv_fun_id.inv.app _
-... ⟶ _                              : f.functor.map (e.inv_fun_id.inv.app _)
-
-set_option trace.tidy true
-open tidy.rewrite_search.tracer
-
--- -- With rewrite_search and good caching, we could just write:
--- def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E :=
--- { functor := e.functor ⋙ f.functor,
---   inverse := f.inverse ⋙ e.inverse,
---   fun_inv_id' :=
---   { hom := { app := λ X, effe_id e f X },
---     inv := { app := λ X, id_effe e f X } },
---   inv_fun_id' :=
---   { hom := { app := λ X, feef_id e f X },
---     inv := { app := λ X, id_feef e f X } },
---  }
-
-def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E :=
+@[trans] def trans (e : C ≌ D) (f : D ≌ E) : C ≌ E :=
 { functor := e.functor ⋙ f.functor,
   inverse := f.inverse ⋙ e.inverse,
-  fun_inv_id' :=
-  { hom := { app := λ X, effe_id e f X, naturality' :=
-      begin
-        sorry
-        -- intros,
-        -- rw ← category.assoc,
-        -- rw ← functor.map_comp,
-        -- rw nat_trans.app_eq_coe,
-        -- erw nat_trans.naturality ((fun_inv_id f).hom),
-        -- simp, -- TODO convert this to a rw
-        -- erw is_iso.hom_inv_id,
-        -- rw category.comp_id
-      end },
-    inv := { app := λ X, id_effe e f X, naturality' :=
-      begin
-        -- sorry
-        dsimp [id_effe],
-        intros X Y f_1,
-        simp at *, dsimp at *,
-        sorry
-        -- rewrite_search { trace_summary := tt, trace_result := tt, view := visualiser, optimal := ff }
-        -- nth_rewrite_lhs 0 ←category.assoc,
-        -- nth_rewrite_rhs 2 ←category.assoc,
-        -- nth_rewrite_rhs 3 ←category.assoc,
-        -- nth_rewrite_rhs 1 ←category.assoc,
-        -- nth_rewrite_rhs 0 category.assoc,
-        -- nth_rewrite_rhs 0 category.assoc,
-        -- nth_rewrite_rhs 0 ←category.assoc,
-        -- nth_rewrite_rhs 0 category.assoc,
-        -- nth_rewrite_rhs 0 ←inv_fun_map,
-        -- nth_rewrite_rhs 0 ←functor.map_comp,
-        -- nth_rewrite_rhs 0 ←functor.map_comp,
-        -- nth_rewrite_rhs 0 nat_iso.naturality_2,
-        -- nth_rewrite_rhs 0 category.assoc,
-        -- nth_rewrite_rhs 0 ←functor.map_comp,
-        -- nth_rewrite_rhs 0 ←nat_trans.naturality,
-        -- nth_rewrite_rhs 0 functor.image_preimage,
-        -- nth_rewrite_rhs 0 functor.map_comp,
-        -- nth_rewrite_rhs 0 ←category.assoc,
-        -- nth_rewrite_rhs 0 ←nat_trans.naturality
-      end },
-    hom_inv_id' :=
-      begin
-        sorry
-        -- ext1,
-        -- dsimp at *, simp at *,
-        -- nth_rewrite_lhs 0 ←category.assoc,
-        -- nth_rewrite_lhs 0 is_iso.hom_inv_id,
-        -- nth_rewrite_lhs 0 ←functor.map_id,
-        -- nth_rewrite_rhs 0 ←functor.map_id,
-        -- nth_rewrite_rhs 0 ←functor.map_id,
-        -- nth_rewrite_rhs 0 ←functor.map_id,
-        -- nth_rewrite_rhs 0 inv_fun_map,
-        -- nth_rewrite_rhs 0 functor.map_comp,
-        -- nth_rewrite_rhs 0 functor.map_comp
-      end,
-    inv_hom_id' :=
-      begin
-        sorry
-        -- ext1,
-        -- dsimp at *, simp at *,
-        -- nth_rewrite_lhs 0 ←category.assoc,
-        -- nth_rewrite_lhs 0 is_iso.hom_inv_id,
-        -- nth_rewrite_lhs 0 category.id_comp,
-        -- nth_rewrite_lhs 0 is_iso.hom_inv_id
-      end },
-  inv_fun_id' :=
-  { hom := { app := λ X, feef_id e f X, naturality' :=
-              begin
-                sorry
-                -- intros X Y f_1,
-                -- dsimp at *, simp at *, dsimp at *,
-                -- nth_rewrite_lhs 2 ←category.assoc,
-                -- nth_rewrite_lhs 0 ←category.assoc,
-                -- nth_rewrite_lhs 0 is_iso.hom_inv_id,
-                -- nth_rewrite_lhs 0 category.id_comp,
-                -- nth_rewrite_lhs 0 category.assoc,
-                -- nth_rewrite_lhs 0 is_iso.hom_inv_id,
-                -- nth_rewrite_lhs 0 category.comp_id
-              end },
-    inv := { app := λ X, id_feef e f X, naturality' :=
-              begin
-                sorry
-                -- intros X Y f_1,
-                -- dsimp at *, simp at *, dsimp at *,
-                -- nth_rewrite_lhs 0 ←category.assoc,
-                -- nth_rewrite_rhs 2 ←category.assoc,
-                -- nth_rewrite_rhs 3 ←category.assoc,
-                -- nth_rewrite_rhs 1 ←category.assoc,
-                -- nth_rewrite_rhs 0 category.assoc,
-                -- nth_rewrite_rhs 0 category.assoc,
-                -- nth_rewrite_rhs 0 ←category.assoc,
-                -- nth_rewrite_rhs 0 category.assoc,
-                -- nth_rewrite_rhs 0 ←fun_inv_map,
-                -- nth_rewrite_rhs 0 ←functor.map_comp,
-                -- nth_rewrite_rhs 0 ←functor.map_comp,
-                -- nth_rewrite_rhs 0 nat_iso.naturality_2,
-                -- nth_rewrite_rhs 0 category.assoc,
-                -- nth_rewrite_rhs 0 ←functor.map_comp,
-                -- nth_rewrite_rhs 0 ←nat_trans.naturality,
-                -- nth_rewrite_rhs 0 functor.image_preimage,
-                -- nth_rewrite_rhs 0 functor.map_comp,
-                -- nth_rewrite_rhs 0 ←category.assoc,
-                -- nth_rewrite_rhs 0 ←nat_trans.naturality
-              end },
-    hom_inv_id' :=
-      begin
-        sorry
-        -- ext1,
-        -- dsimp at *, simp at *,
-        -- nth_rewrite_lhs 0 ←category.assoc,
-        -- nth_rewrite_lhs 0 is_iso.hom_inv_id,
-        -- nth_rewrite_lhs 0 ←functor.map_id,
-        -- nth_rewrite_rhs 0 ←functor.map_id,
-        -- nth_rewrite_rhs 0 ←functor.map_id,
-        -- nth_rewrite_rhs 0 ←functor.map_id,
-        -- nth_rewrite_rhs 0 fun_inv_map,
-        -- nth_rewrite_rhs 0 functor.map_comp,
-        -- nth_rewrite_rhs 0 functor.map_comp
-      end,
-    inv_hom_id' :=
-      begin
-        sorry
-        -- ext1,
-        -- dsimp at *, simp at *,
-        -- nth_rewrite_lhs 0 ←category.assoc,
-        -- nth_rewrite_lhs 0 is_iso.hom_inv_id,
-        -- nth_rewrite_lhs 0 category.id_comp,
-        -- nth_rewrite_lhs 0 is_iso.hom_inv_id
-      end },
- }
+  fun_inv_id' := nat_iso.of_components (effe_iso_id e f)
+  begin
+    /- `tidy` says -/ 
+    intros X Y f_1, dsimp at *, simp at *, dsimp at *,
+    /- `rewrite_search` says -/
+    conv_lhs { erw [←category.assoc] },
+    conv_lhs { congr, skip, erw [←category.assoc] },
+    conv_lhs { congr, skip, congr, erw [is_iso.hom_inv_id] },
+    conv_lhs { congr, skip, erw [category.id_comp] },
+    conv_lhs { erw [category.assoc] },
+    conv_lhs { congr, skip, erw [is_iso.hom_inv_id] },
+    conv_lhs { erw [category.comp_id] }
+  end,
+  inv_fun_id' := nat_iso.of_components (feef_iso_id e f)
+  begin
+    /- `tidy` says -/ 
+    intros X Y f_1, dsimp at *, simp at *, dsimp at *,
+    /- `rewrite_search` says -/
+    conv_lhs { erw [←category.assoc] },
+    conv_lhs { congr, skip, erw [←category.assoc] },
+    conv_lhs { congr, skip, congr, erw [is_iso.hom_inv_id] },
+    conv_lhs { congr, skip, erw [category.id_comp] },
+    conv_lhs { erw [category.assoc] },
+    conv_lhs { congr, skip, erw [is_iso.hom_inv_id] },
+    conv_lhs { erw [category.comp_id] }
+  end
+}
 
 end equivalence
 
@@ -248,6 +120,20 @@ class is_equivalence (F : C ⥤ D) :=
 restate_axiom is_equivalence.fun_inv_id'
 restate_axiom is_equivalence.inv_fun_id'
 end
+
+namespace is_equivalence
+variables {D : Type u₂} [𝒟 : category.{u₂ v₂} D]
+include 𝒟
+
+instance of_equivalence (F : C ≌ D) : is_equivalence (F.functor) :=
+{ inverse := F.inverse,
+  fun_inv_id' := F.fun_inv_id,
+  inv_fun_id' := F.inv_fun_id }
+instance of_equivalence_inverse (F : C ≌ D) : is_equivalence (F.inverse) :=
+{ inverse := F.functor,
+  fun_inv_id' := F.inv_fun_id,
+  inv_fun_id' := F.fun_inv_id }
+end is_equivalence
 
 namespace functor
 instance is_equivalence_refl : is_equivalence (functor.id C) :=
@@ -281,8 +167,9 @@ def as_equivalence (F : C ⥤ D) [is_equivalence F] : C ≌ D :=
 variables {E : Type u₃} [ℰ : category.{u₃ v₃} E]
 include ℰ
 
--- instance is_equivalence_trans (F : C ⥤ D) (G : D ⥤ E) [is_equivalence F] [is_equivalence G] :
---   is_equivalence (F ⋙ G) := sorry
+instance is_equivalence_trans (F : C ⥤ D) (G : D ⥤ E) [is_equivalence F] [is_equivalence G] :
+  is_equivalence (F ⋙ G) :=
+is_equivalence.of_equivalence (equivalence.trans (as_equivalence F) (as_equivalence G))
 
 end functor
 
@@ -296,12 +183,18 @@ instance is_equivalence_inverse (e : C ≌ D) : is_equivalence e.inverse :=
   fun_inv_id' := e.inv_fun_id,
   inv_fun_id' := e.fun_inv_id }
 
-@[simp,search] lemma fun_inv_map (F : C ⥤ D) [is_equivalence F] (X Y : D) (f : X ⟶ Y) :
+@[simp] lemma fun_inv_map (F : C ⥤ D) [is_equivalence F] (X Y : D) (f : X ⟶ Y) :
   F.map (F.inv.map f) = (F.inv_fun_id.hom.app X) ≫ f ≫ (F.inv_fun_id.inv.app Y) :=
-by obviously
-@[simp,search] lemma inv_fun_map (F : C ⥤ D) [is_equivalence F] (X Y : C) (f : X ⟶ Y) :
+begin
+  erw [nat_iso.naturality_2],
+  refl
+end
+@[simp] lemma inv_fun_map (F : C ⥤ D) [is_equivalence F] (X Y : C) (f : X ⟶ Y) :
   F.inv.map (F.map f) = (F.fun_inv_id.hom.app X) ≫ f ≫ (F.fun_inv_id.inv.app Y) :=
-by obviously
+begin
+  erw [nat_iso.naturality_2],
+  refl
+end
 
 end is_equivalence
 
@@ -316,6 +209,5 @@ def obj_preimage (F : C ⥤ D) [ess_surj F] (d : D) : C := ess_surj.obj_preimage
 def fun_obj_preimage_iso (F : C ⥤ D) [ess_surj F] (d : D) : F.obj (F.obj_preimage d) ≅ d :=
 ess_surj.iso F d
 end functor
-
 
 end category_theory

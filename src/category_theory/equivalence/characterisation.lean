@@ -4,9 +4,7 @@
 
 import category_theory.equivalence
 import category_theory.natural_isomorphism
-import tidy.rewrite_search
-
-import tidy.command.rfl_lemma
+import category_theory.tactics.comp_slice
 
 open category_theory
 
@@ -26,20 +24,33 @@ instance faithful_of_equivalence (F : C ⥤ D) [is_equivalence F] : faithful F :
                                 assumption
                               end }.
 
-open tidy.rewrite_search.tracer
-open tidy.rewrite_search.strategy
-open tidy.rewrite_search.metric
-
 instance full_of_equivalence (F : C ⥤ D) [is_equivalence F] : full F :=
 { preimage := λ X Y f, (nat_iso.app F.fun_inv_id X).inv ≫ (F.inv.map f) ≫ (nat_iso.app F.fun_inv_id Y).hom,
   witness' := λ X Y f,
     begin
       apply F.inv.injectivity,
-      tidy,
-      rewrite_search_using [`search] { --view := visualiser,
-                                       trace_summary := tt,
-                                       strategy := pexplore {pop_size := 3},
-                                       },
+      /- obviously can finish from here... -/
+      dsimp, simp, dsimp,
+      conv { 
+        to_lhs,
+        comp_slice 4 6,
+        rw [←functor.map_comp, ←functor.map_comp],
+        rw [←is_equivalence.fun_inv_map],
+      },
+      conv {
+        to_lhs,
+        comp_slice 1 2,
+        simp,
+      },
+      dsimp, simp,
+      conv {
+        to_lhs,
+        comp_slice 2 4,
+        rw [←functor.map_comp, ←functor.map_comp],
+        erw [nat_iso.naturality_2],
+      },
+      erw [nat_iso.naturality_1],
+      refl,
     end }.
 
 section
@@ -47,8 +58,19 @@ section
 @[simp] private def equivalence_inverse (F : C ⥤ D) [full F] [faithful F] [ess_surj F] : D ⥤ C :=
 { obj  := λ X, F.obj_preimage X,
   map := λ X Y f, F.preimage ((F.fun_obj_preimage_iso X).hom ≫ f ≫ (F.fun_obj_preimage_iso Y).inv),
-  map_id' := λ X, begin apply F.injectivity, obviously, end,
-  map_comp' := λ X Y Z f g, begin apply F.injectivity, obviously, end }.
+  map_id' := λ X, begin apply F.injectivity, tidy, end,
+  map_comp' := λ X Y Z f g, 
+  begin 
+    apply F.injectivity,
+    /- obviously can finish from here... -/
+    tidy,
+    conv {
+      to_rhs,
+      comp_slice 2 3,
+      erw [is_iso.hom_inv_id]
+    },
+    simp,
+  end }.
 
 def equivalence_of_fully_faithfully_ess_surj
   (F : C ⥤ D) [full F] [faithful : faithful F] [ess_surj F] : is_equivalence F :=
