@@ -1,4 +1,4 @@
-import category_theory.limits
+import category_theory.limits.limits
 import order.filter
 
 open category_theory.limits
@@ -14,8 +14,8 @@ class directed [preorder α] :=
 (i₁ (x₁ x₂ : α) : x₁ ≤ bound x₁ x₂)
 (i₂ (x₁ x₂ : α) : x₂ ≤ bound x₁ x₂)
 
-variables (C : Type u₁) [𝒞 : category.{u₁ v₁} C]
-include 𝒞 
+variables (C : Type u₁) [𝒞 : category.{v₁} C]
+include 𝒞
 
 -- class filtered :=
 -- (default : C)

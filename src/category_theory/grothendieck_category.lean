@@ -2,9 +2,11 @@ import category_theory.types
 
 namespace category_theory
 
-universes u v
-variables {C : Type u} [𝒞 : category.{u v} C]
+universes v u
+variables {C : Type u} [𝒞 : category.{v} C]
 include 𝒞
+
+-- This is just the comma category *↓F. Does it deserve a separate identity?
 
 def grothendieck_category (F : C ⥤ Type u) : category (Σ c : C, F.obj c) :=
 { hom := λ p q, { f : p.1 ⟶ q.1 // (F.map f) p.2 = q.2 },
