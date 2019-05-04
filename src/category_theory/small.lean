@@ -14,11 +14,11 @@ namespace category_theory
 
 variables (κ : cardinal.{u})
 
-def is_kappa_small (I : Type u) [small_category.{u} I] : Prop :=
+def is_kappa_small (I : Type u) [small_category I] : Prop :=
 cardinal.mk (Σ (a b : I), a ⟶ b) < κ
 
-structure kappa_filtered (C : Type u) [small_category.{u} C] : Prop :=
-(has_cocones : ∀ (I : Type u) [small_category.{u} I] (hI : is_kappa_small κ I) (F : I ⥤ C),
+structure kappa_filtered (C : Type u) [small_category C] : Prop :=
+(has_cocones : ∀ (I : Type u) [small_category I] (hI : is_kappa_small κ I) (F : I ⥤ C),
   nonempty (limits.cocone F))
 
 end category_theory

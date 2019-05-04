@@ -8,6 +8,8 @@ import category_theory.equivalence
 
 import tactic.tidy
 import tactic.rewrite_search
+import tidy.forwards_reasoning
+import tidy.backwards_reasoning
 
 open category_theory
 

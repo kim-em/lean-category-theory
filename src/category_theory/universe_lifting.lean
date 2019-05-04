@@ -3,6 +3,7 @@
 -- Authors: Scott Morrison
 
 import category_theory.equivalence
+import tidy.backwards_reasoning
 
 namespace category_theory
 

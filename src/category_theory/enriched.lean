@@ -1,15 +1,15 @@
-import category_theory.limits
+import category_theory.limits.limits
 import category_theory.limits.preserves
 import category_theory.limits.types
 import category_theory.fully_faithful
 
 open category_theory.limits
 
-universes u v
+universes v u
 
 namespace category_theory
 
-variables {C : Type u} [𝒞 : category.{u v} C]
+variables {C : Type u} [𝒞 : category.{v} C]
 variables (V : Type (v+1)) [𝒱 : large_category V]
           [has_terminal.{v+1 v} V] [has_binary_products.{v+1 v} V]
           (ℱ : V ⥤ Type v) [faithful ℱ] [preserves_limits ℱ]
