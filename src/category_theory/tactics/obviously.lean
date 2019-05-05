@@ -10,6 +10,7 @@ import tactic.tidy
 import tactic.rewrite_search
 import tidy.forwards_reasoning
 import tidy.backwards_reasoning
+import tidy.tidy
 
 open category_theory
 
