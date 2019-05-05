@@ -2,6 +2,8 @@
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Scott Morrison
 
+-- PR'd as #981
+
 import category_theory.bifunctor
 import category_theory.equivalence
 import category_theory.eq_to_hom
