@@ -5,6 +5,6 @@ lean_version = "3.4.2"
 path = "src"
 
 [dependencies]
-mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "f98ffdefc77ce0f40199280cea68ff13afb0206c"}
+mathlib = {git = "https://github.com/leanprover-community/mathlib", rev = "fbce6e4d46fb22ff4145c0e854d3966ef69a983d"}
 lean-rewrite-search = {git = "https://github.com/semorrison/lean-rewrite-search", branch = "master", rev = "5ac38962c1d49082249659ae7924b9bafcd1ee7a"}
-lean-tidy = {git = "https://github.com/semorrison/lean-tidy", branch = "master", rev = "47acc0126e66eb13eef5d9e41112e5e343e344d4"}
+lean-tidy = {git = "https://github.com/semorrison/lean-tidy", branch = "master", rev = "f3cd30e9c92632ed042693ed7472ba6d53f0ba38"}
