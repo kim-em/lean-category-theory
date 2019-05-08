@@ -8,7 +8,7 @@ namespace category_theory
 
 universes v₁ v₂ u₁ u₂
 
-structure idempotent (C : Type u₁) [category.{v₁} C] :=
+structure idempotent (C : Sort u₁) [category.{v₁+1} C] :=
 (X : C)
 (idem : X ⟶ X)
 (w' : idem ≫ idem = idem . obviously)
@@ -16,7 +16,7 @@ structure idempotent (C : Type u₁) [category.{v₁} C] :=
 restate_axiom idempotent.w'
 attribute [simp] idempotent.w -- search
 
-variables {C : Type u₁} [𝒞 : category.{v₁} C]
+variables {C : Sort u₁} [𝒞 : category.{v₁+1} C]
 include 𝒞
 
 namespace idempotent
@@ -39,7 +39,7 @@ end
 
 end idempotent
 
-instance idempotent_completion : category.{v₁} (idempotent C) :=
+instance idempotent_completion : category.{v₁+1} (idempotent C) :=
 { hom  := idempotent.morphism,
   id   := λ P, ⟨ P.idem ⟩,
   comp := λ _ _ _ f g,
@@ -52,7 +52,7 @@ namespace idempotent_completion
 @[simp] lemma id_hom (P : idempotent C) : ((𝟙 P) : idempotent.morphism P P).hom = P.idem := rfl
 @[simp] lemma comp_hom {P Q R : idempotent C} (f : P ⟶ Q) (g : Q ⟶ R) : (f ≫ g).hom = f.hom ≫ g.hom := rfl
 
-def to_completion (C : Type u₁) [𝒞 : category.{v₁} C] : C ⥤ (idempotent.{v₁} C) :=
+def to_completion (C : Type u₁) [𝒞 : category.{v₁+1} C] : C ⥤ (idempotent.{v₁} C) :=
 { obj := λ P, { X := P, idem := 𝟙 P },
   map := λ _ _ f, { hom := f } }
 
@@ -86,7 +86,7 @@ lemma idempotent_idempotent :
     inv := { app := λ X, { hom := X.idem } } } }
 
 variable {D : Type u₂}
-variable [𝒟 : category.{v₂} D]
+variable [𝒟 : category.{v₂+1} D]
 include 𝒟
 
 def extend_to_completion (F : C ⥤ (idempotent D)) : (idempotent C) ⥤ (idempotent D) :=
