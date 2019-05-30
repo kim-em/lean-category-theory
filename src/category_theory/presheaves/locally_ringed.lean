@@ -1,7 +1,6 @@
 import category_theory.presheaves.sheaves
 import category_theory.presheaves.stalk
-import category_theory.examples.CommRing.products
-import category_theory.examples.rings
+import algebra.CommRing.products
 import ring_theory.ideals
 
 universes v

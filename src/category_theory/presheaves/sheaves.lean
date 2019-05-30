@@ -1,7 +1,7 @@
 import category_theory.opposites
 import category_theory.full_subcategory
 import category_theory.limits.types
-import category_theory.examples.topological_spaces
+import topology.Top.basic
 import category_theory.limits.obviously
 
 
