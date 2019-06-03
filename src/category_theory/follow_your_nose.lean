@@ -9,10 +9,10 @@ universes v₁ u₁
 open tactic
 
 def fyn_names :=
-[ `category_theory.category.id,
+[ `category_theory.category_struct.id,
   `category_theory.functor.map,
   `category_theory.nat_trans.app,
-  `category_theory.category.comp,
+  `category_theory.category_struct.comp,
   `prod.mk ]
 
 meta def construct_morphism : tactic unit :=

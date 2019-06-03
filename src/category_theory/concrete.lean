@@ -9,11 +9,11 @@ namespace category_theory
 
 universes u v
 
-class concrete (C : Type u) [category.{u v} C] := 
-  (fibre_functor : C ⥤ (Type v))
+class concrete (C : Type u) [category.{v} C] :=
+  (fibre_functor : C ⥤ Sort v)
   (faithfulness : faithful fibre_functor . obviously)
 
-instance : concrete (Type u) := 
+instance : concrete (Type u) :=
 { fibre_functor := functor.id _ }
 
 end category_theory

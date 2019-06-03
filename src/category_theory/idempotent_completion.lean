@@ -1,7 +1,7 @@
 -- Copyright (c) 2017 Scott Morrison. All rights reserved.
 -- Released under Apache 2.0 license as described in the file LICENSE.
 -- Authors: Stephen Morgan, Scott Morrison
-
+import category_theory.tactics.obviously
 import category_theory.equivalence
 
 namespace category_theory
@@ -76,25 +76,25 @@ end
 
 lemma idempotent_idempotent :
   equivalence (idempotent (idempotent C)) (idempotent C) :=
-{ functor := idempotent_functor,
-  inverse := idempotent_inverse,
-  fun_inv_id' :=
+equivalence.mk idempotent_functor idempotent_inverse
   { hom := { app := λ X, { hom := { hom := X.idem.hom } } },
-    inv := { app := λ X, { hom := { hom := X.idem.hom } } } },
-  inv_fun_id' :=
+    inv := { app := λ X, { hom := { hom := X.idem.hom } } } }
   { hom := { app := λ X, { hom := X.idem } },
-    inv := { app := λ X, { hom := X.idem } } } }
+    inv := { app := λ X, { hom := X.idem } } }
 
 variable {D : Type u₂}
 variable [𝒟 : category.{v₂+1} D]
 include 𝒟
+
+attribute [search] idempotent.w idempotent.morphism.left idempotent.morphism.right
+  idem_hom_idempotent comp_hom id_hom
 
 def extend_to_completion (F : C ⥤ (idempotent D)) : (idempotent C) ⥤ (idempotent D) :=
 { obj := λ P,
   { X := (F.obj P.X).X,
     idem := (F.map P.idem).hom,
     w' := begin rw [←comp_hom, ←functor.map_comp, idempotent.w], end },
-  map := λ _ _ f, { hom := (F.map f.hom).hom } }
+  map := λ X Y f, { hom := (F.map f.hom).hom } }
 
 end idempotent_completion
 end category_theory

@@ -1,13 +1,13 @@
 import category_theory.limits.limits
-import category_theory.limits.binary_products
-import category_theory.limits.products
-import category_theory.limits.pullbacks
-import category_theory.limits.equalizers
+import category_theory.limits.shapes.binary_products
+import category_theory.limits.shapes.products
+import category_theory.limits.shapes.pullbacks
+import category_theory.limits.shapes.equalizers
 import category_theory.tactics.obviously
 
 open category_theory.limits
 
-attribute [search] fork.condition cofork.condition square.condition cosquare.condition cone.w cocone.w
+attribute [search] fork.condition cofork.condition pullback_cone.condition pushout_cocone.condition cone.w cocone.w
 
 attribute [search] is_limit.fac
 attribute [search,elim] is_limit.uniq
@@ -28,8 +28,8 @@ attribute [search] limit.pre_π limit.post_π colimit.ι_pre colimit.ι_post
 -- attribute [search] is_product.fac is_coproduct.fac
 -- attribute [search,elim] is_product.uniq is_coproduct.uniq
 
-attribute [search] pi.lift_π pi.map_π pi.pre_π pi.post_π
-attribute [search] sigma.ι_desc sigma.ι_map sigma.ι_pre sigma.ι_post
+-- attribute [search] pi.lift_π pi.map_π pi.pre_π pi.post_π
+-- attribute [search] sigma.ι_desc sigma.ι_map sigma.ι_pre sigma.ι_post
 
 -- attribute [search] is_pullback.fac₁ is_pullback.fac₂
 -- attribute [search,elim] is_pullback.uniq

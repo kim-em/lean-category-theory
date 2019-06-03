@@ -1,16 +1,16 @@
 import category_theory.functor
 
-universes u v
+universes v u
 
 namespace category_theory
 
 structure Category : Type (max (u+1) (v+1)) :=
  (C : Type u)
- [𝒞 : category.{u v} C]
+ [𝒞 : category.{v} C]
 
 instance category_of_Category (𝒞 : Category) : category (𝒞.C) := 𝒞.𝒞
 
-instance CAT : category.{(max (u+1) (v+1)) (max u v)} Category :=
+instance CAT : category.{(max (u+1) v)} Category.{v u} :=
 { hom     := λ 𝒞 𝒟, 𝒞.C ⥤ 𝒟.C,
   id      := λ 𝒞, (functor.id 𝒞.C),
   comp    := λ _ _ _ F G, F ⋙ G,

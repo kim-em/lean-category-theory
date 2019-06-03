@@ -19,6 +19,9 @@ open category_theory
 attribute [elim] full.preimage
 attribute [forward] faithful.injectivity
 
+attribute [search] category.comp_id category.id_comp category.assoc
+attribute [search] category_theory.functor.map_comp category_theory.functor.map_id
+
 attribute [search] yoneda.obj_map_id
 
 attribute [search] equivalence.fun_inv_map equivalence.inv_fun_map
