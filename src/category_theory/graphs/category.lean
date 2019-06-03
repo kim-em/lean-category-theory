@@ -12,9 +12,8 @@ open category_theory.graphs
 universes u v
 variable {C : Type u}
 
-instance category.graph [𝒞 : category.{u v} C] : graph C := {
-  edges := 𝒞.hom
-}
+instance category.graph [𝒞 : category.{v} C] : graph C :=
+{ edges := 𝒞.hom }
 
 variable [small_category C]
 

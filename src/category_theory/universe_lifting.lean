@@ -4,7 +4,7 @@
 
 import category_theory.equivalence
 import tidy.backwards_reasoning
-import tidy.tidy
+import category_theory.tactics.obviously
 
 namespace category_theory
 

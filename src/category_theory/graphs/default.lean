@@ -7,42 +7,42 @@ import tidy.auto_cast
 
 namespace category_theory.graphs
 
-universes u₁ v₁ u₂ v₂
+universes v₁ v₂ u₁ u₂
 
 class graph (vertices : Type u₁) :=
-  (edges : vertices → vertices → Type v₁)
+(edges : vertices → vertices → Sort v₁)
 
 variable {C : Type u₁}
 variables {W X Y Z : C}
-variable [𝒞 : graph.{u₁ v₁} C]
+variable [𝒞 : graph.{v₁} C]
 
-def edges : C → C → Type v₁ := @graph.edges.{u₁ v₁} C 𝒞
+def edges : C → C → Sort v₁ := @graph.edges.{v₁} C 𝒞
 
-structure graph_hom (G : Type u₁) [graph.{u₁ v₁} G] (H : Type u₂) [graph.{u₂ v₂} H] := 
-  (onVertices : G → H)
-  (onEdges    : ∀ {X Y : G}, edges X Y → edges (onVertices X) (onVertices Y))
+structure graph_hom (G : Type u₁) [graph.{v₁} G] (H : Type u₂) [graph.{v₂} H] :=
+(onVertices : G → H)
+(onEdges    : ∀ {X Y : G}, edges X Y → edges (onVertices X) (onVertices Y))
 
 section
-variables {G : Type u₁} [𝒢 : graph.{u₁ v₁} G] {H : Type u₂} [ℋ : graph.{u₂ v₂} H]
+variables {G : Type u₁} [𝒢 : graph.{v₁} G] {H : Type u₂} [ℋ : graph.{v₂} H]
 include 𝒢 ℋ
 
 @[extensionality] lemma graph_hom_pointwise_equal
-  {p q : graph_hom G H} 
-  (vertexWitness : ∀ X : G, p.onVertices X = q.onVertices X) 
+  {p q : graph_hom G H}
+  (vertexWitness : ∀ X : G, p.onVertices X = q.onVertices X)
   (edgeWitness : ∀ X Y : G, ∀ f : edges X Y, ⟬ p.onEdges f ⟭ = q.onEdges f) : p = q :=
 begin
   induction p with p_onVertices p_onEdges,
   induction q with q_onVertices q_onEdges,
   have h_vertices : p_onVertices = q_onVertices, exact funext vertexWitness,
   subst h_vertices,
-  have h_edges : @p_onEdges = @q_onEdges, 
+  have h_edges : @p_onEdges = @q_onEdges,
   apply funext, intro X, apply funext, intro Y, apply funext, intro f,
   exact edgeWitness X Y f,
   subst h_edges
 end
 end
 
-variables {G : Type u₁} [𝒢 : graph.{u₁ v₁} G]
+variables {G : Type u₁} [𝒢 : graph.{v₁} G]
 include 𝒢
 
 inductive path : G → G → Type (max u₁ v₁)
