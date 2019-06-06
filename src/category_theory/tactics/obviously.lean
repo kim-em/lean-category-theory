@@ -21,6 +21,9 @@ attribute [forward] faithful.injectivity
 
 attribute [search] category.comp_id category.id_comp category.assoc
 attribute [search] category_theory.functor.map_comp category_theory.functor.map_id
+attribute [search] nat_trans.naturality
+attribute [search] iso.hom_inv_id iso.inv_hom_id
+attribute [search] nat_iso.naturality_1 nat_iso.naturality_2
 
 attribute [search] yoneda.obj_map_id
 
