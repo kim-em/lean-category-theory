@@ -22,20 +22,20 @@ def yoneda_0 : C ⥤ ((Cᵒᵖ) ⥤ Type v₁) :=
 { obj := λ X,
   { obj := λ Y, (unop Y) ⟶ X,
     map := λ Y Y' f g, f.unop ≫ g,
-    map_comp' := begin intros X_1 Y Z f g, ext1, dsimp at *, erw [category.assoc] end,
-    map_id' := begin intros X_1, ext1, dsimp at *, erw [category.id_comp] end },
+    map_comp' := begin intros, ext1, dsimp at *, erw [category.assoc] end,
+    map_id' := begin intros, ext1, dsimp at *, erw [category.id_comp] end },
   map := λ X X' f,
     { app := λ Y g, g ≫ f,
-      naturality' := begin intros X_1 Y f_1, ext1, dsimp at *, simp at * end },
-  map_comp' := begin intros X Y Z f g, ext1, ext1, dsimp at *, simp at * end,
-  map_id' := begin intros X, ext1, ext1, dsimp at *, simp at * end }.
+      naturality' := begin intros, ext1, dsimp at *, simp at * end },
+  map_comp' := begin intros, ext1, ext1, dsimp at *, simp at * end,
+  map_id' := begin intros, ext1, ext1, dsimp at *, simp at * end }.
 
 def yoneda_1 : C ⥤ ((Cᵒᵖ) ⥤ Type v₁) :=
 { obj := λ X,
   { obj := λ Y, (unop Y) ⟶ X,
     map := λ Y Y' f g, f.unop ≫ g,
-    map_comp' := begin intros X_1 Y Z f g, ext1, dsimp at *, erw [category.assoc] end,
-    map_id' := begin intros X_1, ext1, dsimp at *, erw [category.id_comp] end },
+    map_comp' := begin intros, ext1, dsimp at *, erw [category.assoc] end,
+    map_id' := begin intros, ext1, dsimp at *, erw [category.id_comp] end },
   map := λ X X' f, { app := λ Y g, g ≫ f } }.
 
 def yoneda_2 : C ⥤ ((Cᵒᵖ) ⥤ Type v₁) :=
