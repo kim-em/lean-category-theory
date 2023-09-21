@@ -1,3 +1,9 @@
+# Archived, this repository is obsolete! 
+
+The entire contents have long ago become part of [Mathlib](https://github.com/leanprover-community/mathlib4).
+
+---
+
 [![Build Status](https://travis-ci.org/semorrison/lean-category-theory.svg?branch=master)](https://travis-ci.org/semorrison/lean-category-theory)
 
 This repository develops the basics of category theory in Lean.
